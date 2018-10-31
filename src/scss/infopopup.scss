@@ -1,0 +1,116 @@
+@import 'burger';
+
+.infopopup {
+  width: 400px;
+  height: 400px;
+  box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3), 10px 15px 12px rgba(0, 0, 0, 0.22);
+  color: $darkgrey;
+  position: absolute;
+  background: $offwhite;
+  border-radius: 5px;
+  bottom: 20px;
+  left: 100px;
+  border: 3px solid $offwhite;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: 'Lato', 'Helvetica', sans-serif;
+  font-size: $large;
+  transition: opacity 0.5s ease 0.1s, z-index 0.1s ease 0s;
+  opacity: 1;
+  z-index: $overheader;
+
+  &.hidden {
+    transition: 0.5s ease;
+    opacity: 0;
+  }
+
+  .legend-section {
+    width: 300px;
+    padding-left: 60px;
+    height: 40px;
+    display: inline-block;
+
+    svg {
+      width: 100px;
+      float: left;
+      display: inline-block;
+    }
+
+    .legend-labels {
+      float: left;
+      display: inline-block;
+      width: calc(100% - 100px);
+
+      .label {
+        display: block;
+        font-size: $xsmall;
+        margin-top: 10px;
+        margin-left: 10px;
+
+        .color-category {
+          width: 8px;
+          height: 8px;
+          border-radius: 10px;
+          display: inline-block;
+          margin: 0px 5px 0 0;
+
+          &.category_group00 { background: $category_group00; }
+          &.category_group01 { background: $category_group01; }
+          &.category_group02 { background: $category_group02; }
+          &.category_group03 { background: $category_group03; }
+          &.category_group04 { background: $category_group04; }
+        }
+      }
+    }
+
+    &:first-child {
+      .legend-labels .label {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .side-menu-burg {
+    position: absolute;
+    right: 8px;
+    top: 10px;
+  }
+
+  .legend-item {
+    display: block;
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 3px;
+    padding-left: 80px;
+
+    .item-label {
+      line-height: 15px;
+      height: 15px;
+      font-size: $normal;
+    }
+
+    .color-marker {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      float: left;
+      margin: 0 10px 0 0;
+      border-radius: 15px;
+
+      &.victims { background-color: #C90500; }
+      &.military { background-color: #319C31; }
+      &.nonstate { background-color: #AC28AC; }
+      &.state-police { background-color: #0000BF; }
+      &.iguala-municipal-police { background-color: #00558D; }
+      &.federal-police { background-color: #5756A2; }
+      &.huitzuco-municipal-police { background-color: #4ECAC1; }
+      &.cocula-municipal-police { background-color: #095959; }
+      &.ambulance { background-color: #ffffff; }
+      &.other { background-color: #D3CE2A; }
+      &.drivers { background-color: #822519; }
+      &.communications { background-color: #a6a6a6; }
+      &.GIEI { background-color: #ffffff; }
+      &.PGR { background-color: #000000; }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.video-wrapper {
+  z-index: 1;
+  position: relative;
+  width: 740px;
+  height: 420px;
+  transition: opacity 500ms;
+  background-color: black;
+  font-family: 'Lato', Helvetica, sans-serif;
+  overflow: hidden;
+}
+
+.video-js .vjs-big-play-button {
+  font-size: 3em;
+  line-height: 40px;
+  height: 40px;
+  width: 40px;
+  display: block;
+  position: absolute;
+  background: none;
+  top: 10px;
+  left: 10px;
+  padding: 0;
+  cursor: pointer;
+  opacity: 1;
+  border-radius: 20px;
+  transition: 0.2s ease;
+  border: 1px solid $midwhite;
+
+  &:hover {
+    transition: 0.2s ease;
+    border: 1px solid $offwhite;
+  }
+}

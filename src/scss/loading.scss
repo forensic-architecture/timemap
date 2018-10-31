@@ -1,0 +1,80 @@
+.loading-overlay {
+  font-family: 'Lato', Helvetica, sans-serif;
+  font-weight: 300;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0,0.9);
+  transition: 0.4s ease;
+  z-index: $loading-overlay;
+  opacity: 1;
+
+  .loading-wrapper {
+    position: fixed;
+    left: 50%;
+    top: 40%;
+    text-align: center;
+    width: 100%;
+    margin: 0 0 0 -50%;
+    height: 100%;
+    opacity: 1;
+
+    span {
+      color: $offwhite;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+  }
+
+  &.hidden {
+    transition: opacity 0.4s ease, z-index .1s 0.4s;
+    opacity: 0;
+    z-index: $hidden;
+  }
+
+
+  /*
+https://github.com/tobiasahlin/SpinKit/blob/master/LICENSE
+  */
+  .spinner {
+    width: 40px;
+    height: 40px;
+
+    position: relative;
+    margin: 20px auto;
+  }
+
+  .double-bounce1, .double-bounce2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: $offwhite;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    -webkit-animation: sk-bounce 3.0s infinite ease-in-out;
+    animation: sk-bounce 3.0s infinite ease-in-out;
+  }
+
+  .double-bounce2 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+  }
+
+  @-webkit-keyframes sk-bounce {
+    0%, 100% { -webkit-transform: scale(0.0) }
+    50% { -webkit-transform: scale(1.0) }
+  }
+
+  @keyframes sk-bounce {
+    0%, 100% {
+      transform: scale(0.0);
+      -webkit-transform: scale(0.0);
+    } 50% {
+      transform: scale(1.0);
+      -webkit-transform: scale(1.0);
+    }
+  }
+}

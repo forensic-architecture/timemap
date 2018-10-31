@@ -1,0 +1,144 @@
+{
+  "es-MX": {
+    "loading": "Cargando...",
+    "legend": {
+      "view2d": {
+        "paragraphs": [
+          "Seleccionando una serie de filtros verá aparecer eventos en el mapa y en la línea del tiempo.",
+          "Cada evento estará coloreado según la persona que dio el testimonio del evento."
+        ],
+        "colors": [
+          { "class": "category_group00", "label": "Category Group 00" },
+          { "class": "category_group01", "label": "Category Group 01" },
+          { "class": "category_group02", "label": "Category Group 02" },
+          { "class": "category_group03", "label": "Category Group 03" },
+          { "class": "other", "label": "Other categories" }
+        ]
+      }
+    },
+    "toolbar": {
+      "title": "TITLE",
+      "panels": {
+        "mentions": {
+          "title": "Personas",
+          "overview": "Seleccionar los nombres de personas mostrará eventos en los que esta persona o organización ha sido mencionada, incluyendo el propio testimonio. Entre paréntesis encontrará el número de menciones. Ej. (34)."
+        },
+        "categories": {
+          "title": "Testimonios",
+          "overview": "Seleccionar el nombre de una persona mostrará los eventos descritos por su testimonio. Entre paréntesis encontrará el número de eventos descritos. Ej. (34)."
+        },
+        "search": {
+          "title": "Directorio de etiquetas",
+          "placeholder": "Búsqueda"
+        }
+      }
+    },
+    "timeline": {
+      "zooms": [
+        "3 años",
+        "3 meses",
+        "3 días",
+        "12 horas",
+        "2 horas",
+        "30 min",
+        "10 min"
+      ],
+      "labels_title": "Testimonios",
+      "labels": [
+        "Testimony Group 00",
+        "Testimony Group 01",
+        "Testimony Group 02",
+        "Testimony Group 03",
+        "Other categories"
+      ],
+      "info": "Viendo eventos ocurridos entre"
+    },
+    "cardstack": {
+      "header": "eventos seleccionados",
+      "unknown_location": "Localización desconocida",
+      "timestamp": "Día y hora",
+      "estimated": "aproximado",
+      "location": "Localización",
+      "incident_type": "Tipo de acción",
+      "description": "Hechos",
+      "people": "Personas en el evento",
+      "source": "Fuente",
+      "category": "Según el testimonio de",
+      "communication": "Comunicación",
+      "transmitter": "Transmisor",
+      "receiver": "Receptor",
+      "warning": "(!) HECHOS CUESTIONADOS"
+    }
+  },
+  "en-US": {
+    "loading": "Loading...",
+    "legend": {
+      "view2d": {
+        "paragraphs": [
+          "Selecting a series of tags, you will be able to explore events on the map of Iguala and on the timeline.",
+          "Each event is colored according the person that gave category of the event."
+        ],
+        "colors": [
+          { "class": "category_group00", "label": "Category Group 00" },
+          { "class": "category_group01", "label": "Category Group 01" },
+          { "class": "category_group02", "label": "Category Group 02" },
+          { "class": "category_group03", "label": "Category Group 03" },
+          { "class": "other", "label": "Other categories" }
+        ]
+      }
+    },
+    "toolbar": {
+      "title": "TITLE",
+      "panels": {
+        "mentions": {
+          "title": "Mentions",
+          "overview": "Selecting the names of people/organisation will show events in which these have been mentioned in their own testistimony and by others. The number in the parentheses shows how many events contain a mention of a person or organisation, e.g. (34)"
+        },
+        "categories": {
+          "title": "Testimonies",
+          "overview": "Selecting the name of a person will show the events only according to a person’s category or category. The number in the parentheses show how many events are contained in each category, e.g. (34)."
+        },
+        "search": {
+          "title": "Directory of tags",
+          "placeholder": "Search"
+        }
+      }
+    },
+    "timeline": {
+      "zooms": [
+        "3 years",
+        "3 months",
+        "3 days",
+        "12 hours",
+        "2 hours",
+        "30 min",
+        "10 min"
+      ],
+      "labels_title": "Testimonies",
+      "labels": [
+        "Testimony Group 00",
+        "Testimony Group 01",
+        "Testimony Group 02",
+        "Testimony Group 03",
+        "Other"
+      ],
+      "info": "Seeing events occurred between"
+    },
+    "cardstack": {
+      "header": "selected events",
+      "timestamp": "Day and time",
+      "unknown_location": "Unknown location",
+      "estimated": "estimated",
+      "location": "Localization",
+      "incident_type": "Type of action",
+      "description": "Summary of facts",
+      "people": "People involved",
+      "source": "Source",
+      "category": "According to",
+      "communication": "Communication",
+      "transmitter": "Transmitter",
+      "receiver": "Receiver",
+      "warning": "(!) Highly questioned"
+    }
+  }
+}

@@ -1,0 +1,81 @@
+.popup {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 15px;
+  border: 0;
+  opacity: 0;
+  border-radius: 2px;
+  transition: 0.2 ease;
+  background: rgba(0, 0, 0, 0.9);
+  transition: 0.4s ease;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+
+  &:hover {
+    transition: 0.4s ease;
+    box-shadow: 0 29px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  }
+
+  .card-tophalf {
+    height: 100px;
+
+    .left {
+      float: left;
+      width: 120px;
+      padding-right: 5px;
+      box-sizing: border-box;
+      border-right: 1px dotted $midwhite;
+    }
+    .right {
+      float: left;
+      width: 225px;
+      padding-left: 5px;
+      height: 90px;
+      overflow: hidden;
+    }
+  }
+
+  .tag,
+  p.see-more {
+    cursor: pointer;
+
+    &:hover {
+      color: $yellow;
+    }
+  }
+
+  p {
+    margin: 5px 0 0 0;
+  }
+
+  .timestamp {
+    font-family: 'Lato', Helvetica, sans-serif;
+    text-transform: uppercase;
+    font-size: $xlarge;
+    margin-top: 0;
+  }
+
+  .location {
+    font-family: 'Lato', Helvetica, sans-serif;
+    font-size: $normal;
+    color: $offwhite;
+  }
+
+  .estimated-timestamp {
+    margin-top: 3px;
+    margin-left: 3px;
+    font-size: $xsmall;
+    color: $midwhite;
+    text-transform: lowercase;
+  }
+
+  .summary {
+    max-height: 200px;
+    text-overflow: ellipsis;
+    overflow: scroll;
+    font-weight: 500;
+  }
+
+  .source {
+    text-align: right;
+  }
+}

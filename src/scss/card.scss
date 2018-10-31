@@ -1,0 +1,190 @@
+.event-card {
+  box-sizing: border-box;
+  margin: 1px 0 0 0;
+  padding: 15px;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 3px;
+  transition: 0.2 ease;
+  background: $offwhite;
+  color: $darkgrey;
+  box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  font-size: $large;
+  line-height: $xxlarge;
+  transition: 0.2s ease;
+  height: auto;
+
+  &:hover {
+    border: 1px solid $yellow;
+  }
+
+  .card-bottomhalf {
+    transition: 0.4s ease;
+    height: auto;
+
+    &.folded {
+      transition: 0.4s ease;
+      height: 0;
+      overflow: hidden;
+    }
+  }
+
+  h4 {
+    text-transform: normal;
+    margin-bottom: 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .event-card-section {
+    margin-bottom: 10px;
+  }
+
+  .card-toggle p {
+    text-align: center;
+    cursor: pointer;
+
+    .arrow-down {
+      display: inline-block;
+      transition: 0.2s ease;
+      border: solid $darkwhite;
+      border-width: 0 2px 2px 0;
+      padding: 3px;
+      transform: rotate(-135deg);
+      -webkit-transform: rotate(-135deg);
+
+      &.folded {
+        transition: 0.2s ease;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+      }
+    }
+
+    &:hover .arrow-down {
+      transition: 0.2s ease;
+      border: solid $darkgrey;
+      border-width: 0 2px 2px 0;
+    }
+  }
+
+  .tags {
+    width: 100%;
+    margin: 5px 0;
+    text-align: left;
+  }
+
+  .warning {
+    background: $red;
+    color: white;
+    text-transform: uppercase;
+    width: 100%;
+    text-align: center;
+  }
+
+  .timestamp {
+    font-family: 'Lato', Helvetica, sans-serif;
+    margin-top: 0;
+
+    .estimated-timestamp {
+      color: $midwhite;
+      margin-left: 5px;
+    }
+  }
+
+  .category {
+    .color-category {
+      width: 12px;
+      height: 12px;
+      border-radius: 20px;
+      display: inline-block;
+      margin: 0px 5px 0 0;
+
+      &.category_group00 { background: $category_group00; }
+      &.category_group01 { background: $category_group01; }
+      &.category_group02 { background: $category_group02; }
+      &.category_group03 { background: $category_group03; }
+      &.category_group04 { background: $category_group04; }
+    }
+  }
+
+  .event-type {
+    margin: 0 0 10px 0;
+
+    span {
+      display: inline-block;
+      margin: 0 5px 2px 0;
+      color: $darkgrey;
+
+      &.flagged {
+        background: $red;
+        color: $offwhite;
+        padding: 0 5px;
+      }
+    }
+  }
+
+  .location {
+    font-family: 'Lato', Helvetica, sans-serif;
+  }
+
+  .summary {
+    overflow: auto;
+    margin-top: 0;
+  }
+
+  .tag {
+    display: inline-block;
+    margin: 0;
+    margin-right: 5px;
+  }
+
+  /*
+  https://github.com/tobiasahlin/SpinKit/blob/master/LICENSE
+  */
+  .spinner {
+    width: 40px;
+    height: 40px;
+
+    position: relative;
+    margin: 20px auto;
+  }
+
+  .double-bounce1, .double-bounce2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: $darkgrey;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    -webkit-animation: sk-bounce 3.0s infinite ease-in-out;
+    animation: sk-bounce 3.0s infinite ease-in-out;
+  }
+
+  .double-bounce2 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+  }
+
+  @-webkit-keyframes sk-bounce {
+    0%, 100% { -webkit-transform: scale(0.0) }
+    50% { -webkit-transform: scale(1.0) }
+  }
+
+  @keyframes sk-bounce {
+    0%, 100% {
+      transform: scale(0.0);
+      -webkit-transform: scale(0.0);
+    } 50% {
+      transform: scale(1.0);
+      -webkit-transform: scale(1.0);
+    }
+  }
+}

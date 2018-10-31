@@ -1,0 +1,62 @@
+.header {
+  background: #000000;
+  position: fixed;
+  padding: 10px;
+  z-index: 10;
+  top: 10px;
+  right: 10px;
+  height: 40px;
+  width: 240px;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+
+  .header-title {
+    a {
+      font-family: 'Lato', Helvetica, serif;
+      color: darken($offwhite, 5%);
+      font-size: $xlarge;
+      letter-spacing: 0.1em;
+      float: left;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .side-menu-burg {
+    right: 10px;
+    span,
+    span::before,
+    span::after {
+      background: $midwhite;
+    }
+  }
+
+  &:hover {
+    .side-menu-burg {
+      span {
+        transition: 0.2s ease;
+        background: $offwhite;
+      }
+      span::before {
+        transition: 0.2s ease;
+        top: -6px;
+        background: $offwhite;
+      }
+
+      span::after {
+        transition: 0.2s ease;
+        bottom: -6px;
+        background: $offwhite;
+      }
+    }
+    .header-title a {
+      transition: 0.2s ease;
+      color: $offwhite;
+    }
+  }
+}

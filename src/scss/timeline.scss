@@ -1,0 +1,288 @@
+
+.timeline-wrapper {
+  position: fixed;
+  box-sizing: border-box;
+  left: 110px;
+  right: 0px;
+  height: 170px;
+  background: rgba($black, 0.8);
+  box-shadow: 0 -10px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  color: white;
+  transition: 0.2s ease;
+  bottom: 0px;
+  z-index: $timeline;
+
+  &.folded {
+    transition: 0.2s ease;
+    bottom: -170px;
+
+    .timeline-header .timeline-toggle p .arrow-down {
+      transform: translate(0, 5px)rotate(-135deg);
+      -webkit-transform: translate(0, 5px)rotate(-135deg);
+    }
+  }
+
+  .timeline-header {
+    height: 0px;
+    width: 100%;
+    font-size: $large;
+    font-weight: 700;
+
+    .timeline-toggle {
+      position: absolute;
+      margin: 0 auto;
+      width: 100%;
+      text-align: center;
+
+      p {
+        width: 60px;
+        height: 25px;
+        margin: 0 auto;
+        background: rgba($black, 0.8);
+        margin-top: -25px;
+        cursor: pointer;
+
+        &:hover {
+          .arrow-down {
+            transition: 0.2s ease;
+            border-right: 2px solid $offwhite;
+            border-bottom: 2px solid $offwhite;
+          }
+        }
+      }
+
+      .arrow-down {
+        display: inline-block;
+        padding: 3px;
+        transition: 0.2s ease;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        border-right: 2px solid $midwhite;
+        border-bottom: 2px solid $midwhite;
+      }
+    }
+
+    .timeline-info {
+      position: absolute;
+      margin-top: -70px;
+      margin-left: 10px;
+      background: rgba($black, 0.8);
+      padding: 10px;
+      min-height: 20px;
+      p {
+        margin: 0;
+        height: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+
+        &:first-child {
+          text-transform: none;
+          font-size: $normal;
+          letter-spacing: 0.05;
+        }
+      }
+    }
+  }
+
+  .timeline-content {
+    height: 160px;
+    padding-top: 20px;
+
+    .timeline-labels {
+      padding-top: 2px;
+      padding-left: 20px;
+      margin-right: 0px;
+      border-right: 1px solid $midgrey;
+      width: 175px;
+      height: 180px;
+      float: left;
+      text-align: left;
+      box-sizing: border-box;
+
+      .timeline-label-title {
+        font-size: $normal;
+        font-weight: 700;
+        fill: $offwhite;
+        letter-spacing: 0.1em;
+        height: 20px;
+        text-transform: uppercase;
+      }
+
+      .timeline-label {
+        font-size: $small;
+        line-height: 16px;
+        color: $offwhite;
+        text-align: right;
+        padding-right: 10px;
+        letter-spacing: 0.05em;
+      }
+    }
+
+    .timeLabel {
+      font-size: $normal;
+      fill: $midwhite;
+      letter-spacing: 0.05em;
+    }
+
+    .timeline {
+      /*width: calc(100% - 200px);*/
+      width: calc(100% - 40px);
+      margin-left: 20px;
+      box-sizing: border-box;
+      float: left;
+
+      svg {
+        display: inline-block;
+        float: left;
+      }
+
+      .domain {
+        opacity: 0;
+      }
+
+      .tick {
+        cursor: -webkit-grab;
+        cursor: -moz-grab;
+        line {
+          stroke: rgb(199, 199, 199);
+          shape-rendering: crispEdges;
+          opacity: 0.6;
+        }
+
+        text {
+          font-family: 'Lato', Helvetica, sans-serif;
+          fill: $midwhite;
+          text-transform: capitalize;
+        }
+      }
+
+      .xAxis {
+        line {
+          stroke-dasharray: 1px 4px;
+        }
+      }
+
+      .yAxis {
+        .tick line {
+          stroke-width: 15px;
+          cursor: -webkit-grab;
+          cursor: -moz-grab;
+        }
+      }
+
+      .axisBoundaries {
+        stroke: $offwhite;
+        stroke-width: 1;
+        stroke-dasharray: 1px 4px;
+      }
+
+      .event {
+        cursor: pointer;
+        opacity: .7;
+
+        &.mouseover {
+          opacity: 1;
+        }
+      }
+
+      .timeline-marker {
+        fill: none;
+        stroke: $offwhite;
+        stroke-width: 2;
+        stroke-dasharray: 5px 2px;
+      }
+
+      .coevent {
+        opacity: .7;
+        cursor: pointer;
+      }
+
+      .time-controls path,
+      .time-controls rect {
+        cursor: pointer;
+        transition: 0.2s ease;
+        fill: $midwhite;
+
+        &:hover path,
+        &:hover path, {
+          transition: 0.2s ease;
+          fill: $offwhite;
+        }
+      }
+
+      .time-controls-inline path {
+        cursor: pointer;
+        fill: $offwhite;
+      }
+
+      .time-controls circle,
+      .time-controls-inline circle {
+        fill: $midwhite;
+        fill-opacity: 0.01;
+        cursor: pointer;
+        stroke: $midwhite;
+        stroke-width: 1;
+      }
+
+      .time-controls-inline circle { stroke: none; }
+
+      .time-controls g,
+      .time-controls-inline {
+        &:hover {
+          cursor: pointer;
+          circle {
+            transition: 0.2s ease;
+            fill-opacity: 0.2;
+            fill: $offwhite;
+          }
+          path,
+          rect {
+            transition: 0.2s ease;
+            fill: $offwhite;
+          }
+        }
+      }
+
+      .zoom-level-button {
+        font-size: $xsmall;
+        cursor: pointer;
+        text-anchor: middle;
+        letter-spacing: 0.05em;
+        transition: 0.2s ease;
+        fill: $midwhite;
+
+        &:hover,
+        &.active {
+          transition: 0.2s ease;
+          fill: $offwhite;
+        }
+      }
+    }
+  }
+}
+
+/*
+* Slider
+* https://bl.ocks.org/mbostock/6452972
+*/
+.track,
+.track-overlay {
+  stroke-linecap: round;
+}
+
+.track {
+  stroke: $offwhite;
+  stroke-opacity: 1;
+  stroke-width: 1px;
+}
+
+.track-overlay {
+  pointer-events: stroke;
+  stroke-width: 15px;
+  stroke: transparent;
+  cursor: pointer;
+}
+
+.handle {
+  fill: $offwhite;
+}

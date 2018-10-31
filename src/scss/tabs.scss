@@ -1,0 +1,47 @@
+.react-tabs {
+  padding-top: 0;
+  box-sizing: border-box;
+  height: 100%;
+
+  [role=tablist] {
+    padding: 0;
+  }
+
+
+  [role=tab] {
+    font-family: 'Lato', Helvetica, sans-serif;
+    font-size: $xlarge;
+    width: 33%;
+    background: none;
+    color: $midwhite;
+    outline: none;
+    float: left;
+    cursor: pointer;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    list-style-type: none;
+    box-sizing: border-box;
+    &:hover {
+      color: $offwhite;
+    }
+  }
+
+  [role=tab][aria-selected=true] {
+    font-weight: 700;
+    border-radius: 0;
+    border: 0;
+    color: $offwhite;
+    border: 1px solid;
+    box-sizing: border-box;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-bottom: 0;
+  }
+
+  .react-innertabpanel {
+    box-sizing: border-box;
+    padding-top: 20px;
+  }
+}

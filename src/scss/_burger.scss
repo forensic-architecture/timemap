@@ -1,0 +1,114 @@
+
+// Burger transition
+.side-menu-burg {
+  position: absolute;
+  overflow: hidden;
+  float: right;
+  margin: 0;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+  border: none;
+  cursor: pointer;
+  background: none;
+
+  &.hidden {
+    display: none;
+  }
+
+  span {
+    display: block;
+    position: absolute;
+    top: 9px;
+    left: 0px;
+    right: 0px;
+    height: 2px;
+    background: $offwhite;
+    border-radius: 4px;
+  }
+
+  span::before,
+  span::after {
+    position: absolute;
+    display: block;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: $offwhite;
+    border-radius: 4px;
+    content: "";
+    transition-duration: 0.2s, 0.2s;
+    transition-delay: 0.2s, 0s;
+  }
+
+  span::before {
+    transition-property: top, transform;
+    top: -8px;
+  }
+
+  span::after {
+    transition-property: bottom, transform;
+    bottom: -8px;
+  }
+
+  &:hover {
+    span::before {
+      top: -6px;
+    }
+
+    span::after {
+      bottom: -6px;
+    }
+  }
+
+  &.is-active  {
+    span {
+      background: $midwhite;
+      transform: rotate(45deg);
+      transition-delay: 0s, 0.2s;
+    }
+
+    span::before,
+    span::after {
+      background: $midwhite;
+      transition-delay: 0s, 0.2s;
+    }
+
+    span::before {
+      top: 0;
+      transform: rotate(0deg);
+      -webkit-transform: rotate(0deg);
+    }
+
+    span::after {
+      bottom: 0;
+      transform: rotate(-90deg);
+      -webkit-transform: rotate(-90deg);
+    }
+
+    &:hover {
+      span,
+      span::before,
+      span::after {
+        transition: 0.2s ease;
+        background: $offwhite;
+      }
+    }
+
+    &.over-white:hover {
+      span,
+      span:before,
+      span:after {
+        transition: 0.2s ease;
+        background: $darkgrey;
+      }
+    }
+  }
+}
+
+.side-menu-burg:focus {
+  outline: none;
+}

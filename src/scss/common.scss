@@ -1,0 +1,137 @@
+@import 'colors';
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: $black;
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      color: $yellow;
+    }
+  }
+}
+
+h1 {
+  font-family: 'Merriweather', serif;
+}
+
+h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.login-wrapper {
+  margin-left: 20px;
+  color: white;
+
+  .login-title {
+    p.message {
+      color: $yellow;
+    }
+  }
+
+  form span {
+    width: 120px;
+    display: inline-block;
+  }
+
+  form input {
+    margin: 10px 0;
+    height: 30px;
+    box-sizing: border-box;
+    padding: 0 5px;
+    outline: none;
+    font-family: 'Lato', sans-serif;
+
+    &:focus {
+      border: 3px solid $yellow;
+    }
+  }
+
+  form button {
+    background: $black;
+    color: white;
+    width: 120px;
+    height: 30px;
+    border: 1px solid $offwhite;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    outline: none;
+    margin-top: 10px;
+    margin-left: 320px;
+
+    &:hover,
+    &:focus {
+      transition: 0.2s ease;
+      border: 1px solid $yellow;
+      color: $yellow;
+    }
+  }
+}
+
+.page {
+  font-family: 'Lato', Helvetica sans-serif;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+
+  ::-moz-selection {
+    color: $black;
+    background: $yellow;
+  }
+  ::selection {
+    color: $black;
+    background: $yellow;
+  }
+}
+
+.chart {
+  background: #000010;
+}
+
+.primary-action {
+  button {
+    font-size: 1.2em;
+    height: 40px;
+    line-height: 40px;
+    width: 200px;
+    padding: 0;
+    border: 1px solid $offwhite;
+    background: none;
+    color: $offwhite;
+    cursor: pointer;
+    outline: none;
+
+    &:hover {
+      transition: 0.2s ease;
+      color: $yellow;
+      border: 1px solid $yellow;
+      background: rgba(white, 0.1);
+    }
+  }
+}
+
+/*
+Scrollbar
+*/
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: $offwhite;
+}
+
+.hidden {
+    visibility: hidden;
+}

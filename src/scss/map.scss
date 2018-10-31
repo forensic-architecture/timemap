@@ -1,0 +1,223 @@
+@import 'popup';
+
+@-webkit-keyframes pulsate {
+  0% { opacity: 0.1; }
+  50% { opacity: 0.25; }
+  100% { opacity: 0.1; }
+}
+
+.map-wrapper {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 110px;
+  right: 0;
+
+  .leaflet-container {
+    height: 100%;
+
+    img.leaflet-tile {
+      -webkit-filter: contrast(120%) brightness(115%) grayscale(95%); /* Webkit */
+     filter: gray; /* IE6-9 */
+     filter: contrast(120%) brightness(115%) grayscale(95%); /* W3C */
+    }
+  }
+
+  &.hidden {
+    z-index: $hidden;
+  }
+  &.show {
+      z-index: $map;
+  }
+  .event {
+    fill: $yellow;
+    cursor: pointer;
+    opacity: 0.45;
+  }
+
+  .link {
+    stroke: $midgrey;
+    fill: none;
+    stroke-width: 2;
+    stroke-dasharray: 2px 5px;
+  }
+
+  .site-label {
+    background: rgba($black,0.6);
+    color: #fff;
+    padding: 2px 7px;
+    font-weight: 500;
+    font-size: 11px;
+    font-family: 'Lato', Helvetica, sans-serif;
+    border: rgba($black,0.6);
+    letter-spacing: 0.05em;
+
+    &::before {
+      border-top-color: rgba($black,0.6);
+    }
+  }
+}
+
+/*
+* Leaflet mapping controls
+*/
+.leaflet-touch .leaflet-bar {
+  .leaflet-control-zoom {
+    border: 0;
+    margin-left: 20px;
+    margin-top: 20px;
+  }
+
+  a.leaflet-control-zoom-in,
+  a.leaflet-control-zoom-out {
+    border: 0;
+    border-radius: 2px;
+    color: $yellow;
+  }
+
+  a.leaflet-control-zoom-in {
+    border-bottom: 1px solid $yellow;
+  }
+}
+
+/*
+* Leaflet marker and popups
+*/
+
+.leaflet-svg {
+  display: block;
+
+  &.hide {
+    display: none;
+  }
+}
+
+.leaflet-popup {
+  display: none;
+
+  &.do-display {
+    display: block;
+  }
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 3px;
+  background: $black;
+
+  .leaflet-popup-content {
+    color: white;
+    margin: 0;
+    padding: 3px 5px;
+
+    .event-card {
+      margin: 0;
+    }
+  }
+}
+
+.leaflet-popup-close-button {
+  display: none;
+
+  & + .leaflet-popup-content-wrapper .leaflet-popup-content {
+    padding-top: 3px;
+  }
+}
+
+.leaflet-popup-tip-container {
+  display: none;
+}
+
+.leaflet-pane > svg path.bus-route,
+.leaflet-pane > svg path.district {
+  pointer-events: auto;
+}
+
+.eventLocationMarker {
+  fill: none;
+  stroke: $yellow;
+  stroke-width: 2;
+}
+
+/*
+*
+* Elements
+*/
+
+.location-event-marker {
+  stroke-width: 0;
+  transition: 0.2s ease;
+  fill-opacity: 0.8;
+  cursor: pointer;
+
+  &:hover {
+    transition: 0.2s ease;
+    fill-opacity: 1;
+  }
+}
+
+.coevent-marker {
+  fill-opacity: 0.1;
+  stroke-dasharray: 8px 4px;
+  stroke-width: 2px;
+  opacity: 1;
+}
+.coevent-path {
+  stroke-dasharray: 8px 4px;
+  stroke-width: 2;
+}
+
+.district-boundaries {
+  fill: $red;
+  fill-opacity: 0.3;
+  stroke-width: 2;
+  stroke: $red;
+}
+
+.path-polyline {
+  stroke: $darkgrey;
+  stroke-width: 2px;
+}
+
+.route-polyline {
+  transition: 0.2s ease;
+  stroke: $darkgrey;
+
+  &:hover {
+    transition: 0.2s ease;
+    stroke: $black;
+  }
+}
+
+.district-popup {
+  button {
+    height: 80px;
+    line-height: 80px;
+    width: 200px;
+    padding: 0;
+    border: none;
+    background: none;
+    background-size: 100%;
+    color: $offwhite;
+    cursor: pointer;
+    outline: none;
+    font-family: 'Lato', Helvetica, sans-serif;
+    text-transform: uppercase;
+
+    p {
+      font-size: $normal;
+      margin: 0;
+      transition: 0.2s ease;
+      letter-spacing: 0.1em;
+      &:first-child {
+        font-size: $xsmall;
+      }
+    }
+
+    &:hover {
+      p:last-child {
+        transition: 0.2s ease;
+        letter-spacing: 0.15em;
+      }
+    }
+  }
+}

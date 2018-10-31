@@ -1,0 +1,16 @@
+.icon {
+  display: inline-block;
+  width: 32px;
+  height: 1em;
+  stroke-width: 0;
+  stroke: $offwhite;
+  fill: $offwhite;
+  transform: scale(1.4);
+  cursor: pointer;
+
+  &:hover {
+    transition: 0.2s ease;
+    stroke: $yellow;
+    fill: $yellow;
+  }
+}
