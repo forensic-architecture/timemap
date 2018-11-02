@@ -166,27 +166,22 @@ Events can have zero, one or multiple tags (comma-separated in one single string
 
 ### Configuration
 
-The application will require to include a few configuration settings. Configuration options are to be set in [app/config.js](app/config.js). It contains the following fields:
+The application will require to include a few configuration settings. Configuration options are to be set in [app/config.js](app/config.js). You will find a file named `app/config.example.js` which you can copy as an example. It contains the following fields:
 
-```javascript
-module.exports = {
-  title: 'EXAMPLE_TITLE',                     // REQUIRED
-  SERVER_ROOT: 'http://localhost:4040',       // REQUIRED
-  EVENT_EXT: '/<EVENT_URI>',                  // REQUIRED
-  EVENT_DESC_ROOT: '/<EVENT_DETAIL_URI>',     // Optional
-  CATEGORY_EXT: '/<CATEGORY_URI>',            // REQUIRED
-  TAG_TREE_EXT: '/<TAG_TREE_URI>',            // Optional
-  SITES_EXT: '/<STIES',                       // Optional
-  MAP_ANCHOR: [27.5813121, -18.5161798],      // REQUIRED
-  INCOMING_DATETIME_FORMAT: '%m/%d/%YT%H:%M', // REQUIRED
-  MAPBOX_TOKEN: 'SOME_MAPBOX_TOKEN',          // REQUIRED
-  features: {
-    USE_TAGS: false,
-    USE_SEARCH: false,
-    USE_SITES: false
-  }
-}
-```
+| Option  | Description | Type | Nullable |
+| ------- | ----------- | ---- | -------- |
+| title | Title of the application, display in the toolbar | String | No |
+| SERVER_ROOT | Base URI for the server | String | No |
+| EVENT_EXT | Endpoint for events, which will be concatenated with SERVER_ROOT | String | No |
+| EVENT_DESC_ROOT | Endpoint for additional metadata for each individual event, concatenated to SERVER_ROOT | String | Yes |
+| CATEGORY_EXT | Endpoint for categories, concatenated with SERVER_ROOT | String | Yes |
+| TAG_TREE_EXT | Endpoint for tags, concatenated with SERVER_ROOT | String | Yes |
+| SITES_EXT | Endpoint for sites, concatenated with SERVER_ROOT | String | Yes |
+| MAP_ANCHOR | Geographic coordinates for original map anchor | Array of numbers | No |
+| MAPBOX_TOKEN | Access token for Mapbox satellite imagery | String | No |
+| features.USE_TAGS | Enable / Disable tags | boolean | No |
+| features.USE_SEARCH | Enable / Disable search | boolean | No |
+| features.USE_SITES | Enable / Disable sites | boolean | No |
 
 In this configuration file you'll need to add your Mapbox token (see [here for more info](https://www.mapbox.com/help/define-access-token/)). Additionally, you'll need to replace the required endpoints by functioning ones. Finally, you'll want to initialize your application set in `MAP_ANCHOR`, as a (lat, long) pair, which determines the specific location at which the application will center itself on start.
 
@@ -194,6 +189,16 @@ In this configuration file you'll need to add your Mapbox token (see [here for m
 
 If you'd like to tailor the functionality of TimeMap to your use case, you can consult the [Wiki]() for more detailed documentation of the architecture of TimeMap.
 
-## How to contribute
+## Contribute
 
-If you'd like to contribute to extend the functionality of TimeMap, you can take a look at the issues.
+### [Code of Conduct](CODE_OF_CONDUCT.md)
+
+Please read our adopted [code of conduct](CODE_OF_CONDUCT.md) before contributing, so that you can understand what actions will and will not be tolerated.
+
+### [Contributing Guide](CONTRIBUTING.md)
+
+Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose bugfixes and improvements.
+
+## License
+
+TimeMap is distributed under the MIT License.
