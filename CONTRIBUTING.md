@@ -57,6 +57,8 @@ More information will be available on the [git workflow wiki page](https://githu
 
 You can also refer to Github's guide to [forking a repository](https://help.github.com/articles/fork-a-repo/) and to [syncing a fork](https://help.github.com/articles/syncing-a-fork/).
 
+If you have any questions or just want to chat, please join our team [fa_open_source](https://keybase.io/team/fa_open_source) on Keybase for community discussion. Keybase is a great platform for encrypted chat and file sharing.
+
 ## Other
 
 This contributing guide is based on the guidelines of the [SuperCollider contributing guide](https://raw.githubusercontent.com/supercollider/supercollider/develop/CONTRIBUTING.md).

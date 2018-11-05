@@ -199,6 +199,9 @@ Please read our adopted [code of conduct](CODE_OF_CONDUCT.md) before contributin
 
 Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose bugfixes and improvements.
 
+## Community
+If you have any questions or just want to chat, please join our team [fa_open_source](https://keybase.io/team/fa_open_source) on Keybase for community discussion. Keybase is a great platform for encrypted chat and file sharing.
+
 ## License
 
 TimeMap is distributed under the MIT License.
