@@ -30,7 +30,7 @@ class TagListPanel extends React.Component {
 
     if (Object.keys(tagFilter.children).length > 0) {
       Object.values(tagFilter.children).forEach((childNode) => {
-        this.traverseNodeAndCheckIt(childNode, depth, tagFilters, tagFilter.active);
+        this.traverseNodeAndCheckIt(childNode, depth, tagFilter.active);
       });
     }
   }
