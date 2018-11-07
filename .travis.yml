@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+    - node_modules
+before_script:
+  - npm install -g yarn
+install:
+  - yarn
+script:
+  - yarn build
