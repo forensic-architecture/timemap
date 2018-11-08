@@ -18,6 +18,34 @@ function makeError(type, id, message) {
   }
 }
 
+
+const isLeaf = node => (Object.keys(node.children).length === 0);
+const isDuplicate = (node, set) => { return (set.has(node.key)); };
+
+
+/*
+* Traverse a tag tree and check its duplicates
+*/
+function traverseNodeAndCheckIt(node, parent, set, duplicates) {
+  // If it's a leaf, check that it's not duplicate
+  if (isLeaf(node)) {
+    if (isDuplicate(node, set)) {
+      duplicates.push({
+        id: node.key,
+        error: makeError('Tags', node.key, 'tag was found more than once in hierarchy. Ignoring duplicate.')
+      });
+      delete parent.children[node.key];
+    } else {
+      set.add(node.key);
+    }
+  } else {
+    // If it's not a leaf, simply keep going
+    Object.values(node.children).forEach((childNode) => {
+      traverseNodeAndCheckIt(childNode, node, set, duplicates);
+    });
+  }
+}
+
 /*
 * Validate domain schema
 */
@@ -27,7 +55,7 @@ export function validate(domain) {
     categories: [],
     sites: [],
     notifications: domain.notifications,
-    tags: domain.tags
+    tags: {}
   }
 
   const discardedDomain = {
@@ -59,7 +87,7 @@ export function validate(domain) {
     validateItem(site, 'sites', siteSchema);
   });
 
-  // Message the number of failed items
+  // Message the number of failed items in domain
   Object.keys(discardedDomain).forEach(disc => {
     const len = discardedDomain[disc].length;
     if (len) {
@@ -69,7 +97,22 @@ export function validate(domain) {
         type: 'error'
       });
     }
-  })
+  });
+
+  // Validate uniqueness of tags
+  const tagSet = new Set([]);
+  const duplicateTags = [];
+  traverseNodeAndCheckIt(domain.tags, {}, tagSet, duplicateTags);
+
+  // Duplicated tags
+  if (duplicateTags.length > 0) {
+    sanitizedDomain.notifications.push({
+      message: `Tags are required to be unique. Ignoring duplicates for now.`,
+      items: duplicateTags,
+      type: 'error'
+    });
+  }
+  sanitizedDomain.tags = domain.tags;
 
   return sanitizedDomain;
 }

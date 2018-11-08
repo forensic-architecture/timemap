@@ -31,12 +31,12 @@ export default class Notification extends React.Component{
     if (this.props.isNotification) {
       return (
         <div className={`notification-wrapper`}>
-          {this.props.notifications.map(not => (
+          {this.props.notifications.map(notification => (
             <div className='notification' onClick={() => this.toggleDetails() }>
               <button onClick={() => this.props.toggle()} className="side-menu-burg over-white is-active"><span /></button>
-              <div className={`message ${not.type}`}>{`${not.message}`}</div>
+              <div className={`message ${notification.type}`}>{`${notification.message}`}</div>
               <div className={`details ${this.state.isExtended}`}>
-                {(not.items !== null) ? this.renderItems(not.items) : ''}
+                {(notification.items !== null) ? this.renderItems(notification.items) : ''}
               </div>
             </div>
           ))}
