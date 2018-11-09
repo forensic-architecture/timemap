@@ -21,26 +21,9 @@ class TagListPanel extends React.Component {
     this.computeTree(nextProps.tags.children[nextProps.tagType]);
   }
 
-  traverseNodeAndCheckIt(node, depth, active) {
-    // do something to node
-    const tagFilter = this.newTagFilters.find(tagFilter => tagFilter.key === node.key)
-    tagFilter.active = (depth === 0) ? !node.active : active;
-    tagFilter.depth = depth;
-    depth = depth + 1;
-
-    if (Object.keys(tagFilter.children).length > 0) {
-      Object.values(tagFilter.children).forEach((childNode) => {
-        this.traverseNodeAndCheckIt(childNode, depth, tagFilter.active);
-      });
-    }
-  }
-
   onClickCheckbox(tag) {
-    this.newTagFilters = this.props.tagFilters.slice(0);
-    let depth = 0;
-    if (tag.key && tag.children) this.traverseNodeAndCheckIt(tag, depth);
-
-    this.props.filter({ tags: this.newTagFilters });
+    tag.active = !tag.active
+    this.props.filter(tag);
   }
 
   createNodeComponent (node, depth) {

@@ -3,7 +3,7 @@ import initial from '../store/initial.js';
 import {
   UPDATE_HIGHLIGHTED,
   UPDATE_SELECTED,
-  UPDATE_FILTERS,
+  UPDATE_TAGFILTERS,
   UPDATE_TIMERANGE,
   RESET_ALLFILTERS,
   TOGGLE_LANGUAGE,
@@ -22,15 +22,34 @@ function updateSelected(appState, action) {
   });
 }
 
-function updateFilters(appState, action) { // XXX
+function updateTagFilters(appState, action) {
+  const tagFilters = appState.filters.tags.slice(0);
+  const nextActiveState = action.tag.active
+
+  function traverseNode(node) {
+    const tagFilter = tagFilters.find(tF => tF.key === node.key);
+    node.active = nextActiveState;
+    if (!tagFilter) tagFilters.push(node);
+
+    if (node && Object.keys(node.children).length > 0) {
+      Object.values(node.children).forEach((childNode) => { traverseNode(childNode); });
+    }
+  }
+
+  traverseNode(action.tag);
+
   return Object.assign({}, appState, {
-    filters: Object.assign({}, appState.filters, action.filters)
+    filters: Object.assign({}, appState.filters, {
+      tags: tagFilters
+    })
   });
 }
 
 function updateTimeRange(appState, action) { // XXX
   return Object.assign({}, appState, {
-    filters: Object.assign({}, appState.filters, action.range),
+    filters: Object.assign({}, appState.filters, {
+      range: action.range
+    }),
   });
 }
 
@@ -70,8 +89,8 @@ function app(appState = initial.app, action) {
       return updateHighlighted(appState, action);
     case UPDATE_SELECTED:
       return updateSelected(appState, action);
-    case UPDATE_FILTERS:
-      return updateFilters(appState, action);
+    case UPDATE_TAGFILTERS:
+      return updateTagFilters(appState, action);
     case UPDATE_TIMERANGE:
       return updateTimeRange(appState, action);
     case RESET_ALLFILTERS:

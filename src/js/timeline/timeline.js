@@ -56,7 +56,7 @@ export default function(app, ui) {
   let selected = [];
   let range = app.range;
 
-  const filter = app.filter;
+  const timeFilter = app.filter;
   const select = app.select;
   const getCategoryLabel = app.getCategoryLabel;
   const getCategoryGroupColor = app.getCategoryGroupColor;
@@ -230,9 +230,7 @@ export default function(app, ui) {
     })
     .on('end', () => {
       toggleTransition(true);
-      filter({
-        range: scale.x.domain()
-      });
+      timeFilter(scale.x.domain());
     });
 
   /*
@@ -367,9 +365,7 @@ export default function(app, ui) {
     const domainF = d3.timeMinute.offset(newCentralTime, zoom.duration / 2);
 
     scale.x.domain([domain0, domainF]);
-    filter({
-      range: scale.x.domain()
-    });
+    timeFilter(scale.x.domain());
   }
 
   /**
@@ -392,9 +388,7 @@ export default function(app, ui) {
     }
 
     scale.x.domain([domain0, domainF]);
-    filter({
-      range: scale.x.domain()
-    });
+    timeFilter(scale.x.domain());
   }
 
   function toggleTransition(isTransition) {
