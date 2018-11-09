@@ -26,7 +26,7 @@ const isDuplicate = (node, set) => { return (set.has(node.key)); };
 /*
 * Traverse a tag tree and check its duplicates
 */
-function traverseNodeAndCheckIt(node, parent, set, duplicates) {
+function validateTree(node, parent, set, duplicates) {
   // If it's a leaf, check that it's not duplicate
   if (isLeaf(node)) {
     if (isDuplicate(node, set)) {
@@ -41,7 +41,7 @@ function traverseNodeAndCheckIt(node, parent, set, duplicates) {
   } else {
     // If it's not a leaf, simply keep going
     Object.values(node.children).forEach((childNode) => {
-      traverseNodeAndCheckIt(childNode, node, set, duplicates);
+      validateTree(childNode, node, set, duplicates);
     });
   }
 }
@@ -102,7 +102,7 @@ export function validate(domain) {
   // Validate uniqueness of tags
   const tagSet = new Set([]);
   const duplicateTags = [];
-  traverseNodeAndCheckIt(domain.tags, {}, tagSet, duplicateTags);
+  validateTree(domain.tags, {}, tagSet, duplicateTags);
 
   // Duplicated tags
   if (duplicateTags.length > 0) {
