@@ -43,6 +43,7 @@ describe('server process', function() {
   urls.forEach(function(url) {
 
     it('should respond to request for "' + url + '"', function(done) {
+      this.timeout(5000);
 
       http.get({
         hostname: 'localhost',
