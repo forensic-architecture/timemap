@@ -14,24 +14,22 @@ describe('server process', function() {
     console.log("launching server...")
     server_proc = child_process.spawn('yarn', ['dev'], {
       cwd: '.',
-      shell: '/bin/bash',
-      detached: true
+      stdio: 'ignore'
     });
 
     server_proc.on('exit', function(code, signal) {
       server_exited = true;
     });
 
-    return (new Promise(function(done) {
+    return (new Promise(function(resolve) {
       // @TODO Better way to detect server alive-ness than waiting?
-      setTimeout(done, SERVER_LAUNCH_WAIT_TIME)
+      setTimeout(resolve, SERVER_LAUNCH_WAIT_TIME)
     }));
   });
 
   after(function() {
     console.log("killing server...")
-    server_proc.unref();
-    server_proc.kill();
+    server_proc.kill('SIGKILL');
   });
 
   it('should launch', function() {
@@ -51,7 +49,8 @@ describe('server process', function() {
       http.get({
         hostname: 'localhost',
         port: 8080,
-        path: '/'
+        path: '/',
+        agent: false
       }, function(res) {
         var result_data = '';
 
