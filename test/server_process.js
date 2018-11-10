@@ -13,7 +13,8 @@ describe('server process', function() {
 
     console.log("launching server...")
     server_proc = child_process.spawn('yarn', ['dev'], {
-      cwd: '.'
+      cwd: '.',
+      shell: '/bin/bash'
     });
 
     server_proc.on('exit', function(code, signal) {
