@@ -29,6 +29,7 @@ describe('server process', function() {
 
   after(function() {
     console.log("killing server...")
+    server_proc.unref();
     server_proc.kill();
   });
 
