@@ -10,7 +10,7 @@ export const getSites = (state) => {
   if (process.env.features.USE_SITES) return state.domain.sites;
   return [];
 }
-export const getTags = state => state.domain.tags;
+export const getAllTags = state => state.domain.tags;
 
 export const getCategoriesFilter = state => state.app.filters.categories;
 export const getTagsFilter = state => state.app.filters.tags;
@@ -105,20 +105,20 @@ export const getCategoryGroups = createSelector(
   }
 )
 
+
 /**
  * Given a tree of tags, return those tags as a list, where each node has been
  * aware of its depth, and given an 'active' flag
  */
 export const getTagFilters = createSelector(
-  [getTags],
+  [getAllTags],
   (tags) => {
-    const allTags = [];
+    const allTagFilters = [];
     let depth = 0;
     function traverseNode(node, depth) {
-      // do something to node
       node.active = (!node.hasOwnProperty('active')) ? false : node.active;
       node.depth = depth;
-      allTags.push(node)
+      if (node.active) allTagFilters.push(node)
       depth = depth + 1;
 
       if (Object.keys(node.children).length > 0) {
@@ -129,6 +129,6 @@ export const getTagFilters = createSelector(
     }
 
     if (tags.key && tags.children) traverseNode(tags, depth)
-    return allTags;
+    return allTagFilters;
   }
 )

@@ -136,11 +136,11 @@ export function updateDistrict(district) {
     };
 }
 
-export const UPDATE_FILTERS = 'UPDATE_FILTERS';
-export function updateFilters(filters) {
+export const UPDATE_TAGFILTERS = 'UPDATE_TIMEFILTERS';
+export function updateTagFilters(tag) {
     return {
-        type: UPDATE_FILTERS,
-        filters: filters
+        type: UPDATE_TAGFILTERS,
+        tag
     };
 }
 

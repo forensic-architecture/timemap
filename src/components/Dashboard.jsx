@@ -21,7 +21,8 @@ class Dashboard extends React.Component {
       this.handleHighlight = this.handleHighlight.bind(this);
       this.handleSelect = this.handleSelect.bind(this);
       this.handleToggle = this.handleToggle.bind(this);
-      this.handleFilter = this.handleFilter.bind(this);
+      this.handleTagFilter = this.handleTagFilter.bind(this);
+      this.handleTimeFilter = this.handleTimeFilter.bind(this);
     }
 
     componentDidMount() {
@@ -67,8 +68,12 @@ class Dashboard extends React.Component {
       }
     }
 
-    handleFilter(filters) {
-      this.props.actions.updateFilters(filters);
+    handleTagFilter(tag) {
+      this.props.actions.updateTagFilters(tag);
+    }
+
+    handleTimeFilter(timeRange) {
+      this.props.actions.updateTimeRange(timeRange);
     }
 
     handleToggle( key ) {
@@ -139,7 +144,7 @@ class Dashboard extends React.Component {
           toolbarTab={this.props.ui.components.toolbarTab}
           isView2d={this.props.ui.flags.isView2d}
 
-          filter={this.handleFilter}
+          filter={this.handleTagFilter}
           toggle={ (key) => this.handleToggle(key) }
           actions={this.props.actions}
         />
@@ -152,7 +157,6 @@ class Dashboard extends React.Component {
           isFetchingEvents={this.props.ui.flags.isFetchingEvents}
 
           highlight={this.handleHighlight}
-          filter={this.handleFilter}
           toggle={this.handleToggle}
           getCategoryGroup={category => this.getCategoryGroup(category)}
           getCategoryGroupColor={category => this.getCategoryGroupColor(category)}
@@ -170,7 +174,7 @@ class Dashboard extends React.Component {
           dom={this.props.ui.dom}
 
           select={this.handleSelect}
-          filter={this.handleFilter}
+          filter={this.handleTimeFilter}
           highlight={this.handleHighlight}
           toggle={() => this.handleToggle('TOGGLE_CARDSTACK')}
           getCategoryGroup={category => this.getCategoryGroup(category)}
@@ -209,7 +213,7 @@ function mapStateToProps(state) {
       categories: selectors.getFilteredCategories(state),
       categoryGroups: selectors.getCategoryGroups(state),
       sites: selectors.getSites(state),
-      tags: selectors.getTags(state),
+      tags: selectors.getAllTags(state),
 
       notifications: state.domain.notifications,
     }),

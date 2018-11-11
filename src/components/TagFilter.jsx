@@ -53,7 +53,6 @@ class TagFilter extends React.Component {
         <Checkbox
           isActive={this.isActive()}
           label={label}
-          onClickLabel={() => this.onClickTag()}
           onClickCheckbox={() => this.onClickTag()}
         />
       </li>
@@ -73,7 +72,6 @@ class TagFilter extends React.Component {
           <Checkbox
             isActive={this.isActive()}
             label={`${category.name} ( ${category.counts} )`}
-            onClickLabel={() => this.onClickCategory()}
             onClickCheckbox={() => this.onClickCategory()}
           />
         </li>
