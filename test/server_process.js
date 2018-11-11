@@ -1,75 +1,67 @@
 var assert = require('assert');
 var child_process = require('child_process')
 var http = require('http');
+import test from 'ava'
 
-var SERVER_LAUNCH_WAIT_TIME = 5 * 1000;
+const SERVER_LAUNCH_WAIT_TIME = 5 * 1000;
 
-describe('server process', function() {
-  var server_proc = null;
-  var server_exited = false;
+var server_proc = null;
+var server_exited = false;
 
-  before(function() {
-    this.timeout(SERVER_LAUNCH_WAIT_TIME + 1000);
-
-    console.log("launching server...")
-    server_proc = child_process.spawn('yarn', ['dev'], {
-      cwd: '.',
-      stdio: 'ignore'
-    });
-
-    server_proc.on('exit', function(code, signal) {
-      server_exited = true;
-    });
-
-    return (new Promise(function(resolve) {
-      // @TODO Better way to detect server alive-ness than waiting?
-      setTimeout(resolve, SERVER_LAUNCH_WAIT_TIME)
-    }));
+test.before.cb(t => {
+  console.log("launching server...")
+  server_proc = child_process.spawn('yarn', ['dev'], {
+    cwd: '.',
+    stdio: 'ignore'
   });
 
-  after(function() {
-    console.log("killing server...")
-    server_proc.kill('SIGKILL');
+  server_proc.on('exit', function(code, signal) {
+    server_exited = true;
   });
 
-  it('should launch', function() {
-    assert.equal(server_exited, false);
-  });
+  setTimeout(t.end, SERVER_LAUNCH_WAIT_TIME)
+});
 
-  var urls = [
-    '/',
-    'js/index.bundle.js'
-  ];
+test.after(function() {
+  console.log("killing server...")
+  server_proc.kill('SIGKILL');
+});
 
-  urls.forEach(function(url) {
+test('should launch', t => {
+  t.false(server_exited);
+});
 
-    it('should respond to request for "' + url + '"', function(done) {
-      this.timeout(5000);
+var urls = [
+  '/',
+  'js/index.bundle.js'
+];
 
-      http.get({
-        hostname: 'localhost',
-        port: 8080,
-        path: '/',
-        agent: false
-      }, function(res) {
-        var result_data = '';
+urls.forEach(function(url) {
+  test.cb('should respond to request for "' + url + '"', t => {
+    http.get({
+      hostname: 'localhost',
+      port: 8080,
+      path: '/',
+      agent: false
+    }, function(res) {
+      var result_data = '';
 
-        if(res.statusCode != 200) {
-          throw new Error('Server response was not 200.');
-        }
-
+      if(res.statusCode != 200) {
+        t.fail('Server response was not 200.');
+      } else {
         res.on('data', function(data) { result_data += data });
 
         res.on('end', function() {
           if (result_data.length > 0) {
-            done();
+            t.pass();
           } else {
-            done(new Error("Server returned no data."));
+            t.fail("Server returned no data.");
           }
         });
-      })
+      }
 
-    });
+      t.end();
+    })
 
   });
 
