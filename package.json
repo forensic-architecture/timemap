@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "webpack-dev-server --content-base static --mode development",
     "build": "NODE_ENV=production webpack --mode production",
-    "test": "npx ava --verbose"
+    "test": "ava --verbose"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
