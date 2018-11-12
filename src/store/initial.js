@@ -7,6 +7,7 @@ const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
 const initial = {
   domain: {
     events: [],
+    narratives: [],    
     locations: [],
 
     categories: [],
