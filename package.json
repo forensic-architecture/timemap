@@ -6,7 +6,9 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --content-base static --mode development",
-    "build": "NODE_ENV=production webpack --mode production"
+    "build": "NODE_ENV=production webpack --mode production",
+    "test": "ava --verbose",
+    "test-watch": "ava --watch"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -32,11 +34,13 @@
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "ava": "1.0.0-beta.8",
     "babel-loader": "^8.0.4",
     "css-loader": "^1.0.0",
     "file-loader": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.4",
+    "mocha": "^5.2.0",
     "node-sass": "^4.9.4",
     "redux-devtools": "^3.4.0",
     "sass-loader": "^7.1.0",
@@ -44,5 +48,10 @@
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.9"
+  },
+  "ava": {
+    "files": [
+      "test/**/*.js"
+    ]
   }
 }
