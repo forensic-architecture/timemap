@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "webpack-dev-server --content-base static --mode development",
     "build": "NODE_ENV=production webpack --mode production",
-    "test": "ava --verbose"
+    "test": "ava --verbose",
+    "test-watch": "ava --watch"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
