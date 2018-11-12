@@ -113,6 +113,7 @@ class Dashboard extends React.Component {
       return (<div>
         <Viewport
           locations={this.props.domain.locations}
+          narratives={this.props.domain.narratives}
           sites={this.props.domain.sites}
           categoryGroups={this.props.domain.categoryGroups}
 
@@ -164,6 +165,7 @@ class Dashboard extends React.Component {
         />
         <Timeline
           events={this.props.domain.events.filter(item => item)}
+          narratives={this.props.domain.narratives}
           categoryGroups={this.props.domain.categoryGroups}
 
           range={this.props.app.filters.range}
@@ -214,6 +216,7 @@ function mapStateToProps(state) {
       categoryGroups: selectors.getCategoryGroups(state),
       sites: selectors.getSites(state),
       tags: selectors.getAllTags(state),
+      narratives: selectors.getFilteredNarratives(state),
 
       notifications: state.domain.notifications,
     }),

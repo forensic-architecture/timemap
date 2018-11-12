@@ -12,6 +12,7 @@ export default function(newApp, ui, select) {
 
   const domain = {
     locations: [],
+    narratives: [],
     categoryGroups: [],
     sites: []
   }
@@ -148,6 +149,9 @@ Stop and start the development process in terminal after you have added your tok
       return `translate(${newPoint.x},${newPoint.y})`;
     });
 
+    g.selectAll('.narrative')
+      .attr('d', sequenceLine);
+
     const busLine = d3.line()
       .x(d => lMap.latLngToLayerPoint(d).x)
       .y(d => lMap.latLngToLayerPoint(d).y)
@@ -268,6 +272,7 @@ Stop and start the development process in terminal after you have added your tok
       .attr('class', 'location')
       .attr('transform', (d) => {
         d.LatLng = new L.LatLng(+d.latitude, +d.longitude);
+        console.log(lMap.latLngToLayerPoint(d.LatLng))
         return `translate(${lMap.latLngToLayerPoint(d.LatLng).x},
                   ${lMap.latLngToLayerPoint(d.LatLng).y})`;
       })
@@ -324,37 +329,40 @@ Stop and start the development process in terminal after you have added your tok
     }
   }
 
-  // NB: is this a function to be removed for future features?
-  /**
-   * Creats a marker for an eventPoint along a path
-   * @param {Object} eventPoint: data for an evenPoint - time, loc, tags, etc
-   * @param {number} step: the portion of the entire path this event corresponds to
-   */
-  function createPathEventMarker(eventPoint, step) {
-    const {
-      latitude,
-      longitude
-    } = getEventLocation(eventPoint);
-    const pathEventMarker = L.circleMarker(
-      [latitude, longitude], {
-        color: ui.colors.DARKGREY,
-        fill: ui.colors.DARKGREY,
-        weight: 2,
-        fillOpacity: 0.6,
-        radius: 10 * step,
-      },
-    );
 
-    // Add marker event handlers
-    pathEventMarker.bindPopup('');
-    pathEventMarker.on('popupopen', () => {
-      select([eventPoint]);
-    });
-    pathEventMarker.on('popupclose', () => {
-      select();
-    });
+   const getCoords = (d) => {
+     d.LatLng = new L.LatLng(+d.latitude, +d.longitude);
+     return {
+       x: lMap.latLngToLayerPoint(d.LatLng).x,
+       y: lMap.latLngToLayerPoint(d.LatLng).y
+     }
+   }
 
-    return pathEventMarker;
+   const sequenceLine = d3.line()
+     .x(d => getCoords(d).x)
+     .y(d => getCoords(d).y)
+
+   /**
+    * Clears existing narrative layer
+    * Renders all narrativ as paths
+    * Adds eventlayer to map
+    */
+
+  function renderNarratives() {
+    const narrativesDom = g.selectAll('.narrative')
+      .data(domain.narratives.map(d => d.steps))
+
+    narrativesDom
+      .exit()
+      .remove();
+
+    narrativesDom
+      .enter().append('path')
+      .attr('class', 'narrative')
+      .attr('d', sequenceLine)
+      .style('stroke-width', 3)
+      .style('stroke', '#fff')
+      .style('fill', 'none');
   }
 
   /**
@@ -366,6 +374,7 @@ Stop and start the development process in terminal after you have added your tok
 
     if (hash(domain) !== hash(newDomain)) {
       domain.locations = newDomain.locations;
+      domain.narratives = newDomain.narratives;
       domain.categoryGroups = newDomain.categoryGroups;
       domain.sites = newDomain.sites;
       renderDomain();
@@ -386,6 +395,7 @@ Stop and start the development process in terminal after you have added your tok
    function renderDomain () {
      renderSites();
      renderEvents();
+     renderNarratives();
    }
   function renderSelectedAndHighlight () {
     renderSelected();

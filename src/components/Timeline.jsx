@@ -12,6 +12,7 @@ class Timeline extends React.Component {
   componentDidMount() {
       const domain = {
         events: this.props.events,
+        narratives: this.props.narratives,
         categoryGroups: this.props.categoryGroups
       }
       const app = {
@@ -37,6 +38,7 @@ class Timeline extends React.Component {
   componentWillReceiveProps(nextProps) {
     const domain = {
       events: nextProps.events,
+      narratives: nextProps.narratives,
       categoryGroups: nextProps.categoryGroups
     }
 

@@ -11,6 +11,7 @@ class View2D extends React.Component {
   componentDidMount() {
     const domain = {
       locations: this.props.locations,
+      narratives: this.props.narratives,
       sites: this.props.sites,
       categoryGroups: this.props.categoryGroups
     }
@@ -34,6 +35,7 @@ class View2D extends React.Component {
   componentWillReceiveProps(nextProps) {
     const domain = {
       locations: nextProps.locations,
+      narratives: nextProps.narratives,
       sites: nextProps.sites,
       categoryGroups: nextProps.categoryGroups
     }

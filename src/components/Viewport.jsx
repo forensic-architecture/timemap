@@ -12,6 +12,7 @@ class Viewport extends React.Component {
       return (
         <View2D
           locations={this.props.locations}
+          narratives={this.props.narratives}
           sites={this.props.sites}
           categoryGroups={this.props.categoryGroups}
 
