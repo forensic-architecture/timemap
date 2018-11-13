@@ -10,7 +10,7 @@
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="TimeMap is released under the MIT license." />
   </a>
   <a href="https://travis-ci.com/forensic-architecture/timemap">
-    <img src="https://travis-ci.com/forensic-architecture/timemap.svg?branch=develop" alt="Build Status"/>}
+    <img src="https://travis-ci.com/forensic-architecture/timemap.svg?branch=develop" alt="Build Status"/>
   </a>
 </p>
 
