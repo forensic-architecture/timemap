@@ -90,13 +90,19 @@ export const getFilteredNarratives = createSelector(
             (parseTimestamp(evt.timestamp) < rangeFilter[1]);
 
         if (isRange && isTagged && evt.narrative) {
-          if (!narratives[evt.narrative]) narratives[evt.narrative] = { key: evt.narrative, steps: [] };
+          if (!narratives[evt.narrative]) narratives[evt.narrative] = { key: evt.narrative, steps: [], byId: {} };
           narratives[evt.narrative].steps.push(evt);
+          narratives[evt.narrative].byId[evt.id] = { next: null, prev: null };
         }
       });
       Object.keys(narratives).forEach((key) => {
-        narratives[key].steps.sort((a, b) => {
+        const steps = narratives[key].steps;
+        steps.sort((a, b) => {
           return (parseTimestamp(a.timestamp) > parseTimestamp(b.timestamp));
+        });
+        steps.forEach((step, i) => {
+          narratives[key].byId[step.id].next = (i < steps.length - 2) ? steps[i + 1] : null;
+          narratives[key].byId[step.id].prev = (i > 0) ? steps[i - 1] : null;
         });
       })
       return Object.values(narratives);

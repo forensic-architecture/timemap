@@ -137,14 +137,19 @@ class Card extends React.Component {
     </div>);
   }
 
+  getTimeLabel(){
+    const timestamp = this.props.tools.parser(this.props.event.timestamp);
+    const timelabel = this.props.tools.formatterWithYear(timestamp);
+    return timelabel;
+  }
+
   // NB: should be internaionalized.
   renderTimestamp() {
     const daytime_lang = copy[this.props.language].cardstack.timestamp;
     const estimated_lang = copy[this.props.language].cardstack.estimated;
 
     if (isNotNullNorUndefined(this.props.event.timestamp)) {
-      const timestamp = this.props.tools.parser(this.props.event.timestamp);
-      const timelabel = this.props.tools.formatterWithYear(timestamp);
+      const timelabel = this.getTimeLabel();
       return (<div className="event-card-section timestamp">
         <h4>{daytime_lang}</h4>
         {timelabel}
@@ -166,6 +171,27 @@ class Card extends React.Component {
     </div>);
   }
 
+  renderCardLink(event, direction) {
+    if (event !== null) {
+      const timelabel = this.getTimeLabel();
+      return (<a onClick={() => this.props.select([event])}>
+        {`${timelabel} - ${event.location}`}
+      </a>);
+    }
+    return (<a className="disabled">None</a>);
+  }
+
+  renderNarrative() {
+    const links = this.props.getNarrativeLinks(this.props.event);
+    if (links !== null) {
+      return (<div className="event-card-section">
+        <h4>Connected events</h4>
+        <p>Next: {this.renderCardLink(links.next, 'next')}</p>
+        <p>Previous: {this.renderCardLink(links.prev, 'prev')}</p>
+      </div>);
+    }
+  }
+
   renderContent() {
     if (this.state.isFolded) {
       return (<div className="card-bottomhalf folded"></div>);
@@ -176,16 +202,16 @@ class Card extends React.Component {
     } else {
       if (!this.props.event.hasOwnProperty('receiver') && !this.props.event.hasOwnProperty('transmitter')) {
         return (<div className="card-bottomhalf">
-          {this.renderTimestamp()}
           {this.renderLocation()}
           {this.renderTags()}
           {this.renderSource()}
+          {this.renderNarrative()}
         </div>);
       } else {
         return (<div className="card-bottomhalf">
-          {this.renderTimestamp()}
           {this.renderTags()}
           {this.renderSource()}
+          {this.renderNarrative()}
         </div>);
       }
     }

@@ -109,6 +109,12 @@ class Dashboard extends React.Component {
       return label;
     }
 
+    getNarrativeLinks(event) {
+      const narrative = this.props.domain.narratives.find(nv => nv.key === event.narrative);
+      if (narrative) return narrative.byId[event.id];
+      return null;
+    }
+
     renderTool() {
       return (<div>
         <Viewport
@@ -157,8 +163,10 @@ class Dashboard extends React.Component {
           isCardstack={this.props.ui.flags.isCardstack}
           isFetchingEvents={this.props.ui.flags.isFetchingEvents}
 
+          select={this.handleSelect}
           highlight={this.handleHighlight}
           toggle={this.handleToggle}
+          getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryGroup={category => this.getCategoryGroup(category)}
           getCategoryGroupColor={category => this.getCategoryGroupColor(category)}
           getCategoryLabel={category => this.getCategoryLabel(category)}

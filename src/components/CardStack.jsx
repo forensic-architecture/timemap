@@ -25,10 +25,12 @@ class CardStack extends React.Component {
               language={this.props.language}
               tools={this.props.tools}
               isFetchingEvents={this.props.isFetchingEvents}
+              getNarrativeLinks={this.props.getNarrativeLinks}
               getCategoryGroup={this.props.getCategoryGroup}
               getCategoryGroupColor={this.props.getCategoryGroupColor}
               getCategoryLabel={this.props.getCategoryLabel}
               highlight={this.props.highlight}
+              select={this.props.select}              
           />
         );
       });

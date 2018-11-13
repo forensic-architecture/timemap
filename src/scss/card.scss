@@ -43,6 +43,15 @@
 
   .event-card-section {
     margin-bottom: 10px;
+
+    a:hover {
+      color: $red;
+      cursor: pointer;
+    }
+    a.disabled {
+      color: $midgrey;
+      cursor: default;
+    }
   }
 
   .card-toggle p {
