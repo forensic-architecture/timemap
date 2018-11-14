@@ -23,7 +23,7 @@ TimeMap has the following high-level features capabilites:
 * Visualize and filter these incidents over time, on an adjustable timeline that allows to zoom in and out.
 * Visualize types of incidents by tag and by category, which can be displayed using different styles.
 
-A fully-functioning live version can be found as a result of the Forensic Architecture investigation of the [Ayotzinapa case](www.plataforma-ayotzinapa.org).
+A fully-functioning live version can be found as a result of the Forensic Architecture investigation of the [Ayotzinapa case](https://www.plataforma-ayotzinapa.org).
 
 ## Get up and running
 
