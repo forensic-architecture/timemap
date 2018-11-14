@@ -16,7 +16,7 @@ class Timeline extends React.Component {
         categoryGroups: this.props.categoryGroups
       }
       const app = {
-        range: this.props.range,
+        timerange: this.props.timerange,
         selected: this.props.selected,
         language: this.props.language,
         select: this.props.select,
@@ -43,7 +43,7 @@ class Timeline extends React.Component {
     }
 
     const app = {
-      range: nextProps.range,
+      timerange: nextProps.timerange,
       selected: nextProps.selected,
       language: nextProps.language,
       select: nextProps.select,
@@ -75,8 +75,8 @@ class Timeline extends React.Component {
     const labels_title_lang = copy[this.props.language].timeline.labels_title;
     const info_lang = copy[this.props.language].timeline.info;
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`;
-    const date0 = this.props.tools.formatterWithYear(this.props.range[0]);
-    const date1 = this.props.tools.formatterWithYear(this.props.range[1]);
+    const date0 = this.props.tools.formatterWithYear(this.props.timerange[0]);
+    const date1 = this.props.tools.formatterWithYear(this.props.timerange[1]);
     return (
       <div className={classes}>
         <div className="timeline-header">

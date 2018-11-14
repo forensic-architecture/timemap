@@ -145,12 +145,12 @@ export function updateTagFilters(tag) {
     }
 }
 
-export const UPDATE_TIMERANGE = 'UPDATE_TIMERANGE'
-export function updateTimeRange(range) {
+export const UPDATE_TIMERANGE = 'UPDATE_TIMERANGE';
+export function updateTimeRange(timerange) {
     return {
         type: UPDATE_TIMERANGE,
-        range
-    }
+        timerange
+    };
 }
 
 export const RESET_ALLFILTERS = 'RESET_ALLFILTERS'

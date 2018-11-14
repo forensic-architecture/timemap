@@ -7,7 +7,7 @@ const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
 const initial = {
   domain: {
     events: [],
-    narratives: [],    
+    narratives: [],
     locations: [],
 
     categories: [],
@@ -23,7 +23,7 @@ const initial = {
     selected: [],
     notifications: [],
     filters: {
-      range: [
+      timerange: [
           d3.timeParse("%Y-%m-%dT%H:%M:%S")("2014-08-22T12:00:00"),
           d3.timeParse("%Y-%m-%dT%H:%M:%S")("2014-08-27T12:00:00")
       ],

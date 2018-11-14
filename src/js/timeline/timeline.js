@@ -54,7 +54,7 @@ export default function(app, ui) {
   let events = [];
   let categoryGroups = [];
   let selected = [];
-  let range = app.range;
+  let timerange = app.timerange;
 
   const timeFilter = app.filter;
   const select = app.select;
@@ -90,7 +90,7 @@ export default function(app, ui) {
   const scale = {};
 
   scale.x = d3.scaleTime()
-    .domain(range)
+    .domain(timerange)
     .range([mg.l, WIDTH]);
 
   const groupStep = (106 - 30) / categoryGroups.length;
@@ -222,8 +222,8 @@ export default function(app, ui) {
       const dragNow = scale.x.invert(d3.event.x).getTime();
       const timeShift = (drag0 - dragNow) / 1000;
 
-      const newDomain0 = d3.timeSecond.offset(range[0], timeShift);
-      const newDomainF = d3.timeSecond.offset(range[1], timeShift);
+      const newDomain0 = d3.timeSecond.offset(timerange[0], timeShift);
+      const newDomainF = d3.timeSecond.offset(timerange[1], timeShift);
 
       scale.x.domain([newDomain0, newDomainF])
       render();
@@ -417,7 +417,7 @@ export default function(app, ui) {
    * It automatically sets brush timeline to a domain set by the params
    */
   function updateTimeRange() {
-    scale.x.domain(range);
+    scale.x.domain(timerange);
     axis.x0.scale(scale.x);
     axis.x1.scale(scale.x);
   }
@@ -430,12 +430,12 @@ export default function(app, ui) {
     dom.axis.label0
       .attr('x', 5)
       .attr('y', 15)
-      .text(formatterWithYear(range[0]));
+      .text(formatterWithYear(timerange[0]));
 
     dom.axis.label1
       .attr('x', WIDTH - 5)
       .attr('y', 15)
-      .text(formatterWithYear(range[1]))
+      .text(formatterWithYear(timerange[1]))
       .style('text-anchor', 'end');
   }
 
@@ -618,7 +618,7 @@ export default function(app, ui) {
     renderAxis();
 
     events = domain.events;
-    range = app.range;
+    timerange = app.timerange;
     selected = app.selected.slice(0);
     updateTimeRange();
   }

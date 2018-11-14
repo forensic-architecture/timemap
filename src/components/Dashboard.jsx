@@ -38,11 +38,11 @@ class Dashboard extends React.Component {
 
     handleSelect(selected) {
       if (selected) {
-        // attacks are not susceptible to tag filters, so make sure this happens only when they are found
-        // in the domain
         let eventsToSelect = selected.map(eventId => this.props.domain.events[eventId]);
+        const parser = this.props.ui.tools.parser;
+
         eventsToSelect = eventsToSelect.sort((a, b) => {
-          return this.props.ui.tools.parser(a.timestamp) - this.props.ui.tools.parser(b.timestamp);
+          return parser(a.timestamp) - parser(b.timestamp);
         });
 
         if (eventsToSelect.every(event => (event))) {
@@ -58,7 +58,7 @@ class Dashboard extends React.Component {
             });
 
             eventsSelected = eventsSelected.sort((a, b) => {
-              return this.props.ui.tools.parser(a.timestamp) - this.props.ui.tools.parser(b.timestamp);
+              return parser(a.timestamp) - parser(b.timestamp);
             });
 
             this.props.actions.updateSelected(eventsSelected);
@@ -105,8 +105,8 @@ class Dashboard extends React.Component {
     }
 
     getCategoryLabel(category) {
-      const label = this.props.domain.categories.find(t => t.category === category).category_label;
-      return label;
+      const categories = this.props.domain.categories;
+      return categories.find(t => t.category === category).category_label;
     }
 
     getNarrativeLinks(event) {
@@ -176,7 +176,7 @@ class Dashboard extends React.Component {
           narratives={this.props.domain.narratives}
           categoryGroups={this.props.domain.categoryGroups}
 
-          range={this.props.app.filters.range}
+          timerange={this.props.app.filters.timerange}
           selected={this.props.app.selected}
           language={this.props.app.language}
 
@@ -202,7 +202,7 @@ class Dashboard extends React.Component {
           toggle={() => this.handleToggle('TOGGLE_NOTIFICATIONS')}
         />
         <LoadingOverlay
-          ui={this.props.ui}
+          ui={this.props.ui.flags.isFetchingDomain}
           language={this.props.app.language}
         />
       </div>
@@ -218,21 +218,23 @@ function mapStateToProps(state) {
   return Object.assign({}, state, {
     domain: Object.assign({}, state.domain, {
 
-      events: selectors.getFilteredEvents(state),
-      locations: selectors.getFilteredLocations(state),
-      categories: selectors.getFilteredCategories(state),
-      categoryGroups: selectors.getCategoryGroups(state),
-      sites: selectors.getSites(state),
-      tags: selectors.getAllTags(state),
-      narratives: selectors.getFilteredNarratives(state),
+      // These items are affected by app selectionFilters
+      events: selectors.selectEvents(state),
+      locations: selectors.selectLocations(state),
+      categories: selectors.selectCategories(state),
+      categoryGroups: selectors.selectCategoryGroups(state),
+      narratives: selectors.selectNarratives(state),
 
-      notifications: state.domain.notifications,
+      // These items are not affected by selectionFilters
+      sites: selectors.getSites(state),
+      tags: selectors.getTagTree(state),
+      notifications: selectors.getNotifications(state)
     }),
     app: Object.assign({}, state.app, {
       error: state.app.error,
       filters: Object.assign({}, state.app.filters, {
-        range: selectors.getRangeFilter(state),
-        tags: selectors.getTagFilters(state)
+        timerange: selectors.getTimeRange(state),
+        tags: selectors.selectTagList(state)
       })
     }),
     ui: state.ui

@@ -58,30 +58,6 @@ class Card extends React.Component {
     </div>);
   }
 
-  // NB: is this function for a future feature?
-  renderIncidents() {
-    const incident_type_lang = copy[this.props.language].cardstack.incident_type;
-    const incidentTags = []; //this.props.event.tags.filter(tag => tag.type === 'incident_type');
-
-    return (<div className="event-card-section event-type">
-      <h4>{incident_type_lang}</h4>
-      {
-        incidentTags.map((tag, idx) => {
-          return (<span className={(
-              tag.name === 'contradicción' || tag.name === 'declaración con sospecha de tortura')
-              ? ' flagged'
-              : ''}>
-            {tag.name}{
-              (idx < incidentTags.length - 1)
-                ? ','
-                : ''
-            }
-          </span>);
-        })
-      }
-    </div>);
-  }
-
   renderSummary() {
     const summary = copy[this.props.language].cardstack.description;
     const desc = this.props.event.description;
@@ -162,15 +138,6 @@ class Card extends React.Component {
     }
   }
 
-  renderHeader() {
-    return (<div className="card-collapsed">
-      {this.renderWarning()}
-      {this.renderCategory()}
-      {this.renderTimestamp()}
-      {this.renderSummary()}
-    </div>);
-  }
-
   renderCardLink(event, direction) {
     if (event !== null) {
       const timelabel = this.getTimeLabel();
@@ -183,6 +150,7 @@ class Card extends React.Component {
 
   renderNarrative() {
     const links = this.props.getNarrativeLinks(this.props.event);
+
     if (links !== null) {
       return (<div className="event-card-section">
         <h4>Connected events</h4>
@@ -190,6 +158,22 @@ class Card extends React.Component {
         <p>Previous: {this.renderCardLink(links.prev, 'prev')}</p>
       </div>);
     }
+  }
+
+  renderSpinner() {
+    return (<div className="spinner">
+      <div className="double-bounce1"></div>
+      <div className="double-bounce2"></div>
+    </div>);
+  }
+
+  renderHeader() {
+    return (<div className="card-collapsed">
+      {this.renderWarning()}
+      {this.renderCategory()}
+      {this.renderTimestamp()}
+      {this.renderSummary()}
+    </div>);
   }
 
   renderContent() {
@@ -200,29 +184,13 @@ class Card extends React.Component {
         {this.renderSpinner()}
       </div>);
     } else {
-      if (!this.props.event.hasOwnProperty('receiver') && !this.props.event.hasOwnProperty('transmitter')) {
-        return (<div className="card-bottomhalf">
-          {this.renderLocation()}
-          {this.renderTags()}
-          {this.renderSource()}
-          {this.renderNarrative()}
-        </div>);
-      } else {
-        return (<div className="card-bottomhalf">
-          {this.renderTags()}
-          {this.renderSource()}
-          {this.renderNarrative()}
-        </div>);
-      }
+      return (<div className="card-bottomhalf">
+        {this.renderLocation()}
+        {this.renderTags()}
+        {this.renderSource()}
+        {this.renderNarrative()}
+      </div>);
     }
-  }
-
-
-  renderSpinner() {
-    return (<div className="spinner">
-      <div className="double-bounce1"></div>
-      <div className="double-bounce2"></div>
-    </div>);
   }
 
   renderArrow() {
