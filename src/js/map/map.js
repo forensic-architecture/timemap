@@ -5,7 +5,7 @@ import {
 import hash from 'object-hash';
 import 'leaflet-polylinedecorator';
 
-export default function(newApp, ui, select) {
+export default function(newApp, ui) {
   let svg, g, defs;
 
   let categoryColorGroups = {};
@@ -24,7 +24,8 @@ export default function(newApp, ui, select) {
 
   const getCategoryGroup = newApp.getCategoryGroup;
   const getCategoryGroupColor = newApp.getCategoryGroupColor;
-  const groupColors = ui.style.groupColors;
+  const select = newApp.select;
+  const groupColors = ui.groupColors;
 
     // Map Settings
   const center = newApp.mapAnchor;

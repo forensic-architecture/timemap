@@ -36,6 +36,17 @@ function isTaggedIn(event, tagFilters) {
   }
 }
 
+/*
+* Returns true if no tags are selected
+*/
+function isNoTags(tagFilters) {
+  return (
+    tagFilters.length === 0
+    || !process.env.features.USE_TAGS
+    || tagFilters.every(t => !t.active)
+  );
+}
+
 /**
  * Given an event and a time range,
  * returns true/false if the event falls within timeRange
@@ -44,15 +55,6 @@ function isTimeRangedIn(event, timeRange) {
   return (
     timeRange[0] < parseTimestamp(event.timestamp)
     && parseTimestamp(event.timestamp) < timeRange[1]
-  );
-}
-
-
-function isNoTags(tagFilters) {
-  return (
-    tagFilters.length === 0
-    || !process.env.features.USE_TAGS
-    || tagFilters.every(t => !t.active)
   );
 }
 
@@ -137,9 +139,9 @@ export const selectLocations = createSelector(
       }
     })
 
-  // Make locations an array are remove if any are undefined
-  return Object.values(selectedLocations).filter(item => item);
-});
+    return Object.values(selectedLocations);
+  }
+);
 
 
 /*
@@ -159,9 +161,9 @@ export const selectCategoryGroups = createSelector(
   [selectCategories],
   (categories) => {
     const groups = {};
-    categories.forEach((t) => {
-      if (t.group && !groups[t.group]) {
-        groups[t.group] = t.group_label;
+    categories.forEach((cat) => {
+      if (cat.group && !groups[cat.group]) {
+        groups[cat.group] = cat.group_label;
       }
     });
     return Object.keys(groups).concat(['other']);

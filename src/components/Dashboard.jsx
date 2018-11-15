@@ -128,9 +128,8 @@ class Dashboard extends React.Component {
           highlighted={this.props.app.highlighted}
           mapAnchor={this.props.app.mapAnchor}
 
-          uiStyle={this.props.ui.style}
           dom={this.props.ui.dom}
-          isView2d={this.props.ui.flags.isView2d}
+          groupColors={this.props.ui.style.groupColors}
 
           select={this.handleSelect}
           highlight={this.handleHighlight}
