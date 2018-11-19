@@ -1,15 +1,15 @@
 // TODO: relegate these URLs entirely to environment variables
-const EVENT_DATA_URL = `${process.env.SERVER_ROOT}${process.env.EVENT_EXT}`;
-const CATEGORY_URL = `${process.env.SERVER_ROOT}${process.env.CATEGORY_EXT}`;
-const TAG_TREE_URL = `${process.env.SERVER_ROOT}${process.env.TAG_TREE_EXT}`;
-const SITES_URL = `${process.env.SERVER_ROOT}${process.env.SITES_EXT}`;
+const EVENT_DATA_URL = `${process.env.SERVER_ROOT}${process.env.EVENT_EXT}`
+const CATEGORY_URL = `${process.env.SERVER_ROOT}${process.env.CATEGORY_EXT}`
+const TAG_TREE_URL = `${process.env.SERVER_ROOT}${process.env.TAG_TREE_EXT}`
+const SITES_URL = `${process.env.SERVER_ROOT}${process.env.SITES_EXT}`
 const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`
 
 /*
 * Create an error notification object
 * Types: ['error', 'warning', 'good', 'neural']
 */
-function makeError(type, id, message) {
+function makeError (type, id, message) {
   return {
     type: 'error',
     id,
@@ -17,62 +17,62 @@ function makeError(type, id, message) {
   }
 }
 
-export function fetchDomain() {
-    let events = [];
-    let categories = [];
-    let sites = [];
-    let notifications = [];
-    let tags = {};
+export function fetchDomain () {
+  let notifications = []
 
-    function makeError(domainType) {
+  function handleError (domainType) {
+    return () => {
       notifications.push({
         message: `Something went wrong fetching ${domainType}. Check the URL or try disabling them in the config file.`,
         type: 'error'
-      });
+      })
+      return []
+    }
+  }
+
+  return dispatch => {
+    dispatch(toggleFetchingDomain())
+    const promises = []
+
+    const eventPromise = fetch(EVENT_DATA_URL)
+      .then(response => response.json())
+      .catch(handleError('events'))
+
+    const catPromise = fetch(CATEGORY_URL)
+      .then(response => response.json())
+      .catch(handleError('categories'))
+
+    let sitesPromise = Promise.resolve([])
+    if (process.env.features.USE_SITES) {
+      sitesPromise = fetch(SITES_URL)
+        .then(response => response.json())
+        .catch(handleError('sites'))
     }
 
-    return dispatch => {
+    let tagsPromise
+    if (process.env.features.USE_TAGS) {
+      tagsPromise = fetch(TAG_TREE_URL)
+        .then(response => response.json())
+        .catch(handleError('tags'))
+    }
+
+    return Promise.all([ eventPromise, catPromise, sitesPromise, tagsPromise])
+      .then(response => {
         dispatch(toggleFetchingDomain());
-        const promises = [];
-
-        const eventPromise = fetch(EVENT_DATA_URL)
-            .then(response => response.json())
-            .then(jsonEv => { events = jsonEv; })
-            .catch(err => { makeError('events')});
-        promises.push(eventPromise);
-
-        const catPromise = fetch(CATEGORY_URL)
-            .then(response => response.json())
-            .then(jsonCat => { categories = jsonCat; })
-            .catch(err => { makeError('categories')});
-        promises.push(catPromise);
-
-        if (process.env.features.USE_SITES) {
-          const sitesPromise = fetch(SITES_URL)
-              .then(response => response.json())
-              .then(jsonSites => { sites = jsonSites; })
-              .catch(err => { makeError('sites')});
-          promises.push(sitesPromise);
+        const result = {
+          events: response[0],
+          categories: response[1],
+          sites: response[2],
+          tags: response[3],
+          notifications
         }
-
-        if (process.env.features.USE_TAGS) {
-          const tagTreePromise = fetch(TAG_TREE_URL)
-              .then(response => response.json())
-              .then(jsonTagTree => { tags = jsonTagTree; })
-              .catch(err => { makeError('tags')});
-          promises.push(tagTreePromise);
-        }
-
-        return Promise.all(promises)
-          .then(reponse => {
-            dispatch(toggleFetchingDomain());
-            return { events, categories, sites, tags, notifications };
-          })
-          .catch(err => {
-            dispatch(fetchError(err.message))
-            dispatch(toggleFetchingDomain());
-          })
-    };
+        return result
+      })
+      .catch(err => {
+        dispatch(fetchError(err.message))
+        dispatch(toggleFetchingDomain());
+      })
+  };
 }
 
 export const FETCH_ERROR = 'FETCH_ERROR';

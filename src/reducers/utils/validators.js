@@ -26,23 +26,26 @@ const isDuplicate = (node, set) => { return (set.has(node.key)); };
 /*
 * Traverse a tag tree and check its duplicates
 */
-function validateTree(node, parent, set, duplicates) {
+function validateTree (node, parent, set, duplicates) {
+  if (!Array.isArray(node) || !node.length) {
+    return
+  }
   // If it's a leaf, check that it's not duplicate
   if (isLeaf(node)) {
     if (isDuplicate(node, set)) {
       duplicates.push({
         id: node.key,
         error: makeError('Tags', node.key, 'tag was found more than once in hierarchy. Ignoring duplicate.')
-      });
-      delete parent.children[node.key];
+      })
+      delete parent.children[node.key]
     } else {
-      set.add(node.key);
+      set.add(node.key)
     }
   } else {
     // If it's not a leaf, simply keep going
     Object.values(node.children).forEach((childNode) => {
-      validateTree(childNode, node, set, duplicates);
-    });
+      validateTree(childNode, node, set, duplicates)
+    })
   }
 }
 
