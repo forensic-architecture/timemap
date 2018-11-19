@@ -59,16 +59,24 @@ export default function(newApp, ui, select) {
       .setView(center, zoom)
       .setMinZoom(10)
       .setMaxZoom(18)
-      .setMaxBounds(maxBoundaries);
+      .setMaxBounds(maxBoundaries)
 
     // NB: configure tile endpoint
-    let s;
-    if (process.env.MAPBOX_TOKEN) {
+    let s
+    if (process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== 'your_token') {
       s = L.tileLayer(
         `http://a.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`
       );
     } else {
-      s = L.tileLayer(`${process.env.SERVER_ROOT}/mapbox/{z}/{x}/{y}`);
+      // eslint-disable-next-line
+      alert(`No mapbox token specified in config.
+Timemap does not currently support any other tiling layer,
+so you will need to sign up for one at:
+
+    https://www.mapbox.com/
+
+Stop and start the development process in terminal after you have added your token to config.js`)
+    return
     }
     s = s.addTo(map);
 
