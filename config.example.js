@@ -1,17 +1,17 @@
 module.exports = {
-  title: 'EXAMPLE_TITLE',
+  title: 'Example',
   SERVER_ROOT: 'http://localhost:4040',
-  EVENT_EXT: '/api/<ORIGIN_NAME>/MAP2D_dev/rows',
-  CATEGORY_EXT: '/api/<ORIGIN_NAME>/MAP2D_dev_category/rows',
-  EVENT_DESC_ROOT: '/api/<ORIGIN_NAME>/MAP2D_dev/ids',
-  TAG_TREE_EXT: '/api/<ORIGIN_NAME>/MAP2D_dev_tags/tree',
-  SITES_EXT: '/api/<ORIGIN_NAME>/MAP2D_dev_sites/rows',
-  MAP_ANCHOR: [27.5813121, -18.5161798],
+  EVENT_EXT: '/api/example/export_events/rows',
+  CATEGORY_EXT: '/api/example/export_categories/rows',
+  EVENT_DESC_ROOT: '/api/example/export_events/ids',
+  TAG_TREE_EXT: '/api/example/export_tags/tree',
+  SITES_EXT: '/api/example/export_sites/rows',
+  MAP_ANCHOR: [31.356397, 34.784818],
   INCOMING_DATETIME_FORMAT: '%m/%d/%YT%H:%M',
-  MAPBOX_TOKEN: 'SOME_MAPBOX_TOKEN',
+  MAPBOX_TOKEN: 'your_token',
   features: {
-    USE_TAGS: false,
+    USE_TAGS: true,
     USE_SEARCH: false,
-    USE_SITES: false
+    USE_SITES: true
   }
 }
