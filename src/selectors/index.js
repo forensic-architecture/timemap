@@ -3,60 +3,60 @@ import {
 } from 'reselect'
 
 // Input selectors
-export const getEvents = state => state.domain.events;
-export const getLocations = state => state.domain.locations;
-export const getCategories = state => state.domain.categories;
+export const getEvents = state => state.domain.events
+export const getLocations = state => state.domain.locations
+export const getCategories = state => state.domain.categories
 export const getSites = (state) => {
-  if (process.env.features.USE_SITES) return state.domain.sites;
-  return [];
+  if (process.env.features.USE_SITES) return state.domain.sites
+  return []
 }
-export const getAllTags = state => state.domain.tags;
+export const getAllTags = state => state.domain.tags
 
-export const getCategoriesFilter = state => state.app.filters.categories;
-export const getTagsFilter = state => state.app.filters.tags;
-export const getRangeFilter = state => state.app.filters.range;
+export const getCategoriesFilter = state => state.app.filters.categories
+export const getTagsFilter = state => state.app.filters.tags
+export const getRangeFilter = state => state.app.filters.range
 
 // NB: should we stick with the default semantics and name these as selectors?
 // e.g. 'selectEvents', 'selectCoevents'.
 // Filter events
-function isTaggedIn(event, tagFilters) {
+function isTaggedIn (event, tagFilters) {
   if (event.tags) {
-    const tagsArray = event.tags.split(",");
+    const tagsArray = event.tags.split(',')
     const isTagged = tagsArray.some((tag) => {
       return tagFilters.find((tagFilter) => {
-        return (tagFilter.key === tag && tagFilter.active);
+        return (tagFilter.key === tag && tagFilter.active)
       })
-    });
-    return isTagged;
+    })
+    return isTagged
   } else {
-    return false;
+    return false
   }
 }
-
 
 /**
  * Of all available events, selects those that fall within the time range,
  * and if TAGS are being used, select them if their tags are enabled
  */
 export const getFilteredEvents = createSelector(
-    [getEvents, getTagsFilter, getRangeFilter],
-    (events, tagFilters, rangeFilter) => {
+  [getEvents, getTagsFilter, getRangeFilter],
+  (events, tagFilters, rangeFilter) => {
+    return events.reduce((acc, value) => {
+      const noTags = (tagFilters.length === 0 || !process.env.features.USE_TAGS || tagFilters.every(t => !t.active))
 
-      return events.reduce((acc, value) => {
-        const noTags = (tagFilters.length === 0 || !process.env.features.USE_TAGS || tagFilters.every(t => !t.active));
+      const isTagged = (noTags) || isTaggedIn(value, tagFilters)
 
-        const isTagged = (noTags) || isTaggedIn(value, tagFilters);
+      // TODO: put this datetime format as a constant
+      const isRange = (rangeFilter[0] < d3.timeParse('%Y-%m-%dT%H:%M:%S')(value.timestamp)) &&
+          (d3.timeParse('%Y-%m-%dT%H:%M:%S')(value.timestamp) < rangeFilter[1])
 
-        const isRange = (rangeFilter[0] < d3.timeParse("%Y-%m-%dT%H:%M:%S")(value.timestamp)) &&
-            (d3.timeParse("%Y-%m-%dT%H:%M:%S")(value.timestamp) < rangeFilter[1]);
-
-        if (isRange && isTagged) {
-          const event = Object.assign({}, value);
-          acc[event.id] = event;
-        }
-        return acc;
-    }, []);
-});
+      if (isRange && isTagged) {
+        const event = Object.assign({}, value)
+        acc[event.id] = event
+      }
+      return acc
+    }, [])
+  }
+)
 
 /**
  * Of all the filtered events, group them by location and return a list of
@@ -65,12 +65,11 @@ export const getFilteredEvents = createSelector(
 export const getFilteredLocations = createSelector(
   [getFilteredEvents],
   (events) => {
-
-    const filteredLocations = {};
+    const filteredLocations = {}
     events.forEach(event => {
-      const location = event.location;
+      const location = event.location
       if (filteredLocations[location]) {
-        filteredLocations[location].events.push(event);
+        filteredLocations[location].events.push(event)
       } else {
         filteredLocations[location] = {
           label: location,
@@ -81,17 +80,15 @@ export const getFilteredLocations = createSelector(
       }
     })
 
-  // Make locations an array are remove if any are undefined
-  return Object.values(filteredLocations).filter(item => item);
-});
+    // Make locations an array are remove if any are undefined
+    return Object.values(filteredLocations).filter(item => item)
+  }
+)
 
 // Filter categories
 export const getFilteredCategories = createSelector(
   [getCategories],
-  (categories) => {
-
-    return Object.values(categories);
-  });
+  (categories) => Object.values(categories))
 
 /**
  * Return categories by group
@@ -99,12 +96,11 @@ export const getFilteredCategories = createSelector(
 export const getCategoryGroups = createSelector(
   [getFilteredCategories],
   (categories) => {
-    const groups = {};
-    categories.forEach((t) => { if (t.group && !groups[t.group]) { groups[t.group] = t.group_label } });
-    return Object.keys(groups).concat(['other']);
+    const groups = {}
+    categories.forEach((t) => { if (t.group && !groups[t.group]) { groups[t.group] = t.group_label } })
+    return Object.keys(groups).concat(['other'])
   }
 )
-
 
 /**
  * Given a tree of tags, return those tags as a list, where each node has been
@@ -113,22 +109,22 @@ export const getCategoryGroups = createSelector(
 export const getTagFilters = createSelector(
   [getAllTags],
   (tags) => {
-    const allTagFilters = [];
-    let depth = 0;
-    function traverseNode(node, depth) {
-      node.active = (!node.hasOwnProperty('active')) ? false : node.active;
-      node.depth = depth;
+    const allTagFilters = []
+    let depth = 0
+    function traverseNode (node, depth) {
+      node.active = (!node.hasOwnProperty('active')) ? false : node.active
+      node.depth = depth
       if (node.active) allTagFilters.push(node)
-      depth = depth + 1;
+      depth = depth + 1
 
       if (Object.keys(node.children).length > 0) {
         Object.values(node.children).forEach((childNode) => {
-          traverseNode(childNode, depth);
-        });
+          traverseNode(childNode, depth)
+        })
       }
     }
 
-    if (tags.key && tags.children) traverseNode(tags, depth)
-    return allTagFilters;
+    if (tags && tags.key && tags.children) traverseNode(tags, depth)
+    return allTagFilters
   }
 )
