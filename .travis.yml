@@ -6,7 +6,7 @@ cache:
     - node_modules
 before_script:
   - npm install -g yarn
-  - cp config.example.js config.js
+  - cp example.config.js config.js
 install:
   - yarn
 script:
