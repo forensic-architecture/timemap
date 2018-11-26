@@ -15,108 +15,111 @@ import Timeline from './Timeline.jsx';
 import Notification from './Notification.jsx';
 
 class Dashboard extends React.Component {
-    constructor(props) {
-      super(props);
+  constructor(props) {
+    super(props);
 
-      this.handleHighlight = this.handleHighlight.bind(this);
-      this.handleSelect = this.handleSelect.bind(this);
-      this.handleToggle = this.handleToggle.bind(this);
-      this.handleTagFilter = this.handleTagFilter.bind(this);
-      this.handleTimeFilter = this.handleTimeFilter.bind(this);
+    this.handleHighlight = this.handleHighlight.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
+    this.handleTagFilter = this.handleTagFilter.bind(this);
+    this.handleTimeFilter = this.handleTimeFilter.bind(this);
+  }
+
+  componentDidMount() {
+    if (!this.props.app.isMobile) {
+      this.props.actions.fetchDomain()
+        .then((domain) => this.props.actions.updateDomain(domain));
     }
+  }
 
-    componentDidMount() {
-      if (!this.props.app.isMobile) {
-        this.props.actions.fetchDomain()
-          .then((domain) => this.props.actions.updateDomain(domain))
+  handleHighlight(highlighted) {
+    this.props.actions.updateHighlighted((highlighted) ? highlighted : null);
+  }
+
+  handleSelect(selected) {
+    if (selected) {
+      //let eventsToSelect = selected.map(eventId => this.props.domain.events[eventId]);
+      const parser = this.props.ui.tools.parser;
+
+      //eventsToSelect = eventsToSelect.sort((a, b) => {
+      //  return parser(a.timestamp) - parser(b.timestamp);
+      //});
+
+      //if (eventsToSelect.every(event => (event))) {
+      //  this.props.actions.updateSelected(eventsToSelect);
+      //}
+      const enhanceEvent = (ev) => {
+        return Object.assign({}, ev, this.props.domain.events[ev.id]);
       }
-    }
 
-    handleHighlight(highlighted) {
-      this.props.actions.updateHighlighted((highlighted) ? highlighted : null);
-    }
+      // Now fetch detail data for each event
+      // Add transmitter and receiver data for coevents
+      this.props.actions.fetchEvents(selected)
+        .then((events) => {
+          let eventsSelected = events.map(enhanceEvent);
 
-    handleSelect(selected) {
-      if (selected) {
-        let eventsToSelect = selected.map(eventId => this.props.domain.events[eventId]);
-        const parser = this.props.ui.tools.parser;
-
-        eventsToSelect = eventsToSelect.sort((a, b) => {
-          return parser(a.timestamp) - parser(b.timestamp);
-        });
-
-        if (eventsToSelect.every(event => (event))) {
-          this.props.actions.updateSelected(eventsToSelect);
-        }
-
-        // Now fetch detail data for each event
-        // Add transmitter and receiver data for coevents
-        this.props.actions.fetchEvents(selected)
-          .then((events) => {
-            let eventsSelected = events.map(ev => {
-              return Object.assign({}, ev, this.props.domain.events[ev.id]);
-            });
-
-            eventsSelected = eventsSelected.sort((a, b) => {
-              return parser(a.timestamp) - parser(b.timestamp);
-            });
-
-            this.props.actions.updateSelected(eventsSelected);
+          eventsSelected = eventsSelected.sort((a, b) => {
+            return parser(a.timestamp) - parser(b.timestamp);
           });
-      } else {
+
+          this.props.actions.updateSelected(eventsSelected);
+        });
+    } else {
+      this.props.actions.updateSelected([]);
+    }
+  }
+
+  handleTagFilter(tag) {
+    this.props.actions.updateTagFilters(tag);
+  }
+
+  handleTimeFilter(timeRange) {
+    this.props.actions.updateTimeRange(timeRange);
+  }
+
+  handleToggle( key ) {
+    switch( key ) {
+      case 'TOGGLE_CARDSTACK': {
         this.props.actions.updateSelected([]);
+        break;
+      }
+      case 'TOGGLE_INFOPOPUP': {
+        this.props.actions.toggleInfoPopup();
+        break;
+      }
+      case 'TOGGLE_NOTIFICATIONS': {
+        this.props.actions.toggleNotifications();
+        break;
       }
     }
+  }
 
-    handleTagFilter(tag) {
-      this.props.actions.updateTagFilters(tag);
-    }
+  getCategoryGroup(category) {
+    const cat = this.props.domain.categories.find(t => t.category === category)
+    if (cat) return cat.group;
+    return 'other';
+  }
 
-    handleTimeFilter(timeRange) {
-      this.props.actions.updateTimeRange(timeRange);
-    }
+  getCategoryGroupColor(category) {
+    const group = this.getCategoryGroup(category);
+    return this.props.ui.style.groupColors[group];
+  }
 
-    handleToggle( key ) {
-      switch( key ) {
-        case 'TOGGLE_CARDSTACK': {
-          this.props.actions.updateSelected([]);
-          break;
-        }
-        case 'TOGGLE_INFOPOPUP': {
-          this.props.actions.toggleInfoPopup();
-          break;
-        }
-        case 'TOGGLE_NOTIFICATIONS': {
-          this.props.actions.toggleNotifications();
-          break;
-        }
-      }
-    }
+  getCategoryLabel(category) {
+    const categories = this.props.domain.categories;
+    return categories.find(t => t.category === category).category_label;
+  }
 
-    getCategoryGroup(category) {
-      const cat = this.props.domain.categories.find(t => t.category === category)
-      if (cat) return cat.group;
-      return 'other';
-    }
+  getNarrativeLinks(event) {
+    const narrative = this.props.domain.narratives.find(nv => nv.key === event.narrative);
+    if (narrative) return narrative.byId[event.id];
+    return null;
+  }
 
-    getCategoryGroupColor(category) {
-      const group = this.getCategoryGroup(category);
-      return this.props.ui.style.groupColors[group];
-    }
-
-    getCategoryLabel(category) {
-      const categories = this.props.domain.categories;
-      return categories.find(t => t.category === category).category_label;
-    }
-
-    getNarrativeLinks(event) {
-      const narrative = this.props.domain.narratives.find(nv => nv.key === event.narrative);
-      if (narrative) return narrative.byId[event.id];
-      return null;
-    }
-
-    renderTool() {
-      return (<div>
+  render() {
+    console.log(this.props)
+    return (
+      <div>
         <Viewport
           locations={this.props.domain.locations}
           narratives={this.props.domain.narratives}
@@ -128,8 +131,11 @@ class Dashboard extends React.Component {
           highlighted={this.props.app.highlighted}
           mapAnchor={this.props.app.mapAnchor}
 
-          dom={this.props.ui.dom}
-          groupColors={this.props.ui.style.groupColors}
+          ui={{
+            dom: this.props.ui.dom,
+            narratives: this.props.ui.style.narratives,
+            groupColors: this.props.ui.style.groupColors
+          }}
 
           select={this.handleSelect}
           highlight={this.handleHighlight}
@@ -201,18 +207,13 @@ class Dashboard extends React.Component {
           language={this.props.app.language}
         />
       </div>
-    )
-  }
-
-  render() {
-    return (<div>{this.renderTool()}</div>);
+    );
   }
 }
 
 function mapStateToProps(state) {
   return Object.assign({}, state, {
     domain: Object.assign({}, state.domain, {
-
       // These items are affected by app selectionFilters
       events: selectors.selectEvents(state),
       locations: selectors.selectLocations(state),

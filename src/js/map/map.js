@@ -26,6 +26,7 @@ export default function(newApp, ui) {
   const getCategoryGroupColor = newApp.getCategoryGroupColor;
   const select = newApp.select;
   const groupColors = ui.groupColors;
+  const narrativeProps = ui.narratives;
 
     // Map Settings
   const center = newApp.mapAnchor;
@@ -360,8 +361,19 @@ Stop and start the development process in terminal after you have added your tok
       .enter().append('path')
       .attr('class', 'narrative')
       .attr('d', sequenceLine)
-      .style('stroke-width', 3)
-      .style('stroke', '#fff')
+      .style('stroke-width', d => {
+        const n = d[0].narrative;
+        return (n) ? narrativeProps[n].strokeWidth : 3;
+      })
+      .style('stroke-dasharray', d => {
+        const n = d[0].narrative;
+        if (narrativeProps[n].style === 'dotted') return "2px 5px";
+        return 'none';
+      })
+      .style('stroke', d => {
+        const n = d[0].narrative;
+        return (n) ? narrativeProps[n].stroke : '#fff';
+      })
       .style('fill', 'none');
   }
 

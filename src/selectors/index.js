@@ -10,7 +10,6 @@ export const getSites = (state) => {
   if (process.env.features.USE_SITES) return state.domain.sites
   return []
 }
-console.log(process.env)
 export const getNotifications = state => state.domain.notifications;
 export const getTagTree = state => state.domain.tags;
 export const getTagsFilter = state => state.app.filters.tags;
@@ -103,6 +102,7 @@ export const selectNarratives = createSelector(
           narratives[evt.narrative].byId[evt.id] = { next: null, prev: null };
         }
       });
+
       Object.keys(narratives).forEach((key) => {
         const steps = narratives[key].steps;
         steps.sort((a, b) => {
@@ -112,7 +112,8 @@ export const selectNarratives = createSelector(
           narratives[key].byId[step.id].next = (i < steps.length - 2) ? steps[i + 1] : null;
           narratives[key].byId[step.id].prev = (i > 0) ? steps[i - 1] : null;
         });
-      })
+      });
+
       return Object.values(narratives);
 });
 

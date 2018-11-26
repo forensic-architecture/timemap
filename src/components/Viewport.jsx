@@ -24,12 +24,8 @@ class Viewport extends React.Component {
       select: this.props.select,
       mapAnchor: this.props.mapAnchor
     }
-    const ui = {
-      groupColors: this.props.groupColors,
-      dom: this.props.dom
-    }
 
-    this.map = new Map(app, ui);
+    this.map = new Map(app, this.props.ui);
     this.map.update(domain, app);
   }
 

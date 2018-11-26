@@ -59,6 +59,7 @@ const initial = {
   */
   ui: {
     style: {
+
       colors: {
         WHITE: "#efefef",
         YELLOW: "#ffd800",
@@ -70,6 +71,7 @@ const initial = {
         BLUE: "#F2DE79",//"rgb(48, 103 , 217)",
         GREEN: "#4FF2F2",//"rgb(0, 158, 86)",
       },
+
       groupColors: {
         category_group00: "#FF0000",
         category_group01: "#226b22",
@@ -78,7 +80,17 @@ const initial = {
         category_group04: "#d3ce2a",
         other: "#FF0000"
       },
+
       palette: d3.schemeCategory10,
+
+      narratives: {
+        narrative_1: {
+          style: 'dotted',                  // ['dotted', 'solid']
+          opacity: 0.4,                     // range between 0 and 1
+          stroke: '#ffffff',               // Any hex or rgb code
+          strokeWidth: 2
+        }
+      }
     },
     dom: {
       timeline: "timeline",
