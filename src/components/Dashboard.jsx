@@ -146,10 +146,6 @@ class Dashboard extends React.Component {
           viewFilters={this.props.app.filters.views}
           features={this.props.app.features}
 
-          isToolbar={this.props.ui.flags.isToolbar}
-          toolbarTab={this.props.ui.components.toolbarTab}
-          isView2d={this.props.ui.flags.isView2d}
-
           filter={this.handleTagFilter}
           toggle={ (key) => this.handleToggle(key) }
           actions={this.props.actions}

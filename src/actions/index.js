@@ -176,21 +176,7 @@ export function toggleFetchingEvents() {
     }
 }
 
-export const TOGGLE_VIEW = 'TOGGLE_VIEW'
-export function toggleView() {
-    return {
-        type: TOGGLE_VIEW
-    }
-}
-
-export const TOGGLE_TIMELINE = 'TOGGLE_TIMELINE'
-export function toggleTimeline() {
-    return {
-        type: TOGGLE_TIMELINE
-    }
-}
-
-export const TOGGLE_LANGUAGE = 'TOGGLE_LANGUAGE'
+export const TOGGLE_LANGUAGE = 'TOGGLE_LANGUAGE';
 export function toggleLanguage(language) {
     return {
         type: TOGGLE_LANGUAGE,
@@ -198,37 +184,14 @@ export function toggleLanguage(language) {
     }
 }
 
-export const OPEN_TOOLBAR = 'OPEN_TOOLBAR'
-export function openToolbar(toolbarTab = 0) {
-    return {
-        type: OPEN_TOOLBAR,
-        toolbarTab: toolbarTab,
-    }
-}
-
-export const CLOSE_TOOLBAR = 'CLOSE_TOOLBAR'
+export const CLOSE_TOOLBAR = 'CLOSE_TOOLBAR';
 export function closeToolbar() {
     return {
         type: CLOSE_TOOLBAR
     }
 }
 
-export const OPEN_CABINET = 'OPEN_CABINET'
-export function openCabinet(tabNum) {
-    return {
-        type: OPEN_CABINET,
-        tabNum: tabNum,
-    }
-}
-
-export const CLOSE_CABINET = 'CLOSE_CABINET'
-export function closeCabinet() {
-    return {
-        type: CLOSE_CABINET
-    }
-}
-
-export const TOGGLE_INFOPOPUP = 'TOGGLE_INFOPOPUP'
+export const TOGGLE_INFOPOPUP = 'TOGGLE_INFOPOPUP';
 export function toggleInfoPopup() {
     return {
         type: TOGGLE_INFOPOPUP

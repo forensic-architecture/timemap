@@ -25,10 +25,6 @@ class Toolbar extends React.Component {
       }
     }
 
-    openCabinet() {
-      this.props.actions.openCabinet();
-    }
-
     resetAllFilters() {
       this.props.actions.resetAllFilters();
     }
@@ -54,43 +50,42 @@ class Toolbar extends React.Component {
       const routeClass = (isViewLayer.routes) ? 'action-button active disabled' : 'action-button disabled'
       const sitesClass = (isViewLayer.sites) ? 'action-button active disabled' : 'action-button disabled';
       const coeventsClass = (isViewLayer.coevents) ? 'action-button active disabled' : 'action-button disabled';
-      if (this.props.isView2d) {
-        return (
-          <div className="bottom-action-block">
-            <button
-              className={routeClass}
-              onClick={() => this.toggleMapViews('routes')}
-            >
-                <svg x="0px" y="0px" width="30px" height="20px" viewBox="0 0 30 20" enableBackground="new 0 0 30 20">
-                    <path d="M0.806,13.646h7.619c2.762,0,3-0.238,3-3v-0.414c0-2.762,0.301-3,3.246-3h14.523"/>
-                    <polyline points="16.671,9.228 19.103,7.233 16.671,5.237 "/>
-                </svg>
-            </button>
-            <button
-              className={sitesClass}
-              onClick={() => this.toggleMapViews('sites')}
-            >
+
+      return (
+        <div className="bottom-action-block">
+          <button
+            className={routeClass}
+            onClick={() => this.toggleMapViews('routes')}
+          >
               <svg x="0px" y="0px" width="30px" height="20px" viewBox="0 0 30 20" enableBackground="new 0 0 30 20">
-                <path d="M24.615,6.793H5.385c-2.761,0-3,0.239-3,3v0.414
-                c0,2.762,0.239,3,3,3h7.621l1.996,2.432l1.996-2.432h7.618c2.762,0,3-0.238,3-3V9.793C27.615,7.032,27.377,6.793,24.615,6.793z"/>
+                  <path d="M0.806,13.646h7.619c2.762,0,3-0.238,3-3v-0.414c0-2.762,0.301-3,3.246-3h14.523"/>
+                  <polyline points="16.671,9.228 19.103,7.233 16.671,5.237 "/>
               </svg>
-            </button>
-            <button
-                className={coeventsClass}
-                onClick={() => this.toggleMapViews('coevents')}
-            >
-              <svg className="coevents" x="0px" y="0px" width="30px" height="20px" viewBox="0 0 30 20" enableBackground="new 0 0 30 20">
-                <polygon stroke-linejoin="round" stroke-miterlimit="10" points="19.178,20 10.823,20 10.473,14.081
-                  10,13.396 10,6.084 20,6.084 20,13.396 19.445,14.021 "/>
-                <rect className="no-fill" x="11.4" y="7.867" width="7.2" height="3.35"/>
-                <line stroke-linejoin="round" stroke-miterlimit="10" x1="12.125" y1="1" x2="12.125" y2="5.35"/>
-                <rect x="11.4" y="4.271" width="1.496" height="1.079"/>
-                <rect x="17.104" y="4.271" width="1.496" height="1.079"/>
-              </svg>
-            </button>
-          </div>
-        );
-      }
+          </button>
+          <button
+            className={sitesClass}
+            onClick={() => this.toggleMapViews('sites')}
+          >
+            <svg x="0px" y="0px" width="30px" height="20px" viewBox="0 0 30 20" enableBackground="new 0 0 30 20">
+              <path d="M24.615,6.793H5.385c-2.761,0-3,0.239-3,3v0.414
+              c0,2.762,0.239,3,3,3h7.621l1.996,2.432l1.996-2.432h7.618c2.762,0,3-0.238,3-3V9.793C27.615,7.032,27.377,6.793,24.615,6.793z"/>
+            </svg>
+          </button>
+          <button
+              className={coeventsClass}
+              onClick={() => this.toggleMapViews('coevents')}
+          >
+            <svg className="coevents" x="0px" y="0px" width="30px" height="20px" viewBox="0 0 30 20" enableBackground="new 0 0 30 20">
+              <polygon stroke-linejoin="round" stroke-miterlimit="10" points="19.178,20 10.823,20 10.473,14.081
+                10,13.396 10,6.084 20,6.084 20,13.396 19.445,14.021 "/>
+              <rect className="no-fill" x="11.4" y="7.867" width="7.2" height="3.35"/>
+              <line stroke-linejoin="round" stroke-miterlimit="10" x1="12.125" y1="1" x2="12.125" y2="5.35"/>
+              <rect x="11.4" y="4.271" width="1.496" height="1.079"/>
+              <rect x="17.104" y="4.271" width="1.496" height="1.079"/>
+            </svg>
+          </button>
+        </div>
+      );
       return (<div/>)
     }
 
@@ -153,7 +148,7 @@ class Toolbar extends React.Component {
     const title = copy[this.props.language].toolbar.title;
     return (
       <div className="toolbar">
-        <div className="toolbar-header" onClick={() => this.openCabinet()}><p>{title}</p></div>
+        <div className="toolbar-header"><p>{title}</p></div>
         <div className="toolbar-tabs">
           {/*this.renderToolbarTab(0, 'search')*/}
           {this.renderToolbarTagRoot()}

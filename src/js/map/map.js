@@ -273,7 +273,6 @@ Stop and start the development process in terminal after you have added your tok
       .attr('class', 'location')
       .attr('transform', (d) => {
         d.LatLng = new L.LatLng(+d.latitude, +d.longitude);
-        console.log(lMap.latLngToLayerPoint(d.LatLng))
         return `translate(${lMap.latLngToLayerPoint(d.LatLng).x},
                   ${lMap.latLngToLayerPoint(d.LatLng).y})`;
       })

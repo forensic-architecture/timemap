@@ -2,11 +2,17 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const userConfig = require('./config');
+const userConfigJSON = {};
+
 const devMode = process.env.NODE_ENV !== 'production';
 const path = require('path');
 
 const APP_DIR = path.resolve(__dirname, './src');
 const BUILD_DIR = path.resolve(__dirname, './build');
+
+for (const k in userConfig) {
+  userConfigJSON[k] = JSON.stringify(userConfig[k]);
+}
 
 const config = {
   entry: {
@@ -53,16 +59,8 @@ const config = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
+        ...userConfigJSON,
         'NODE_ENV': JSON.stringify('production'),
-        'MAPBOX_TOKEN': JSON.stringify(userConfig.MAPBOX_TOKEN),
-        'SERVER_ROOT': JSON.stringify(userConfig.SERVER_ROOT),
-        'EVENT_EXT': JSON.stringify(userConfig.EVENT_EXT),
-        'CATEGORY_EXT': JSON.stringify(userConfig.CATEGORY_EXT),
-        'TAG_TREE_EXT': JSON.stringify(userConfig.TAG_TREE_EXT),
-        'SITES_EXT': JSON.stringify(userConfig.SITES_EXT),
-        'EVENT_DESC_ROOT': JSON.stringify(userConfig.EVENT_DESC_ROOT),
-        'MAP_ANCHOR': JSON.stringify(userConfig.MAP_ANCHOR),
-        'INCOMING_DATETIME_FORMAT': JSON.stringify(userConfig.INCOMING_DATETIME_FORMAT),
         'features': {
           'USE_TAGS': JSON.stringify(userConfig.features.USE_TAGS),
           'USE_SEARCH': JSON.stringify(userConfig.features.USE_SEARCH),

@@ -10,6 +10,7 @@ export const getSites = (state) => {
   if (process.env.features.USE_SITES) return state.domain.sites
   return []
 }
+console.log(process.env)
 export const getNotifications = state => state.domain.notifications;
 export const getTagTree = state => state.domain.tags;
 export const getTagsFilter = state => state.app.filters.tags;
