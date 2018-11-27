@@ -1,4 +1,4 @@
-import '../scss/main.scss';
+
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Search from './Search.jsx';

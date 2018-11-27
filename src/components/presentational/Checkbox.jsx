@@ -1,4 +1,3 @@
-import '../scss/main.scss';
 import React from 'react';
 
 export default ({ label, isActive, onClickCheckbox }) => (

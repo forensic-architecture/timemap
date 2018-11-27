@@ -1,27 +1,35 @@
-import '../scss/main.scss';
 import copy from '../js/data/copy.json';
 import {isNotNullNorUndefined} from '../js/data/utilities';
 import React from 'react';
+
+import Spinner from './presentational/Spinner';
+import CardTimestamp from './presentational/CardTimestamp';
+import CardLocation from './presentational/CardLocation';
+import CardCaret from './presentational/CardCaret';
+import CardTags from './presentational/CardTags';
+import CardSummary from './presentational/CardSummary';
+import CardSource from './presentational/CardSource';
+import CardCategory from './presentational/CardCategory';
+import CardNarrative from './presentational/CardNarrative';
 
 class Card extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isFolded: true
+      isHighlighted: false
     };
-
-    this.toggle = this.toggle.bind(this);
   }
 
   toggle() {
-    if (this.state.isFolded) {
-      this.props.highlight(this.props.event);
-    } else {
-      this.props.highlight();
-    }
     this.setState({
-      isFolded: !this.state.isFolded
+      isHighlighted: !this.state.isHighlighted
+    }, () => {
+      if (this.state.isHighlighted) {
+        this.props.highlight(this.props.event);
+      } else {
+        this.props.highlight();
+      }
     });
   }
 
@@ -31,192 +39,148 @@ class Card extends React.Component {
     return 'other';
   }
 
-  renderWarning() {
-    const warning_lang = copy[this.props.language].cardstack.warning;
-
-    if (this.props.event.tags) {
-      const tagsArray = this.props.event.tags.split(",");
-      /* TODO: This needs to be generalized */
-      if (tagsArray.some(tag => {
-        return (tag.name === 'contradicción' ||
-         tag.name === 'declaración con sospecha de tortura')
-      })) {
-        return (<div className="warning event-card-section">{warning_lang}</div>);
-      }
-    }
+  makeTimelabel(timestamp) {
+    if (timestamp === null) return null;
+    const parsedTimestamp = this.props.tools.parser(timestamp);
+    const timelabel = this.props.tools.formatterWithYear(parsedTimestamp);
+    return timelabel;
   }
 
   renderCategory() {
-    const category_lang = copy[this.props.language].cardstack.category;
-
+    const categoryTitle = copy[this.props.language].cardstack.category;
     const colorType = this.getCategoryColorClass(this.props.event.category);
     const categoryLabel = this.props.getCategoryLabel(this.props.event.category);
 
-    return (<div className="event-card-section category">
-      <h4>{category_lang}</h4>
-      <p><span className={`color-category ${colorType}`}/>{categoryLabel}</p>
-    </div>);
+    return (
+      <CardCategory
+        categoryTitle={categoryTitle}
+        categoryLabel={categoryLabel}
+        colorType={colorType}
+      />
+    );
   }
 
   renderSummary() {
-    const summary = copy[this.props.language].cardstack.description;
-    const desc = this.props.event.description;
-    const description = (this.state.isFolded) ? `${desc.substring(0, 40)}...` : desc;
-    return (<div className="event-card-section summary">
-      <h4>{summary}</h4>
-      <p>{description}</p>
-    </div>);
+    return (
+      <CardSummary
+        language={this.props.language}
+        description={this.props.event.description}
+        isHighlighted={this.state.isHighlighted}
+      />
+    )
   }
 
   renderTags() {
-    const people_lang = copy[this.props.language].cardstack.people;
-    const peopleTags = []; //this.props.event.tags.filter(tag => tag.type === 'people');
-
-    return (<div className="event-card-section tags">
-      <h4>{people_lang}</h4>
-      <p>{
-          peopleTags.map((tag, idx) => {
-            return (<span className="tag">
-              {tag.name}
-              {
-                (idx < peopleTags.length - 1)
-                  ? ','
-                  : ''
-              }
-            </span>);
-          })
-        }</p>
-    </div>);
+    return (
+      <CardTags
+        tags={this.props.tags || []}
+        language={this.props.language}
+      />
+    )
   }
 
-  // NB: is this function for a future feature? Should also be internaionalized.
   renderLocation() {
-    const location_lang = copy[this.props.language].cardstack.location;
-    if (isNotNullNorUndefined(this.props.event.location)) {
-      return (<p className="event-card-section location">
-        <h4>{location_lang}</h4>
-        <p>{this.props.event.location}</p>
-      </p>);
-    } else {
-      return (<p className="event-card-section location">
-        <h4>{location_lang}</h4>
-        <p>Sin localización conocida.</p>
-      </p>);
-    }
+    return (
+      <CardLocation
+        language={this.props.language}
+        location={this.props.event.location}
+      />
+    )
   }
 
   renderSource() {
-    const source_lang = copy[this.props.language].cardstack.source;
-    return (<div className="event-card-section source">
-      <h4>{source_lang}</h4>
-      <p>{this.props.event.source}</p>
-    </div>);
-  }
-
-  getTimeLabel(){
-    const timestamp = this.props.tools.parser(this.props.event.timestamp);
-    const timelabel = this.props.tools.formatterWithYear(timestamp);
-    return timelabel;
+    return (
+      <CardSource
+        language={this.props.language}
+        source={this.props.event.source}
+      />
+    )
   }
 
   // NB: should be internaionalized.
   renderTimestamp() {
-    const daytime_lang = copy[this.props.language].cardstack.timestamp;
-    const estimated_lang = copy[this.props.language].cardstack.estimated;
-
-    if (isNotNullNorUndefined(this.props.event.timestamp)) {
-      const timelabel = this.getTimeLabel();
-      return (<div className="event-card-section timestamp">
-        <h4>{daytime_lang}</h4>
-        {timelabel}
-      </div>);
-    } else {
-      return (<div className="event-card-section timestamp">
-        <h4>{daytime_lang}</h4>
-        Hora no conocida
-      </div>);
-    }
-  }
-
-  renderCardLink(event, direction) {
-    if (event !== null) {
-      const timelabel = this.getTimeLabel();
-      return (<a onClick={() => this.props.select([event])}>
-        {`${timelabel} - ${event.location}`}
-      </a>);
-    }
-    return (<a className="disabled">None</a>);
+    return (
+      <CardTimestamp
+        makeTimelabel={(timestamp) => this.makeTimelabel(timestamp)}
+        language={this.props.language}
+        timestamp={this.props.event.timestamp}
+      />
+    );
   }
 
   renderNarrative() {
     const links = this.props.getNarrativeLinks(this.props.event);
 
     if (links !== null) {
-      return (<div className="event-card-section">
-        <h4>Connected events</h4>
-        <p>Next: {this.renderCardLink(links.next, 'next')}</p>
-        <p>Previous: {this.renderCardLink(links.prev, 'prev')}</p>
-      </div>);
+
+      return (
+        <CardNarrative
+          select={(event) => this.props.select([event])}
+          makeTimelabel={(timestamp) => this.makeTimelabel(timestamp)}
+          next={links.next}
+          prev={links.prev}
+        />
+      )
     }
   }
 
-  renderSpinner() {
-    return (<div className="spinner">
-      <div className="double-bounce1"></div>
-      <div className="double-bounce2"></div>
-    </div>);
+  renderLoadingCard() {
+    return (
+      <li className='event-card'>
+        <div className="card-bottomhalf">
+          <Spinner />
+        </div>
+      </li>
+    );
   }
 
   renderHeader() {
-    return (<div className="card-collapsed">
-      {this.renderWarning()}
-      {this.renderCategory()}
-      {this.renderTimestamp()}
-      {this.renderSummary()}
-    </div>);
+    return (
+      <div className="card-collapsed">
+        {this.renderCategory()}
+        {this.renderTimestamp()}
+        {this.renderSummary()}
+      </div>
+    );
   }
 
   renderContent() {
-    if (this.state.isFolded) {
-      return (<div className="card-bottomhalf folded"></div>);
-    } else if (this.props.isFetchingEvents) {
-      return (<div className="card-bottomhalf">
-        {this.renderSpinner()}
-      </div>);
+    if (!this.state.isHighlighted) {
+      return (
+        <div className="card-bottomhalf folded"></div>
+      );
     } else {
-      return (<div className="card-bottomhalf">
-        {this.renderLocation()}
-        {this.renderTags()}
-        {this.renderSource()}
-        {this.renderNarrative()}
-      </div>);
+      return (
+        <div className="card-bottomhalf">
+          {this.renderLocation()}
+          {this.renderTags()}
+          {this.renderSource()}
+          {this.renderNarrative()}
+        </div>
+      );
     }
   }
 
-  renderArrow() {
-    let classes = (this.state.isFolded)
-      ? 'arrow-down folded'
-      : 'arrow-down';
-    return (<div className="card-toggle" onClick={() => this.toggle()}>
-      <p>
-        <i className={classes}></i>
-      </p>
-    </div>);
+  renderCaret() {
+    return (
+      <CardCaret
+        toggle={() => this.toggle()}
+        isHighlighted={this.state.isHighlighted}
+      />
+    )
   }
 
   render() {
     if (this.props.isLoading) {
-      return (<li className='event-card'>
-        <div className="card-bottomhalf">
-          {this.renderSpinner()}
-        </div>
-      </li>);
+      return this.renderLoadingCard();
     } else {
-      return (<li className='event-card'>
-        {this.renderHeader()}
-        {this.renderContent()}
-        {this.renderArrow()}
-      </li>);
+      return (
+        <li className='event-card'>
+          {this.renderHeader()}
+          {this.renderContent()}
+          {this.renderCaret()}
+        </li>
+      );
     }
   }
 }

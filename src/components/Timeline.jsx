@@ -1,4 +1,3 @@
-import '../scss/main.scss';
 import copy from '../js/data/copy.json';
 import React from 'react';
 import TimelineLogic from '../js/timeline/timeline.js';
@@ -77,6 +76,7 @@ class Timeline extends React.Component {
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`;
     const date0 = this.props.tools.formatterWithYear(this.props.timerange[0]);
     const date1 = this.props.tools.formatterWithYear(this.props.timerange[1]);
+
     return (
       <div className={classes}>
         <div className="timeline-header">

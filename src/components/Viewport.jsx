@@ -1,4 +1,3 @@
-import '../scss/main.scss';
 import React from 'react';
 import Map from '../js/map/map.js';
 import { areEqual } from '../js/data/utilities.js';
