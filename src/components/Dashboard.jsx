@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 
-import LoadingOverlay from './LoadingOverlay.jsx';
+import LoadingOverlay from './presentational/LoadingOverlay';
 import Viewport from './Viewport.jsx';
 import Toolbar from './Toolbar.jsx';
 import CardStack from './CardStack.jsx';
@@ -37,16 +37,8 @@ class Dashboard extends React.Component {
 
   handleSelect(selected) {
     if (selected) {
-      //let eventsToSelect = selected.map(eventId => this.props.domain.events[eventId]);
       const parser = this.props.ui.tools.parser;
 
-      //eventsToSelect = eventsToSelect.sort((a, b) => {
-      //  return parser(a.timestamp) - parser(b.timestamp);
-      //});
-
-      //if (eventsToSelect.every(event => (event))) {
-      //  this.props.actions.updateSelected(eventsToSelect);
-      //}
       const enhanceEvent = (ev) => {
         return Object.assign({}, ev, this.props.domain.events[ev.id]);
       }
@@ -120,15 +112,19 @@ class Dashboard extends React.Component {
     return (
       <div>
         <Viewport
-          locations={this.props.domain.locations}
-          narratives={this.props.domain.narratives}
-          sites={this.props.domain.sites}
-          categoryGroups={this.props.domain.categoryGroups}
+          domain={{
+            locations: this.props.domain.locations,
+            narratives: this.props.domain.narratives,
+            sites: this.props.domain.sites,
+            categoryGroups: this.props.domain.categoryGroups
+          }}
 
-          views={this.props.app.filters.views}
-          selected={this.props.app.selected}
-          highlighted={this.props.app.highlighted}
-          mapAnchor={this.props.app.mapAnchor}
+          app={{
+            views: this.props.app.filters.views,
+            selected: this.props.app.selected,
+            highlighted: this.props.app.highlighted,
+            mapAnchor: this.props.app.mapAnchor,
+          }}
 
           ui={{
             dom: this.props.ui.dom,
@@ -136,15 +132,16 @@ class Dashboard extends React.Component {
             groupColors: this.props.ui.style.groupColors
           }}
 
-          select={this.handleSelect}
-          highlight={this.handleHighlight}
-          getCategoryGroup={category => this.getCategoryGroup(category)}
-          getCategoryGroupColor={category => this.getCategoryGroupColor(category)}
+          methods={{
+            select: this.handleSelect,
+            highlight: this.handleHighlight,
+            getCategoryGroup: category => this.getCategoryGroup(category),
+            getCategoryGroupColor: category => this.getCategoryGroupColor(category)
+          }}
         />
         <Toolbar
           tags={this.props.domain.tags}
           categories={this.props.domain.categories}
-
           language={this.props.app.language}
           tagFilters={this.props.app.filters.tags}
           categoryFilter={this.props.app.filters.categories}
@@ -158,7 +155,6 @@ class Dashboard extends React.Component {
         <CardStack
           selected={this.props.app.selected}
           language={this.props.app.language}
-
           tools={this.props.ui.tools}
           isCardstack={this.props.ui.flags.isCardstack}
           isFetchingEvents={this.props.ui.flags.isFetchingEvents}

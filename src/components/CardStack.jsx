@@ -33,9 +33,8 @@ class CardStack extends React.Component {
           />
         );
       });
-    } else {
-        return '';
     }
+    return '';
   }
 
   renderLocation() {
@@ -77,6 +76,7 @@ class CardStack extends React.Component {
 
     if (this.props.isFetchingEvents) {
       return this.renderIsLoading();
+      
     } else if (this.props.selected.length > 0) {
       return (
         <div id="card-stack" className={`card-stack ${this.props.isCardstack ? '' : ' folded'}`}>

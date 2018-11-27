@@ -5,7 +5,7 @@ import {
 import hash from 'object-hash';
 import 'leaflet-polylinedecorator';
 
-export default function(newApp, ui) {
+export default function(newApp, ui, methods) {
   let svg, g, defs;
 
   let categoryColorGroups = {};
@@ -22,9 +22,9 @@ export default function(newApp, ui) {
     views: Object.assign({}, newApp.views),
   }
 
-  const getCategoryGroup = newApp.getCategoryGroup;
-  const getCategoryGroupColor = newApp.getCategoryGroupColor;
-  const select = newApp.select;
+  const getCategoryGroup = methods.getCategoryGroup;
+  const getCategoryGroupColor = methods.getCategoryGroupColor;
+  const select = methods.select;
   const groupColors = ui.groupColors;
   const narrativeProps = ui.narratives;
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import Checkbox from './presentational/Checkbox.jsx';
+import Checkbox from './presentational/Checkbox';
 
 class TagListPanel extends React.Component {
 
