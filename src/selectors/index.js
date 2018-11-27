@@ -78,7 +78,6 @@ export const selectEvents = createSelector(
         return acc;
     }, []);
 });
->>>>>>> Add selector and reducer for narrative
 
 /**
  * Of all available events, selects those that fall within the time range,
