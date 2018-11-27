@@ -25,10 +25,10 @@ class Card extends React.Component {
     this.setState({
       isHighlighted: !this.state.isHighlighted
     }, () => {
-      if (this.state.isHighlighted) {
+      if (!this.state.isHighlighted) {
         this.props.highlight(this.props.event);
       } else {
-        this.props.highlight();
+        this.props.highlight(null);
       }
     });
   }

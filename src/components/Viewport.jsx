@@ -13,7 +13,7 @@ class Viewport extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.map.update(this.props.domain, this.props.app);
+    this.map.update(nextProps.domain, nextProps.app);
   }
 
   render() {

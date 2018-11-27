@@ -37,17 +37,24 @@ class Dashboard extends React.Component {
 
   handleSelect(selected) {
     if (selected) {
+      let eventsToSelect = selected.map(eventId => this.props.domain.events[eventId]);
       const parser = this.props.ui.tools.parser;
 
-      const enhanceEvent = (ev) => {
-        return Object.assign({}, ev, this.props.domain.events[ev.id]);
+      eventsToSelect = eventsToSelect.sort((a, b) => {
+        return parser(a.timestamp) - parser(b.timestamp);
+      });
+
+      if (eventsToSelect.every(event => (event))) {
+        this.props.actions.updateSelected(eventsToSelect);
       }
 
       // Now fetch detail data for each event
       // Add transmitter and receiver data for coevents
       this.props.actions.fetchEvents(selected)
         .then((events) => {
-          let eventsSelected = events.map(enhanceEvent);
+          let eventsSelected = events.map(ev => {
+            return Object.assign({}, ev, this.props.domain.events[ev.id]);
+          });
 
           eventsSelected = eventsSelected.sort((a, b) => {
             return parser(a.timestamp) - parser(b.timestamp);
@@ -108,7 +115,6 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <div>
         <Viewport
@@ -157,7 +163,7 @@ class Dashboard extends React.Component {
           language={this.props.app.language}
           tools={this.props.ui.tools}
           isCardstack={this.props.ui.flags.isCardstack}
-          isFetchingEvents={this.props.ui.flags.isFetchingEvents}
+          isLoading={this.props.ui.flags.isFetchingEvents}
 
           select={this.handleSelect}
           highlight={this.handleHighlight}

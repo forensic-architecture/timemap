@@ -14,16 +14,12 @@ class CardStack extends React.Component {
   renderCards() {
     if (this.props.selected.length > 0) {
       return this.props.selected.map((event) => {
-        // if event has property 'name', update with event details
-        const shouldCardUpdate = (event.name);
-
         return (
           <Card
             event={event}
-            shouldCardUpdate={shouldCardUpdate}
             language={this.props.language}
             tools={this.props.tools}
-            isLoading={this.props.isFetchingEvents}
+            isLoading={this.props.isLoading}
             getNarrativeLinks={this.props.getNarrativeLinks}
             getCategoryGroup={this.props.getCategoryGroup}
             getCategoryGroupColor={this.props.getCategoryGroupColor}
@@ -48,52 +44,45 @@ class CardStack extends React.Component {
     return '';
   }
 
-  renderIsLoading() {
+  renderCardStackHeader() {
+    const header_lang = copy[this.props.language].cardstack.header;
+
     return (
-      <div id="card-stack" className={`card-stack ${this.props.isCardstack ? '' : ' folded'}`}>
-        <div
-          id='card-stack-header'
-          className='card-stack-header'
-          onClick={() => this.props.toggle('TOGGLE_CARDSTACK')}
-        >
-          <button className="side-menu-burg is-active"><span></span></button>
-          <p className="header-copy top">{copy[this.props.language].loading}</p>
-        </div>
-        <div id="card-stack-content" className="card-stack-content">
-          <ul>
-            <Card
-              language={this.props.language}
-              isLoading={true}
-            />
-          </ul>
-        </div>
+      <div
+        id='card-stack-header'
+        className='card-stack-header'
+        onClick={() => this.props.toggle('TOGGLE_CARDSTACK')}
+      >
+        <button className="side-menu-burg is-active"><span></span></button>
+        <p className="header-copy top">
+          {(this.props.isLoading)
+            ? copy[this.props.language].loading
+            : `${this.props.selected.length} ${header_lang}`}
+        </p>
+        {(this.props.isLoading) ? '' : this.renderLocation()}
       </div>
     )
   }
 
-  render() {
-    const header_lang = copy[this.props.language].cardstack.header;
+  renderCardStackContent() {
+    return (
+      <div id="card-stack-content" className="card-stack-content">
+        <ul>
+          {(this.props.isLoading)
+            ? <Card language={this.props.language} isLoading={true} />
+            : this.renderCards()
+          }
+        </ul>
+      </div>
+    );
+  }
 
-    if (this.props.isFetchingEvents) {
-      return this.renderIsLoading();
-      
-    } else if (this.props.selected.length > 0) {
+  render() {
+    if (this.props.selected.length > 0) {
       return (
         <div id="card-stack" className={`card-stack ${this.props.isCardstack ? '' : ' folded'}`}>
-          <div
-            id='card-stack-header'
-            className='card-stack-header'
-            onClick={() => this.props.toggle('TOGGLE_CARDSTACK')}
-          >
-            <button className="side-menu-burg is-active"><span></span></button>
-            <p className="header-copy top">{`${this.props.selected.length} ${header_lang}`}</p>
-            {this.renderLocation()}
-          </div>
-          <div id="card-stack-content" className="card-stack-content">
-            <ul>
-              {this.renderCards()}
-            </ul>
-          </div>
+          {this.renderCardStackHeader()}
+          {this.renderCardStackContent()}
         </div>
       );
     }
