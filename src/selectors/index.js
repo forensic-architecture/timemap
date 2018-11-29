@@ -192,8 +192,9 @@ export const selectTagList = createSelector(
         });
       }
     }
-
-    if (tags.key && tags.children) traverseNode(tags, depth)
+    if (tags && tags !== undefined) {
+      if (tags.key && tags.children) traverseNode(tags, depth)
+    }
     return tagList;
   }
 )
