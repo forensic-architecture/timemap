@@ -357,22 +357,26 @@ Stop and start the development process in terminal after you have added your tok
       .exit()
       .remove();
 
+    let styleName
     narrativesDom
       .enter().append('path')
       .attr('class', 'narrative')
       .attr('d', sequenceLine)
       .style('stroke-width', d => {
+        styleName = d[0].narrative && d[0].narrative in narrativeProps
+          ? d[0].narrative
+          : 'default'
         const n = d[0].narrative;
-        return (n) ? narrativeProps[n].strokeWidth : 3;
+        return (n) ? narrativeProps[styleName].strokeWidth : 3;
       })
       .style('stroke-dasharray', d => {
         const n = d[0].narrative;
-        if (narrativeProps[n].style === 'dotted') return "2px 5px";
+        if (narrativeProps[styleName].style === 'dotted') return "2px 5px";
         return 'none';
       })
       .style('stroke', d => {
         const n = d[0].narrative;
-        return (n) ? narrativeProps[n].stroke : '#fff';
+        return (n) ? narrativeProps[styleName].stroke : '#fff';
       })
       .style('fill', 'none');
   }

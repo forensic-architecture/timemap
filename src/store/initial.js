@@ -84,10 +84,16 @@ const initial = {
       palette: d3.schemeCategory10,
 
       narratives: {
-        narrative_1: {
+        default: {
           style: 'dotted',                  // ['dotted', 'solid']
           opacity: 0.4,                     // range between 0 and 1
-          stroke: '#ffffff',               // Any hex or rgb code
+          stroke: 'red',               // Any hex or rgb code
+          strokeWidth: 2
+        },
+        narrative_1: {
+          style: 'solid',                  // ['dotted', 'solid']
+          opacity: 0.4,                     // range between 0 and 1
+          stroke: 'red',               // Any hex or rgb code
           strokeWidth: 2
         }
       }
