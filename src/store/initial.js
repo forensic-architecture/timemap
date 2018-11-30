@@ -72,16 +72,12 @@ const initial = {
         GREEN: "#4FF2F2",//"rgb(0, 158, 86)",
       },
 
-      groupColors: {
-        category_group00: "#FF0000",
-        category_group01: "#226b22",
-        category_group02: "#671f6f",
-        category_group03: "#0000bf",
-        category_group04: "#d3ce2a",
+      palette: d3.schemeCategory10,
+
+      categories: {
+        default: 'red',
         other: "#FF0000"
       },
-
-      palette: d3.schemeCategory10,
 
       narratives: {
         default: {

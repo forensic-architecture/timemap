@@ -12,7 +12,7 @@ class Timeline extends React.Component {
       const domain = {
         events: this.props.events,
         narratives: this.props.narratives,
-        categoryGroups: this.props.categoryGroups
+        categories: this.props.categories
       }
       const app = {
         timerange: this.props.timerange,
@@ -20,9 +20,7 @@ class Timeline extends React.Component {
         language: this.props.language,
         select: this.props.select,
         filter: this.props.filter,
-        getCategoryLabel: this.props.getCategoryLabel,
-        getCategoryGroup: this.props.getCategoryGroup,
-        getCategoryGroupColor: this.props.getCategoryGroupColor
+        getCategoryColor: this.props.getCategoryColor
       }
       const ui = {
         tools: this.props.tools,
@@ -38,7 +36,7 @@ class Timeline extends React.Component {
     const domain = {
       events: nextProps.events,
       narratives: nextProps.narratives,
-      categoryGroups: nextProps.categoryGroups
+      categories: nextProps.categories
     }
 
     const app = {
@@ -47,9 +45,7 @@ class Timeline extends React.Component {
       language: nextProps.language,
       select: nextProps.select,
       filter: nextProps.filter,
-      getCategoryLabel: nextProps.getCategoryLabel,
-      getCategoryGroup: nextProps.getCategoryGroup,
-      getCategoryGroupColor: nextProps.getCategoryGroupColor
+      getCategoryColor: nextProps.getCategoryColor
     }
 
     this.timeline.update(domain, app);
@@ -64,8 +60,8 @@ class Timeline extends React.Component {
 
   renderLabels() {
     const labels = copy[this.props.language].timeline.labels;
-    return this.props.categoryGroups.map((label) => {
-      const groupLen = this.props.categoryGroups.length
+    return this.props.categories.map((label) => {
+      const groupLen = this.props.categories.length
       return (<div className="timeline-label">{label}</div>);
     });
   }

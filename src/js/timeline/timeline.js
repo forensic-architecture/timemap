@@ -597,20 +597,21 @@ export default function(app, ui) {
    * @param {Object} app: Redux state app subtree
    */
   function updateAxis(domain) {
-    categoryGroups = domain.categoryGroups
-    const groupStep = (106 - 30) / categoryGroups.length;
-    let groupYs = Array.apply(null, Array(categoryGroups.length));
+    console.log(domain)
+    const categories = domain.categories
+    const groupStep = (106 - 30) / categories.length;
+    let groupYs = Array.apply(null, Array(categories.length));
     groupYs = groupYs.map((g, i) => {
       return 30 + i * groupStep;
     });
 
     scale.y = d3.scaleOrdinal()
-      .domain(categoryGroups)
+      .domain(categories)
       .range(groupYs);
 
     axis.y =
       d3.axisLeft(scale.y)
-        .tickValues(categoryGroups);
+        .tickValues(categories);
   }
 
   function update(domain, app) {

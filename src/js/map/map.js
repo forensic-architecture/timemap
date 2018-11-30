@@ -195,7 +195,7 @@ Stop and start the development process in terminal after you have added your tok
     unmarkPoint();
     app.selected.forEach(eventPoint => {
       if (isNotNullNorUndefined(eventPoint) && isNotNullNorUndefined(eventPoint.location)) {
-        if (eventPoint.latitude && eventPoint.longitude) {
+        if (eventPoint.latitude && eventPoint.latitude !== "" && eventPoint.longitude && eventPoint.longitude !== "") {
           const location = new L.LatLng(eventPoint.latitude, eventPoint.longitude);
           eventCircleMarkers[eventPoint.id] = L.circleMarker(location, {
             radius: 32,

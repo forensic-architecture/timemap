@@ -92,21 +92,20 @@ class Dashboard extends React.Component {
     }
   }
 
-  getCategoryGroup(category) {
-    const cat = this.props.domain.categories.find(t => t.category === category)
-    if (cat) return cat.group;
-    return 'other';
+  // getCategoryGroup(category) {
+  //   const cat = this.props.domain.categories.find(t => t.category === category)
+  //   if (cat) return cat.group;
+  //   return 'other';
+  // }
+
+  getCategoryColor(category) {
+    return this.props.ui.style.categories[category];
   }
 
-  getCategoryGroupColor(category) {
-    const group = this.getCategoryGroup(category);
-    return this.props.ui.style.groupColors[group];
-  }
-
-  getCategoryLabel(category) {
-    const categories = this.props.domain.categories;
-    return categories.find(t => t.category === category).category_label;
-  }
+  // getCategoryLabel(category) {
+  //   const categories = this.props.domain.categories;
+  //   return categories.find(t => t.category === category).category_label;
+  // }
 
   getNarrativeLinks(event) {
     const narrative = this.props.domain.narratives.find(nv => nv.key === event.narrative);
@@ -169,14 +168,12 @@ class Dashboard extends React.Component {
           highlight={this.handleHighlight}
           toggle={this.handleToggle}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
-          getCategoryGroup={category => this.getCategoryGroup(category)}
-          getCategoryGroupColor={category => this.getCategoryGroupColor(category)}
-          getCategoryLabel={category => this.getCategoryLabel(category)}
+          getCategoryColor={category => this.getCategoryColor(category)}
         />
         <Timeline
           events={this.props.domain.events.filter(item => item)}
           narratives={this.props.domain.narratives}
-          categoryGroups={this.props.domain.categoryGroups}
+          categories={this.props.domain.categories}
 
           timerange={this.props.app.filters.timerange}
           selected={this.props.app.selected}
@@ -189,9 +186,7 @@ class Dashboard extends React.Component {
           filter={this.handleTimeFilter}
           highlight={this.handleHighlight}
           toggle={() => this.handleToggle('TOGGLE_CARDSTACK')}
-          getCategoryGroup={category => this.getCategoryGroup(category)}
-          getCategoryGroupColor={category => this.getCategoryGroupColor(category)}
-          getCategoryLabel={category => this.getCategoryLabel(category)}
+          getCategoryColor={category => this.getCategoryColor(category)}
         />
         <InfoPopUp
           ui={this.props.ui}
@@ -219,7 +214,6 @@ function mapStateToProps(state) {
       events: selectors.selectEvents(state),
       locations: selectors.selectLocations(state),
       categories: selectors.selectCategories(state),
-      categoryGroups: selectors.selectCategoryGroups(state),
       narratives: selectors.selectNarratives(state),
 
       // These items are not affected by selectionFilters

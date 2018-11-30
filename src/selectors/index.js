@@ -151,7 +151,7 @@ export const selectLocations = createSelector(
 export const selectCategories = createSelector(
   [getCategories],
   (categories) => {
-    return Object.values(categories);
+    return categories.map(v => v.category);
   }
 );
 
