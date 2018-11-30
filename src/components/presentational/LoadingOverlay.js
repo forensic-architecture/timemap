@@ -1,9 +1,9 @@
 import React from 'react';
-import copy from '../js/data/copy.json';
+import copy from '../../js/data/copy.json';
 
-const LoadingOverlay = ({ ui, language }) => {
+const LoadingOverlay = ({ isLoading, language }) => {
   let classes = 'loading-overlay';
-  classes += (!ui.flags.isFetchingDomain) ? ' hidden' : '';
+  classes += (!isLoading) ? ' hidden' : '';
 
   return (
     <div id="loading-overlay" className={classes}>

@@ -56,6 +56,7 @@
     "cardstack": {
       "header": "eventos seleccionados",
       "unknown_location": "Localización desconocida",
+      "unknown_time": "Día y hora desconocida",
       "timestamp": "Día y hora",
       "estimated": "aproximado",
       "location": "Localización",
@@ -129,6 +130,7 @@
       "timestamp": "Day and time",
       "unknown_location": "Unknown location",
       "estimated": "estimated",
+      "unknown_time": "Unknown time",
       "location": "Localization",
       "incident_type": "Type of action",
       "description": "Summary of facts",

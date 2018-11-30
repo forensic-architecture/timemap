@@ -77,26 +77,7 @@ export default class InfoPopUp extends React.Component{
     )
   }
 
-  renderView3DLegend() {
-      const lang = copy[this.props.app.language].legend.view3d;
-      return (
-        <div className={`infopopup ${(this.props.ui.flags.isInfopopup) ? '' : 'hidden'}`}>
-          <button onClick={() => this.props.toggle()} className="side-menu-burg over-white is-active"><span /></button>
-          {lang.paragraphs.map(paragraph => <p>{paragraph}</p>)}
-          {lang.colors.map(color => (
-            <div className="legend-item">
-              <div className={`color-marker ${color.class}`}></div>
-              <div className="item-label">{color.label}</div>
-            </div>
-          ))}
-        </div>
-      )
-  }
-
   render() {
-    if (!this.props.ui.flags.isView2d) {
-      return (<div>{this.renderView3DLegend()}</div>)
-    }
     return (
       <div>{this.renderView2DLegend()}</div>
     )

@@ -5,13 +5,14 @@ import {
 import hash from 'object-hash';
 import 'leaflet-polylinedecorator';
 
-export default function(newApp, ui, select) {
+export default function(newApp, ui, methods) {
   let svg, g, defs;
 
   let categoryColorGroups = {};
 
   const domain = {
     locations: [],
+    narratives: [],
     categoryGroups: [],
     sites: []
   }
@@ -21,9 +22,11 @@ export default function(newApp, ui, select) {
     views: Object.assign({}, newApp.views),
   }
 
-  const getCategoryGroup = newApp.getCategoryGroup;
-  const getCategoryGroupColor = newApp.getCategoryGroupColor;
-  const groupColors = ui.style.groupColors;
+  const getCategoryGroup = methods.getCategoryGroup;
+  const getCategoryGroupColor = methods.getCategoryGroupColor;
+  const select = methods.select;
+  const groupColors = ui.groupColors;
+  const narrativeProps = ui.narratives;
 
     // Map Settings
   const center = newApp.mapAnchor;
@@ -147,6 +150,9 @@ Stop and start the development process in terminal after you have added your tok
       const newPoint = projectPoint([+d.latitude, +d.longitude]);
       return `translate(${newPoint.x},${newPoint.y})`;
     });
+
+    g.selectAll('.narrative')
+      .attr('d', sequenceLine);
 
     const busLine = d3.line()
       .x(d => lMap.latLngToLayerPoint(d).x)
@@ -324,37 +330,55 @@ Stop and start the development process in terminal after you have added your tok
     }
   }
 
-  // NB: is this a function to be removed for future features?
-  /**
-   * Creats a marker for an eventPoint along a path
-   * @param {Object} eventPoint: data for an evenPoint - time, loc, tags, etc
-   * @param {number} step: the portion of the entire path this event corresponds to
-   */
-  function createPathEventMarker(eventPoint, step) {
-    const {
-      latitude,
-      longitude
-    } = getEventLocation(eventPoint);
-    const pathEventMarker = L.circleMarker(
-      [latitude, longitude], {
-        color: ui.colors.DARKGREY,
-        fill: ui.colors.DARKGREY,
-        weight: 2,
-        fillOpacity: 0.6,
-        radius: 10 * step,
-      },
-    );
 
-    // Add marker event handlers
-    pathEventMarker.bindPopup('');
-    pathEventMarker.on('popupopen', () => {
-      select([eventPoint]);
-    });
-    pathEventMarker.on('popupclose', () => {
-      select();
-    });
+   const getCoords = (d) => {
+     d.LatLng = new L.LatLng(+d.latitude, +d.longitude);
+     return {
+       x: lMap.latLngToLayerPoint(d.LatLng).x,
+       y: lMap.latLngToLayerPoint(d.LatLng).y
+     }
+   }
 
-    return pathEventMarker;
+   const sequenceLine = d3.line()
+     .x(d => getCoords(d).x)
+     .y(d => getCoords(d).y)
+
+   /**
+    * Clears existing narrative layer
+    * Renders all narrativ as paths
+    * Adds eventlayer to map
+    */
+
+  function renderNarratives() {
+    const narrativesDom = g.selectAll('.narrative')
+      .data(domain.narratives.map(d => d.steps))
+
+    narrativesDom
+      .exit()
+      .remove();
+
+    let styleName
+    narrativesDom
+      .enter().append('path')
+      .attr('class', 'narrative')
+      .attr('d', sequenceLine)
+      .style('stroke-width', d => {
+        styleName = d[0].narrative && d[0].narrative in narrativeProps
+          ? d[0].narrative
+          : 'default'
+        const n = d[0].narrative;
+        return (n) ? narrativeProps[styleName].strokeWidth : 3;
+      })
+      .style('stroke-dasharray', d => {
+        const n = d[0].narrative;
+        if (narrativeProps[styleName].style === 'dotted') return "2px 5px";
+        return 'none';
+      })
+      .style('stroke', d => {
+        const n = d[0].narrative;
+        return (n) ? narrativeProps[styleName].stroke : '#fff';
+      })
+      .style('fill', 'none');
   }
 
   /**
@@ -366,6 +390,7 @@ Stop and start the development process in terminal after you have added your tok
 
     if (hash(domain) !== hash(newDomain)) {
       domain.locations = newDomain.locations;
+      domain.narratives = newDomain.narratives;
       domain.categoryGroups = newDomain.categoryGroups;
       domain.sites = newDomain.sites;
       renderDomain();
@@ -386,6 +411,7 @@ Stop and start the development process in terminal after you have added your tok
    function renderDomain () {
      renderSites();
      renderEvents();
+     renderNarratives();
    }
   function renderSelectedAndHighlight () {
     renderSelected();

@@ -48,7 +48,7 @@ function updateTagFilters(appState, action) {
 function updateTimeRange(appState, action) { // XXX
   return Object.assign({}, appState, {
     filters: Object.assign({}, appState.filters, {
-      range: action.range
+      timerange: action.timerange
     }),
   });
 }
@@ -58,7 +58,7 @@ function resetAllFilters(appState) { // XXX
     filters: Object.assign({}, appState.filters, {
       tags: [],
       categories: [],
-      range: [
+      timerange: [
         d3.timeParse("%Y-%m-%dT%H:%M:%S")("2014-09-25T12:00:00"),
         d3.timeParse("%Y-%m-%dT%H:%M:%S")("2014-09-28T12:00:00")
       ],

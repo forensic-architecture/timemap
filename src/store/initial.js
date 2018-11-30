@@ -1,28 +1,35 @@
-// TODO: annotate sections of this state.
-
-// NB: why does this canvas document need to be created?
-const canvas = document.createElement('canvas');
-const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-
 const initial = {
+  /*
+  * The Domain or 'domain' of this state refers to the tree of data
+  *  available for render and display.
+  * Selections and filters in the 'app' subtree will operate the domain
+  *   in mapStateToProps of the Dashboard, and deterimne which items
+  *   in the domain will get rendered by React
+  */
   domain: {
     events: [],
+    narratives: [],
     locations: [],
-
     categories: [],
     sites: [],
-
-    // Tag tree
-    tags: { },
+    tags: {},
     notifications: [],
   },
+
+  /*
+  * The 'app' subtree of this state determines the data and information to be
+  *   displayed.
+  * It may refer to those the user interacts with, by selecting,
+  *   fitlering and so on, which ultimately operate on the data to be displayed.
+  * Additionally, some of the 'app' flags are determined by the config file
+  *   or by the characteristics of the client, browser, etc.
+  */
   app: {
     error: null,
     highlighted: null,
     selected: [],
-    notifications: [],
     filters: {
-      range: [
+      timerange: [
           d3.timeParse("%Y-%m-%dT%H:%M:%S")("2014-08-22T12:00:00"),
           d3.timeParse("%Y-%m-%dT%H:%M:%S")("2014-08-27T12:00:00")
       ],
@@ -37,7 +44,6 @@ const initial = {
     },
     base_uri: 'http://127.0.0.1:8000/', // Modify accordingly on production setup.
     isMobile: (/Mobi/.test(navigator.userAgent)),
-    isWebGL: (gl && gl instanceof WebGLRenderingContext),
     language: 'en-US',
     mapAnchor: process.env.MAP_ANCHOR,
     features: {
@@ -45,8 +51,15 @@ const initial = {
       USE_SEARCH: process.env.features.USE_SEARCH
     }
   },
+
+  /*
+  * The 'ui' subtree of this state refers the state of the cosmetic
+  *   elements of the application, such as color palettes of groups or how some
+  *   of the UI tools are enabled or disabled dynamically by the user
+  */
   ui: {
     style: {
+
       colors: {
         WHITE: "#efefef",
         YELLOW: "#ffd800",
@@ -58,6 +71,7 @@ const initial = {
         BLUE: "#F2DE79",//"rgb(48, 103 , 217)",
         GREEN: "#4FF2F2",//"rgb(0, 158, 86)",
       },
+
       groupColors: {
         category_group00: "#FF0000",
         category_group01: "#226b22",
@@ -66,7 +80,23 @@ const initial = {
         category_group04: "#d3ce2a",
         other: "#FF0000"
       },
+
       palette: d3.schemeCategory10,
+
+      narratives: {
+        default: {
+          style: 'dotted',                  // ['dotted', 'solid']
+          opacity: 0.4,                     // range between 0 and 1
+          stroke: 'red',               // Any hex or rgb code
+          strokeWidth: 2
+        },
+        narrative_1: {
+          style: 'solid',                  // ['dotted', 'solid']
+          opacity: 0.4,                     // range between 0 and 1
+          stroke: 'red',               // Any hex or rgb code
+          strokeWidth: 2
+        }
+      }
     },
     dom: {
       timeline: "timeline",
@@ -76,9 +106,7 @@ const initial = {
     flags: {
       isFetchingDomain: false,
       isFetchingEvents: false,
-      isView2d: true,
-      isTimeline: true,
-      isToolbar: false,
+
       isCardstack: true,
       isInfopopup: false,
       isNotification: true
@@ -87,9 +115,6 @@ const initial = {
       formatter: d3.timeFormat("%d %b, %H:%M"),
       formatterWithYear: d3.timeFormat("%d %b %Y, %H:%M"),
       parser: d3.timeParse("%Y-%m-%dT%H:%M:%S")
-    },
-    components: {
-      toolbarTab: false,
     }
   }
 };

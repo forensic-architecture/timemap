@@ -1,35 +1,27 @@
-import '../scss/main.scss';
 import React from 'react';
-import View2D from './View2D.jsx';
+import Map from '../js/map/map.js';
+import { areEqual } from '../js/data/utilities.js';
 
 class Viewport extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  componentDidMount() {
+    this.map = new Map(this.props.app, this.props.ui, this.props.methods);
+    this.map.update(this.props.domain, this.props.app);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.map.update(nextProps.domain, nextProps.app);
+  }
+
   render() {
-    if( this.props.isView2d ) {
-      return (
-        <View2D
-          locations={this.props.locations}
-          sites={this.props.sites}
-          categoryGroups={this.props.categoryGroups}
-
-          views={this.props.views}
-          selected={this.props.selected}
-          highlighted={this.props.highlighted}
-          mapAnchor={this.props.mapAnchor}
-
-          uiStyle={this.props.uiStyle}
-          dom={this.props.dom}
-
-          select={this.props.select}
-          highlight={this.props.highlight}
-          getCategoryGroupColor={category => this.props.getCategoryGroupColor(category)}
-          getCategoryGroup={category => this.props.getCategoryGroup(category)}
-        />
-      );
-    }
+    return (
+      <div className='map-wrapper'>
+        <div id="map" />
+      </div>
+    );
   }
 }
 

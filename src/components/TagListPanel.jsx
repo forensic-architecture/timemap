@@ -1,6 +1,5 @@
-import '../scss/main.scss';
 import React from 'react';
-import Checkbox from './Checkbox.jsx';
+import Checkbox from './presentational/Checkbox';
 
 class TagListPanel extends React.Component {
 

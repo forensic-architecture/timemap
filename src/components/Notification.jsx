@@ -27,19 +27,41 @@ export default class Notification extends React.Component{
     )
   }
 
+  renderNotificationContent(notification) {
+    const { type, message, items } = notification;
+
+    return (
+      <React.Fragment>
+        <div className={`message ${type}`}>
+          {`${message}`}
+        </div>
+        <div className={`details ${this.state.isExtended}`}>
+          {(items !== null) ? this.renderItems(items) : ''}
+        </div>
+      </React.Fragment>
+    )
+  }
+
   render() {
     if (this.props.isNotification) {
+
       return (
         <div className={`notification-wrapper`}>
-          {this.props.notifications.map(notification => (
-            <div className='notification' onClick={() => this.toggleDetails() }>
-              <button onClick={() => this.props.toggle()} className="side-menu-burg over-white is-active"><span /></button>
-              <div className={`message ${notification.type}`}>{`${notification.message}`}</div>
-              <div className={`details ${this.state.isExtended}`}>
-                {(notification.items !== null) ? this.renderItems(notification.items) : ''}
+          {this.props.notifications.map((notification) => {
+
+            return (
+              <div className='notification' onClick={() => this.toggleDetails() }>
+                <button
+                  onClick={() => this.props.toggle()}
+                  className="side-menu-burg over-white is-active"
+                >
+                  <span />
+                </button>
+                {this.renderNotificationContent(notification)}
               </div>
-            </div>
-          ))}
+            );
+          })
+        }
         </div>
       )
     }

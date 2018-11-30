@@ -1,6 +1,4 @@
-import {
-  combineReducers
-} from 'redux'
+import { combineReducers } from 'redux'
 
 import domain from './domain.js'
 import app from './app.js'

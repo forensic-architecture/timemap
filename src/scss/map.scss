@@ -30,7 +30,7 @@
       z-index: $map;
   }
   .event {
-    fill: $yellow;
+    fill: $event_default;
     cursor: pointer;
     opacity: 0.45;
   }
@@ -144,6 +144,7 @@
 */
 
 .location-event-marker {
+  fill: $event_default;
   stroke-width: 0;
   transition: 0.2s ease;
   fill-opacity: 0.8;
