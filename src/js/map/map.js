@@ -8,8 +8,6 @@ import 'leaflet-polylinedecorator';
 export default function(newApp, ui, methods) {
   let svg, g, defs;
 
-  let categoryColorGroups = {};
-
   const domain = {
     locations: [],
     narratives: [],
@@ -22,10 +20,8 @@ export default function(newApp, ui, methods) {
     views: Object.assign({}, newApp.views),
   }
 
-  // const getCategoryGroup = methods.getCategoryGroup;
-  // const getCategoryColor = methods.getCategoryColor;
+  const getCategoryColor = methods.getCategoryColor;
   const select = methods.select;
-  const categoryColors = ui.categories;
   const narrativeProps = ui.narratives;
 
     // Map Settings
@@ -296,7 +292,7 @@ Stop and start the development process in terminal after you have added your tok
     eventsDom
       .enter().append('circle')
       .attr('class', 'location-event-marker')
-      .style('fill', (d, i) => categoryColors[domain.categories[i]])
+      .style('fill', (d, i) => getCategoryColor(domain.categories[i]))
       .transition()
       .duration(500)
       .attr('r', d => (d) ? Math.sqrt(16 * d) + 3 : 0);

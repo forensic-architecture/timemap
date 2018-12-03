@@ -43,8 +43,7 @@ function mapStateToProps(state) {
     },
     ui: {
       dom: state.ui.dom,
-      narratives: state.ui.style.narratives,
-      categories: state.ui.style.narratives
+      narratives: state.ui.style.narratives
     }
   }
 }

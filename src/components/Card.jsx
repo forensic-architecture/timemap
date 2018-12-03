@@ -41,17 +41,15 @@ class Card extends React.Component {
   }
 
   renderCategory() {
-    const eventCat = this.props.event.category || 'other';
     const categoryTitle = copy[this.props.language].cardstack.category;
-    const colorType = this.props.style.categories[eventCat] || this.props.style.categories['other'];
-    console.log(eventCat, this.props.event.category, this.props.style.categories)
     const categoryLabel = this.props.event.category;
+    const color = this.props.getCategoryColor(this.props.event.category);
 
     return (
       <CardCategory
         categoryTitle={categoryTitle}
         categoryLabel={categoryLabel}
-        colorType={colorType}
+        color={color}
       />
     );
   }
