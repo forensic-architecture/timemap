@@ -127,7 +127,7 @@ const initial = {
         narrative_1: {
           style: 'solid',                  // ['dotted', 'solid']
           opacity: 0.4,                     // range between 0 and 1
-          stroke: 'red',               // Any hex or rgb code
+          stroke: 'yellow',               // Any hex or rgb code
           strokeWidth: 2
         }
       }

@@ -342,6 +342,13 @@ Stop and start the development process in terminal after you have added your tok
     * Adds eventlayer to map
     */
 
+  function getNarrativeStyle(narrativeId) {
+    const styleName = narrativeId && narrativeId in narrativeProps
+      ? narrativeId
+      : 'default';
+    return narrativeProps[styleName];
+  }
+
   function renderNarratives() {
     const narrativesDom = g.selectAll('.narrative')
       .data(domain.narratives.map(d => d.steps))
@@ -356,20 +363,19 @@ Stop and start the development process in terminal after you have added your tok
       .attr('class', 'narrative')
       .attr('d', sequenceLine)
       .style('stroke-width', d => {
-        styleName = d[0].narrative && d[0].narrative in narrativeProps
-          ? d[0].narrative
-          : 'default'
-        const n = d[0].narrative;
-        return (n) ? narrativeProps[styleName].strokeWidth : 3;
+        // Note: [0] is a non-elegant way to get the narrative id out of the first
+        // event in the narrative sequence
+        const styleProps = getNarrativeStyle(d[0].narrative);
+        return styleProps.strokeWidth;
       })
       .style('stroke-dasharray', d => {
-        const n = d[0].narrative;
-        if (narrativeProps[styleName].style === 'dotted') return "2px 5px";
-        return 'none';
+        const styleProps = getNarrativeStyle(d[0].narrative);
+        console.log(styleProps)
+        return (styleProps.style === 'dotted') ? "2px 5px" : 'none';
       })
       .style('stroke', d => {
-        const n = d[0].narrative;
-        return (n) ? narrativeProps[styleName].stroke : '#fff';
+        const styleProps = getNarrativeStyle(d[0].narrative);
+        return styleProps.stroke;
       })
       .style('fill', 'none');
   }
