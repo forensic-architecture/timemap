@@ -1,5 +1,7 @@
-
 import React from 'react';
+import { connect } from 'react-redux'
+import * as selectors from '../selectors'
+
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Search from './Search.jsx';
 import TagListPanel from './TagListPanel.jsx';
@@ -226,4 +228,16 @@ class Toolbar extends React.Component {
   }
 }
 
-export default Toolbar;
+function mapStateToProps(state) {
+  return {
+    tags: selectors.getTagTree(state),
+    categories: selectors.selectCategories(state),
+    language: state.app.language,
+    tagFilters: selectors.selectTagList(state),
+    categoryFilter: state.app.filters.categories,
+    viewFilters: state.app.filters.views,
+    features: state.app.features
+  }
+}
+
+export default connect(mapStateToProps)(Toolbar)

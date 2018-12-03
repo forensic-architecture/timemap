@@ -33,12 +33,6 @@ class Card extends React.Component {
     });
   }
 
-  getCategoryColorClass(category) {
-    if (category)
-      return this.props.getCategoryGroup(category);
-    return 'other';
-  }
-
   makeTimelabel(timestamp) {
     if (timestamp === null) return null;
     const parsedTimestamp = this.props.tools.parser(timestamp);
@@ -48,8 +42,8 @@ class Card extends React.Component {
 
   renderCategory() {
     const categoryTitle = copy[this.props.language].cardstack.category;
-    const colorType = this.getCategoryColorClass(this.props.event.category);
-    const categoryLabel = this.props.getCategoryLabel(this.props.event.category);
+    const colorType = this.props.event.category || 'other';
+    const categoryLabel = this.props.event.category;
 
     return (
       <CardCategory

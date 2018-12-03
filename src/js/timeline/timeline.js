@@ -50,22 +50,15 @@ export default function(app, ui) {
       active: false
     },
   ];
-
   let events = [];
-  let categoryGroups = [];
+  let categories = [];
   let selected = [];
   let timerange = app.timerange;
 
   const timeFilter = app.filter;
   const select = app.select;
   const getCategoryLabel = app.getCategoryLabel;
-  const getCategoryGroupColor = app.getCategoryGroupColor;
-  const getCategoryGroup = app.getCategoryGroup;
-
-  // Play functions
-  window.playInterval;
-  let isPlaying = false;
-  const playDuration = 1000;
+  const getCategoryColor = app.getCategoryColor;
 
   // Drag behavior
   let dragPos0;
@@ -93,14 +86,15 @@ export default function(app, ui) {
     .domain(timerange)
     .range([mg.l, WIDTH]);
 
-  const groupStep = (106 - 30) / categoryGroups.length;
-  const groupYs = new Array(categoryGroups.length);
+  // calculate group step between categories
+  const groupStep = (106 - 30) / categories.length;
+  const groupYs = new Array(categories.length);
   groupYs.map((g, i) => {
     return 30 + i * groupStep;
   });
 
   scale.y = d3.scaleOrdinal()
-    .domain(categoryGroups)
+    .domain(categories)
     .range(groupYs);
 
   /**
@@ -292,7 +286,7 @@ export default function(app, ui) {
    * @param {object} eventPoint data object
    */
   function getEventPointFillColor(eventPoint) {
-    return getCategoryGroupColor(eventPoint.category);
+    return getCategoryColor(eventPoint.category);
   }
 
   /**
@@ -301,10 +295,10 @@ export default function(app, ui) {
    */
   function getAllEventsAtOnce(eventPoint) {
     const timestamp = eventPoint.timestamp;
-    const categoryGroup = getCategoryGroup(eventPoint.category);
+    const categoryGroup = eventPoint.category;
     return events.filter(event => {
       return (event.timestamp === timestamp &&
-        categoryGroup === getCategoryGroup(event.category))
+        categoryGroup === event.category)
     }).map(event => event.id);
   }
 
@@ -313,7 +307,7 @@ export default function(app, ui) {
    * @param {object} eventPoint: regular eventPoint data
    */
   function getEventY(eventPoint) {
-    const yGroup = getCategoryGroup(eventPoint.category);
+    const yGroup = eventPoint.category;
     return scale.y(yGroup);
   }
 
@@ -370,7 +364,7 @@ export default function(app, ui) {
 
   /**
    * Shift time range by moving forward or backwards
-   * @param {Stirng} direction: 'forward' / 'backwards'
+   * @param {String} direction: 'forward' / 'backwards'
    */
   function moveTime(direction) {
     select();
@@ -597,7 +591,6 @@ export default function(app, ui) {
    * @param {Object} app: Redux state app subtree
    */
   function updateAxis(domain) {
-    console.log(domain)
     const categories = domain.categories
     const groupStep = (106 - 30) / categories.length;
     let groupYs = Array.apply(null, Array(categories.length));

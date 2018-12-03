@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux'
+import * as selectors from '../selectors'
+
 import Card from './Card.jsx';
 import copy from '../js/data/copy.json';
 import {
@@ -90,4 +93,14 @@ class CardStack extends React.Component {
   }
 }
 
-export default CardStack;
+function mapStateToProps(state) {
+  return {
+    selected: state.app.selected,
+    language: state.app.selected,
+    tools: state.ui.tools,
+    isCardstack: state.ui.flags.isCardstack,
+    isLoading: state.ui.flags.isFetchingEvents
+  }
+}
+
+export default connect(mapStateToProps)(CardStack)

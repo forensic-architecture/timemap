@@ -1,5 +1,8 @@
-import copy from '../js/data/copy.json';
 import React from 'react';
+import { connect } from 'react-redux';
+import * as selectors from '../selectors';
+
+import copy from '../js/data/copy.json';
 import TimelineLogic from '../js/timeline/timeline.js';
 
 class Timeline extends React.Component {
@@ -67,6 +70,7 @@ class Timeline extends React.Component {
   }
 
   render() {
+    let events = this.props.events
     const labels_title_lang = copy[this.props.language].timeline.labels_title;
     const info_lang = copy[this.props.language].timeline.info;
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`;
@@ -92,4 +96,18 @@ class Timeline extends React.Component {
   }
 }
 
-export default Timeline;
+function mapStateToProps(state) {
+  return {
+    // events: selectors.selectEvents(state),
+    events: state.domain.events,
+    categories: selectors.selectCategories(state),
+    language: state.app.language,
+    tools: state.ui.tools,
+    timerange: selectors.getTimeRange(state),
+    dom: state.ui.dom,
+    selected: state.app.selected
+  }
+}
+
+export default connect(mapStateToProps)(Timeline);
+// export default Timeline

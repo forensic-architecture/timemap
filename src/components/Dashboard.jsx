@@ -113,15 +113,13 @@ class Dashboard extends React.Component {
     return null;
   }
 
-  render() {
-    return (
-      <div>
+/***
         <Viewport
           domain={{
             locations: this.props.domain.locations,
             narratives: this.props.domain.narratives,
             sites: this.props.domain.sites,
-            categoryGroups: this.props.domain.categoryGroups
+            categories: this.props.domain.categories
           }}
 
           app={{
@@ -140,30 +138,21 @@ class Dashboard extends React.Component {
           methods={{
             select: this.handleSelect,
             highlight: this.handleHighlight,
-            getCategoryGroup: category => this.getCategoryGroup(category),
-            getCategoryGroupColor: category => this.getCategoryGroupColor(category)
+            // getCategoryGroup: category => this.getCategoryGroup(category),
+            getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
-        <Toolbar
-          tags={this.props.domain.tags}
-          categories={this.props.domain.categories}
-          language={this.props.app.language}
-          tagFilters={this.props.app.filters.tags}
-          categoryFilter={this.props.app.filters.categories}
-          viewFilters={this.props.app.filters.views}
-          features={this.props.app.features}
+***/
 
+  render() {
+    return (
+      <div>
+        <Toolbar
           filter={this.handleTagFilter}
           toggle={ (key) => this.handleToggle(key) }
           actions={this.props.actions}
         />
         <CardStack
-          selected={this.props.app.selected}
-          language={this.props.app.language}
-          tools={this.props.ui.tools}
-          isCardstack={this.props.ui.flags.isCardstack}
-          isLoading={this.props.ui.flags.isFetchingEvents}
-
           select={this.handleSelect}
           highlight={this.handleHighlight}
           toggle={this.handleToggle}
@@ -171,17 +160,6 @@ class Dashboard extends React.Component {
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <Timeline
-          events={this.props.domain.events.filter(item => item)}
-          narratives={this.props.domain.narratives}
-          categories={this.props.domain.categories}
-
-          timerange={this.props.app.filters.timerange}
-          selected={this.props.app.selected}
-          language={this.props.app.language}
-
-          tools={this.props.ui.tools}
-          dom={this.props.ui.dom}
-
           select={this.handleSelect}
           filter={this.handleTimeFilter}
           highlight={this.handleHighlight}
@@ -207,31 +185,6 @@ class Dashboard extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return Object.assign({}, state, {
-    domain: Object.assign({}, state.domain, {
-      // These items are affected by app selectionFilters
-      events: selectors.selectEvents(state),
-      locations: selectors.selectLocations(state),
-      categories: selectors.selectCategories(state),
-      narratives: selectors.selectNarratives(state),
-
-      // These items are not affected by selectionFilters
-      sites: selectors.getSites(state),
-      tags: selectors.getTagTree(state),
-      notifications: selectors.getNotifications(state)
-    }),
-    app: Object.assign({}, state.app, {
-      error: state.app.error,
-      filters: Object.assign({}, state.app.filters, {
-        timerange: selectors.getTimeRange(state),
-        tags: selectors.selectTagList(state)
-      })
-    }),
-    ui: state.ui
-  });
-}
-
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(actions, dispatch)
@@ -239,6 +192,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  mapStateToProps,
+  state => state,
   mapDispatchToProps,
 )(Dashboard);
