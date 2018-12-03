@@ -232,6 +232,7 @@ function mapStateToProps(state) {
   return {
     tags: selectors.getTagTree(state),
     categories: selectors.selectCategories(state),
+    narratives: selectors.selectNarratives(state),
     language: state.app.language,
     tagFilters: selectors.selectTagList(state),
     categoryFilter: state.app.filters.categories,

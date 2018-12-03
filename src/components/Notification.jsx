@@ -28,12 +28,12 @@ export default class Notification extends React.Component{
   }
 
   renderNotificationContent(notification) {
-    const { type, message, items } = notification;
+    let { type, message, items } = notification;
 
     return (
       <div>
         <div className={`message ${type}`}>
-          {`${message}`}
+          {message}
         </div>
         <div className={`details ${this.state.isExtended}`}>
           {(items !== null) ? this.renderItems(items) : ''}
@@ -48,7 +48,6 @@ export default class Notification extends React.Component{
       return (
         <div className={`notification-wrapper`}>
           {this.props.notifications.map((notification) => {
-console.log(notification)
             return (
               <div className='notification' onClick={() => this.toggleDetails() }>
                 <button
@@ -65,6 +64,6 @@ console.log(notification)
         </div>
       )
     }
-    return '';
+    return (<div/>);
   }
 }

@@ -23,7 +23,7 @@ class Dashboard extends React.Component {
     this.handleTagFilter = this.handleTagFilter.bind(this);
     this.updateTimerange = this.updateTimerange.bind(this);
 
-    this.eventsById = {};
+    this.eventsById = {}
   }
 
   componentDidMount() {
