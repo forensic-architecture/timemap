@@ -22,6 +22,8 @@ class Dashboard extends React.Component {
     this.handleToggle = this.handleToggle.bind(this);
     this.handleTagFilter = this.handleTagFilter.bind(this);
     this.handleTimeFilter = this.handleTimeFilter.bind(this);
+
+    this.eventsById = {};
   }
 
   componentDidMount() {
@@ -35,9 +37,15 @@ class Dashboard extends React.Component {
     this.props.actions.updateHighlighted((highlighted) ? highlighted : null);
   }
 
+  getEventById(eventId) {
+    if (this.eventsById[eventId]) return this.eventsById[eventId];
+    this.eventsById[eventId] = this.props.domain.events.find(ev => ev.id === eventId);
+    return this.eventsById[eventId];
+  }
+
   handleSelect(selected) {
     if (selected) {
-      let eventsToSelect = selected.map(eventId => this.props.domain.events[eventId]);
+      let eventsToSelect = selected.map(eventId => this.getEventById(eventId));
       const parser = this.props.ui.tools.parser;
 
       eventsToSelect = eventsToSelect.sort((a, b) => {
@@ -53,7 +61,7 @@ class Dashboard extends React.Component {
       this.props.actions.fetchEvents(selected)
         .then((events) => {
           let eventsSelected = events.map(ev => {
-            return Object.assign({}, ev, this.props.domain.events[ev.id]);
+            return Object.assign({}, ev, this.getEventById(ev.id));
           });
 
           eventsSelected = eventsSelected.sort((a, b) => {
