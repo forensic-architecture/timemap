@@ -147,6 +147,14 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
+      <Viewport
+          methods={{
+            select: this.handleSelect,
+            highlight: this.handleHighlight,
+            // getCategoryGroup: category => this.getCategoryGroup(category),
+            getCategoryColor: category => this.getCategoryColor(category)
+          }}
+        />
         <Toolbar
           filter={this.handleTagFilter}
           toggle={ (key) => this.handleToggle(key) }

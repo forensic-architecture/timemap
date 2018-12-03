@@ -22,10 +22,10 @@ export default function(newApp, ui, methods) {
     views: Object.assign({}, newApp.views),
   }
 
-  const getCategoryGroup = methods.getCategoryGroup;
-  const getCategoryColor = methods.getCategoryColor;
+  // const getCategoryGroup = methods.getCategoryGroup;
+  // const getCategoryColor = methods.getCategoryColor;
   const select = methods.select;
-  const groupColors = ui.groupColors;
+  const categoryColors = ui.categories;
   const narrativeProps = ui.narratives;
 
     // Map Settings
@@ -227,32 +227,30 @@ Stop and start the development process in terminal after you have added your tok
    */
 
   function getLocationEventsDistribution(location) {
-    // const eventsHere = {};
+    const eventCount = {};
     const categories = domain.categories;
-    categories.sort((a, b) => {
-      return (+a.slice(-2) > +b.slice(-2));
-    });
+    // categories.sort((a, b) => {
+    //   return (+a.slice(-2) > +b.slice(-2));
+    // });
     categories.forEach(group => {
-      eventsHere[group] = 0
+      eventCount[group] = 0
     });
 
-    // location.events.forEach((event) => {
-    //   const group = getCategoryGroup(event.category);
-    //   eventsHere[group] += 1;
-    // });
+    location.events.forEach((event) => {;
+      eventCount[event.category] += 1;
+    });
 
     let i = 0;
     const events = [];
 
     while (i < categories.length) {
-      let eventsCount = eventsHere[categories[i]];
+      let _eventsCount = eventCount[categories[i]];
       for (let j = i + 1; j < categories.length; j++) {
-        eventsCount += eventsHere[categories[j]];
+        _eventsCount += eventCount[categories[j]];
       }
-      events.push(eventsCount);
+      events.push(_eventsCount);
       i++;
     }
-
     return events;
   }
 
@@ -283,8 +281,7 @@ Stop and start the development process in terminal after you have added your tok
 
     const eventsDom = g.selectAll('.location')
       .selectAll('.location-event-marker')
-      .data((d, i) => getLocationEventsDistribution(domain.locations[i]),
-        (d, i) => 'location-' + i);
+      .data((d, i) => getLocationEventsDistribution(domain.locations[i]))
 
     eventsDom
       .exit()
@@ -299,7 +296,7 @@ Stop and start the development process in terminal after you have added your tok
     eventsDom
       .enter().append('circle')
       .attr('class', 'location-event-marker')
-      .style('fill', (d, i) => groupColors[domain.categories[i]])
+      .style('fill', (d, i) => categoryColors[domain.categories[i]])
       .transition()
       .duration(500)
       .attr('r', d => (d) ? Math.sqrt(16 * d) + 3 : 0);
