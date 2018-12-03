@@ -8,12 +8,10 @@ import 'leaflet-polylinedecorator';
 export default function(newApp, ui, methods) {
   let svg, g, defs;
 
-  let categoryColorGroups = {};
-
   const domain = {
     locations: [],
     narratives: [],
-    categoryGroups: [],
+    categories: [],
     sites: []
   }
   const app = {
@@ -22,10 +20,8 @@ export default function(newApp, ui, methods) {
     views: Object.assign({}, newApp.views),
   }
 
-  const getCategoryGroup = methods.getCategoryGroup;
-  const getCategoryGroupColor = methods.getCategoryGroupColor;
+  const getCategoryColor = methods.getCategoryColor;
   const select = methods.select;
-  const groupColors = ui.groupColors;
   const narrativeProps = ui.narratives;
 
     // Map Settings
@@ -195,7 +191,7 @@ Stop and start the development process in terminal after you have added your tok
     unmarkPoint();
     app.selected.forEach(eventPoint => {
       if (isNotNullNorUndefined(eventPoint) && isNotNullNorUndefined(eventPoint.location)) {
-        if (eventPoint.latitude && eventPoint.longitude) {
+        if (eventPoint.latitude && eventPoint.latitude !== "" && eventPoint.longitude && eventPoint.longitude !== "") {
           const location = new L.LatLng(eventPoint.latitude, eventPoint.longitude);
           eventCircleMarkers[eventPoint.id] = L.circleMarker(location, {
             radius: 32,
@@ -227,32 +223,30 @@ Stop and start the development process in terminal after you have added your tok
    */
 
   function getLocationEventsDistribution(location) {
-    const eventsHere = {};
-    const categoryGroups = domain.categoryGroups;
-    categoryGroups.sort((a, b) => {
-      return (+a.slice(-2) > +b.slice(-2));
-    });
-    categoryGroups.forEach(group => {
-      eventsHere[group] = 0
+    const eventCount = {};
+    const categories = domain.categories;
+    // categories.sort((a, b) => {
+    //   return (+a.slice(-2) > +b.slice(-2));
+    // });
+    categories.forEach(group => {
+      eventCount[group] = 0
     });
 
-    location.events.forEach((event) => {
-      const group = getCategoryGroup(event.category);
-      eventsHere[group] += 1;
+    location.events.forEach((event) => {;
+      eventCount[event.category] += 1;
     });
 
     let i = 0;
     const events = [];
 
-    while (i < categoryGroups.length) {
-      let eventsCount = eventsHere[categoryGroups[i]];
-      for (let j = i + 1; j < categoryGroups.length; j++) {
-        eventsCount += eventsHere[categoryGroups[j]];
+    while (i < categories.length) {
+      let _eventsCount = eventCount[categories[i]];
+      for (let j = i + 1; j < categories.length; j++) {
+        _eventsCount += eventCount[categories[j]];
       }
-      events.push(eventsCount);
+      events.push(_eventsCount);
       i++;
     }
-
     return events;
   }
 
@@ -281,9 +275,9 @@ Stop and start the development process in terminal after you have added your tok
         select(location.events);
       });
 
-    const eventsDom = g.selectAll('.location').selectAll('.location-event-marker')
-      .data((d, i) => getLocationEventsDistribution(domain.locations[i]),
-        (d, i) => 'location-' + i);
+    const eventsDom = g.selectAll('.location')
+      .selectAll('.location-event-marker')
+      .data((d, i) => getLocationEventsDistribution(domain.locations[i]))
 
     eventsDom
       .exit()
@@ -298,7 +292,7 @@ Stop and start the development process in terminal after you have added your tok
     eventsDom
       .enter().append('circle')
       .attr('class', 'location-event-marker')
-      .style('fill', (d, i) => groupColors[domain.categoryGroups[i]])
+      .style('fill', (d, i) => getCategoryColor(domain.categories[i]))
       .transition()
       .duration(500)
       .attr('r', d => (d) ? Math.sqrt(16 * d) + 3 : 0);
@@ -391,7 +385,7 @@ Stop and start the development process in terminal after you have added your tok
     if (hash(domain) !== hash(newDomain)) {
       domain.locations = newDomain.locations;
       domain.narratives = newDomain.narratives;
-      domain.categoryGroups = newDomain.categoryGroups;
+      domain.categories = newDomain.categories;
       domain.sites = newDomain.sites;
       renderDomain();
     }

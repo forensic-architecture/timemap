@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux'
+import * as selectors from '../selectors'
+
 import Card from './Card.jsx';
 import copy from '../js/data/copy.json';
 import {
@@ -22,7 +25,7 @@ class CardStack extends React.Component {
             isLoading={this.props.isLoading}
             getNarrativeLinks={this.props.getNarrativeLinks}
             getCategoryGroup={this.props.getCategoryGroup}
-            getCategoryGroupColor={this.props.getCategoryGroupColor}
+            getCategoryColor={this.props.getCategoryColor}
             getCategoryLabel={this.props.getCategoryLabel}
             highlight={this.props.highlight}
             select={this.props.select}
@@ -90,4 +93,14 @@ class CardStack extends React.Component {
   }
 }
 
-export default CardStack;
+function mapStateToProps(state) {
+  return {
+    selected: state.app.selected,
+    language: state.app.language,
+    tools: state.ui.tools,
+    isCardstack: state.ui.flags.isCardstack,
+    isLoading: state.ui.flags.isFetchingEvents
+  }
+}
+
+export default connect(mapStateToProps)(CardStack)
