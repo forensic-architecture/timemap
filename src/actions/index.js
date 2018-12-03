@@ -180,6 +180,14 @@ export function updateTimeRange(timerange) {
   }
 }
 
+export const UPDATE_NARRATIVE = 'UPDATE_NARRATIVE';
+export function updateNarrative(narrative) {
+  return {
+    type: UPDATE_NARRATIVE,
+    narrative
+  }
+}
+
 export const RESET_ALLFILTERS = 'RESET_ALLFILTERS'
 export function resetAllFilters() {
   return {
@@ -254,5 +262,13 @@ export function fetchSourceError(msg) {
   return {
     type: FETCH_SOURCE_ERROR,
     msg
+  }
+}
+
+export const TOGGLE_MAPVIEW = 'TOGGLE_MAPVIEW';
+export function toggleMapView(layer) {
+  return {
+    type: TOGGLE_MAPVIEW,
+    layer
   }
 }
