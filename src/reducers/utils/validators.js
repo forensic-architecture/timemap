@@ -3,6 +3,7 @@ import Joi from 'joi';
 import eventSchema from '../schema/eventSchema.js';
 import categorySchema from '../schema/categorySchema.js';
 import siteSchema from '../schema/siteSchema.js';
+import narrativeSchema from '../schema/narrativeSchema.js';
 
 import { capitalize } from './helpers.js';
 
@@ -57,6 +58,7 @@ export function validateDomain (domain) {
     events: [],
     categories: [],
     sites: [],
+    narratives: [],
     notifications: domain.notifications,
     tags: {}
   }
@@ -64,7 +66,8 @@ export function validateDomain (domain) {
   const discardedDomain = {
     events: [],
     categories: [],
-    sites: []
+    sites: [],
+    narratives: [],
   }
 
   function validateItem(item, domainClass, schema) {
@@ -84,11 +87,16 @@ export function validateDomain (domain) {
     validateItem(event, 'events', eventSchema);
   });
   domain.categories.forEach(category => {
+    console.log(category)
     validateItem(category, 'categories', categorySchema);
   });
   domain.sites.forEach(site => {
     validateItem(site, 'sites', siteSchema);
   });
+  domain.narratives.forEach(narrative => {
+    validateItem(narrative, 'narratives', narrativeSchema);
+  });
+
 
   // Message the number of failed items in domain
   Object.keys(discardedDomain).forEach(disc => {

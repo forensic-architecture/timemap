@@ -67,7 +67,7 @@ class Dashboard extends React.Component {
   }
 
   getNarrativeLinks(event) {
-    const narrative = this.props.domain.narratives.find(nv => nv.key === event.narrative);
+    const narrative = this.props.domain.narratives.find(nv => nv.id === event.narrative);
     if (narrative) return narrative.byId[event.id];
     return null;
   }

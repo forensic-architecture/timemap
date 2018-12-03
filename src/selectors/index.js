@@ -6,6 +6,7 @@ import {
 export const getEvents = state => state.domain.events
 export const getLocations = state => state.domain.locations
 export const getCategories = state => state.domain.categories
+export const getNarratives = state => state.domain.narratives
 export const getSites = (state) => {
   if (process.env.features.USE_SITES) return state.domain.sites
   return []
@@ -84,8 +85,8 @@ export const selectEvents = createSelector(
  * and if TAGS are being used, select them if their tags are enabled
  */
 export const selectNarratives = createSelector(
-    [getEvents, getTagsFilter, getTimeRange],
-    (events, tagFilters, timeRange) => {
+    [getEvents, getNarratives, getTagsFilter, getTimeRange],
+    (events, narrativeMetadata, tagFilters, timeRange) => {
 
       const narratives = {};
       events.forEach((evt) => {
@@ -112,7 +113,7 @@ export const selectNarratives = createSelector(
           narratives[key].byId[step.id].prev = (i > 0) ? steps[i - 1] : null;
         });
       });
-
+console.log(narrativeMetadata, narratives)
       return Object.values(narratives);
 });
 

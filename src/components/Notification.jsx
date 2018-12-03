@@ -48,7 +48,7 @@ export default class Notification extends React.Component{
       return (
         <div className={`notification-wrapper`}>
           {this.props.notifications.map((notification) => {
-
+console.log(notification)
             return (
               <div className='notification' onClick={() => this.toggleDetails() }>
                 <button
@@ -65,6 +65,6 @@ export default class Notification extends React.Component{
         </div>
       )
     }
-    return (<div/>);
+    return '';
   }
 }

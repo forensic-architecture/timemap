@@ -370,7 +370,6 @@ Stop and start the development process in terminal after you have added your tok
       })
       .style('stroke-dasharray', d => {
         const styleProps = getNarrativeStyle(d[0].narrative);
-        console.log(styleProps)
         return (styleProps.style === 'dotted') ? "2px 5px" : 'none';
       })
       .style('stroke', d => {

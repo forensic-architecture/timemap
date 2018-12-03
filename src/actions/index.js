@@ -52,6 +52,10 @@ export function fetchDomain () {
       .then(response => response.json())
       .catch(handleError('categories'))
 
+    const narPromise = fetch(NARRATIVE_URL)
+      .then(response => response.json())
+      .catch(handleError('narratives'))
+
     let sitesPromise = Promise.resolve([])
     if (process.env.features.USE_SITES) {
       sitesPromise = fetch(SITES_URL)
@@ -66,14 +70,16 @@ export function fetchDomain () {
         .catch(handleError('tags'))
     }
 
-    return Promise.all([ eventPromise, catPromise, sitesPromise, tagsPromise])
+    return Promise.all([eventPromise, catPromise, narPromise,
+      sitesPromise, tagsPromise])
       .then(response => {
         dispatch(toggleFetchingDomain())
         const result = {
           events: response[0],
           categories: response[1],
-          sites: response[2],
-          tags: response[3],
+          narratives: response[2],
+          sites: response[3],
+          tags: response[4],
           notifications
         }
         return result
@@ -102,6 +108,7 @@ export function updateDomain(domain) {
       categories: domain.categories,
       tags: domain.tags,
       sites: domain.sites,
+      narratives: domain.narratives,
       notifications: domain.notifications
     }
   }
