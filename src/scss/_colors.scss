@@ -10,8 +10,13 @@ $midgrey: rgb(44, 44, 44);
 $darkgrey: #232323;
 $black: #000000;
 
-$category_group00: #FF0000;
-$category_group01: #226b22;
-$category_group02: #671f6f;
-$category_group03: #0000bf;
-$category_group04: #d3ce2a;
+// Category colors
+$default:   red;
+$alpha:     #00ff00;
+$beta:      #ff00ff;
+$other:     yellow;
+
+.default { background: $default; }
+.other { background: $other; }
+.alpha { background: $alpha; }
+.beta { background: $beta; }

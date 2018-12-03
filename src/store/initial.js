@@ -31,7 +31,7 @@ const initial = {
     filters: {
       timerange: [
           d3.timeParse("%Y-%m-%dT%H:%M:%S")("2014-08-22T12:00:00"),
-          d3.timeParse("%Y-%m-%dT%H:%M:%S")("2017-08-27T12:00:00")
+          d3.timeParse("%Y-%m-%dT%H:%M:%S")("2014-08-27T12:00:00")
       ],
       tags: [],
       categories: [],
@@ -76,7 +76,10 @@ const initial = {
 
       categories: {
         default: 'red',
-        other: "#FF0000"
+        // Add here other categories to differentiate by color, like:
+        alpha: '#00ff00',
+        beta: '#ff0000',
+        other: 'yellow'
       },
 
       narratives: {
