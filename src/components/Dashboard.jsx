@@ -92,57 +92,15 @@ class Dashboard extends React.Component {
     }
   }
 
-  // getCategoryGroup(category) {
-  //   const cat = this.props.domain.categories.find(t => t.category === category)
-  //   if (cat) return cat.group;
-  //   return 'other';
-  // }
-
   getCategoryColor(category) {
     return this.props.ui.style.categories[category];
   }
-
-  // getCategoryLabel(category) {
-  //   const categories = this.props.domain.categories;
-  //   return categories.find(t => t.category === category).category_label;
-  // }
 
   getNarrativeLinks(event) {
     const narrative = this.props.domain.narratives.find(nv => nv.key === event.narrative);
     if (narrative) return narrative.byId[event.id];
     return null;
   }
-
-/***
-        <Viewport
-          domain={{
-            locations: this.props.domain.locations,
-            narratives: this.props.domain.narratives,
-            sites: this.props.domain.sites,
-            categories: this.props.domain.categories
-          }}
-
-          app={{
-            views: this.props.app.filters.views,
-            selected: this.props.app.selected,
-            highlighted: this.props.app.highlighted,
-            mapAnchor: this.props.app.mapAnchor,
-          }}
-
-          ui={{
-            dom: this.props.ui.dom,
-            narratives: this.props.ui.style.narratives,
-            groupColors: this.props.ui.style.groupColors
-          }}
-
-          methods={{
-            select: this.handleSelect,
-            highlight: this.handleHighlight,
-            // getCategoryGroup: category => this.getCategoryGroup(category),
-            getCategoryColor: category => this.getCategoryColor(category)
-          }}
-        />
-***/
 
   render() {
     return (
@@ -151,7 +109,6 @@ class Dashboard extends React.Component {
           methods={{
             select: this.handleSelect,
             highlight: this.handleHighlight,
-            // getCategoryGroup: category => this.getCategoryGroup(category),
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
