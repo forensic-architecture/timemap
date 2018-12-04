@@ -96,7 +96,7 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
-      <Viewport
+        <Viewport
           methods={{
             select: this.handleSelect,
             highlight: this.handleHighlight,
