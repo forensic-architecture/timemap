@@ -247,3 +247,10 @@ export function toggleMapView(layer) {
     layer
   }
 }
+
+export const TOGGLE_GUIDEDMODE = 'TOGGLE_GUIDEDMODE';
+export function toggleGuidedMode() {
+  return {
+    type: TOGGLE_GUIDEDMODE
+  }
+}

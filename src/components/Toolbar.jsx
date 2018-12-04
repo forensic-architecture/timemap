@@ -18,16 +18,12 @@ class Toolbar extends React.Component {
       super(props);
 
       this.state = {
-        tab: -1
+        tabNum: -1
       };
     }
 
-    toggleTab(tabIndex) {
-      if ( this.state.tab === tabIndex ) {
-       this.setState({ tab: -1 });
-      } else {
-        this.setState({ tab: tabIndex });
-      }
+    toggleTab(tabNum) {
+      this.setState({ tabNum: (this.state.tabNum === tabNum) ? -1 : tabNum });
     }
 
     resetAllFilters() {
@@ -44,6 +40,10 @@ class Toolbar extends React.Component {
 
     toggleMapViews(layer) {
       this.props.actions.toggleMapView(layer);
+    }
+
+    toggleGuidedMode() {
+      this.props.actions.toggleGuidedMode();
     }
 
     renderMapActions() {
@@ -68,18 +68,19 @@ class Toolbar extends React.Component {
     renderBottomActions() {
       return (
         <div className="bottom-actions">
-          {this.renderMapActions()}
+          <button onClick={() => { this.toggleGuidedMode(); }}>Toggle mode</button>
+          {/*}{this.renderMapActions()}
           <div className="bottom-action-block">
-            <button className="action-button tiny default" onClick={() => { /*this.toggleLanguage()*/}}>
+            <button className="action-button tiny default" onClick={() => { this.toggleLanguage()}}>
               {(this.props.language === 'es-MX') ? 'ES' : 'EN' }
             </button>
-            <button className="action-button info tiny default" onClick={() => {/*this.toggleInfoPopup()*/}}>
+            <button className="action-button info tiny default" onClick={() => { this.toggleInfoPopup()}}>
               i
             </button>
             <button className="action-button tiny" onClick={() => this.resetAllFilters()}>
               <RefreshIcon />
             </button>
-          </div>
+          </div>*/}
         </div>
       );
     }
@@ -135,6 +136,25 @@ class Toolbar extends React.Component {
        );
   }
 
+  renderToolbarNarrativePanel() {
+    return (
+      <TabPanel>
+        <h2>Focus stories</h2>
+        <p>Here are some highlighted stories</p>
+        {this.props.narratives.map((narr) => {
+          return (
+            <div className="panel-action action">
+              <button style={{ backgroundColor: '#000' }}>
+                <p>{narr.label}</p>
+                <p><small>{narr.description}</small></p>
+              </button>
+            </div>
+          )
+        })}
+      </TabPanel>
+    );
+  }
+
   renderSearch() {
     if (this.props.features.USE_SEARCH) {
       return (
@@ -167,21 +187,26 @@ class Toolbar extends React.Component {
     return '';
   }
 
-  renderToolbarNavs() {
-    if (this.props.narratives) {
-      return this.props.narratives.map((nar, idx) => {
-        const isActive = (idx === this.state.tab);
+  renderToolbarNarratives() {
+    const isActive = (this.state.tabNum === 0);
+    let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab';
 
-        let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab';
+    return (
+      <div className={classes} onClick={() => { this.toggleTab(0); }}>
+        <div className="tab-caption">Focus stories</div>
+      </div>
+    );
+  }
 
-        return (
-          <div className={classes} onClick={() => { this.toggleTab(idx); }}>
-            <div className="tab-caption">{nar.label}</div>
-          </div>
-        );
-      })
-    }
-    return '';
+  renderToolbarTags() {
+    const isActive = (this.state.tabNum === 1);
+    let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab';
+
+    return (
+      <div className={classes} onClick={() => { this.toggleTab(1); }}>
+        <div className="tab-caption">Explore freely</div>
+      </div>
+    );
   }
 
   renderToolbarTabs() {
@@ -191,27 +216,33 @@ class Toolbar extends React.Component {
         <div className="toolbar-header"><p>{title}</p></div>
         <div className="toolbar-tabs">
           {/*this.renderToolbarTab(0, 'search')*/}
-          {(this.props.isModeGuided)
-            ? this.renderToolbarNavs()
-            : this.renderToolbarTagRoot()}
+          {this.renderToolbarNarratives()}
+          {this.renderToolbarTags()}
         </div>
-        {/* {this.renderBottomActions()} */}
+        {this.renderBottomActions()}
+      </div>
+    )
+  }
+
+  renderToolbarPanels() {
+    let classes = (this.state.tabNum !== -1) ? 'toolbar-panels' : 'toolbar-panels folded';
+
+    return (
+      <div className={classes}>
+        {this.renderPanelHeader()}
+        <Tabs selectedIndex={this.state.tabNum}>
+          {this.renderToolbarNarrativePanel()}
+          {this.renderToolbarTagList()}
+        </Tabs>
       </div>
     )
   }
 
   render() {
-    let classes = (this.state.tab !== -1) ? 'toolbar-panels' : 'toolbar-panels folded';
-
     return (
       <div id="toolbar-wrapper" className="toolbar-wrapper">
         {this.renderToolbarTabs()}
-        <div className={classes}>
-          {this.renderPanelHeader()}
-          <Tabs selectedIndex={this.state.tab}>
-            {this.renderToolbarTagList()}
-          </Tabs>
-        </div>
+        {this.renderToolbarPanels()}
       </div>
     );
   }

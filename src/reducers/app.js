@@ -8,6 +8,7 @@ import {
   RESET_ALLFILTERS,
   TOGGLE_LANGUAGE,
   TOGGLE_MAPVIEW,
+  TOGGLE_GUIDEDMODE,
   FETCH_ERROR,
 } from '../actions';
 
@@ -87,6 +88,12 @@ function toggleMapView(appState, action) {
   });
 }
 
+function toggleGuidedMode(appState, action) {
+  return Object.assign({}, appState, {
+    isModeGuided: !appState.isModeGuided
+  })
+}
+
 function fetchError(state, action) {
   return {
     ...state,
@@ -112,6 +119,8 @@ function app(appState = initial.app, action) {
       return toggleLanguage(appState, action);
     case TOGGLE_MAPVIEW:
       return toggleMapView(appState, action);
+    case TOGGLE_GUIDEDMODE:
+      return toggleGuidedMode(appState, action);
     case FETCH_ERROR:
       return fetchError(appState, action);
     default:
