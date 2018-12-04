@@ -8,7 +8,9 @@ import TimelineLogic from '../js/timeline/timeline.js';
 class Timeline extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isFolded: false};
+    this.state = {
+      isFolded: false
+    };
   }
 
   componentDidMount() {
@@ -18,6 +20,7 @@ class Timeline extends React.Component {
         categories: this.props.categories
       }
       const app = {
+        zoomLevels: this.props.zoomLevels,
         timerange: this.props.timerange,
         selected: this.props.selected,
         language: this.props.language,
@@ -106,6 +109,7 @@ function mapStateToProps(state) {
     language: state.app.language,
     tools: state.ui.tools,
     timerange: selectors.getTimeRange(state),
+    zoomLevels: state.app.zoomLevels,
     dom: state.ui.dom,
     selected: state.app.selected
   }

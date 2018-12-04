@@ -14,42 +14,7 @@ export default function(app, ui, methods) {
   d3.timeFormatDefaultLocale(esLocale);
   const formatterWithYear = ui.tools.formatterWithYear;
   const parser = ui.tools.parser;
-  const zoomLevels = [{
-      label: '3 años',
-      duration: 1576800,
-      active: false
-    },
-    {
-      label: '3 meses',
-      duration: 129600,
-      active: false
-    },
-    {
-      label: '3 días',
-      duration: 4320,
-      active: true
-    },
-    {
-      label: '12 horas',
-      duration: 720,
-      active: false
-    },
-    {
-      label: '2 horas',
-      duration: 120,
-      active: false
-    },
-    {
-      label: '30 min',
-      duration: 30,
-      active: false
-    },
-    {
-      label: '10 min',
-      duration: 10,
-      active: false
-    },
-  ];
+  const zoomLevels = app.zoomLevels;
   let events = [];
   let categories = [];
   let selected = [];
