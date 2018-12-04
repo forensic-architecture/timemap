@@ -21,7 +21,7 @@ class Dashboard extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.handleTagFilter = this.handleTagFilter.bind(this);
-    this.handleTimeFilter = this.handleTimeFilter.bind(this);
+    this.updateTimerange = this.updateTimerange.bind(this);
 
     this.eventsById = {};
   }
@@ -79,7 +79,7 @@ class Dashboard extends React.Component {
     this.props.actions.updateTagFilters(tag);
   }
 
-  handleTimeFilter(timeRange) {
+  updateTimerange(timeRange) {
     this.props.actions.updateTimeRange(timeRange);
   }
 
@@ -134,7 +134,7 @@ class Dashboard extends React.Component {
         />
         <Timeline
           select={this.handleSelect}
-          filter={this.handleTimeFilter}
+          onUpdateTimerange={this.updateTimerange}
           highlight={this.handleHighlight}
           toggle={() => this.handleToggle('TOGGLE_CARDSTACK')}
           getCategoryColor={category => this.getCategoryColor(category)}

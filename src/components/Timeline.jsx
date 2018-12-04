@@ -14,12 +14,6 @@ class Timeline extends React.Component {
   }
 
   componentDidMount() {
-    const app = {
-      zoomLevels: this.props.zoomLevels,
-      timerange: this.props.timerange,
-      selected: this.props.selected,
-      language: this.props.language,
-    }
     const ui = {
       tools: this.props.tools,
       dom: this.props.dom
@@ -27,27 +21,18 @@ class Timeline extends React.Component {
 
     const methods = {
       select: this.props.select,
-      filter: this.props.filter,
+      onUpdateTimerange: this.props.onUpdateTimerange,
       getCategoryColor: this.props.getCategoryColor
     }
 
-    this.timeline = new TimelineLogic(app, ui, methods);
-    this.timeline.update(this.props.domain, app);
+    this.timeline = new TimelineLogic(this.props.app, ui, methods);
+    this.timeline.update(this.props.domain, this.props.app);
     this.timeline.render(this.props.domain);
   }
 
   componentWillReceiveProps(nextProps) {
-    const app = {
-      timerange: nextProps.timerange,
-      selected: nextProps.selected,
-      language: nextProps.language,
-      select: nextProps.select,
-      filter: nextProps.filter,
-      getCategoryColor: nextProps.getCategoryColor
-    }
-
-    this.timeline.update(this.props.domain, app);
-    this.timeline.render(this.props.domain);
+    this.timeline.update(nextProps.domain, nextProps.app);
+    this.timeline.render(nextProps.domain);
   }
 
   onClickArrow() {
@@ -65,12 +50,11 @@ class Timeline extends React.Component {
   }
 
   render() {
-    let events = this.props.events
-    const labels_title_lang = copy[this.props.language].timeline.labels_title;
-    const info_lang = copy[this.props.language].timeline.info;
+    const labels_title_lang = copy[this.props.app.language].timeline.labels_title;
+    const info_lang = copy[this.props.app.language].timeline.info;
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`;
-    const date0 = this.props.tools.formatterWithYear(this.props.timerange[0]);
-    const date1 = this.props.tools.formatterWithYear(this.props.timerange[1]);
+    const date0 = this.props.tools.formatterWithYear(this.props.app.timerange[0]);
+    const date1 = this.props.tools.formatterWithYear(this.props.app.timerange[1]);
 
     return (
       <div className={classes}>
@@ -98,12 +82,14 @@ function mapStateToProps(state) {
       categories: selectors.selectCategories(state),
       narratives: state.domain.narratives
     },
-    language: state.app.language,
+    app: {
+      timerange: selectors.getTimeRange(state),
+      selected: state.app.selected,
+      language: state.app.language,
+      zoomLevels: state.app.zoomLevels
+    },
     tools: state.ui.tools,
-    timerange: selectors.getTimeRange(state),
-    zoomLevels: state.app.zoomLevels,
     dom: state.ui.dom,
-    selected: state.app.selected
   }
 }
 

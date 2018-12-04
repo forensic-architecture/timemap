@@ -184,7 +184,7 @@ export default function(app, ui, methods) {
     })
     .on('end', () => {
       toggleTransition(true);
-      methods.filter(scale.x.domain());
+      methods.onUpdateTimerange(scale.x.domain());
     });
 
   /*
@@ -317,7 +317,7 @@ export default function(app, ui, methods) {
     const domainF = d3.timeMinute.offset(newCentralTime, zoom.duration / 2);
 
     scale.x.domain([domain0, domainF]);
-    methods.filter(scale.x.domain());
+    methods.onUpdateTimerange(scale.x.domain());
   }
 
   /**
@@ -340,7 +340,7 @@ export default function(app, ui, methods) {
     }
 
     scale.x.domain([domain0, domainF]);
-    methods.filter(scale.x.domain());
+    methods.onUpdateTimerange(scale.x.domain());
   }
 
   function toggleTransition(isTransition) {
