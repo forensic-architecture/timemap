@@ -65,6 +65,7 @@ class TagListPanel extends React.Component {
   }
 
   render() {
+
     return (
       <div className="react-innertabpanel">
         <h2>Explore data by tag</h2>

@@ -161,10 +161,12 @@
   }
 
   .toolbar-tab {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 60px;
     width: 110px;
-    padding: 10px 0 5px 0;
+    padding: 5px 0 5px 0;
     font-weight: 400;
     text-overflow: ellipsis;
     overflow: hidden;
