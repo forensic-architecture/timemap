@@ -326,7 +326,7 @@ export default function(app, ui, methods) {
    * @param {String} direction: 'forward' / 'backwards'
    */
   function moveTime(direction) {
-    app.select();
+    methods.select();
     const extent = getTimeScaleExtent();
     const newCentralTime = d3.timeMinute.offset(scale.x.domain()[0], extent / 2);
 
@@ -439,7 +439,7 @@ export default function(app, ui, methods) {
       .attr('cy', eventPoint => getEventY(eventPoint))
       .style('fill', eventPoint => getEventPointFillColor(eventPoint))
       .on('click', eventPoint => {
-        return app.select(getAllEventsAtOnce(eventPoint))
+        return methods.select(getAllEventsAtOnce(eventPoint))
       })
       .on('mouseover', handleMouseOver)
       .on('mouseout', handleMouseOut)

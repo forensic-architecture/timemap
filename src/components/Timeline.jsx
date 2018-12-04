@@ -24,7 +24,6 @@ class Timeline extends React.Component {
         timerange: this.props.timerange,
         selected: this.props.selected,
         language: this.props.language,
-        select: this.props.select,
       }
       const ui = {
         tools: this.props.tools,
@@ -32,6 +31,7 @@ class Timeline extends React.Component {
       }
 
       const methods = {
+        select: this.props.select,
         filter: this.props.filter,
         getCategoryColor: this.props.getCategoryColor
       }
