@@ -126,9 +126,9 @@ class Dashboard extends React.Component {
           actions={this.props.actions}
         />
         <CardStack
-          select={this.handleSelect}
-          highlight={this.handleHighlight}
-          toggle={this.handleToggle}
+          onSelect={this.handleSelect}
+          onHighlight={this.handleHighlight}
+          onToggle={this.handleToggle}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={category => this.getCategoryColor(category)}
         />

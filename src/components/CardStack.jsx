@@ -27,8 +27,8 @@ class CardStack extends React.Component {
             getCategoryGroup={this.props.getCategoryGroup}
             getCategoryColor={this.props.getCategoryColor}
             getCategoryLabel={this.props.getCategoryLabel}
-            highlight={this.props.highlight}
-            select={this.props.select}
+            highlight={this.props.onHighlight}
+            select={this.props.onSelect}
           />
         );
       });
@@ -54,7 +54,7 @@ class CardStack extends React.Component {
       <div
         id='card-stack-header'
         className='card-stack-header'
-        onClick={() => this.props.toggle('TOGGLE_CARDSTACK')}
+        onClick={() => this.props.onToggle('TOGGLE_CARDSTACK')}
       >
         <button className="side-menu-burg is-active"><span></span></button>
         <p className="header-copy top">
