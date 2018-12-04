@@ -10,35 +10,43 @@ import {
 } from '../actions'
 
 function toggleFetchingDomain(uiState, action) {
-  return Object.assign({}, uiState, {
-    flags: Object.assign({}, uiState.flags, {
+  return {
+    ...uiState,
+    flags: {
+      ...uiState.flags,
       isFetchingDomain: !uiState.flags.isFetchingDomain
-    })
-  });
+    }
+  }
 }
 
 function toggleFetchingSources(uiState, action) {
-  return Object.assign({}, uiState, {
-    flags: Object.assign({}, uiState.flags, {
+  return {
+    ...uiState,
+    flags: {
+      ...uiState.flags,
       isFetchingSources: !uiState.flags.isFetchingSources
-    })
-  });
+    }
+  }
 }
 
 function toggleInfoPopup(uiState, action) {
-  return Object.assign({}, uiState, {
-    flags: Object.assign({}, uiState.flags, {
+  return {
+    ...uiState,
+    flags: {
+      ...uiState.flags,
       isInfopopup: !uiState.flags.isInfopopup
-    })
-  });
+    }
+  }
 }
 
 function toggleNotifications(uiState, action) {
-  return Object.assign({}, uiState, {
-    flags: Object.assign({}, uiState.flags, {
+  return {
+    ...uiState,
+    flags: {
+      ...uiState.flags,
       isNotification: !uiState.flags.isNotification
-    })
-  });
+    }
+  }
 }
 
 function ui(uiState = initial.ui, action) {

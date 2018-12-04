@@ -1,8 +1,18 @@
+// TODO: move to util lib
+function urlFromEnv(ext) {
+  if (process.env[ext]) {
+    return `${process.env.SERVER_ROOT}${process.env[ext]}`
+  } else {
+    return null
+  }
+}
+
 // TODO: relegate these URLs entirely to environment variables
-const EVENT_DATA_URL = `${process.env.SERVER_ROOT}${process.env.EVENT_EXT}`
-const CATEGORY_URL = `${process.env.SERVER_ROOT}${process.env.CATEGORY_EXT}`
-const TAG_TREE_URL = `${process.env.SERVER_ROOT}${process.env.TAG_TREE_EXT}`
-const SITES_URL = `${process.env.SERVER_ROOT}${process.env.SITES_EXT}`
+const EVENT_DATA_URL = urlFromEnv('EVENT_EXT')
+const CATEGORY_URL = urlFromEnv('CATEGORY_EXT')
+const TAG_URL = urlFromEnv('TAGS_EXT')
+const SOURCES_URL = urlFromEnv('SOURCES_EXT')
+const SITES_URL = urlFromEnv('SITES_EXT')
 const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`
 
 /*
@@ -120,7 +130,11 @@ export function fetchSelected(selected) {
   }
   return dispatch => {
     dispatch(updateSelected(selected))
-    dispatch(toggleFetchingSources())
+    if (!SOURCES_URL) {
+      dispatch(fetchSourceError('No source extension specified.'))
+    } else {
+      dispatch(toggleFetchingSources())
+    }
 
     // const urls = events.map(eventUrlMap)
     // return Promise.all(
@@ -213,13 +227,6 @@ export function toggleFetchingSources() {
   }
 }
 
-// export const TOGGLE_FETCHING_EVENTS = 'TOGGLE_FETCHING_EVENTS'
-// export function toggleFetchingEvents() {
-//     return {
-//         type: TOGGLE_FETCHING_EVENTS
-//     }
-// }
-
 export const TOGGLE_LANGUAGE = 'TOGGLE_LANGUAGE';
 export function toggleLanguage(language) {
   return {
@@ -246,5 +253,15 @@ export const TOGGLE_NOTIFICATIONS = 'TOGGLE_NOTIFICATIONS'
 export function toggleNotifications() {
   return {
     type: TOGGLE_NOTIFICATIONS
+  }
+}
+
+// ERRORS
+
+export const FETCH_SOURCE_ERROR = 'FETCH_SOURCE_ERROR'
+export function fetchSourceError(msg) {
+  return {
+    type: FETCH_SOURCE_ERROR,
+    msg
   }
 }
