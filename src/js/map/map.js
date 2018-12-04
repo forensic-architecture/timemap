@@ -227,8 +227,8 @@ Stop and start the development process in terminal after you have added your tok
     // categories.sort((a, b) => {
     //   return (+a.slice(-2) > +b.slice(-2));
     // });
-    categories.forEach(group => {
-      eventCount[group] = 0
+    categories.forEach(cat => {
+      eventCount[cat.category] = 0
     });
 
     location.events.forEach((event) => {;
@@ -239,9 +239,9 @@ Stop and start the development process in terminal after you have added your tok
     const events = [];
 
     while (i < categories.length) {
-      let _eventsCount = eventCount[categories[i]];
+      let _eventsCount = eventCount[categories[i].category];
       for (let j = i + 1; j < categories.length; j++) {
-        _eventsCount += eventCount[categories[j]];
+        _eventsCount += eventCount[categories[j].category];
       }
       events.push(_eventsCount);
       i++;

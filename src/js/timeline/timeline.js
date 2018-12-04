@@ -513,7 +513,7 @@ export default function(app, ui, methods) {
 
     axis.y =
       d3.axisLeft(scale.y)
-        .tickValues(categories);
+        .tickValues(categories.map(c => c.category));
   }
 
   function update(domain, app) {

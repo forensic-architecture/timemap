@@ -155,26 +155,9 @@ export const selectLocations = createSelector(
 */
 export const selectCategories = createSelector(
   [getCategories],
-  (categories) => {
-    return Object.values(categories);
-  }
+  (categories) => categories
 );
 
-/**
- * Return categories by group
- */
-export const selectCategoryGroups = createSelector(
-  [selectCategories],
-  (categories) => {
-    const groups = {};
-    categories.forEach((cat) => {
-      if (cat.group && !groups[cat.group]) {
-        groups[cat.group] = cat.group_label;
-      }
-    });
-    return Object.keys(groups).concat(['other']);
-  }
-);
 
 /**
  * Given a tree of tags, return those tags as a list
