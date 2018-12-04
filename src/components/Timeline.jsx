@@ -14,40 +14,29 @@ class Timeline extends React.Component {
   }
 
   componentDidMount() {
-      const domain = {
-        events: this.props.events,
-        narratives: this.props.narratives,
-        categories: this.props.categories
-      }
-      const app = {
-        zoomLevels: this.props.zoomLevels,
-        timerange: this.props.timerange,
-        selected: this.props.selected,
-        language: this.props.language,
-      }
-      const ui = {
-        tools: this.props.tools,
-        dom: this.props.dom
-      }
+    const app = {
+      zoomLevels: this.props.zoomLevels,
+      timerange: this.props.timerange,
+      selected: this.props.selected,
+      language: this.props.language,
+    }
+    const ui = {
+      tools: this.props.tools,
+      dom: this.props.dom
+    }
 
-      const methods = {
-        select: this.props.select,
-        filter: this.props.filter,
-        getCategoryColor: this.props.getCategoryColor
-      }
+    const methods = {
+      select: this.props.select,
+      filter: this.props.filter,
+      getCategoryColor: this.props.getCategoryColor
+    }
 
-      this.timeline = new TimelineLogic(app, ui, methods);
-      this.timeline.update(domain, app);
-      this.timeline.render(domain);
+    this.timeline = new TimelineLogic(app, ui, methods);
+    this.timeline.update(this.props.domain, app);
+    this.timeline.render(this.props.domain);
   }
 
   componentWillReceiveProps(nextProps) {
-    const domain = {
-      events: nextProps.events,
-      narratives: nextProps.narratives,
-      categories: nextProps.categories
-    }
-
     const app = {
       timerange: nextProps.timerange,
       selected: nextProps.selected,
@@ -57,8 +46,8 @@ class Timeline extends React.Component {
       getCategoryColor: nextProps.getCategoryColor
     }
 
-    this.timeline.update(domain, app);
-    this.timeline.render(domain);
+    this.timeline.update(this.props.domain, app);
+    this.timeline.render(this.props.domain);
   }
 
   onClickArrow() {
@@ -104,8 +93,11 @@ class Timeline extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    events: state.domain.events,
-    categories: selectors.selectCategories(state),
+    domain: {
+      events: state.domain.events,
+      categories: selectors.selectCategories(state),
+      narratives: state.domain.narratives
+    },
     language: state.app.language,
     tools: state.ui.tools,
     timerange: selectors.getTimeRange(state),
