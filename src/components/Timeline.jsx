@@ -22,15 +22,18 @@ class Timeline extends React.Component {
         selected: this.props.selected,
         language: this.props.language,
         select: this.props.select,
-        filter: this.props.filter,
-        getCategoryColor: this.props.getCategoryColor
       }
       const ui = {
         tools: this.props.tools,
         dom: this.props.dom
       }
 
-      this.timeline = new TimelineLogic(app, ui);
+      const methods = {
+        filter: this.props.filter,
+        getCategoryColor: this.props.getCategoryColor
+      }
+
+      this.timeline = new TimelineLogic(app, ui, methods);
       this.timeline.update(domain, app);
       this.timeline.render(domain);
   }

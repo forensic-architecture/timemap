@@ -10,7 +10,7 @@ import {
 import esLocale from '../data/es-MX.json';
 import copy from '../data/copy.json';
 
-export default function(app, ui) {
+export default function(app, ui, methods) {
   d3.timeFormatDefaultLocale(esLocale);
   const formatterWithYear = ui.tools.formatterWithYear;
   const parser = ui.tools.parser;
@@ -54,10 +54,6 @@ export default function(app, ui) {
   let categories = [];
   let selected = [];
   let timerange = app.timerange;
-
-  const timeFilter = app.filter;
-  const getCategoryLabel = app.getCategoryLabel;
-  const getCategoryColor = app.getCategoryColor;
 
   // Drag behavior
   let dragPos0;
@@ -223,7 +219,7 @@ export default function(app, ui) {
     })
     .on('end', () => {
       toggleTransition(true);
-      timeFilter(scale.x.domain());
+      methods.filter(scale.x.domain());
     });
 
   /*
@@ -285,7 +281,7 @@ export default function(app, ui) {
    * @param {object} eventPoint data object
    */
   function getEventPointFillColor(eventPoint) {
-    return getCategoryColor(eventPoint.category);
+    return methods.getCategoryColor(eventPoint.category);
   }
 
   /**
@@ -357,7 +353,7 @@ export default function(app, ui) {
     const domainF = d3.timeMinute.offset(newCentralTime, zoom.duration / 2);
 
     scale.x.domain([domain0, domainF]);
-    timeFilter(scale.x.domain());
+    methods.filter(scale.x.domain());
   }
 
   /**
@@ -380,7 +376,7 @@ export default function(app, ui) {
     }
 
     scale.x.domain([domain0, domainF]);
-    timeFilter(scale.x.domain());
+    methods.filter(scale.x.domain());
   }
 
   function toggleTransition(isTransition) {
