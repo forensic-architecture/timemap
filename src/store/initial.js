@@ -44,6 +44,7 @@ const initial = {
     },
     base_uri: 'http://127.0.0.1:8000/', // Modify accordingly on production setup.
     isMobile: (/Mobi/.test(navigator.userAgent)),
+    isModeGuided: true,
     language: 'en-US',
     mapAnchor: process.env.MAP_ANCHOR,
     zoomLevels: [{

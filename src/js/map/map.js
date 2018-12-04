@@ -291,7 +291,7 @@ Stop and start the development process in terminal after you have added your tok
     eventsDom
       .enter().append('circle')
       .attr('class', 'location-event-marker')
-      .style('fill', (d, i) => getCategoryColor(domain.categories[i]))
+      .style('fill', (d, i) => getCategoryColor(domain.categories[i].category))
       .transition()
       .duration(500)
       .attr('r', d => (d) ? Math.sqrt(16 * d) + 3 : 0);

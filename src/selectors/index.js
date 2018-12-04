@@ -96,7 +96,7 @@ export const selectNarratives = createSelector(
 
         if (isTimeRanged && isTagged && isInNarrative) {
           if (!narratives[evt.narrative]) {
-            narratives[evt.narrative] = { key: evt.narrative, steps: [], byId: {} };
+            narratives[evt.narrative] = { id: evt.narrative, steps: [], byId: {} };
           }
           narratives[evt.narrative].steps.push(evt);
           narratives[evt.narrative].byId[evt.id] = { next: null, prev: null };
@@ -105,15 +105,19 @@ export const selectNarratives = createSelector(
 
       Object.keys(narratives).forEach((key) => {
         const steps = narratives[key].steps;
+
         steps.sort((a, b) => {
           return (parseTimestamp(a.timestamp) > parseTimestamp(b.timestamp));
         });
+
         steps.forEach((step, i) => {
           narratives[key].byId[step.id].next = (i < steps.length - 2) ? steps[i + 1] : null;
           narratives[key].byId[step.id].prev = (i > 0) ? steps[i - 1] : null;
         });
+
+        narratives[key] = Object.assign(narrativeMetadata.find(n => n.id === key), narratives[key]);
       });
-console.log(narrativeMetadata, narratives)
+
       return Object.values(narratives);
 });
 
@@ -152,7 +156,7 @@ export const selectLocations = createSelector(
 export const selectCategories = createSelector(
   [getCategories],
   (categories) => {
-    return categories.map(v => v.category);
+    return Object.values(categories);
   }
 );
 

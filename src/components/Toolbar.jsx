@@ -5,7 +5,10 @@ import * as selectors from '../selectors'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Search from './Search.jsx';
 import TagListPanel from './TagListPanel.jsx';
-import Icon from './Icon.jsx';
+import SitesIcon from './presentational/Icons/SitesIcon.js';
+import RefreshIcon from './presentational/Icons/RefreshIcon.js';
+import CoeventIcon from './presentational/Icons/CoeventIcon.js';
+import RouteIcon from './presentational/Icons/RouteIcon.js';
 import copy from '../js/data/copy.json';
 // NB: i think this entire component can actually be part of a future feature...
 
@@ -40,52 +43,24 @@ class Toolbar extends React.Component {
     }
 
     toggleMapViews(layer) {
-      const isLayerInView = !this.props.viewFilters[layer];
-      const newViews = {};
-      newViews[layer] = isLayerInView;
-      const views = Object.assign({}, this.props.viewFilters, newViews);
-      this.props.actions.updateFilters({ views });
+      this.props.actions.toggleMapView(layer);
     }
 
     renderMapActions() {
-      const isViewLayer = this.props.viewFilters;
-      const routeClass = (isViewLayer.routes) ? 'action-button active disabled' : 'action-button disabled'
-      const sitesClass = (isViewLayer.sites) ? 'action-button active disabled' : 'action-button disabled';
-      const coeventsClass = (isViewLayer.coevents) ? 'action-button active disabled' : 'action-button disabled';
-
       return (
         <div className="bottom-action-block">
-          <button
-            className={routeClass}
-            onClick={() => this.toggleMapViews('routes')}
-          >
-              <svg x="0px" y="0px" width="30px" height="20px" viewBox="0 0 30 20" enableBackground="new 0 0 30 20">
-                  <path d="M0.806,13.646h7.619c2.762,0,3-0.238,3-3v-0.414c0-2.762,0.301-3,3.246-3h14.523"/>
-                  <polyline points="16.671,9.228 19.103,7.233 16.671,5.237 "/>
-              </svg>
-          </button>
-          <button
-            className={sitesClass}
-            onClick={() => this.toggleMapViews('sites')}
-          >
-            <svg x="0px" y="0px" width="30px" height="20px" viewBox="0 0 30 20" enableBackground="new 0 0 30 20">
-              <path d="M24.615,6.793H5.385c-2.761,0-3,0.239-3,3v0.414
-  c0,2.762,0.239,3,3,3h7.621l1.996,2.432l1.996-2.432h7.618c2.762,0,3-0.238,3-3V9.793C27.615,7.032,27.377,6.793,24.615,6.793z"/>
-            </svg>
-          </button>
-          <button
-              className={coeventsClass}
-              onClick={() => this.toggleMapViews('coevents')}
-          >
-            <svg className="coevents" x="0px" y="0px" width="30px" height="20px" viewBox="0 0 30 20" enableBackground="new 0 0 30 20">
-              <polygon stroke-linejoin="round" stroke-miterlimit="10" points="19.178,20 10.823,20 10.473,14.081
-                10,13.396 10,6.084 20,6.084 20,13.396 19.445,14.021 "/>
-              <rect className="no-fill" x="11.4" y="7.867" width="7.2" height="3.35"/>
-              <line stroke-linejoin="round" stroke-miterlimit="10" x1="12.125" y1="1" x2="12.125" y2="5.35"/>
-              <rect x="11.4" y="4.271" width="1.496" height="1.079"/>
-              <rect x="17.104" y="4.271" width="1.496" height="1.079"/>
-            </svg>
-          </button>
+            <RouteIcon
+              onClick={(view) => this.toggleMapViews(view)}
+              isEnabled={this.props.viewFilters.routes}
+            />
+            <SitesIcon
+              onClick={(view) => this.toggleMapViews(view)}
+              isEnabled={this.props.viewFilters.sites}
+            />
+            <CoeventIcon
+              onClick={(view) => this.toggleMapViews(view)}
+              isEnabled={this.props.viewFilters.coevents}
+            />
         </div>
       );
     }
@@ -102,11 +77,7 @@ class Toolbar extends React.Component {
               i
             </button>
             <button className="action-button tiny" onClick={() => this.resetAllFilters()}>
-              <svg className="reset" x="0px" y="0px" width="25px" height="25px" viewBox="7.5 7.5 25 25" enableBackground="new 7.5 7.5 25 25">
-                <path stroke-width="2" stroke-miterlimit="10" d="M28.822,16.386c1.354,3.219,0.898,7.064-1.5,9.924
-                c-3.419,4.073-9.49,4.604-13.562,1.186c-4.073-3.417-4.604-9.49-1.187-13.562c1.987-2.368,4.874-3.54,7.74-3.433" />
-                <polygon points="26.137,12.748 27.621,19.464 28.9,16.741 31.898,16.503" />
-              </svg>
+              <RefreshIcon />
             </button>
           </div>
         </div>
@@ -124,11 +95,10 @@ class Toolbar extends React.Component {
 
   renderToolbarTab(tabNum, key) {
     const isActive = (tabNum === this.state.tab);
-    //let caption_lang = copy[this.props.language].toolbar.tabs[tabNum];
+
     let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab';
     return (
       <div className={classes} onClick={() => { this.toggleTab(tabNum); }}>
-        {/*<Icon iconType={key} />*/}
         <div className="tab-caption">{key}</div>
       </div>
     );
@@ -143,20 +113,6 @@ class Toolbar extends React.Component {
       })
     }
     return '';
-  }
-
-  renderToolbarTabs() {
-    const title = copy[this.props.language].toolbar.title;
-    return (
-      <div className="toolbar">
-        <div className="toolbar-header"><p>{title}</p></div>
-        <div className="toolbar-tabs">
-          {/*this.renderToolbarTab(0, 'search')*/}
-          {this.renderToolbarTagRoot()}
-        </div>
-        {/* {this.renderBottomActions()} */}
-      </div>
-    )
   }
 
   renderTagListPanel(tagType) {
@@ -211,6 +167,39 @@ class Toolbar extends React.Component {
     return '';
   }
 
+  renderToolbarNavs() {
+    if (this.props.narratives) {
+      return this.props.narratives.map((nar, idx) => {
+        const isActive = (idx === this.state.tab);
+
+        let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab';
+
+        return (
+          <div className={classes} onClick={() => { this.toggleTab(idx); }}>
+            <div className="tab-caption">{nar.label}</div>
+          </div>
+        );
+      })
+    }
+    return '';
+  }
+
+  renderToolbarTabs() {
+    const title = copy[this.props.language].toolbar.title;
+    return (
+      <div className="toolbar">
+        <div className="toolbar-header"><p>{title}</p></div>
+        <div className="toolbar-tabs">
+          {/*this.renderToolbarTab(0, 'search')*/}
+          {(this.props.isModeGuided)
+            ? this.renderToolbarNavs()
+            : this.renderToolbarTagRoot()}
+        </div>
+        {/* {this.renderBottomActions()} */}
+      </div>
+    )
+  }
+
   render() {
     let classes = (this.state.tab !== -1) ? 'toolbar-panels' : 'toolbar-panels folded';
 
@@ -237,7 +226,8 @@ function mapStateToProps(state) {
     tagFilters: selectors.selectTagList(state),
     categoryFilter: state.app.filters.categories,
     viewFilters: state.app.filters.views,
-    features: state.app.features
+    features: state.app.features,
+    isModeGuided: state.app.isModeGuided
   }
 }
 

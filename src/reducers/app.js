@@ -7,6 +7,7 @@ import {
   UPDATE_TIMERANGE,
   RESET_ALLFILTERS,
   TOGGLE_LANGUAGE,
+  TOGGLE_MAPVIEW,
   FETCH_ERROR,
 } from '../actions';
 
@@ -74,6 +75,18 @@ function toggleLanguage(appState, action) {
   });
 }
 
+function toggleMapView(appState, action) {
+  const isLayerInView = !appState.views[layer];
+  const newViews = {};
+  newViews[layer] = isLayerInView;
+  const views = Object.assign({}, appState.views, newViews);
+  return Object.assign({}, appState, {
+    filters: Object.assign({}, appState.filters, {
+      views
+    })
+  });
+}
+
 function fetchError(state, action) {
   return {
     ...state,
@@ -97,6 +110,8 @@ function app(appState = initial.app, action) {
       return resetAllFilters(appState, action);
     case TOGGLE_LANGUAGE:
       return toggleLanguage(appState, action);
+    case TOGGLE_MAPVIEW:
+      return toggleMapView(appState, action);
     case FETCH_ERROR:
       return fetchError(appState, action);
     default:

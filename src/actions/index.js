@@ -239,3 +239,11 @@ export function fetchSourceError(msg) {
     msg
   }
 }
+
+export const TOGGLE_MAPVIEW = 'TOGGLE_MAPVIEW';
+export function toggleMapView(layer) {
+  return {
+    type: TOGGLE_MAPVIEW,
+    layer
+  }
+}
