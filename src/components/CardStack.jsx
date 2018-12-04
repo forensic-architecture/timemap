@@ -22,7 +22,7 @@ class CardStack extends React.Component {
             event={event}
             language={this.props.language}
             tools={this.props.tools}
-            isLoading={this.props.isLoading}
+            // isLoading={this.props.isLoading}
             getNarrativeLinks={this.props.getNarrativeLinks}
             getCategoryGroup={this.props.getCategoryGroup}
             getCategoryColor={this.props.getCategoryColor}
@@ -58,11 +58,8 @@ class CardStack extends React.Component {
       >
         <button className="side-menu-burg is-active"><span></span></button>
         <p className="header-copy top">
-          {(this.props.isLoading)
-            ? copy[this.props.language].loading
-            : `${this.props.selected.length} ${header_lang}`}
+          {`${this.props.selected.length} ${header_lang}`}
         </p>
-        {(this.props.isLoading) ? '' : this.renderLocation()}
       </div>
     )
   }
@@ -71,10 +68,7 @@ class CardStack extends React.Component {
     return (
       <div id="card-stack-content" className="card-stack-content">
         <ul>
-          {(this.props.isLoading)
-            ? <Card language={this.props.language} isLoading={true} />
-            : this.renderCards()
-          }
+          {this.renderCards()}
         </ul>
       </div>
     );
@@ -99,7 +93,7 @@ function mapStateToProps(state) {
     language: state.app.language,
     tools: state.ui.tools,
     isCardstack: state.ui.flags.isCardstack,
-    isLoading: state.ui.flags.isFetchingSources
+    isFetchingSources: state.ui.flags.isFetchingSources
   }
 }
 
