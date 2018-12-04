@@ -52,9 +52,7 @@ class Dashboard extends React.Component {
         return parser(a.timestamp) - parser(b.timestamp);
       });
 
-      this.props.actions.updateSelected(eventsToSelect)
-    } else {
-      this.props.actions.updateSelected([]);
+      this.props.actions.fetchSelected(eventsToSelect)
     }
   }
 
