@@ -44,7 +44,6 @@ class Dashboard extends React.Component {
   }
 
   handleSelect(selected) {
-    console.log(selected)
     if (selected) {
       let eventsToSelect = selected.map(event => this.getEventById(event.id));
       const parser = this.props.ui.tools.parser;

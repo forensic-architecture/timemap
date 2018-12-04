@@ -258,7 +258,6 @@ export default function(app, ui, methods) {
     const category = eventPoint.category;
     return events
       .filter(event => (event.timestamp === timestamp && category === event.category))
-      .map(event => event.id);
   }
 
   /*
