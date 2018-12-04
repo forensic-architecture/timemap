@@ -10,55 +10,15 @@ import {
 import esLocale from '../data/es-MX.json';
 import copy from '../data/copy.json';
 
-export default function(app, ui) {
+export default function(app, ui, methods) {
   d3.timeFormatDefaultLocale(esLocale);
   const formatterWithYear = ui.tools.formatterWithYear;
   const parser = ui.tools.parser;
-  const zoomLevels = [{
-      label: '3 años',
-      duration: 1576800,
-      active: false
-    },
-    {
-      label: '3 meses',
-      duration: 129600,
-      active: false
-    },
-    {
-      label: '3 días',
-      duration: 4320,
-      active: true
-    },
-    {
-      label: '12 horas',
-      duration: 720,
-      active: false
-    },
-    {
-      label: '2 horas',
-      duration: 120,
-      active: false
-    },
-    {
-      label: '30 min',
-      duration: 30,
-      active: false
-    },
-    {
-      label: '10 min',
-      duration: 10,
-      active: false
-    },
-  ];
+  const zoomLevels = app.zoomLevels;
   let events = [];
   let categories = [];
   let selected = [];
   let timerange = app.timerange;
-
-  const timeFilter = app.filter;
-  const select = app.select;
-  const getCategoryLabel = app.getCategoryLabel;
-  const getCategoryColor = app.getCategoryColor;
 
   // Drag behavior
   let dragPos0;
@@ -224,7 +184,7 @@ export default function(app, ui) {
     })
     .on('end', () => {
       toggleTransition(true);
-      timeFilter(scale.x.domain());
+      methods.onUpdateTimerange(scale.x.domain());
     });
 
   /*
@@ -286,7 +246,7 @@ export default function(app, ui) {
    * @param {object} eventPoint data object
    */
   function getEventPointFillColor(eventPoint) {
-    return getCategoryColor(eventPoint.category);
+    return methods.getCategoryColor(eventPoint.category);
   }
 
   /**
@@ -295,11 +255,9 @@ export default function(app, ui) {
    */
   function getAllEventsAtOnce(eventPoint) {
     const timestamp = eventPoint.timestamp;
-    const categoryGroup = eventPoint.category;
-    return events.filter(event => {
-      return (event.timestamp === timestamp &&
-        categoryGroup === event.category)
-    }).map(event => event.id);
+    const category = eventPoint.category;
+    return events
+      .filter(event => (event.timestamp === timestamp && category === event.category))
   }
 
   /*
@@ -359,7 +317,7 @@ export default function(app, ui) {
     const domainF = d3.timeMinute.offset(newCentralTime, zoom.duration / 2);
 
     scale.x.domain([domain0, domainF]);
-    timeFilter(scale.x.domain());
+    methods.onUpdateTimerange(scale.x.domain());
   }
 
   /**
@@ -367,7 +325,7 @@ export default function(app, ui) {
    * @param {String} direction: 'forward' / 'backwards'
    */
   function moveTime(direction) {
-    select();
+    methods.onSelect();
     const extent = getTimeScaleExtent();
     const newCentralTime = d3.timeMinute.offset(scale.x.domain()[0], extent / 2);
 
@@ -382,7 +340,7 @@ export default function(app, ui) {
     }
 
     scale.x.domain([domain0, domainF]);
-    timeFilter(scale.x.domain());
+    methods.onUpdateTimerange(scale.x.domain());
   }
 
   function toggleTransition(isTransition) {
@@ -479,7 +437,9 @@ export default function(app, ui) {
       .attr('cx', eventPoint => getEventX(eventPoint))
       .attr('cy', eventPoint => getEventY(eventPoint))
       .style('fill', eventPoint => getEventPointFillColor(eventPoint))
-      .on('click', eventPoint => select(getAllEventsAtOnce(eventPoint)))
+      .on('click', eventPoint => {
+        return methods.onSelect(getAllEventsAtOnce(eventPoint))
+      })
       .on('mouseover', handleMouseOver)
       .on('mouseout', handleMouseOut)
       .transition()

@@ -8,51 +8,31 @@ import TimelineLogic from '../js/timeline/timeline.js';
 class Timeline extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isFolded: false};
+    this.state = {
+      isFolded: false
+    };
   }
 
   componentDidMount() {
-      const domain = {
-        events: this.props.events,
-        narratives: this.props.narratives,
-        categories: this.props.categories
-      }
-      const app = {
-        timerange: this.props.timerange,
-        selected: this.props.selected,
-        language: this.props.language,
-        select: this.props.select,
-        filter: this.props.filter,
-        getCategoryColor: this.props.getCategoryColor
-      }
-      const ui = {
-        tools: this.props.tools,
-        dom: this.props.dom
-      }
+    const ui = {
+      tools: this.props.tools,
+      dom: this.props.dom
+    }
 
-      this.timeline = new TimelineLogic(app, ui);
-      this.timeline.update(domain, app);
-      this.timeline.render(domain);
+    const methods = {
+      onSelect: this.props.onSelect,
+      onUpdateTimerange: this.props.onUpdateTimerange,
+      getCategoryColor: this.props.getCategoryColor
+    }
+
+    this.timeline = new TimelineLogic(this.props.app, ui, methods);
+    this.timeline.update(this.props.domain, this.props.app);
+    this.timeline.render(this.props.domain);
   }
 
   componentWillReceiveProps(nextProps) {
-    const domain = {
-      events: nextProps.events,
-      narratives: nextProps.narratives,
-      categories: nextProps.categories
-    }
-
-    const app = {
-      timerange: nextProps.timerange,
-      selected: nextProps.selected,
-      language: nextProps.language,
-      select: nextProps.select,
-      filter: nextProps.filter,
-      getCategoryColor: nextProps.getCategoryColor
-    }
-
-    this.timeline.update(domain, app);
-    this.timeline.render(domain);
+    this.timeline.update(nextProps.domain, nextProps.app);
+    this.timeline.render(nextProps.domain);
   }
 
   onClickArrow() {
@@ -70,12 +50,11 @@ class Timeline extends React.Component {
   }
 
   render() {
-    let events = this.props.events
-    const labels_title_lang = copy[this.props.language].timeline.labels_title;
-    const info_lang = copy[this.props.language].timeline.info;
+    const labels_title_lang = copy[this.props.app.language].timeline.labels_title;
+    const info_lang = copy[this.props.app.language].timeline.info;
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`;
-    const date0 = this.props.tools.formatterWithYear(this.props.timerange[0]);
-    const date1 = this.props.tools.formatterWithYear(this.props.timerange[1]);
+    const date0 = this.props.tools.formatterWithYear(this.props.app.timerange[0]);
+    const date1 = this.props.tools.formatterWithYear(this.props.app.timerange[1]);
 
     return (
       <div className={classes}>
@@ -98,16 +77,20 @@ class Timeline extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    // events: selectors.selectEvents(state),
-    events: state.domain.events,
-    categories: selectors.selectCategories(state),
-    language: state.app.language,
+    domain: {
+      events: state.domain.events,
+      categories: selectors.selectCategories(state),
+      narratives: state.domain.narratives
+    },
+    app: {
+      timerange: selectors.getTimeRange(state),
+      selected: state.app.selected,
+      language: state.app.language,
+      zoomLevels: state.app.zoomLevels
+    },
     tools: state.ui.tools,
-    timerange: selectors.getTimeRange(state),
     dom: state.ui.dom,
-    selected: state.app.selected
   }
 }
 
 export default connect(mapStateToProps)(Timeline);
-// export default Timeline

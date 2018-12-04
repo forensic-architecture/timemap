@@ -21,7 +21,7 @@ class Dashboard extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.handleTagFilter = this.handleTagFilter.bind(this);
-    this.handleTimeFilter = this.handleTimeFilter.bind(this);
+    this.updateTimerange = this.updateTimerange.bind(this);
 
     this.eventsById = {};
   }
@@ -45,7 +45,7 @@ class Dashboard extends React.Component {
 
   handleSelect(selected) {
     if (selected) {
-      let eventsToSelect = selected.map(eventId => this.getEventById(eventId));
+      let eventsToSelect = selected.map(event => this.getEventById(event.id));
       const parser = this.props.ui.tools.parser;
 
       eventsToSelect = eventsToSelect.sort((a, b) => {
@@ -79,7 +79,7 @@ class Dashboard extends React.Component {
     this.props.actions.updateTagFilters(tag);
   }
 
-  handleTimeFilter(timeRange) {
+  updateTimerange(timeRange) {
     this.props.actions.updateTimeRange(timeRange);
   }
 
@@ -126,17 +126,17 @@ class Dashboard extends React.Component {
           actions={this.props.actions}
         />
         <CardStack
-          select={this.handleSelect}
-          highlight={this.handleHighlight}
-          toggle={this.handleToggle}
+          onSelect={this.handleSelect}
+          onHighlight={this.handleHighlight}
+          onToggle={this.handleToggle}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <Timeline
-          select={this.handleSelect}
-          filter={this.handleTimeFilter}
-          highlight={this.handleHighlight}
-          toggle={() => this.handleToggle('TOGGLE_CARDSTACK')}
+          onSelect={this.handleSelect}
+          onUpdateTimerange={this.updateTimerange}
+          // onHighlight={this.handleHighlight}
+          // onToggle={() => this.handleToggle('TOGGLE_CARDSTACK')}
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <InfoPopUp
