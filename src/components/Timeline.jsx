@@ -20,7 +20,7 @@ class Timeline extends React.Component {
     }
 
     const methods = {
-      select: this.props.select,
+      onSelect: this.props.onSelect,
       onUpdateTimerange: this.props.onUpdateTimerange,
       getCategoryColor: this.props.getCategoryColor
     }

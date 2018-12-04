@@ -133,10 +133,10 @@ class Dashboard extends React.Component {
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <Timeline
-          select={this.handleSelect}
+          onSelect={this.handleSelect}
           onUpdateTimerange={this.updateTimerange}
-          highlight={this.handleHighlight}
-          toggle={() => this.handleToggle('TOGGLE_CARDSTACK')}
+          // onHighlight={this.handleHighlight}
+          // onToggle={() => this.handleToggle('TOGGLE_CARDSTACK')}
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <InfoPopUp
