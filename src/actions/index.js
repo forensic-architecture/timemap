@@ -113,6 +113,27 @@ export function fetchEvents (events) {
   }
 }
 
+export function fetchSources(event) {
+  return dispatch => {
+    console.log('TODO: fetch sources')
+    // TODO: fetch sources
+    // Now fetch detail data for each event
+    // Add transmitter and receiver data for coevents
+    // this.props.actions.fetchEvents(selected)
+    //   .then((events) => {
+    //     let eventsSelected = events.map(ev => {
+    //       return Object.assign({}, ev, this.getEventById(ev.id));
+    //     });
+
+    //     eventsSelected = eventsSelected.sort((a, b) => {
+    //       return parser(a.timestamp) - parser(b.timestamp);
+    //     });
+
+    //     this.props.actions.updateSelected(eventsSelected);
+    //   });
+  }
+}
+
 export const UPDATE_HIGHLIGHTED = 'UPDATE_HIGHLIGHTED'
 export function updateHighlighted(highlighted) {
     return {

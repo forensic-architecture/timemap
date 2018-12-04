@@ -52,24 +52,7 @@ class Dashboard extends React.Component {
         return parser(a.timestamp) - parser(b.timestamp);
       });
 
-      if (eventsToSelect.every(event => (event))) {
-        this.props.actions.updateSelected(eventsToSelect);
-      }
-
-      // Now fetch detail data for each event
-      // Add transmitter and receiver data for coevents
-      this.props.actions.fetchEvents(selected)
-        .then((events) => {
-          let eventsSelected = events.map(ev => {
-            return Object.assign({}, ev, this.getEventById(ev.id));
-          });
-
-          eventsSelected = eventsSelected.sort((a, b) => {
-            return parser(a.timestamp) - parser(b.timestamp);
-          });
-
-          this.props.actions.updateSelected(eventsSelected);
-        });
+      this.props.actions.updateSelected(eventsToSelect)
     } else {
       this.props.actions.updateSelected([]);
     }
