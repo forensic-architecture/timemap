@@ -31,14 +31,14 @@ export default class Notification extends React.Component{
     const { type, message, items } = notification;
 
     return (
-      <React.Fragment>
+      <div>
         <div className={`message ${type}`}>
           {`${message}`}
         </div>
         <div className={`details ${this.state.isExtended}`}>
           {(items !== null) ? this.renderItems(items) : ''}
         </div>
-      </React.Fragment>
+      </div>
     )
   }
 
