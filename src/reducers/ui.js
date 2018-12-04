@@ -2,7 +2,7 @@ import initial from '../store/initial.js';
 
 import {
   TOGGLE_FETCHING_DOMAIN,
-  TOGGLE_FETCHING_EVENTS,
+  TOGGLE_FETCHING_SOURCES,
   TOGGLE_VIEW,
   TOGGLE_TIMELINE,
   TOGGLE_INFOPOPUP,
@@ -17,10 +17,10 @@ function toggleFetchingDomain(uiState, action) {
   });
 }
 
-function toggleFetchingEvents(uiState, action) {
+function toggleFetchingSources(uiState, action) {
   return Object.assign({}, uiState, {
     flags: Object.assign({}, uiState.flags, {
-      isFetchingEvents: !uiState.flags.isFetchingEvents
+      isFetchingSources: !uiState.flags.isFetchingSources
     })
   });
 }
@@ -45,8 +45,8 @@ function ui(uiState = initial.ui, action) {
   switch (action.type) {
     case TOGGLE_FETCHING_DOMAIN:
       return toggleFetchingDomain(uiState, action);
-    case TOGGLE_FETCHING_EVENTS:
-      return toggleFetchingEvents(uiState, action);
+    case TOGGLE_FETCHING_SOURCES:
+      return toggleFetchingSources(uiState, action);
     case TOGGLE_INFOPOPUP:
       return toggleInfoPopup(uiState, action);
     case TOGGLE_NOTIFICATIONS:

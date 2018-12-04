@@ -139,7 +139,7 @@ const initial = {
     },
     flags: {
       isFetchingDomain: false,
-      isFetchingEvents: false,
+      isFetchingSources: false,
 
       isCardstack: true,
       isInfopopup: false,
