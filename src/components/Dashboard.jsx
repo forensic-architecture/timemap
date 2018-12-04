@@ -45,7 +45,7 @@ class Dashboard extends React.Component {
 
   handleSelect(selected) {
     if (selected) {
-      let eventsToSelect = selected.map(eventId => this.getEventById(eventId));
+      let eventsToSelect = selected.map(event => this.getEventById(event.id));
       const parser = this.props.ui.tools.parser;
 
       eventsToSelect = eventsToSelect.sort((a, b) => {
