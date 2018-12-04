@@ -98,7 +98,6 @@ class Timeline extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    // events: selectors.selectEvents(state),
     events: state.domain.events,
     categories: selectors.selectCategories(state),
     language: state.app.language,
@@ -110,4 +109,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(Timeline);
-// export default Timeline

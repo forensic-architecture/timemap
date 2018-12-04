@@ -56,7 +56,6 @@ export default function(app, ui) {
   let timerange = app.timerange;
 
   const timeFilter = app.filter;
-  const select = app.select;
   const getCategoryLabel = app.getCategoryLabel;
   const getCategoryColor = app.getCategoryColor;
 
@@ -295,11 +294,10 @@ export default function(app, ui) {
    */
   function getAllEventsAtOnce(eventPoint) {
     const timestamp = eventPoint.timestamp;
-    const categoryGroup = eventPoint.category;
-    return events.filter(event => {
-      return (event.timestamp === timestamp &&
-        categoryGroup === event.category)
-    }).map(event => event.id);
+    const category = eventPoint.category;
+    return events
+      .filter(event => (event.timestamp === timestamp && category === event.category))
+      .map(event => event.id);
   }
 
   /*
@@ -367,7 +365,7 @@ export default function(app, ui) {
    * @param {String} direction: 'forward' / 'backwards'
    */
   function moveTime(direction) {
-    select();
+    app.select();
     const extent = getTimeScaleExtent();
     const newCentralTime = d3.timeMinute.offset(scale.x.domain()[0], extent / 2);
 
@@ -479,7 +477,9 @@ export default function(app, ui) {
       .attr('cx', eventPoint => getEventX(eventPoint))
       .attr('cy', eventPoint => getEventY(eventPoint))
       .style('fill', eventPoint => getEventPointFillColor(eventPoint))
-      .on('click', eventPoint => select(getAllEventsAtOnce(eventPoint)))
+      .on('click', eventPoint => {
+        return app.select(getAllEventsAtOnce(eventPoint))
+      })
       .on('mouseover', handleMouseOver)
       .on('mouseout', handleMouseOut)
       .transition()
