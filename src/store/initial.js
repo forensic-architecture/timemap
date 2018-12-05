@@ -119,10 +119,10 @@ const initial = {
 
       narratives: {
         default: {
-          style: 'solid',                  // ['dotted', 'solid']
+          style: 'dotted',                  // ['dotted', 'solid']
           opacity: 0.9,                     // range between 0 and 1
           stroke: 'red',               // Any hex or rgb code
-          strokeWidth: 5
+          strokeWidth: 2
         },
         narrative_1: {
           style: 'solid',                  // ['dotted', 'solid']

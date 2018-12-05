@@ -19,13 +19,7 @@ class Timeline extends React.Component {
       dom: this.props.dom
     }
 
-    const methods = {
-      onSelect: this.props.onSelect,
-      onUpdateTimerange: this.props.onUpdateTimerange,
-      getCategoryColor: this.props.getCategoryColor
-    }
-
-    this.timeline = new TimelineLogic(this.props.app, ui, methods);
+    this.timeline = new TimelineLogic(this.props.app, ui, this.props.methods);
     this.timeline.update(this.props.domain, this.props.app);
     this.timeline.render(this.props.domain);
   }

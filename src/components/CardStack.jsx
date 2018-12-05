@@ -22,7 +22,6 @@ class CardStack extends React.Component {
             event={event}
             language={this.props.language}
             tools={this.props.tools}
-            // isLoading={this.props.isLoading}
             getNarrativeLinks={this.props.getNarrativeLinks}
             getCategoryGroup={this.props.getCategoryGroup}
             getCategoryColor={this.props.getCategoryColor}

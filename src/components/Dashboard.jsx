@@ -94,8 +94,8 @@ class Dashboard extends React.Component {
       <div>
         <Viewport
           methods={{
-            select: this.handleSelect,
-            highlight: this.handleHighlight,
+            onSelect: this.handleSelect,
+            // onHighlight: this.handleHighlight,
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
@@ -111,9 +111,11 @@ class Dashboard extends React.Component {
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <Timeline
-          onSelect={this.handleSelect}
-          onUpdateTimerange={this.updateTimerange}
-          getCategoryColor={category => this.getCategoryColor(category)}
+          methods={{
+            onSelect: this.handleSelect,
+            onUpdateTimerange: this.updateTimerange,
+            getCategoryColor: category => this.getCategoryColor(category)
+          }}
         />
         <InfoPopUp
           ui={this.props.ui}
