@@ -39,28 +39,16 @@ function toggleInfoPopup(uiState, action) {
   }
 }
 
-function toggleNotifications(uiState, action) {
-  return {
-    ...uiState,
-    flags: {
-      ...uiState.flags,
-      isNotification: !uiState.flags.isNotification
-    }
-  }
-}
-
 function ui(uiState = initial.ui, action) {
   switch (action.type) {
     case TOGGLE_FETCHING_DOMAIN:
-      return toggleFetchingDomain(uiState, action);
+      return toggleFetchingDomain(uiState, action)
     case TOGGLE_FETCHING_SOURCES:
-      return toggleFetchingSources(uiState, action);
+      return toggleFetchingSources(uiState, action)
     case TOGGLE_INFOPOPUP:
-      return toggleInfoPopup(uiState, action);
-    case TOGGLE_NOTIFICATIONS:
-      return toggleNotifications(uiState, action);
+      return toggleInfoPopup(uiState, action)
     default:
-      return uiState;
+      return uiState
   }
 }
 

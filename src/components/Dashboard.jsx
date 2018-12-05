@@ -123,9 +123,7 @@ class Dashboard extends React.Component {
         <Notification
           isNotification={this.props.ui.flags.isNotification}
           notifications={this.props.domain.notifications}
-          onToggle={() => {
-            this.props.actions.toggleNotifications();
-          }}
+          onToggle={this.props.actions.markNotificationsRead}
         />
         <LoadingOverlay
           ui={this.props.ui.flags.isFetchingDomain}

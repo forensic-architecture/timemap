@@ -142,8 +142,7 @@ const initial = {
       isFetchingSources: false,
 
       isCardstack: true,
-      isInfopopup: false,
-      isNotification: true
+      isInfopopup: false
     },
     tools: {
       formatter: d3.timeFormat("%d %b, %H:%M"),

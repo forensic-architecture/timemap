@@ -43,8 +43,8 @@ export default class Notification extends React.Component{
   }
 
   render() {
-    if (this.props.isNotification) {
-
+    const notificationsToRender = this.props.notifications.filter(n => !('isRead' in n && n.isRead))
+    if (notificationsToRender.length > 0) {
       return (
         <div className={`notification-wrapper`}>
           {this.props.notifications.map((notification) => {
