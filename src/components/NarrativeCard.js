@@ -30,6 +30,17 @@ class NarrativeCard extends React.Component {
     }
   }
 
+  renderClose() {
+    return (
+      <button
+        className="side-menu-burg is-active"
+        onClick={() => { this.props.actions.updateNarrative(null); }}
+      >
+        <span></span>
+      </button>
+    )
+  }
+
   render() {
     if (this.props.narrative !== null) {
       const steps = this.props.narrative.steps;
@@ -37,6 +48,7 @@ class NarrativeCard extends React.Component {
 
       return (
         <div className="narrative-info">
+          {this.renderClose()}
           <h6>{this.props.narrative.label}</h6>
           <p>{this.props.narrative.description}</p>
           <h3>{this.state.step + 1}/{steps.length}. {step.location}</h3>
