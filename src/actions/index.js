@@ -171,6 +171,14 @@ export function updateTimeRange(timerange) {
   }
 }
 
+export const UPDATE_NARRATIVE = 'UPDATE_NARRATIVE';
+export function updateNarrative(narrative) {
+  return {
+    type: UPDATE_NARRATIVE,
+    narrative
+  }
+}
+
 export const RESET_ALLFILTERS = 'RESET_ALLFILTERS'
 export function resetAllFilters() {
   return {

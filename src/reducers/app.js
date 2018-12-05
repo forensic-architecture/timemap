@@ -5,6 +5,7 @@ import {
   UPDATE_SELECTED,
   UPDATE_TAGFILTERS,
   UPDATE_TIMERANGE,
+  UPDATE_NARRATIVE,
   RESET_ALLFILTERS,
   TOGGLE_LANGUAGE,
   TOGGLE_MAPVIEW,
@@ -21,6 +22,12 @@ function updateHighlighted(appState, action) {
 function updateSelected(appState, action) {
   return Object.assign({}, appState, {
     selected: action.selected
+  });
+}
+
+function updateNarrative(appState, action) {
+  return Object.assign({}, appState, {
+    narrative: action.narrative
   });
 }
 
@@ -113,6 +120,8 @@ function app(appState = initial.app, action) {
       return updateTagFilters(appState, action);
     case UPDATE_TIMERANGE:
       return updateTimeRange(appState, action);
+    case UPDATE_NARRATIVE:
+      return updateNarrative(appState, action);
     case RESET_ALLFILTERS:
       return resetAllFilters(appState, action);
     case TOGGLE_LANGUAGE:

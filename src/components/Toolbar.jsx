@@ -34,17 +34,25 @@ class Toolbar extends React.Component {
     if (this.props.features.USE_SEARCH) {
       return (
         <TabPanel>
-            <Search
-              language={this.props.language}
-              tags={this.props.tags}
-              categories={this.props.categories}
-              tagFilters={this.props.tagFilters}
-              categoryFilters={this.props.categoryFilters}
-              filter={this.props.filter}
-            />
+          <Search
+            language={this.props.language}
+            tags={this.props.tags}
+            categories={this.props.categories}
+            tagFilters={this.props.tagFilters}
+            categoryFilters={this.props.categoryFilters}
+            filter={this.props.filter}
+          />
         </TabPanel>
       )
     }
+  }
+
+  goToNarrative(narrative) {
+    this.setState({
+      tabNum: -1
+    }, () => {
+      this.props.actions.updateNarrative(narrative);
+    });
   }
 
   renderToolbarNarrativePanel() {
@@ -55,7 +63,7 @@ class Toolbar extends React.Component {
         {this.props.narratives.map((narr) => {
           return (
             <div className="panel-action action">
-              <button style={{ backgroundColor: '#000' }}>
+              <button style={{ backgroundColor: '#000' }} onClick={() => { this.goToNarrative(narr); }}>
                 <p>{narr.label}</p>
                 <p><small>{narr.description}</small></p>
               </button>

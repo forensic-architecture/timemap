@@ -48,7 +48,6 @@ class ToolbarBottomActions extends React.Component {
   render() {
     return (
       <div className="bottom-actions">
-        <button onClick={() => { this.toggleGuidedMode(); }}>Toggle mode</button>
         {/*}{this.renderMapActions()}
         <div className="bottom-action-block">
           <button className="action-button tiny default" onClick={() => { this.toggleLanguage()}}>

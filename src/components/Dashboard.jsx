@@ -9,6 +9,7 @@ import LoadingOverlay from './presentational/LoadingOverlay';
 import Viewport from './Viewport.jsx';
 import Toolbar from './Toolbar.jsx';
 import CardStack from './CardStack.jsx';
+import NarrativeCard from './NarrativeCard.js';
 import InfoPopUp from './InfoPopup.jsx';
 import Timeline from './Timeline.jsx';
 import Notification from './Notification.jsx';
@@ -103,6 +104,9 @@ class Dashboard extends React.Component {
           ui={this.props.ui}
           app={this.props.app}
           toggle={() => this.props.actions.toggleInfoPopup()}
+        />
+        <NarrativeCard
+          onSelect={this.handleSelect}
         />
         <Notification
           isNotification={this.props.ui.flags.isNotification}
