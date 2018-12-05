@@ -54,7 +54,7 @@ class CardStack extends React.Component {
       <div
         id='card-stack-header'
         className='card-stack-header'
-        onClick={() => this.props.onToggle('TOGGLE_CARDSTACK')}
+        onClick={() => this.props.onToggleCardstack()}
       >
         <button className="side-menu-burg is-active"><span></span></button>
         <p className="header-copy top">

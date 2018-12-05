@@ -256,6 +256,13 @@ export function toggleNotifications() {
   }
 }
 
+export const MARK_NOTIFICATIONS_READ = 'MARK_NOTIFICATIONS_READ'
+export function markNotificationsRead() {
+  return {
+    type: MARK_NOTIFICATIONS_READ
+  }
+}
+
 // ERRORS
 
 export const FETCH_SOURCE_ERROR = 'FETCH_SOURCE_ERROR'

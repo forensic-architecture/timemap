@@ -52,7 +52,7 @@ function validateTree (node, parent, set, duplicates) {
 /*
 * Validate domain schema
 */
-export function validate(domain) {
+export function validateDomain (domain) {
   const sanitizedDomain = {
     events: [],
     categories: [],

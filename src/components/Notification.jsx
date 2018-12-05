@@ -52,7 +52,7 @@ export default class Notification extends React.Component{
             return (
               <div className='notification' onClick={() => this.toggleDetails() }>
                 <button
-                  onClick={() => this.props.toggle()}
+                  onClick={this.props.onToggle}
                   className="side-menu-burg over-white is-active"
                 >
                   <span />

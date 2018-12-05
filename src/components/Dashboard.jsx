@@ -19,7 +19,7 @@ class Dashboard extends React.Component {
 
     this.handleHighlight = this.handleHighlight.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
-    this.handleToggle = this.handleToggle.bind(this);
+    // this.handleToggle = this.handleToggle.bind(this);
     this.handleTagFilter = this.handleTagFilter.bind(this);
     this.updateTimerange = this.updateTimerange.bind(this);
 
@@ -62,22 +62,22 @@ class Dashboard extends React.Component {
     this.props.actions.updateTimeRange(timeRange);
   }
 
-  handleToggle( key ) {
-    switch( key ) {
-      case 'TOGGLE_CARDSTACK': {
-        this.props.actions.updateSelected([]);
-        break;
-      }
-      case 'TOGGLE_INFOPOPUP': {
-        this.props.actions.toggleInfoPopup();
-        break;
-      }
-      case 'TOGGLE_NOTIFICATIONS': {
-        this.props.actions.toggleNotifications();
-        break;
-      }
-    }
-  }
+  // handleToggle( key ) {
+  //   switch( key ) {
+  //     case 'TOGGLE_CARDSTACK': {
+  //       this.props.actions.updateSelected([]);
+  //       break;
+  //     }
+  //     case 'TOGGLE_INFOPOPUP': {
+  //       this.props.actions.toggleInfoPopup();
+  //       break;
+  //     }
+  //     case 'TOGGLE_NOTIFICATIONS': {
+  //       this.props.actions.toggleNotifications();
+  //       break;
+  //     }
+  //   }
+  // }
 
   getCategoryColor(category='other') {
     return this.props.ui.style.categories[category] || this.props.style.categories['other']
@@ -100,33 +100,32 @@ class Dashboard extends React.Component {
           }}
         />
         <Toolbar
-          filter={this.handleTagFilter}
-          toggle={ (key) => this.handleToggle(key) }
+          onFilter={this.handleTagFilter}
           actions={this.props.actions}
         />
         <CardStack
           onSelect={this.handleSelect}
           onHighlight={this.handleHighlight}
-          onToggle={this.handleToggle}
+          onToggleCardstack={() => this.props.actions.updateSelected([])}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <Timeline
           onSelect={this.handleSelect}
           onUpdateTimerange={this.updateTimerange}
-          // onHighlight={this.handleHighlight}
-          // onToggle={() => this.handleToggle('TOGGLE_CARDSTACK')}
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <InfoPopUp
           ui={this.props.ui}
           app={this.props.app}
-          toggle={() => this.handleToggle('TOGGLE_INFOPOPUP')}
+          toggle={() => this.props.actions.toggleInfoPopup()}
         />
         <Notification
           isNotification={this.props.ui.flags.isNotification}
           notifications={this.props.domain.notifications}
-          toggle={() => this.handleToggle('TOGGLE_NOTIFICATIONS')}
+          onToggle={() => {
+            this.props.actions.toggleNotifications();
+          }}
         />
         <LoadingOverlay
           ui={this.props.ui.flags.isFetchingDomain}
