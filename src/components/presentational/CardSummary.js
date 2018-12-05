@@ -8,7 +8,7 @@ const CardSummary = ({ language, description, isHighlighted }) => {
   const descriptionText = (isHighlighted) ? description : `${description.substring(0, 40)}...`;
 
   return (
-    <div className="event-card-section summary">
+    <div className="card-cell summary">
       <h4>{summary}</h4>
       <p>{descriptionText}</p>
     </div>

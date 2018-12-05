@@ -5,19 +5,23 @@ import { isNotNullNorUndefined } from '../../js/utilities';
 
 const CardLocation = ({ language, location }) => {
 
-  const location_lang = copy[language].cardstack.location;
   if (isNotNullNorUndefined(location)) {
     return (
-      <p className="event-card-section location">
-        <h4>{location_lang}</h4>
-        <p>{location}</p>
+      <p className="card-cell location">
+        <p>
+          <i className="material-icons left">location_on</i>
+          {location}
+        </p>
       </p>
     );
   } else {
+    const unknown = copy[language].cardstack.unknown_location;
     return (
-      <p className="event-card-section location">
-        <h4>{location_lang}</h4>
-        <p>Sin localización conocida.</p>
+      <p className="card-cell location">
+        <p>
+          <i className="material-icons left">location_on</i>
+          {unknown}
+        </p>
       </p>
     );
   }
