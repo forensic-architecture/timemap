@@ -2,7 +2,7 @@ import initial from '../store/initial.js';
 
 import {
   TOGGLE_FETCHING_DOMAIN,
-  TOGGLE_FETCHING_EVENTS,
+  TOGGLE_FETCHING_SOURCES,
   TOGGLE_VIEW,
   TOGGLE_TIMELINE,
   TOGGLE_INFOPOPUP,
@@ -10,49 +10,45 @@ import {
 } from '../actions'
 
 function toggleFetchingDomain(uiState, action) {
-  return Object.assign({}, uiState, {
-    flags: Object.assign({}, uiState.flags, {
+  return {
+    ...uiState,
+    flags: {
+      ...uiState.flags,
       isFetchingDomain: !uiState.flags.isFetchingDomain
-    })
-  });
+    }
+  }
 }
 
-function toggleFetchingEvents(uiState, action) {
-  return Object.assign({}, uiState, {
-    flags: Object.assign({}, uiState.flags, {
-      isFetchingEvents: !uiState.flags.isFetchingEvents
-    })
-  });
+function toggleFetchingSources(uiState, action) {
+  return {
+    ...uiState,
+    flags: {
+      ...uiState.flags,
+      isFetchingSources: !uiState.flags.isFetchingSources
+    }
+  }
 }
 
 function toggleInfoPopup(uiState, action) {
-  return Object.assign({}, uiState, {
-    flags: Object.assign({}, uiState.flags, {
+  return {
+    ...uiState,
+    flags: {
+      ...uiState.flags,
       isInfopopup: !uiState.flags.isInfopopup
-    })
-  });
-}
-
-function toggleNotifications(uiState, action) {
-  return Object.assign({}, uiState, {
-    flags: Object.assign({}, uiState.flags, {
-      isNotification: !uiState.flags.isNotification
-    })
-  });
+    }
+  }
 }
 
 function ui(uiState = initial.ui, action) {
   switch (action.type) {
     case TOGGLE_FETCHING_DOMAIN:
-      return toggleFetchingDomain(uiState, action);
-    case TOGGLE_FETCHING_EVENTS:
-      return toggleFetchingEvents(uiState, action);
+      return toggleFetchingDomain(uiState, action)
+    case TOGGLE_FETCHING_SOURCES:
+      return toggleFetchingSources(uiState, action)
     case TOGGLE_INFOPOPUP:
-      return toggleInfoPopup(uiState, action);
-    case TOGGLE_NOTIFICATIONS:
-      return toggleNotifications(uiState, action);
+      return toggleInfoPopup(uiState, action)
     default:
-      return uiState;
+      return uiState
   }
 }
 

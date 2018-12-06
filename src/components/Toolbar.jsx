@@ -170,7 +170,7 @@ class Toolbar extends React.Component {
           categories={this.props.categories}
           tagFilters={this.props.tagFilters}
           categoryFilters={this.props.categoryFilters}
-          filter={this.props.filter}
+          filter={this.props.onFilter}
           title={title}
           overview={overview}
           language={this.props.language}
@@ -189,7 +189,7 @@ class Toolbar extends React.Component {
               categories={this.props.categories}
               tagFilters={this.props.tagFilters}
               categoryFilters={this.props.categoryFilters}
-              filter={this.props.filter}
+              filter={this.props.onFilter}
             />
         </TabPanel>
       )

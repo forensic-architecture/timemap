@@ -21,7 +21,6 @@ export default function(newApp, ui, methods) {
   }
 
   const getCategoryColor = methods.getCategoryColor;
-  const select = methods.select;
   const narrativeProps = ui.narratives;
 
     // Map Settings
@@ -272,7 +271,7 @@ Stop and start the development process in terminal after you have added your tok
                   ${lMap.latLngToLayerPoint(d.LatLng).y})`;
       })
       .on('click', (location) => {
-        select(location.events);
+        methods.onSelect(location.events);
       });
 
     const eventsDom = g.selectAll('.location')

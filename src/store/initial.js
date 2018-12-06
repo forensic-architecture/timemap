@@ -30,8 +30,8 @@ const initial = {
     selected: [],
     filters: {
       timerange: [
-          d3.timeParse("%Y-%m-%dT%H:%M:%S")("2014-08-22T12:00:00"),
-          d3.timeParse("%Y-%m-%dT%H:%M:%S")("2014-08-27T12:00:00")
+          d3.timeParse("%Y-%m-%dT%H:%M:%S")("2013-02-23T12:00:00"),
+          d3.timeParse("%Y-%m-%dT%H:%M:%S")("2016-02-23T12:00:00")
       ],
       tags: [],
       categories: [],
@@ -59,7 +59,7 @@ const initial = {
     {
       label: '3 días',
       duration: 4320,
-      active: true
+      active: false
     },
     {
       label: '12 horas',
@@ -120,7 +120,7 @@ const initial = {
       narratives: {
         default: {
           style: 'dotted',                  // ['dotted', 'solid']
-          opacity: 0.4,                     // range between 0 and 1
+          opacity: 0.9,                     // range between 0 and 1
           stroke: 'red',               // Any hex or rgb code
           strokeWidth: 2
         },
@@ -139,11 +139,10 @@ const initial = {
     },
     flags: {
       isFetchingDomain: false,
-      isFetchingEvents: false,
+      isFetchingSources: false,
 
       isCardstack: true,
-      isInfopopup: false,
-      isNotification: true
+      isInfopopup: false
     },
     tools: {
       formatter: d3.timeFormat("%d %b, %H:%M"),

@@ -19,7 +19,7 @@ class Dashboard extends React.Component {
 
     this.handleHighlight = this.handleHighlight.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
-    this.handleToggle = this.handleToggle.bind(this);
+    // this.handleToggle = this.handleToggle.bind(this);
     this.handleTagFilter = this.handleTagFilter.bind(this);
     this.updateTimerange = this.updateTimerange.bind(this);
 
@@ -46,32 +46,11 @@ class Dashboard extends React.Component {
   handleSelect(selected) {
     if (selected) {
       let eventsToSelect = selected.map(event => this.getEventById(event.id));
-      const parser = this.props.ui.tools.parser;
+      const p = this.props.ui.tools.parser;
 
-      eventsToSelect = eventsToSelect.sort((a, b) => {
-        return parser(a.timestamp) - parser(b.timestamp);
-      });
+      eventsToSelect = eventsToSelect.sort((a, b) => p(a.timestamp) - p(b.timestamp))
 
-      if (eventsToSelect.every(event => (event))) {
-        this.props.actions.updateSelected(eventsToSelect);
-      }
-
-      // Now fetch detail data for each event
-      // Add transmitter and receiver data for coevents
-      this.props.actions.fetchEvents(selected)
-        .then((events) => {
-          let eventsSelected = events.map(ev => {
-            return Object.assign({}, ev, this.getEventById(ev.id));
-          });
-
-          eventsSelected = eventsSelected.sort((a, b) => {
-            return parser(a.timestamp) - parser(b.timestamp);
-          });
-
-          this.props.actions.updateSelected(eventsSelected);
-        });
-    } else {
-      this.props.actions.updateSelected([]);
+      this.props.actions.fetchSelected(eventsToSelect)
     }
   }
 
@@ -81,23 +60,6 @@ class Dashboard extends React.Component {
 
   updateTimerange(timeRange) {
     this.props.actions.updateTimeRange(timeRange);
-  }
-
-  handleToggle( key ) {
-    switch( key ) {
-      case 'TOGGLE_CARDSTACK': {
-        this.props.actions.updateSelected([]);
-        break;
-      }
-      case 'TOGGLE_INFOPOPUP': {
-        this.props.actions.toggleInfoPopup();
-        break;
-      }
-      case 'TOGGLE_NOTIFICATIONS': {
-        this.props.actions.toggleNotifications();
-        break;
-      }
-    }
   }
 
   getCategoryColor(category='other') {
@@ -113,41 +75,39 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
-      <Viewport
+        <Viewport
           methods={{
-            select: this.handleSelect,
-            highlight: this.handleHighlight,
+            onSelect: this.handleSelect,
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
         <Toolbar
-          filter={this.handleTagFilter}
-          toggle={ (key) => this.handleToggle(key) }
+          onFilter={this.handleTagFilter}
           actions={this.props.actions}
         />
         <CardStack
           onSelect={this.handleSelect}
           onHighlight={this.handleHighlight}
-          onToggle={this.handleToggle}
+          onToggleCardstack={() => this.props.actions.updateSelected([])}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <Timeline
-          onSelect={this.handleSelect}
-          onUpdateTimerange={this.updateTimerange}
-          // onHighlight={this.handleHighlight}
-          // onToggle={() => this.handleToggle('TOGGLE_CARDSTACK')}
-          getCategoryColor={category => this.getCategoryColor(category)}
+          methods={{
+            onSelect: this.handleSelect,
+            onUpdateTimerange: this.updateTimerange,
+            getCategoryColor: category => this.getCategoryColor(category)
+          }}
         />
         <InfoPopUp
           ui={this.props.ui}
           app={this.props.app}
-          toggle={() => this.handleToggle('TOGGLE_INFOPOPUP')}
+          toggle={() => this.props.actions.toggleInfoPopup()}
         />
         <Notification
           isNotification={this.props.ui.flags.isNotification}
           notifications={this.props.domain.notifications}
-          toggle={() => this.handleToggle('TOGGLE_NOTIFICATIONS')}
+          onToggle={this.props.actions.markNotificationsRead}
         />
         <LoadingOverlay
           ui={this.props.ui.flags.isFetchingDomain}

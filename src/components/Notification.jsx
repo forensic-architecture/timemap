@@ -43,8 +43,8 @@ export default class Notification extends React.Component{
   }
 
   render() {
-    if (this.props.isNotification) {
-
+    const notificationsToRender = this.props.notifications.filter(n => !('isRead' in n && n.isRead))
+    if (notificationsToRender.length > 0) {
       return (
         <div className={`notification-wrapper`}>
           {this.props.notifications.map((notification) => {
@@ -52,7 +52,7 @@ export default class Notification extends React.Component{
             return (
               <div className='notification' onClick={() => this.toggleDetails() }>
                 <button
-                  onClick={() => this.props.toggle()}
+                  onClick={this.props.onToggle}
                   className="side-menu-burg over-white is-active"
                 >
                   <span />
