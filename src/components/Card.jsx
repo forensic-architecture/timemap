@@ -1,5 +1,5 @@
 import copy from '../js/data/copy.json';
-import {isNotNullNorUndefined} from '../js/data/utilities';
+import {isNotNullNorUndefined} from '../js/utilities';
 import React from 'react';
 
 import Spinner from './presentational/Spinner';

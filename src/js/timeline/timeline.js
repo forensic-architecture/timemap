@@ -6,7 +6,7 @@
 */
 import {
   areEqual
-} from '../data/utilities';
+} from '../utilities';
 import esLocale from '../data/es-MX.json';
 import copy from '../data/copy.json';
 

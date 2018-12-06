@@ -1,7 +1,7 @@
 import {
   areEqual,
   isNotNullNorUndefined
-} from '../data/utilities';
+} from '../utilities';
 import hash from 'object-hash';
 import 'leaflet-polylinedecorator';
 
@@ -363,16 +363,19 @@ Stop and start the development process in terminal after you have added your tok
       .attr('class', 'narrative')
       .attr('d', sequenceLine)
       .style('stroke-width', d => {
+        if (!d[0]) return 0;
         // Note: [0] is a non-elegant way to get the narrative id out of the first
         // event in the narrative sequence
         const styleProps = getNarrativeStyle(d[0].narrative);
         return styleProps.strokeWidth;
       })
       .style('stroke-dasharray', d => {
+        if (!d[0]) return 'none';
         const styleProps = getNarrativeStyle(d[0].narrative);
         return (styleProps.style === 'dotted') ? "2px 5px" : 'none';
       })
       .style('stroke', d => {
+        if (!d[0]) return 'none';
         const styleProps = getNarrativeStyle(d[0].narrative);
         return styleProps.stroke;
       })

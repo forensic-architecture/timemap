@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
 import Map from '../js/map/map.js'
-import { areEqual } from '../js/data/utilities.js'
+import { areEqual } from '../js/utilities.js'
 
 class Viewport extends React.Component {
   constructor(props) {

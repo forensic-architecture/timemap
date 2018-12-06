@@ -1,5 +1,7 @@
 import initial from '../store/initial.js';
 
+import { parseDate } from '../js/utilities.js';
+
 import {
   UPDATE_HIGHLIGHTED,
   UPDATE_SELECTED,
@@ -26,9 +28,25 @@ function updateSelected(appState, action) {
 }
 
 function updateNarrative(appState, action) {
-  return Object.assign({}, appState, {
-    narrative: action.narrative
-  });
+  if (action.narrative === null) {
+    return Object.assign({}, appState, {
+      narrative: action.narrative,
+    });
+  } else {
+    const dates = action.narrative.steps.map(n => parseDate(n.timestamp).getTime())
+    let minDate = Math.min(...dates);
+    let maxDate = Math.max(...dates);
+    // Add some margin to the datetime extent
+    minDate = minDate - ((maxDate - minDate) / 20);
+    maxDate = maxDate + ((maxDate - minDate) / 20);
+
+    return Object.assign({}, appState, {
+      narrative: action.narrative,
+      filters: Object.assign({}, appState.filters, {
+        timerange: [new Date(minDate), new Date(maxDate)]
+      }),
+    });
+  }
 }
 
 function updateTagFilters(appState, action) {

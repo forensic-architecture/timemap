@@ -64,7 +64,6 @@ class NarrativeCard extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state)
   return {
     narrative: state.app.narrative
   }

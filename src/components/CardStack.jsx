@@ -6,7 +6,7 @@ import Card from './Card.jsx';
 import copy from '../js/data/copy.json';
 import {
   isNotNullNorUndefined
-} from '../js/data/utilities.js';
+} from '../js/utilities.js';
 
 class CardStack extends React.Component {
 

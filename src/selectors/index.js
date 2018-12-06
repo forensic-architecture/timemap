@@ -94,10 +94,11 @@ export const selectNarratives = createSelector(
         const isTimeRanged = isTimeRangedIn(evt, timeRange);
         const isInNarrative =  evt.narrative;
 
-        if (isTimeRanged && isTagged && isInNarrative) {
-          if (!narratives[evt.narrative]) {
-            narratives[evt.narrative] = { id: evt.narrative, steps: [], byId: {} };
-          }
+        if (!narratives[evt.narrative]) {
+          narratives[evt.narrative] = { id: evt.narrative, steps: [], byId: {} };
+        }
+
+        if (/*isTimeRanged && isTagged && */isInNarrative) {
           narratives[evt.narrative].steps.push(evt);
           narratives[evt.narrative].byId[evt.id] = { next: null, prev: null };
         }
@@ -117,6 +118,7 @@ export const selectNarratives = createSelector(
 
         narratives[key] = Object.assign(narrativeMetadata.find(n => n.id === key), narratives[key]);
       });
+      console.log(narrativeMetadata, narratives)
 
       return Object.values(narratives);
 });
