@@ -22,10 +22,6 @@ class ToolbarBottomActions extends React.Component {
     this.props.actions.toggleMapView(layer);
   }
 
-  toggleGuidedMode() {
-    this.props.actions.toggleGuidedMode();
-  }
-
   renderMapActions() {
     return (
       <div className="bottom-action-block">

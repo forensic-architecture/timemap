@@ -45,7 +45,6 @@ const initial = {
     },
     base_uri: 'http://127.0.0.1:8000/', // Modify accordingly on production setup.
     isMobile: (/Mobi/.test(navigator.userAgent)),
-    isModeGuided: true,
     language: 'en-US',
     mapAnchor: process.env.MAP_ANCHOR,
     zoomLevels: [{
@@ -86,31 +85,24 @@ const initial = {
     features: {
       USE_TAGS: process.env.features.USE_TAGS,
       USE_SEARCH: process.env.features.USE_SEARCH
+    },
+    flags: {
+      isFetchingDomain: false,
+      isFetchingEvents: false,
+
+      isCardstack: true,
+      isInfopopup: false,
+      isNotification: true
     }
   },
 
   /*
   * The 'ui' subtree of this state refers the state of the cosmetic
-  *   elements of the application, such as color palettes of groups or how some
-  *   of the UI tools are enabled or disabled dynamically by the user
+  *   elements of the application, such as color palettes of categories
+  *   as well as dom elements to attach SVG
   */
   ui: {
     style: {
-
-      colors: {
-        WHITE: "#efefef",
-        YELLOW: "#ffd800",
-        MIDGREY: "rgb(44, 44, 44)",
-        DARKGREY: "#232323",
-        PINK: "#F28B50",//rgb(232, 9, 90)",
-        ORANGE: "#F25835",//rgb(232, 9, 90)",
-        RED: "rgb(233, 0, 19)",
-        BLUE: "#F2DE79",//"rgb(48, 103 , 217)",
-        GREEN: "#4FF2F2",//"rgb(0, 158, 86)",
-      },
-
-      palette: d3.schemeCategory10,
-
       categories: {
         default: 'red',
         // Add here other categories to differentiate by color, like:
@@ -139,18 +131,6 @@ const initial = {
       timeslider: "timeslider",
       map: "map"
     },
-    flags: {
-      isFetchingDomain: false,
-      isFetchingSources: false,
-
-      isCardstack: true,
-      isInfopopup: false
-    },
-    tools: {
-      formatter: d3.timeFormat("%d %b, %H:%M"),
-      formatterWithYear: d3.timeFormat("%d %b %Y, %H:%M"),
-      parser: d3.timeParse("%Y-%m-%dT%H:%M:%S")
-    }
   }
 };
 

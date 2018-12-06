@@ -5,15 +5,16 @@
   TODO: is it possible to express this idiomatically as React?
 */
 import {
-  areEqual
+  areEqual,
+  parseDate,
+  formatterWithYear
 } from '../utilities';
 import esLocale from '../data/es-MX.json';
 import copy from '../data/copy.json';
 
 export default function(app, ui, methods) {
   d3.timeFormatDefaultLocale(esLocale);
-  const formatterWithYear = ui.tools.formatterWithYear;
-  const parser = ui.tools.parser;
+
   const zoomLevels = app.zoomLevels;
   let events = [];
   let categories = [];
@@ -242,7 +243,7 @@ export default function(app, ui, methods) {
    * @param {object} eventPoint: regular eventPoint data
    */
   function getEventX(eventPoint) {
-    return scale.x(parser(eventPoint.timestamp));
+    return scale.x(parseDate(eventPoint.timestamp));
   }
 
   function getTimeScaleExtent() {

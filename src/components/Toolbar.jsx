@@ -157,7 +157,6 @@ function mapStateToProps(state) {
     categoryFilter: state.app.filters.categories,
     viewFilters: state.app.filters.views,
     features: state.app.features,
-    isModeGuided: state.app.isModeGuided
   }
 }
 

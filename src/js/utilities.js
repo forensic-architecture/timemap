@@ -49,3 +49,11 @@ export function parseDate(datetime) {
     datetime.slice(17, 19)
   );
 }
+
+export function formatterWithYear(datetime) {
+  return d3.timeFormat("%d %b %Y, %H:%M")(datetime);
+}
+
+export function formatter(datetime) {
+  return d3.timeFormat("%d %b, %H:%M")(datetime);
+}

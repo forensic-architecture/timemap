@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as selectors from '../selectors';
 
 import copy from '../js/data/copy.json';
+import { formatterWithYear } from '../js/utilities';
 import TimelineLogic from '../js/timeline/timeline.js';
 
 class Timeline extends React.Component {
@@ -15,7 +16,6 @@ class Timeline extends React.Component {
 
   componentDidMount() {
     const ui = {
-      tools: this.props.tools,
       dom: this.props.dom
     }
 
@@ -47,8 +47,8 @@ class Timeline extends React.Component {
     const labels_title_lang = copy[this.props.app.language].timeline.labels_title;
     const info_lang = copy[this.props.app.language].timeline.info;
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`;
-    const date0 = this.props.tools.formatterWithYear(this.props.app.timerange[0]);
-    const date1 = this.props.tools.formatterWithYear(this.props.app.timerange[1]);
+    const date0 = formatterWithYear(this.props.app.timerange[0]);
+    const date1 = formatterWithYear(this.props.app.timerange[1]);
 
     return (
       <div className={classes}>
@@ -82,7 +82,6 @@ function mapStateToProps(state) {
       language: state.app.language,
       zoomLevels: state.app.zoomLevels
     },
-    tools: state.ui.tools,
     dom: state.ui.dom,
   }
 }

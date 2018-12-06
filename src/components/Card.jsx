@@ -1,5 +1,9 @@
 import copy from '../js/data/copy.json';
-import {isNotNullNorUndefined} from '../js/utilities';
+import {
+  isNotNullNorUndefined,
+  parseDate,
+  formatterWithYear
+} from '../js/utilities';
 import React from 'react';
 
 import Spinner from './presentational/Spinner';
@@ -35,8 +39,8 @@ class Card extends React.Component {
 
   makeTimelabel(timestamp) {
     if (timestamp === null) return null;
-    const parsedTimestamp = this.props.tools.parser(timestamp);
-    const timelabel = this.props.tools.formatterWithYear(parsedTimestamp);
+    const parsedTimestamp = parseDate(timestamp);
+    const timelabel = formatterWithYear(parsedTimestamp);
     return timelabel;
   }
 

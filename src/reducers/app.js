@@ -11,7 +11,10 @@ import {
   RESET_ALLFILTERS,
   TOGGLE_LANGUAGE,
   TOGGLE_MAPVIEW,
-  TOGGLE_GUIDEDMODE,
+  TOGGLE_FETCHING_DOMAIN,
+  TOGGLE_FETCHING_EVENTS,
+  TOGGLE_INFOPOPUP,
+  TOGGLE_NOTIFICATIONS,
   FETCH_ERROR,
 } from '../actions';
 
@@ -113,12 +116,6 @@ function toggleMapView(appState, action) {
   });
 }
 
-function toggleGuidedMode(appState, action) {
-  return Object.assign({}, appState, {
-    isModeGuided: !appState.isModeGuided
-  })
-}
-
 function fetchError(state, action) {
   return {
     ...state,
@@ -126,6 +123,39 @@ function fetchError(state, action) {
     notifications: [{ type: 'error', message: action.message }]
   }
 }
+
+function toggleFetchingDomain(appState, action) {
+  return Object.assign({}, appState, {
+    flags: Object.assign({}, appState.flags, {
+      isFetchingDomain: !appState.flags.isFetchingDomain
+    })
+  });
+}
+
+function toggleFetchingEvents(appState, action) {
+  return Object.assign({}, appState, {
+    flags: Object.assign({}, appState.flags, {
+      isFetchingEvents: !appState.flags.isFetchingEvents
+    })
+  });
+}
+
+function toggleInfoPopup(appState, action) {
+  return Object.assign({}, appState, {
+    flags: Object.assign({}, appState.flags, {
+      isInfopopup: !appState.flags.isInfopopup
+    })
+  });
+}
+
+function toggleNotifications(appState, action) {
+  return Object.assign({}, appState, {
+    flags: Object.assign({}, appState.flags, {
+      isNotification: !appState.flags.isNotification
+    })
+  });
+}
+
 
 
 function app(appState = initial.app, action) {
@@ -146,10 +176,16 @@ function app(appState = initial.app, action) {
       return toggleLanguage(appState, action);
     case TOGGLE_MAPVIEW:
       return toggleMapView(appState, action);
-    case TOGGLE_GUIDEDMODE:
-      return toggleGuidedMode(appState, action);
     case FETCH_ERROR:
       return fetchError(appState, action);
+    case TOGGLE_FETCHING_DOMAIN:
+      return toggleFetchingDomain(appState, action);
+    case TOGGLE_FETCHING_EVENTS:
+      return toggleFetchingEvents(appState, action);
+    case TOGGLE_INFOPOPUP:
+      return toggleInfoPopup(appState, action);
+    case TOGGLE_NOTIFICATIONS:
+      return toggleNotifications(appState, action);
     default:
       return appState;
   }

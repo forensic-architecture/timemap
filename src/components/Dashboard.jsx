@@ -14,6 +14,8 @@ import InfoPopUp from './InfoPopup.jsx';
 import Timeline from './Timeline.jsx';
 import Notification from './Notification.jsx';
 
+import { parseDate } from '../js/utilities';
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -110,12 +112,12 @@ class Dashboard extends React.Component {
           actions={this.props.actions}
         />
         <Notification
-          isNotification={this.props.ui.flags.isNotification}
+          isNotification={this.props.app.flags.isNotification}
           notifications={this.props.domain.notifications}
           onToggle={this.props.actions.markNotificationsRead}
         />
         <LoadingOverlay
-          ui={this.props.ui.flags.isFetchingDomain}
+          ui={this.props.app.flags.isFetchingDomain}
           language={this.props.app.language}
         />
       </div>
