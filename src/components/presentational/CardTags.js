@@ -14,7 +14,7 @@ const CardTags = ({ tags, language }) => {
           {tags.map((tag, idx) => {
               return (
                 <span className="tag">
-                  {tag.name}
+                  <small>{tag.name}</small>
                   {(idx < tags.length - 1)
                     ? ','
                     : ''}
@@ -28,7 +28,7 @@ const CardTags = ({ tags, language }) => {
   return (
     <div className="card-row card-cell tags">
       <h4>{tags_lang}</h4>
-      <p>{no_tags_lang}</p>
+      <p><small>{no_tags_lang}</small></p>
     </div>
   );
 

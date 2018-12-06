@@ -9,7 +9,7 @@ const CardSource = ({ source, language }) => {
   return (
     <div className="card-row card-cell source">
       <h4>{source_lang}: </h4>
-      <p>{source}</p>
+      <p><small>{source}</small></p>
     </div>
   );
 }

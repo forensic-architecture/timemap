@@ -6,12 +6,12 @@ const CardNarrativeLink = ({ event, makeTimelabel, select }) => {
 
     return (
       <a onClick={() => select(event)}>
-        {`${timelabel} - ${event.location}`}
+        <small>{`${timelabel} / ${event.location}`}</small>
       </a>
     );
   }
 
-  return (<a className="disabled">None</a>);
+  return (<a className="disabled"><small>None</small></a>);
 }
 
 export default CardNarrativeLink;
