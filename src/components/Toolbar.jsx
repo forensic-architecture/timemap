@@ -106,13 +106,15 @@ class Toolbar extends React.Component {
 
   renderToolbarTabs() {
     const title = copy[this.props.language].toolbar.title;
+    const isTags = this.props.tags && (this.props.tags.children > 0);
+
     return (
       <div className="toolbar">
         <div className="toolbar-header"><p>{title}</p></div>
         <div className="toolbar-tabs">
           {/*this.renderToolbarTab(0, 'search')*/}
-          {this.renderToolbarTab(0, 'Focus stories')}
-          {this.renderToolbarTab(1, 'Explore freely')}
+          {this.renderToolbarTab(0, 'Narratives')}
+          {(isTags) ? this.renderToolbarTab(1, 'Explore by tag') : ''}
         </div>
         <ToolbarBottomActions
           actions={this.props.actions}
