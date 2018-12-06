@@ -62,23 +62,6 @@ class Dashboard extends React.Component {
     this.props.actions.updateTimeRange(timeRange);
   }
 
-  // handleToggle( key ) {
-  //   switch( key ) {
-  //     case 'TOGGLE_CARDSTACK': {
-  //       this.props.actions.updateSelected([]);
-  //       break;
-  //     }
-  //     case 'TOGGLE_INFOPOPUP': {
-  //       this.props.actions.toggleInfoPopup();
-  //       break;
-  //     }
-  //     case 'TOGGLE_NOTIFICATIONS': {
-  //       this.props.actions.toggleNotifications();
-  //       break;
-  //     }
-  //   }
-  // }
-
   getCategoryColor(category='other') {
     return this.props.ui.style.categories[category] || this.props.style.categories['other']
   }
@@ -95,7 +78,6 @@ class Dashboard extends React.Component {
         <Viewport
           methods={{
             onSelect: this.handleSelect,
-            // onHighlight: this.handleHighlight,
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
