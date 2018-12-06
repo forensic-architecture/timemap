@@ -107,21 +107,6 @@ export function updateDomain(domain) {
   }
 }
 
-// export function fetchEvents (events) {
-//   return dispatch => {
-//     dispatch(toggleFetchingEvents())
-//     const urls = events.map(eventUrlMap)
-//     return Promise.all(
-//       urls.map(url => fetch(url)
-//         .then(response => response.json())
-//       )
-//     )
-//       .then(json => {
-//         dispatch(toggleFetchingEvents())
-//         return json
-//       })
-//   }
-// }
 
 export function fetchSelected(selected) {
   if (!selected || !selected.length || selected.length === 0) {
@@ -136,31 +121,6 @@ export function fetchSelected(selected) {
       dispatch(toggleFetchingSources())
     }
 
-    // const urls = events.map(eventUrlMap)
-    // return Promise.all(
-    //   urls.map(url => fetch(url)
-    //     .then(response => response.json())
-    //   )
-    // )
-    //   .then(json => {
-    //     dispatch(toggleFetchingEvents())
-    //     return json
-    //   })
-    // TODO: fetch sources
-    // Now fetch detail data for each event
-    // Add transmitter and receiver data for coevents
-    // this.props.actions.fetchEvents(selected)
-    //   .then((events) => {
-    //     let eventsSelected = events.map(ev => {
-    //       return Object.assign({}, ev, this.getEventById(ev.id));
-    //     });
-
-    //     eventsSelected = eventsSelected.sort((a, b) => {
-    //       return parser(a.timestamp) - parser(b.timestamp);
-    //     });
-
-    //     this.props.actions.updateSelected(eventsSelected);
-    //   });
   }
 }
 
