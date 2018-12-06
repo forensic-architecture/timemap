@@ -7,22 +7,22 @@ const CardLocation = ({ language, location }) => {
 
   if (isNotNullNorUndefined(location)) {
     return (
-      <p className="card-cell location">
+      <div className="card-cell location">
         <p>
           <i className="material-icons left">location_on</i>
           {location}
         </p>
-      </p>
+      </div>
     );
   } else {
     const unknown = copy[language].cardstack.unknown_location;
     return (
-      <p className="card-cell location">
+      <div className="card-cell location">
         <p>
           <i className="material-icons left">location_on</i>
           {unknown}
         </p>
-      </p>
+      </div>
     );
   }
 }

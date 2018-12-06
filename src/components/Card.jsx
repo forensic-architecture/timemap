@@ -139,7 +139,7 @@ class Card extends React.Component {
           {this.renderTimestamp()}
           {this.renderLocation()}
         </div>
-        {this.renderCategory()}        
+        {this.renderCategory()}
         {this.renderSummary()}
       </div>
     );

@@ -8,8 +8,8 @@ const CardTags = ({ tags, language }) => {
 
   if (tags.length > 0) {
     return (
-      <div className="card-cell tags">
-        <h4>{tags_lang}</h4>
+      <div className="card-row card-cell tags">
+        <h4>{tags_lang}:</h4>
         <p>
           {tags.map((tag, idx) => {
               return (
@@ -26,7 +26,7 @@ const CardTags = ({ tags, language }) => {
     );
   }
   return (
-    <div className="card-cell tags">
+    <div className="card-row card-cell tags">
       <h4>{tags_lang}</h4>
       <p>{no_tags_lang}</p>
     </div>

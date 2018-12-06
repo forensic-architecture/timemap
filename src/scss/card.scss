@@ -10,43 +10,18 @@
   box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   font-size: $large;
   line-height: $xxlarge;
-  transition: 0.2s ease;
   height: auto;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
 
   &:hover {
-    border: 1px solid $yellow;
-  }
-
-  .material-icons {
-    font-size: $normal;
-    color: $darkwhite;
-    margin-right: 5px;
-  }
-
-  .card-row {
-    display: flex;
-    flex-direction: row;
-    border-bottom: 1px solid $midwhite;
-    margin-bottom: 10px;
-
-    .card-cell {
-      flex: 1;
-    }
-  }
-
-  .card-bottomhalf {
-    transition: 0.4s ease;
-    height: auto;
-
-    &.folded {
-      transition: 0.4s ease;
-      height: 0;
-      overflow: hidden;
-    }
+    opacity: 1;
+    transition: opacity 0.2s ease;
   }
 
   h4 {
     margin-bottom: 0;
+    margin-right: 5px;
     text-transform: uppercase;
     font-size: $xsmall;
     color: $darkwhite;
@@ -61,16 +36,55 @@
     margin: 0;
   }
 
-  .card-cell {
-    margin-bottom: 10px;
+  .material-icons {
+    font-size: $normal;
+    color: $darkwhite;
+    margin-right: 5px;
+  }
 
+  .card-row {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid $lightwhite;
+    margin: 5px 0 10px 0;
+    padding-bottom: 10px;
+
+    .card-cell {
+      flex: 1;
+    }
+
+    h4 {
+      min-width: 80px;
+      max-width: 80px;
+    }
+  }
+
+  .card-cell {
+    a {
+      font-weight: bold;
+      transition: color 0.2s;
+    }
     a:hover {
-      color: $red;
+      color: $darkwhite;
       cursor: pointer;
+      transition: color 0.2s;
     }
     a.disabled {
       color: $midgrey;
+      font-weight: normal;
       cursor: default;
+    }
+  }
+
+
+  .card-bottomhalf {
+    transition: 0.4s ease;
+    height: auto;
+
+    &.folded {
+      transition: 0.4s ease;
+      height: 0;
+      overflow: hidden;
     }
   }
 
@@ -126,28 +140,19 @@
   }
 
   .category {
+    margin-bottom: 5px;
+
     .color-category {
       width: 12px;
       height: 12px;
       border-radius: 20px;
       display: inline-block;
-      margin: 0px 5px 0 0;
+      margin: 0 0 0 5px;
     }
-  }
 
-  .event-type {
-    margin: 0 0 10px 0;
-
-    span {
-      display: inline-block;
-      margin: 0 5px 2px 0;
-      color: $darkgrey;
-
-      &.flagged {
-        background: $red;
-        color: $offwhite;
-        padding: 0 5px;
-      }
+    p {
+      text-align: right;
+      flex: 1;
     }
   }
 

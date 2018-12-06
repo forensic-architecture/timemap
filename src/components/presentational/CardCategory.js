@@ -1,11 +1,13 @@
 import React from 'react';
 
+import { capitalizeFirstLetter } from '../../js/data/utilities.js';
+
 const CardCategory = ({ categoryTitle, categoryLabel, color }) => (
-  <div className="card-cell category">
+  <div className="card-row card-cell category">
     <h4>{categoryTitle}</h4>
     <p>
+      {capitalizeFirstLetter(categoryLabel)}
       <span className='color-category' style={{ background: color }}/>
-      {categoryLabel}
     </p>
   </div>
 );
