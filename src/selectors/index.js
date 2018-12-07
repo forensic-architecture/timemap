@@ -3,13 +3,13 @@ import {
 } from 'reselect'
 
 // Input selectors
-export const getEvents = state => state.domain.events
-export const getLocations = state => state.domain.locations
-export const getCategories = state => state.domain.categories
-export const getNarratives = state => state.domain.narratives
+export const getEvents = state => state.domain.events;
+export const getLocations = state => state.domain.locations;
+export const getCategories = state => state.domain.categories;
+export const getNarratives = state => state.domain.narratives;
 export const getSites = (state) => {
-  if (process.env.features.USE_SITES) return state.domain.sites
-  return []
+  if (process.env.features.USE_SITES) return state.domain.sites;
+  return [];
 }
 export const getNotifications = state => state.domain.notifications;
 export const getTagTree = state => state.domain.tags;
@@ -116,9 +116,10 @@ export const selectNarratives = createSelector(
           narratives[key].byId[step.id].prev = (i > 0) ? steps[i - 1] : null;
         });
 
-        narratives[key] = Object.assign(narrativeMetadata.find(n => n.id === key), narratives[key]);
+        if (narrativeMetadata.find(n => n.id === key)) {
+          narratives[key] = Object.assign(narrativeMetadata.find(n => n.id === key), narratives[key]);
+        }
       });
-      console.log(narrativeMetadata, narratives)
 
       return Object.values(narratives);
 });
