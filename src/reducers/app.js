@@ -12,7 +12,7 @@ import {
   TOGGLE_LANGUAGE,
   TOGGLE_MAPVIEW,
   TOGGLE_FETCHING_DOMAIN,
-  TOGGLE_FETCHING_EVENTS,
+  TOGGLE_FETCHING_SOURCES,
   TOGGLE_INFOPOPUP,
   TOGGLE_NOTIFICATIONS,
   FETCH_ERROR,
@@ -132,10 +132,10 @@ function toggleFetchingDomain(appState, action) {
   });
 }
 
-function toggleFetchingEvents(appState, action) {
+function toggleFetchingSources(appState, action) {
   return Object.assign({}, appState, {
     flags: Object.assign({}, appState.flags, {
-      isFetchingEvents: !appState.flags.isFetchingEvents
+      isFetchingSources: !appState.flags.isFetchingSources
     })
   });
 }
@@ -180,8 +180,8 @@ function app(appState = initial.app, action) {
       return fetchError(appState, action);
     case TOGGLE_FETCHING_DOMAIN:
       return toggleFetchingDomain(appState, action);
-    case TOGGLE_FETCHING_EVENTS:
-      return toggleFetchingEvents(appState, action);
+    case TOGGLE_FETCHING_SOURCES:
+      return toggleFetchingSources(appState, action);
     case TOGGLE_INFOPOPUP:
       return toggleInfoPopup(appState, action);
     case TOGGLE_NOTIFICATIONS:

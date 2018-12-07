@@ -8,12 +8,13 @@ function urlFromEnv(ext) {
 }
 
 // TODO: relegate these URLs entirely to environment variables
-const EVENT_DATA_URL = urlFromEnv('EVENT_EXT')
-const CATEGORY_URL = urlFromEnv('CATEGORY_EXT')
-const TAG_URL = urlFromEnv('TAGS_EXT')
-const SOURCES_URL = urlFromEnv('SOURCES_EXT')
-const SITES_URL = urlFromEnv('SITES_EXT')
-const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`
+const EVENT_DATA_URL = urlFromEnv('EVENT_EXT');
+const CATEGORY_URL = urlFromEnv('CATEGORY_EXT');
+const TAG_URL = urlFromEnv('TAGS_EXT');
+const SOURCES_URL = urlFromEnv('SOURCES_EXT');
+const NARRATIVE_URL = urlFromEnv('NARRATIVE_EXT');
+const SITES_URL = urlFromEnv('SITES_EXT');
+const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`;
 
 /*
 * Create an error notification object
@@ -163,19 +164,19 @@ export function updateTagFilters(tag) {
   }
 }
 
+export const UPDATE_NARRATIVE = 'UPDATE_NARRATIVE';
+ export function updateNarrative(narrative) {
+   return {
+     type: UPDATE_NARRATIVE,
+     narrative
+   }
+ }
+
 export const UPDATE_TIMERANGE = 'UPDATE_TIMERANGE';
 export function updateTimeRange(timerange) {
   return {
     type: UPDATE_TIMERANGE,
     timerange
-  }
-}
-
-export const UPDATE_NARRATIVE = 'UPDATE_NARRATIVE';
-export function updateNarrative(narrative) {
-  return {
-    type: UPDATE_NARRATIVE,
-    narrative
   }
 }
 
@@ -224,6 +225,14 @@ export function toggleInfoPopup() {
   }
 }
 
+export const TOGGLE_MAPVIEW = 'TOGGLE_MAPVIEW';
+ export function toggleMapView(layer) {
+   return {
+     type: TOGGLE_MAPVIEW,
+     layer
+   }
+ }
+
 export const TOGGLE_NOTIFICATIONS = 'TOGGLE_NOTIFICATIONS'
 export function toggleNotifications() {
   return {
@@ -245,13 +254,5 @@ export function fetchSourceError(msg) {
   return {
     type: FETCH_SOURCE_ERROR,
     msg
-  }
-}
-
-export const TOGGLE_MAPVIEW = 'TOGGLE_MAPVIEW';
-export function toggleMapView(layer) {
-  return {
-    type: TOGGLE_MAPVIEW,
-    layer
   }
 }
