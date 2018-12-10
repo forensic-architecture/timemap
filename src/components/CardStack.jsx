@@ -91,7 +91,7 @@ function mapStateToProps(state) {
     selected: state.app.selected,
     language: state.app.language,
     isCardstack: state.app.flags.isCardstack,
-    isLoading: state.app.flags.isFetchingEvents
+    isLoading: state.app.flags.isFetchingSources
   }
 }
 

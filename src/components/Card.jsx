@@ -122,16 +122,6 @@ class Card extends React.Component {
     }
   }
 
-  renderLoadingCard() {
-    return (
-      <li className='event-card'>
-        <div className="card-bottomhalf">
-          <Spinner />
-        </div>
-      </li>
-    );
-  }
-
   renderHeader() {
     return (
       <div className="card-collapsed">
@@ -146,19 +136,19 @@ class Card extends React.Component {
   }
 
   renderContent() {
-    if (!this.state.isHighlighted) {
-      return (
-        <div className="card-bottomhalf folded"></div>
-      );
-    } else {
-      return (
-        <div className="card-bottomhalf">
-          {this.renderTags()}
-          {this.renderSource()}
-          {this.renderNarrative()}
-        </div>
-      );
-    }
+    // if (!this.state.isHighlighted) {
+    //   return (
+    //     <div className="card-bottomhalf folded"></div>
+    //   );
+    // } else {
+    return (
+      <div className="card-bottomhalf">
+        {this.renderTags()}
+        {this.renderSource()}
+        {this.renderNarrative()}
+      </div>
+    );
+    // }
   }
 
   renderCaret() {
@@ -171,17 +161,13 @@ class Card extends React.Component {
   }
 
   render() {
-    if (this.props.isLoading) {
-      return this.renderLoadingCard();
-    } else {
-      return (
-        <li className='event-card'>
-          {this.renderHeader()}
-          {this.renderContent()}
-          {this.renderCaret()}
-        </li>
-      );
-    }
+    return (
+      <li className='event-card'>
+        {this.renderHeader()}
+        {this.renderContent()}
+        {/* {this.renderCaret()} */}
+      </li>
+    );
   }
 }
 
