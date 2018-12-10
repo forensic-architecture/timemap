@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const userConfig = require('./dev.config');
+const userConfig = require('./config');
 const userConfigJSON = {};
 
 const devMode = process.env.NODE_ENV !== 'production';

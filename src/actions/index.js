@@ -66,7 +66,7 @@ export function fetchDomain () {
 
     let tagsPromise
     if (process.env.features.USE_TAGS) {
-      tagsPromise = fetch(TAG_TREE_URL)
+      tagsPromise = fetch(TAG_URL)
         .then(response => response.json())
         .catch(handleError('tags'))
     }
@@ -164,14 +164,6 @@ export function updateTagFilters(tag) {
   }
 }
 
-export const UPDATE_NARRATIVE = 'UPDATE_NARRATIVE';
- export function updateNarrative(narrative) {
-   return {
-     type: UPDATE_NARRATIVE,
-     narrative
-   }
- }
-
 export const UPDATE_TIMERANGE = 'UPDATE_TIMERANGE';
 export function updateTimeRange(timerange) {
   return {
@@ -262,13 +254,5 @@ export function fetchSourceError(msg) {
   return {
     type: FETCH_SOURCE_ERROR,
     msg
-  }
-}
-
-export const TOGGLE_MAPVIEW = 'TOGGLE_MAPVIEW';
-export function toggleMapView(layer) {
-  return {
-    type: TOGGLE_MAPVIEW,
-    layer
   }
 }

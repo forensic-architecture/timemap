@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { capitalizeFirstLetter } from '../../js/data/utilities.js';
+import { capitalizeFirstLetter } from '../../js/utilities.js';
 
 const CardCategory = ({ categoryTitle, categoryLabel, color }) => (
   <div className="card-row card-cell category">
