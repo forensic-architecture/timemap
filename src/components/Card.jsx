@@ -89,6 +89,7 @@ class Card extends React.Component {
   renderSource() {
     return (
       <CardSource
+        isLoading={this.props.isLoading}
         language={this.props.language}
         source={this.props.event.source}
       />
