@@ -137,7 +137,7 @@
       "tags": "Tags",
       "notags": "No known tags for this event.",
       "source": "Source",
-      "unknown_source": "Unknown source. The relability of this event cannot be confirmed.",
+      "unknown_source": "The information for this source could not be retrieved.",
       "category": "Category",
       "communication": "Communication",
       "transmitter": "Transmitter",
