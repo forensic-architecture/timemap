@@ -12,12 +12,6 @@
   line-height: $xxlarge;
   height: auto;
   opacity: 0.9;
-  transition: opacity 0.2s ease;
-
-  &:hover {
-    opacity: 1;
-    transition: opacity 0.2s ease;
-  }
 
   h4 {
     margin-bottom: 0;
