@@ -35,3 +35,25 @@ export function areEqual(arr1, arr2) {
 export function isNotNullNorUndefined(variable) {
   return (typeof variable !== 'undefined' && variable !== null);
 }
+
+/**
+* Return a Date object given a datetime string of the format: "2016-09-10T07:00:00"
+* @param {string} datetime
+*/
+export function parseDate(datetime) {
+  return new Date(datetime.slice(0, 4),
+    datetime.slice(5, 7) - 1,
+    datetime.slice(8, 10),
+    datetime.slice(11, 13),
+    datetime.slice(14, 16),
+    datetime.slice(17, 19)
+  );
+}
+
+export function formatterWithYear(datetime) {
+  return d3.timeFormat("%d %b %Y, %H:%M")(datetime);
+}
+
+export function formatter(datetime) {
+  return d3.timeFormat("%d %b, %H:%M")(datetime);
+}

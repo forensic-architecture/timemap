@@ -6,7 +6,7 @@ import Card from './Card.jsx';
 import copy from '../js/data/copy.json';
 import {
   isNotNullNorUndefined
-} from '../js/data/utilities.js';
+} from '../js/utilities.js';
 
 class CardStack extends React.Component {
 
@@ -21,7 +21,7 @@ class CardStack extends React.Component {
           <Card
             event={event}
             language={this.props.language}
-            tools={this.props.tools}
+            isLoading={this.props.isLoading}
             getNarrativeLinks={this.props.getNarrativeLinks}
             getCategoryGroup={this.props.getCategoryGroup}
             getCategoryColor={this.props.getCategoryColor}
@@ -90,9 +90,8 @@ function mapStateToProps(state) {
   return {
     selected: state.app.selected,
     language: state.app.language,
-    tools: state.ui.tools,
-    isCardstack: state.ui.flags.isCardstack,
-    isFetchingSources: state.ui.flags.isFetchingSources
+    isCardstack: state.app.flags.isCardstack,
+    isLoading: state.app.flags.isFetchingEvents
   }
 }
 

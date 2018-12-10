@@ -8,12 +8,13 @@ function urlFromEnv(ext) {
 }
 
 // TODO: relegate these URLs entirely to environment variables
-const EVENT_DATA_URL = urlFromEnv('EVENT_EXT')
-const CATEGORY_URL = urlFromEnv('CATEGORY_EXT')
-const TAG_URL = urlFromEnv('TAGS_EXT')
-const SOURCES_URL = urlFromEnv('SOURCES_EXT')
-const SITES_URL = urlFromEnv('SITES_EXT')
-const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`
+const EVENT_DATA_URL = urlFromEnv('EVENT_EXT');
+const CATEGORY_URL = urlFromEnv('CATEGORY_EXT');
+const TAG_URL = urlFromEnv('TAGS_EXT');
+const SOURCES_URL = urlFromEnv('SOURCES_EXT');
+const NARRATIVE_URL = urlFromEnv('NARRATIVE_EXT');
+const SITES_URL = urlFromEnv('SITES_EXT');
+const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`;
 
 /*
 * Create an error notification object
@@ -52,6 +53,10 @@ export function fetchDomain () {
       .then(response => response.json())
       .catch(handleError('categories'))
 
+    const narPromise = fetch(NARRATIVE_URL)
+      .then(response => response.json())
+      .catch(handleError('narratives'))
+
     let sitesPromise = Promise.resolve([])
     if (process.env.features.USE_SITES) {
       sitesPromise = fetch(SITES_URL)
@@ -66,14 +71,16 @@ export function fetchDomain () {
         .catch(handleError('tags'))
     }
 
-    return Promise.all([ eventPromise, catPromise, sitesPromise, tagsPromise])
+    return Promise.all([eventPromise, catPromise, narPromise,
+      sitesPromise, tagsPromise])
       .then(response => {
         dispatch(toggleFetchingDomain())
         const result = {
           events: response[0],
           categories: response[1],
-          sites: response[2],
-          tags: response[3],
+          narratives: response[2],
+          sites: response[3],
+          tags: response[4],
           notifications
         }
         return result
@@ -102,6 +109,7 @@ export function updateDomain(domain) {
       categories: domain.categories,
       tags: domain.tags,
       sites: domain.sites,
+      narratives: domain.narratives,
       notifications: domain.notifications
     }
   }
@@ -156,6 +164,14 @@ export function updateTagFilters(tag) {
   }
 }
 
+export const UPDATE_NARRATIVE = 'UPDATE_NARRATIVE';
+ export function updateNarrative(narrative) {
+   return {
+     type: UPDATE_NARRATIVE,
+     narrative
+   }
+ }
+
 export const UPDATE_TIMERANGE = 'UPDATE_TIMERANGE';
 export function updateTimeRange(timerange) {
   return {
@@ -208,6 +224,14 @@ export function toggleInfoPopup() {
     type: TOGGLE_INFOPOPUP
   }
 }
+
+export const TOGGLE_MAPVIEW = 'TOGGLE_MAPVIEW';
+ export function toggleMapView(layer) {
+   return {
+     type: TOGGLE_MAPVIEW,
+     layer
+   }
+ }
 
 export const TOGGLE_NOTIFICATIONS = 'TOGGLE_NOTIFICATIONS'
 export function toggleNotifications() {

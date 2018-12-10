@@ -1,7 +1,7 @@
 import {
   areEqual,
   isNotNullNorUndefined
-} from '../data/utilities';
+} from '../utilities';
 import hash from 'object-hash';
 import 'leaflet-polylinedecorator';
 
@@ -227,8 +227,8 @@ Stop and start the development process in terminal after you have added your tok
     // categories.sort((a, b) => {
     //   return (+a.slice(-2) > +b.slice(-2));
     // });
-    categories.forEach(group => {
-      eventCount[group] = 0
+    categories.forEach(cat => {
+      eventCount[cat.category] = 0
     });
 
     location.events.forEach((event) => {;
@@ -239,9 +239,9 @@ Stop and start the development process in terminal after you have added your tok
     const events = [];
 
     while (i < categories.length) {
-      let _eventsCount = eventCount[categories[i]];
+      let _eventsCount = eventCount[categories[i].category];
       for (let j = i + 1; j < categories.length; j++) {
-        _eventsCount += eventCount[categories[j]];
+        _eventsCount += eventCount[categories[j].category];
       }
       events.push(_eventsCount);
       i++;
@@ -291,7 +291,7 @@ Stop and start the development process in terminal after you have added your tok
     eventsDom
       .enter().append('circle')
       .attr('class', 'location-event-marker')
-      .style('fill', (d, i) => getCategoryColor(domain.categories[i]))
+      .style('fill', (d, i) => getCategoryColor(domain.categories[i].category))
       .transition()
       .duration(500)
       .attr('r', d => (d) ? Math.sqrt(16 * d) + 3 : 0);
@@ -342,6 +342,13 @@ Stop and start the development process in terminal after you have added your tok
     * Adds eventlayer to map
     */
 
+  function getNarrativeStyle(narrativeId) {
+    const styleName = narrativeId && narrativeId in narrativeProps
+      ? narrativeId
+      : 'default';
+    return narrativeProps[styleName];
+  }
+
   function renderNarratives() {
     const narrativesDom = g.selectAll('.narrative')
       .data(domain.narratives.map(d => d.steps))
@@ -356,20 +363,21 @@ Stop and start the development process in terminal after you have added your tok
       .attr('class', 'narrative')
       .attr('d', sequenceLine)
       .style('stroke-width', d => {
-        styleName = d[0].narrative && d[0].narrative in narrativeProps
-          ? d[0].narrative
-          : 'default'
-        const n = d[0].narrative;
-        return (n) ? narrativeProps[styleName].strokeWidth : 3;
+        if (!d[0]) return 0;
+        // Note: [0] is a non-elegant way to get the narrative id out of the first
+        // event in the narrative sequence
+        const styleProps = getNarrativeStyle(d[0].narrative);
+        return styleProps.strokeWidth;
       })
       .style('stroke-dasharray', d => {
-        const n = d[0].narrative;
-        if (narrativeProps[styleName].style === 'dotted') return "2px 5px";
-        return 'none';
+        if (!d[0]) return 'none';
+        const styleProps = getNarrativeStyle(d[0].narrative);
+        return (styleProps.style === 'dotted') ? "2px 5px" : 'none';
       })
       .style('stroke', d => {
-        const n = d[0].narrative;
-        return (n) ? narrativeProps[styleName].stroke : '#fff';
+        if (!d[0]) return 'none';
+        const styleProps = getNarrativeStyle(d[0].narrative);
+        return styleProps.stroke;
       })
       .style('fill', 'none');
   }

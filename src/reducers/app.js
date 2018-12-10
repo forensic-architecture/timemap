@@ -1,12 +1,20 @@
 import initial from '../store/initial.js';
 
+import { parseDate } from '../js/utilities.js';
+
 import {
   UPDATE_HIGHLIGHTED,
   UPDATE_SELECTED,
   UPDATE_TAGFILTERS,
   UPDATE_TIMERANGE,
+  UPDATE_NARRATIVE,
   RESET_ALLFILTERS,
   TOGGLE_LANGUAGE,
+  TOGGLE_MAPVIEW,
+  TOGGLE_FETCHING_DOMAIN,
+  TOGGLE_FETCHING_SOURCES,
+  TOGGLE_INFOPOPUP,
+  TOGGLE_NOTIFICATIONS,
   FETCH_ERROR,
 } from '../actions';
 
@@ -20,6 +28,28 @@ function updateSelected(appState, action) {
   return Object.assign({}, appState, {
     selected: action.selected
   });
+}
+
+function updateNarrative(appState, action) {
+  if (action.narrative === null) {
+    return Object.assign({}, appState, {
+      narrative: action.narrative,
+    });
+  } else {
+    const dates = action.narrative.steps.map(n => parseDate(n.timestamp).getTime())
+    let minDate = Math.min(...dates);
+    let maxDate = Math.max(...dates);
+    // Add some margin to the datetime extent
+    minDate = minDate - ((maxDate - minDate) / 20);
+    maxDate = maxDate + ((maxDate - minDate) / 20);
+
+    return Object.assign({}, appState, {
+      narrative: action.narrative,
+      filters: Object.assign({}, appState.filters, {
+        timerange: [new Date(minDate), new Date(maxDate)]
+      }),
+    });
+  }
 }
 
 function updateTagFilters(appState, action) {
@@ -74,6 +104,18 @@ function toggleLanguage(appState, action) {
   });
 }
 
+function toggleMapView(appState, action) {
+  const isLayerInView = !appState.views[layer];
+  const newViews = {};
+  newViews[layer] = isLayerInView;
+  const views = Object.assign({}, appState.views, newViews);
+  return Object.assign({}, appState, {
+    filters: Object.assign({}, appState.filters, {
+      views
+    })
+  });
+}
+
 function fetchError(state, action) {
   return {
     ...state,
@@ -81,6 +123,39 @@ function fetchError(state, action) {
     notifications: [{ type: 'error', message: action.message }]
   }
 }
+
+function toggleFetchingDomain(appState, action) {
+  return Object.assign({}, appState, {
+    flags: Object.assign({}, appState.flags, {
+      isFetchingDomain: !appState.flags.isFetchingDomain
+    })
+  });
+}
+
+function toggleFetchingSources(appState, action) {
+  return Object.assign({}, appState, {
+    flags: Object.assign({}, appState.flags, {
+      isFetchingSources: !appState.flags.isFetchingSources
+    })
+  });
+}
+
+function toggleInfoPopup(appState, action) {
+  return Object.assign({}, appState, {
+    flags: Object.assign({}, appState.flags, {
+      isInfopopup: !appState.flags.isInfopopup
+    })
+  });
+}
+
+function toggleNotifications(appState, action) {
+  return Object.assign({}, appState, {
+    flags: Object.assign({}, appState.flags, {
+      isNotification: !appState.flags.isNotification
+    })
+  });
+}
+
 
 
 function app(appState = initial.app, action) {
@@ -93,12 +168,24 @@ function app(appState = initial.app, action) {
       return updateTagFilters(appState, action);
     case UPDATE_TIMERANGE:
       return updateTimeRange(appState, action);
+    case UPDATE_NARRATIVE:
+      return updateNarrative(appState, action);
     case RESET_ALLFILTERS:
       return resetAllFilters(appState, action);
     case TOGGLE_LANGUAGE:
       return toggleLanguage(appState, action);
+    case TOGGLE_MAPVIEW:
+      return toggleMapView(appState, action);
     case FETCH_ERROR:
       return fetchError(appState, action);
+    case TOGGLE_FETCHING_DOMAIN:
+      return toggleFetchingDomain(appState, action);
+    case TOGGLE_FETCHING_SOURCES:
+      return toggleFetchingSources(appState, action);
+    case TOGGLE_INFOPOPUP:
+      return toggleInfoPopup(appState, action);
+    case TOGGLE_NOTIFICATIONS:
+      return toggleNotifications(appState, action);
     default:
       return appState;
   }

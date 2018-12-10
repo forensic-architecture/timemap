@@ -27,7 +27,7 @@ export default class InfoPopUp extends React.Component{
 
   renderView2DLegend() {
     return (
-      <div className={`infopopup ${(this.props.ui.flags.isInfopopup) ? '' : 'hidden'}`}>
+      <div className={`infopopup ${(this.props.app.flags.isInfopopup) ? '' : 'hidden'}`}>
         <button onClick={() => this.props.toggle()} className="side-menu-burg over-white is-active"><span /></button>
         {this.renderView2DCopy()}
         <div className="legend">

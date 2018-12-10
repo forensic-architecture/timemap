@@ -3,12 +3,13 @@ import {
 } from 'reselect'
 
 // Input selectors
-export const getEvents = state => state.domain.events
-export const getLocations = state => state.domain.locations
-export const getCategories = state => state.domain.categories
+export const getEvents = state => state.domain.events;
+export const getLocations = state => state.domain.locations;
+export const getCategories = state => state.domain.categories;
+export const getNarratives = state => state.domain.narratives;
 export const getSites = (state) => {
-  if (process.env.features.USE_SITES) return state.domain.sites
-  return []
+  if (process.env.features.USE_SITES) return state.domain.sites;
+  return [];
 }
 export const getNotifications = state => state.domain.notifications;
 export const getTagTree = state => state.domain.tags;
@@ -84,8 +85,8 @@ export const selectEvents = createSelector(
  * and if TAGS are being used, select them if their tags are enabled
  */
 export const selectNarratives = createSelector(
-    [getEvents, getTagsFilter, getTimeRange],
-    (events, tagFilters, timeRange) => {
+    [getEvents, getNarratives, getTagsFilter, getTimeRange],
+    (events, narrativeMetadata, tagFilters, timeRange) => {
 
       const narratives = {};
       events.forEach((evt) => {
@@ -93,10 +94,11 @@ export const selectNarratives = createSelector(
         const isTimeRanged = isTimeRangedIn(evt, timeRange);
         const isInNarrative =  evt.narrative;
 
-        if (isTimeRanged && isTagged && isInNarrative) {
-          if (!narratives[evt.narrative]) {
-            narratives[evt.narrative] = { key: evt.narrative, steps: [], byId: {} };
-          }
+        if (!narratives[evt.narrative]) {
+          narratives[evt.narrative] = { id: evt.narrative, steps: [], byId: {} };
+        }
+
+        if (/*isTimeRanged && isTagged && */isInNarrative) {
           narratives[evt.narrative].steps.push(evt);
           narratives[evt.narrative].byId[evt.id] = { next: null, prev: null };
         }
@@ -104,13 +106,19 @@ export const selectNarratives = createSelector(
 
       Object.keys(narratives).forEach((key) => {
         const steps = narratives[key].steps;
+
         steps.sort((a, b) => {
           return (parseTimestamp(a.timestamp) > parseTimestamp(b.timestamp));
         });
+
         steps.forEach((step, i) => {
           narratives[key].byId[step.id].next = (i < steps.length - 2) ? steps[i + 1] : null;
           narratives[key].byId[step.id].prev = (i > 0) ? steps[i - 1] : null;
         });
+
+        if (narrativeMetadata.find(n => n.id === key)) {
+          narratives[key] = Object.assign(narrativeMetadata.find(n => n.id === key), narratives[key]);
+        }
       });
 
       return Object.values(narratives);
@@ -150,26 +158,9 @@ export const selectLocations = createSelector(
 */
 export const selectCategories = createSelector(
   [getCategories],
-  (categories) => {
-    return categories.map(v => v.category);
-  }
+  (categories) => categories
 );
 
-/**
- * Return categories by group
- */
-export const selectCategoryGroups = createSelector(
-  [selectCategories],
-  (categories) => {
-    const groups = {};
-    categories.forEach((cat) => {
-      if (cat.group && !groups[cat.group]) {
-        groups[cat.group] = cat.group_label;
-      }
-    });
-    return Object.keys(groups).concat(['other']);
-  }
-);
 
 /**
  * Given a tree of tags, return those tags as a list

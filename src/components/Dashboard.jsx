@@ -9,9 +9,12 @@ import LoadingOverlay from './presentational/LoadingOverlay';
 import Viewport from './Viewport.jsx';
 import Toolbar from './Toolbar.jsx';
 import CardStack from './CardStack.jsx';
+import NarrativeCard from './NarrativeCard.js';
 import InfoPopUp from './InfoPopup.jsx';
 import Timeline from './Timeline.jsx';
 import Notification from './Notification.jsx';
+
+import { parseDate } from '../js/utilities';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -23,7 +26,7 @@ class Dashboard extends React.Component {
     this.handleTagFilter = this.handleTagFilter.bind(this);
     this.updateTimerange = this.updateTimerange.bind(this);
 
-    this.eventsById = {};
+    this.eventsById = {}
   }
 
   componentDidMount() {
@@ -46,9 +49,7 @@ class Dashboard extends React.Component {
   handleSelect(selected) {
     if (selected) {
       let eventsToSelect = selected.map(event => this.getEventById(event.id));
-      const p = this.props.ui.tools.parser;
-
-      eventsToSelect = eventsToSelect.sort((a, b) => p(a.timestamp) - p(b.timestamp))
+      eventsToSelect = eventsToSelect.sort((a, b) => parseDate(a.timestamp) - parseDate(b.timestamp))
 
       this.props.actions.fetchSelected(eventsToSelect)
     }
@@ -67,7 +68,7 @@ class Dashboard extends React.Component {
   }
 
   getNarrativeLinks(event) {
-    const narrative = this.props.domain.narratives.find(nv => nv.key === event.narrative);
+    const narrative = this.props.domain.narratives.find(nv => nv.id === event.narrative);
     if (narrative) return narrative.byId[event.id];
     return null;
   }
@@ -104,13 +105,17 @@ class Dashboard extends React.Component {
           app={this.props.app}
           toggle={() => this.props.actions.toggleInfoPopup()}
         />
+        <NarrativeCard
+          onSelect={this.handleSelect}
+          actions={this.props.actions}
+        />
         <Notification
-          isNotification={this.props.ui.flags.isNotification}
+          isNotification={this.props.app.flags.isNotification}
           notifications={this.props.domain.notifications}
           onToggle={this.props.actions.markNotificationsRead}
         />
         <LoadingOverlay
-          ui={this.props.ui.flags.isFetchingDomain}
+          ui={this.props.app.flags.isFetchingDomain}
           language={this.props.app.language}
         />
       </div>

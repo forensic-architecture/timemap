@@ -178,6 +178,7 @@ The application will require to include a few configuration settings. Configurat
 | EVENT_EXT | Endpoint for events, which will be concatenated with SERVER_ROOT | String | No |
 | EVENT_DESC_ROOT | Endpoint for additional metadata for each individual event, concatenated to SERVER_ROOT | String | Yes |
 | CATEGORY_EXT | Endpoint for categories, concatenated with SERVER_ROOT | String | Yes |
+| NARRATIVE_EXT | Endpoint for narratives, concatenated with SERVER_ROOT | String | No |
 | TAG_TREE_EXT | Endpoint for tags, concatenated with SERVER_ROOT | String | Yes |
 | SITES_EXT | Endpoint for sites, concatenated with SERVER_ROOT | String | Yes |
 | MAP_ANCHOR | Geographic coordinates for original map anchor | Array of numbers | No |

@@ -13,11 +13,11 @@ class TagListPanel extends React.Component {
   }
 
   componentDidMount() {
-    this.computeTree(this.props.tags.children[this.props.tagType]);
+    this.computeTree(this.props.tags);//.children[this.props.tagType]);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.computeTree(nextProps.tags.children[nextProps.tagType]);
+    this.computeTree(nextProps.tags);//.children[nextProps.tagType]);
   }
 
   onClickCheckbox(tag) {
@@ -65,8 +65,11 @@ class TagListPanel extends React.Component {
   }
 
   render() {
+
     return (
       <div className="react-innertabpanel">
+        <h2>Explore data by tag</h2>
+        <p>Explore freely all the data by selecting tags.</p>
         {this.renderTree()}
       </div>
     );

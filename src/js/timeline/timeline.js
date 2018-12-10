@@ -5,15 +5,16 @@
   TODO: is it possible to express this idiomatically as React?
 */
 import {
-  areEqual
-} from '../data/utilities';
+  areEqual,
+  parseDate,
+  formatterWithYear
+} from '../utilities';
 import esLocale from '../data/es-MX.json';
 import copy from '../data/copy.json';
 
 export default function(app, ui, methods) {
   d3.timeFormatDefaultLocale(esLocale);
-  const formatterWithYear = ui.tools.formatterWithYear;
-  const parser = ui.tools.parser;
+
   const zoomLevels = app.zoomLevels;
   let events = [];
   let categories = [];
@@ -25,7 +26,7 @@ export default function(app, ui, methods) {
   let transitionDuration = 500;
 
   // Dimension of the client
-  const WIDTH_CONTROLS = 180;
+  const WIDTH_CONTROLS = 100;
   const boundingClient = d3.select(`#${ui.dom.timeline}`).node().getBoundingClientRect();
   let WIDTH = boundingClient.width - WIDTH_CONTROLS;
   const HEIGHT = 140;
@@ -121,16 +122,6 @@ export default function(app, ui, methods) {
   dom.backwards.append('circle');
   dom.backwards.append('path');
 
-  dom.playGroup = dom.controls.append('g');
-  dom.playGroup.append('circle');
-
-  dom.play = dom.playGroup.append('g');
-  dom.play.append('path');
-
-  dom.pause = dom.playGroup.append('g').style('opacity', 0);
-  dom.pause.append('rect');
-  dom.pause.append('rect');
-
   dom.zooms = dom.controls.append('g');
 
   dom.zooms.selectAll('.zoom-level-button')
@@ -220,28 +211,6 @@ export default function(app, ui, methods) {
   addResizeListener();
 
   /**
-   * PLAY FUNCTIONALITY
-   */
-  function stopBrushTransition() {
-    clearInterval(window.playInterval);
-    isPlaying = false;
-    dom.play.style('opacity', 1);
-    dom.pause.style('opacity', 0);
-  }
-
-  /**
-   * START PLAY SERIES OF TRANSITIONS
-   */
-  function playBrushTransition() {
-    isPlaying = true;
-    dom.play.style('opacity', 0);
-    dom.pause.style('opacity', 1);
-    window.playInterval = setInterval(() => {
-      moveTime('forward');
-    }, playDuration);
-  }
-
-  /**
    * Return which color event circle should be based on incident type
    * @param {object} eventPoint data object
    */
@@ -274,7 +243,7 @@ export default function(app, ui, methods) {
    * @param {object} eventPoint: regular eventPoint data
    */
   function getEventX(eventPoint) {
-    return scale.x(parser(eventPoint.timestamp));
+    return scale.x(parseDate(eventPoint.timestamp));
   }
 
   function getTimeScaleExtent() {
@@ -510,20 +479,6 @@ export default function(app, ui, methods) {
       .attr('d', d3.symbol().type(d3.symbolTriangle).size(80))
       .attr('transform', `translate(${scale.x.range()[1] - 20}, 62)rotate(90)`);
 
-    // These controls on separate svg
-    dom.playGroup.select('circle')
-      .attr('transform', 'translate(135, 60)rotate(90)')
-      .attr('r', 25);
-
-    dom.play.select('path')
-      .attr('d', d3.symbol().type(d3.symbolTriangle).size(260))
-      .attr('transform', 'translate(135, 60)rotate(90)');
-
-    dom.pause.selectAll('rect')
-      .attr('transform', (d, i) => `translate(${125 + (i * 15)}, 47)`)
-      .attr('height', 25)
-      .attr('width', 5);
-
     dom.zooms.selectAll('text')
       .text(d => d.label)
       .attr('x', 60)
@@ -535,11 +490,6 @@ export default function(app, ui, methods) {
 
     dom.backwards
       .on('click', () => moveTime('backwards'));
-
-    dom.playGroup
-      .on('click', () => {
-        return (isPlaying) ? stopBrushTransition() : playBrushTransition();
-      });
 
     dom.zooms.selectAll('text')
       .on('click', zoom => applyZoom(zoom));
@@ -564,7 +514,7 @@ export default function(app, ui, methods) {
 
     axis.y =
       d3.axisLeft(scale.y)
-        .tickValues(categories);
+        .tickValues(categories.map(c => c.category));
   }
 
   function update(domain, app) {
