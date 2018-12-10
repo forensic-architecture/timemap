@@ -106,9 +106,9 @@ const initial = {
       categories: {
         default: 'red',
         // Add here other categories to differentiate by color, like:
-        alpha: '#00ff00',
-        beta: '#ff0000',
-        other: 'yellow'
+        alpha: '#c73e1d',
+        beta: '#f40000',
+        other: '#f3de2c'
       },
 
       narratives: {
@@ -121,7 +121,7 @@ const initial = {
         narrative_1: {
           style: 'solid',                  // ['dotted', 'solid']
           opacity: 0.4,                     // range between 0 and 1
-          stroke: 'yellow',               // Any hex or rgb code
+          stroke: '#f18f01',               // Any hex or rgb code
           strokeWidth: 2
         }
       }
