@@ -10,27 +10,16 @@
   box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   font-size: $large;
   line-height: $xxlarge;
-  transition: 0.2s ease;
   height: auto;
-
-  &:hover {
-    border: 1px solid $yellow;
-  }
-
-  .card-bottomhalf {
-    transition: 0.4s ease;
-    height: auto;
-
-    &.folded {
-      transition: 0.4s ease;
-      height: 0;
-      overflow: hidden;
-    }
-  }
+  opacity: 0.9;
 
   h4 {
-    text-transform: normal;
     margin-bottom: 0;
+    margin-right: 5px;
+    text-transform: uppercase;
+    font-size: $xsmall;
+    color: $darkwhite;
+    font-weight: 100;
 
     &:first-child {
       margin-top: 0;
@@ -41,16 +30,54 @@
     margin: 0;
   }
 
-  .event-card-section {
-    margin-bottom: 10px;
+  .material-icons {
+    font-size: $normal;
+    color: $darkwhite;
+    margin-right: 5px;
+  }
 
+  .card-row {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid $lightwhite;
+    margin: 5px 0 10px 0;
+    padding-bottom: 10px;
+
+    .card-cell {
+      flex: 1;
+    }
+
+    h4 {
+      min-width: 80px;
+      max-width: 80px;
+    }
+  }
+
+  .card-cell {
+    a {
+      transition: color 0.2s;
+    }
     a:hover {
-      color: $red;
+      color: $darkwhite;
       cursor: pointer;
+      transition: color 0.2s;
     }
     a.disabled {
       color: $midgrey;
+      font-weight: normal;
       cursor: default;
+    }
+  }
+
+
+  .card-bottomhalf {
+    transition: 0.4s ease;
+    height: auto;
+
+    &.folded {
+      transition: 0.4s ease;
+      height: 0;
+      overflow: hidden;
     }
   }
 
@@ -106,28 +133,19 @@
   }
 
   .category {
+    margin-bottom: 5px;
+
     .color-category {
       width: 12px;
       height: 12px;
       border-radius: 20px;
       display: inline-block;
-      margin: 0px 5px 0 0;
+      margin: 0 0 0 5px;
     }
-  }
 
-  .event-type {
-    margin: 0 0 10px 0;
-
-    span {
-      display: inline-block;
-      margin: 0 5px 2px 0;
-      color: $darkgrey;
-
-      &.flagged {
-        background: $red;
-        color: $offwhite;
-        padding: 0 5px;
-      }
+    p {
+      text-align: right;
+      flex: 1;
     }
   }
 
@@ -144,50 +162,5 @@
     display: inline-block;
     margin: 0;
     margin-right: 5px;
-  }
-
-  /*
-  https://github.com/tobiasahlin/SpinKit/blob/master/LICENSE
-  */
-  .spinner {
-    width: 40px;
-    height: 40px;
-
-    position: relative;
-    margin: 20px auto;
-  }
-
-  .double-bounce1, .double-bounce2 {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: $darkgrey;
-    opacity: 0.6;
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    -webkit-animation: sk-bounce 3.0s infinite ease-in-out;
-    animation: sk-bounce 3.0s infinite ease-in-out;
-  }
-
-  .double-bounce2 {
-    -webkit-animation-delay: -1.0s;
-    animation-delay: -1.0s;
-  }
-
-  @-webkit-keyframes sk-bounce {
-    0%, 100% { -webkit-transform: scale(0.0) }
-    50% { -webkit-transform: scale(1.0) }
-  }
-
-  @keyframes sk-bounce {
-    0%, 100% {
-      transform: scale(0.0);
-      -webkit-transform: scale(0.0);
-    } 50% {
-      transform: scale(1.0);
-      -webkit-transform: scale(1.0);
-    }
   }
 }

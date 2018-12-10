@@ -135,8 +135,11 @@ class Card extends React.Component {
   renderHeader() {
     return (
       <div className="card-collapsed">
+        <div className="card-row">
+          {this.renderTimestamp()}
+          {this.renderLocation()}
+        </div>
         {this.renderCategory()}
-        {this.renderTimestamp()}
         {this.renderSummary()}
       </div>
     );
@@ -150,7 +153,6 @@ class Card extends React.Component {
     } else {
       return (
         <div className="card-bottomhalf">
-          {this.renderLocation()}
           {this.renderTags()}
           {this.renderSource()}
           {this.renderNarrative()}

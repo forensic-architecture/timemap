@@ -106,8 +106,8 @@ const initial = {
       categories: {
         default: 'red',
         // Add here other categories to differentiate by color, like:
-        alpha: '#c73e1d',
-        beta: '#f40000',
+        alpha: '#00ff00',
+        beta: '#ff0000',
         other: '#f3de2c'
       },
 

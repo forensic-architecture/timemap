@@ -113,8 +113,8 @@ class Toolbar extends React.Component {
         <div className="toolbar-header"><p>{title}</p></div>
         <div className="toolbar-tabs">
           {/*this.renderToolbarTab(0, 'search')*/}
-          {this.renderToolbarTab(0, 'Narratives')}
-          {(isTags) ? this.renderToolbarTab(1, 'Explore by tag') : ''}
+          {this.renderToolbarTab(0, 'Focus stories')}
+          {this.renderToolbarTab(1, 'Explore freely')}
         </div>
         <ToolbarBottomActions
           actions={this.props.actions}
@@ -133,6 +133,42 @@ class Toolbar extends React.Component {
           {this.renderToolbarNarrativePanel()}
           {this.renderToolbarTagPanel()}
         </Tabs>
+      </div>
+    )
+  }
+
+  renderToolbarNavs() {
+    if (this.props.narratives) {
+      return this.props.narratives.map((nar, idx) => {
+        const isActive = (idx === this.state.tab);
+
+        let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab';
+
+        return (
+          <div className={classes} onClick={() => { this.toggleTab(idx); }}>
+            <div className="tab-caption">{nar.label}</div>
+          </div>
+        );
+      })
+    }
+    return '';
+  }
+
+  renderToolbarTabs() {
+    const title = copy[this.props.language].toolbar.title;
+    const isTags = this.props.tags && (this.props.tags.children > 0);
+
+    return (
+      <div className="toolbar">
+        <div className="toolbar-header"><p>{title}</p></div>
+        <div className="toolbar-tabs">
+          {/*this.renderToolbarTab(0, 'search')*/}
+          {this.renderToolbarTab(0, 'Narratives')}
+          {(isTags) ? this.renderToolbarTab(1, 'Explore by tag') : ''}
+        </div>
+        <ToolbarBottomActions
+          actions={this.props.actions}
+        />
       </div>
     )
   }

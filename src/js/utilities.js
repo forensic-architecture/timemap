@@ -36,6 +36,14 @@ export function isNotNullNorUndefined(variable) {
   return (typeof variable !== 'undefined' && variable !== null);
 }
 
+/*
+* Capitalizes _only_ the first letter of a string
+* Taken from: https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+*/
+export function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 /**
 * Return a Date object given a datetime string of the format: "2016-09-10T07:00:00"
 * @param {string} datetime

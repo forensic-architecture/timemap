@@ -12,16 +12,20 @@ const CardTimestamp = ({ makeTimelabel, language, timestamp }) => {
   if (isNotNullNorUndefined(timestamp)) {
     const timelabel = makeTimelabel(timestamp);
     return (
-      <div className="event-card-section timestamp">
-        <h4>{daytime_lang}</h4>
-        {timelabel}
+      <div className="card-cell timestamp">
+        <p>
+          <i className="material-icons left">today</i>
+          {timelabel}
+        </p>
       </div>
     );
   } else {
     return (
-      <div className="event-card-section timestamp">
-        <h4>{daytime_lang}</h4>
-        {unknown_lang}
+      <div className="card-cell timestamp">
+        <p>
+          <i className="material-icons left">today</i>
+          {unknown_lang}
+        </p>
       </div>
     );
   }
