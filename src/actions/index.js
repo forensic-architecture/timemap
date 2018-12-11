@@ -118,7 +118,6 @@ export function updateDomain(domain) {
 
 export function fetchSelected(selected) {
   if (!selected || !selected.length || selected.length === 0) {
-    console.log('hitting base')
     return updateSelected([])
   }
   return dispatch => {
@@ -127,6 +126,7 @@ export function fetchSelected(selected) {
       dispatch(fetchSourceError('No source extension specified.'))
     } else {
       dispatch(toggleFetchingSources())
+      // TODO: fetching logic
     }
 
   }

@@ -91,7 +91,10 @@ class Card extends React.Component {
       <CardSource
         isLoading={this.props.isLoading}
         language={this.props.language}
-        source={this.props.event.source}
+        source={{
+          ...this.props.source,
+          error: this.props.sourceError
+        }}
       />
     )
   }
@@ -137,11 +140,6 @@ class Card extends React.Component {
   }
 
   renderContent() {
-    // if (!this.state.isHighlighted) {
-    //   return (
-    //     <div className="card-bottomhalf folded"></div>
-    //   );
-    // } else {
     return (
       <div className="card-bottomhalf">
         {this.renderTags()}
@@ -149,7 +147,6 @@ class Card extends React.Component {
         {this.renderNarrative()}
       </div>
     );
-    // }
   }
 
   renderCaret() {
