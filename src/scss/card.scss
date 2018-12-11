@@ -36,7 +36,7 @@
     margin-right: 5px;
   }
 
-  .card-row {
+  .card-row, .card-col {
     display: flex;
     flex-direction: row;
     border-bottom: 1px solid $lightwhite;
@@ -51,6 +51,10 @@
       min-width: 80px;
       max-width: 80px;
     }
+  }
+
+  .card-col {
+    flex-direction: column;
   }
 
   .card-cell {
