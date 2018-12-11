@@ -16,6 +16,16 @@ const NARRATIVE_URL = urlFromEnv('NARRATIVE_EXT');
 const SITES_URL = urlFromEnv('SITES_EXT');
 const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`;
 
+
+const DEBUG_GER = 'DEBUG_GER'
+function _debugger(value) {
+  console.log(value)
+  return {
+    type: DEBUG_GER,
+    value
+  }
+}
+
 /*
 * Create an error notification object
 * Types: ['error', 'warning', 'good', 'neural']
@@ -64,7 +74,7 @@ export function fetchDomain () {
         .catch(handleError('sites'))
     }
 
-    let tagsPromise
+    let tagsPromise = Promise.resolve([])
     if (process.env.features.USE_TAGS) {
       tagsPromise = fetch(TAG_URL)
         .then(response => response.json())
@@ -126,7 +136,23 @@ export function fetchSelected(selected) {
       dispatch(fetchSourceError('No source extension specified.'))
     } else {
       dispatch(toggleFetchingSources())
-      // TODO: fetching logic
+
+      fetch(SOURCES_URL)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('No sources are available at the URL specified in the config specified.')
+          } else {
+            return response.json()
+          }
+        })
+        .then(sources => {
+          dispatch(_debugger(sources))
+        })
+        .catch(err => {
+          dispatch(fetchSourceError(err.message))
+          dispatch(toggleFetchingSources())
+        })
+
     }
 
   }
