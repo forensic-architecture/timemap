@@ -129,24 +129,29 @@ class Card extends React.Component {
   renderHeader() {
     return (
       <div className="card-collapsed">
-        <div className="card-row">
+        <div className="card-column">
           {this.renderTimestamp()}
           {this.renderLocation()}
         </div>
-        {this.renderCategory()}
+        {/* {this.renderCategory()} */}
+        <br/>
         {this.renderSummary()}
       </div>
     );
   }
 
   renderContent() {
-    return (
-      <div className="card-bottomhalf">
-        {this.renderTags()}
-        {this.renderSource()}
-        {this.renderNarrative()}
-      </div>
-    );
+    if (this.state.isHighlighted) {
+      return (
+        <div className="card-bottomhalf">
+          {this.renderTags()}
+          {this.renderSource()}
+          {this.renderNarrative()}
+        </div>
+      )
+    } else {
+      return <div classname="card-bottomhalf"></div>
+    }
   }
 
   renderCaret() {
@@ -163,7 +168,7 @@ class Card extends React.Component {
       <li className='event-card'>
         {this.renderHeader()}
         {this.renderContent()}
-        {/* {this.renderCaret()} */}
+        {this.renderCaret()}
       </li>
     );
   }
