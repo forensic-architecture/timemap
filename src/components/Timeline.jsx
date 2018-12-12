@@ -4,7 +4,6 @@ import * as selectors from '../selectors';
 
 import copy from '../js/data/copy.json';
 import { formatterWithYear } from '../js/utilities';
-import TimelineHeader from './presentational/TimelineHeader';
 import TimelineLogic from '../js/timeline/timeline.js';
 
 class Timeline extends React.Component {
@@ -16,12 +15,18 @@ class Timeline extends React.Component {
   }
 
   componentDidMount() {
-    this.timeline = new TimelineLogic(this.props.app, this.props.ui, this.props.methods);
+    const ui = {
+      dom: this.props.dom
+    }
+
+    this.timeline = new TimelineLogic(this.props.app, ui, this.props.methods);
     this.timeline.update(this.props.domain, this.props.app);
+    this.timeline.render(this.props.domain);
   }
 
   componentWillReceiveProps(nextProps) {
     this.timeline.update(nextProps.domain, nextProps.app);
+    this.timeline.render(nextProps.domain);
   }
 
   onClickArrow() {
@@ -30,19 +35,34 @@ class Timeline extends React.Component {
     });
   }
 
+  renderLabels() {
+    const labels = copy[this.props.language].timeline.labels;
+    return this.props.categories.map((label) => {
+      const groupLen = this.props.categories.length
+      return (<div className="timeline-label">{label}</div>);
+    });
+  }
+
   render() {
+    const labels_title_lang = copy[this.props.app.language].timeline.labels_title;
+    const info_lang = copy[this.props.app.language].timeline.info;
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`;
+    const date0 = formatterWithYear(this.props.app.timerange[0]);
+    const date1 = formatterWithYear(this.props.app.timerange[1]);
 
     return (
       <div className={classes}>
-        <TimelineHeader
-          title={copy[this.props.app.language].timeline.info}
-          date0={formatterWithYear(this.props.app.timerange[0])}
-          date1={formatterWithYear(this.props.app.timerange[1])}
-          onClick={() => { this.onClickArrow(); }}
-        />
+        <div className="timeline-header">
+          <div className="timeline-toggle" onClick={() => this.onClickArrow()}>
+            <p><i className="arrow-down"></i></p>
+          </div>
+          <div className="timeline-info">
+            <p>{info_lang}</p>
+            <p>{date0} - {date1}</p>
+          </div>
+        </div>
         <div className="timeline-content">
-          <div id={this.props.ui.dom.timeline} className="timeline" />
+          <div id="timeline" className="timeline" />
         </div>
       </div>
     );
@@ -62,9 +82,7 @@ function mapStateToProps(state) {
       language: state.app.language,
       zoomLevels: state.app.zoomLevels
     },
-    ui: {
-      dom: state.ui.dom,
-    }
+    dom: state.ui.dom,
   }
 }
 
