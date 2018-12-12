@@ -81,8 +81,21 @@ export function fetchDomain () {
         .catch(handleError('tags'))
     }
 
-    return Promise.all([eventPromise, catPromise, narPromise,
-      sitesPromise, tagsPromise])
+    let sourcesPromise = Promise.resolve([])
+    if (process.env.features.USE_SOURCES) {
+      sourcesPromise = fetch(SOURCES_URL)
+        .then(response => response.json())
+        .catch(handleError('sources'))
+    }
+
+    return Promise.all([
+      eventPromise,
+      catPromise,
+      narPromise,
+      sitesPromise,
+      tagsPromise,
+      sourcesPromise
+    ])
       .then(response => {
         dispatch(toggleFetchingDomain())
         const result = {
@@ -91,6 +104,7 @@ export function fetchDomain () {
           narratives: response[2],
           sites: response[3],
           tags: response[4],
+          sources: response[5],
           notifications
         }
         return result
@@ -114,14 +128,7 @@ export const UPDATE_DOMAIN = 'UPDATE_DOMAIN'
 export function updateDomain(domain) {
   return {
     type: UPDATE_DOMAIN,
-    domain: {
-      events: domain.events,
-      categories: domain.categories,
-      tags: domain.tags,
-      sites: domain.sites,
-      narratives: domain.narratives,
-      notifications: domain.notifications
-    }
+    domain
   }
 }
 

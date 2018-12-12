@@ -1,9 +1,10 @@
 import Joi from 'joi';
 
-import eventSchema from '../schema/eventSchema.js';
-import categorySchema from '../schema/categorySchema.js';
-import siteSchema from '../schema/siteSchema.js';
-import narrativeSchema from '../schema/narrativeSchema.js';
+import eventSchema from '../schema/eventSchema';
+import categorySchema from '../schema/categorySchema';
+import siteSchema from '../schema/siteSchema';
+import narrativeSchema from '../schema/narrativeSchema';
+import sourceSchema from '../schema/sourceSchema'
 
 import { capitalize } from './helpers.js';
 
@@ -59,6 +60,7 @@ export function validateDomain (domain) {
     categories: [],
     sites: [],
     narratives: [],
+    sources: [],
     notifications: domain.notifications,
     tags: {}
   }
@@ -68,6 +70,7 @@ export function validateDomain (domain) {
     categories: [],
     sites: [],
     narratives: [],
+    sources: [],
   }
 
   function validateItem(item, domainClass, schema) {
@@ -95,6 +98,9 @@ export function validateDomain (domain) {
   domain.narratives.forEach(narrative => {
     validateItem(narrative, 'narratives', narrativeSchema);
   });
+  domain.sources.forEach(source => {
+    validateItem(source, 'sources', sourceSchema);
+  })
 
 
   // Message the number of failed items in domain

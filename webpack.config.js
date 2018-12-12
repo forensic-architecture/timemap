@@ -64,7 +64,8 @@ const config = {
         'features': {
           'USE_TAGS': JSON.stringify(userConfig.features.USE_TAGS),
           'USE_SEARCH': JSON.stringify(userConfig.features.USE_SEARCH),
-          'USE_SITES': JSON.stringify(userConfig.features.USE_SITES)
+          'USE_SITES': JSON.stringify(userConfig.features.USE_SITES),
+          'USE_SOURCES': JSON.stringify(userConfig.features.USE_SOURCES)
         }
       }
     }),
