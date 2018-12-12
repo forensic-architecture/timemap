@@ -122,40 +122,49 @@ Stop and start the development process in terminal after you have added your tok
   }
 
   function getSVGBoundaries() {
+    const mapNode = d3.select('.leaflet-map-pane').node();
+
+    // We'll get the transform of the leaflet container,
+    // which will let us offset the SVG by the same quantity
+    const transform = window
+      .getComputedStyle(mapNode)
+      .getPropertyValue('transform');
+
+    // However getComputedStyle returns an awkward string of the format
+    // matrix(0, 0, 1, 0, 0.56523, 123123), hence this awkwardness
     return {
-      topLeft: projectPoint(maxBoundaries[0]),
-      bottomRight: projectPoint(maxBoundaries[1])
+      transformX: +transform.split(',')[4],
+      transformY: +transform.split(',')[5].substring(0, transform.split(',')[5].length - 2)
     }
   }
 
   function updateSVG() {
-    const boundaries = getSVGBoundaries();
-    const {
-      topLeft,
-      bottomRight
-    } = boundaries;
-    svg.attr('width', bottomRight.x - topLeft.x + 200)
-      .attr('height', bottomRight.y - topLeft.y + 200)
-      .style('left', `${topLeft.x - 100}px`)
-      .style('top', `${topLeft.y - 100}px`);
+    const boundingClient = d3.select(`#${ui.dom.map}`).node().getBoundingClientRect();
+    let WIDTH = boundingClient.width;
+    let HEIGHT = boundingClient.height;
 
-    g.attr('transform', `translate(${-(topLeft.x - 100)},${-(topLeft.y - 100)})`);
+    // Offset with leaflet map transform boundaries
+    const { transformX, transformY } = getSVGBoundaries();
+
+    svg.attr('width', WIDTH)
+      .attr('height', HEIGHT)
+      .style('left', -transformX)
+      .style('top', -transformY)
 
     g.selectAll('.location').attr('transform', (d) => {
       const newPoint = projectPoint([+d.latitude, +d.longitude]);
-      return `translate(${newPoint.x},${newPoint.y})`;
+      return `translate(${newPoint.x + transformX},${newPoint.y + transformY})`;
     });
+
+    const sequenceLine = d3.line()
+      .x(d => getCoords(d).x + transformX)
+      .y(d => getCoords(d).y + transformY);
 
     g.selectAll('.narrative')
       .attr('d', sequenceLine);
-
-    const busLine = d3.line()
-      .x(d => lMap.latLngToLayerPoint(d).x)
-      .y(d => lMap.latLngToLayerPoint(d).y)
-      .curve(d3.curveMonotoneX);
   }
 
-  lMap.on("zoom viewreset move", updateSVG);
+  lMap.on("zoomend viewreset moveend", updateSVG);
 
   /**
    * Returns latitud / longitude
@@ -224,9 +233,7 @@ Stop and start the development process in terminal after you have added your tok
   function getLocationEventsDistribution(location) {
     const eventCount = {};
     const categories = domain.categories;
-    // categories.sort((a, b) => {
-    //   return (+a.slice(-2) > +b.slice(-2));
-    // });
+
     categories.forEach(cat => {
       eventCount[cat.category] = 0
     });
