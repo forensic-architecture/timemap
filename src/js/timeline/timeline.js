@@ -316,7 +316,7 @@ export default function(newApp, ui, methods) {
       const newDomain0 = d3.timeSecond.offset(app.timerange[0], timeShift);
       const newDomainF = d3.timeSecond.offset(app.timerange[1], timeShift);
 
-      scale.x.domain([newDomain0, newDomainF])
+      scale.x.domain([newDomain0, newDomainF]);
       render();
     })
     .on('end', () => {
@@ -554,6 +554,7 @@ export default function(newApp, ui, methods) {
       app.timerange = newApp.timerange;
       app.selected = newApp.selected.slice(0);
       updateTimeRange();
+      renderTimeLabels();
       renderEventsAndHighlight();
     }
   }

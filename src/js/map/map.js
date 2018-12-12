@@ -129,11 +129,8 @@ Stop and start the development process in terminal after you have added your tok
   }
 
   function updateSVG() {
-    const boundaries = getSVGBoundaries();
-    const {
-      topLeft,
-      bottomRight
-    } = boundaries;
+    const { topLeft, bottomRight } = getSVGBoundaries();
+
     svg.attr('width', bottomRight.x - topLeft.x + 200)
       .attr('height', bottomRight.y - topLeft.y + 200)
       .style('left', `${topLeft.x - 100}px`)
@@ -155,7 +152,7 @@ Stop and start the development process in terminal after you have added your tok
       .curve(d3.curveMonotoneX);
   }
 
-  lMap.on("zoom viewreset move", updateSVG);
+  lMap.on("zoomend viewreset moveend", updateSVG);
 
   /**
    * Returns latitud / longitude
@@ -224,9 +221,7 @@ Stop and start the development process in terminal after you have added your tok
   function getLocationEventsDistribution(location) {
     const eventCount = {};
     const categories = domain.categories;
-    // categories.sort((a, b) => {
-    //   return (+a.slice(-2) > +b.slice(-2));
-    // });
+
     categories.forEach(cat => {
       eventCount[cat.category] = 0
     });
