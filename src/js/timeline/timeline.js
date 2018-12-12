@@ -9,54 +9,49 @@ import {
   parseDate,
   formatterWithYear
 } from '../utilities';
+import hash from 'object-hash';
 import esLocale from '../data/es-MX.json';
 import copy from '../data/copy.json';
 
-export default function(app, ui, methods) {
+export default function(newApp, ui, methods) {
   d3.timeFormatDefaultLocale(esLocale);
 
-  const zoomLevels = app.zoomLevels;
-  let events = [];
-  let categories = [];
-  let selected = [];
-  let timerange = app.timerange;
+  const domain = {
+    events: [],
+    categories: [],
+  }
+  const app = {
+    selected: [],
+    highlighted: null,
+    zoomLevels: newApp.zoomLevels,
+    timerange: newApp.timerange,
+    language: newApp.language
+  }
+
+  // Dimension of the client
+  const WIDTH_CONTROLS = 100;
+  const HEIGHT = 140;
+  const boundingClient = d3.select(`#${ui.dom.timeline}`).node().getBoundingClientRect();
+  let WIDTH = boundingClient.width - WIDTH_CONTROLS;
+
+  // Highlight events with a larger white ring marker
+  const markerRadius = 15;
+
+  // NB: is it possible to do this with SCSS?
+  // A: Maybe, although we are using it programmatically here for now
+  const margin = { left: 120 };
 
   // Drag behavior
   let dragPos0;
   let transitionDuration = 500;
 
-  // Dimension of the client
-  const WIDTH_CONTROLS = 100;
-  const boundingClient = d3.select(`#${ui.dom.timeline}`).node().getBoundingClientRect();
-  let WIDTH = boundingClient.width - WIDTH_CONTROLS;
-  const HEIGHT = 140;
-  const markerRadius = 15;
-  // margin
-  // NB: is it possible to do this with SCSS?
-  // A: Maybe, although we are using it programmatically here for now
-  const mg = {
-    l: 120
-  };
-
   /**
    * Create scales
    */
   const scale = {};
-
-  scale.x = d3.scaleTime()
-    .domain(timerange)
-    .range([mg.l, WIDTH]);
-
-  // calculate group step between categories
-  const groupStep = (106 - 30) / categories.length;
-  const groupYs = new Array(categories.length);
-  groupYs.map((g, i) => {
-    return 30 + i * groupStep;
-  });
-
+  scale.x = d3.scaleTime();
   scale.y = d3.scaleOrdinal()
-    .domain(categories)
-    .range(groupYs);
+
 
   /**
    * Initilize SVG elements and groups
@@ -76,10 +71,10 @@ export default function(app, ui, methods) {
     .attr('width', WIDTH_CONTROLS)
     .attr('height', HEIGHT);
 
+
   /*
    * Axis group elements
    */
-
   dom.axis = {};
 
   dom.axis.x0 = dom.svg.append('g')
@@ -105,11 +100,14 @@ export default function(app, ui, methods) {
   dom.axis.label1 = dom.svg.append('text')
     .attr('class', 'timelabelF timeLabel');
 
+
   /*
    * Plottable elements
    */
   dom.dataset = dom.svg.append('g');
   dom.events = dom.dataset.append('g');
+  dom.markers = dom.svg.append('g');
+
 
   /*
    * Time Controls
@@ -125,9 +123,10 @@ export default function(app, ui, methods) {
   dom.zooms = dom.controls.append('g');
 
   dom.zooms.selectAll('.zoom-level-button')
-    .data(zoomLevels)
+    .data(app.zoomLevels)
     .enter().append('text')
     .attr('class', 'zoom-level-button');
+
 
   /*
    * Initialize axis function and element group
@@ -152,37 +151,8 @@ export default function(app, ui, methods) {
     d3.axisLeft(scale.y)
     .tickValues([]);
 
-  /*
-   * Setup drag behavior
-   */
-  const drag =
-    d3.drag()
-    .on('start', () => {
-      d3.event.sourceEvent.stopPropagation();
-      dragPos0 = d3.event.x;
-      toggleTransition(false);
-    })
-    .on('drag', () => {
-      const drag0 = scale.x.invert(dragPos0).getTime();
-      const dragNow = scale.x.invert(d3.event.x).getTime();
-      const timeShift = (drag0 - dragNow) / 1000;
+  updateAxis();
 
-      const newDomain0 = d3.timeSecond.offset(timerange[0], timeShift);
-      const newDomainF = d3.timeSecond.offset(timerange[1], timeShift);
-
-      scale.x.domain([newDomain0, newDomainF])
-      render();
-    })
-    .on('end', () => {
-      toggleTransition(true);
-      methods.onUpdateTimerange(scale.x.domain());
-    });
-
-  /*
-   * SVG groups for marker
-   */
-
-  dom.markers = dom.svg.append('g');
 
   /**
    * Adapt dimensions when resizing
@@ -191,6 +161,7 @@ export default function(app, ui, methods) {
     return d3.select(`#${ui.dom.timeline}`).node()
       .getBoundingClientRect().width;
   }
+
 
   /**
    * Resize timeline one window resice
@@ -201,14 +172,15 @@ export default function(app, ui, methods) {
         WIDTH = getCurrentWidth() - WIDTH_CONTROLS;
 
         dom.svg.attr('width', WIDTH);
-        scale.x.range([mg.l, WIDTH]);
-        axis.y.tickSize(WIDTH - mg.l);
+        scale.x.range([margin.left, WIDTH]);
+        axis.y.tickSize(WIDTH - margin.left);
         dom.axis.y.attr('transform', `translate(${WIDTH}, 0)`)
         render(null);
       }
     });
   }
   addResizeListener();
+
 
   /**
    * Return which color event circle should be based on incident type
@@ -218,6 +190,7 @@ export default function(app, ui, methods) {
     return methods.getCategoryColor(eventPoint.category);
   }
 
+
   /**
    * Given an event, get all the filtered events that happen simultaneously
    * @param {object} eventPoint: regular eventPoint data
@@ -225,9 +198,10 @@ export default function(app, ui, methods) {
   function getAllEventsAtOnce(eventPoint) {
     const timestamp = eventPoint.timestamp;
     const category = eventPoint.category;
-    return events
+    return domain.events
       .filter(event => (event.timestamp === timestamp && category === event.category))
   }
+
 
   /*
    * Get y height of eventPoint, considering the ordinal Y scale
@@ -237,6 +211,7 @@ export default function(app, ui, methods) {
     const yGroup = eventPoint.category;
     return scale.y(yGroup);
   }
+
 
   /*
    * Get x position of eventPoint, considering the time scale
@@ -250,6 +225,7 @@ export default function(app, ui, methods) {
     return (scale.x.domain()[1].getTime() - scale.x.domain()[0].getTime()) / 60000;
   }
 
+
   /*
    * Given a number of minutes, calculate the width based on current scale.x
    * @param {number} minutes: number of minutes
@@ -259,8 +235,12 @@ export default function(app, ui, methods) {
     return (minutes * WIDTH) / allMins;
   }
 
+
+  /*
+  * TODO: Highlight zoom level based on time range selected
+  */
   function highlightZoomLevel(zoom) {
-    zoomLevels.forEach((level) => {
+    app.zoomLevels.forEach((level) => {
       if (level.label === zoom.label) {
         level.active = true;
       } else {
@@ -271,6 +251,7 @@ export default function(app, ui, methods) {
     dom.zooms.selectAll('text')
       .classed('active', level => level.active);
   }
+
 
   /**
    * Apply zoom level to timeline
@@ -288,6 +269,7 @@ export default function(app, ui, methods) {
     scale.x.domain([domain0, domainF]);
     methods.onUpdateTimerange(scale.x.domain());
   }
+
 
   /**
    * Shift time range by moving forward or backwards
@@ -316,6 +298,33 @@ export default function(app, ui, methods) {
     transitionDuration = (isTransition) ? 500 : 0;
   }
 
+
+  /*
+   * Setup drag behavior
+   */
+  const drag = d3.drag()
+    .on('start', () => {
+      d3.event.sourceEvent.stopPropagation();
+      dragPos0 = d3.event.x;
+      toggleTransition(false);
+    })
+    .on('drag', () => {
+      const drag0 = scale.x.invert(dragPos0).getTime();
+      const dragNow = scale.x.invert(d3.event.x).getTime();
+      const timeShift = (drag0 - dragNow) / 1000;
+
+      const newDomain0 = d3.timeSecond.offset(app.timerange[0], timeShift);
+      const newDomainF = d3.timeSecond.offset(app.timerange[1], timeShift);
+
+      scale.x.domain([newDomain0, newDomainF])
+      render();
+    })
+    .on('end', () => {
+      toggleTransition(true);
+      methods.onUpdateTimerange(scale.x.domain());
+    });
+
+
   /**
    * Highlight event circle on hover
    */
@@ -324,6 +333,7 @@ export default function(app, ui, methods) {
       .attr('r', 7)
       .classed('mouseover', true);
   }
+
 
   /**
    * Unhighlight event when mouse out
@@ -334,11 +344,12 @@ export default function(app, ui, methods) {
       .classed('mouseover', false);
   }
 
+
   /**
    * It automatically sets brush timeline to a domain set by the params
    */
   function updateTimeRange() {
-    scale.x.domain(timerange);
+    scale.x.domain(app.timerange);
     axis.x0.scale(scale.x);
     axis.x1.scale(scale.x);
   }
@@ -351,23 +362,24 @@ export default function(app, ui, methods) {
     dom.axis.label0
       .attr('x', 5)
       .attr('y', 15)
-      .text(formatterWithYear(timerange[0]));
+      .text(formatterWithYear(app.timerange[0]));
 
     dom.axis.label1
       .attr('x', WIDTH - 5)
       .attr('y', 15)
-      .text(formatterWithYear(timerange[1]))
+      .text(formatterWithYear(app.timerange[1]))
       .style('text-anchor', 'end');
   }
 
+
   /**
-   * Makes a circular rinig mark in one particular location at a time
+   * Makes a circular ring mark in all selected events
    * @param {object} eventPoint: object with eventPoint data (time, loc, tags)
    */
   function renderHighlight() {
     const markers = dom.markers
       .selectAll('circle')
-      .data(selected);
+      .data(app.selected);
 
     markers
       .enter()
@@ -382,13 +394,14 @@ export default function(app, ui, methods) {
     markers.exit().remove();
   }
 
+
   /**
    * Return event circles of different groups
    */
   function renderEvents() {
     const eventsDom = dom.events
       .selectAll('.event')
-      .data(events, d => d.id);
+      .data(domain.events, d => d.id);
 
     eventsDom
       .exit()
@@ -417,6 +430,7 @@ export default function(app, ui, methods) {
       .attr('r', 5);
   }
 
+
   /**
    * Render axis on timeline and viewbox boundaries
    */
@@ -437,7 +451,7 @@ export default function(app, ui, methods) {
       .duration(transitionDuration)
       .call(axis.x1);
 
-    axis.y.tickSize(WIDTH - mg.l);
+    axis.y.tickSize(WIDTH - margin.left);
 
     dom.axis.y
       .call(axis.y)
@@ -453,12 +467,13 @@ export default function(app, ui, methods) {
       .attr('x', scale.x.range()[1] - 5);
   }
 
+
   /**
    * Render left and right time shifting controls
    */
   function renderTimeControls() {
     const zoomLabels = copy[app.language].timeline.zooms;
-    zoomLevels.forEach((level, i) => {
+    app.zoomLevels.forEach((level, i) => {
       level.label = zoomLabels[i];
     });
 
@@ -495,49 +510,71 @@ export default function(app, ui, methods) {
       .on('click', zoom => applyZoom(zoom));
   }
 
+
   /**
    * Updates data displayed by this timeline, but only render if necessary
    * @param {Object} domain: Redux state domain subtree
    * @param {Object} app: Redux state app subtree
    */
-  function updateAxis(domain) {
-    const categories = domain.categories
-    const groupStep = (106 - 30) / categories.length;
-    let groupYs = Array.apply(null, Array(categories.length));
+  function updateAxis() {
+    scale.x = d3.scaleTime()
+      .domain(app.timerange)
+      .range([margin.left, WIDTH]);
+
+    const groupStep = (106 - 30) / domain.categories.length;
+    let groupYs = Array.apply(null, Array(domain.categories.length));
     groupYs = groupYs.map((g, i) => {
       return 30 + i * groupStep;
     });
 
     scale.y = d3.scaleOrdinal()
-      .domain(categories)
+      .domain(domain.categories)
       .range(groupYs);
 
     axis.y =
       d3.axisLeft(scale.y)
-        .tickValues(categories.map(c => c.category));
+        .tickValues(domain.categories.map(c => c.category));
   }
 
-  function update(domain, app) {
-    updateAxis(domain);
-    renderAxis();
 
-    events = domain.events;
-    timerange = app.timerange;
-    selected = app.selected.slice(0);
-    updateTimeRange();
+  /**
+   * Updates displayable data on the timeline: events, selected and
+   * potentially adjusts time range
+   * @param {Object} newDomain: object of arrays of events and categories
+   * @param {Object} newApp: object of time range and selected events
+   */
+  function update(newDomain, newApp) {
+    if (hash(domain) !== hash(newDomain)) {
+      domain.categories = newDomain.categories;
+      domain.events = newDomain.events;
+      updateAxis();
+      renderContext();
+    }
+    if (hash(app) !== hash(newApp)) {
+      app.timerange = newApp.timerange;
+      app.selected = newApp.selected.slice(0);
+      updateTimeRange();
+      renderEventsAndHighlight();
+    }
   }
 
-  function render() {
+  function renderContext() {
     renderAxis();
     renderTimeControls();
     renderTimeLabels();
+  }
 
+  function renderEventsAndHighlight() {
     renderEvents();
     renderHighlight();
   }
 
+  function render() {
+    renderContext();
+    renderEventsAndHighlight();
+  }
+
   return {
     update,
-    render,
   };
 }
