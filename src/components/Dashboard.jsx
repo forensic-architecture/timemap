@@ -51,7 +51,7 @@ class Dashboard extends React.Component {
       let eventsToSelect = selected.map(event => this.getEventById(event.id));
       eventsToSelect = eventsToSelect.sort((a, b) => parseDate(a.timestamp) - parseDate(b.timestamp))
 
-      this.props.actions.fetchSelected(eventsToSelect)
+      this.props.actions.updateSelected(eventsToSelect)
     }
   }
 

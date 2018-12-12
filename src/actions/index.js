@@ -126,18 +126,14 @@ export function updateDomain(domain) {
 }
 
 
-export function fetchSelected(selected) {
-  if (!selected || !selected.length || selected.length === 0) {
-    return updateSelected([])
-  }
+export function fetchSource(source) {
   return dispatch => {
-    dispatch(updateSelected(selected))
     if (!SOURCES_URL) {
       dispatch(fetchSourceError('No source extension specified.'))
     } else {
       dispatch(toggleFetchingSources())
 
-      fetch(SOURCES_URL)
+      fetch(`${SOURCES_URL}`)
         .then(response => {
           if (!response.ok) {
             throw new Error('No sources are available at the URL specified in the config specified.')
