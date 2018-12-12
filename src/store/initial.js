@@ -25,7 +25,9 @@ const initial = {
   *   or by the characteristics of the client, browser, etc.
   */
   app: {
-    error: null,
+    errors: {
+      source: null,
+    },
     highlighted: null,
     selected: [],
     narrative: null,

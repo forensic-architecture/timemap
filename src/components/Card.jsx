@@ -89,8 +89,12 @@ class Card extends React.Component {
   renderSource() {
     return (
       <CardSource
+        isLoading={this.props.isLoading}
         language={this.props.language}
-        source={this.props.event.source}
+        source={{
+          ...this.props.source,
+          error: this.props.sourceError
+        }}
       />
     )
   }
@@ -122,42 +126,31 @@ class Card extends React.Component {
     }
   }
 
-  renderLoadingCard() {
-    return (
-      <li className='event-card'>
-        <div className="card-bottomhalf">
-          <Spinner />
-        </div>
-      </li>
-    );
-  }
-
   renderHeader() {
     return (
       <div className="card-collapsed">
-        <div className="card-row">
+        <div className="card-column">
           {this.renderTimestamp()}
           {this.renderLocation()}
         </div>
-        {this.renderCategory()}
+        {/* {this.renderCategory()} */}
+        <br/>
         {this.renderSummary()}
       </div>
     );
   }
 
   renderContent() {
-    if (!this.state.isHighlighted) {
-      return (
-        <div className="card-bottomhalf folded"></div>
-      );
-    } else {
+    if (this.state.isHighlighted) {
       return (
         <div className="card-bottomhalf">
           {this.renderTags()}
           {this.renderSource()}
           {this.renderNarrative()}
         </div>
-      );
+      )
+    } else {
+      return <div classname="card-bottomhalf"></div>
     }
   }
 
@@ -171,17 +164,13 @@ class Card extends React.Component {
   }
 
   render() {
-    if (this.props.isLoading) {
-      return this.renderLoadingCard();
-    } else {
-      return (
-        <li className='event-card'>
-          {this.renderHeader()}
-          {this.renderContent()}
-          {this.renderCaret()}
-        </li>
-      );
-    }
+    return (
+      <li className='event-card'>
+        {this.renderHeader()}
+        {this.renderContent()}
+        {this.renderCaret()}
+      </li>
+    );
   }
 }
 

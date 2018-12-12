@@ -16,6 +16,7 @@ import {
   TOGGLE_INFOPOPUP,
   TOGGLE_NOTIFICATIONS,
   FETCH_ERROR,
+  FETCH_SOURCE_ERROR,
 } from '../actions';
 
 function updateHighlighted(appState, action) {
@@ -156,6 +157,16 @@ function toggleNotifications(appState, action) {
   });
 }
 
+function fetchSourceError(appState, action) {
+  return {
+    ...appState,
+    errors: {
+      ...appState.errors,
+      source: action.msg
+    }
+  }
+}
+
 
 
 function app(appState = initial.app, action) {
@@ -186,6 +197,8 @@ function app(appState = initial.app, action) {
       return toggleInfoPopup(appState, action);
     case TOGGLE_NOTIFICATIONS:
       return toggleNotifications(appState, action);
+    case FETCH_SOURCE_ERROR:
+      return fetchSourceError(appState, action);
     default:
       return appState;
   }
