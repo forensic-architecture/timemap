@@ -123,8 +123,8 @@ Stop and start the development process in terminal after you have added your tok
 
   function getSVGBoundaries() {
     return {
-      topLeft: projectPoint(maxBoundaries[0]),
-      bottomRight: projectPoint(maxBoundaries[1])
+      transformX: +transform.split(',')[4],
+      transformY: +transform.split(',')[5].substring(0, transform.split(',')[5].length - 1)
     }
   }
 
