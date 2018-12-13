@@ -60,7 +60,7 @@ export function validateDomain (domain) {
     categories: [],
     sites: [],
     narratives: [],
-    sources: [],
+    sources: {},
     notifications: domain.notifications,
     tags: {}
   }
@@ -73,34 +73,47 @@ export function validateDomain (domain) {
     sources: [],
   }
 
-  function validateItem(item, domainClass, schema) {
+  function validateArrayItem(item, domainKey, schema) {
     const result = Joi.validate(item, schema);
     if (result.error !== null) {
       const id = item.id || '-';
-      const domainStr = capitalize(domainClass);
+      const domainStr = capitalize(domainKey);
       const error = makeError(domainStr, id, result.error.message);
 
-      discardedDomain[domainClass].push(Object.assign(item, { error }));
+      discardedDomain[domainKey].push(Object.assign(item, { error }));
     } else {
-      sanitizedDomain[domainClass].push(item);
+      sanitizedDomain[domainKey].push(item);
     }
   }
 
-  domain.events.forEach(event => {
-    validateItem(event, 'events', eventSchema);
-  });
-  domain.categories.forEach(category => {
-    validateItem(category, 'categories', categorySchema);
-  });
-  domain.sites.forEach(site => {
-    validateItem(site, 'sites', siteSchema);
-  });
-  domain.narratives.forEach(narrative => {
-    validateItem(narrative, 'narratives', narrativeSchema);
-  });
-  domain.sources.forEach(source => {
-    validateItem(source, 'sources', sourceSchema);
-  })
+  function validateArray(items, domainKey, schema) {
+    items.forEach(item => {
+      validateArrayItem(item, domainKey, schema)
+    })
+  }
+
+  function validateObject(obj, domainKey, itemSchema) {
+    Object.keys(obj).forEach(key => {
+      const vl = obj[key]
+      const result = Joi.validate(vl, itemSchema)
+      if (result.error !== null) {
+        const id = vl.id || '-'
+        const domainStr = capitalize(domainKey)
+        discardedDomain[domainKey].push({
+          ...vl,
+          error: makeError(domainStr, id, result.error.message)
+        })
+      } else {
+        sanitizedDomain[domainKey][key] = vl
+      }
+    })
+  }
+
+  validateArray(domain.events, 'events', eventSchema);
+  validateArray(domain.categories, 'categories', categorySchema);
+  validateArray(domain.sites, 'sites', siteSchema);
+  validateArray(domain.narratives, 'narratives', narrativeSchema);
+  validateObject(domain.sources, 'sources', sourceSchema);
 
 
   // Message the number of failed items in domain

@@ -8,9 +8,9 @@ const sourceSchema = Joi.object().keys({
   affil_2:        Joi.string().allow(''),
   url:            Joi.string().allow(''),
   title:          Joi.string().allow(''),
-  parent:         Joi.string(),
+  parent:         Joi.string().allow(''),
   author:         Joi.string().allow(''),
-  date:           Joi.string(),
+  date:           Joi.string().allow(''),
   notes:          Joi.string().allow('')
 });
 

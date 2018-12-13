@@ -164,8 +164,10 @@ export const selectSelected = createSelector(
     if (selected.length === 0) {
       return []
     }
-    const sourceIds = selected.map(e => e.source)
-    const srcs = sources.filter(s => s.id.indexOf(sourceIds) > -1)
+    const srcs = selected
+      .map(e => e.source)
+      .map(id => sources[id])
+
     return selected.map((s, idx) => ({
       ...s,
       source: srcs[idx]
