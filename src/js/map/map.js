@@ -124,7 +124,7 @@ Stop and start the development process in terminal after you have added your tok
   function getSVGBoundaries() {
     return {
       transformX: +transform.split(',')[4],
-      transformY: +transform.split(',')[5].substring(0, transform.split(',')[5].length - 1)
+      transformY: +transform.split(',')[5].split(')')[0]
     }
   }
 
