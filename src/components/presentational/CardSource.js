@@ -3,10 +3,10 @@ import Spinner from './Spinner'
 
 import copy from '../../js/data/copy.json'
 
-const CardSource = ({ source, language, isLoading, error }) => {
+const CardSource = ({ sources, language, isLoading, error }) => {
   const source_lang = copy[language].cardstack.source
 
-  function renderSource() {
+  function renderSource(source) {
     return source.error ? (
       <div><small>{source.error}</small></div>
     ) : (
@@ -15,7 +15,11 @@ const CardSource = ({ source, language, isLoading, error }) => {
   }
 
   function renderContent() {
-    return isLoading ? <Spinner/> : renderSource()
+    return isLoading
+      ? <Spinner/>
+      : sources.map(
+        source => renderSource(source)
+      )
   }
 
   return (

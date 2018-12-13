@@ -91,10 +91,12 @@ class Card extends React.Component {
       <CardSource
         isLoading={this.props.isLoading}
         language={this.props.language}
-        source={{
-          ...this.props.source,
-          error: this.props.sourceError
-        }}
+        sources={[
+          ...this.props.event.sources.map(s => ({
+            ...s,
+            error: this.props.sourceError
+          })),
+        ]}
       />
     )
   }
