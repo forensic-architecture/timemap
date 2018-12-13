@@ -175,7 +175,7 @@ class Toolbar extends React.Component {
 
   render() {
     return (
-      <div id="toolbar-wrapper" className="toolbar-wrapper">
+      <div id="toolbar-wrapper" className={`toolbar-wrapper ${this.props.narrative ? 'narrative-mode' : ''}`}>
         {this.renderToolbarTabs()}
         {this.renderToolbarPanels()}
       </div>
@@ -193,6 +193,7 @@ function mapStateToProps(state) {
     categoryFilter: state.app.filters.categories,
     viewFilters: state.app.filters.views,
     features: state.app.features,
+    narrative: state.app.narrative,
   }
 }
 

@@ -129,11 +129,11 @@ class Card extends React.Component {
   renderHeader() {
     return (
       <div className="card-collapsed">
-        <div className="card-column">
+        <div className="card-row">
           {this.renderTimestamp()}
           {this.renderLocation()}
         </div>
-        {/* {this.renderCategory()} */}
+        {this.renderCategory()}
         <br/>
         {this.renderSummary()}
       </div>

@@ -27,8 +27,12 @@
     z-index: $hidden;
   }
   &.show {
-      z-index: $map;
+    z-index: $map;
   }
+  &.narrative-mode {
+    left: 0;
+  }
+  
   .event {
     fill: $event_default;
     cursor: pointer;

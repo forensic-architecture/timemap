@@ -17,6 +17,7 @@ export default function(newApp, ui, methods) {
   const app = {
     selected: [],
     highlighted: null,
+    narrative: null,
     views: Object.assign({}, newApp.views),
   }
 
@@ -362,7 +363,6 @@ Stop and start the development process in terminal after you have added your tok
       .exit()
       .remove();
 
-    let styleName
     narrativesDom
       .enter().append('path')
       .attr('class', 'narrative')
@@ -384,7 +384,24 @@ Stop and start the development process in terminal after you have added your tok
         const styleProps = getNarrativeStyle(d[0].narrative);
         return styleProps.stroke;
       })
+      .style('stroke-opacity', d => {
+        if (app.narrative === null) return 0;
+        if (!d[0] || app.narrative.id !== d[0].narrative) return 0.2;
+        return 1;
+      })
       .style('fill', 'none');
+
+    narrativesDom
+      .style('stroke', d => {
+        if (!d[0]) return 'none';
+        const styleProps = getNarrativeStyle(d[0].narrative);
+        return styleProps.stroke;
+      })
+      .style('stroke-opacity', d => {
+        if (app.narrative === null) return 0;
+        if (!d[0] || app.narrative.id !== d[0].narrative) return 0.2;
+        return 1;
+      })
   }
 
   /**
@@ -393,22 +410,25 @@ Stop and start the development process in terminal after you have added your tok
    */
   function update(newDomain, newApp) {
     updateSVG();
+    const isNewDomain = (hash(domain) !== hash(newDomain));
+    const isNewAppProps = (hash(app) !== hash(newApp));
 
-    if (hash(domain) !== hash(newDomain)) {
+    if (isNewDomain) {
       domain.locations = newDomain.locations;
       domain.narratives = newDomain.narratives;
       domain.categories = newDomain.categories;
       domain.sites = newDomain.sites;
-      renderDomain();
     }
 
-    if (hash(app) !== hash(newApp)) {
+    if (isNewAppProps) {
       app.selected = newApp.selected;
       app.highlighted = newApp.highlighted;
+      app.narrative = newApp.narrative;
       app.views = newApp.views;
-
-      renderSelectedAndHighlight();
     }
+
+    if (isNewDomain || isNewAppProps) renderDomain();
+    if (isNewAppProps) renderSelectedAndHighlight();
   }
 
   /**

@@ -9,6 +9,10 @@
   z-index: $header;
   background: $midgrey;
 
+  &.narrative-mode {
+    left: -110px;
+  }
+
   .toolbar {
     position: relative;
     width: 110px;
@@ -292,37 +296,6 @@
     }
   }
 
-  .people-tab {
-    width: 50%;
-    font-family: 'Lato', Helvetica, sans-serif;
-    font-size: $normal;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-
-    svg {
-      transform: translate(-2px,0)scale(0.6);
-      &:hover {
-        transition: 0.2s ease;
-        stroke: $offwhite;
-      }
-    }
-
-    &.react-tabs__tab--selected {
-      svg circle,
-      svg path {
-        stroke: $offwhite;
-      }
-    }
-
-    svg circle,
-    svg path {
-      transition: 0.2s ease;
-      fill: none;
-      stroke: $midwhite;
-      stroke-width: 3;
-    }
-  }
-
   .react-tabs__tab-list {
     height: 40px;
     overflow: hidden;
@@ -361,6 +334,14 @@
     ul {
       height: 0;
       margin: 0;
+    }
+
+    .panel-header {
+      visibility: hidden;
+
+      .caret {
+        transform: translate(8px, 5px)rotate(225deg);
+      }
     }
   }
 
@@ -491,7 +472,7 @@
       }
     }
 
-    &:first-child {
+    /*&:first-child {
       button { background-image: url("/static/archive/img/scene01.jpg"); }
     }
     &:nth-child(2n) {
@@ -503,114 +484,7 @@
 
     &.back-to-map {
         button { background-image: url("/static/archive/img/map.jpg"); }
-    }
-  }
-}
-
-.taggroup-wrapper {
-  margin-top: 30px;
-  z-index: 10;
-  border-bottom: none;
-
-  &:last-child {
-    margin-bottom: 0;
-    border-bottom: 1px solid rgba(white, 0);
-  }
-
-  &:hover {
-    transition: 0.1s ease;
-  }
-
-  .collapsible-item {
-    width: calc(100% - 32px);
-    float: left;
-  }
-
-  .taggroup-header {
-    width: 100%;
-    margin: 0;
-    font-size: $large;
-
-    h2::first-letter {
-      margin-top: 0;
-    }
-  }
-
-  .taggroup-content {
-    width: 100%;
-    display: inline-block;
-    padding-left: 10px;
-    box-sizing: border-box;
-    transition: 0.2s ease;
-
-    .tagsubgroup-wrapper {
-      border: none;
-      border-bottom: 1px solid rgba(white, 0.25);
-      &:first-letter {
-        text-transform: uppercase;
-      }
-
-      &:last-child {
-        border-bottom: 0;
-      }
-
-      .tagsubgroup-header {
-        cursor: pointer;
-      }
-
-      &.folded {
-        .tagsubgroup-content {
-          overflow: hidden;
-          padding: 0 10px;
-          transition: 0.2s ease;
-          height: 0;
-          border-top: 0;
-        }
-      }
-
-      .item {
-        overflow: auto;
-        min-height: 32px;
-        height: auto;
-
-        span {
-          height: auto;
-        }
-      }
-    }
-
-    .tag-filter {
-      outline: none;
-      border: 0;
-      background: none;
-      color: $offwhite;
-      margin-left: 20px;
-      width: calc(100% - 20px);
-      box-sizing: border-box;
-      padding: 0;
-      font-size: $normal;
-      font-weight: 400;
-      text-align: left;
-      cursor: pointer;
-      border: 1px solid $black;
-      border-bottom: 1px solid rgba(white, 0.25);
-      &:first-letter {
-        text-transform: uppercase;
-      }
-
-      &:last-child {
-        border-bottom: 1px solid rgba(white, 0);
-      }
-    }
-  }
-
-  &.folded {
-    .filter-list-content {
-      padding: 0 10px;
-      border-top: 0;
-      transition: 0.2s ease;
-      height: 0;
-    }
+    }*/
   }
 }
 

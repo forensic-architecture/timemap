@@ -49,9 +49,12 @@ class NarrativeCard extends React.Component {
       return (
         <div className="narrative-info">
           {this.renderClose()}
-          <h6>{this.props.narrative.label}</h6>
+          <h3>{this.props.narrative.label}</h3>
           <p>{this.props.narrative.description}</p>
-          <h3>{this.state.step + 1}/{steps.length}. {step.location}</h3>
+          <h6>
+            <i className="material-icons left">location_on</i>
+            {this.state.step + 1}/{steps.length}. {step.location}
+          </h6>
           <div className="actions">
             <div className={`${(!this.state.step) ? 'disabled ' : ''} action`} onClick={() => this.goToPrevKeyFrame()}>&larr;</div>
             <div className={`${(this.state.step >= this.props.narrative.steps.length - 1) ? 'disabled ' : ''} action`} onClick={() => this.goToNextKeyFrame()}>&rarr;</div>

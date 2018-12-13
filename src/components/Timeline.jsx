@@ -47,6 +47,7 @@ class Timeline extends React.Component {
     const labels_title_lang = copy[this.props.app.language].timeline.labels_title;
     const info_lang = copy[this.props.app.language].timeline.info;
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`;
+    classes += this.props.app.narrative ? 'narrative-mode' : '';
     const date0 = formatterWithYear(this.props.app.timerange[0]);
     const date1 = formatterWithYear(this.props.app.timerange[1]);
 
@@ -80,7 +81,8 @@ function mapStateToProps(state) {
       timerange: selectors.getTimeRange(state),
       selected: state.app.selected,
       language: state.app.language,
-      zoomLevels: state.app.zoomLevels
+      zoomLevels: state.app.zoomLevels,
+      narrative: state.app.narrative
     },
     dom: state.ui.dom,
   }

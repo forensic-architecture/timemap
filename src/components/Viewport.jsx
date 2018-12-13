@@ -19,8 +19,9 @@ class Viewport extends React.Component {
   }
 
   render() {
+    const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper';
     return (
-      <div className='map-wrapper'>
+      <div className={classes}>
         <div id="map" />
       </div>
     )
@@ -39,7 +40,8 @@ function mapStateToProps(state) {
       views: state.app.filters.views,
       selected: state.app.selected,
       highlighted: state.app.highlighted,
-      mapAnchor: state.app.mapAnchor
+      mapAnchor: state.app.mapAnchor,
+      narrative: state.app.narrative
     },
     ui: {
       dom: state.ui.dom,

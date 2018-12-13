@@ -109,9 +109,6 @@ class Dashboard extends React.Component {
           onSelect={this.handleSelect}
           actions={this.props.actions}
         />
-        <NarrativeCard
-          onSelect={this.handleSelect}
-        />
         <Notification
           isNotification={this.props.app.flags.isNotification}
           notifications={this.props.domain.notifications}
