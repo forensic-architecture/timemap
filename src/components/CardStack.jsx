@@ -36,17 +36,6 @@ class CardStack extends React.Component {
     return '';
   }
 
-  renderLocation() {
-    let locationName = copy[this.props.language].cardstack.unknown_location;
-    if (this.props.selected.length > 0) {
-      if (isNotNullNorUndefined(this.props.selected[0].location)) {
-        locationName = this.props.selected[0].location;
-      }
-      return (<p className="header-copy">in:<b>{` ${locationName}`}</b></p>)
-    }
-    return '';
-  }
-
   renderCardStackHeader() {
     const header_lang = copy[this.props.language].cardstack.header;
 

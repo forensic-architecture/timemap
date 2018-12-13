@@ -51,7 +51,7 @@ class Toolbar extends React.Component {
     this.setState({
       tabNum: -1
     }, () => {
-      this.props.actions.updateNarrative(narrative);
+      this.props.onSelectNarrative(narrative);
     });
   }
 

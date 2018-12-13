@@ -76,22 +76,16 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
+        <Toolbar
+          onFilter={this.handleTagFilter}
+          onSelectNarrative={(narrative) => { this.props.actions.updateNarrative(narrative); }}
+          actions={this.props.actions}
+        />
         <Viewport
           methods={{
             onSelect: this.handleSelect,
             getCategoryColor: category => this.getCategoryColor(category)
           }}
-        />
-        <Toolbar
-          onFilter={this.handleTagFilter}
-          actions={this.props.actions}
-        />
-        <CardStack
-          onSelect={this.handleSelect}
-          onHighlight={this.handleHighlight}
-          onToggleCardstack={() => this.props.actions.updateSelected([])}
-          getNarrativeLinks={event => this.getNarrativeLinks(event)}
-          getCategoryColor={category => this.getCategoryColor(category)}
         />
         <Timeline
           methods={{
@@ -100,14 +94,21 @@ class Dashboard extends React.Component {
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
+        <NarrativeCard
+          onSelect={this.handleSelect}
+          onSelectNarrative={(narrative) => { this.props.actions.updateNarrative(narrative); }}
+        />
+        <CardStack
+          onSelect={this.handleSelect}
+          onHighlight={this.handleHighlight}
+          onToggleCardstack={() => this.props.actions.updateSelected([])}
+          getNarrativeLinks={event => this.getNarrativeLinks(event)}
+          getCategoryColor={category => this.getCategoryColor(category)}
+        />
         <InfoPopUp
           ui={this.props.ui}
           app={this.props.app}
           toggle={() => this.props.actions.toggleInfoPopup()}
-        />
-        <NarrativeCard
-          onSelect={this.handleSelect}
-          actions={this.props.actions}
         />
         <Notification
           isNotification={this.props.app.flags.isNotification}
