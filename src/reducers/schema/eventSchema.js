@@ -12,7 +12,7 @@ const eventSchema = Joi.object().keys({
     type:             Joi.string().allow(''),
     category:         Joi.string().required(),
     narrative:        Joi.string().allow(''),
-    source:           Joi.string().allow(''),
+    sources:          Joi.array(),
     tags:             Joi.string().allow(''),
     comments:         Joi.string().allow(''),
     timestamp:        Joi.string().required(),

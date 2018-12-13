@@ -165,12 +165,14 @@ export const selectSelected = createSelector(
       return []
     }
     const srcs = selected
-      .map(e => e.source)
-      .map(id => sources[id])
+      .map(e => e.sources)
+      .map(_sources =>
+        _sources.map(id => sources[id])
+      )
 
     return selected.map((s, idx) => ({
       ...s,
-      source: srcs[idx]
+      sources: srcs[idx]
     }))
   }
 )
