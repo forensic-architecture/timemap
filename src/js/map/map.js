@@ -118,28 +118,41 @@ Stop and start the development process in terminal after you have added your tok
 
   function projectPoint(location) {
     const latLng = new L.LatLng(location[0], location[1]);
-    return lMap.latLngToLayerPoint(latLng);
+    return {
+      x: lMap.latLngToLayerPoint(latLng).x + getSVGBoundaries().transformX,
+      y: lMap.latLngToLayerPoint(latLng).y + getSVGBoundaries().transformY
+    };
   }
 
   function getSVGBoundaries() {
+    const mapNode = d3.select('.leaflet-map-pane').node();
+
+    // We'll get the transform of the leaflet container,
+    // which will let us offset the SVG by the same quantity
+    const transform = window
+      .getComputedStyle(mapNode)
+      .getPropertyValue('transform');
+
+    // However getComputedStyle returns an awkward string of the format
+    // matrix(0, 0, 1, 0, 0.56523, 123123), hence this awkwardness
     return {
-      topLeft: projectPoint(maxBoundaries[0]),
-      bottomRight: projectPoint(maxBoundaries[1])
+      transformX: +transform.split(',')[4],
+      transformY: +transform.split(',')[5].split(')')[0]
     }
   }
 
   function updateSVG() {
-    const boundaries = getSVGBoundaries();
-    const {
-      topLeft,
-      bottomRight
-    } = boundaries;
-    svg.attr('width', bottomRight.x - topLeft.x + 200)
-      .attr('height', bottomRight.y - topLeft.y + 200)
-      .style('left', `${topLeft.x - 100}px`)
-      .style('top', `${topLeft.y - 100}px`);
+    const boundingClient = d3.select(`#${ui.dom.map}`).node().getBoundingClientRect();
 
-    g.attr('transform', `translate(${-(topLeft.x - 100)},${-(topLeft.y - 100)})`);
+    let WIDTH = boundingClient.width;
+    let HEIGHT = boundingClient.height;
+
+    // Offset with leaflet map transform boundaries
+    const { transformX, transformY } = getSVGBoundaries();
+
+    svg.attr('width', WIDTH)
+      .attr('height', HEIGHT)
+      .attr('style', `left: ${-transformX}px; top: ${-transformY}px`);
 
     g.selectAll('.location').attr('transform', (d) => {
       const newPoint = projectPoint([+d.latitude, +d.longitude]);
@@ -148,14 +161,9 @@ Stop and start the development process in terminal after you have added your tok
 
     g.selectAll('.narrative')
       .attr('d', sequenceLine);
-
-    const busLine = d3.line()
-      .x(d => lMap.latLngToLayerPoint(d).x)
-      .y(d => lMap.latLngToLayerPoint(d).y)
-      .curve(d3.curveMonotoneX);
   }
 
-  lMap.on("zoom viewreset move", updateSVG);
+  lMap.on("zoomend viewreset moveend", updateSVG);
 
   /**
    * Returns latitud / longitude
@@ -332,10 +340,13 @@ Stop and start the development process in terminal after you have added your tok
      }
    }
 
-   const sequenceLine = d3.line()
+   /*const sequenceLine = d3.line()
      .x(d => getCoords(d).x)
-     .y(d => getCoords(d).y)
+     .y(d => getCoords(d).y)*/
 
+   const sequenceLine = d3.line()
+     .x(d => getCoords(d).x + getSVGBoundaries().transformX)
+     .y(d => getCoords(d).y + getSVGBoundaries().transformY);
    /**
     * Clears existing narrative layer
     * Renders all narrativ as paths
@@ -407,13 +418,13 @@ Stop and start the development process in terminal after you have added your tok
   }
 
   /**
-   * Renders events on the map: takes data, and enters, updates and exits
-   */
-   function renderDomain () {
-     renderSites();
-     renderEvents();
-     renderNarratives();
-   }
+  * Renders events on the map: takes data, and enters, updates and exits
+  */
+  function renderDomain () {
+    renderSites();
+    renderNarratives();
+    renderEvents();
+  }
   function renderSelectedAndHighlight () {
     renderSelected();
     renderHighlighted();
