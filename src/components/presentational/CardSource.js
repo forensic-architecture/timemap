@@ -7,7 +7,9 @@ function renderSource(source) {
   return source.error ? (
     <div><small>{source.error}</small></div>
   ) : (
-    <div><p>TODO: display source properly.</p></div>
+    <div>
+      <p>{source.id}</p>
+    </div>
   )
 }
 
@@ -21,7 +23,7 @@ const CardSource = ({ source, language, isLoading, error }) => {
   }
 
   return (
-    <div className="card-col card-cell source">
+    <div className="card-row card-cell source">
       <h4>{source_lang}: </h4>
       {renderContent()}
     </div>

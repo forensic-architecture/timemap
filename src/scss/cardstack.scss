@@ -1,6 +1,8 @@
 @import 'burger';
 @import 'card';
 
+$card-width: 500px;
+
 .card-stack {
   position: absolute;
   top: 10px;
@@ -20,7 +22,7 @@
   .card-stack-header {
     min-height: 38px;
     line-height: 38px;
-    width: 360px;
+    width: $card-width;
     box-sizing: border-box;
     padding: 0 5px;
     background: $black;
@@ -61,7 +63,7 @@
   }
 
   .card-stack-content {
-    width: 360px;
+    width: $card-width;
 
     ul {
       padding: 0;
