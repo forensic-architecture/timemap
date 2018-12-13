@@ -126,6 +126,16 @@ Stop and start the development process in terminal after you have added your tok
   }
 
   function getSVGBoundaries() {
+    const mapNode = d3.select('.leaflet-map-pane').node();
+
+    // We'll get the transform of the leaflet container,
+    // which will let us offset the SVG by the same quantity
+    const transform = window
+      .getComputedStyle(mapNode)
+      .getPropertyValue('transform');
+
+    // However getComputedStyle returns an awkward string of the format
+    // matrix(0, 0, 1, 0, 0.56523, 123123), hence this awkwardness
     return {
       transformX: +transform.split(',')[4],
       transformY: +transform.split(',')[5].split(')')[0]
@@ -138,7 +148,8 @@ Stop and start the development process in terminal after you have added your tok
     let WIDTH = boundingClient.width;
     let HEIGHT = boundingClient.height;
 
-    g.attr('transform', `translate(${-(topLeft.x - 100)},${-(topLeft.y - 100)})`);
+    // Offset with leaflet map transform boundaries
+    const { transformX, transformY } = getSVGBoundaries();
 
     svg.attr('width', WIDTH)
       .attr('height', HEIGHT)
@@ -146,19 +157,18 @@ Stop and start the development process in terminal after you have added your tok
 
     g.selectAll('.location').attr('transform', (d) => {
       const newPoint = projectPoint([+d.latitude, +d.longitude]);
-      return `translate(${newPoint.x},${newPoint.y})`;
+      return `translate(${newPoint.x + transformX},${newPoint.y + transformY})`;
     });
+
+    const sequenceLine = d3.line()
+      .x(d => getCoords(d).x + transformX)
+      .y(d => getCoords(d).y + transformY);
 
     g.selectAll('.narrative')
       .attr('d', sequenceLine);
-
-    const busLine = d3.line()
-      .x(d => lMap.latLngToLayerPoint(d).x)
-      .y(d => lMap.latLngToLayerPoint(d).y)
-      .curve(d3.curveMonotoneX);
   }
 
-  lMap.on("zoom viewreset move", updateSVG);
+  lMap.on("zoomend viewreset moveend", updateSVG);
 
   /**
    * Returns latitud / longitude
