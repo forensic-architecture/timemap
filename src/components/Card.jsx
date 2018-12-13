@@ -86,19 +86,17 @@ class Card extends React.Component {
     )
   }
 
-  renderSource() {
-    return (
+  renderSources() {
+    return this.props.event.sources.map(source => (
       <CardSource
         isLoading={this.props.isLoading}
         language={this.props.language}
-        sources={[
-          ...this.props.event.sources.map(s => ({
-            ...s,
-            error: this.props.sourceError
-          })),
-        ]}
+        source={{
+          ...source,
+          error: this.props.sourceError
+        }}
       />
-    )
+    ))
   }
 
   // NB: should be internaionalized.
@@ -147,7 +145,7 @@ class Card extends React.Component {
       return (
         <div className="card-bottomhalf">
           {this.renderTags()}
-          {this.renderSource()}
+          {this.renderSources()}
           {this.renderNarrative()}
         </div>
       )
