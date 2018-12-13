@@ -129,17 +129,16 @@ Stop and start the development process in terminal after you have added your tok
   }
 
   function updateSVG() {
-    const boundaries = getSVGBoundaries();
-    const {
-      topLeft,
-      bottomRight
-    } = boundaries;
-    svg.attr('width', bottomRight.x - topLeft.x + 200)
-      .attr('height', bottomRight.y - topLeft.y + 200)
-      .style('left', `${topLeft.x - 100}px`)
-      .style('top', `${topLeft.y - 100}px`);
+    const boundingClient = d3.select(`#${ui.dom.map}`).node().getBoundingClientRect();
+
+    let WIDTH = boundingClient.width;
+    let HEIGHT = boundingClient.height;
 
     g.attr('transform', `translate(${-(topLeft.x - 100)},${-(topLeft.y - 100)})`);
+
+    svg.attr('width', WIDTH)
+      .attr('height', HEIGHT)
+      .attr('style', `left: ${-transformX}px; top: ${-transformY}px`);
 
     g.selectAll('.location').attr('transform', (d) => {
       const newPoint = projectPoint([+d.latitude, +d.longitude]);
