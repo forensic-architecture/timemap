@@ -157,7 +157,7 @@ Stop and start the development process in terminal after you have added your tok
 
     g.selectAll('.location').attr('transform', (d) => {
       const newPoint = projectPoint([+d.latitude, +d.longitude]);
-      return `translate(${newPoint.x + transformX},${newPoint.y + transformY})`;
+      return `translate(${newPoint.x},${newPoint.y})`;
     });
 
     const sequenceLine = d3.line()
@@ -279,9 +279,8 @@ Stop and start the development process in terminal after you have added your tok
       .enter().append('g')
       .attr('class', 'location')
       .attr('transform', (d) => {
-        d.LatLng = new L.LatLng(+d.latitude, +d.longitude);
-        return `translate(${lMap.latLngToLayerPoint(d.LatLng).x},
-                  ${lMap.latLngToLayerPoint(d.LatLng).y})`;
+        const newPoint = projectPoint([+d.latitude, +d.longitude]);
+        return `translate(${newPoint.x},${newPoint.y})`;
       })
       .on('click', (location) => {
         methods.onSelect(location.events);
