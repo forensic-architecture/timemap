@@ -115,7 +115,7 @@ const initial = {
 
       narratives: {
         default: {
-          style: 'dotted',                  // ['dotted', 'solid']
+          style: 'solid',                  // ['dotted', 'solid']
           opacity: 0.9,                     // range between 0 and 1
           stroke: 'red',               // Any hex or rgb code
           strokeWidth: 3

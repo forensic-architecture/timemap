@@ -395,7 +395,7 @@ Stop and start the development process in terminal after you have added your tok
       })
       .style('stroke-opacity', d => {
         if (app.narrative === null) return 0;
-        if (!d[0] || app.narrative.id !== d[0].narrative) return 0.2;
+        if (!d[0] || !d[0].narratives.find(n => n === app.narrative.id)) return 0.2;
         return 1;
       })
       .style('fill', 'none');
@@ -408,7 +408,7 @@ Stop and start the development process in terminal after you have added your tok
       })
       .style('stroke-opacity', d => {
         if (app.narrative === null) return 0;
-        if (!d[0] || app.narrative.id !== d[0].narrative) return 0.2;
+        if (!d[0] || !d[0].narratives.find(n => n === app.narrative.id)) return 0.2;
         return 1;
       })
   }
