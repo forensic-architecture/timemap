@@ -5,27 +5,16 @@ import copy from '../../js/data/copy.json'
 
 const CardSource = ({ source, language, isLoading, error }) => {
 
-  function renderContent() {
-    if (isLoading) {
-      return <Spinner/>
-    } else if (source.error) {
-      return (
-        <div><small>{source.error}</small></div>
-      )
-    } else {
-      /* source with no errors */
-      return (
-        <div>
-          <p>{source.id}</p>
-          <i className="material-icons md-36">photo</i>
-        </div>
-      )
-    }
-  }
-
   return (
-    <div className="card-row card-cell source">
-      {renderContent()}
+    <div className="card-source">
+      {isLoading
+          ? <Spinner/>
+          : (
+            <div className="source-row">
+              <i className="material-icons md-36 source-icon">photo</i>
+              <p>{source.id}</p>
+            </div>
+          )}
     </div>
   )
 }

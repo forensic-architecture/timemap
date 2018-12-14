@@ -93,7 +93,7 @@ class Card extends React.Component {
 
     const source_lang = copy[this.props.language].cardstack.sources
     return (
-      <div>
+      <div className="card-col">
         <h4>{source_lang}: </h4>
         {this.props.event.sources.map(source => (
           <CardSource
