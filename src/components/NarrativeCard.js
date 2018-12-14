@@ -26,7 +26,6 @@ class NarrativeCard extends React.Component {
   componentDidUpdate() {
     if (this.props.narrative !== null) {
       const step = this.props.narrative.steps[this.state.step];
-      console.log(step)
       this.props.onSelect([step]);
     }
   }
