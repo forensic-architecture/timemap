@@ -87,16 +87,23 @@ class Card extends React.Component {
   }
 
   renderSources() {
-    return this.props.event.sources.map(source => (
-      <CardSource
-        isLoading={this.props.isLoading}
-        language={this.props.language}
-        source={{
-          ...source,
-          error: this.props.sourceError
-        }}
-      />
-    ))
+    if (this.props.sourceError) {
+      return <div>ERROR: something went wrong loading sources, TODO:</div>
+    }
+
+    const source_lang = copy[this.props.language].cardstack.sources
+    return (
+      <div>
+        <h4>{source_lang}: </h4>
+        {this.props.event.sources.map(source => (
+          <CardSource
+            isLoading={this.props.isLoading}
+            language={this.props.language}
+            source={source}
+          />
+        ))}
+      </div>
+    )
   }
 
   // NB: should be internaionalized.
