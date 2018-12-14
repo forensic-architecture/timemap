@@ -23,8 +23,13 @@ class NarrativeCard extends React.Component {
     }
   }
 
-  componentDidUpdate() {
-    if (this.props.narrative !== null) {
+  componentDidMount() {
+    const step = this.props.narrative.steps[this.state.step];
+    this.props.onSelect([step]);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.narrative === this.props.narrative && this.state.step !== prevState.step) {
       const step = this.props.narrative.steps[this.state.step];
       this.props.onSelect([step]);
     }
@@ -42,7 +47,7 @@ class NarrativeCard extends React.Component {
   }
 
   render() {
-    if (this.props.narrative !== null && this.props.narrative.steps[this.state.step]) {
+    if (this.props.narrative.steps[this.state.step]) {
       const steps = this.props.narrative.steps;
       const step = steps[this.state.step];
 

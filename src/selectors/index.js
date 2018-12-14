@@ -163,7 +163,6 @@ export const selectLocations = createSelector(
 export const selectSelected = createSelector(
   [getSelected, getSources],
   (selected, sources) => {
-    console.log(selected, sources)
     if (selected.length === 0) {
       return []
     }

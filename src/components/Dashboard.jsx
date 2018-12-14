@@ -94,10 +94,13 @@ class Dashboard extends React.Component {
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
-        <NarrativeCard
-          onSelect={this.handleSelect}
-          onSelectNarrative={(narrative) => { this.props.actions.updateNarrative(narrative); }}
-        />
+        {(this.props.app.narrative !== null)
+            ? <NarrativeCard
+              onSelect={this.handleSelect}
+              onSelectNarrative={(narrative) => { this.props.actions.updateNarrative(narrative); }}
+            />
+            : ''
+        }
         <CardStack
           onSelect={this.handleSelect}
           onHighlight={this.handleHighlight}

@@ -32,7 +32,6 @@ function updateSelected(appState, action) {
 }
 
 function updateNarrative(appState, action) {
-  console.log('this happens')
   if (action.narrative === null) {
     return Object.assign({}, appState, {
       narrative: action.narrative,
