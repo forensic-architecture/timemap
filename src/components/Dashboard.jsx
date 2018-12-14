@@ -32,7 +32,7 @@ class Dashboard extends React.Component {
   componentDidMount() {
     if (!this.props.app.isMobile) {
       this.props.actions.fetchDomain()
-        .then((domain) => this.props.actions.updateDomain(domain));
+        .then(domain => this.props.actions.updateDomain(domain));
     }
   }
 
@@ -51,7 +51,7 @@ class Dashboard extends React.Component {
       let eventsToSelect = selected.map(event => this.getEventById(event.id));
       eventsToSelect = eventsToSelect.sort((a, b) => parseDate(a.timestamp) - parseDate(b.timestamp))
 
-      this.props.actions.fetchSelected(eventsToSelect)
+      this.props.actions.updateSelected(eventsToSelect)
     }
   }
 

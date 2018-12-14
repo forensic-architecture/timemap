@@ -89,7 +89,7 @@ class CardStack extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    selected: state.app.selected,
+    selected: selectors.selectSelected(state),
     sourceError: state.app.errors.source,
     language: state.app.language,
     isCardstack: state.app.flags.isCardstack,

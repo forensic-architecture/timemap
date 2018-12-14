@@ -81,8 +81,21 @@ export function fetchDomain () {
         .catch(handleError('tags'))
     }
 
-    return Promise.all([eventPromise, catPromise, narPromise,
-      sitesPromise, tagsPromise])
+    let sourcesPromise = Promise.resolve([])
+    if (process.env.features.USE_SOURCES) {
+      sourcesPromise = fetch(SOURCES_URL)
+        .then(response => response.json())
+        .catch(handleError('sources'))
+    }
+
+    return Promise.all([
+      eventPromise,
+      catPromise,
+      narPromise,
+      sitesPromise,
+      tagsPromise,
+      sourcesPromise
+    ])
       .then(response => {
         dispatch(toggleFetchingDomain())
         const result = {
@@ -91,6 +104,7 @@ export function fetchDomain () {
           narratives: response[2],
           sites: response[3],
           tags: response[4],
+          sources: response[5],
           notifications
         }
         return result
@@ -114,30 +128,19 @@ export const UPDATE_DOMAIN = 'UPDATE_DOMAIN'
 export function updateDomain(domain) {
   return {
     type: UPDATE_DOMAIN,
-    domain: {
-      events: domain.events,
-      categories: domain.categories,
-      tags: domain.tags,
-      sites: domain.sites,
-      narratives: domain.narratives,
-      notifications: domain.notifications
-    }
+    domain
   }
 }
 
 
-export function fetchSelected(selected) {
-  if (!selected || !selected.length || selected.length === 0) {
-    return updateSelected([])
-  }
+export function fetchSource(source) {
   return dispatch => {
-    dispatch(updateSelected(selected))
     if (!SOURCES_URL) {
       dispatch(fetchSourceError('No source extension specified.'))
     } else {
       dispatch(toggleFetchingSources())
 
-      fetch(SOURCES_URL)
+      fetch(`${SOURCES_URL}`)
         .then(response => {
           if (!response.ok) {
             throw new Error('No sources are available at the URL specified in the config specified.')

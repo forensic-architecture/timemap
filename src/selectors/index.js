@@ -1,14 +1,17 @@
-import {
-  createSelector
-} from 'reselect'
+import { createSelector} from 'reselect'
 
 // Input selectors
 export const getEvents = state => state.domain.events;
 export const getLocations = state => state.domain.locations;
 export const getCategories = state => state.domain.categories;
 export const getNarratives = state => state.domain.narratives;
+export const getSelected = state => state.app.selected;
 export const getSites = (state) => {
   if (process.env.features.USE_SITES) return state.domain.sites;
+  return [];
+}
+export const getSources = state => {
+  if (process.env.features.USE_SOURCES) return state.domain.sources;
   return [];
 }
 export const getNotifications = state => state.domain.notifications;
@@ -152,6 +155,27 @@ export const selectLocations = createSelector(
   }
 );
 
+/**
+ * Of all the sources, select those that are relevant to the selected events.
+ */
+export const selectSelected = createSelector(
+  [getSelected, getSources],
+  (selected, sources) => {
+    if (selected.length === 0) {
+      return []
+    }
+    const srcs = selected
+      .map(e => e.sources)
+      .map(_sources =>
+        _sources.map(id => sources[id])
+      )
+
+    return selected.map((s, idx) => ({
+      ...s,
+      sources: srcs[idx]
+    }))
+  }
+)
 
 /*
 * Select categories, return them as a list
