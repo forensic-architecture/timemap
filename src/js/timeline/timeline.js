@@ -19,13 +19,13 @@ export default function(newApp, ui, methods) {
   const domain = {
     events: [],
     categories: [],
+    narratives: []
   }
   const app = {
-    selected: [],
-    highlighted: null,
-    zoomLevels: newApp.zoomLevels,
     timerange: newApp.timerange,
-    language: newApp.language
+    selected: [],
+    language: newApp.language,
+    zoomLevels: newApp.zoomLevels
   }
 
   // Dimension of the client
@@ -517,6 +517,8 @@ export default function(newApp, ui, methods) {
    * @param {Object} app: Redux state app subtree
    */
   function updateAxis() {
+    updateTimeRange();
+    
     scale.x = d3.scaleTime()
       .domain(app.timerange)
       .range([margin.left, WIDTH]);
@@ -544,35 +546,39 @@ export default function(newApp, ui, methods) {
    * @param {Object} newApp: object of time range and selected events
    */
   function update(newDomain, newApp) {
-    if (hash(domain) !== hash(newDomain)) {
+    const isNewDomain = (hash(domain) !== hash(newDomain));
+    const isNewAppProps = (hash(app) !== hash(newApp));
+
+    if (isNewDomain) {
       domain.categories = newDomain.categories;
       domain.events = newDomain.events;
-      updateAxis();
-      renderContext();
+      domain.narratives = newDomain.narratives;
     }
-    if (hash(app) !== hash(newApp)) {
+
+    if (isNewAppProps) {
       app.timerange = newApp.timerange;
       app.selected = newApp.selected.slice(0);
-      updateTimeRange();
-      renderTimeLabels();
-      renderEventsAndHighlight();
     }
+
+    if (isNewDomain || isNewAppProps) renderContent();
+    if (isNewAppProps) renderContext();
   }
 
   function renderContext() {
-    renderAxis();
     renderTimeControls();
     renderTimeLabels();
   }
 
-  function renderEventsAndHighlight() {
+  function renderContent() {
+    updateAxis();
+    renderAxis();
     renderEvents();
     renderHighlight();
   }
 
   function render() {
     renderContext();
-    renderEventsAndHighlight();
+    renderContent();
   }
 
   return {

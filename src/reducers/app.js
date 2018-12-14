@@ -32,6 +32,7 @@ function updateSelected(appState, action) {
 }
 
 function updateNarrative(appState, action) {
+  console.log('this happens')
   if (action.narrative === null) {
     return Object.assign({}, appState, {
       narrative: action.narrative,
@@ -43,7 +44,7 @@ function updateNarrative(appState, action) {
     // Add some margin to the datetime extent
     minDate = minDate - ((maxDate - minDate) / 20);
     maxDate = maxDate + ((maxDate - minDate) / 20);
-    return appState;
+
     return Object.assign({}, appState, {
       narrative: action.narrative,
       filters: Object.assign({}, appState.filters, {

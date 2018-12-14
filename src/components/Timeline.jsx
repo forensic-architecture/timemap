@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as selectors from '../selectors';
+import hash from 'object-hash';
 
 import copy from '../js/data/copy.json';
-import { formatterWithYear } from '../js/utilities';
+import { formatterWithYear, isNotNullNorUndefined } from '../js/utilities';
 import TimelineHeader from './presentational/TimelineHeader';
 import TimelineLogic from '../js/timeline/timeline.js';
 
@@ -21,7 +22,9 @@ class Timeline extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.timeline.update(nextProps.domain, nextProps.app);
+    if (hash(nextProps) !== hash(this.props)) {
+      this.timeline.update(nextProps.domain, nextProps.app);
+    }
   }
 
   onClickArrow() {
@@ -32,7 +35,7 @@ class Timeline extends React.Component {
 
   render() {
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`;
-
+    classes += (this.props.app.narrative !== null) ? ' narrative-mode' : '';
     return (
       <div className={classes}>
         <TimelineHeader
@@ -60,7 +63,8 @@ function mapStateToProps(state) {
       timerange: selectors.getTimeRange(state),
       selected: state.app.selected,
       language: state.app.language,
-      zoomLevels: state.app.zoomLevels
+      zoomLevels: state.app.zoomLevels,
+      narrative: state.app.narrative
     },
     ui: {
       dom: state.ui.dom,

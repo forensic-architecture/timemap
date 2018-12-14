@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
+import hash from 'object-hash';
+
 import Map from '../js/map/map.js'
 import { areEqual } from '../js/utilities.js'
 
@@ -15,7 +17,9 @@ class Viewport extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.map.update(nextProps.domain, nextProps.app)
+    if (hash(nextProps) !== hash(this.props)) {
+      this.map.update(nextProps.domain, nextProps.app)
+    }
   }
 
   render() {

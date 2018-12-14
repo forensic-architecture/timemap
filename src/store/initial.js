@@ -115,11 +115,17 @@ const initial = {
 
       narratives: {
         default: {
-          style: 'solid',                  // ['dotted', 'solid']
-          opacity: 0.5,                     // range between 0 and 1
-          stroke: 'transparent',               // Any hex or rgb code
-          strokeWidth: 2
+          style: 'dotted',                  // ['dotted', 'solid']
+          opacity: 0.9,                     // range between 0 and 1
+          stroke: 'red',               // Any hex or rgb code
+          strokeWidth: 3
         },
+        narrative_1: {
+          style: 'solid',                  // ['dotted', 'solid']
+          opacity: 0.4,                     // range between 0 and 1
+          stroke: '#f18f01',               // Any hex or rgb code
+          strokeWidth: 3
+        }
       }
     },
     dom: {

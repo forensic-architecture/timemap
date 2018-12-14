@@ -7,6 +7,7 @@ import Search from './Search.jsx';
 import TagListPanel from './TagListPanel.jsx';
 import ToolbarBottomActions from './ToolbarBottomActions.jsx';
 import copy from '../js/data/copy.json';
+import { isNotNullNorUndefined } from '../js/utilities.js';
 
 class Toolbar extends React.Component {
 
@@ -174,8 +175,9 @@ class Toolbar extends React.Component {
   }
 
   render() {
+    const isNarrative = isNotNullNorUndefined(this.props.narrative);
     return (
-      <div id="toolbar-wrapper" className={`toolbar-wrapper ${this.props.narrative ? 'narrative-mode' : ''}`}>
+      <div id="toolbar-wrapper" className={`toolbar-wrapper ${(isNarrative) ? 'narrative-mode' : ''}`}>
         {this.renderToolbarTabs()}
         {this.renderToolbarPanels()}
       </div>

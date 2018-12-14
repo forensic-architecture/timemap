@@ -430,10 +430,11 @@ Stop and start the development process in terminal after you have added your tok
     }
 
     if (isNewAppProps) {
+      app.views = newApp.views;
       app.selected = newApp.selected;
       app.highlighted = newApp.highlighted;
+      app.mapAnchor = newApp.mapAnchor;
       app.narrative = newApp.narrative;
-      app.views = newApp.views;
     }
 
     if (isNewDomain || isNewAppProps) renderDomain();
