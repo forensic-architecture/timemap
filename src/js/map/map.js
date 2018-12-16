@@ -160,11 +160,7 @@ Stop and start the development process in terminal after you have added your tok
       return `translate(${newPoint.x},${newPoint.y})`;
     });
 
-    const sequenceLine = d3.line()
-      .x(d => getCoords(d).x + transformX)
-      .y(d => getCoords(d).y + transformY);
-
-    g.selectAll('.narrative')
+    svg.selectAll('.narrative')
       .attr('d', d => sequenceLine(d.steps));
   }
 
@@ -237,9 +233,7 @@ Stop and start the development process in terminal after you have added your tok
   function getLocationEventsDistribution(location) {
     const eventCount = {};
     const categories = domain.categories;
-    // categories.sort((a, b) => {
-    //   return (+a.slice(-2) > +b.slice(-2));
-    // });
+
     categories.forEach(cat => {
       eventCount[cat.category] = 0
     });
