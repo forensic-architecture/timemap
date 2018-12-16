@@ -49,7 +49,10 @@ export default function(newApp, ui, methods) {
    * Create scales
    */
   const scale = {};
-  scale.x = d3.scaleTime();
+  scale.x = d3.scaleTime()
+      .domain(app.timerange)
+      .range([margin.left, WIDTH]);
+
   scale.y = d3.scaleOrdinal()
 
 
@@ -63,6 +66,14 @@ export default function(newApp, ui, methods) {
     .append('svg')
     .attr('width', WIDTH)
     .attr('height', HEIGHT);
+
+  dom.clip = dom.svg.append("svg:clipPath")
+    .attr("id", "clip")
+    .append("svg:rect")
+    .attr("x", margin.left)
+    .attr("y", 0)
+    .attr("width", WIDTH - margin.left)
+    .attr("height", HEIGHT - 25);
 
   dom.controls =
     d3.select(`#${ui.dom.timeline}`)
@@ -104,9 +115,10 @@ export default function(newApp, ui, methods) {
   /*
    * Plottable elements
    */
-  dom.dataset = dom.svg.append('g');
-  dom.events = dom.dataset.append('g');
-  dom.markers = dom.svg.append('g');
+
+  dom.body = dom.svg.append("g").attr("clip-path", "url(#clip)");
+  dom.events = dom.body.append('g');
+  dom.markers = dom.body.append('g');
 
 
   /*
@@ -321,6 +333,7 @@ export default function(newApp, ui, methods) {
     })
     .on('end', () => {
       toggleTransition(true);
+      app.timerange = scale.x.domain();
       methods.onUpdateTimerange(scale.x.domain());
     });
 
@@ -517,12 +530,6 @@ export default function(newApp, ui, methods) {
    * @param {Object} app: Redux state app subtree
    */
   function updateAxis() {
-    updateTimeRange();
-    
-    scale.x = d3.scaleTime()
-      .domain(app.timerange)
-      .range([margin.left, WIDTH]);
-
     const groupStep = (106 - 30) / domain.categories.length;
     let groupYs = Array.apply(null, Array(domain.categories.length));
     groupYs = groupYs.map((g, i) => {
