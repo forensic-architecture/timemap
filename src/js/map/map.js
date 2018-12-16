@@ -165,7 +165,7 @@ Stop and start the development process in terminal after you have added your tok
       .y(d => getCoords(d).y + transformY);
 
     g.selectAll('.narrative')
-      .attr('d', sequenceLine);
+      .attr('d', d => sequenceLine(d.steps));
   }
 
   lMap.on("zoomend viewreset moveend", updateSVG);
@@ -365,8 +365,8 @@ Stop and start the development process in terminal after you have added your tok
   }
 
   function renderNarratives() {
-    const narrativesDom = g.selectAll('.narrative')
-      .data(domain.narratives.map(d => d.steps))
+    const narrativesDom = svg.selectAll('.narrative')
+      .data(domain.narratives)
 
     narrativesDom
       .exit()
@@ -375,40 +375,45 @@ Stop and start the development process in terminal after you have added your tok
     narrativesDom
       .enter().append('path')
       .attr('class', 'narrative')
-      .attr('d', sequenceLine)
+      .attr('d', d => sequenceLine(d.steps))
       .style('stroke-width', d => {
-        if (!d[0]) return 0;
-        // Note: [0] is a non-elegant way to get the narrative id out of the first
-        // event in the narrative sequence
-        const styleProps = getNarrativeStyle(d[0].narrative);
+        if (!d) return 0;
+        const styleProps = getNarrativeStyle(d.id);
         return styleProps.strokeWidth;
       })
       .style('stroke-dasharray', d => {
-        if (!d[0]) return 'none';
-        const styleProps = getNarrativeStyle(d[0].narrative);
+        if (!d) return 'none';
+        const styleProps = getNarrativeStyle(d.id);
         return (styleProps.style === 'dotted') ? "2px 5px" : 'none';
       })
       .style('stroke', d => {
-        if (!d[0]) return 'none';
-        const styleProps = getNarrativeStyle(d[0].narrative);
+        if (!d || app.narrative === null) return 'none';
+        if (d.id !== app.narrative.id) return '#232323';
+        const styleProps = getNarrativeStyle(d.id);
         return styleProps.stroke;
       })
       .style('stroke-opacity', d => {
         if (app.narrative === null) return 0;
-        if (!d[0] || !d[0].narratives.find(n => n === app.narrative.id)) return 0.2;
+        if (!d || d.id !== app.narrative.id) return 0.2;
         return 1;
       })
-      .style('fill', 'none');
+      .style('fill', 'none')
+      .style('cursor', 'pointer')
+      .on('click', d => {
+        console.log(d)
+      });
 
     narrativesDom
+      .attr('d', d => sequenceLine(d.steps))
       .style('stroke', d => {
-        if (!d[0]) return 'none';
-        const styleProps = getNarrativeStyle(d[0].narrative);
+        if (!d || app.narrative === null) return 'none';
+        if (d.id !== app.narrative.id) return '#232323';
+        const styleProps = getNarrativeStyle(d.id);
         return styleProps.stroke;
       })
       .style('stroke-opacity', d => {
         if (app.narrative === null) return 0;
-        if (!d[0] || !d[0].narratives.find(n => n === app.narrative.id)) return 0.2;
+        if (!d || d.id !== app.narrative.id) return 0.2;
         return 1;
       })
   }
@@ -446,8 +451,8 @@ Stop and start the development process in terminal after you have added your tok
   */
   function renderDomain () {
     renderSites();
-    renderNarratives();
     renderEvents();
+    renderNarratives();
   }
   function renderSelectedAndHighlight () {
     renderSelected();

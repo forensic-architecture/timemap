@@ -168,6 +168,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     height: 60px;
     width: 110px;
     padding: 5px 0 5px 0;
@@ -454,7 +455,7 @@
       height: 140px;
       line-height: 140px;
       width: 100%;
-      padding: 0;
+      padding: 10px;
       border: 1px solid $offwhite;
       background-size: 100%;
       color: $offwhite;
@@ -469,6 +470,10 @@
       &:hover {
         transition: 0.2s ease;
         letter-spacing: 0.15em;
+      }
+
+      p {
+        text-transform: none;
       }
     }
 
@@ -515,10 +520,10 @@
       height: 60px;
       padding: 0;
 
-      .tab-caption {
+      /*.tab-caption {
         transition: 0.2s ease;
         opacity: 0;
-      }
+      }*/
 
       &:hover {
         .tab-caption {

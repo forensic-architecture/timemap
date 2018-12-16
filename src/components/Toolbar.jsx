@@ -7,7 +7,7 @@ import Search from './Search.jsx';
 import TagListPanel from './TagListPanel.jsx';
 import ToolbarBottomActions from './ToolbarBottomActions.jsx';
 import copy from '../js/data/copy.json';
-import { isNotNullNorUndefined } from '../js/utilities.js';
+import { isNotNullNorUndefined, trimAndEllipse } from '../js/utilities.js';
 
 class Toolbar extends React.Component {
 
@@ -66,7 +66,7 @@ class Toolbar extends React.Component {
             <div className="panel-action action">
               <button style={{ backgroundColor: '#000' }} onClick={() => { this.goToNarrative(narr); }}>
                 <p>{narr.label}</p>
-                <p><small>{narr.description}</small></p>
+                <p><small>{trimAndEllipse(narr.description, 120)}</small></p>
               </button>
             </div>
           )
@@ -100,6 +100,7 @@ class Toolbar extends React.Component {
 
     return (
       <div className={classes} onClick={() => { this.toggleTab(tabNum); }}>
+        <i className="material-icons">timeline</i>
         <div className="tab-caption">{label}</div>
       </div>
     );

@@ -32,11 +32,15 @@
   &.narrative-mode {
     left: 0;
   }
-  
+
   .event {
     fill: $event_default;
     cursor: pointer;
     opacity: 0.45;
+  }
+
+  .narrative {
+    cursor: pointer;
   }
 
   .link {

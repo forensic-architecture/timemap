@@ -29,6 +29,13 @@ NARRATIVE INFO
     font-weight: 100;
   }
 
+  h6 {
+    margin: 10px 0;
+    i {
+      font-size: $normal;
+    }
+  }
+
   p {
     font-family: 'Lato', 'Helvetica', sans-serif;
     font-size: $normal;
