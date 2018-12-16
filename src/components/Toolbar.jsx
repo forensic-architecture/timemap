@@ -59,8 +59,8 @@ class Toolbar extends React.Component {
   renderToolbarNarrativePanel() {
     return (
       <TabPanel>
-        <h2>Focus stories</h2>
-        <p>Here are some highlighted stories</p>
+        <h2>{copy[this.props.language].toolbar.narrative_panel_title}</h2>
+        <p>{copy[this.props.language].toolbar.narrative_summary}</p>
         {this.props.narratives.map((narr) => {
           return (
             <div className="panel-action action">

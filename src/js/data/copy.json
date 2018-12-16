@@ -103,7 +103,9 @@
           "title": "Directory of tags",
           "placeholder": "Search"
         }
-      }
+      },
+      "narrative_panel_title": "Focus narratives",
+      "narrative_summary": "Here you can follow some curated stories we have found in the data."
     },
     "timeline": {
       "zooms": [

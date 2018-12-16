@@ -98,10 +98,24 @@ Stop and start the development process in terminal after you have added your tok
       .attr('viewBox', '0 0 6 6')
       .attr('refX', 3)
       .attr('refY', 3)
-      .attr('markerWidth', 14)
-      .attr('markerHeight', 14)
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
       .attr('orient', 'auto')
       .append('path')
+      .style('fill', 'red')
+      .attr('d', 'M0,3v-3l6,3l-6,3z');
+
+    svg.insert('defs', 'g')
+      .append('marker-off')
+      .attr('id', 'arrow-off')
+      .attr('viewBox', '0 0 6 6')
+      .attr('refX', 3)
+      .attr('refY', 3)
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
+      .attr('orient', 'auto')
+      .append('path')
+      .style('fill', 'black')
       .attr('d', 'M0,3v-3l6,3l-6,3z');
 
     map.on('zoomstart', () => {
@@ -366,6 +380,12 @@ Stop and start the development process in terminal after you have added your tok
       .exit()
       .remove();
 
+    const getMarker = (d) => {
+      if (!d || app.narrative === null) return 'none';
+      if (d.id !== app.narrative.id) return 'url(#arrow-off)';
+      return 'url(#arrow)';
+    }
+
     narrativesDom
       .enter().append('path')
       .attr('class', 'narrative')
@@ -393,12 +413,18 @@ Stop and start the development process in terminal after you have added your tok
       })
       .style('fill', 'none')
       .style('cursor', 'pointer')
+      .attr('marker-start', d => getMarker(d))
+      .attr('marker-end', d => getMarker(d))
+      .attr('mid-marker', d => getMarker(d))
       .on('click', d => {
         console.log(d)
       });
 
     narrativesDom
       .attr('d', d => sequenceLine(d.steps))
+      .attr('marker-start', d => getMarker(d))
+      .attr('marker-end', d => getMarker(d))
+      .attr('mid-marker', d => getMarker(d))
       .style('stroke', d => {
         if (!d || app.narrative === null) return 'none';
         if (d.id !== app.narrative.id) return '#232323';
