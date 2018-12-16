@@ -451,8 +451,8 @@ Stop and start the development process in terminal after you have added your tok
   */
   function renderDomain () {
     renderSites();
+    renderNarratives();    
     renderEvents();
-    renderNarratives();
   }
   function renderSelectedAndHighlight () {
     renderSelected();
