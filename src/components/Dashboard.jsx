@@ -19,6 +19,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
+    this.handleViewSource = this.handleViewSource.bind(this)
     this.handleHighlight = this.handleHighlight.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.handleSelectNarrative = this.handleSelectNarrative.bind(this);
@@ -44,6 +45,11 @@ class Dashboard extends React.Component {
     if (this.eventsById[eventId]) return this.eventsById[eventId];
     this.eventsById[eventId] = this.props.domain.events.find(ev => ev.id === eventId);
     return this.eventsById[eventId];
+  }
+
+  handleViewSource(source) {
+    console.log('handleViewSource: to implement in Dashboard.jsx')
+    this.props.actions.updateSource(source)
   }
 
   handleSelect(selected) {
@@ -108,6 +114,7 @@ class Dashboard extends React.Component {
             : ''
         }
         <CardStack
+          onViewSource={this.handleViewSource}
           onSelect={this.handleSelect}
           onHighlight={this.handleHighlight}
           onToggleCardstack={() => this.props.actions.updateSelected([])}

@@ -220,6 +220,14 @@ export function resetAllFilters() {
   }
 }
 
+export const UPDATE_SOURCE = "UPDATE_SOURCE"
+export function updateSource(source) {
+  return {
+    type: UPDATE_SOURCE,
+    source
+  }
+}
+
 // UI
 
 export const TOGGLE_FETCHING_DOMAIN = 'TOGGLE_FETCHING_DOMAIN'

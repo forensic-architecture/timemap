@@ -1,9 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Spinner from './Spinner'
 
 import copy from '../../js/data/copy.json'
 
-const CardSource = ({ source, language, isLoading, error }) => {
+const CardSource = ({ source, isLoading, onClickHandler }) => {
 
   function renderIconText(type) {
     switch(type) {
@@ -29,7 +30,7 @@ const CardSource = ({ source, language, isLoading, error }) => {
       {isLoading
           ? <Spinner/>
           : (
-            <div className="source-row">
+            <div className="source-row" onClick={() => onClickHandler(source)}>
               <i className="material-icons source-icon">
                 {renderIconText(source.type)}
               </i>
@@ -38,6 +39,15 @@ const CardSource = ({ source, language, isLoading, error }) => {
           )}
     </div>
   )
+}
+
+CardSource.propTypes = {
+  source: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    type: PropTypes.string
+  }),
+  isLoading: PropTypes.bool,
+  onClickHandler: PropTypes.func.isRequired,
 }
 
 export default CardSource

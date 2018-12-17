@@ -30,9 +30,9 @@ class Card extends React.Component {
       isHighlighted: !this.state.isHighlighted
     }, () => {
       if (!this.state.isHighlighted) {
-        this.props.highlight(this.props.event);
+        this.props.onHighlight(this.props.event);
       } else {
-        this.props.highlight(null);
+        this.props.onHighlight(null);
       }
     });
   }
@@ -101,8 +101,8 @@ class Card extends React.Component {
         {this.props.event.sources.map(source => (
           <CardSource
             isLoading={this.props.isLoading}
-            language={this.props.language}
             source={source}
+            onClickHandler={source => this.props.onViewSource(source)}
           />
         ))}
       </div>
@@ -127,7 +127,7 @@ class Card extends React.Component {
 
       return (
         <CardNarrative
-          select={(event) => this.props.select([event])}
+          select={(event) => this.props.onSelect([event])}
           makeTimelabel={(timestamp) => this.makeTimelabel(timestamp)}
           next={links.next}
           prev={links.prev}

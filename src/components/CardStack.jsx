@@ -27,8 +27,9 @@ class CardStack extends React.Component {
             getCategoryGroup={this.props.getCategoryGroup}
             getCategoryColor={this.props.getCategoryColor}
             getCategoryLabel={this.props.getCategoryLabel}
-            highlight={this.props.onHighlight}
-            select={this.props.onSelect}
+            onViewSource={this.props.onViewSource}
+            onHighlight={this.props.onHighlight}
+            onSelect={this.props.onSelect}
           />
         );
       });
