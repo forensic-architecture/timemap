@@ -69,6 +69,9 @@ class Card extends React.Component {
   }
 
   renderTags() {
+    if (!this.props.tags || (this.props.tags && this.props.tags.length === 0)) {
+      return null
+    }
     return (
       <CardTags
         tags={this.props.tags || []}
