@@ -57,7 +57,7 @@ export default function(newApp, ui, methods) {
     const map = L.map(id)
       .setView(center, zoom)
       .setMinZoom(10)
-      .setMaxZoom(18)
+      .setMaxZoom(19)
       .setMaxBounds(maxBoundaries)
 
     // NB: configure tile endpoint
@@ -383,6 +383,9 @@ Stop and start the development process in terminal after you have added your tok
     if (app.narrative !== null) {
       d3.selectAll('#arrow path')
         .style('fill', getNarrativeStyle(app.narrative.id).stroke);
+
+      d3.selectAll('.location-event-marker')
+        .style('fill-opacity', '0.1 !important')
     }
 
     const getMarker = (d) => {
@@ -407,7 +410,6 @@ Stop and start the development process in terminal after you have added your tok
       })
       .style('stroke', d => {
         if (!d || app.narrative === null) return 'none';
-        if (d.id !== app.narrative.id) return '#232323';
         const styleProps = getNarrativeStyle(d.id);
         return styleProps.stroke;
       })
@@ -432,7 +434,6 @@ Stop and start the development process in terminal after you have added your tok
       .attr('mid-marker', d => getMarker(d))
       .style('stroke', d => {
         if (!d || app.narrative === null) return 'none';
-        if (d.id !== app.narrative.id) return '#232323';
         const styleProps = getNarrativeStyle(d.id);
         return styleProps.stroke;
       })
