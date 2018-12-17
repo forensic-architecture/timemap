@@ -3,10 +3,11 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import * as selectors from '../selectors';
 
-import MediaOverlay from './MediaOverlay.jsx';
+import MediaOverlay from './presentational/MediaOverlay';
 import LoadingOverlay from './presentational/LoadingOverlay';
-import Map from './Map.jsx';
+import Viewport from './Viewport.jsx';
 import Toolbar from './Toolbar.jsx';
 import CardStack from './CardStack.jsx';
 import NarrativeCard from './NarrativeCard.js';
@@ -21,12 +22,10 @@ class Dashboard extends React.Component {
     super(props);
 
     this.handleViewSource = this.handleViewSource.bind(this)
-    this.handleHighlight = this.handleHighlight.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
-    this.handleSelectNarrative = this.handleSelectNarrative.bind(this);
-    this.handleTagFilter = this.handleTagFilter.bind(this);
-    this.updateTimerange = this.updateTimerange.bind(this);
-    this.getCategoryColor = this.getCategoryColor.bind(this);
+    this.handleHighlight = this.handleHighlight.bind(this)
+    this.handleSelect = this.handleSelect.bind(this)
+    this.handleTagFilter = this.handleTagFilter.bind(this)
+    this.updateTimerange = this.updateTimerange.bind(this)
 
     this.eventsById = {}
   }
@@ -49,6 +48,7 @@ class Dashboard extends React.Component {
   }
 
   handleViewSource(source) {
+    console.log('handleViewSource: to implement in Dashboard.jsx')
     this.props.actions.updateSource(source)
   }
 
@@ -59,10 +59,6 @@ class Dashboard extends React.Component {
 
       this.props.actions.updateSelected(eventsToSelect)
     }
-  }
-
-  handleSelectNarrative(narrative) {
-    this.props.actions.updateNarrative(narrative);
   }
 
   handleTagFilter(tag) {
@@ -86,33 +82,16 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
-        <Toolbar
-          onFilter={this.handleTagFilter}
-          onSelectNarrative={this.handleSelectNarrative}
-          actions={this.props.actions}
-        />
-        <Map
-          mapId="map"
+        <Viewport
           methods={{
             onSelect: this.handleSelect,
-            onSelectNarrative: this.handleSelectNarrative,
-            getCategoryColor: this.getCategoryColor,
-          }}
-        />
-        <Timeline
-          methods={{
-            onSelect: this.handleSelect,
-            onUpdateTimerange: this.updateTimerange,
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
-        {(this.props.app.narrative !== null)
-            ? <NarrativeCard
-              onSelect={this.handleSelect}
-              onSelectNarrative={this.handleSelectNarrative}
-            />
-            : ''
-        }
+        <Toolbar
+          onFilter={this.handleTagFilter}
+          actions={this.props.actions}
+        />
         <CardStack
           onViewSource={this.handleViewSource}
           onSelect={this.handleSelect}
@@ -121,23 +100,33 @@ class Dashboard extends React.Component {
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={category => this.getCategoryColor(category)}
         />
+        <Timeline
+          methods={{
+            onSelect: this.handleSelect,
+            onUpdateTimerange: this.updateTimerange,
+            getCategoryColor: category => this.getCategoryColor(category)
+          }}
+        />
         <InfoPopUp
           ui={this.props.ui}
           app={this.props.app}
           toggle={() => this.props.actions.toggleInfoPopup()}
+        />
+        <NarrativeCard
+          onSelect={this.handleSelect}
+          actions={this.props.actions}
+        />
+        <NarrativeCard
+          onSelect={this.handleSelect}
         />
         <Notification
           isNotification={this.props.app.flags.isNotification}
           notifications={this.props.domain.notifications}
           onToggle={this.props.actions.markNotificationsRead}
         />
-        {this.props.app.source ? (
-          <MediaOverlay
-            onCancel={() => {
-              this.props.actions.updateSource(null)}
-            }
-          />
-        ) : null}
+        <MediaOverlay
+
+        />
         <LoadingOverlay
           ui={this.props.app.flags.isFetchingDomain}
           language={this.props.app.language}

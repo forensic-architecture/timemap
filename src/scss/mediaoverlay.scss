@@ -1,0 +1,51 @@
+$vimeo-height: 800px;
+$vimeo-width: 1000px;
+
+.mo-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(230, 230, 230, 0.5);
+  z-index: 20;
+}
+
+.mo-container {
+  background-color: transparent;
+  max-width: 80vw;
+  min-width: 80vw;
+  max-height: 90vh;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .mo-controls, .mo-media-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.mo-media-container {
+  max-height: $vimeo-height;
+}
+
+.mo-controls {
+  color: white;
+  width: $vimeo-width;
+  background-color: black;
+}
+
+.vimeo-iframe {
+  min-height: $vimeo-height;
+  max-height: $vimeo-height;
+  min-width: $vimeo-width;
+  max-width: $vimeo-width;
+  border: none;
+}

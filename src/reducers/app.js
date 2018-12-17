@@ -8,6 +8,7 @@ import {
   UPDATE_TAGFILTERS,
   UPDATE_TIMERANGE,
   UPDATE_NARRATIVE,
+  UPDATE_SOURCE,
   RESET_ALLFILTERS,
   TOGGLE_LANGUAGE,
   TOGGLE_MAPVIEW,
@@ -117,6 +118,13 @@ function toggleMapView(appState, action) {
   });
 }
 
+function updateSource(appState, action) {
+  return {
+    ...appState,
+    source: action.source
+  }
+}
+
 function fetchError(state, action) {
   return {
     ...state,
@@ -181,6 +189,8 @@ function app(appState = initial.app, action) {
       return updateTimeRange(appState, action);
     case UPDATE_NARRATIVE:
       return updateNarrative(appState, action);
+    case UPDATE_SOURCE:
+      return updateSource(appState, action);
     case RESET_ALLFILTERS:
       return resetAllFilters(appState, action);
     case TOGGLE_LANGUAGE:
