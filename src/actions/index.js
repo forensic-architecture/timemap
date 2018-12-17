@@ -97,7 +97,6 @@ export function fetchDomain () {
       sourcesPromise
     ])
       .then(response => {
-        dispatch(toggleFetchingDomain())
         const result = {
           events: response[0],
           categories: response[1],
@@ -107,11 +106,16 @@ export function fetchDomain () {
           sources: response[5],
           notifications
         }
+        if (Object.values(result).some(resp => resp.hasOwnProperty('error'))) {
+          throw new Error('Some URLs returned negative. If you are in development, check the server is running')
+        }
         return result
       })
       .catch(err => {
         dispatch(fetchError(err.message))
         dispatch(toggleFetchingDomain())
+        // TODO: handle this appropriately in React hierarchy
+        alert(err.message)
       })
   };
 }
