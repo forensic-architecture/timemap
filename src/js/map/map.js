@@ -380,6 +380,11 @@ Stop and start the development process in terminal after you have added your tok
       .exit()
       .remove();
 
+    if (app.narrative !== null) {
+      d3.selectAll('#arrow path')
+        .style('fill', getNarrativeStyle(app.narrative.id).stroke);
+    }
+
     const getMarker = (d) => {
       if (!d || app.narrative === null) return 'none';
       if (d.id !== app.narrative.id) return 'url(#arrow-off)';
