@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
-import MediaOverlay from './MediaOverlay.jsx';
+import SourceOverlay from './SourceOverlay.jsx';
 import LoadingOverlay from './presentational/LoadingOverlay';
 import Map from './Map.jsx';
 import Toolbar from './Toolbar.jsx';
@@ -132,7 +132,8 @@ class Dashboard extends React.Component {
           onToggle={this.props.actions.markNotificationsRead}
         />
         {this.props.app.source ? (
-          <MediaOverlay
+          <SourceOverlay
+            source={this.props.app.source}
             onCancel={() => {
               this.props.actions.updateSource(null)}
             }
