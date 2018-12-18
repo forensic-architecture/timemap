@@ -106,7 +106,7 @@ Stop and start the development process in terminal after you have added your tok
       .attr('d', 'M0,3v-3l6,3l-6,3z');
 
     svg.insert('defs', 'g')
-      .append('marker-off')
+      .append('marker')
       .attr('id', 'arrow-off')
       .attr('viewBox', '0 0 6 6')
       .attr('refX', 3)
@@ -116,6 +116,7 @@ Stop and start the development process in terminal after you have added your tok
       .attr('orient', 'auto')
       .append('path')
       .style('fill', 'black')
+      .style('fill-opacity', 0.2)
       .attr('d', 'M0,3v-3l6,3l-6,3z');
 
     map.on('zoomstart', () => {
@@ -175,7 +176,7 @@ Stop and start the development process in terminal after you have added your tok
     });
 
     svg.selectAll('.narrative')
-      .attr('d', d => sequenceLine(d.steps));
+      .each((g, i, nodes) => { return updateNarrativeSteps(g, i, nodes); });
   }
 
   lMap.on("zoomend viewreset moveend", updateSVG);
@@ -315,6 +316,9 @@ Stop and start the development process in terminal after you have added your tok
       .transition()
       .duration(500)
       .attr('r', d => (d) ? Math.sqrt(16 * d) + 3 : 0);
+
+    eventsDom.selectAll('.location-event-marker')
+      .style('fill-opacity', '0.1 !important');
   }
 
   // NB: is this a function to be removed for future features?
@@ -352,24 +356,23 @@ Stop and start the development process in terminal after you have added your tok
      }
    }
 
-   /*const sequenceLine = d3.line()
-     .x(d => getCoords(d).x)
-     .y(d => getCoords(d).y)*/
-
-   const sequenceLine = d3.line()
-     .x(d => getCoords(d).x + getSVGBoundaries().transformX)
-     .y(d => getCoords(d).y + getSVGBoundaries().transformY);
-   /**
-    * Clears existing narrative layer
-    * Renders all narrativ as paths
-    * Adds eventlayer to map
-    */
+ /**
+  * Clears existing narrative layer
+  * Renders all narrativ as paths
+  * Adds eventlayer to map
+  */
 
   function getNarrativeStyle(narrativeId) {
     const styleName = narrativeId && narrativeId in narrativeProps
       ? narrativeId
       : 'default';
     return narrativeProps[styleName];
+  }
+
+  function getMarker (d) {
+    if (!d || app.narrative === null) return 'none';
+    if (d.id === app.narrative.id) return 'url(#arrow)';
+    return 'url(#arrow-off)';
   }
 
   function renderNarratives() {
@@ -383,67 +386,88 @@ Stop and start the development process in terminal after you have added your tok
     if (app.narrative !== null) {
       d3.selectAll('#arrow path')
         .style('fill', getNarrativeStyle(app.narrative.id).stroke);
-
-      d3.selectAll('.location-event-marker')
-        .style('fill-opacity', '0.1 !important')
     }
 
-    const getMarker = (d) => {
-      if (!d || app.narrative === null) return 'none';
-      if (d.id !== app.narrative.id) return 'url(#arrow-off)';
-      return 'url(#arrow)';
-    }
-
-    narrativesDom
-      .enter().append('path')
+    const narrativesEnter = narrativesDom
+      .enter().append('g')
+      .attr('id', d => 'narrative-' + d.id)
       .attr('class', 'narrative')
-      .attr('d', d => sequenceLine(d.steps))
-      .style('stroke-width', d => {
-        if (!d) return 0;
-        const styleProps = getNarrativeStyle(d.id);
-        return styleProps.strokeWidth;
-      })
-      .style('stroke-dasharray', d => {
-        if (!d) return 'none';
-        const styleProps = getNarrativeStyle(d.id);
-        return (styleProps.style === 'dotted') ? "2px 5px" : 'none';
-      })
-      .style('stroke', d => {
-        if (!d || app.narrative === null) return 'none';
-        const styleProps = getNarrativeStyle(d.id);
-        return styleProps.stroke;
-      })
-      .style('stroke-opacity', d => {
-        if (app.narrative === null) return 0;
-        if (!d || d.id !== app.narrative.id) return 0.2;
-        return 1;
-      })
-      .style('fill', 'none')
-      .style('cursor', 'pointer')
-      .attr('marker-start', d => getMarker(d))
-      .attr('marker-end', d => getMarker(d))
-      .attr('mid-marker', d => getMarker(d))
-      .on('click', d => {
-        console.log(d)
-      });
 
-    narrativesDom
-      .attr('d', d => sequenceLine(d.steps))
-      .attr('marker-start', d => getMarker(d))
-      .attr('marker-end', d => getMarker(d))
-      .attr('mid-marker', d => getMarker(d))
-      .style('stroke', d => {
-        if (!d || app.narrative === null) return 'none';
-        const styleProps = getNarrativeStyle(d.id);
-        return styleProps.stroke;
-      })
-      .style('stroke-opacity', d => {
-        if (app.narrative === null) return 0;
-        if (!d || d.id !== app.narrative.id) return 0.2;
-        return 1;
-      })
+    narrativesDom.selectAll('.narrative')
+      .each((g, i, nodes) => { return updateNarrativeSteps(g, i, nodes); });
   }
 
+  function updateNarrativeSteps(g, i, nodes) {
+      const n = d3.select(nodes[i]).data()[0];
+      const allsteps = n.steps.slice();
+      allsteps.push(n.steps[n.steps.length - 1]);
+
+      const steps = d3.select(nodes[i]).selectAll('.narrative-step')
+          .data(n.steps)
+
+      steps.enter().append('line')
+        .attr('class', 'narrative-step')
+          .attr('x1', d => getCoords(d).x + getSVGBoundaries().transformX)
+          .attr('x2', (d, j) => { return getCoords(allsteps[j + 1]).x + getSVGBoundaries().transformX; })
+          .attr('y1', d => getCoords(d).y + getSVGBoundaries().transformY)
+          .attr('y2', (d, j) => { return getCoords(allsteps[j + 1]).y + getSVGBoundaries().transformY; })
+          .style('stroke-width', d => {
+            if (!d) return 0;
+            const styleProps = getNarrativeStyle(n.id);
+            return styleProps.strokeWidth;
+          })
+          .style('stroke-dasharray', d => {
+            if (!d) return 'none';
+            const styleProps = getNarrativeStyle(n.id);
+            return (styleProps.style === 'dotted') ? "2px 5px" : 'none';
+          })
+          .style('stroke', d => {
+            if (!d || app.narrative === null) return 'none';
+            const styleProps = getNarrativeStyle(n.id);
+            return styleProps.stroke;
+          })
+          .style('stroke-opacity', d => {
+            if (app.narrative === null) return 0;
+            if (!d || d.id !== app.narrative.id) return 0.2;
+            return 1;
+          })
+          .attr('marker-start', (d, j) => !j ? getMarker(n) :  'none')
+          .attr('marker-end', getMarker(n))
+          .attr('mid-marker', getMarker(n))
+
+      steps
+          .attr('x1', d => getCoords(d).x + getSVGBoundaries().transformX)
+          .attr('x2', (d, j) => { return getCoords(allsteps[j + 1]).x + getSVGBoundaries().transformX; })
+          .attr('y1', d => getCoords(d).y + getSVGBoundaries().transformY)
+          .attr('y2', (d, j) => { return getCoords(allsteps[j + 1]).y + getSVGBoundaries().transformY; })
+          .style('stroke-width', d => {
+            if (!d) return 0;
+            const styleProps = getNarrativeStyle(n.id);
+            return styleProps.strokeWidth;
+          })
+          .style('stroke-dasharray', d => {
+            if (!d) return 'none';
+            const styleProps = getNarrativeStyle(n.id);
+            return (styleProps.style === 'dotted') ? "2px 5px" : 'none';
+          })
+          .style('stroke', d => {
+            if (!d || app.narrative === null) return 'none';
+            const styleProps = getNarrativeStyle(n.id);
+            return styleProps.stroke;
+          })
+          .style('stroke-opacity', d => {
+            if (app.narrative === null) return 0;
+            if (!d || n.id !== app.narrative.id) return 0.2;
+            return 1;
+          })
+          .attr('marker-start', (d, j) => !j ? getMarker(n) :  'none')
+          .attr('marker-end', getMarker(n))
+          .attr('mid-marker', getMarker(n))
+
+      steps
+        .exit()
+        .remove();
+  }
   /**
    * Updates displayable data on the map: events, coevents and paths
    * @param {Object} domain: object of arrays of events, coevs, attacks, paths, sites
