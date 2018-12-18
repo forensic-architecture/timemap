@@ -32,6 +32,13 @@ class NarrativeCard extends React.Component {
     if (prevProps.narrative === this.props.narrative && this.state.step !== prevState.step) {
       const step = this.props.narrative.steps[this.state.step];
       this.props.onSelect([step]);
+    } else if (prevProps.narrative !== this.props.narrative && this.props.narrative !== null) {
+      this.setState({
+        step: 0
+      }, () => {
+        const step = this.props.narrative.steps[this.state.step];
+        this.props.onSelect([step]);
+      });
     }
   }
 
