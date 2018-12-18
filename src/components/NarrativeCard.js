@@ -23,10 +23,22 @@ class NarrativeCard extends React.Component {
     }
   }
 
-  componentDidUpdate() {
-    if (this.props.narrative !== null) {
+  componentDidMount() {
+    const step = this.props.narrative.steps[this.state.step];
+    this.props.onSelect([step]);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.narrative === this.props.narrative && this.state.step !== prevState.step) {
       const step = this.props.narrative.steps[this.state.step];
       this.props.onSelect([step]);
+    } else if (prevProps.narrative !== this.props.narrative && this.props.narrative !== null) {
+      this.setState({
+        step: 0
+      }, () => {
+        const step = this.props.narrative.steps[this.state.step];
+        this.props.onSelect([step]);
+      });
     }
   }
 
@@ -34,7 +46,7 @@ class NarrativeCard extends React.Component {
     return (
       <button
         className="side-menu-burg is-active"
-        onClick={() => { this.props.actions.updateNarrative(null); }}
+        onClick={() => { this.props.onSelectNarrative(null); }}
       >
         <span></span>
       </button>
@@ -42,16 +54,19 @@ class NarrativeCard extends React.Component {
   }
 
   render() {
-    if (this.props.narrative !== null && this.props.narrative.steps[this.state.step]) {
+    if (this.props.narrative.steps[this.state.step]) {
       const steps = this.props.narrative.steps;
       const step = steps[this.state.step];
 
       return (
         <div className="narrative-info">
           {this.renderClose()}
-          <h6>{this.props.narrative.label}</h6>
+          <h3>{this.props.narrative.label}</h3>
           <p>{this.props.narrative.description}</p>
-          <h3>{this.state.step + 1}/{steps.length}. {step.location}</h3>
+          <h6>
+            <i className="material-icons left">location_on</i>
+            {this.state.step + 1}/{steps.length}. {step.location}
+          </h6>
           <div className="actions">
             <div className={`${(!this.state.step) ? 'disabled ' : ''} action`} onClick={() => this.goToPrevKeyFrame()}>&larr;</div>
             <div className={`${(this.state.step >= this.props.narrative.steps.length - 1) ? 'disabled ' : ''} action`} onClick={() => this.goToNextKeyFrame()}>&rarr;</div>

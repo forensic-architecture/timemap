@@ -44,6 +44,13 @@ export function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+export function trimAndEllipse(string, stringNum) {
+  if (string.length > stringNum) {
+    return string.substring(0, 120) + '...'
+  }
+  return string;
+}
+
 /**
 * Return a Date object given a datetime string of the format: "2016-09-10T07:00:00"
 * @param {string} datetime

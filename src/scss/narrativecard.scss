@@ -4,9 +4,9 @@ NARRATIVE INFO
 .narrative-info {
   position: fixed;
   top: 10px;
-  left: 130px;
+  left: 10px;
   height: auto;
-  width: 270px;
+  width: 370px;
   box-sizing: border-box;
   padding: 15px;
   max-height: calc(100% - 250px);
@@ -23,6 +23,17 @@ NARRATIVE INFO
 
   h3 {
     font-size: $large;
+    font-family: 'Merriweather', 'Georgia', serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 100;
+  }
+
+  h6 {
+    margin: 10px 0;
+    i {
+      font-size: $normal;
+    }
   }
 
   p {

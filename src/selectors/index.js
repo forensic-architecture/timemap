@@ -95,16 +95,18 @@ export const selectNarratives = createSelector(
       events.forEach((evt) => {
         const isTagged = isTaggedIn(evt, tagFilters) || isNoTags(tagFilters);
         const isTimeRanged = isTimeRangedIn(evt, timeRange);
-        const isInNarrative =  evt.narrative;
+        const isInNarrative =  evt.narratives.length > 0;
 
-        if (!narratives[evt.narrative]) {
-          narratives[evt.narrative] = { id: evt.narrative, steps: [], byId: {} };
-        }
+        evt.narratives.map(narrative => {
+          if (!narratives[narrative]) {
+            narratives[narrative] = { id: narrative, steps: [], byId: {} };
+          }
 
-        if (/*isTimeRanged && isTagged && */isInNarrative) {
-          narratives[evt.narrative].steps.push(evt);
-          narratives[evt.narrative].byId[evt.id] = { next: null, prev: null };
-        }
+          if (isInNarrative) {
+            narratives[narrative].steps.push(evt);
+            narratives[narrative].byId[evt.id] = { next: null, prev: null };
+          }
+        })
       });
 
       Object.keys(narratives).forEach((key) => {

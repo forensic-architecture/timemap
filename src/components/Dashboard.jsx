@@ -22,7 +22,7 @@ class Dashboard extends React.Component {
 
     this.handleHighlight = this.handleHighlight.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
-    // this.handleToggle = this.handleToggle.bind(this);
+    this.handleSelectNarrative = this.handleSelectNarrative.bind(this);
     this.handleTagFilter = this.handleTagFilter.bind(this);
     this.updateTimerange = this.updateTimerange.bind(this);
 
@@ -55,6 +55,10 @@ class Dashboard extends React.Component {
     }
   }
 
+  handleSelectNarrative(narrative) {
+    this.props.actions.updateNarrative(narrative);
+  }
+
   handleTagFilter(tag) {
     this.props.actions.updateTagFilters(tag);
   }
@@ -76,22 +80,17 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
+        <Toolbar
+          onFilter={this.handleTagFilter}
+          onSelectNarrative={this.handleSelectNarrative}
+          actions={this.props.actions}
+        />
         <Viewport
           methods={{
             onSelect: this.handleSelect,
+            onSelectNarrative: this.handleSelectNarrative,
             getCategoryColor: category => this.getCategoryColor(category)
           }}
-        />
-        <Toolbar
-          onFilter={this.handleTagFilter}
-          actions={this.props.actions}
-        />
-        <CardStack
-          onSelect={this.handleSelect}
-          onHighlight={this.handleHighlight}
-          onToggleCardstack={() => this.props.actions.updateSelected([])}
-          getNarrativeLinks={event => this.getNarrativeLinks(event)}
-          getCategoryColor={category => this.getCategoryColor(category)}
         />
         <Timeline
           methods={{
@@ -100,17 +99,24 @@ class Dashboard extends React.Component {
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
+        {(this.props.app.narrative !== null)
+            ? <NarrativeCard
+              onSelect={this.handleSelect}
+              onSelectNarrative={this.handleSelectNarrative}
+            />
+            : ''
+        }
+        <CardStack
+          onSelect={this.handleSelect}
+          onHighlight={this.handleHighlight}
+          onToggleCardstack={() => this.props.actions.updateSelected([])}
+          getNarrativeLinks={event => this.getNarrativeLinks(event)}
+          getCategoryColor={category => this.getCategoryColor(category)}
+        />
         <InfoPopUp
           ui={this.props.ui}
           app={this.props.app}
           toggle={() => this.props.actions.toggleInfoPopup()}
-        />
-        <NarrativeCard
-          onSelect={this.handleSelect}
-          actions={this.props.actions}
-        />
-        <NarrativeCard
-          onSelect={this.handleSelect}
         />
         <Notification
           isNotification={this.props.app.flags.isNotification}

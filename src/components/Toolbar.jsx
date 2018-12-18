@@ -7,6 +7,7 @@ import Search from './Search.jsx';
 import TagListPanel from './TagListPanel.jsx';
 import ToolbarBottomActions from './ToolbarBottomActions.jsx';
 import copy from '../js/data/copy.json';
+import { isNotNullNorUndefined, trimAndEllipse } from '../js/utilities.js';
 
 class Toolbar extends React.Component {
 
@@ -51,21 +52,21 @@ class Toolbar extends React.Component {
     this.setState({
       tabNum: -1
     }, () => {
-      this.props.actions.updateNarrative(narrative);
+      this.props.onSelectNarrative(narrative);
     });
   }
 
   renderToolbarNarrativePanel() {
     return (
       <TabPanel>
-        <h2>Focus stories</h2>
-        <p>Here are some highlighted stories</p>
+        <h2>{copy[this.props.language].toolbar.narrative_panel_title}</h2>
+        <p>{copy[this.props.language].toolbar.narrative_summary}</p>
         {this.props.narratives.map((narr) => {
           return (
             <div className="panel-action action">
               <button style={{ backgroundColor: '#000' }} onClick={() => { this.goToNarrative(narr); }}>
                 <p>{narr.label}</p>
-                <p><small>{narr.description}</small></p>
+                <p><small>{trimAndEllipse(narr.description, 120)}</small></p>
               </button>
             </div>
           )
@@ -99,6 +100,7 @@ class Toolbar extends React.Component {
 
     return (
       <div className={classes} onClick={() => { this.toggleTab(tabNum); }}>
+        <i className="material-icons">timeline</i>
         <div className="tab-caption">{label}</div>
       </div>
     );
@@ -174,8 +176,9 @@ class Toolbar extends React.Component {
   }
 
   render() {
+    const isNarrative = isNotNullNorUndefined(this.props.narrative);
     return (
-      <div id="toolbar-wrapper" className="toolbar-wrapper">
+      <div id="toolbar-wrapper" className={`toolbar-wrapper ${(isNarrative) ? 'narrative-mode' : ''}`}>
         {this.renderToolbarTabs()}
         {this.renderToolbarPanels()}
       </div>
@@ -193,6 +196,7 @@ function mapStateToProps(state) {
     categoryFilter: state.app.filters.categories,
     viewFilters: state.app.filters.views,
     features: state.app.features,
+    narrative: state.app.narrative,
   }
 }
 

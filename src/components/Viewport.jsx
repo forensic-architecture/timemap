@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
+import hash from 'object-hash';
+
 import Map from '../js/map/map.js'
 import { areEqual } from '../js/utilities.js'
 
@@ -15,12 +17,15 @@ class Viewport extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.map.update(nextProps.domain, nextProps.app)
+    if (hash(nextProps) !== hash(this.props)) {
+      this.map.update(nextProps.domain, nextProps.app)
+    }
   }
 
   render() {
+    const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper';
     return (
-      <div className='map-wrapper'>
+      <div className={classes}>
         <div id="map" />
       </div>
     )
@@ -39,7 +44,8 @@ function mapStateToProps(state) {
       views: state.app.filters.views,
       selected: state.app.selected,
       highlighted: state.app.highlighted,
-      mapAnchor: state.app.mapAnchor
+      mapAnchor: state.app.mapAnchor,
+      narrative: state.app.narrative
     },
     ui: {
       dom: state.ui.dom,
