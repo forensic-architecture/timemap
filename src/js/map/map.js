@@ -377,7 +377,7 @@ Stop and start the development process in terminal after you have added your tok
 
   function renderNarratives() {
     const narrativesDom = svg.selectAll('.narrative')
-      .data(domain.narratives)
+      .data((app.narrative !== null) ? domain.narratives : [])
 
     narrativesDom
       .exit()
@@ -434,6 +434,7 @@ Stop and start the development process in terminal after you have added your tok
           .attr('marker-start', (d, j) => !j ? getMarker(n) :  'none')
           .attr('marker-end', getMarker(n))
           .attr('mid-marker', getMarker(n))
+          .on('click', () => methods.onSelectNarrative(n) )
 
       steps
           .attr('x1', d => getCoords(d).x + getSVGBoundaries().transformX)

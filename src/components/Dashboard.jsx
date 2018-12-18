@@ -22,7 +22,7 @@ class Dashboard extends React.Component {
 
     this.handleHighlight = this.handleHighlight.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
-    // this.handleToggle = this.handleToggle.bind(this);
+    this.handleSelectNarrative = this.handleSelectNarrative.bind(this);
     this.handleTagFilter = this.handleTagFilter.bind(this);
     this.updateTimerange = this.updateTimerange.bind(this);
 
@@ -55,6 +55,10 @@ class Dashboard extends React.Component {
     }
   }
 
+  handleSelectNarrative(narrative) {
+    this.props.actions.updateNarrative(narrative);
+  }
+
   handleTagFilter(tag) {
     this.props.actions.updateTagFilters(tag);
   }
@@ -78,12 +82,13 @@ class Dashboard extends React.Component {
       <div>
         <Toolbar
           onFilter={this.handleTagFilter}
-          onSelectNarrative={(narrative) => { this.props.actions.updateNarrative(narrative); }}
+          onSelectNarrative={this.handleSelectNarrative}
           actions={this.props.actions}
         />
         <Viewport
           methods={{
             onSelect: this.handleSelect,
+            onSelectNarrative: this.handleSelectNarrative,
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
@@ -97,7 +102,7 @@ class Dashboard extends React.Component {
         {(this.props.app.narrative !== null)
             ? <NarrativeCard
               onSelect={this.handleSelect}
-              onSelectNarrative={(narrative) => { this.props.actions.updateNarrative(narrative); }}
+              onSelectNarrative={this.handleSelectNarrative}
             />
             : ''
         }
