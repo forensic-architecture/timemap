@@ -3,10 +3,8 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import * as selectors from '../selectors';
 
 import LoadingOverlay from './presentational/LoadingOverlay';
-import Viewport from './Viewport.jsx';
 import Map from './Map.jsx';
 import Toolbar from './Toolbar.jsx';
 import CardStack from './CardStack.jsx';
@@ -26,6 +24,7 @@ class Dashboard extends React.Component {
     this.handleSelectNarrative = this.handleSelectNarrative.bind(this);
     this.handleTagFilter = this.handleTagFilter.bind(this);
     this.updateTimerange = this.updateTimerange.bind(this);
+    this.getCategoryColor = this.getCategoryColor.bind(this);
 
     this.eventsById = {}
   }
@@ -91,16 +90,9 @@ class Dashboard extends React.Component {
           methods={{
             onSelect: this.handleSelect,
             onSelectNarrative: this.handleSelectNarrative,
-            getCategoryColor: category => this.getCategoryColor(category)
+            getCategoryColor: this.getCategoryColor,
           }}
         />
-        {/*<Viewport
-          methods={{
-            onSelect: this.handleSelect,
-            onSelectNarrative: this.handleSelectNarrative,
-            getCategoryColor: category => this.getCategoryColor(category)
-          }}
-        />*/}
         <Timeline
           methods={{
             onSelect: this.handleSelect,

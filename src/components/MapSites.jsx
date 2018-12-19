@@ -23,6 +23,7 @@ class MapSites extends React.Component {
 
   render () {
     if (!this.props.sites || !this.props.sites.length) return <div />;
+
     return (
       <div className="sites-layer">
         {this.props.sites.map(site => { return this.renderSite(site); })}

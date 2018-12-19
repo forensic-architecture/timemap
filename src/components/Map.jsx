@@ -1,56 +1,33 @@
 import React from 'react';
-import hash from 'object-hash';
+import { Portal } from 'react-portal';
 
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
+
+import hash from 'object-hash';
 
 import MapLogic from '../js/map/map.js'
 import MapSites from './MapSites.jsx';
 import MapEvents from './MapEvents.jsx';
 import MapNarratives from './MapNarratives.jsx';
+import MapDefsMarkers from './MapDefsMarkers.jsx';
 
 class Map extends React.Component {
 
   constructor() {
     super();
-
+    this.svgRef = React.createRef();
+    this.map = null;
     this.state = {
       isInitialized: false,
-      map: null,
       mapTransformX: 0,
       mapTransformY: 0
     }
   }
 
   componentDidMount(){
-    if (this.state.map === null) {
+    if (this.map === null) {
       this.initializeMap();
-    }
-  }
-
-  componentDidUpdate() {
-    if (!this.state.isInitialized) {
-      const pane = d3.select(this.state.map.getPanes().overlayPane);
-      const boundingClient = d3.select(`#${this.props.mapId}`).node().getBoundingClientRect();
-      const width = boundingClient.width;
-      const height = boundingClient.height;
-
-      this.svg = pane.append('svg')
-        .attr('class', 'leaflet-svg')
-        .attr('width', width)
-        .attr('height', height);
-
-      this.state.map.on('zoomstart', () => {
-        this.svg.classed('hide', true);
-      });
-      this.state.map.on('zoomend', () => {
-        this.svg.classed('hide', false);
-      });
-
-      this.mapLogic = new MapLogic(this.state.map, this.svg, this.props.app, this.props.ui)
-      this.mapLogic.update(this.props.app)
-
-      this.setState({ isInitialized: true })
     }
   }
 
@@ -59,7 +36,6 @@ class Map extends React.Component {
       this.mapLogic.update(nextProps.app)
     }
   }  
-
 
   initializeMap() {
     /**
@@ -93,21 +69,26 @@ class Map extends React.Component {
 
     map.keyboard.disable();
 
-    map.on("move", () => this.updateSVG());
-    map.on("zoomend viewreset moveend", () => this.updateSVG());
+    map.on("move", () => this.alignLayers());
+    map.on("zoomend viewreset moveend", () => this.alignLayers());
     this.addResizeListener();
 
-    this.setState({ map });
+    this.mapLogic = new MapLogic(map, this.svgRef.current, this.props.app, this.props.ui);
+    this.mapLogic.update(this.props.app);
+
+    this.map = map;
+
+    this.setState({ isInitialized: true });
   }
 
   addResizeListener() {
     window.addEventListener('resize', () => {
-      this.updateSVG();
+      this.alignLayers();
     });
   }
 
-  getSVGBoundaries() {
-    const mapNode = d3.select('.leaflet-map-pane').node();
+  alignLayers() {
+    const mapNode = document.querySelector('.leaflet-map-pane');
     if (mapNode === null) return { transformX: 0, transformY: 0 };
 
     // We'll get the transform of the leaflet container,
@@ -116,94 +97,106 @@ class Map extends React.Component {
       .getComputedStyle(mapNode)
       .getPropertyValue('transform');
 
-    // However getComputedStyle returns an awkward string of the format
-    // matrix(0, 0, 1, 0, 0.56523, 123123), hence this awkwardness
+    // Offset with leaflet map transform boundaries    
+    this.setState({
+      mapTransformX: +transform.split(',')[4],
+      mapTransformY: +transform.split(',')[5].split(')')[0]
+    })
+  }
+
+  getClientDims() {
+    const boundingClient = document.querySelector(`#${this.props.mapId}`).getBoundingClientRect();
+
     return {
-      transformX: +transform.split(',')[4],
-      transformY: +transform.split(',')[5].split(')')[0]
+      width: boundingClient.width,
+      height: boundingClient.height
     }
   }
 
-  updateSVG() {
-    const boundingClient = d3.select(`#${this.props.mapId}`).node().getBoundingClientRect();
+  renderSVG() {
+    if (this.map === null) return '';
+    const pane = this.map.getPanes().overlayPane;
+    const { width, height } = this.getClientDims();
 
-    let WIDTH = boundingClient.width;
-    let HEIGHT = boundingClient.height;
-
-    // Offset with leaflet map transform boundaries
-    const { transformX, transformY } = this.getSVGBoundaries();
-    
-    this.setState({
-      mapTransformX: transformX,
-      mapTransformY: transformY
-    })
-
-    this.svg.attr('width', WIDTH)
-      .attr('height', HEIGHT)
-      .attr('style', `left: ${-transformX}px; top: ${-transformY}px`);
+    return (
+      <Portal node={pane}>
+        <svg
+          ref={this.svgRef}
+          width={width}
+          height={height}
+          style={{ transform: `translate3d(${-this.state.mapTransformX}px, ${-this.state.mapTransformY}px, 0)`}}
+          className='leaflet-svg'
+        >
+        </svg>
+      </Portal>
+    );      
   }
 
   renderSites() {
-    if (this.state.isInitialized) {
-      return (
-        <MapSites
-          sites={this.props.domain.sites}
-          map={this.state.map}
-          mapTransformX={this.state.mapTransformX}
-          mapTransformY={this.state.mapTransformY}
-          isEnabled={this.props.app.views.sites}
-        />
-      );
-    }
-    return '';
+    return (
+      <MapSites
+        sites={this.props.domain.sites}
+        map={this.map}
+        mapTransformX={this.state.mapTransformX}
+        mapTransformY={this.state.mapTransformY}
+        isEnabled={this.props.app.views.sites}
+      />
+    );
   }
 
   renderNarratives() {
-    if (this.state.isInitialized) {
-      return (
-        <MapNarratives
-          svg={this.svg}
-          narratives={this.props.domain.narratives}
-          map={this.state.map}
-          mapTransformX={this.state.mapTransformX}
-          mapTransformY={this.state.mapTransformY}
-          narrative={this.props.app.narrative}
-          narrativeProps={this.props.ui.narratives}
-          onSelect={this.props.methods.onSelect}
-          onSelectNarrative={this.props.methods.onSelectNarrative}
-        />
-      );
-    }
-    return '';    
+    return (
+      <MapNarratives
+        svg={this.svgRef.current}
+        narratives={this.props.domain.narratives}
+        map={this.map}
+        mapTransformX={this.state.mapTransformX}
+        mapTransformY={this.state.mapTransformY}
+        narrative={this.props.app.narrative}
+        narrativeProps={this.props.ui.narratives}
+        onSelect={this.props.methods.onSelect}
+        onSelectNarrative={this.props.methods.onSelectNarrative}
+      />
+    );
   }
 
   renderEvents() {
-    if (this.state.isInitialized) {
-      return (
-        <MapEvents
-          svg={this.svg}
-          locations={this.props.domain.locations}
-          categories={this.props.domain.categories}
-          map={this.state.map}
-          mapTransformX={this.state.mapTransformX}
-          mapTransformY={this.state.mapTransformY}
-          onSelect={this.props.methods.onSelect}
-          onSelectNarrative={this.props.methods.onSelectNarrative}
-        />
-      );
-    }
-    return '';    
+    return (
+      <MapEvents
+        svg={this.svgRef.current}
+        locations={this.props.domain.locations}
+        categories={this.props.domain.categories}
+        map={this.map}
+        mapTransformX={this.state.mapTransformX}
+        mapTransformY={this.state.mapTransformY}
+        narrative={this.props.app.narrative}
+        onSelect={this.props.methods.onSelect}
+        onSelectNarrative={this.props.methods.onSelectNarrative}
+        getCategoryColor={this.props.methods.getCategoryColor}
+      />
+    );
+  }
+
+  renderMarkers() {
+    return (
+      <Portal node={this.svgRef.current}>
+        <MapDefsMarkers />
+      </Portal>
+    )
   }
 
 
   render() {
     const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper';
+
     return (
       <div className={classes}>
         <div id={this.props.mapId} />
-        {this.renderSites()}
-        {this.renderEvents()}
-        {this.renderNarratives()}
+        {this.renderSVG()}
+        {(this.state.isInitialized) ? this.renderMarkers() : ''}
+        {(this.state.isInitialized) ? this.renderSites() : ''}
+        {(this.state.isInitialized) ? this.renderEvents() : ''}
+        {(this.state.isInitialized) ? this.renderNarratives() : ''}
       </div>
     );
   }

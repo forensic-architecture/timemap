@@ -1,8 +1,6 @@
 import React from 'react';
 import { Portal } from 'react-portal';
 
-import MapDefsMarkers from './MapDefsMarkers.jsx';
-
 class MapNarratives extends React.Component {
 
   projectPoint(location) {
@@ -81,10 +79,9 @@ class MapNarratives extends React.Component {
 
   render() {
     if (this.props.narrative === null) return (<div />);
-    /*<MapDefsMarkers />*/
 
     return (
-      <Portal node={this.props.svg.node()}>
+      <Portal node={this.props.svg}>
         {this.props.narratives.map(n => this.renderNarrative(n))}
       </Portal>
     );
