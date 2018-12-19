@@ -16,7 +16,6 @@
     "es6-promise": "^4.1.1",
     "joi": "^14.0.1",
     "leaflet": "^1.0.3",
-    "leaflet-polylinedecorator": "^1.3.2",
     "normalizr": "^3.2.3",
     "object-hash": "^1.3.0",
     "react": "^16.6.3",
