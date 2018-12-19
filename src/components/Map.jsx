@@ -40,8 +40,6 @@ class Map extends React.Component {
         .attr('width', width)
         .attr('height', height);
 
-      this.g = this.svg.append('g');
-
       this.state.map.on('zoomstart', () => {
         this.svg.classed('hide', true);
       });
@@ -49,7 +47,7 @@ class Map extends React.Component {
         this.svg.classed('hide', false);
       });
 
-      this.mapLogic = new MapLogic(this.state.map, this.svg, this.g, this.props.app, this.props.ui, this.props.methods)
+      this.mapLogic = new MapLogic(this.state.map, this.svg, this.props.app, this.props.ui)
       this.mapLogic.update(this.props.app)
 
       this.setState({ isInitialized: true })
@@ -66,9 +64,6 @@ class Map extends React.Component {
   initializeMap() {
     /**
      * Creates a Leaflet map and a tilelayer for the map background
-     * @param {string} id: DOM element to create map onto
-     * @param {array} center: [lat, long] coordinates the map will be centered on
-     * @param {number} zoom: zoom level
      */
     const map = 
       L.map(this.props.mapId)
@@ -99,8 +94,16 @@ class Map extends React.Component {
     map.keyboard.disable();
 
     map.on("move", () => this.updateSVG());
+    map.on("zoomend viewreset moveend", () => this.updateSVG());
+    this.addResizeListener();
 
     this.setState({ map });
+  }
+
+  addResizeListener() {
+    window.addEventListener('resize', () => {
+      this.updateSVG();
+    });
   }
 
   getSVGBoundaries() {
@@ -122,10 +125,10 @@ class Map extends React.Component {
   }
 
   updateSVG() {
-    //const boundingClient = d3.select(`#${this.props.mapId}`).node().getBoundingClientRect();
+    const boundingClient = d3.select(`#${this.props.mapId}`).node().getBoundingClientRect();
 
-    //let WIDTH = boundingClient.width;
-    //let HEIGHT = boundingClient.height;
+    let WIDTH = boundingClient.width;
+    let HEIGHT = boundingClient.height;
 
     // Offset with leaflet map transform boundaries
     const { transformX, transformY } = this.getSVGBoundaries();
@@ -135,9 +138,9 @@ class Map extends React.Component {
       mapTransformY: transformY
     })
 
-    /*this.svg.attr('width', WIDTH)
+    this.svg.attr('width', WIDTH)
       .attr('height', HEIGHT)
-      .attr('style', `left: ${-transformX}px; top: ${-transformY}px`);*/
+      .attr('style', `left: ${-transformX}px; top: ${-transformY}px`);
   }
 
   renderSites() {

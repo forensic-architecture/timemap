@@ -65,18 +65,20 @@
       border-top-color: rgba($black,0.6);
     }
   }
-}
 
-.sites-layer {
-  position: fixed;
-  top: 0px;
-  left: 110px;
-}
+  .sites-layer {
+    position: fixed;
+    top: 0px;
+    left: 110px;
+  }
 
-.narratives-layer {
-  position: fixed;
-  top: 0px;
-  left: 110px;
+  &.narrative-mode {
+    .sites-layer {
+      position: fixed;
+      top: 0px;
+      left: 0px;
+    }
+  }
 }
 
 /*

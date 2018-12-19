@@ -42,7 +42,7 @@ class MapEvents extends React.Component {
       <circle
         className="location-event-marker"
         r={(counts) ? Math.sqrt(16 * counts) + 3 : 0}
-        style={{ fill: this.props.getCategoryColor(events), fillOpacity: 0.2 }}
+        style={{ fill: 'yellow'/*this.props.getCategoryColor(events[0])*/, fillOpacity: 0.2 }}
         onClick={() => this.props.onSelect(events)}
       >
       </circle>
