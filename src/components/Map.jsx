@@ -5,10 +5,13 @@ import { connect } from 'react-redux'
 import * as selectors from '../selectors'
 
 import hash from 'object-hash';
+import 'leaflet';
 
-import MapLogic from '../js/map/map.js'
+import { isNotNullNorUndefined } from '../js/utilities';
+
 import MapSites from './MapSites.jsx';
 import MapEvents from './MapEvents.jsx';
+import MapSelectedEvents from './MapSelectedEvents.jsx';
 import MapNarratives from './MapNarratives.jsx';
 import MapDefsMarkers from './MapDefsMarkers.jsx';
 
@@ -31,8 +34,14 @@ class Map extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (hash(nextProps.app) !== hash(this.props.app)) {
-      this.mapLogic.update(nextProps.app)
+    if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
+
+      // Fly to first  of events selected
+      const eventPoint = (nextProps.app.selected.length > 0) ? nextProps.app.selected[0] : null;
+
+      if (eventPoint.latitude && eventPoint.longitude) {
+        this.map.flyTo([eventPoint.latitude, eventPoint.longitude]);
+      }
     }
   }  
 
@@ -74,9 +83,6 @@ class Map extends React.Component {
     map.on('zoomend', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.remove('hide'); });
 
     this.addResizeListener();
-
-    this.mapLogic = new MapLogic(map, this.svgRef.current, this.props.app, this.props.ui);
-    this.mapLogic.update(this.props.app);
 
     this.map = map;
   }
@@ -177,6 +183,19 @@ class Map extends React.Component {
     );
   }
 
+  renderSelected() {
+    return (
+      <MapSelectedEvents
+        svg={this.svgRef.current}
+        selected={this.props.app.selected}
+        map={this.map}
+        mapTransformX={this.state.mapTransformX}
+        mapTransformY={this.state.mapTransformY}
+      />
+    );
+  }
+
+
   renderMarkers() {
     return (
       <Portal node={this.svgRef.current}>
@@ -197,6 +216,7 @@ class Map extends React.Component {
         {(this.map !== null) ? this.renderSites() : ''}
         {(this.map !== null) ? this.renderEvents() : ''}
         {(this.map !== null) ? this.renderNarratives() : ''}
+        {(this.map !== null) ? this.renderSelected() : ''}
       </div>
     );
   }
