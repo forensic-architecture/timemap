@@ -47,6 +47,7 @@ export default function(lMap, svg, g, newApp, ui, methods) {
 
   function getSVGBoundaries() {
     const mapNode = d3.select('.leaflet-map-pane').node();
+    if (mapNode === null) return { transformX: 0, transformY: 0 };
 
     // We'll get the transform of the leaflet container,
     // which will let us offset the SVG by the same quantity
@@ -406,7 +407,7 @@ export default function(lMap, svg, g, newApp, ui, methods) {
   * Renders events on the map: takes data, and enters, updates and exits
   */
   function renderDomain () {
-    renderSites();
+    //renderSites();
     renderNarratives();
     renderEvents();
   }

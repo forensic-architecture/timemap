@@ -7,6 +7,7 @@ import * as selectors from '../selectors';
 
 import LoadingOverlay from './presentational/LoadingOverlay';
 import Viewport from './Viewport.jsx';
+import Map from './Map.jsx';
 import Toolbar from './Toolbar.jsx';
 import CardStack from './CardStack.jsx';
 import NarrativeCard from './NarrativeCard.js';
@@ -85,13 +86,21 @@ class Dashboard extends React.Component {
           onSelectNarrative={this.handleSelectNarrative}
           actions={this.props.actions}
         />
-        <Viewport
+        <Map
+          mapId="map"
           methods={{
             onSelect: this.handleSelect,
             onSelectNarrative: this.handleSelectNarrative,
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
+        {/*<Viewport
+          methods={{
+            onSelect: this.handleSelect,
+            onSelectNarrative: this.handleSelectNarrative,
+            getCategoryColor: category => this.getCategoryColor(category)
+          }}
+        />*/}
         <Timeline
           methods={{
             onSelect: this.handleSelect,
