@@ -7,30 +7,13 @@ import 'leaflet-polylinedecorator';
 
 export default function(lMap, svg, g, newApp, ui, methods) {
 
-  const domain = {
-    locations: [],
-    narratives: [],
-    categories: [],
-  }
   const app = {
     selected: [],
     highlighted: null,
-    narrative: null,
-    views: Object.assign({}, newApp.views),
   }
-
-  const getCategoryColor = methods.getCategoryColor;
 
   // Icons for markPoint flags (a yellow ring around a location)
   const eventCircleMarkers = {};
-
-  function projectPoint(location) {
-    const latLng = new L.LatLng(location[0], location[1]);
-    return {
-      x: lMap.latLngToLayerPoint(latLng).x + getSVGBoundaries().transformX,
-      y: lMap.latLngToLayerPoint(latLng).y + getSVGBoundaries().transformY
-    };
-  }
 
   function getSVGBoundaries() {
     const mapNode = d3.select('.leaflet-map-pane').node();
@@ -62,25 +45,10 @@ export default function(lMap, svg, g, newApp, ui, methods) {
     svg.attr('width', WIDTH)
       .attr('height', HEIGHT)
       .attr('style', `left: ${-transformX}px; top: ${-transformY}px`);
-
-    g.selectAll('.location').attr('transform', (d) => {
-      const newPoint = projectPoint([+d.latitude, +d.longitude]);
-      return `translate(${newPoint.x},${newPoint.y})`;
-    });
   }
 
   lMap.on("zoomend viewreset moveend", updateSVG);
 
-  /**
-   * Returns latitud / longitude
-   * @param {Object} eventPoint: data for an evenPoint - time, loc, tags, etc
-   */
-  function getEventLocation(eventPoint) {
-    return {
-      latitude: +eventPoint.location.latitude,
-      longitude: +eventPoint.location.longitude,
-    };
-  }
 
   /*
    * INTERACTIVE FUNCTIONS
@@ -130,136 +98,22 @@ export default function(lMap, svg, g, newApp, ui, methods) {
       }
     }
   }
-
-  /*
-   * RENDERING FUNCTIONS
-   */
-
-  function getLocationEventsDistribution(location) {
-    const eventCount = {};
-    const categories = domain.categories;
-
-    categories.forEach(cat => {
-      eventCount[cat.category] = 0
-    });
-
-    location.events.forEach((event) => {;
-      eventCount[event.category] += 1;
-    });
-
-    let i = 0;
-    const events = [];
-
-    while (i < categories.length) {
-      let _eventsCount = eventCount[categories[i].category];
-      for (let j = i + 1; j < categories.length; j++) {
-        _eventsCount += eventCount[categories[j].category];
-      }
-      events.push(_eventsCount);
-      i++;
-    }
-    return events;
-  }
-
-  /**
-   * Clears existing event layer
-   * Renders all events as markers
-   * Adds eventlayer to map
-   */
-  function renderEvents() {
-    const locationsDom = g.selectAll('.location')
-      .data(domain.locations, d => d.id)
-
-    locationsDom
-      .exit()
-      .remove();
-
-    locationsDom
-      .enter().append('g')
-      .attr('class', 'location')
-      .attr('transform', (d) => {
-        const newPoint = projectPoint([+d.latitude, +d.longitude]);
-        return `translate(${newPoint.x},${newPoint.y})`;
-      })
-      .on('click', (location) => {
-        methods.onSelect(location.events);
-      });
-
-    const eventsDom = g.selectAll('.location')
-      .selectAll('.location-event-marker')
-      .data((d, i) => getLocationEventsDistribution(domain.locations[i]))
-
-    eventsDom
-      .exit()
-      .attr('r', 0)
-      .remove();
-
-    eventsDom
-      .transition()
-      .duration(500)
-      .attr('r', d => (d) ? Math.sqrt(16 * d) + 3 : 0);
-
-    eventsDom
-      .enter().append('circle')
-      .attr('class', 'location-event-marker')
-      .style('fill', (d, i) => getCategoryColor(domain.categories[i].category))
-      .transition()
-      .duration(500)
-      .attr('r', d => (d) ? Math.sqrt(16 * d) + 3 : 0);
-
-    eventsDom.selectAll('.location-event-marker')
-      .style('fill-opacity', '0.1 !important');
-  }
-
-   const getCoords = (d) => {
-     d.LatLng = new L.LatLng(+d.latitude, +d.longitude);
-     return {
-       x: lMap.latLngToLayerPoint(d.LatLng).x,
-       y: lMap.latLngToLayerPoint(d.LatLng).y
-     }
-   }
-
- 
-
-  function getMarker (d) {
-    if (!d || app.narrative === null) return 'none';
-    if (d.id === app.narrative.id) return 'url(#arrow)';
-    return 'url(#arrow-off)';
-  }
-
  
   /**
    * Updates displayable data on the map: events, coevents and paths
-   * @param {Object} domain: object of arrays of events, coevs, attacks, paths, sites
    */
-  function update(newDomain, newApp) {
+  function update(newApp) {
     updateSVG();
-    const isNewDomain = (hash(domain) !== hash(newDomain));
     const isNewAppProps = (hash(app) !== hash(newApp));
 
-    if (isNewDomain) {
-      domain.locations = newDomain.locations;
-      domain.categories = newDomain.categories;
-    }
-
     if (isNewAppProps) {
-      app.views = newApp.views;
       app.selected = newApp.selected;
       app.highlighted = newApp.highlighted;
-      app.mapAnchor = newApp.mapAnchor;
-      app.narrative = newApp.narrative;
     }
 
-    if (isNewDomain || isNewAppProps) renderDomain();
     if (isNewAppProps) renderSelectedAndHighlight();
   }
 
-  /**
-  * Renders events on the map: takes data, and enters, updates and exits
-  */
-  function renderDomain () {
-    renderEvents();
-  }
   function renderSelectedAndHighlight () {
     renderSelected();
     renderHighlighted();

@@ -6,6 +6,7 @@ import * as selectors from '../selectors'
 
 import MapLogic from '../js/map/map.js'
 import MapSites from './MapSites.jsx';
+import MapEvents from './MapEvents.jsx';
 import MapNarratives from './MapNarratives.jsx';
 
 class Map extends React.Component {
@@ -49,15 +50,15 @@ class Map extends React.Component {
       });
 
       this.mapLogic = new MapLogic(this.state.map, this.svg, this.g, this.props.app, this.props.ui, this.props.methods)
-      this.mapLogic.update(this.props.domain, this.props.app)
+      this.mapLogic.update(this.props.app)
 
       this.setState({ isInitialized: true })
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (hash(nextProps) !== hash(this.props)) {
-      this.mapLogic.update(nextProps.domain, nextProps.app)
+    if (hash(nextProps.app) !== hash(this.props.app)) {
+      this.mapLogic.update(nextProps.app)
     }
   }  
 
@@ -121,10 +122,10 @@ class Map extends React.Component {
   }
 
   updateSVG() {
-    const boundingClient = d3.select(`#${this.props.mapId}`).node().getBoundingClientRect();
+    //const boundingClient = d3.select(`#${this.props.mapId}`).node().getBoundingClientRect();
 
-    let WIDTH = boundingClient.width;
-    let HEIGHT = boundingClient.height;
+    //let WIDTH = boundingClient.width;
+    //let HEIGHT = boundingClient.height;
 
     // Offset with leaflet map transform boundaries
     const { transformX, transformY } = this.getSVGBoundaries();
@@ -136,12 +137,7 @@ class Map extends React.Component {
 
     /*this.svg.attr('width', WIDTH)
       .attr('height', HEIGHT)
-      .attr('style', `left: ${-transformX}px; top: ${-transformY}px`);
-
-    this.g.selectAll('.location').attr('transform', (d) => {
-      const newPoint = projectPoint([+d.latitude, +d.longitude]);
-      return `translate(${newPoint.x},${newPoint.y})`;
-    });*/
+      .attr('style', `left: ${-transformX}px; top: ${-transformY}px`);*/
   }
 
   renderSites() {
@@ -178,12 +174,32 @@ class Map extends React.Component {
     return '';    
   }
 
+  renderEvents() {
+    if (this.state.isInitialized) {
+      return (
+        <MapEvents
+          svg={this.svg}
+          locations={this.props.domain.locations}
+          categories={this.props.domain.categories}
+          map={this.state.map}
+          mapTransformX={this.state.mapTransformX}
+          mapTransformY={this.state.mapTransformY}
+          onSelect={this.props.methods.onSelect}
+          onSelectNarrative={this.props.methods.onSelectNarrative}
+        />
+      );
+    }
+    return '';    
+  }
+
+
   render() {
     const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper';
     return (
       <div className={classes}>
         <div id={this.props.mapId} />
         {this.renderSites()}
+        {this.renderEvents()}
         {this.renderNarratives()}
       </div>
     );
