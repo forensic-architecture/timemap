@@ -46,6 +46,7 @@ class MapEvents extends React.Component {
       <g
         className="location"
         transform={`translate(${x}, ${y})`}
+        style={{ transition: 'transform 0.1s' }}
       >
         {Object.keys(eventsByCategory).map(cat => {
           return this.renderCategory(eventsByCategory[cat], cat)

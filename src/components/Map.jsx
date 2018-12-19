@@ -19,7 +19,6 @@ class Map extends React.Component {
     this.svgRef = React.createRef();
     this.map = null;
     this.state = {
-      isInitialized: false,
       mapTransformX: 0,
       mapTransformY: 0
     }
@@ -71,14 +70,15 @@ class Map extends React.Component {
 
     map.on("move", () => this.alignLayers());
     map.on("zoomend viewreset moveend", () => this.alignLayers());
+    map.on('zoomstart', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.add('hide') });
+    map.on('zoomend', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.remove('hide'); });
+
     this.addResizeListener();
 
     this.mapLogic = new MapLogic(map, this.svgRef.current, this.props.app, this.props.ui);
     this.mapLogic.update(this.props.app);
 
     this.map = map;
-
-    this.setState({ isInitialized: true });
   }
 
   addResizeListener() {
@@ -193,10 +193,10 @@ class Map extends React.Component {
       <div className={classes}>
         <div id={this.props.mapId} />
         {this.renderSVG()}
-        {(this.state.isInitialized) ? this.renderMarkers() : ''}
-        {(this.state.isInitialized) ? this.renderSites() : ''}
-        {(this.state.isInitialized) ? this.renderEvents() : ''}
-        {(this.state.isInitialized) ? this.renderNarratives() : ''}
+        {(this.map !== null) ? this.renderMarkers() : ''}
+        {(this.map !== null) ? this.renderSites() : ''}
+        {(this.map !== null) ? this.renderEvents() : ''}
+        {(this.map !== null) ? this.renderNarratives() : ''}
       </div>
     );
   }
