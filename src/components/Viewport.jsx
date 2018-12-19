@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import * as selectors from '../selectors'
 import hash from 'object-hash';
 
-import Map from '../js/map/map.js'
+import Map from './Map.jsx';
 import { areEqual } from '../js/utilities.js'
 
 class Viewport extends React.Component {
@@ -11,22 +11,17 @@ class Viewport extends React.Component {
     super(props)
   }
 
-  componentDidMount() {
-    this.map = new Map(this.props.app, this.props.ui, this.props.methods)
-    this.map.update(this.props.domain, this.props.app)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (hash(nextProps) !== hash(this.props)) {
-      this.map.update(nextProps.domain, nextProps.app)
-    }
-  }
-
   render() {
     const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper';
     return (
       <div className={classes}>
-        <div id="map" />
+        <Map
+          mapId="map"
+          domain={this.props.domain}
+          app={this.props.app}
+          ui={this.props.ui}
+          methods={this.props.methods}
+        />
       </div>
     )
   }

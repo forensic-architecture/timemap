@@ -5,8 +5,7 @@ import {
 import hash from 'object-hash';
 import 'leaflet-polylinedecorator';
 
-export default function(newApp, ui, methods) {
-  let svg, g, defs;
+export default function(lMap, svg, g, newApp, ui, methods) {
 
   const domain = {
     locations: [],
@@ -24,14 +23,8 @@ export default function(newApp, ui, methods) {
   const getCategoryColor = methods.getCategoryColor;
   const narrativeProps = ui.narratives;
 
-    // Map Settings
-  const center = newApp.mapAnchor;
-  const maxBoundaries = [[180, -180], [-180, 180]];
-  const zoomLevel = 14;
-
   // Initialize layer
   const sitesLayer = L.layerGroup();
-  const pathLayer = L.layerGroup();
 
   // Icons for markPoint flags (a yellow ring around a location)
   const eventCircleMarkers = {};
@@ -43,94 +36,6 @@ export default function(newApp, ui, methods) {
     permanent: true,
     direction: 'top',
   };
-
-
-  /**
-   * Creates a Leaflet map and a tilelayer for the map background
-   * @param {string} id: DOM element to create map onto
-   * @param {array} center: [lat, long] coordinates the map will be centered on
-   * @param {number} zoom: zoom level
-   */
-  function initBackgroundMap(id, zoom) {
-    /* http://bl.ocks.org/sumbera/10463358 */
-
-    const map = L.map(id)
-      .setView(center, zoom)
-      .setMinZoom(10)
-      .setMaxZoom(19)
-      .setMaxBounds(maxBoundaries)
-
-    // NB: configure tile endpoint
-    let s
-    if (process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== 'your_token') {
-      s = L.tileLayer(
-        `http://a.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`
-      );
-    } else {
-      // eslint-disable-next-line
-      alert(`No mapbox token specified in config.
-Timemap does not currently support any other tiling layer,
-so you will need to sign up for one at:
-
-    https://www.mapbox.com/
-
-Stop and start the development process in terminal after you have added your token to config.js`)
-    return
-    }
-    s = s.addTo(map);
-
-    map.keyboard.disable();
-    const pane = d3.select(map.getPanes().overlayPane);
-    const boundingClient = d3.select(`#${id}`).node().getBoundingClientRect();
-    const width = boundingClient.width;
-    const height = boundingClient.height;
-
-    svg = pane.append('svg')
-      .attr('class', 'leaflet-svg')
-      .attr('width', width)
-      .attr('height', height);
-
-    g = svg.append('g');
-
-    svg.insert('defs', 'g')
-      .append('marker')
-      .attr('id', 'arrow')
-      .attr('viewBox', '0 0 6 6')
-      .attr('refX', 3)
-      .attr('refY', 3)
-      .attr('markerWidth', 6)
-      .attr('markerHeight', 6)
-      .attr('orient', 'auto')
-      .append('path')
-      .style('fill', 'red')
-      .attr('d', 'M0,3v-3l6,3l-6,3z');
-
-    svg.insert('defs', 'g')
-      .append('marker')
-      .attr('id', 'arrow-off')
-      .attr('viewBox', '0 0 6 6')
-      .attr('refX', 3)
-      .attr('refY', 3)
-      .attr('markerWidth', 6)
-      .attr('markerHeight', 6)
-      .attr('orient', 'auto')
-      .append('path')
-      .style('fill', 'black')
-      .style('fill-opacity', 0.2)
-      .attr('d', 'M0,3v-3l6,3l-6,3z');
-
-    map.on('zoomstart', () => {
-      svg.classed('hide', true);
-    });
-    map.on('zoomend', () => {
-      svg.classed('hide', false);
-    });
-
-    return map;
-  }
-
-  // Initialize leaflet map and layers for each type of data
-  const lMap = initBackgroundMap(ui.dom.map, zoomLevel);
 
   function projectPoint(location) {
     const latLng = new L.LatLng(location[0], location[1]);
