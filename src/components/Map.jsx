@@ -6,7 +6,7 @@ import * as selectors from '../selectors'
 
 import MapLogic from '../js/map/map.js'
 import MapSites from './MapSites.jsx';
-import MapDefsMarkers from './MapDefsMarkers.jsx';
+import MapNarratives from './MapNarratives.jsx';
 
 class Map extends React.Component {
 
@@ -97,17 +97,9 @@ class Map extends React.Component {
 
     map.keyboard.disable();
 
-    map.on("move", () => this.moveElements());
+    map.on("move", () => this.updateSVG());
 
     this.setState({ map });
-  }
-
-  projectPoint(location) {
-    const latLng = new L.LatLng(location[0], location[1]);
-    return {
-      x: this.state.map.latLngToLayerPoint(latLng).x + this.state.mapTransformX,
-      y: this.state.map.latLngToLayerPoint(latLng).y + this.state.mapTransformY
-    };
   }
 
   getSVGBoundaries() {
@@ -152,10 +144,6 @@ class Map extends React.Component {
     });*/
   }
 
-  moveElements() {
-    this.updateSVG();
-  }
-
   renderSites() {
     if (this.state.isInitialized) {
       return (
@@ -171,12 +159,32 @@ class Map extends React.Component {
     return '';
   }
 
+  renderNarratives() {
+    if (this.state.isInitialized) {
+      return (
+        <MapNarratives
+          svg={this.svg}
+          narratives={this.props.domain.narratives}
+          map={this.state.map}
+          mapTransformX={this.state.mapTransformX}
+          mapTransformY={this.state.mapTransformY}
+          narrative={this.props.app.narrative}
+          narrativeProps={this.props.ui.narratives}
+          onSelect={this.props.methods.onSelect}
+          onSelectNarrative={this.props.methods.onSelectNarrative}
+        />
+      );
+    }
+    return '';    
+  }
+
   render() {
     const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper';
     return (
       <div className={classes}>
         <div id={this.props.mapId} />
         {this.renderSites()}
+        {this.renderNarratives()}
       </div>
     );
   }

@@ -11,7 +11,6 @@ export default function(lMap, svg, g, newApp, ui, methods) {
     locations: [],
     narratives: [],
     categories: [],
-    sites: []
   }
   const app = {
     selected: [],
@@ -21,21 +20,9 @@ export default function(lMap, svg, g, newApp, ui, methods) {
   }
 
   const getCategoryColor = methods.getCategoryColor;
-  const narrativeProps = ui.narratives;
-
-  // Initialize layer
-  const sitesLayer = L.layerGroup();
 
   // Icons for markPoint flags (a yellow ring around a location)
   const eventCircleMarkers = {};
-
-  // Styles for elements in map
-  const settingsSiteLabel = {
-    className: 'site-label',
-    opacity: 1,
-    permanent: true,
-    direction: 'top',
-  };
 
   function projectPoint(location) {
     const latLng = new L.LatLng(location[0], location[1]);
@@ -80,9 +67,6 @@ export default function(lMap, svg, g, newApp, ui, methods) {
       const newPoint = projectPoint([+d.latitude, +d.longitude]);
       return `translate(${newPoint.x},${newPoint.y})`;
     });
-
-    svg.selectAll('.narrative')
-      .each((g, i, nodes) => { return updateNarrativeSteps(g, i, nodes); });
   }
 
   lMap.on("zoomend viewreset moveend", updateSVG);
@@ -227,33 +211,6 @@ export default function(lMap, svg, g, newApp, ui, methods) {
       .style('fill-opacity', '0.1 !important');
   }
 
-  // NB: is this a function to be removed for future features?
-  function renderSites() {
-    sitesLayer.clearLayers();
-    lMap.removeLayer(sitesLayer);
-
-    // Create a label for each attack site, persistent across filtering
-    if (app.views.sites) {
-      domain.sites.forEach((site) => {
-        if (isNotNullNorUndefined(site)) {
-          // Create an invisible marker for each site label
-          const siteMarker = L.circleMarker([+site.latitude, +site.longitude], {
-            radius: 0,
-            stroke: 0
-          });
-
-          siteMarker.bindTooltip(site.site, settingsSiteLabel).openTooltip();
-
-          // Add this one attack marker to group attack layer
-          sitesLayer.addLayer(siteMarker);
-        }
-      });
-
-      lMap.addLayer(sitesLayer);
-    }
-  }
-
-
    const getCoords = (d) => {
      d.LatLng = new L.LatLng(+d.latitude, +d.longitude);
      return {
@@ -262,18 +219,7 @@ export default function(lMap, svg, g, newApp, ui, methods) {
      }
    }
 
- /**
-  * Clears existing narrative layer
-  * Renders all narrativ as paths
-  * Adds eventlayer to map
-  */
-
-  function getNarrativeStyle(narrativeId) {
-    const styleName = narrativeId && narrativeId in narrativeProps
-      ? narrativeId
-      : 'default';
-    return narrativeProps[styleName];
-  }
+ 
 
   function getMarker (d) {
     if (!d || app.narrative === null) return 'none';
@@ -281,100 +227,7 @@ export default function(lMap, svg, g, newApp, ui, methods) {
     return 'url(#arrow-off)';
   }
 
-  function renderNarratives() {
-    const narrativesDom = svg.selectAll('.narrative')
-      .data((app.narrative !== null) ? domain.narratives : [])
-
-    narrativesDom
-      .exit()
-      .remove();
-
-    if (app.narrative !== null) {
-      d3.selectAll('#arrow path')
-        .style('fill', getNarrativeStyle(app.narrative.id).stroke);
-    }
-
-    const narrativesEnter = narrativesDom
-      .enter().append('g')
-      .attr('id', d => 'narrative-' + d.id)
-      .attr('class', 'narrative')
-
-    narrativesDom.selectAll('.narrative')
-      .each((g, i, nodes) => { return updateNarrativeSteps(g, i, nodes); });
-  }
-
-  function updateNarrativeSteps(g, i, nodes) {
-      const n = d3.select(nodes[i]).data()[0];
-      const allsteps = n.steps.slice();
-      allsteps.push(n.steps[n.steps.length - 1]);
-
-      const steps = d3.select(nodes[i]).selectAll('.narrative-step')
-          .data(n.steps)
-
-      steps.enter().append('line')
-        .attr('class', 'narrative-step')
-          .attr('x1', d => getCoords(d).x + getSVGBoundaries().transformX)
-          .attr('x2', (d, j) => { return getCoords(allsteps[j + 1]).x + getSVGBoundaries().transformX; })
-          .attr('y1', d => getCoords(d).y + getSVGBoundaries().transformY)
-          .attr('y2', (d, j) => { return getCoords(allsteps[j + 1]).y + getSVGBoundaries().transformY; })
-          .style('stroke-width', d => {
-            if (!d) return 0;
-            const styleProps = getNarrativeStyle(n.id);
-            return styleProps.strokeWidth;
-          })
-          .style('stroke-dasharray', d => {
-            if (!d) return 'none';
-            const styleProps = getNarrativeStyle(n.id);
-            return (styleProps.style === 'dotted') ? "2px 5px" : 'none';
-          })
-          .style('stroke', d => {
-            if (!d || app.narrative === null) return 'none';
-            const styleProps = getNarrativeStyle(n.id);
-            return styleProps.stroke;
-          })
-          .style('stroke-opacity', d => {
-            if (app.narrative === null) return 0;
-            if (!d || d.id !== app.narrative.id) return 0.2;
-            return 1;
-          })
-          .attr('marker-start', (d, j) => !j ? getMarker(n) :  'none')
-          .attr('marker-end', getMarker(n))
-          .attr('mid-marker', getMarker(n))
-          .on('click', () => methods.onSelectNarrative(n) )
-
-      steps
-          .attr('x1', d => getCoords(d).x + getSVGBoundaries().transformX)
-          .attr('x2', (d, j) => { return getCoords(allsteps[j + 1]).x + getSVGBoundaries().transformX; })
-          .attr('y1', d => getCoords(d).y + getSVGBoundaries().transformY)
-          .attr('y2', (d, j) => { return getCoords(allsteps[j + 1]).y + getSVGBoundaries().transformY; })
-          .style('stroke-width', d => {
-            if (!d) return 0;
-            const styleProps = getNarrativeStyle(n.id);
-            return styleProps.strokeWidth;
-          })
-          .style('stroke-dasharray', d => {
-            if (!d) return 'none';
-            const styleProps = getNarrativeStyle(n.id);
-            return (styleProps.style === 'dotted') ? "2px 5px" : 'none';
-          })
-          .style('stroke', d => {
-            if (!d || app.narrative === null) return 'none';
-            const styleProps = getNarrativeStyle(n.id);
-            return styleProps.stroke;
-          })
-          .style('stroke-opacity', d => {
-            if (app.narrative === null) return 0;
-            if (!d || n.id !== app.narrative.id) return 0.2;
-            return 1;
-          })
-          .attr('marker-start', (d, j) => !j ? getMarker(n) :  'none')
-          .attr('marker-end', getMarker(n))
-          .attr('mid-marker', getMarker(n))
-
-      steps
-        .exit()
-        .remove();
-  }
+ 
   /**
    * Updates displayable data on the map: events, coevents and paths
    * @param {Object} domain: object of arrays of events, coevs, attacks, paths, sites
@@ -386,9 +239,7 @@ export default function(lMap, svg, g, newApp, ui, methods) {
 
     if (isNewDomain) {
       domain.locations = newDomain.locations;
-      domain.narratives = newDomain.narratives;
       domain.categories = newDomain.categories;
-      domain.sites = newDomain.sites;
     }
 
     if (isNewAppProps) {
@@ -407,8 +258,6 @@ export default function(lMap, svg, g, newApp, ui, methods) {
   * Renders events on the map: takes data, and enters, updates and exits
   */
   function renderDomain () {
-    //renderSites();
-    renderNarratives();
     renderEvents();
   }
   function renderSelectedAndHighlight () {
