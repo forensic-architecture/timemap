@@ -77,20 +77,12 @@ class Map extends React.Component {
 
     map.keyboard.disable();
 
-    map.on("move", () => this.alignLayers());
-    map.on("zoomend viewreset moveend", () => this.alignLayers());
+    map.on('move zoomend viewreset moveend', () => this.alignLayers());
     map.on('zoomstart', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.add('hide') });
     map.on('zoomend', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.remove('hide'); });
-
-    this.addResizeListener();
+    window.addEventListener('resize', () => { this.alignLayers(); });
 
     this.map = map;
-  }
-
-  addResizeListener() {
-    window.addEventListener('resize', () => {
-      this.alignLayers();
-    });
   }
 
   alignLayers() {
