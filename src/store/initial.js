@@ -11,6 +11,7 @@ const initial = {
     narratives: [],
     locations: [],
     categories: [],
+    sources: {},
     sites: [],
     tags: {},
     notifications: [],

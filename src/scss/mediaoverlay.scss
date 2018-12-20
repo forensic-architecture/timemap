@@ -3,6 +3,7 @@ $vimeo-width: 1000px;
 
 .mo-overlay {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: absolute;
@@ -14,18 +15,41 @@ $vimeo-width: 1000px;
   z-index: 20;
 }
 
+.mo-header {
+  min-height: 4em;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+
+  .mo-header-close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 4em;
+  }
+
+  .mo-header-text {
+    flex: 1;
+    margin-left: -4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .mo-container {
-  background-color: transparent;
-  max-width: 80vw;
-  min-width: 80vw;
-  max-height: 90vh;
-  min-height: 90vh;
+  background-color: rgba(230,230,230,0.98);
+  max-width: 800px;
+  min-width: 800px;
+  max-height: 600px;
+  min-height: 600px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
-  .mo-controls, .mo-media-container {
+  .mo-media-container {
     flex: 1;
     display: flex;
     justify-content: center;
