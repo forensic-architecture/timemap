@@ -53,15 +53,30 @@
   .site-label {
     background: rgba($black,0.6);
     color: #fff;
-    padding: 2px 7px;
+    padding: 5px;
     font-weight: 500;
     font-size: 11px;
     font-family: 'Lato', Helvetica, sans-serif;
     border: rgba($black,0.6);
     letter-spacing: 0.05em;
+    transition: transform 0.1s;
 
     &::before {
       border-top-color: rgba($black,0.6);
+    }
+  }
+
+  .sites-layer {
+    position: fixed;
+    top: 0px;
+    left: 110px;
+  }
+
+  &.narrative-mode {
+    .sites-layer {
+      position: fixed;
+      top: 0px;
+      left: 0px;
     }
   }
 }
@@ -164,69 +179,10 @@
   }
 }
 
-.coevent-marker {
-  fill-opacity: 0.1;
-  stroke-dasharray: 8px 4px;
-  stroke-width: 2px;
-  opacity: 1;
-}
-.coevent-path {
-  stroke-dasharray: 8px 4px;
-  stroke-width: 2;
-}
-
-.district-boundaries {
-  fill: $red;
-  fill-opacity: 0.3;
-  stroke-width: 2;
-  stroke: $red;
-}
-
 .path-polyline {
   stroke: $darkgrey;
   stroke-width: 2px;
 }
 
-.route-polyline {
-  transition: 0.2s ease;
-  stroke: $darkgrey;
 
-  &:hover {
-    transition: 0.2s ease;
-    stroke: $black;
-  }
-}
 
-.district-popup {
-  button {
-    height: 80px;
-    line-height: 80px;
-    width: 200px;
-    padding: 0;
-    border: none;
-    background: none;
-    background-size: 100%;
-    color: $offwhite;
-    cursor: pointer;
-    outline: none;
-    font-family: 'Lato', Helvetica, sans-serif;
-    text-transform: uppercase;
-
-    p {
-      font-size: $normal;
-      margin: 0;
-      transition: 0.2s ease;
-      letter-spacing: 0.1em;
-      &:first-child {
-        font-size: $xsmall;
-      }
-    }
-
-    &:hover {
-      p:last-child {
-        transition: 0.2s ease;
-        letter-spacing: 0.15em;
-      }
-    }
-  }
-}
