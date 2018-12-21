@@ -13,7 +13,7 @@ import hash from 'object-hash';
 import esLocale from '../data/es-MX.json';
 import copy from '../data/copy.json';
 
-export default function(newApp, ui, methods) {
+export default function(svg, newApp, ui, methods) {
   d3.timeFormatDefaultLocale(esLocale);
 
   const domain = {
@@ -60,27 +60,27 @@ export default function(newApp, ui, methods) {
    * Initilize SVG elements and groups
    */
   const dom = {};
+console.log(svg)
+  dom.svg = d3.select(svg)
+    //d3.select(`#${ui.dom.timeline}`)
+    //.append('svg')
+    //.attr('width', WIDTH)
+    //.attr('height', HEIGHT);
 
-  dom.svg =
-    d3.select(`#${ui.dom.timeline}`)
-    .append('svg')
-    .attr('width', WIDTH)
-    .attr('height', HEIGHT);
+//  dom.clip = dom.svg.append("svg:clipPath")
+//    .attr("id", "clip")
+//    .append("svg:rect")
+//    .attr("x", margin.left)
+//    .attr("y", 0)
+//    .attr("width", WIDTH - margin.left)
+//    .attr("height", HEIGHT - 25);
 
-  dom.clip = dom.svg.append("svg:clipPath")
-    .attr("id", "clip")
-    .append("svg:rect")
-    .attr("x", margin.left)
-    .attr("y", 0)
-    .attr("width", WIDTH - margin.left)
-    .attr("height", HEIGHT - 25);
-
-  dom.controls =
-    d3.select(`#${ui.dom.timeline}`)
-    .append('svg')
-    .attr('class', 'time-controls')
-    .attr('width', WIDTH_CONTROLS)
-    .attr('height', HEIGHT);
+  dom.controls = d3.select(svg)
+    //d3.select(`#${ui.dom.timeline}`)
+    //.append('svg')
+    //.attr('class', 'time-controls')
+    //.attr('width', WIDTH_CONTROLS)
+    //.attr('height', HEIGHT);
 
 
   /*
@@ -124,13 +124,13 @@ export default function(newApp, ui, methods) {
   /*
    * Time Controls
    */
-  dom.forward = dom.svg.append('g').attr('class', 'time-controls-inline');
-  dom.forward.append('circle');
-  dom.forward.append('path');
-
-  dom.backwards = dom.svg.append('g').attr('class', 'time-controls-inline');
-  dom.backwards.append('circle');
-  dom.backwards.append('path');
+//  dom.forward = dom.svg.append('g').attr('class', 'time-controls-inline');
+//  dom.forward.append('circle');
+//  dom.forward.append('path');
+//
+//  dom.backwards = dom.svg.append('g').attr('class', 'time-controls-inline');
+//  dom.backwards.append('circle');
+//  dom.backwards.append('path');
 
   dom.zooms = dom.controls.append('g');
 
@@ -491,33 +491,27 @@ export default function(newApp, ui, methods) {
     });
 
     // These controls on timeline svg
-    dom.backwards.select('circle')
-      .attr('transform', `translate(${scale.x.range()[0] + 20}, 62)`)
-      .attr('r', 15);
-
-    dom.backwards.select('path')
-      .attr('d', d3.symbol().type(d3.symbolTriangle).size(80))
-      .attr('transform', `translate(${scale.x.range()[0] + 20}, 62)rotate(270)`);
-
-    dom.forward.select('circle')
-      .attr('transform', `translate(${scale.x.range()[1] - 20}, 62)`)
-      .attr('r', 15);
-
-    dom.forward.select('path')
-      .attr('d', d3.symbol().type(d3.symbolTriangle).size(80))
-      .attr('transform', `translate(${scale.x.range()[1] - 20}, 62)rotate(90)`);
+//    dom.backwards.select('circle')
+//      .attr('transform', `translate(${scale.x.range()[0] + 20}, 62)`)
+//      .attr('r', 15);
+//
+//    dom.backwards.select('path')
+//      .attr('d', d3.symbol().type(d3.symbolTriangle).size(80))
+//      .attr('transform', `translate(${scale.x.range()[0] + 20}, 62)rotate(270)`);
+//
+//    dom.forward.select('circle')
+//      .attr('transform', `translate(${scale.x.range()[1] - 20}, 62)`)
+//      .attr('r', 15);
+//
+//    dom.forward.select('path')
+//      .attr('d', d3.symbol().type(d3.symbolTriangle).size(80))
+//      .attr('transform', `translate(${scale.x.range()[1] - 20}, 62)rotate(90)`);
 
     dom.zooms.selectAll('text')
       .text(d => d.label)
       .attr('x', 60)
       .attr('y', (d, i) => (i * 15) + 20)
       .classed('active', level => level.active);
-
-    dom.forward
-      .on('click', () => moveTime('forward'));
-
-    dom.backwards
-      .on('click', () => moveTime('backwards'));
 
     dom.zooms.selectAll('text')
       .on('click', zoom => applyZoom(zoom));
@@ -589,6 +583,7 @@ export default function(newApp, ui, methods) {
   }
 
   return {
+    moveTime,
     update,
   };
 }
