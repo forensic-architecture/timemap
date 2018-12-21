@@ -1,7 +1,7 @@
 $panel-width: 800px;
 $panel-height: 800px;
 $vimeo-width: $panel-width - 100;
-// $vimeo-height: $panel-height - 100;
+$vimeo-height: $panel-height / 2;
 
 $header-inset: 10px;
 
@@ -104,12 +104,22 @@ $header-inset: 10px;
   background-color: black;
 }
 
-.vimeo-iframe {
-  // min-height: $vimeo-height;
-  // max-height: $vimeo-height;
+.media-player {
   min-width: $vimeo-width;
   max-width: $vimeo-width;
+  min-height: $vimeo-height;
+  max-height: $vimeo-height;
   border: none;
+
+  iframe, video {
+    width: $vimeo-width;
+    height: $vimeo-height - 50;
+    border: none;
+  }
+}
+
+.media-controls {
+  padding: 0 50px;
 }
 
 

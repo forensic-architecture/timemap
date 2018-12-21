@@ -155,13 +155,13 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  state => ({
-    ...state,
-    app: {
-      ...state.app,
-      source: state.domain.sources["Anna News - Horbatenko Tanks Video"]
-    }
-  }),
-  // state => state,
+  // state => ({
+  //   ...state,
+  //   app: {
+  //     ...state.app,
+  //     source: state.domain.sources["Anna News - Horbatenko Tanks Video"]
+  //   }
+  // }),
+  state => state,
   mapDispatchToProps,
 )(Dashboard);

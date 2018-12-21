@@ -12,27 +12,20 @@ class SourceOverlay extends React.Component {
 
   renderVideo() {
     // return (
-    //   <iframe
-    //     className="vimeo-iframe"
-    //     src="https://player.vimeo.com/video/33044546"
-    //     frameborder="0"
-    //     webkitallowfullscreen
-    //     mozallowfullscreen
-    //     allowfullscreen
-    //   ></iframe>
+    //   <Media>
+    //     <div className="media">
+    //       <div className="media-player">
+    //         <Player src="http://localhost:8000/Anna News - Horbatenko Tanks Video.mp4" />
+    //       </div>
+    //       <div className="media-controls">
+    //         <controls.PlayPause/>
+    //         <controls.MuteUnmute/>
+    //       </div>
+    //     </div>
+    //   </Media>
     // )
     return (
-      <Media>
-        <div className="media">
-          <div className="media-player">
-            <Player src="https://player.vimeo.com/video/33044546" />
-          </div>
-          <div className="media-controls">
-            <controls.PlayPause/>
-            <controls.MuteUnmute/>
-          </div>
-        </div>
-      </Media>
+      <NoSource failedUrls={["NOT ALL SOURCES AVAILABLE IN APPLICATION YET"]} />
     )
   }
 
@@ -50,7 +43,7 @@ class SourceOverlay extends React.Component {
 
   renderError() {
     return (
-      <div>ERROR: no support for this source</div>
+      <NoSource failedUrls={["NOT ALL SOURCES AVAILABLE IN APPLICATION YET"]} />
     )
   }
 
@@ -96,7 +89,7 @@ class SourceOverlay extends React.Component {
               {type ? <div>Type: <span className="indent">{type}</span></div> : null}
               {date ? <div>Date:<span className="indent">{date}</span></div> : null}
               <hr/>
-              {url ? <div><a href={url} target="_blank">Link to original webpage</a></div> : null}
+              {url ? <div><a href={url} target="_blank">Link to original URL</a></div> : null}
             </div>
           </div>
         </div>
