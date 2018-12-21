@@ -35,7 +35,7 @@ class MapNarratives extends React.Component {
 
   getStrokeOpacity(narrative, step) {
     if (this.props.narrative === null) return 0;
-    if (!step || narrative.id !== this.props.narrative.id) return 0.2;
+    if (!step || narrative.id !== this.props.narrative.id) return 0.1;
     return 1;
   }
 
@@ -53,8 +53,6 @@ class MapNarratives extends React.Component {
         y1={y}
         y2={p2.y}
         markerStart="none"
-        markerEnd="url(#arrow)"
-        midMarker="url(#arrow)"
         onClick={() => this.props.onSelectNarrative(n)}
         style={{
           strokeWidth: this.getStrokeWidth(n, step),
