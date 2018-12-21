@@ -7,6 +7,7 @@ import copy from '../js/data/copy.json';
 import { formatterWithYear, isNotNullNorUndefined } from '../js/utilities';
 import TimelineHeader from './presentational/TimelineHeader';
 import TimelineHandles from './TimelineHandles.jsx';
+import TimelineZoomControls from './TimelineZoomControls.jsx';
 import TimelineLogic from '../js/timeline/timeline.js';
 
 
@@ -43,7 +44,7 @@ class Timeline extends React.Component {
 
     if (document.querySelector(`#${this.props.ui.dom.timeline}`) !== null) {
       const boundingClient = document.querySelector(`#${this.props.ui.dom.timeline}`).getBoundingClientRect();
-      WIDTH = boundingClient.width - WIDTH_CONTROLS;
+      WIDTH = boundingClient.width;
     }
     return {
       height: HEIGHT,
@@ -61,19 +62,27 @@ class Timeline extends React.Component {
     return '';
   }
 
+  onApplyZoom(zoom) {
+    if (this.timeline) {
+      return this.timeline.applyZoom(zoom);
+    }
+    return '';
+  }  
+
   renderSVG() {
-    const { width, height, margin_left } = this.getClientDims();
+    const dims = this.getClientDims();
   
     return (
       <svg
         ref={this.svgRef}
-        width={width}
-        height={height}
+        width={dims.width}
+        height={dims.height}
       >
         <clipPath id="clip">
-          <rect x="120" y="0" width={width - margin_left} height={height - 25}></rect>
+          <rect x="120" y="0" width={dims.width - dims.margin_left - dims.width_controls} height={dims.height - 25}></rect>
         </clipPath>
-        <TimelineHandles dims={this.getClientDims()} onMoveTime={(dir) => { this.onMoveTime(dir) }} />
+        <TimelineHandles dims={dims} onMoveTime={(dir) => { this.onMoveTime(dir) }} />
+        <TimelineZoomControls zoomLevels={this.props.app.zoomLevels} dims={dims} onApplyZoom={(zoom) => { this.onApplyZoom(zoom); }} />
       </svg>
     ); 
   }

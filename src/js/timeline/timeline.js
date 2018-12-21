@@ -132,12 +132,12 @@ console.log(svg)
 //  dom.backwards.append('circle');
 //  dom.backwards.append('path');
 
-  dom.zooms = dom.controls.append('g');
-
-  dom.zooms.selectAll('.zoom-level-button')
-    .data(app.zoomLevels)
-    .enter().append('text')
-    .attr('class', 'zoom-level-button');
+//  dom.zooms = dom.controls.append('g');
+//
+//  dom.zooms.selectAll('.zoom-level-button')
+//    .data(app.zoomLevels)
+//    .enter().append('text')
+//    .attr('class', 'zoom-level-button');
 
 
   /*
@@ -251,18 +251,18 @@ console.log(svg)
   /*
   * TODO: Highlight zoom level based on time range selected
   */
-  function highlightZoomLevel(zoom) {
-    app.zoomLevels.forEach((level) => {
-      if (level.label === zoom.label) {
-        level.active = true;
-      } else {
-        level.active = false;
-      }
-    });
-
-    dom.zooms.selectAll('text')
-      .classed('active', level => level.active);
-  }
+//  function highlightZoomLevel(zoom) {
+//    app.zoomLevels.forEach((level) => {
+//      if (level.label === zoom.label) {
+//        level.active = true;
+//      } else {
+//        level.active = false;
+//      }
+//    });
+//
+//    dom.zooms.selectAll('text')
+//      .classed('active', level => level.active);
+//  }
 
 
   /**
@@ -270,7 +270,7 @@ console.log(svg)
    * @param {object} zoom: zoom level from zoomLevels
    */
   function applyZoom(zoom) {
-    highlightZoomLevel(zoom);
+//    highlightZoomLevel(zoom);
 
     const extent = getTimeScaleExtent();
     const newCentralTime = d3.timeMinute.offset(scale.x.domain()[0], extent / 2);
@@ -507,14 +507,14 @@ console.log(svg)
 //      .attr('d', d3.symbol().type(d3.symbolTriangle).size(80))
 //      .attr('transform', `translate(${scale.x.range()[1] - 20}, 62)rotate(90)`);
 
-    dom.zooms.selectAll('text')
-      .text(d => d.label)
-      .attr('x', 60)
-      .attr('y', (d, i) => (i * 15) + 20)
-      .classed('active', level => level.active);
-
-    dom.zooms.selectAll('text')
-      .on('click', zoom => applyZoom(zoom));
+//    dom.zooms.selectAll('text')
+//      .text(d => d.label)
+//      .attr('x', 60)
+//      .attr('y', (d, i) => (i * 15) + 20)
+//      .classed('active', level => level.active);
+//
+//    dom.zooms.selectAll('text')
+//      .on('click', zoom => applyZoom(zoom));
   }
 
 
@@ -583,6 +583,7 @@ console.log(svg)
   }
 
   return {
+    applyZoom,
     moveTime,
     update,
   };
