@@ -13,7 +13,6 @@ class MapSelectedEvents extends React.Component {
 
   renderMarker (event) {
     const { x, y } = this.projectPoint([event.latitude, event.longitude]);
-    console.log(x, y)
     return (
       <g
         className="location-marker"

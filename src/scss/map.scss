@@ -59,7 +59,6 @@
     font-family: 'Lato', Helvetica, sans-serif;
     border: rgba($black,0.6);
     letter-spacing: 0.05em;
-    transition: transform 0.1s;
 
     &::before {
       border-top-color: rgba($black,0.6);
@@ -169,12 +168,9 @@
 .location-event-marker {
   fill: $event_default;
   stroke-width: 0;
-  transition: 0.2s ease;
-  /*fill-opacity: 0.8;*/
   cursor: pointer;
 
   &:hover {
-    transition: 0.2s ease;
     fill-opacity: 1;
   }
 }
