@@ -40,7 +40,7 @@ class Map extends React.Component {
       const eventPoint = (nextProps.app.selected.length > 0) ? nextProps.app.selected[0] : null;
 
       if (eventPoint !== null && eventPoint.latitude && eventPoint.longitude) {
-        this.map.flyTo([eventPoint.latitude, eventPoint.longitude]);
+        this.map.setView([eventPoint.latitude, eventPoint.longitude]);
       }
     }
   }  
