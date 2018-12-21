@@ -4967,7 +4967,7 @@ promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
 
-prop-types@15.6.2, prop-types@^15.5.0, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.2:
+prop-types@15.6.2, prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   dependencies:
@@ -5101,6 +5101,12 @@ react-image@^1.5.1:
   dependencies:
     "@babel/runtime" "^7.0.0"
     prop-types "15.6.2"
+
+react-media-player@^0.7.5:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/react-media-player/-/react-media-player-0.7.5.tgz#4ada5cba5814d1121a8690ba89e520e5d5210975"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-portal@^4.2.0:
   version "4.2.0"

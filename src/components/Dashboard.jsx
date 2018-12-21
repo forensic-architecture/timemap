@@ -159,7 +159,7 @@ export default connect(
     ...state,
     app: {
       ...state.app,
-      source: state.domain.sources["24Kanal - Chervonosilske Damaged Tank Photo"]
+      source: state.domain.sources["Anna News - Horbatenko Tanks Video"]
     }
   }),
   // state => state,

@@ -1,5 +1,6 @@
 import React from 'react'
 import Img from 'react-image'
+import { Media, Player, controls } from 'react-media-player'
 import Spinner from './presentational/Spinner'
 import NoSource from './presentational/NoSource'
 
@@ -10,15 +11,28 @@ class SourceOverlay extends React.Component {
   }
 
   renderVideo() {
+    // return (
+    //   <iframe
+    //     className="vimeo-iframe"
+    //     src="https://player.vimeo.com/video/33044546"
+    //     frameborder="0"
+    //     webkitallowfullscreen
+    //     mozallowfullscreen
+    //     allowfullscreen
+    //   ></iframe>
+    // )
     return (
-      <iframe
-        className="vimeo-iframe"
-        src="https://player.vimeo.com/video/33044546"
-        frameborder="0"
-        webkitallowfullscreen
-        mozallowfullscreen
-        allowfullscreen
-      ></iframe>
+      <Media>
+        <div className="media">
+          <div className="media-player">
+            <Player src="https://player.vimeo.com/video/33044546" />
+          </div>
+          <div className="media-controls">
+            <controls.PlayPause/>
+            <controls.MuteUnmute/>
+          </div>
+        </div>
+      </Media>
     )
   }
 
@@ -47,6 +61,7 @@ class SourceOverlay extends React.Component {
   }
 
   _renderSwitch() {
+    console.table(this.props.source)
     switch(this.props.source.type) {
       case 'Video':
         return this.renderVideo()
