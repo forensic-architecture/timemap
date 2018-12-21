@@ -112,7 +112,6 @@ class Map extends React.Component {
   }
 
   renderSVG() {
-    if (this.map === null) return '';
     const pane = this.map.getPanes().overlayPane;
     const { width, height } = this.getClientDims();
 
@@ -203,7 +202,7 @@ class Map extends React.Component {
     return (
       <div className={classes}>
         <div id={this.props.mapId} />
-        {this.renderSVG()}
+        {(this.map !== null) ? this.renderSVG() : ''}
         {(this.map !== null) ? this.renderMarkers() : ''}
         {(this.map !== null) ? this.renderSites() : ''}
         {(this.map !== null) ? this.renderEvents() : ''}

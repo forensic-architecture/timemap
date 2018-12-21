@@ -9,20 +9,29 @@ import TimelineHeader from './presentational/TimelineHeader';
 import TimelineHandles from './TimelineHandles.jsx';
 import TimelineZoomControls from './TimelineZoomControls.jsx';
 import TimelineLogic from '../js/timeline/timeline.js';
-
+import TimelineLabels from './TimelineLabels.jsx';
 
 class Timeline extends React.Component {
   constructor(props) {
     super(props);
     this.svgRef = React.createRef()
     this.state = {
-      isFolded: false
+      isFolded: false,
+      dims: {
+        height: 140,
+        width: 0,
+        width_controls: 100,
+        height_controls: 115,
+        margin_left: 120        
+      }
     };
   }
 
   componentDidMount() {
     this.timeline = new TimelineLogic(this.svgRef.current, this.props.app, this.props.ui, this.props.methods);
     this.timeline.update(this.props.domain, this.props.app);
+    this.computeDims();
+    window.addEventListener('resize', () => { this.computeDims(); });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -37,21 +46,11 @@ class Timeline extends React.Component {
     });
   }
 
-  getClientDims() {
-    const WIDTH_CONTROLS = 100;
-    const HEIGHT = 140;
-    let WIDTH = 0;
-
+  computeDims() {
     if (document.querySelector(`#${this.props.ui.dom.timeline}`) !== null) {
       const boundingClient = document.querySelector(`#${this.props.ui.dom.timeline}`).getBoundingClientRect();
-      WIDTH = boundingClient.width;
-    }
-    return {
-      height: HEIGHT,
-      width: WIDTH,
-      width_controls: WIDTH_CONTROLS,
-      height_controls: 115,
-      margin_left: 120
+      const WIDTH = boundingClient.width;
+      this.setState({ dims: Object.assign({}, this.state.dims, { width: WIDTH }) });
     }
   }
 
@@ -70,8 +69,8 @@ class Timeline extends React.Component {
   }  
 
   renderSVG() {
-    const dims = this.getClientDims();
-  
+    const dims = this.state.dims;
+
     return (
       <svg
         ref={this.svgRef}
@@ -83,6 +82,7 @@ class Timeline extends React.Component {
         </clipPath>
         <TimelineHandles dims={dims} onMoveTime={(dir) => { this.onMoveTime(dir) }} />
         <TimelineZoomControls zoomLevels={this.props.app.zoomLevels} dims={dims} onApplyZoom={(zoom) => { this.onApplyZoom(zoom); }} />
+        <TimelineLabels dims={dims} timelabels={this.props.app.timerange} />
       </svg>
     ); 
   }

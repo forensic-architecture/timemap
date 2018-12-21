@@ -25,7 +25,6 @@ export default function(svg, newApp, ui, methods) {
     timerange: newApp.timerange,
     selected: [],
     language: newApp.language,
-    zoomLevels: newApp.zoomLevels
   }
 
   // Dimension of the client
@@ -60,28 +59,8 @@ export default function(svg, newApp, ui, methods) {
    * Initilize SVG elements and groups
    */
   const dom = {};
-console.log(svg)
+
   dom.svg = d3.select(svg)
-    //d3.select(`#${ui.dom.timeline}`)
-    //.append('svg')
-    //.attr('width', WIDTH)
-    //.attr('height', HEIGHT);
-
-//  dom.clip = dom.svg.append("svg:clipPath")
-//    .attr("id", "clip")
-//    .append("svg:rect")
-//    .attr("x", margin.left)
-//    .attr("y", 0)
-//    .attr("width", WIDTH - margin.left)
-//    .attr("height", HEIGHT - 25);
-
-  dom.controls = d3.select(svg)
-    //d3.select(`#${ui.dom.timeline}`)
-    //.append('svg')
-    //.attr('class', 'time-controls')
-    //.attr('width', WIDTH_CONTROLS)
-    //.attr('height', HEIGHT);
-
 
   /*
    * Axis group elements
@@ -100,18 +79,6 @@ console.log(svg)
     .attr('transform', `translate(${WIDTH}, 0)`)
     .attr('class', 'yAxis');
 
-  dom.axis.boundaries = dom.svg.selectAll('.axisBoundaries')
-    .data([0, 1])
-    .enter().append('line')
-    .attr('class', 'axisBoundaries');
-
-  dom.axis.label0 = dom.svg.append('text')
-    .attr('class', 'timeLabel0 timeLabel');
-
-  dom.axis.label1 = dom.svg.append('text')
-    .attr('class', 'timelabelF timeLabel');
-
-
   /*
    * Plottable elements
    */
@@ -119,25 +86,6 @@ console.log(svg)
   dom.body = dom.svg.append("g").attr("clip-path", "url(#clip)");
   dom.events = dom.body.append('g');
   dom.markers = dom.body.append('g');
-
-
-  /*
-   * Time Controls
-   */
-//  dom.forward = dom.svg.append('g').attr('class', 'time-controls-inline');
-//  dom.forward.append('circle');
-//  dom.forward.append('path');
-//
-//  dom.backwards = dom.svg.append('g').attr('class', 'time-controls-inline');
-//  dom.backwards.append('circle');
-//  dom.backwards.append('path');
-
-//  dom.zooms = dom.controls.append('g');
-//
-//  dom.zooms.selectAll('.zoom-level-button')
-//    .data(app.zoomLevels)
-//    .enter().append('text')
-//    .attr('class', 'zoom-level-button');
 
 
   /*
@@ -248,30 +196,11 @@ console.log(svg)
   }
 
 
-  /*
-  * TODO: Highlight zoom level based on time range selected
-  */
-//  function highlightZoomLevel(zoom) {
-//    app.zoomLevels.forEach((level) => {
-//      if (level.label === zoom.label) {
-//        level.active = true;
-//      } else {
-//        level.active = false;
-//      }
-//    });
-//
-//    dom.zooms.selectAll('text')
-//      .classed('active', level => level.active);
-//  }
-
-
   /**
    * Apply zoom level to timeline
    * @param {object} zoom: zoom level from zoomLevels
    */
   function applyZoom(zoom) {
-//    highlightZoomLevel(zoom);
-
     const extent = getTimeScaleExtent();
     const newCentralTime = d3.timeMinute.offset(scale.x.domain()[0], extent / 2);
 
@@ -367,24 +296,6 @@ console.log(svg)
     axis.x1.scale(scale.x);
   }
 
-
-  /**
-   * Display the current time range in the time label above the timeline
-   */
-  function renderTimeLabels() {
-    dom.axis.label0
-      .attr('x', 5)
-      .attr('y', 15)
-      .text(formatterWithYear(app.timerange[0]));
-
-    dom.axis.label1
-      .attr('x', WIDTH - 5)
-      .attr('y', 15)
-      .text(formatterWithYear(app.timerange[1]))
-      .style('text-anchor', 'end');
-  }
-
-
   /**
    * Makes a circular ring mark in all selected events
    * @param {object} eventPoint: object with eventPoint data (time, loc, tags)
@@ -469,54 +380,7 @@ console.log(svg)
     dom.axis.y
       .call(axis.y)
       .call(drag);
-
-    dom.axis.boundaries
-      .attr('x1', (d, i) => scale.x.range()[i])
-      .attr('x2', (d, i) => scale.x.range()[i])
-      .attr('y1', 10)
-      .attr('y2', 20);
-
-    dom.axis.label1
-      .attr('x', scale.x.range()[1] - 5);
   }
-
-
-  /**
-   * Render left and right time shifting controls
-   */
-  function renderTimeControls() {
-    const zoomLabels = copy[app.language].timeline.zooms;
-    app.zoomLevels.forEach((level, i) => {
-      level.label = zoomLabels[i];
-    });
-
-    // These controls on timeline svg
-//    dom.backwards.select('circle')
-//      .attr('transform', `translate(${scale.x.range()[0] + 20}, 62)`)
-//      .attr('r', 15);
-//
-//    dom.backwards.select('path')
-//      .attr('d', d3.symbol().type(d3.symbolTriangle).size(80))
-//      .attr('transform', `translate(${scale.x.range()[0] + 20}, 62)rotate(270)`);
-//
-//    dom.forward.select('circle')
-//      .attr('transform', `translate(${scale.x.range()[1] - 20}, 62)`)
-//      .attr('r', 15);
-//
-//    dom.forward.select('path')
-//      .attr('d', d3.symbol().type(d3.symbolTriangle).size(80))
-//      .attr('transform', `translate(${scale.x.range()[1] - 20}, 62)rotate(90)`);
-
-//    dom.zooms.selectAll('text')
-//      .text(d => d.label)
-//      .attr('x', 60)
-//      .attr('y', (d, i) => (i * 15) + 20)
-//      .classed('active', level => level.active);
-//
-//    dom.zooms.selectAll('text')
-//      .on('click', zoom => applyZoom(zoom));
-  }
-
 
   /**
    * Updates data displayed by this timeline, but only render if necessary
@@ -561,25 +425,14 @@ console.log(svg)
       app.selected = newApp.selected.slice(0);
     }
 
-    if (isNewDomain || isNewAppProps) renderContent();
-    if (isNewAppProps) renderContext();
+    if (isNewDomain || isNewAppProps) render();
   }
 
-  function renderContext() {
-    renderTimeControls();
-    renderTimeLabels();
-  }
-
-  function renderContent() {
+  function render() {
     updateAxis();
     renderAxis();
     renderEvents();
     renderHighlight();
-  }
-
-  function render() {
-    renderContext();
-    renderContent();
   }
 
   return {
