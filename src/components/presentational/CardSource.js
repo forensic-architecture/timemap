@@ -25,7 +25,7 @@ const CardSource = ({ source, isLoading, onClickHandler }) => {
     }
   }
 
-  if (!source.type) {
+  if (!source) {
     return null;
   }
   return (
