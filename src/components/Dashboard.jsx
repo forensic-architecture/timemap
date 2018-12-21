@@ -155,13 +155,13 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  // state => ({
-  //   ...state,
-  //   app: {
-  //     ...state.app,
-  //     source: state.domain.sources["24Kanal - Chervonosilske Damaged Tank Photo"]
-  //   }
-  // }),
-  state => state,
+  state => ({
+    ...state,
+    app: {
+      ...state.app,
+      source: state.domain.sources["24Kanal - Chervonosilske Damaged Tank Photo"]
+    }
+  }),
+  // state => state,
   mapDispatchToProps,
 )(Dashboard);

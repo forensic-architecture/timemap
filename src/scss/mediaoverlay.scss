@@ -1,5 +1,9 @@
-$vimeo-height: 800px;
-$vimeo-width: 1000px;
+$panel-width: 800px;
+$panel-height: 800px;
+$vimeo-width: $panel-width;
+$vimeo-height: $panel-height;
+
+$header-inset: 10px;
 
 .mo-overlay {
   display: flex;
@@ -11,39 +15,43 @@ $vimeo-width: 1000px;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(230, 230, 230, 0.5);
+  background-color: rgba(239, 239, 239, 0.5);
   z-index: 20;
 }
 
 .mo-header {
-  min-height: 4em;
+  min-height: 38px;
+  max-height: 38px;
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: flex-end;
+  background-color: black;
+  color: white;
 
   .mo-header-close {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 4em;
+    margin-left: $header-inset + 8px;
   }
 
   .mo-header-text {
     flex: 1;
     margin-left: -4em;
+    margin-right: $header-inset;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: right;
   }
 }
 
 .mo-container {
-  background-color: rgba(230,230,230,0.98);
-  max-width: 800px;
-  min-width: 800px;
-  max-height: 600px;
-  min-height: 600px;
+  background-color: rgba(239, 239, 239, 0.8);
+  max-width: $panel-width;
+  min-width: $panel-width;
+  max-height: $panel-height;
+  min-height: $panel-height;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -57,7 +65,32 @@ $vimeo-width: 1000px;
 }
 
 .mo-media-container {
+  padding-top: 3*$header-inset;
+  font-family: "Lato", Helvetica, sans-serif;
   max-height: $vimeo-height;
+  min-width: 100%;
+}
+
+.mo-meta-container {
+  padding: 3*$header-inset;
+  min-height: 100px;
+  min-width: $panel-width;
+  max-width: $panel-height;
+  display: flex;
+  justify-content: center;
+
+  .mo-box {
+    display: flex;
+    flex-direction: column;
+    max-width: $panel-width - (6*$header-inset);
+    min-width: $panel-width - (6*$header-inset);
+    border: 1px solid rgb(189,189,189);
+    padding: $header-inset;
+  }
+
+  .indent {
+    margin-left: 2*$header-inset;
+  }
 }
 
 .mo-controls {
@@ -72,4 +105,24 @@ $vimeo-width: 1000px;
   min-width: $vimeo-width;
   max-width: $vimeo-width;
   border: none;
+}
+
+
+/* source overlay specific styles */
+.no-source-container {
+  border: 1px solid black;
+  padding: 2em;
+  min-height: 200px;
+}
+
+.no-source-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 0.7em;
+  // min-width: 150px;
+  // max-width: 150px;
+
+  .no-source-icon {
+    margin-right: 1em;
+  }
 }

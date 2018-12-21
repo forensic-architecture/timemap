@@ -1,5 +1,7 @@
 import React from 'react'
 import Img from 'react-image'
+import Spinner from './presentational/Spinner'
+import NoSource from './presentational/NoSource'
 
 class SourceOverlay extends React.Component {
   constructor(props) {
@@ -24,9 +26,11 @@ class SourceOverlay extends React.Component {
     const imageExts = ['.jpg', '.png']
     const possibleUrls = imageExts.map(ext => `${this.props.source.path}${ext}`)
     return (
-      <div>
-        <Img src={possibleUrls} />
-      </div>
+      <Img
+        src={possibleUrls}
+        loader={<Spinner />}
+        unloader={<NoSource failedUrls={possibleUrls} />}
+      />
     )
   }
 
@@ -56,6 +60,7 @@ class SourceOverlay extends React.Component {
   }
 
   render() {
+    const {id, url, title, date, type, affil_1, affil_2} = this.props.source
     return (
       <div className="mo-overlay">
         <div className="mo-container" onClick={this.props.onCancel}>
@@ -67,6 +72,17 @@ class SourceOverlay extends React.Component {
           </div>
           <div className="mo-media-container">
             {this._renderSwitch()}
+          </div>
+          <div className="mo-meta-container">
+            <div className="mo-box">
+              {id ? <div><b>{id}</b></div> : null}
+              {title? <div><b>{title}</b></div> : null}
+              <hr/>
+              {type ? <div>Type: <span className="indent">{type}</span></div> : null}
+              {date ? <div>Date:<span className="indent">{date}</span></div> : null}
+              <hr/>
+              {url ? <div><a href={url} target="_blank">Link to original webpage</a></div> : null}
+            </div>
           </div>
         </div>
       </div>
