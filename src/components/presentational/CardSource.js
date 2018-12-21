@@ -25,6 +25,9 @@ const CardSource = ({ source, isLoading, onClickHandler }) => {
     }
   }
 
+  if (!source.type) {
+    return null;
+  }
   return (
     <div className="card-source">
       {isLoading
