@@ -4,14 +4,9 @@
   Allows brushing and selecting periods of time in it
   TODO: is it possible to express this idiomatically as React?
 */
-import {
-  areEqual,
-  parseDate,
-  formatterWithYear
-} from '../utilities';
+import { parseDate } from '../utilities';
 import hash from 'object-hash';
 import esLocale from '../data/es-MX.json';
-import copy from '../data/copy.json';
 
 export default function(svg, newApp, ui, methods) {
   d3.timeFormatDefaultLocale(esLocale);
@@ -23,18 +18,12 @@ export default function(svg, newApp, ui, methods) {
   }
   const app = {
     timerange: newApp.timerange,
-    selected: [],
-    language: newApp.language,
+    selected: []
   }
 
   // Dimension of the client
   const WIDTH_CONTROLS = 100;
-  const HEIGHT = 140;
-  const boundingClient = d3.select(`#${ui.dom.timeline}`).node().getBoundingClientRect();
-  let WIDTH = boundingClient.width - WIDTH_CONTROLS;
-
-  // Highlight events with a larger white ring marker
-  const markerRadius = 15;
+  let WIDTH = getCurrentWidth() - WIDTH_CONTROLS;
 
   // NB: is it possible to do this with SCSS?
   // A: Maybe, although we are using it programmatically here for now
@@ -85,7 +74,6 @@ export default function(svg, newApp, ui, methods) {
 
   dom.body = dom.svg.append("g").attr("clip-path", "url(#clip)");
   dom.events = dom.body.append('g');
-  dom.markers = dom.body.append('g');
 
 
   /*
@@ -131,7 +119,6 @@ export default function(svg, newApp, ui, methods) {
       if (d3.select(`#${ui.dom.timeline}`).node() !== null) {
         WIDTH = getCurrentWidth() - WIDTH_CONTROLS;
 
-        dom.svg.attr('width', WIDTH);
         scale.x.range([margin.left, WIDTH]);
         axis.y.tickSize(WIDTH - margin.left);
         dom.axis.y.attr('transform', `translate(${WIDTH}, 0)`)
@@ -140,16 +127,7 @@ export default function(svg, newApp, ui, methods) {
     });
   }
   addResizeListener();
-
-
-  /**
-   * Return which color event circle should be based on incident type
-   * @param {object} eventPoint data object
-   */
-  function getEventPointFillColor(eventPoint) {
-    return methods.getCategoryColor(eventPoint.category);
-  }
-
+  
 
   /**
    * Given an event, get all the filtered events that happen simultaneously
@@ -184,17 +162,6 @@ export default function(svg, newApp, ui, methods) {
   function getTimeScaleExtent() {
     return (scale.x.domain()[1].getTime() - scale.x.domain()[0].getTime()) / 60000;
   }
-
-
-  /*
-   * Given a number of minutes, calculate the width based on current scale.x
-   * @param {number} minutes: number of minutes
-   */
-  function getWidthOfTime(minutes) {
-    const allMins = getTimeScaleExtent();
-    return (minutes * WIDTH) / allMins;
-  }
-
 
   /**
    * Apply zoom level to timeline
@@ -286,39 +253,6 @@ export default function(svg, newApp, ui, methods) {
       .classed('mouseover', false);
   }
 
-
-  /**
-   * It automatically sets brush timeline to a domain set by the params
-   */
-  function updateTimeRange() {
-    scale.x.domain(app.timerange);
-    axis.x0.scale(scale.x);
-    axis.x1.scale(scale.x);
-  }
-
-  /**
-   * Makes a circular ring mark in all selected events
-   * @param {object} eventPoint: object with eventPoint data (time, loc, tags)
-   */
-  function renderHighlight() {
-    const markers = dom.markers
-      .selectAll('circle')
-      .data(app.selected);
-
-    markers
-      .enter()
-      .append('circle')
-      .attr('class', 'timeline-marker')
-      .merge(markers)
-      .attr('cy', eventPoint => getEventY(eventPoint))
-      .attr('cx', eventPoint => getEventX(eventPoint))
-      .attr('r', 10)
-      .style('opacity', .9);
-
-    markers.exit().remove();
-  }
-
-
   /**
    * Return event circles of different groups
    */
@@ -342,10 +276,8 @@ export default function(svg, newApp, ui, methods) {
       .attr('class', 'event')
       .attr('cx', eventPoint => getEventX(eventPoint))
       .attr('cy', eventPoint => getEventY(eventPoint))
-      .style('fill', eventPoint => getEventPointFillColor(eventPoint))
-      .on('click', eventPoint => {
-        return methods.onSelect(getAllEventsAtOnce(eventPoint))
-      })
+      .style('fill', eventPoint => methods.getCategoryColor(eventPoint.category))
+      .on('click', eventPoint => methods.onSelect(getAllEventsAtOnce(eventPoint)))
       .on('mouseover', handleMouseOver)
       .on('mouseout', handleMouseOut)
       .transition()
@@ -432,10 +364,11 @@ export default function(svg, newApp, ui, methods) {
     updateAxis();
     renderAxis();
     renderEvents();
-    renderHighlight();
   }
 
   return {
+    getEventX,
+    getEventY,
     applyZoom,
     moveTime,
     update,

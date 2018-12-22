@@ -10,6 +10,7 @@ import TimelineHandles from './TimelineHandles.jsx';
 import TimelineZoomControls from './TimelineZoomControls.jsx';
 import TimelineLogic from '../js/timeline/timeline.js';
 import TimelineLabels from './TimelineLabels.jsx';
+import TimelineMarkers from './TimelineMarkers.jsx'
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -83,6 +84,7 @@ class Timeline extends React.Component {
         <TimelineHandles dims={dims} onMoveTime={(dir) => { this.onMoveTime(dir) }} />
         <TimelineZoomControls zoomLevels={this.props.app.zoomLevels} dims={dims} onApplyZoom={(zoom) => { this.onApplyZoom(zoom); }} />
         <TimelineLabels dims={dims} timelabels={this.props.app.timerange} />
+        <TimelineMarkers selected={this.props.app.selected} getEventX={(e) => this.timeline.getEventX(e)} getEventY={(e) => this.timeline.getEventY(e)} />
       </svg>
     ); 
   }
