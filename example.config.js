@@ -13,6 +13,7 @@ module.exports = {
   features: {
     USE_TAGS: false,
     USE_SEARCH: false,
-    USE_SITES: false
+    USE_SITES: false,
+    USE_SOURCES: true
   }
 }
