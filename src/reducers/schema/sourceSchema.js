@@ -7,7 +7,7 @@ const sourceSchema = Joi.object().keys({
   affil_1:        Joi.string().allow(''),
   affil_2:        Joi.string().allow(''),
   url:            Joi.string().allow(''),
-  title:          Joi.string().allow(''),
+  desc:          Joi.string().allow(''),
   parent:         Joi.string().allow(''),
   author:         Joi.string().allow(''),
   date:           Joi.string().allow(''),

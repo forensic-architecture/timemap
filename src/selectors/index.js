@@ -170,8 +170,12 @@ export const selectSelected = createSelector(
     // NB: return source object if exists, otherwise null
     const srcs = selected
       .map(e => e.sources)
-      .map(_sources =>
-        _sources.map(id => (sources.hasOwnProperty(id) ? sources[id] : null))
+      .map(_sources => {
+        if (!_sources) return [];
+        return _sources.map(id => (
+          sources.hasOwnProperty(id) ? sources[id] : null
+        ))
+      }
       )
 
     return selected.map((s, idx) => ({
