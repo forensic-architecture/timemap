@@ -9,12 +9,8 @@ class SourceOverlay extends React.Component {
     super(props)
     this.renderVideo = this.renderVideo.bind(this)
     this.renderPhoto = this.renderPhoto.bind(this)
-  }
-
-  renderPlaceholder() {
-    return (
-      <NoSource failedUrls={["NOT ALL SOURCES AVAILABLE IN APPLICATION YET"]} />
-    )
+    this.renderPhotobook = this.renderPhotobook.bind(this)
+    this.renderTestimony = this.renderTestimony.bind(this)
   }
 
   renderVideo() {
@@ -40,6 +36,10 @@ class SourceOverlay extends React.Component {
     )
   }
 
+  renderPhotobook() {
+    return this.renderError()
+  }
+
   renderError() {
     return (
       <NoSource failedUrls={["NOT ALL SOURCES AVAILABLE IN APPLICATION YET"]} />
@@ -48,7 +48,9 @@ class SourceOverlay extends React.Component {
 
   renderTestimony() {
     return (
-      <div>Eyewitness</div>
+      <div>
+        <a href={`${this.props.source.path}.docx`}>Download Testimony</a>
+      </div>
     )
   }
 
@@ -59,6 +61,8 @@ class SourceOverlay extends React.Component {
         return this.renderVideo()
       case 'Photo':
         return this.renderPhoto()
+      case 'Photobook':
+        return this.renderPhotobook()
       case 'Eyewitness Testimony':
         return this.renderTestimony()
       default:
@@ -68,7 +72,7 @@ class SourceOverlay extends React.Component {
 
   render() {
     if (typeof(this.props.source) !== 'object') {
-      return this.renderPlaceholder();
+      return this.renderError()
     }
     const {id, url, title, date, type, affil_1, affil_2} = this.props.source
     return (
