@@ -21,7 +21,6 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-image": "^1.5.1",
-    "react-media-player": "^0.7.5",
     "react-portal": "^4.2.0",
     "react-redux": "^5.0.4",
     "react-tabs": "^1.0.0",
@@ -29,6 +28,7 @@
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
     "uuid": "^3.1.0",
+    "video-react": "^0.13.1",
     "video.js": "^5.19.2",
     "whatwg-fetch": "^2.0.3"
   },

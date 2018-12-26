@@ -1,5 +1,5 @@
 $panel-width: 800px;
-$panel-height: 800px;
+$panel-height: 700px;
 $vimeo-width: $panel-width - 100;
 $vimeo-height: $panel-height / 2;
 
@@ -61,11 +61,12 @@ $header-inset: 10px;
     flex: 1;
     display: flex;
     justify-content: center;
+    align-items: center;
   }
 }
 
 .mo-media-container {
-  padding-top: 3*$header-inset;
+  // padding-top: 3*$header-inset;
   font-family: "Lato", Helvetica, sans-serif;
   // max-height: $vimeo-height;
   min-width: 100%;

@@ -1,6 +1,6 @@
 import React from 'react'
 import Img from 'react-image'
-import { Media, Player, controls } from 'react-media-player'
+import { Player } from 'video-react'
 import Spinner from './presentational/Spinner'
 import NoSource from './presentational/NoSource'
 
@@ -19,17 +19,12 @@ class SourceOverlay extends React.Component {
 
   renderVideo() {
     return (
-      <Media>
-        <div className="media">
-          <div className="media-player">
-            <Player src={`${this.props.source.path}.mp4`} />
-          </div>
-          <div className="media-controls">
-            <controls.PlayPause/>
-            <controls.MuteUnmute/>
-          </div>
-        </div>
-      </Media>
+      <div className="media-player">
+        <Player
+          playsInline
+          src={`${this.props.source.path}.mp4`}
+        />
+      </div>
     )
   }
 
