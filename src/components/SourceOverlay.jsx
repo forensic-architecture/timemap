@@ -73,7 +73,7 @@ class SourceOverlay extends React.Component {
     const {id, url, title, date, type, affil_1, affil_2} = this.props.source
     return (
       <div className="mo-overlay">
-        <div className="mo-container" onClick={this.props.onCancel}>
+        <div className="mo-container">
           <div className="mo-header">
             <div className="mo-header-close" onClick={this.props.onCancel}>
               <button className="side-menu-burg is-active"><span></span></button>
