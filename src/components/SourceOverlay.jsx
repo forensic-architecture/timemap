@@ -7,25 +7,29 @@ import NoSource from './presentational/NoSource'
 class SourceOverlay extends React.Component {
   constructor(props) {
     super(props)
+    this.renderVideo = this.renderVideo.bind(this)
     this.renderPhoto = this.renderPhoto.bind(this)
   }
 
-  renderVideo() {
-    // return (
-    //   <Media>
-    //     <div className="media">
-    //       <div className="media-player">
-    //         <Player src="http://localhost:8000/Anna News - Horbatenko Tanks Video.mp4" />
-    //       </div>
-    //       <div className="media-controls">
-    //         <controls.PlayPause/>
-    //         <controls.MuteUnmute/>
-    //       </div>
-    //     </div>
-    //   </Media>
-    // )
+  renderPlaceholder() {
     return (
       <NoSource failedUrls={["NOT ALL SOURCES AVAILABLE IN APPLICATION YET"]} />
+    )
+  }
+
+  renderVideo() {
+    return (
+      <Media>
+        <div className="media">
+          <div className="media-player">
+            <Player src={`${this.props.source.path}.mp4`} />
+          </div>
+          <div className="media-controls">
+            <controls.PlayPause/>
+            <controls.MuteUnmute/>
+          </div>
+        </div>
+      </Media>
     )
   }
 
@@ -54,7 +58,7 @@ class SourceOverlay extends React.Component {
   }
 
   _renderSwitch() {
-    console.table(this.props.source)
+    // console.table(this.props.source)
     switch(this.props.source.type) {
       case 'Video':
         return this.renderVideo()
@@ -68,6 +72,9 @@ class SourceOverlay extends React.Component {
   }
 
   render() {
+    if (typeof(this.props.source) !== 'object') {
+      return this.renderPlaceholder();
+    }
     const {id, url, title, date, type, affil_1, affil_2} = this.props.source
     return (
       <div className="mo-overlay">
