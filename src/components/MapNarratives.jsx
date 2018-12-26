@@ -39,10 +39,18 @@ class MapNarratives extends React.Component {
     return 1;
   }
 
+  hasNoLocation(step) {
+    return (step.latitude === '' || step.longitude === '')
+  }
+
   renderNarrativeStep(allSteps, step, idx, n) {
     const { x, y } = this.projectPoint([step.latitude, step.longitude]);
-
     const step2 = allSteps[idx + 1];
+
+    // don't draw if one of the steps has no location
+    if (this.hasNoLocation(step) || this.hasNoLocation(step2))
+      return null
+
     const p2 = this.projectPoint([step2.latitude, step2.longitude]);
 
     return (
