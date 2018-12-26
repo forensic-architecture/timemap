@@ -25,7 +25,7 @@ const CardSource = ({ source, isLoading, onClickHandler }) => {
     }
   }
 
-  if (typeof source !== 'object') {
+  if (!source) {
     return (
       <div className="card-source">
         <div>Error: this source was not found</div>
