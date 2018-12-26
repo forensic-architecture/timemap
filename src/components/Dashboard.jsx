@@ -155,13 +155,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  // state => ({
-  //   ...state,
-  //   app: {
-  //     ...state.app,
-  //     source: state.domain.sources["Ilovaisk The Terrible Truth - 1551603_1553607 Chumaky Approach 29 Aug Video"]
-  //   }
-  // }),
   state => state,
   mapDispatchToProps,
 )(Dashboard);
