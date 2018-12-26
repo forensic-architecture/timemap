@@ -30,7 +30,7 @@ class MapEvents extends React.Component {
     return (
       <circle
         className="location-event-marker"
-        r={(events) ? Math.sqrt(16 * events.length) + 3 : 0}
+        r={(events.length > 0) ? Math.sqrt(16 * events.length) + 3 : 0}
         style={{ fill: this.props.getCategoryColor(category), fillOpacity: 0.8 }}
         onClick={() => this.props.onSelect(events)}
       >
