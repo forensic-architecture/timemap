@@ -323,7 +323,9 @@ export default function(svg, newApp, ui, methods) {
     const groupStep = (106 - 30) / domain.categories.length;
     let groupYs = Array.apply(null, Array(domain.categories.length));
     groupYs = groupYs.map((g, i) => {
-      return 30 + i * groupStep;
+      //return 30 + i * groupStep;
+      const h = 106 - 30
+      return (i + 1) * h / groupYs.length - 15;
     });
 
     scale.y = d3.scaleOrdinal()
