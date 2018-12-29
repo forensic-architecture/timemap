@@ -15,11 +15,13 @@ class SourceOverlay extends React.Component {
   }
 
   renderVideo() {
+    // NB: assume only one video
     return (
       <div className="media-player">
         <Player
+          className='source-video'
           playsInline
-          src={`${this.props.source.path}.mp4`}
+          src={this.props.source.paths[0]}
         />
       </div>
     )

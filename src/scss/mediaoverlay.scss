@@ -147,11 +147,16 @@ $header-inset: 10px;
 .source-image-container {
   padding: 0 25px;
   overflow-y: scroll;
-  max-height: 100%;
-  .source-image {
-    max-width: calc(100% - 20px);
-    max-height: 100%;
-    padding: 10px;
-  }
+  height: 100%;
 }
 
+.source-image, .source-video {
+  max-width: calc(100% - 20px);
+  max-height: 350px !important;
+  height: 100%;
+  padding: 10px;
+}
+
+.media-player {
+  overflow-y: hidden;
+}
