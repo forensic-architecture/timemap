@@ -1,5 +1,6 @@
 import React from 'react'
 import Img from 'react-image'
+import Photobook from './Photobook.jsx'
 import { Player } from 'video-react'
 import Spinner from './presentational/Spinner'
 import NoSource from './presentational/NoSource'
@@ -25,23 +26,33 @@ class SourceOverlay extends React.Component {
   }
 
   renderPhoto() {
-    const imageExts = ['.jpg', '.png']
-    const extraUrls = imageExts.map(ext => `${this.props.source.path}${ext}`)
-    const possibleUrls = [ this.props.source.path, ...extraUrls ]
     return (
       <div className='source-image-container'>
         <Img
           className='source-image'
-          src={possibleUrls}
+          src={this.props.source.paths}
           loader={<Spinner />}
-          unloader={<NoSource failedUrls={possibleUrls} />}
+          unloader={<NoSource failedUrls={this.props.source.paths} />}
         />
       </div>
     )
   }
 
   renderPhotobook() {
-    return this.renderError()
+    return (
+      <div className='source-image-container'>
+        {this.props.source.paths.map((url, idx) => (
+          <Img
+            key={idx}
+            className='source-image'
+            src={url}
+            loader={<Spinner />}
+            unloader={<NoSource failedUrls={[this.props.source.path]} />}
+          />
+
+        ))}
+      </div>
+    )
   }
 
   renderError() {

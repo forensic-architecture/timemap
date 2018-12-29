@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 const sourceSchema = Joi.object().keys({
   id:             Joi.string().required(),
-  path:           Joi.string().required(),
+  paths:          Joi.array().required(),
   type:           Joi.string().allow(''),
   affil_1:        Joi.string().allow(''),
   affil_2:        Joi.string().allow(''),

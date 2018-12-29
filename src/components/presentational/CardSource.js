@@ -20,6 +20,8 @@ const CardSource = ({ source, isLoading, onClickHandler }) => {
         return 'videocam'
       case 'Photo':
         return 'photo'
+      case 'Photobook':
+        return 'photo_album'
       default:
         return 'help'
     }
