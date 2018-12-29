@@ -26,13 +26,17 @@ class SourceOverlay extends React.Component {
 
   renderPhoto() {
     const imageExts = ['.jpg', '.png']
-    const possibleUrls = imageExts.map(ext => `${this.props.source.path}${ext}`)
+    const extraUrls = imageExts.map(ext => `${this.props.source.path}${ext}`)
+    const possibleUrls = [ this.props.source.path, ...extraUrls ]
     return (
-      <Img
-        src={possibleUrls}
-        loader={<Spinner />}
-        unloader={<NoSource failedUrls={possibleUrls} />}
-      />
+      <div className='source-image-container'>
+        <Img
+          className='source-image'
+          src={possibleUrls}
+          loader={<Spinner />}
+          unloader={<NoSource failedUrls={possibleUrls} />}
+        />
+      </div>
     )
   }
 
@@ -55,7 +59,6 @@ class SourceOverlay extends React.Component {
   }
 
   _renderSwitch() {
-    // console.table(this.props.source)
     switch(this.props.source.type) {
       case 'Video':
         return this.renderVideo()
