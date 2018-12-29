@@ -1,6 +1,5 @@
 import React from 'react'
 import Img from 'react-image'
-import Photobook from './Photobook.jsx'
 import { Player } from 'video-react'
 import Spinner from './presentational/Spinner'
 import NoSource from './presentational/NoSource'
