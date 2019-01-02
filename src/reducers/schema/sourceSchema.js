@@ -2,6 +2,7 @@ import Joi from 'joi';
 
 const sourceSchema = Joi.object().keys({
   id:             Joi.string().required(),
+  thumbnail:      Joi.string().allow(''),
   paths:          Joi.array().required(),
   type:           Joi.string().allow(''),
   affil_1:        Joi.string().allow(''),
