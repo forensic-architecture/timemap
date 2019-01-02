@@ -11,6 +11,8 @@ import TimelineZoomControls from './TimelineZoomControls.jsx';
 import TimelineLogic from '../js/timeline/timeline.js';
 import TimelineLabels from './TimelineLabels.jsx';
 import TimelineMarkers from './TimelineMarkers.jsx'
+import TimelineEvents from './TimelineEvents.jsx';
+import TimelineCategories from './TimelineCategories.jsx';
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -59,14 +61,14 @@ class Timeline extends React.Component {
     if (this.timeline) {
       return this.timeline.moveTime(dir);
     }
-    return '';
+    return null;
   }
 
   onApplyZoom(zoom) {
     if (this.timeline) {
       return this.timeline.applyZoom(zoom);
     }
-    return '';
+    return null;
   }  
 
   renderSVG() {
@@ -84,7 +86,15 @@ class Timeline extends React.Component {
         <TimelineHandles dims={dims} onMoveTime={(dir) => { this.onMoveTime(dir) }} />
         <TimelineZoomControls zoomLevels={this.props.app.zoomLevels} dims={dims} onApplyZoom={(zoom) => { this.onApplyZoom(zoom); }} />
         <TimelineLabels dims={dims} timelabels={this.props.app.timerange} />
+        <TimelineCategories categories={this.props.domain.categories} />
         <TimelineMarkers selected={this.props.app.selected} getEventX={(e) => this.timeline.getEventX(e)} getEventY={(e) => this.timeline.getEventY(e)} />
+        <TimelineEvents
+          events={this.props.domain.events}
+          getEventX={(e) => this.timeline.getEventX(e)}
+          getEventY={(e) => this.timeline.getEventY(e)}
+          getCategoryColor={this.props.methods.getCategoryColor}
+          onSelect={this.props.methods.onSelect}
+        />
       </svg>
     ); 
   }

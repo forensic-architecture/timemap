@@ -12,13 +12,10 @@ export default function(svg, newApp, ui, methods) {
   d3.timeFormatDefaultLocale(esLocale);
 
   const domain = {
-    events: [],
-    categories: [],
-    narratives: []
+    categories: []
   }
   const app = {
     timerange: newApp.timerange,
-    selected: []
   }
 
   // Dimension of the client
@@ -64,17 +61,9 @@ export default function(svg, newApp, ui, methods) {
     .attr('transform', `translate(0, 105)`)
     .attr('class', 'axis axisHourText');
 
-  dom.axis.y = dom.svg.append('g')
+  /*dom.axis.y = dom.svg.append('g')
     .attr('transform', `translate(${WIDTH}, 0)`)
-    .attr('class', 'yAxis');
-
-  /*
-   * Plottable elements
-   */
-
-  dom.body = dom.svg.append("g").attr("clip-path", "url(#clip)");
-  dom.events = dom.body.append('g');
-
+    .attr('class', 'yAxis');*/
 
   /*
    * Initialize axis function and element group
@@ -95,9 +84,9 @@ export default function(svg, newApp, ui, methods) {
     .tickSize(0)
     .tickFormat(d3.timeFormat('%H:%M'));
 
-  axis.y =
+  /*axis.y =
     d3.axisLeft(scale.y)
-    .tickValues([]);
+    .tickValues([]);*/
 
   updateAxis();
 
@@ -127,19 +116,6 @@ export default function(svg, newApp, ui, methods) {
     });
   }
   addResizeListener();
-  
-
-  /**
-   * Given an event, get all the filtered events that happen simultaneously
-   * @param {object} eventPoint: regular eventPoint data
-   */
-  function getAllEventsAtOnce(eventPoint) {
-    const timestamp = eventPoint.timestamp;
-    const category = eventPoint.category;
-    return domain.events
-      .filter(event => (event.timestamp === timestamp && category === event.category))
-  }
-
 
   /*
    * Get y height of eventPoint, considering the ordinal Y scale
@@ -225,67 +201,15 @@ export default function(svg, newApp, ui, methods) {
       const newDomainF = d3.timeSecond.offset(app.timerange[1], timeShift);
 
       scale.x.domain([newDomain0, newDomainF]);
-      render();
+//      render();
+      app.timerange = scale.x.domain();
+      methods.onUpdateTimerange(scale.x.domain());
     })
     .on('end', () => {
       toggleTransition(true);
       app.timerange = scale.x.domain();
       methods.onUpdateTimerange(scale.x.domain());
     });
-
-
-  /**
-   * Highlight event circle on hover
-   */
-  function handleMouseOver() {
-    d3.select(this)
-      .attr('r', 7)
-      .classed('mouseover', true);
-  }
-
-
-  /**
-   * Unhighlight event when mouse out
-   */
-  function handleMouseOut() {
-    d3.select(this)
-      .attr('r', 5)
-      .classed('mouseover', false);
-  }
-
-  /**
-   * Return event circles of different groups
-   */
-  function renderEvents() {
-    const eventsDom = dom.events
-      .selectAll('.event')
-      .data(domain.events, d => d.id);
-
-    eventsDom
-      .exit()
-      .remove();
-
-    eventsDom
-      .transition()
-      .duration(transitionDuration)
-      .attr('cx', eventPoint => getEventX(eventPoint));
-
-    eventsDom
-      .enter()
-      .append('circle')
-      .attr('class', 'event')
-      .attr('cx', eventPoint => getEventX(eventPoint))
-      .attr('cy', eventPoint => getEventY(eventPoint))
-      .style('fill', eventPoint => methods.getCategoryColor(eventPoint.category))
-      .on('click', eventPoint => methods.onSelect(getAllEventsAtOnce(eventPoint)))
-      .on('mouseover', handleMouseOver)
-      .on('mouseout', handleMouseOut)
-      .transition()
-      .delay(300)
-      .duration(200)
-      .attr('r', 5);
-  }
-
 
   /**
    * Render axis on timeline and viewbox boundaries
@@ -307,11 +231,11 @@ export default function(svg, newApp, ui, methods) {
       .duration(transitionDuration)
       .call(axis.x1);
 
-    axis.y.tickSize(WIDTH - margin.left);
+    /*axis.y.tickSize(WIDTH - margin.left);
 
     dom.axis.y
       .call(axis.y)
-      .call(drag);
+      .call(drag);*/
   }
 
   /**
@@ -320,21 +244,18 @@ export default function(svg, newApp, ui, methods) {
    * @param {Object} app: Redux state app subtree
    */
   function updateAxis() {
-    const groupStep = (106 - 30) / domain.categories.length;
     let groupYs = Array.apply(null, Array(domain.categories.length));
     groupYs = groupYs.map((g, i) => {
-      //return 30 + i * groupStep;
-      const h = 106 - 30
-      return (i + 1) * h / groupYs.length - 15;
+      const h = 76;
+      return (i + 1) * h / groupYs.length;
     });
-
     scale.y = d3.scaleOrdinal()
       .domain(domain.categories)
       .range(groupYs);
 
-    axis.y =
+    /*axis.y =
       d3.axisLeft(scale.y)
-        .tickValues(domain.categories.map(c => c.category));
+        .tickValues(domain.categories.map(c => c.category));*/
   }
 
 
@@ -350,13 +271,10 @@ export default function(svg, newApp, ui, methods) {
 
     if (isNewDomain) {
       domain.categories = newDomain.categories;
-      domain.events = newDomain.events;
-      domain.narratives = newDomain.narratives;
     }
 
     if (isNewAppProps) {
       app.timerange = newApp.timerange;
-      app.selected = newApp.selected.slice(0);
     }
 
     if (isNewDomain || isNewAppProps) render();
@@ -365,7 +283,6 @@ export default function(svg, newApp, ui, methods) {
   function render() {
     updateAxis();
     renderAxis();
-    renderEvents();
   }
 
   return {
