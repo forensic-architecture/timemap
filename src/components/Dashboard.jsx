@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
+import SourceOverlay from './SourceOverlay.jsx';
 import LoadingOverlay from './presentational/LoadingOverlay';
 import Map from './Map.jsx';
 import Toolbar from './Toolbar.jsx';
@@ -19,6 +20,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
+    this.handleViewSource = this.handleViewSource.bind(this)
     this.handleHighlight = this.handleHighlight.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.handleSelectNarrative = this.handleSelectNarrative.bind(this);
@@ -44,6 +46,10 @@ class Dashboard extends React.Component {
     if (this.eventsById[eventId]) return this.eventsById[eventId];
     this.eventsById[eventId] = this.props.domain.events.find(ev => ev.id === eventId);
     return this.eventsById[eventId];
+  }
+
+  handleViewSource(source) {
+    this.props.actions.updateSource(source)
   }
 
   handleSelect(selected) {
@@ -108,6 +114,7 @@ class Dashboard extends React.Component {
             : ''
         }
         <CardStack
+          onViewSource={this.handleViewSource}
           onSelect={this.handleSelect}
           onHighlight={this.handleHighlight}
           onToggleCardstack={() => this.props.actions.updateSelected([])}
@@ -124,6 +131,14 @@ class Dashboard extends React.Component {
           notifications={this.props.domain.notifications}
           onToggle={this.props.actions.markNotificationsRead}
         />
+        {this.props.app.source ? (
+          <SourceOverlay
+            source={this.props.app.source}
+            onCancel={() => {
+              this.props.actions.updateSource(null)}
+            }
+          />
+        ) : null}
         <LoadingOverlay
           ui={this.props.app.flags.isFetchingDomain}
           language={this.props.app.language}

@@ -30,9 +30,9 @@ class Card extends React.Component {
       isHighlighted: !this.state.isHighlighted
     }, () => {
       if (!this.state.isHighlighted) {
-        this.props.highlight(this.props.event);
+        this.props.onHighlight(this.props.event);
       } else {
-        this.props.highlight(null);
+        this.props.onHighlight(null);
       }
     });
   }
@@ -69,6 +69,9 @@ class Card extends React.Component {
   }
 
   renderTags() {
+    if (!this.props.tags || (this.props.tags && this.props.tags.length === 0)) {
+      return null
+    }
     return (
       <CardTags
         tags={this.props.tags || []}
@@ -87,16 +90,23 @@ class Card extends React.Component {
   }
 
   renderSources() {
-    return this.props.event.sources.map(source => (
-      <CardSource
-        isLoading={this.props.isLoading}
-        language={this.props.language}
-        source={{
-          ...source,
-          error: this.props.sourceError
-        }}
-      />
-    ))
+    if (this.props.sourceError) {
+      return <div>ERROR: something went wrong loading sources, TODO:</div>
+    }
+
+    const source_lang = copy[this.props.language].cardstack.sources
+    return (
+      <div className="card-col">
+        <h4>{source_lang}: </h4>
+        {this.props.event.sources.map(source => (
+          <CardSource
+            isLoading={this.props.isLoading}
+            source={source}
+            onClickHandler={source => this.props.onViewSource(source)}
+          />
+        ))}
+      </div>
+    )
   }
 
   // NB: should be internaionalized.
@@ -117,7 +127,7 @@ class Card extends React.Component {
 
       return (
         <CardNarrative
-          select={(event) => this.props.select([event])}
+          select={(event) => this.props.onSelect([event])}
           makeTimelabel={(timestamp) => this.makeTimelabel(timestamp)}
           next={links.next}
           prev={links.prev}

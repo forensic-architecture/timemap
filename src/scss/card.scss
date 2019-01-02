@@ -45,7 +45,7 @@
 
     .card-cell {
       flex: 1;
-    }
+   }
 
     h4 {
       min-width: 80px;
@@ -55,6 +55,43 @@
 
   .card-col {
     flex-direction: column;
+  }
+
+  .card-source {
+    margin: 0;
+    padding: 2px 0;
+    border-radius: 3px;
+
+    .source-row {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 8px 15px;
+      border-left: 5px solid $darkgrey;
+      background: linear-gradient(to right, $darkgrey 50%, transparent 50%);
+      background-size: 200% 100%;
+      background-position: right bottom;
+      margin-left: -16px;
+      margin-right: -16px;
+
+      &:hover {
+        background-color: $darkgrey;
+        color: white;
+        cursor: pointer;
+        .material-icons {
+          color: white;
+        }
+        background-position: left bottom;
+        transition: all 2s ease;
+      }
+    }
+
+    .source-icon {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      margin-right: 15px;
+    }
   }
 
   .card-cell {
