@@ -9,12 +9,6 @@ const NoSource = ({ failedUrls  }) => {
         </i>
         <div>No media found, as the original media has not yet been uploaded to the platform.</div>
       </div>
-      {/* <div className="no-source-row"> */}
-      {/*   The following URLs were tried: */}
-      {/* </div> */}
-      {/* <ul> */}
-      {/*   {failedUrls.map((url, idx) => <li key={idx}>{url}</li>)} */}
-      {/* </ul> */}
     </div>
   )
 }
