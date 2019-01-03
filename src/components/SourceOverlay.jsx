@@ -112,9 +112,9 @@ function SourceOverlay ({ source, onCancel }) {
 
     return (
       <div>
-        {img ? `${img}, `: ''}
-        {(vid && txt) ? `${vid}, `: vid}
-        {txt}
+        {img ? img : ''}
+        {vid ? `, ${vid}`: ''}
+        {txt ? `, ${txt}`: ''}
       </div>
     )
   }
