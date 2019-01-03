@@ -62,6 +62,12 @@ class SourceOverlay extends React.Component {
     )
   }
 
+  renderNoSupport(ext) {
+    return (
+      <NoSource failedUrls={[`Application does not support this extension: ${ext}`]} />
+    )
+  }
+
   renderTestimony() {
     return (
       <div>
@@ -70,19 +76,42 @@ class SourceOverlay extends React.Component {
     )
   }
 
-  _renderSwitch() {
-    switch(this.props.source.type) {
-      case 'Video':
-        return this.renderVideo()
-      case 'Photo':
-        return this.renderPhoto()
-      case 'Photobook':
-        return this.renderPhotobook()
-      case 'Eyewitness Testimony':
-        return this.renderTestimony()
+  _renderPath(path) {
+    // render conditionally based on the extension
+    switch (true) {
+      case /\.(png|jpg)$/.test(path):
+        console.log('image')
+        return <div>{path}</div>
+      case /\.(mp4)$/.test(path):
+        console.log('video')
+        return <div>{path}</div>
+      case /\.(md)$/.test(path):
+        console.log('text')
+        return <div>{path}</div>
       default:
-        return this.renderError()
+        console.log('unsupported extension')
+        return this.renderNoSupport(path.split('.')[1])
     }
+  }
+
+  _renderContent() {
+    return (
+      <div className='media-content'>
+        {this.props.source.paths.map(this._renderPath)}
+      </div>
+    )
+    // switch(this.props.source.type) {
+    //   case 'Video':
+    //     return this.renderVideo()
+    //   case 'Photo':
+    //     return this.renderPhoto()
+    //   case 'Photobook':
+    //     return this.renderPhotobook()
+    //   case 'Eyewitness Testimony':
+    //     return this.renderTestimony()
+    //   default:
+    //     return this.renderError()
+    // }
   }
 
   render() {
@@ -100,7 +129,7 @@ class SourceOverlay extends React.Component {
             <div className="mo-header-text">{this.props.source.id}</div>
           </div>
           <div className="mo-media-container">
-            {this._renderSwitch()}
+            {this._renderContent()}
           </div>
           <div className="mo-meta-container">
             <div className="mo-box">

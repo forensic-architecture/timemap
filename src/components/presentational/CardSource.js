@@ -35,12 +35,21 @@ const CardSource = ({ source, isLoading, onClickHandler }) => {
     )
   }
 
+  const isImgUrl = /\.(jpg|png)$/
   let thumbnail = source.thumbnail
-  if (!thumbnail || thumbnail === '') {
+
+  if (!thumbnail || thumbnail === '' || !thumbnail.match(isImgUrl)) {
     // default to first image in paths, null if no images
-    const imgs = source.paths.filter(p => p.match(/\.(jpg|png)$/))
+    const imgs = source.paths.filter(p => p.match(isImgUrl))
     thumbnail = imgs.length > 0 ? imgs[0] : null
   }
+  console.log(thumbnail)
+
+  const fallbackIcon = (
+    <i className="material-icons source-icon">
+      {renderIconText(source.type)}
+    </i>
+  )
 
   return (
     <div className="card-source">
@@ -49,12 +58,15 @@ const CardSource = ({ source, isLoading, onClickHandler }) => {
           : (
             <div className="source-row" onClick={() => onClickHandler(source)}>
               {!!thumbnail ? (
-                <img className="source-icon" src={thumbnail} width={30} height={30} />
-              ) : (
-                <i className="material-icons source-icon">
-                  {renderIconText(source.type)}
-                </i>
-              )}
+                <Img
+                  className="source-icon"
+                  src={thumbnail}
+                  loader={<Spinner small />}
+                  unloader={fallbackIcon}
+                  width={30}
+                  height={30}
+                />
+              ) : fallbackIcon}
              <p>{source.id}</p>
             </div>
           )}
