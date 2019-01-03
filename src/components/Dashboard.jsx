@@ -16,6 +16,8 @@ import Notification from './Notification.jsx';
 
 import { parseDate } from '../js/utilities';
 
+import { injectNarrative } from '../js/utilities'
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -87,12 +89,13 @@ class Dashboard extends React.Component {
     return (
       <div>
         <Toolbar
+          isNarrative={!!this.props.app.narrative}
           onFilter={this.handleTagFilter}
           onSelectNarrative={this.handleSelectNarrative}
           actions={this.props.actions}
         />
         <Map
-          mapId="map"
+          mapId='map'
           methods={{
             onSelect: this.handleSelect,
             onSelectNarrative: this.handleSelectNarrative,
@@ -106,13 +109,10 @@ class Dashboard extends React.Component {
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
-        {(this.props.app.narrative !== null)
-            ? <NarrativeCard
-              onSelect={this.handleSelect}
-              onSelectNarrative={this.handleSelectNarrative}
-            />
-            : ''
-        }
+        <NarrativeCard
+          onSelect={this.handleSelect}
+          onSelectNarrative={this.handleSelectNarrative}
+        />
         <CardStack
           onViewSource={this.handleViewSource}
           onSelect={this.handleSelect}
@@ -166,5 +166,6 @@ function injectSource(id) {
 
 export default connect(
   state => state,
+  // injectNarrative(0),
   mapDispatchToProps,
 )(Dashboard);

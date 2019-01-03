@@ -7,25 +7,22 @@ import Search from './Search.jsx';
 import TagListPanel from './TagListPanel.jsx';
 import ToolbarBottomActions from './ToolbarBottomActions.jsx';
 import copy from '../js/data/copy.json';
-import { isNotNullNorUndefined, trimAndEllipse } from '../js/utilities.js';
+import { trimAndEllipse } from '../js/utilities.js';
 
 class Toolbar extends React.Component {
-
   constructor(props) {
-    super(props);
-
-    this.state = {
-      tabNum: -1
-    };
+    super(props)
+    this.state = { _selected: -1 }
   }
 
-  toggleTab(tabNum) {
-    this.setState({ tabNum: (this.state.tabNum === tabNum) ? -1 : tabNum });
+  selectTab(selected) {
+    const _selected = (this.state._selected === selected) ? -1 : selected
+    this.setState({ _selected });
   }
 
   renderClosePanel() {
     return (
-      <div className="panel-header" onClick={() => this.toggleTab(-1)}>
+      <div className="panel-header" onClick={() => this.selectTab(-1)}>
         <div className="caret"></div>
       </div>
      );
@@ -49,11 +46,8 @@ class Toolbar extends React.Component {
   }
 
   goToNarrative(narrative) {
-    this.setState({
-      tabNum: -1
-    }, () => {
-      this.props.onSelectNarrative(narrative);
-    });
+    this.selectTab(-1) // set all unselected
+    this.props.onSelectNarrative(narrative);
   }
 
   renderToolbarNarrativePanel() {
@@ -64,7 +58,7 @@ class Toolbar extends React.Component {
         {this.props.narratives.map((narr) => {
           return (
             <div className="panel-action action">
-              <button style={{ backgroundColor: '#000' }} onClick={() => { this.goToNarrative(narr); }}>
+              <button style={{ backgroundColor: '#000' }} onClick={() => { this.goToNarrative(narr) }}>
                 <p>{narr.label}</p>
                 <p><small>{trimAndEllipse(narr.description, 120)}</small></p>
               </button>
@@ -94,12 +88,12 @@ class Toolbar extends React.Component {
     return '';
   }
 
-  renderToolbarTab(tabNum, label) {
-    const isActive = (this.state.tabNum === tabNum);
+  renderToolbarTab(_selected, label) {
+    const isActive = (this.state._selected === _selected);
     let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab';
 
     return (
-      <div className={classes} onClick={() => { this.toggleTab(tabNum); }}>
+      <div className={classes} onClick={() => { this.selectTab(_selected); }}>
         <i className="material-icons">timeline</i>
         <div className="tab-caption">{label}</div>
       </div>
@@ -126,12 +120,11 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarPanels() {
-    let classes = (this.state.tabNum !== -1) ? 'toolbar-panels' : 'toolbar-panels folded';
-
+    let classes = (this.state._selected >= 0) ? 'toolbar-panels' : 'toolbar-panels folded';
     return (
       <div className={classes}>
         {this.renderClosePanel()}
-        <Tabs selectedIndex={this.state.tabNum}>
+        <Tabs selectedIndex={this.state._selected}>
           {this.renderToolbarNarrativePanel()}
           {this.renderToolbarTagPanel()}
         </Tabs>
@@ -142,12 +135,12 @@ class Toolbar extends React.Component {
   renderToolbarNavs() {
     if (this.props.narratives) {
       return this.props.narratives.map((nar, idx) => {
-        const isActive = (idx === this.state.tab);
+        const isActive = (idx === this.state._selected);
 
         let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab';
 
         return (
-          <div className={classes} onClick={() => { this.toggleTab(idx); }}>
+          <div className={classes} onClick={() => { this.selectTab(idx); }}>
             <div className="tab-caption">{nar.label}</div>
           </div>
         );
@@ -176,7 +169,8 @@ class Toolbar extends React.Component {
   }
 
   render() {
-    const isNarrative = isNotNullNorUndefined(this.props.narrative);
+    const { isNarrative } = this.props
+
     return (
       <div id="toolbar-wrapper" className={`toolbar-wrapper ${(isNarrative) ? 'narrative-mode' : ''}`}>
         {this.renderToolbarTabs()}

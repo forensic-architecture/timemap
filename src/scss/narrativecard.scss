@@ -5,7 +5,10 @@ NARRATIVE INFO
   position: fixed;
   top: 10px;
   left: 10px;
+  // height: auto;
+  min-height: 500px;
   height: auto;
+  max-height: 500px;
   width: 370px;
   box-sizing: border-box;
   padding: 15px;

@@ -77,7 +77,7 @@ export function formatter(datetime) {
  * Debugging function: put in place of a mapStateToProps function to
  * view that source modal by default
  */
-function injectSource(id) {
+export function injectSource(id) {
   return state => ({
     ...state,
     app: {
@@ -85,5 +85,22 @@ function injectSource(id) {
       source: state.domain.sources[id]
     }
   })
+}
+
+/**
+ * Debugging function: put in place of a mapStateToProps function to
+ * view that narrative modal by default
+ */
+export function injectNarrative(idx) {
+  return state => {
+    console.log(state.domain.narratives)
+    return {
+      ...state,
+      app: {
+        ...state.app,
+        narrative: state.domain.narratives.length ? state.domain.narratives[idx] : null
+      }
+    }
+  }
 }
 

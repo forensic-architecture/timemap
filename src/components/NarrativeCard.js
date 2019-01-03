@@ -24,6 +24,8 @@ class NarrativeCard extends React.Component {
   }
 
   componentDidMount() {
+    if (!this.props.narrative) return
+
     const step = this.props.narrative.steps[this.state.step];
     this.props.onSelect([step]);
   }
@@ -45,7 +47,7 @@ class NarrativeCard extends React.Component {
   renderClose() {
     return (
       <button
-        className="side-menu-burg is-active"
+        className='side-menu-burg is-active'
         onClick={() => { this.props.onSelectNarrative(null); }}
       >
         <span></span>
@@ -54,27 +56,30 @@ class NarrativeCard extends React.Component {
   }
 
   render() {
-    if (this.props.narrative.steps[this.state.step]) {
-      const steps = this.props.narrative.steps;
-      const step = steps[this.state.step];
+    if (!this.props.narrative) return null
+
+    const { steps, current } = this.props.narrative
+    if (steps[current]) {
+      const step = steps[current];
 
       return (
-        <div className="narrative-info">
+        <div className='narrative-info'>
           {this.renderClose()}
           <h3>{this.props.narrative.label}</h3>
           <p>{this.props.narrative.description}</p>
           <h6>
-            <i className="material-icons left">location_on</i>
+            <i className='material-icons left'>location_on</i>
             {this.state.step + 1}/{steps.length}. {step.location}
           </h6>
-          <div className="actions">
+          <div className='actions'>
             <div className={`${(!this.state.step) ? 'disabled ' : ''} action`} onClick={() => this.goToPrevKeyFrame()}>&larr;</div>
             <div className={`${(this.state.step >= this.props.narrative.steps.length - 1) ? 'disabled ' : ''} action`} onClick={() => this.goToNextKeyFrame()}>&rarr;</div>
           </div>
         </div>
       );
+    } else {
+      return null
     }
-    return (<div/>);
   }
 }
 
