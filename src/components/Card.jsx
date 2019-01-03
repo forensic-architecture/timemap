@@ -1,28 +1,28 @@
-import copy from '../js/data/copy.json';
+import copy from '../js/data/copy.json'
 import {
   isNotNullNorUndefined,
   parseDate,
   formatterWithYear
-} from '../js/utilities';
-import React from 'react';
+} from '../js/utilities'
+import React from 'react'
 
-import Spinner from './presentational/Spinner';
-import CardTimestamp from './presentational/CardTimestamp';
-import CardLocation from './presentational/CardLocation';
-import CardCaret from './presentational/CardCaret';
-import CardTags from './presentational/CardTags';
-import CardSummary from './presentational/CardSummary';
-import CardSource from './presentational/CardSource';
-import CardCategory from './presentational/CardCategory';
-import CardNarrative from './presentational/CardNarrative';
+import Spinner from './presentational/Spinner'
+import CardTimestamp from './presentational/CardTimestamp'
+import CardLocation from './presentational/CardLocation'
+import CardCaret from './presentational/CardCaret'
+import CardTags from './presentational/CardTags'
+import CardSummary from './presentational/CardSummary'
+import CardSource from './presentational/CardSource'
+import CardCategory from './presentational/CardCategory'
+import CardNarrative from './presentational/CardNarrative'
 
 class Card extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isHighlighted: false
-    };
+    }
   }
 
   toggle() {
@@ -30,24 +30,24 @@ class Card extends React.Component {
       isHighlighted: !this.state.isHighlighted
     }, () => {
       if (!this.state.isHighlighted) {
-        this.props.onHighlight(this.props.event);
+        this.props.onHighlight(this.props.event)
       } else {
-        this.props.onHighlight(null);
+        this.props.onHighlight(null)
       }
-    });
+    })
   }
 
   makeTimelabel(timestamp) {
-    if (timestamp === null) return null;
-    const parsedTimestamp = parseDate(timestamp);
-    const timelabel = formatterWithYear(parsedTimestamp);
-    return timelabel;
+    if (timestamp === null) return null
+    const parsedTimestamp = parseDate(timestamp)
+    const timelabel = formatterWithYear(parsedTimestamp)
+    return timelabel
   }
 
   renderCategory() {
-    const categoryTitle = copy[this.props.language].cardstack.category;
-    const categoryLabel = this.props.event.category;
-    const color = this.props.getCategoryColor(this.props.event.category);
+    const categoryTitle = copy[this.props.language].cardstack.category
+    const categoryLabel = this.props.event.category
+    const color = this.props.getCategoryColor(this.props.event.category)
 
     return (
       <CardCategory
@@ -55,7 +55,7 @@ class Card extends React.Component {
         categoryLabel={categoryLabel}
         color={color}
       />
-    );
+    )
   }
 
   renderSummary() {
@@ -117,11 +117,11 @@ class Card extends React.Component {
         language={this.props.language}
         timestamp={this.props.event.timestamp}
       />
-    );
+    )
   }
 
   renderNarrative() {
-    const links = this.props.getNarrativeLinks(this.props.event);
+    const links = this.props.getNarrativeLinks(this.props.event)
 
     if (links !== null) {
 
@@ -147,7 +147,7 @@ class Card extends React.Component {
         <br/>
         {this.renderSummary()}
       </div>
-    );
+    )
   }
 
   renderContent() {
@@ -180,8 +180,8 @@ class Card extends React.Component {
         {this.renderContent()}
         {this.renderCaret()}
       </li>
-    );
+    )
   }
 }
 
-export default Card;
+export default Card

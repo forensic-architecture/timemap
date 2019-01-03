@@ -2,7 +2,7 @@
 @import 'card';
 
 $card-width: 370px;
-$narrative-info-max-height: 250px;
+$narrative-info-max-height: 170px;
 $timeline-height: 170px;
 
 .card-stack {
@@ -20,7 +20,7 @@ $timeline-height: 170px;
   &.narrative-mode {
     right: auto;
     left: 10px;
-    top: $narrative-info-max-height;
+    top: $narrative-info-max-height + 12px;
     height: calc(100% - #{$narrative-info-max-height} - #{$timeline-height});
   }
 

@@ -127,7 +127,6 @@ class Dashboard extends React.Component {
           }}
         />
         <CardStack
-          isNarrative={!!app.narrative}
           onViewSource={this.handleViewSource}
           onSelect={this.handleSelect}
           onHighlight={this.handleHighlight}
