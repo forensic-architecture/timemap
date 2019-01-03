@@ -64,24 +64,65 @@ function SourceOverlay ({ source, onCancel }) {
     )
   }
 
-  function _renderPath(path) {
+  function toMedia(path) {
+    let type;
     switch (true) {
       case /\.(png|jpg)$/.test(path):
-        return renderImage(path)
+        type = 'Image'; break
       case /\.(mp4)$/.test(path):
-        return renderVideo(path)
+        type = 'Video'; break
       case /\.(md)$/.test(path):
+        type = 'Text'; break
+      default:
+        type = 'Unknown'; break
+    }
+    return { type, path }
+  }
+
+  function getTypeCounts(media) {
+    let counts = { Image: 0, Video: 0, Text: 0 }
+    media.forEach(m => {
+      counts[m.type] += 1
+    })
+    return counts
+  }
+
+  function _renderPath(media) {
+    const { path, type } = media
+    switch (type) {
+      case 'Image':
+        return renderImage(path)
+      case 'Video':
+        return renderVideo(path)
+      case 'Text':
         return renderText(path)
       default:
-        console.log('unsupported extension')
         return renderNoSupport(path.split('.')[1])
     }
   }
 
-  function _renderContent() {
+  function _renderCounts(counts) {
+    const strFor = type =>
+    counts[type] > 0 ?
+      `${counts[type]} ${type.toLowerCase()}${counts[type] > 1 ? 's': ''}`
+      : ''
+    const img = strFor('Image')
+    const vid = strFor('Video')
+    const txt = strFor('Text')
+
+    return (
+      <div>
+        {img ? `${img}, `: ''}
+        {(vid && txt) ? `${vid}, `: vid}
+        {txt}
+      </div>
+    )
+  }
+
+  function _renderContent(media) {
     return (
       <React.Fragment>
-        {source.paths.map(_renderPath)}
+        {media.map(_renderPath)}
       </React.Fragment>
     )
   }
@@ -89,7 +130,11 @@ function SourceOverlay ({ source, onCancel }) {
   if (typeof(source) !== 'object') {
     return renderError()
   }
-  const {id, url, title, date, type, affil_1, affil_2} = source
+  const {id, url, title, paths, date, type, desc} = source
+  const media = paths.map(toMedia)
+  const counts = getTypeCounts(media)
+
+
   return (
     <div className="mo-overlay">
       <div className="mo-container">
@@ -97,20 +142,20 @@ function SourceOverlay ({ source, onCancel }) {
           <div className="mo-header-close" onClick={onCancel}>
             <button className="side-menu-burg is-active"><span></span></button>
           </div>
-          <div className="mo-header-text">{source.id}</div>
+          <div className="mo-header-text">{source.title}</div>
         </div>
         <div className="mo-media-container">
-          {_renderContent()}
+          {_renderContent(media)}
         </div>
         <div className="mo-meta-container">
           <div className="mo-box">
-            {id ? <div><b>{id}</b></div> : null}
             {title? <div><b>{title}</b></div> : null}
-            <hr/>
-            {type ? <div>Type: <span className="indent">{type}</span></div> : null}
+            <div>{_renderCounts(counts)}</div>
+            {type ? <div>{type}</div> : null}
             {date ? <div>Date:<span className="indent">{date}</span></div> : null}
-            <hr/>
             {url ? <div><a href={url} target="_blank">Link to original URL</a></div> : null}
+            <hr />
+            {desc ? <div>{desc}</div> : null}
           </div>
         </div>
       </div>

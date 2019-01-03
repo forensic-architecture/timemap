@@ -157,7 +157,6 @@ $header-inset: 10px;
 
 .source-image-container {
   padding: 0 25px;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -166,7 +165,7 @@ $header-inset: 10px;
 .source-image, .source-video {
   max-width: calc(100% - 20px);
   max-height: 350px !important;
-  height: 100%;
+  // height: 100%;
   padding: 10px;
 }
 
