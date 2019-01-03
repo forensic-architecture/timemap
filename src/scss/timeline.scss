@@ -176,6 +176,12 @@
           cursor: -webkit-grab;
           cursor: -moz-grab;
         }
+
+        .tick text {
+          font-size: 10px;
+          font-family: 'Lato';
+          text-anchor: end;
+        }
       }
 
       .drag-grabber {

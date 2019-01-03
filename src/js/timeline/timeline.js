@@ -2,7 +2,6 @@
   TIMELINE
   Displays events over the course of the night
   Allows brushing and selecting periods of time in it
-  TODO: is it possible to express this idiomatically as React?
 */
 import { parseDate } from '../utilities';
 import hash from 'object-hash';
@@ -34,9 +33,6 @@ export default function(svg, ui, methods) {
   scale.x = d3.scaleTime()
       .domain(timerange)
       .range([margin.left, WIDTH]);
-
-  scale.y = d3.scaleOrdinal()
-
 
   /**
    * Initilize SVG elements and groups
@@ -79,10 +75,6 @@ export default function(svg, ui, methods) {
     .tickSize(0)
     .tickFormat(d3.timeFormat('%H:%M'));
 
-  axis.y =
-    d3.axisLeft(scale.y)
-    .tickValues([]);
-
   updateAxis();
 
   /**
@@ -103,7 +95,6 @@ export default function(svg, ui, methods) {
         WIDTH = getCurrentWidth() - WIDTH_CONTROLS;
 
         scale.x.range([margin.left, WIDTH]);
-        axis.y.tickSize(WIDTH - margin.left);
         dom.axis.y.attr('transform', `translate(${WIDTH}, 0)`)
         render(null);
       }
@@ -111,14 +102,6 @@ export default function(svg, ui, methods) {
   }
   addResizeListener();
 
-  /**
-   * Get y height of eventPoint, considering the ordinal Y scale
-   * @param {object} eventPoint: regular eventPoint data
-   */
-  function getEventY(eventPoint) {
-    const yGroup = eventPoint.category;
-    return scale.y(yGroup);
-  }
 
   /**
    * Get x position of eventPoint, considering the time scale
@@ -184,6 +167,7 @@ export default function(svg, ui, methods) {
    * Setup drag behavior
    */
   function onDragStart(ev) {
+    console.log('ohoh')
     d3.event.sourceEvent.stopPropagation();
     dragPos0 = d3.event.x;
     toggleTransition(false);
@@ -213,30 +197,6 @@ export default function(svg, ui, methods) {
     methods.onUpdateTimerange(scale.x.domain());
   }
 
-  const drag = d3.drag()
-    .on('start', onDragStart)
-    .on('drag', onDrag)
-    .on('end', onDragEnd);
-
-  /**
-   * Updates data displayed by this timeline, but only render if necessary
-   * @param {Object} domain: Redux state domain subtree
-   * @param {Object} app: Redux state app subtree
-   */
-  function updateAxis() {
-    let groupYs = Array.apply(null, Array(categories.length));
-    groupYs = groupYs.map((g, i) => {
-      return (i + 1) * HEIGHT / groupYs.length;
-    });
-    scale.y = d3.scaleOrdinal()
-      .domain(categories)
-      .range(groupYs);
-
-    axis.y =
-      d3.axisLeft(scale.y)
-        .tickValues(categories.map(c => c.category));
-  }
-
 
   /**
    * Render axis on timeline and viewbox boundaries
@@ -251,27 +211,6 @@ export default function(svg, ui, methods) {
       .transition()
       .duration(transitionDuration)
       .call(axis.x1);
-
-    axis.y.tickSize(WIDTH - margin.left);
-
-    if (!dom.axis.dragGrabber) {
-      dom.axis.dragGrabber = dom.svg.insert('rect', ':first-child')
-      .attr('class', 'drag-grabber')
-      .attr('x', margin.left)
-      .attr('y', margin.top)
-      .attr('width', WIDTH - margin.left)
-      .attr('height', HEIGHT)
-      .call(drag);
-    }   
-    
-    if (!dom.axis.y) {
-      dom.axis.y = dom.svg.insert('g', ':first-child')
-      .attr('transform', `translate(${WIDTH}, 0)`)
-      .attr('class', 'yAxis');
-    }
-
-    dom.axis.y
-      .call(axis.y);
   }
 
 
@@ -289,15 +228,16 @@ export default function(svg, ui, methods) {
   }
 
   function render() {
-    updateAxis();
     renderAxis();
   }
 
   return {
     getEventX,
-    getEventY,
     applyZoom,
     moveTime,
-    update
+    update,
+    onDragStart,
+    onDrag,
+    onDragEnd
   };
 }

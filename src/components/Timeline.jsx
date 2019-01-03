@@ -13,6 +13,7 @@ import TimelineLogic from '../js/timeline/timeline.js';
 import TimelineLabels from './TimelineLabels.jsx';
 import TimelineMarkers from './TimelineMarkers.jsx'
 import TimelineEvents from './TimelineEvents.jsx';
+import TimelineCategories from './TimelineCategories.jsx';
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -27,12 +28,15 @@ class Timeline extends React.Component {
         height_controls: 115,
         margin_left: 120        
       },
-      softTimeUpdate: 0
+      softTimeUpdate: 0,
+      scaleY: null
     };
   }
 
   componentDidMount() {
-    this.methods = Object.assign({}, this.props.methods, { onSoftUpdate: (toggle) => { this.setState({ softTimeUpdate: toggle }) }});
+    this.methods = Object.assign({}, this.props.methods, {
+      onSoftUpdate: (toggle) => { this.setState({ softTimeUpdate: toggle }) }
+    });
     this.timeline = new TimelineLogic(this.svgRef.current, this.props.ui, this.methods);
     this.timeline.update(this.props.domain.categories, this.props.app.timerange);
     this.computeDims();
@@ -42,8 +46,22 @@ class Timeline extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (hash(nextProps) !== hash(this.props)) {
       this.timeline.update(nextProps.domain.categories, nextProps.app.timerange);
+
+      let groupYs = Array.apply(null, Array(nextProps.domain.categories.length));
+      groupYs = groupYs.map((g, i) => (i + 1) * 80 / groupYs.length);
+
+      this.setState({ scaleY: d3.scaleOrdinal().domain(nextProps.domain.categories).range(groupYs) });      
     }
   }
+
+    /**
+   * Get y height of eventPoint, considering the ordinal Y scale
+   * @param {object} eventPoint: regular eventPoint data
+   */
+  getEventY(eventPoint) {
+    return this.state.scaleY(eventPoint.category);
+  }
+
 
   onClickArrow() {
     this.setState((prevState, props) => {
@@ -84,6 +102,10 @@ class Timeline extends React.Component {
         height={dims.height}
       >
         <TimelineClip dims={dims} />
+        <TimelineCategories 
+          timeline={this.timeline}       
+          categories={this.props.domain.categories}
+        />
         <TimelineHandles
           dims={dims}
           onMoveTime={(dir) => { this.onMoveTime(dir) }}
@@ -100,12 +122,12 @@ class Timeline extends React.Component {
         <TimelineMarkers
           selected={this.props.app.selected}
           getEventX={(e) => this.timeline.getEventX(e)}
-          getEventY={(e) => this.timeline.getEventY(e)}
+          getEventY={(e) => this.getEventY(e)/*this.timeline.getEventY(e)*/}
         />
         <TimelineEvents
           events={this.props.domain.events}
           getEventX={(e) => this.timeline.getEventX(e)}
-          getEventY={(e) => this.timeline.getEventY(e)}
+          getEventY={(e) => this.getEventY(e)/*this.timeline.getEventY(e)*/}
           getCategoryColor={this.props.methods.getCategoryColor}
           onSelect={this.props.methods.onSelect}
         />
