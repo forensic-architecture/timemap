@@ -1,7 +1,9 @@
 @import 'burger';
 @import 'card';
 
-$card-width: 500px;
+$card-width: 370px;
+$narrative-info-max-height: 250px;
+$timeline-height: 170px;
 
 .card-stack {
   position: absolute;
@@ -14,6 +16,13 @@ $card-width: 500px;
   z-index: $header;
   color: white;
   -webkit-font-smoothing: antialiased;
+
+  &.narrative-mode {
+    right: auto;
+    left: 10px;
+    top: $narrative-info-max-height;
+    height: calc(100% - #{$narrative-info-max-height} - #{$timeline-height});
+  }
 
   &.full-height {
     max-height: calc(100% - 20px);

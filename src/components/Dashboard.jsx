@@ -78,6 +78,7 @@ class Dashboard extends React.Component {
       this.handleSelect([ narrative.steps[0] ])
     this.props.actions.updateNarrative(narrative)
   }
+
   moveInNarrative(amt) {
     const { current } = this.props.app.narrativeState
     const { narrative } = this.props.app

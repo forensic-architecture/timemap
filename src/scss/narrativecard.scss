@@ -1,3 +1,5 @@
+$narrative-info-width: 370px;
+
 /*
 NARRATIVE INFO
 */
@@ -6,10 +8,9 @@ NARRATIVE INFO
   top: 10px;
   left: 10px;
   // height: auto;
-  min-height: 500px;
   height: auto;
   max-height: 500px;
-  width: 370px;
+  width: $narrative-info-width;
   box-sizing: border-box;
   padding: 15px;
   max-height: calc(100% - 250px);

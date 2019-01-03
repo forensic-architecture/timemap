@@ -65,9 +65,16 @@ class CardStack extends React.Component {
   }
 
   render() {
-    if (this.props.selected.length > 0) {
+    const { isCardstack, isNarrative, selected } = this.props
+    if (selected.length > 0) {
       return (
-        <div id="card-stack" className={`card-stack ${this.props.isCardstack ? '' : ' folded'}`}>
+        <div
+          id="card-stack"
+          className={`card-stack
+            ${isNarrative ? 'narrative-mode' : ''}
+            ${isCardstack ? '' : ' folded'}`
+          }
+        >
           {this.renderCardStackHeader()}
           {this.renderCardStackContent()}
         </div>
