@@ -213,6 +213,20 @@ export function updateNarrative(narrative) {
   }
 }
 
+export const INCREMENT_NARRATIVE_CURRENT = 'INCREMENT_NARRATIVE_CURRENT';
+export function incrementNarrativeCurrent() {
+  return {
+    type: INCREMENT_NARRATIVE_CURRENT
+  }
+}
+
+export const DECREMENT_NARRATIVE_CURRENT = 'DECREMENT_NARRATIVE_CURRENT';
+export function decrementNarrativeCurrent() {
+  return {
+    type: DECREMENT_NARRATIVE_CURRENT
+  }
+}
+
 export const RESET_ALLFILTERS = 'RESET_ALLFILTERS'
 export function resetAllFilters() {
   return {

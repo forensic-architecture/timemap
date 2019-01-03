@@ -37,7 +37,7 @@ function updateNarrative(appState, action) {
     ...appState,
     narrative: action.narrative,
     narrativeState: {
-      current: 0
+      current: !!action.narrative ? 0 : null
     }
   }
 }

@@ -71,64 +71,69 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    const { actions, app, domain, ui } = this.props
     return (
       <div>
         <Toolbar
-          isNarrative={!!this.props.app.narrative}
+          isNarrative={!!app.narrative}
           methods={{
-            onFilter: this.props.actions.updateTagFilters,
-            onSelectNarrative: this.props.actions.updateNarrative
+            onFilter: actions.updateTagFilters,
+            onSelectNarrative: actions.updateNarrative
           }}
         />
         <Map
           mapId='map'
           methods={{
             onSelect: this.handleSelect,
-            onSelectNarrative: this.props.actions.updateNarrative,
+            onSelectNarrative: actions.updateNarrative,
             getCategoryColor: this.getCategoryColor,
           }}
         />
         <Timeline
           methods={{
             onSelect: this.handleSelect,
-            onUpdateTimerange: this.props.actions.updateTimeRange,
+            onUpdateTimerange: actions.updateTimeRange,
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
         <NarrativeCard
-          onSelect={this.handleSelect}
-          onSelectNarrative={this.props.actions.updateNarrative}
+          methods={{
+            onNext: actions.incrementNarrativeCurrent,
+            onPrev: actions.decrementNarrativeCurrent,
+            onSelect: this.handleSelect,
+            onSelectNarrative: actions.updateNarrative
+          }}
         />
         <CardStack
-          isNarrative={!!this.props.app.narrative}
+          isNarrative={!!app.narrative}
           onViewSource={this.handleViewSource}
           onSelect={this.handleSelect}
           onHighlight={this.handleHighlight}
-          onToggleCardstack={() => this.props.actions.updateSelected([])}
+          onToggleCardstack={() => actions.updateSelected([])}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <InfoPopUp
-          ui={this.props.ui}
-          app={this.props.app}
-          toggle={() => this.props.actions.toggleInfoPopup()}
+          ui={ui}
+          app={app}
+          toggle={() => actions.toggleInfoPopup()}
         />
         <Notification
-          isNotification={this.props.app.flags.isNotification}
-          notifications={this.props.domain.notifications}
-          onToggle={this.props.actions.markNotificationsRead}
+          isNotification={app.flags.isNotification}
+          notifications={domain.notifications}
+          onToggle={actions.markNotificationsRead}
         />
-        {this.props.app.source ? (
+        {app.source ? (
           <SourceOverlay
-            source={this.props.app.source}
+            source={app.source}
             onCancel={() => {
-              this.props.actions.updateSource(null)}
+              actions.updateSource(null)}
             }
           />
         ) : null}
         <LoadingOverlay
-          ui={this.props.app.flags.isFetchingDomain}
-          language={this.props.app.language}
+          ui={app.flags.isFetchingDomain}
+          language={app.language}
         />
       </div>
     );
@@ -153,6 +158,5 @@ function injectSource(id) {
 
 export default connect(
   state => state,
-  // injectNarrative(0),
   mapDispatchToProps,
 )(Dashboard);

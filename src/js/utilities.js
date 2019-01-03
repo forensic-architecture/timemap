@@ -93,21 +93,3 @@ export function injectSource(id) {
     }
   })
 }
-
-/**
- * Debugging function: put in place of a mapStateToProps function to
- * view that narrative modal by default
- */
-export function injectNarrative(idx) {
-  return state => {
-    console.log(state.domain.narratives)
-    return {
-      ...state,
-      app: {
-        ...state.app,
-        narrative: state.domain.narratives.length ? state.domain.narratives[idx] : null
-      }
-    }
-  }
-}
-
