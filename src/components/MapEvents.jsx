@@ -27,11 +27,27 @@ class MapEvents extends React.Component {
   }
 
   renderCategory(events, category) {
+    let styleProps = ({
+      fill: this.props.getCategoryColor(category),
+      fillOpacity: 0.8
+    })
+
+    if (this.props.narrative) {
+      const { byId } = this.props.narrative
+      const eventsInNarrative = events.filter(e => byId.hasOwnProperty(e.id))
+      if (eventsInNarrative.length <= 0) {
+        styleProps = {
+          ...styleProps,
+          fillOpacity: 0.1
+        }
+      }
+    }
+
     return (
       <circle
         className="location-event-marker"
-        r={(events) ? Math.sqrt(16 * events.length) + 3 : 0}
-        style={{ fill: this.props.getCategoryColor(category), fillOpacity: 0.8 }}
+        r={(events.length > 0) ? Math.sqrt(16 * events.length) + 3 : 0}
+        style={styleProps}
         onClick={() => this.props.onSelect(events)}
       >
       </circle>
