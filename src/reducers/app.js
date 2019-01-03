@@ -35,31 +35,11 @@ function updateSelected(appState, action) {
 function updateNarrative(appState, action) {
   return {
     ...appState,
-    narrative: action.narrative
+    narrative: action.narrative,
+    narrativeState: {
+      current: 0
+    }
   }
-
-  // if (action.narrative === null) {
-  //   console.log(action.narrative)
-  //   return Object.assign({}, appState, {
-  //     narrative: action.narrative,
-  //   });
-  // } else {
-  //   const dates = action.narrative.steps.map(n => parseDate(n.timestamp).getTime())
-  //   let minDate = Math.min(...dates);
-  //   let maxDate = Math.max(...dates);
-  //   // Add some margin to the datetime extent
-  //   minDate = minDate - ((maxDate - minDate) / 20);
-  //   maxDate = maxDate + ((maxDate - minDate) / 20);
-  //
-  //   const output = Object.assign({}, appState, {
-  //     narrative: action.narrative,
-  //     filters: Object.assign({}, appState.filters, {
-  //       timerange: [new Date(minDate), new Date(maxDate)]
-  //     }),
-  //   });
-  //   console.log(output)
-  //   return output
-  // }
 }
 
 function updateTagFilters(appState, action) {

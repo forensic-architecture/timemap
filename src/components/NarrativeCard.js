@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import { selectActiveNarrative } from '../selectors'
 
 class NarrativeCard extends React.Component {
 
@@ -59,12 +60,10 @@ class NarrativeCard extends React.Component {
     // no display if no narrative
     if (!this.props.narrative) return null
 
-    console.log(this.props.narrative)
     const { steps, current } = this.props.narrative
 
     if (steps[current]) {
       const step = steps[current];
-      console.log('here')
 
       return (
         <div className='narrative-info'>
@@ -89,7 +88,7 @@ class NarrativeCard extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    narrative: state.app.narrative
+    narrative: selectActiveNarrative(state)
   }
 }
 export default connect(mapStateToProps)(NarrativeCard);
