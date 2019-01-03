@@ -1,4 +1,5 @@
 import { createSelector} from 'reselect'
+import { parseTimestamp, compareTimestamp } from '../js/utilities'
 
 // Input selectors
 export const getEvents = state => state.domain.events;
@@ -22,7 +23,6 @@ export const getTimeRange = state => state.app.filters.timerange;
 /**
 * Some handy helpers
 */
-const parseTimestamp = ts => d3.timeParse("%Y-%m-%dT%H:%M:%S")(ts);
 
 /**
  * Given an event and all tags,
@@ -89,40 +89,45 @@ export const selectEvents = createSelector(
  */
 export const selectNarratives = createSelector(
     [getEvents, getNarratives, getTagsFilter, getTimeRange],
-    (events, narrativeMetadata, tagFilters, timeRange) => {
+    (events, narrativesMeta, tagFilters, timeRange) => {
 
       const narratives = {};
-      events.forEach((evt) => {
+      const narrativeSkeleton = id => ({ id, steps: [] })
+
+      /* populate narratives dict with events */
+      events.forEach(evt => {
         const isTagged = isTaggedIn(evt, tagFilters) || isNoTags(tagFilters);
         const isTimeRanged = isTimeRangedIn(evt, timeRange);
         const isInNarrative =  evt.narratives.length > 0;
 
-        evt.narratives.map(narrative => {
-          if (!narratives[narrative]) {
-            narratives[narrative] = { id: narrative, steps: [], byId: {} };
-          }
+        evt.narratives.forEach(narrative => {
+          // initialise
+          if (!narratives[narrative])
+            narratives[narrative] = narrativeSkeleton(narrative)
 
-          if (isInNarrative) {
-            narratives[narrative].steps.push(evt);
-            narratives[narrative].byId[evt.id] = { next: null, prev: null };
-          }
+          // add evt to steps
+          if (isInNarrative)
+            narratives[narrative].steps.push(evt)
         })
       });
 
-      Object.keys(narratives).forEach((key) => {
+
+      /* sort steps by time */
+      Object.keys(narratives).forEach(key => {
         const steps = narratives[key].steps;
 
-        steps.sort((a, b) => {
-          return (parseTimestamp(a.timestamp) > parseTimestamp(b.timestamp));
-        });
+        steps.sort(compareTimestamp);
 
-        steps.forEach((step, i) => {
-          narratives[key].byId[step.id].next = (i < steps.length - 2) ? steps[i + 1] : null;
-          narratives[key].byId[step.id].prev = (i > 0) ? steps[i - 1] : null;
-        });
+        // steps.forEach((step, i) => {
+        //   narratives[key].byId[step.id].next = (i < steps.length - 2) ? steps[i + 1] : null;
+        //   narratives[key].byId[step.id].prev = (i > 0) ? steps[i - 1] : null;
+        // });
 
-        if (narrativeMetadata.find(n => n.id === key)) {
-          narratives[key] = Object.assign(narrativeMetadata.find(n => n.id === key), narratives[key]);
+        if (narrativesMeta.find(n => n.id === key)) {
+          narratives[key] = {
+            ...narrativesMeta.find(n => n.id === key),
+            ...narratives[key]
+          }
         }
       });
 

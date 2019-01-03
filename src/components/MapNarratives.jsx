@@ -74,13 +74,15 @@ class MapNarratives extends React.Component {
   }
 
   renderNarrative(n) {
-    const steps = n.steps.slice(0, n.steps.length - 1);
-
-    return (
-      <g id={`narrative-${n.id.replace(/ /g,"_")}`} className="narrative">
-        {steps.map((s, idx) => this.renderNarrativeStep(n.steps, s, idx, n))}
-      </g>
-    )
+    // TODO: representation for narrative lines
+    // const steps = n.steps.slice(0, n.steps.length - 1);
+    //
+    // return (
+    //   <g id={`narrative-${n.id.replace(/ /g,"_")}`} className="narrative">
+    //     {steps.map((s, idx) => this.renderNarrativeStep(n.steps, s, idx, n))}
+    //   </g>
+    // )
+    return null
   }
 
   render() {

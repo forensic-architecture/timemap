@@ -73,6 +73,13 @@ export function formatter(datetime) {
   return d3.timeFormat("%d %b, %H:%M")(datetime);
 }
 
+export const parseTimestamp = ts => d3.timeParse("%Y-%m-%dT%H:%M:%S")(ts);
+
+export function compareTimestamp (a, b) {
+  return (parseTimestamp(a.timestamp) > parseTimestamp(b.timestamp));
+}
+
+
 /**
  * Debugging function: put in place of a mapStateToProps function to
  * view that source modal by default

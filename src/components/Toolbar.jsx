@@ -5,7 +5,7 @@ import * as selectors from '../selectors'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Search from './Search.jsx';
 import TagListPanel from './TagListPanel.jsx';
-import ToolbarBottomActions from './ToolbarBottomActions.jsx';
+// import ToolbarBottomActions from './ToolbarBottomActions.jsx';
 import copy from '../js/data/copy.json';
 import { trimAndEllipse } from '../js/utilities.js';
 
@@ -46,8 +46,8 @@ class Toolbar extends React.Component {
   }
 
   goToNarrative(narrative) {
-    this.selectTab(-1) // set all unselected
-    this.props.onSelectNarrative(narrative);
+    this.selectTab(-1) // set all unselected within this component
+    this.props.methods.onSelectNarrative(narrative);
   }
 
   renderToolbarNarrativePanel() {
@@ -112,9 +112,7 @@ class Toolbar extends React.Component {
           {this.renderToolbarTab(0, 'Focus stories')}
           {this.renderToolbarTab(1, 'Explore freely')}
         </div>
-        <ToolbarBottomActions
-          actions={this.props.actions}
-        />
+        {/* <ToolbarBottomActions /> */}
       </div>
     )
   }
@@ -161,9 +159,7 @@ class Toolbar extends React.Component {
           {this.renderToolbarTab(0, 'Narratives')}
           {(isTags) ? this.renderToolbarTab(1, 'Explore by tag') : ''}
         </div>
-        <ToolbarBottomActions
-          actions={this.props.actions}
-        />
+        {/* <ToolbarBottomActions /> */}
       </div>
     )
   }

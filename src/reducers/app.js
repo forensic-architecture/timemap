@@ -33,11 +33,11 @@ function updateSelected(appState, action) {
 }
 
 function updateNarrative(appState, action) {
-  console.log(action.narrative)
   return {
     ...appState,
     narrative: action.narrative
   }
+
   // if (action.narrative === null) {
   //   console.log(action.narrative)
   //   return Object.assign({}, appState, {

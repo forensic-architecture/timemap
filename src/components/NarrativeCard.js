@@ -56,11 +56,15 @@ class NarrativeCard extends React.Component {
   }
 
   render() {
+    // no display if no narrative
     if (!this.props.narrative) return null
 
+    console.log(this.props.narrative)
     const { steps, current } = this.props.narrative
+
     if (steps[current]) {
       const step = steps[current];
+      console.log('here')
 
       return (
         <div className='narrative-info'>

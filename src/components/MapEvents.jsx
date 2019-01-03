@@ -33,14 +33,15 @@ class MapEvents extends React.Component {
     })
 
     if (this.props.narrative) {
-      const { byId } = this.props.narrative
-      const eventsInNarrative = events.filter(e => byId.hasOwnProperty(e.id))
-      if (eventsInNarrative.length <= 0) {
-        styleProps = {
-          ...styleProps,
-          fillOpacity: 0.1
-        }
-      }
+      // TODO: logic to display narratives in Map
+      // const { byId } = this.props.narrative
+      // const eventsInNarrative = events.filter(e => byId.hasOwnProperty(e.id))
+      // if (eventsInNarrative.length <= 0) {
+      //   styleProps = {
+      //     ...styleProps,
+      //     fillOpacity: 0.1
+      //   }
+      // }
     }
 
     return (

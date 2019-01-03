@@ -25,9 +25,6 @@ class Dashboard extends React.Component {
     this.handleViewSource = this.handleViewSource.bind(this)
     this.handleHighlight = this.handleHighlight.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
-    this.handleSelectNarrative = this.handleSelectNarrative.bind(this);
-    this.handleTagFilter = this.handleTagFilter.bind(this);
-    this.updateTimerange = this.updateTimerange.bind(this);
     this.getCategoryColor = this.getCategoryColor.bind(this);
 
     this.eventsById = {}
@@ -63,18 +60,6 @@ class Dashboard extends React.Component {
     }
   }
 
-  handleSelectNarrative(narrative) {
-    this.props.actions.updateNarrative(narrative);
-  }
-
-  handleTagFilter(tag) {
-    this.props.actions.updateTagFilters(tag);
-  }
-
-  updateTimerange(timeRange) {
-    this.props.actions.updateTimeRange(timeRange);
-  }
-
   getCategoryColor(category='other') {
     return this.props.ui.style.categories[category] || this.props.ui.style.categories['other']
   }
@@ -90,30 +75,32 @@ class Dashboard extends React.Component {
       <div>
         <Toolbar
           isNarrative={!!this.props.app.narrative}
-          onFilter={this.handleTagFilter}
-          onSelectNarrative={this.handleSelectNarrative}
-          actions={this.props.actions}
+          methods={{
+            onFilter: this.props.actions.updateTagFilters,
+            onSelectNarrative: this.props.actions.updateNarrative
+          }}
         />
         <Map
           mapId='map'
           methods={{
             onSelect: this.handleSelect,
-            onSelectNarrative: this.handleSelectNarrative,
+            onSelectNarrative: this.props.actions.updateNarrative,
             getCategoryColor: this.getCategoryColor,
           }}
         />
         <Timeline
           methods={{
             onSelect: this.handleSelect,
-            onUpdateTimerange: this.updateTimerange,
+            onUpdateTimerange: this.props.actions.updateTimeRange,
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
         <NarrativeCard
           onSelect={this.handleSelect}
-          onSelectNarrative={this.handleSelectNarrative}
+          onSelectNarrative={this.props.actions.updateNarrative}
         />
         <CardStack
+          isNarrative={!!this.props.app.narrative}
           onViewSource={this.handleViewSource}
           onSelect={this.handleSelect}
           onHighlight={this.handleHighlight}
