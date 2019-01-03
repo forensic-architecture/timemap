@@ -42,9 +42,6 @@ const CardSource = ({ source, isLoading, onClickHandler }) => {
     thumbnail = imgs.length > 0 ? imgs[0] : null
   }
 
-  console.log(!!thumbnail)
-  console.log(thumbnail)
-
   return (
     <div className="card-source">
       {isLoading
