@@ -284,7 +284,7 @@ export default function(svg, ui, methods) {
   function update(newCategories, newTimerange) {
     if (hash(categories) !== hash(newCategories)) categories = newCategories;
     if (hash(timerange) !== hash(newTimerange)) timerange = newTimerange;
-
+    scale.x.domain(timerange);
     render();
   }
 

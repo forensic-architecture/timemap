@@ -4,8 +4,9 @@ import * as selectors from '../selectors';
 import hash from 'object-hash';
 
 import copy from '../js/data/copy.json';
-import { formatterWithYear, isNotNullNorUndefined } from '../js/utilities';
+import { formatterWithYear } from '../js/utilities';
 import TimelineHeader from './presentational/TimelineHeader';
+import TimelineClip from './presentational/TimelineClip';
 import TimelineHandles from './TimelineHandles.jsx';
 import TimelineZoomControls from './TimelineZoomControls.jsx';
 import TimelineLogic from '../js/timeline/timeline.js';
@@ -51,8 +52,9 @@ class Timeline extends React.Component {
   }
 
   computeDims() {
-    if (document.querySelector(`#${this.props.ui.dom.timeline}`) !== null) {
-      const boundingClient = document.querySelector(`#${this.props.ui.dom.timeline}`).getBoundingClientRect();
+    const dom = this.props.ui.dom.timeline;
+    if (document.querySelector(`#${dom}`) !== null) {
+      const boundingClient = document.querySelector(`#${dom}`).getBoundingClientRect();
       const WIDTH = boundingClient.width;
       this.setState({ dims: Object.assign({}, this.state.dims, { width: WIDTH }) });
     }
@@ -72,22 +74,6 @@ class Timeline extends React.Component {
     return null;
   }
 
-  renderTimelineClip() {
-    const dims = this.state.dims;
-
-    return (
-      <clipPath id="clip">
-        <rect
-          x="120"
-          y="0" 
-          width={dims.width - dims.margin_left - dims.width_controls}
-          height={dims.height - 25}
-        >
-        </rect>
-      </clipPath>
-    );
-  }
-
   renderSVG() {
     const dims = this.state.dims;
 
@@ -97,7 +83,7 @@ class Timeline extends React.Component {
         width={dims.width}
         height={dims.height}
       >
-        {this.renderTimelineClip()}
+        <TimelineClip dims={dims} />
         <TimelineHandles
           dims={dims}
           onMoveTime={(dir) => { this.onMoveTime(dir) }}
