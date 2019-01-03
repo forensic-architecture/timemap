@@ -55,15 +55,13 @@ export default function(svg, newApp, ui, methods) {
 
   dom.axis.x0 = dom.svg.append('g')
     .attr('transform', `translate(0, 25)`)
+    .attr('clip-path', 'url(#clip')
     .attr('class', 'axis xAxis');
 
   dom.axis.x1 = dom.svg.append('g')
     .attr('transform', `translate(0, 105)`)
+    .attr('clip-path', 'url(#clip')
     .attr('class', 'axis axisHourText');
-
-  /*dom.axis.y = dom.svg.append('g')
-    .attr('transform', `translate(${WIDTH}, 0)`)
-    .attr('class', 'yAxis');*/
 
   /*
    * Initialize axis function and element group
@@ -84,12 +82,11 @@ export default function(svg, newApp, ui, methods) {
     .tickSize(0)
     .tickFormat(d3.timeFormat('%H:%M'));
 
-  /*axis.y =
+  axis.y =
     d3.axisLeft(scale.y)
-    .tickValues([]);*/
+    .tickValues([]);
 
   updateAxis();
-
 
   /**
    * Adapt dimensions when resizing
@@ -126,7 +123,6 @@ export default function(svg, newApp, ui, methods) {
     return scale.y(yGroup);
   }
 
-
   /*
    * Get x position of eventPoint, considering the time scale
    * @param {object} eventPoint: regular eventPoint data
@@ -137,6 +133,10 @@ export default function(svg, newApp, ui, methods) {
 
   function getTimeScaleExtent() {
     return (scale.x.domain()[1].getTime() - scale.x.domain()[0].getTime()) / 60000;
+  }
+
+  function getScaleX() {
+    return scale.x;
   }
 
   /**
@@ -186,41 +186,41 @@ export default function(svg, newApp, ui, methods) {
   /*
    * Setup drag behavior
    */
+  function onDragStart(ev) {
+    d3.event.sourceEvent.stopPropagation();
+    dragPos0 = d3.event.x;
+    toggleTransition(false);
+  }
+
+  function onDrag() {
+    const drag0 = scale.x.invert(dragPos0).getTime();
+    const dragNow = scale.x.invert(d3.event.x).getTime();
+    const timeShift = (drag0 - dragNow) / 1000;
+
+    const newDomain0 = d3.timeSecond.offset(app.timerange[0], timeShift);
+    const newDomainF = d3.timeSecond.offset(app.timerange[1], timeShift);
+
+    scale.x.domain([newDomain0, newDomainF]);
+    render();
+    //app.timerange = scale.x.domain();
+    //methods.onUpdateTimerange(scale.x.domain());
+  }
+
+  function onDragEnd() {
+    toggleTransition(true);
+    app.timerange = scale.x.domain();
+    methods.onUpdateTimerange(scale.x.domain());
+  }
+
   const drag = d3.drag()
-    .on('start', () => {
-      d3.event.sourceEvent.stopPropagation();
-      dragPos0 = d3.event.x;
-      toggleTransition(false);
-    })
-    .on('drag', () => {
-      const drag0 = scale.x.invert(dragPos0).getTime();
-      const dragNow = scale.x.invert(d3.event.x).getTime();
-      const timeShift = (drag0 - dragNow) / 1000;
-
-      const newDomain0 = d3.timeSecond.offset(app.timerange[0], timeShift);
-      const newDomainF = d3.timeSecond.offset(app.timerange[1], timeShift);
-
-      scale.x.domain([newDomain0, newDomainF]);
-//      render();
-      app.timerange = scale.x.domain();
-      methods.onUpdateTimerange(scale.x.domain());
-    })
-    .on('end', () => {
-      toggleTransition(true);
-      app.timerange = scale.x.domain();
-      methods.onUpdateTimerange(scale.x.domain());
-    });
+    .on('start', onDragStart)
+    .on('drag', onDrag)
+    .on('end', onDragEnd);
 
   /**
    * Render axis on timeline and viewbox boundaries
    */
   function renderAxis() {
-    dom.axis.x0
-      .call(drag);
-
-    dom.axis.x1
-      .call(drag);
-
     dom.axis.x0
       .transition()
       .duration(transitionDuration)
@@ -231,11 +231,26 @@ export default function(svg, newApp, ui, methods) {
       .duration(transitionDuration)
       .call(axis.x1);
 
-    /*axis.y.tickSize(WIDTH - margin.left);
+    axis.y.tickSize(WIDTH - margin.left);
+
+    if (!dom.axis.dragGrabber) {
+      dom.axis.dragGrabber = dom.svg.insert('rect', ':first-child')
+      .attr('class', 'drag-grabber')
+      .attr('x', margin.left)
+      .attr('y', 20)
+      .attr('width', WIDTH - margin.left)
+      .attr('height', 80)
+      .call(drag);
+    }   
+    
+    if (!dom.axis.y) {
+      dom.axis.y = dom.svg.insert('g', ':first-child')
+      .attr('transform', `translate(${WIDTH}, 0)`)
+      .attr('class', 'yAxis');
+    }
 
     dom.axis.y
-      .call(axis.y)
-      .call(drag);*/
+      .call(axis.y);
   }
 
   /**
@@ -253,9 +268,9 @@ export default function(svg, newApp, ui, methods) {
       .domain(domain.categories)
       .range(groupYs);
 
-    /*axis.y =
+    axis.y =
       d3.axisLeft(scale.y)
-        .tickValues(domain.categories.map(c => c.category));*/
+        .tickValues(domain.categories.map(c => c.category));
   }
 
 
@@ -269,13 +284,8 @@ export default function(svg, newApp, ui, methods) {
     const isNewDomain = (hash(domain) !== hash(newDomain));
     const isNewAppProps = (hash(app) !== hash(newApp));
 
-    if (isNewDomain) {
-      domain.categories = newDomain.categories;
-    }
-
-    if (isNewAppProps) {
-      app.timerange = newApp.timerange;
-    }
+    if (isNewDomain) domain.categories = newDomain.categories;
+    if (isNewAppProps) app.timerange = newApp.timerange;
 
     if (isNewDomain || isNewAppProps) render();
   }
@@ -286,10 +296,14 @@ export default function(svg, newApp, ui, methods) {
   }
 
   return {
+    getScaleX,
     getEventX,
     getEventY,
     applyZoom,
     moveTime,
     update,
+    onDragStart,
+    onDrag,
+    onDragEnd
   };
 }

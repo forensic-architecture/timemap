@@ -86,7 +86,10 @@ class Timeline extends React.Component {
         <TimelineHandles dims={dims} onMoveTime={(dir) => { this.onMoveTime(dir) }} />
         <TimelineZoomControls zoomLevels={this.props.app.zoomLevels} dims={dims} onApplyZoom={(zoom) => { this.onApplyZoom(zoom); }} />
         <TimelineLabels dims={dims} timelabels={this.props.app.timerange} />
-        <TimelineCategories categories={this.props.domain.categories} />
+        {/*<TimelineCategories categories={this.props.domain.categories}
+          onDragStart={(ev) => { this.timeline.onDragStart(ev) }}
+          onDrag={(ev) => { this.timeline.onDrag(ev); }}
+        />*/}
         <TimelineMarkers selected={this.props.app.selected} getEventX={(e) => this.timeline.getEventX(e)} getEventY={(e) => this.timeline.getEventY(e)} />
         <TimelineEvents
           events={this.props.domain.events}

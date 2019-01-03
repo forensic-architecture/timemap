@@ -6,10 +6,14 @@ class TimelineMarkers extends React.Component {
     return (
       <circle
         className="timeline-marker"
-        cx={this.props.getEventX(event)}
-        cy={this.props.getEventY(event)}
+        cx={0}
+        cy={0}
+        style={{
+          'transform': `translate(${this.props.getEventX(event)}px, ${this.props.getEventY(event)}px)`,
+          'transition': 'transform 0.5s ease',
+          'opacity': 0.9
+        }}        
         r="10"
-        style={{ opacity: "0.9" }}
       >
       </circle>
     )
@@ -17,7 +21,9 @@ class TimelineMarkers extends React.Component {
 
   render () {
     return (
-      <g>
+      <g
+        clipPath={"url(#clip)"}
+      >
         {this.props.selected.map(event => this.renderMarker(event))}
       </g>
     );

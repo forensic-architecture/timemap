@@ -171,10 +171,18 @@
 
       .yAxis {
         .tick line {
+          stroke: $midwhite;
           stroke-width: 15px;
           cursor: -webkit-grab;
           cursor: -moz-grab;
         }
+      }
+
+      .drag-grabber {
+        cursor: -webkit-grab;
+        cursor: -moz-grab;     
+        fill: $offwhite;
+        opacity: 0.05;   
       }
 
       .axisBoundaries {
