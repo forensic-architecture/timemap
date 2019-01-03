@@ -12,7 +12,6 @@ import TimelineLogic from '../js/timeline/timeline.js';
 import TimelineLabels from './TimelineLabels.jsx';
 import TimelineMarkers from './TimelineMarkers.jsx'
 import TimelineEvents from './TimelineEvents.jsx';
-import TimelineCategories from './TimelineCategories.jsx';
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -26,20 +25,22 @@ class Timeline extends React.Component {
         width_controls: 100,
         height_controls: 115,
         margin_left: 120        
-      }
+      },
+      softTimeUpdate: 0
     };
   }
 
   componentDidMount() {
-    this.timeline = new TimelineLogic(this.svgRef.current, this.props.app, this.props.ui, this.props.methods);
-    this.timeline.update(this.props.domain, this.props.app);
+    this.methods = Object.assign({}, this.props.methods, { onSoftUpdate: (toggle) => { this.setState({ softTimeUpdate: toggle }) }});
+    this.timeline = new TimelineLogic(this.svgRef.current, this.props.ui, this.methods);
+    this.timeline.update(this.props.domain.categories, this.props.app.timerange);
     this.computeDims();
     window.addEventListener('resize', () => { this.computeDims(); });
   }
 
   componentWillReceiveProps(nextProps) {
     if (hash(nextProps) !== hash(this.props)) {
-      this.timeline.update(nextProps.domain, nextProps.app);
+      this.timeline.update(nextProps.domain.categories, nextProps.app.timerange);
     }
   }
 
@@ -69,7 +70,23 @@ class Timeline extends React.Component {
       return this.timeline.applyZoom(zoom);
     }
     return null;
-  }  
+  }
+
+  renderTimelineClip() {
+    const dims = this.state.dims;
+
+    return (
+      <clipPath id="clip">
+        <rect
+          x="120"
+          y="0" 
+          width={dims.width - dims.margin_left - dims.width_controls}
+          height={dims.height - 25}
+        >
+        </rect>
+      </clipPath>
+    );
+  }
 
   renderSVG() {
     const dims = this.state.dims;
@@ -80,17 +97,25 @@ class Timeline extends React.Component {
         width={dims.width}
         height={dims.height}
       >
-        <clipPath id="clip">
-          <rect x="120" y="0" width={dims.width - dims.margin_left - dims.width_controls} height={dims.height - 25}></rect>
-        </clipPath>
-        <TimelineHandles dims={dims} onMoveTime={(dir) => { this.onMoveTime(dir) }} />
-        <TimelineZoomControls zoomLevels={this.props.app.zoomLevels} dims={dims} onApplyZoom={(zoom) => { this.onApplyZoom(zoom); }} />
-        <TimelineLabels dims={dims} timelabels={this.props.app.timerange} />
-        {/*<TimelineCategories categories={this.props.domain.categories}
-          onDragStart={(ev) => { this.timeline.onDragStart(ev) }}
-          onDrag={(ev) => { this.timeline.onDrag(ev); }}
-        />*/}
-        <TimelineMarkers selected={this.props.app.selected} getEventX={(e) => this.timeline.getEventX(e)} getEventY={(e) => this.timeline.getEventY(e)} />
+        {this.renderTimelineClip()}
+        <TimelineHandles
+          dims={dims}
+          onMoveTime={(dir) => { this.onMoveTime(dir) }}
+        />
+        <TimelineZoomControls
+          zoomLevels={this.props.app.zoomLevels}
+          dims={dims}
+          onApplyZoom={(zoom) => { this.onApplyZoom(zoom); }}
+        />
+        <TimelineLabels
+          dims={dims}
+          timelabels={this.props.app.timerange}
+        />
+        <TimelineMarkers
+          selected={this.props.app.selected}
+          getEventX={(e) => this.timeline.getEventX(e)}
+          getEventY={(e) => this.timeline.getEventY(e)}
+        />
         <TimelineEvents
           events={this.props.domain.events}
           getEventX={(e) => this.timeline.getEventX(e)}

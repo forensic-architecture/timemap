@@ -8,34 +8,31 @@ import { parseDate } from '../utilities';
 import hash from 'object-hash';
 import esLocale from '../data/es-MX.json';
 
-export default function(svg, newApp, ui, methods) {
+export default function(svg, ui, methods) {
   d3.timeFormatDefaultLocale(esLocale);
 
-  const domain = {
-    categories: []
-  }
-  const app = {
-    timerange: newApp.timerange,
-  }
+  let categories = [];
+  let timerange = [null, null];
 
   // Dimension of the client
   const WIDTH_CONTROLS = 100;
   let WIDTH = getCurrentWidth() - WIDTH_CONTROLS;
+  const HEIGHT = 80;
 
   // NB: is it possible to do this with SCSS?
   // A: Maybe, although we are using it programmatically here for now
-  const margin = { left: 120 };
+  const margin = { left: 120, top: 20 };
 
   // Drag behavior
   let dragPos0;
-  let transitionDuration = 500;
+  let transitionDuration = 300;
 
   /**
    * Create scales
    */
   const scale = {};
   scale.x = d3.scaleTime()
-      .domain(app.timerange)
+      .domain(timerange)
       .range([margin.left, WIDTH]);
 
   scale.y = d3.scaleOrdinal()
@@ -72,13 +69,13 @@ export default function(svg, newApp, ui, methods) {
     d3.axisBottom(scale.x)
     .ticks(10)
     .tickPadding(5)
-    .tickSize(80)
+    .tickSize(HEIGHT)
     .tickFormat(d3.timeFormat('%d %b'));
 
   axis.x1 =
     d3.axisBottom(scale.x)
     .ticks(10)
-    .tickPadding(20)
+    .tickPadding(margin.top)
     .tickSize(0)
     .tickFormat(d3.timeFormat('%H:%M'));
 
@@ -114,7 +111,7 @@ export default function(svg, newApp, ui, methods) {
   }
   addResizeListener();
 
-  /*
+  /**
    * Get y height of eventPoint, considering the ordinal Y scale
    * @param {object} eventPoint: regular eventPoint data
    */
@@ -123,7 +120,7 @@ export default function(svg, newApp, ui, methods) {
     return scale.y(yGroup);
   }
 
-  /*
+  /**
    * Get x position of eventPoint, considering the time scale
    * @param {object} eventPoint: regular eventPoint data
    */
@@ -131,12 +128,11 @@ export default function(svg, newApp, ui, methods) {
     return scale.x(parseDate(eventPoint.timestamp));
   }
 
+  /**
+   * Returns the time scale (x) extent in minutes
+   */
   function getTimeScaleExtent() {
     return (scale.x.domain()[1].getTime() - scale.x.domain()[0].getTime()) / 60000;
-  }
-
-  function getScaleX() {
-    return scale.x;
   }
 
   /**
@@ -147,10 +143,11 @@ export default function(svg, newApp, ui, methods) {
     const extent = getTimeScaleExtent();
     const newCentralTime = d3.timeMinute.offset(scale.x.domain()[0], extent / 2);
 
-    const domain0 = d3.timeMinute.offset(newCentralTime, -zoom.duration / 2);
-    const domainF = d3.timeMinute.offset(newCentralTime, zoom.duration / 2);
+    scale.x.domain([
+      d3.timeMinute.offset(newCentralTime, -zoom.duration / 2),
+      d3.timeMinute.offset(newCentralTime, zoom.duration / 2)
+    ]);
 
-    scale.x.domain([domain0, domainF]);
     methods.onUpdateTimerange(scale.x.domain());
   }
 
@@ -192,23 +189,27 @@ export default function(svg, newApp, ui, methods) {
     toggleTransition(false);
   }
 
+  /*
+   * Drag and update
+   */
   function onDrag() {
     const drag0 = scale.x.invert(dragPos0).getTime();
     const dragNow = scale.x.invert(d3.event.x).getTime();
     const timeShift = (drag0 - dragNow) / 1000;
 
-    const newDomain0 = d3.timeSecond.offset(app.timerange[0], timeShift);
-    const newDomainF = d3.timeSecond.offset(app.timerange[1], timeShift);
+    const newDomain0 = d3.timeSecond.offset(timerange[0], timeShift);
+    const newDomainF = d3.timeSecond.offset(timerange[1], timeShift);
 
     scale.x.domain([newDomain0, newDomainF]);
     render();
-    //app.timerange = scale.x.domain();
-    //methods.onUpdateTimerange(scale.x.domain());
+    // Updates components without updating timerange
+    methods.onSoftUpdate(1);
   }
 
   function onDragEnd() {
     toggleTransition(true);
-    app.timerange = scale.x.domain();
+    timerange = scale.x.domain();
+    methods.onSoftUpdate(0);
     methods.onUpdateTimerange(scale.x.domain());
   }
 
@@ -216,6 +217,26 @@ export default function(svg, newApp, ui, methods) {
     .on('start', onDragStart)
     .on('drag', onDrag)
     .on('end', onDragEnd);
+
+  /**
+   * Updates data displayed by this timeline, but only render if necessary
+   * @param {Object} domain: Redux state domain subtree
+   * @param {Object} app: Redux state app subtree
+   */
+  function updateAxis() {
+    let groupYs = Array.apply(null, Array(categories.length));
+    groupYs = groupYs.map((g, i) => {
+      return (i + 1) * HEIGHT / groupYs.length;
+    });
+    scale.y = d3.scaleOrdinal()
+      .domain(categories)
+      .range(groupYs);
+
+    axis.y =
+      d3.axisLeft(scale.y)
+        .tickValues(categories.map(c => c.category));
+  }
+
 
   /**
    * Render axis on timeline and viewbox boundaries
@@ -237,9 +258,9 @@ export default function(svg, newApp, ui, methods) {
       dom.axis.dragGrabber = dom.svg.insert('rect', ':first-child')
       .attr('class', 'drag-grabber')
       .attr('x', margin.left)
-      .attr('y', 20)
+      .attr('y', margin.top)
       .attr('width', WIDTH - margin.left)
-      .attr('height', 80)
+      .attr('height', HEIGHT)
       .call(drag);
     }   
     
@@ -253,41 +274,18 @@ export default function(svg, newApp, ui, methods) {
       .call(axis.y);
   }
 
-  /**
-   * Updates data displayed by this timeline, but only render if necessary
-   * @param {Object} domain: Redux state domain subtree
-   * @param {Object} app: Redux state app subtree
-   */
-  function updateAxis() {
-    let groupYs = Array.apply(null, Array(domain.categories.length));
-    groupYs = groupYs.map((g, i) => {
-      const h = 76;
-      return (i + 1) * h / groupYs.length;
-    });
-    scale.y = d3.scaleOrdinal()
-      .domain(domain.categories)
-      .range(groupYs);
-
-    axis.y =
-      d3.axisLeft(scale.y)
-        .tickValues(domain.categories.map(c => c.category));
-  }
-
 
   /**
    * Updates displayable data on the timeline: events, selected and
    * potentially adjusts time range
-   * @param {Object} newDomain: object of arrays of events and categories
-   * @param {Object} newApp: object of time range and selected events
+   * @param {Object} newCategories: object of arrays of categories
+   * @param {Object} newTimerange: object of time range
    */
-  function update(newDomain, newApp) {
-    const isNewDomain = (hash(domain) !== hash(newDomain));
-    const isNewAppProps = (hash(app) !== hash(newApp));
+  function update(newCategories, newTimerange) {
+    if (hash(categories) !== hash(newCategories)) categories = newCategories;
+    if (hash(timerange) !== hash(newTimerange)) timerange = newTimerange;
 
-    if (isNewDomain) domain.categories = newDomain.categories;
-    if (isNewAppProps) app.timerange = newApp.timerange;
-
-    if (isNewDomain || isNewAppProps) render();
+    render();
   }
 
   function render() {
@@ -296,14 +294,10 @@ export default function(svg, newApp, ui, methods) {
   }
 
   return {
-    getScaleX,
     getEventX,
     getEventY,
     applyZoom,
     moveTime,
-    update,
-    onDragStart,
-    onDrag,
-    onDragEnd
+    update
   };
 }
