@@ -156,8 +156,8 @@ $header-inset: 10px;
   }
 }
 
-.source-image-container {
-  padding: 0 25px;
+.source-image-container, .source-text-container {
+  padding: 0 10em;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -72,3 +72,18 @@ export function formatterWithYear(datetime) {
 export function formatter(datetime) {
   return d3.timeFormat("%d %b, %H:%M")(datetime);
 }
+
+/**
+ * Debugging function: put in place of a mapStateToProps function to
+ * view that source modal by default
+ */
+function injectSource(id) {
+  return state => ({
+    ...state,
+    app: {
+      ...state.app,
+      source: state.domain.sources[id]
+    }
+  })
+}
+

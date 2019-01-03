@@ -1,8 +1,10 @@
 import React from 'react'
 import Img from 'react-image'
 import { Player } from 'video-react'
+import Md from './Md.jsx'
 import Spinner from './presentational/Spinner'
 import NoSource from './presentational/NoSource'
+// TODO: move render functions into presentational components
 
 function SourceOverlay ({ source, onCancel }) {
   function renderImage(path) {
@@ -32,25 +34,16 @@ function SourceOverlay ({ source, onCancel }) {
   }
 
   function renderText(path) {
-    return (<div>{path}</div>)
+    return (
+      <div className='source-text-container'>
+        <Md
+          path={path}
+          loader={<Spinner />}
+          unloader={renderError()}
+        />
+      </div>
+    )
   }
-
-  // renderImagebook() {
-  //   return (
-  //     <div className='source-image-container'>
-  //       {source.paths.map((url, idx) => (
-  //         <Img
-  //           key={idx}
-  //           className='source-image'
-  //           src={url}
-  //           loader={<Spinner />}
-  //           unloader={<NoSource failedUrls={[source.path]} />}
-  //         />
-  //
-  //       ))}
-  //     </div>
-  //   )
-  // }
 
   function renderError() {
     return (

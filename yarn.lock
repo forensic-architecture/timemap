@@ -3962,7 +3962,6 @@ lodash.tail@^4.1.1:
 lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
-  integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
 lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.3, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@~4.17.10:
   version "4.17.11"
@@ -4035,6 +4034,10 @@ map-visit@^1.0.0:
   resolved "https://registry.yarnpkg.com/map-visit/-/map-visit-1.0.0.tgz#ecdca8f13144e660f1b5bd41f12f3479d98dfb8f"
   dependencies:
     object-visit "^1.0.0"
+
+marked@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-0.6.0.tgz#a18d01cfdcf8d15c3c455b71c8329e5e0f01faa1"
 
 matcher@^1.1.1:
   version "1.1.1"
@@ -5244,7 +5247,6 @@ redux@^3.6.0:
 redux@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.1.tgz#436cae6cc40fbe4727689d7c8fae44808f1bfef5"
-  integrity sha512-R7bAtSkk7nY6O/OYMVR9RiBI+XghjF9rlbl5806HJbQph0LJVHZrU5oaO4q70eUKiqMRqm4y07KLTlMZ2BlVmg==
   dependencies:
     loose-envify "^1.4.0"
     symbol-observable "^1.2.0"
@@ -6403,7 +6405,6 @@ verror@1.10.0:
 video-react@^0.13.1:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/video-react/-/video-react-0.13.1.tgz#5d0dc68748f9b12e118beea1998d6ae5f6cbd6ba"
-  integrity sha512-AeGSpddfHv0UxeJztWUALYEjCdzXM1QdtQ5GD1VUd3vxcgwgIfB7EzFKcewRevSHHK8TDmjNksbvbWRobF/QeA==
   dependencies:
     classnames "^2.2.3"
     lodash.throttle "^4.1.1"

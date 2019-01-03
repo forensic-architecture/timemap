@@ -166,6 +166,5 @@ function injectSource(id) {
 
 export default connect(
   state => state,
-  // injectSource('src7'),
   mapDispatchToProps,
 )(Dashboard);
