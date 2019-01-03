@@ -1,6 +1,6 @@
-import initial from '../store/initial.js';
+import initial from '../store/initial.js'
 
-import { parseDate } from '../js/utilities.js';
+import { parseDate } from '../js/utilities.js'
 
 import {
   UPDATE_HIGHLIGHTED,
@@ -8,6 +8,8 @@ import {
   UPDATE_TAGFILTERS,
   UPDATE_TIMERANGE,
   UPDATE_NARRATIVE,
+  INCREMENT_NARRATIVE_CURRENT,
+  DECREMENT_NARRATIVE_CURRENT,
   UPDATE_SOURCE,
   RESET_ALLFILTERS,
   TOGGLE_LANGUAGE,
@@ -18,18 +20,18 @@ import {
   TOGGLE_NOTIFICATIONS,
   FETCH_ERROR,
   FETCH_SOURCE_ERROR,
-} from '../actions';
+} from '../actions'
 
 function updateHighlighted(appState, action) {
   return Object.assign({}, appState, {
     highlighted: action.highlighted
-  });
+  })
 }
 
 function updateSelected(appState, action) {
   return Object.assign({}, appState, {
     selected: action.selected
-  });
+  })
 }
 
 function updateNarrative(appState, action) {
@@ -42,27 +44,45 @@ function updateNarrative(appState, action) {
   }
 }
 
+function incrementNarrativeCurrent(appState, action) {
+  return {
+    ...appState,
+    narrativeState: {
+      current: appState.narrativeState.current += 1
+    }
+  }
+}
+
+function decrementNarrativeCurrent(appState, action) {
+  return {
+    ...appState,
+    narrativeState: {
+      current: appState.narrativeState.current -= 1
+    }
+  }
+}
+
 function updateTagFilters(appState, action) {
-  const tagFilters = appState.filters.tags.slice(0);
+  const tagFilters = appState.filters.tags.slice(0)
   const nextActiveState = action.tag.active
 
   function traverseNode(node) {
-    const tagFilter = tagFilters.find(tF => tF.key === node.key);
-    node.active = nextActiveState;
-    if (!tagFilter) tagFilters.push(node);
+    const tagFilter = tagFilters.find(tF => tF.key === node.key)
+    node.active = nextActiveState
+    if (!tagFilter) tagFilters.push(node)
 
     if (node && Object.keys(node.children).length > 0) {
-      Object.values(node.children).forEach((childNode) => { traverseNode(childNode); });
+      Object.values(node.children).forEach((childNode) => { traverseNode(childNode) })
     }
   }
 
-  traverseNode(action.tag);
+  traverseNode(action.tag)
 
   return Object.assign({}, appState, {
     filters: Object.assign({}, appState.filters, {
       tags: tagFilters
     })
-  });
+  })
 }
 
 function updateTimeRange(appState, action) { // XXX
@@ -70,7 +90,7 @@ function updateTimeRange(appState, action) { // XXX
     filters: Object.assign({}, appState.filters, {
       timerange: action.timerange
     }),
-  });
+  })
 }
 
 function resetAllFilters(appState) { // XXX
@@ -84,26 +104,26 @@ function resetAllFilters(appState) { // XXX
       ],
     }),
     selected: [],
-  });
+  })
 }
 
 function toggleLanguage(appState, action) {
-  let otherLanguage = (appState.language === 'es-MX') ? 'en-US' : 'es-MX';
+  let otherLanguage = (appState.language === 'es-MX') ? 'en-US' : 'es-MX'
   return Object.assign({}, appState, {
     language: action.language || otherLanguage
-  });
+  })
 }
 
 function toggleMapView(appState, action) {
-  const isLayerInView = !appState.views[layer];
-  const newViews = {};
-  newViews[layer] = isLayerInView;
-  const views = Object.assign({}, appState.views, newViews);
+  const isLayerInView = !appState.views[layer]
+  const newViews = {}
+  newViews[layer] = isLayerInView
+  const views = Object.assign({}, appState.views, newViews)
   return Object.assign({}, appState, {
     filters: Object.assign({}, appState.filters, {
       views
     })
-  });
+  })
 }
 
 function updateSource(appState, action) {
@@ -126,7 +146,7 @@ function toggleFetchingDomain(appState, action) {
     flags: Object.assign({}, appState.flags, {
       isFetchingDomain: !appState.flags.isFetchingDomain
     })
-  });
+  })
 }
 
 function toggleFetchingSources(appState, action) {
@@ -134,7 +154,7 @@ function toggleFetchingSources(appState, action) {
     flags: Object.assign({}, appState.flags, {
       isFetchingSources: !appState.flags.isFetchingSources
     })
-  });
+  })
 }
 
 function toggleInfoPopup(appState, action) {
@@ -142,7 +162,7 @@ function toggleInfoPopup(appState, action) {
     flags: Object.assign({}, appState.flags, {
       isInfopopup: !appState.flags.isInfopopup
     })
-  });
+  })
 }
 
 function toggleNotifications(appState, action) {
@@ -150,7 +170,7 @@ function toggleNotifications(appState, action) {
     flags: Object.assign({}, appState.flags, {
       isNotification: !appState.flags.isNotification
     })
-  });
+  })
 }
 
 function fetchSourceError(appState, action) {
@@ -168,38 +188,42 @@ function fetchSourceError(appState, action) {
 function app(appState = initial.app, action) {
   switch (action.type) {
     case UPDATE_HIGHLIGHTED:
-      return updateHighlighted(appState, action);
+      return updateHighlighted(appState, action)
     case UPDATE_SELECTED:
-      return updateSelected(appState, action);
+      return updateSelected(appState, action)
     case UPDATE_TAGFILTERS:
-      return updateTagFilters(appState, action);
+      return updateTagFilters(appState, action)
     case UPDATE_TIMERANGE:
-      return updateTimeRange(appState, action);
+      return updateTimeRange(appState, action)
     case UPDATE_NARRATIVE:
-      return updateNarrative(appState, action);
+      return updateNarrative(appState, action)
+    case INCREMENT_NARRATIVE_CURRENT:
+      return incrementNarrativeCurrent(appState, action)
+    case DECREMENT_NARRATIVE_CURRENT:
+      return decrementNarrativeCurrent(appState, action)
     case UPDATE_SOURCE:
-      return updateSource(appState, action);
+      return updateSource(appState, action)
     case RESET_ALLFILTERS:
-      return resetAllFilters(appState, action);
+      return resetAllFilters(appState, action)
     case TOGGLE_LANGUAGE:
-      return toggleLanguage(appState, action);
+      return toggleLanguage(appState, action)
     case TOGGLE_MAPVIEW:
-      return toggleMapView(appState, action);
+      return toggleMapView(appState, action)
     case FETCH_ERROR:
-      return fetchError(appState, action);
+      return fetchError(appState, action)
     case TOGGLE_FETCHING_DOMAIN:
-      return toggleFetchingDomain(appState, action);
+      return toggleFetchingDomain(appState, action)
     case TOGGLE_FETCHING_SOURCES:
-      return toggleFetchingSources(appState, action);
+      return toggleFetchingSources(appState, action)
     case TOGGLE_INFOPOPUP:
-      return toggleInfoPopup(appState, action);
+      return toggleInfoPopup(appState, action)
     case TOGGLE_NOTIFICATIONS:
-      return toggleNotifications(appState, action);
+      return toggleNotifications(appState, action)
     case FETCH_SOURCE_ERROR:
-      return fetchSourceError(appState, action);
+      return fetchSourceError(appState, action)
     default:
-      return appState;
+      return appState
   }
 }
 
-export default app;
+export default app

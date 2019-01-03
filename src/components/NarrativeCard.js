@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { connect } from 'react-redux'
 import { selectActiveNarrative } from '../selectors'
 
@@ -8,7 +8,7 @@ function NarrativeCard ({ narrative, methods }) {
     return (
       <button
         className='side-menu-burg is-active'
-        onClick={() => { onSelectNarrative(null); }}
+        onClick={() => { onSelectNarrative(null) }}
       >
         <span></span>
       </button>
@@ -16,15 +16,17 @@ function NarrativeCard ({ narrative, methods }) {
   }
 
   function _renderActions(current, steps) {
+    const prevExists = current !== 0
+    const nextExists = current < steps.length - 1
     return (
       <div className='actions'>
         <div
-          className={`${(!current) ? 'disabled ' : ''} action`}
-          onClick={onPrev}>&larr;
+          className={`${prevExists ? '' : 'disabled'} action`}
+          onClick={prevExists ? onPrev : null}>&larr;
         </div>
         <div
-          className={`${(current >= steps.length - 1) ? 'disabled ' : ''} action`}
-          onClick={onNext}>&rarr;
+          className={`${nextExists ? '' : 'disabled'} action`}
+          onClick={nextExists ? onNext : null}>&rarr;
         </div>
       </div>
     )
@@ -36,7 +38,7 @@ function NarrativeCard ({ narrative, methods }) {
   const { steps, current } = narrative
 
   if (steps[current]) {
-    const step = steps[current];
+    const step = steps[current]
 
     return (
       <div className='narrative-info'>
@@ -49,7 +51,7 @@ function NarrativeCard ({ narrative, methods }) {
         </h6>
         {_renderActions(current, steps)}
       </div>
-    );
+    )
   } else {
     return null
   }
@@ -60,4 +62,4 @@ function mapStateToProps(state) {
     narrative: selectActiveNarrative(state)
   }
 }
-export default connect(mapStateToProps)(NarrativeCard);
+export default connect(mapStateToProps)(NarrativeCard)
