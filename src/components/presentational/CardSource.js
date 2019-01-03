@@ -43,7 +43,6 @@ const CardSource = ({ source, isLoading, onClickHandler }) => {
     const imgs = source.paths.filter(p => p.match(isImgUrl))
     thumbnail = imgs.length > 0 ? imgs[0] : null
   }
-  console.log(thumbnail)
 
   const fallbackIcon = (
     <i className="material-icons source-icon">

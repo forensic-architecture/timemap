@@ -48,33 +48,44 @@ $header-inset: 10px;
 
 .mo-container {
   background-color: rgba(239, 239, 239, 0.9);
-  max-width: $panel-width;
-  min-width: $panel-width;
-  max-height: $panel-height;
-  min-height: $panel-height;
+  // max-width: $panel-width;
+  // min-width: $panel-width;
+  // max-height: $panel-height;
+  // min-height: $panel-height;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
+  height: 80vh;
+  max-width: 90vw;
 
   .mo-media-container {
     flex: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
   }
 }
 
 .mo-media-container {
-  // padding-top: 3*$header-inset;
   font-family: "Lato", Helvetica, sans-serif;
-  // max-height: $vimeo-height;
   min-width: 100%;
-  max-height: 500px;
+  max-height: 60vh;
+  overflow-y: auto;
 
   .media-player {
     width: 100%;
     max-width: $vimeo-width;
+  }
+
+  .media-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // NB: topcushion seems to be necessary with certain overflows..
+  &.topcushion {
+    padding-top: 150px;
   }
 }
 
@@ -146,8 +157,10 @@ $header-inset: 10px;
 
 .source-image-container {
   padding: 0 25px;
-  overflow-y: scroll;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .source-image, .source-video {
