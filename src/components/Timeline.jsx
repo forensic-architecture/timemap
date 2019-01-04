@@ -8,9 +8,9 @@ import { formatterWithYear, parseDate } from '../js/utilities';
 import TimelineHeader from './presentational/TimelineHeader';
 import TimelineAxis from './TimelineAxis.jsx';
 import TimelineClip from './presentational/TimelineClip';
-import TimelineHandles from './TimelineHandles.jsx';
+import TimelineHandles from './presentational/TimelineHandles.js';
 import TimelineZoomControls from './TimelineZoomControls.jsx';
-import TimelineLabels from './TimelineLabels.jsx';
+import TimelineLabels from './presentational/TimelineLabels.js';
 import TimelineMarkers from './TimelineMarkers.jsx'
 import TimelineEvents from './TimelineEvents.jsx';
 import TimelineCategories from './TimelineCategories.jsx';
