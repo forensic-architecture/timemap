@@ -9,13 +9,18 @@ import {
 } from '../js/utilities.js'
 
 class CardStack extends React.Component {
-  renderCards(events) {
-    return events.map(event => (
+  renderCards(events, selections) {
+    // if no selections provided, select all
+    if (!selections)
+      selections = events.map(e => true)
+
+    return events.map((event, idx) => (
       <Card
         event={event}
         sourceError={this.props.sourceError}
         language={this.props.language}
         isLoading={this.props.isLoading}
+        isSelected={selections[idx]}
         getNarrativeLinks={this.props.getNarrativeLinks}
         getCategoryGroup={this.props.getCategoryGroup}
         getCategoryColor={this.props.getCategoryColor}
@@ -37,7 +42,11 @@ class CardStack extends React.Component {
 
   renderNarrativeCards() {
     const { narrative } = this.props
-    return this.renderCards(narrative.steps)
+    const showing = narrative.steps.slice(narrative.current)
+    const selections = showing
+      .map((_, idx) => (idx === 0))
+
+    return this.renderCards(showing, selections)
   }
 
   renderCardStackHeader() {

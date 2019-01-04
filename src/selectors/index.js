@@ -1,5 +1,5 @@
 import { createSelector} from 'reselect'
-import { parseTimestamp, compareTimestamp } from '../js/utilities'
+import { parseTimestamp, compareTimestamp, insetSourceFrom } from '../js/utilities'
 
 // Input selectors
 export const getEvents = state => state.domain.events
@@ -21,6 +21,8 @@ export const getNotifications = state => state.domain.notifications
 export const getTagTree = state => state.domain.tags
 export const getTagsFilter = state => state.app.filters.tags
 export const getTimeRange = state => state.app.filters.timerange
+
+
 
 /**
 * Some handy helpers
@@ -90,8 +92,8 @@ export const selectEvents = createSelector(
  * and if TAGS are being used, select them if their tags are enabled
  */
 export const selectNarratives = createSelector(
-    [getEvents, getNarratives, getTagsFilter, getTimeRange],
-    (events, narrativesMeta, tagFilters, timeRange) => {
+    [getEvents, getNarratives, getTagsFilter, getTimeRange, getSources],
+    (events, narrativesMeta, tagFilters, timeRange, sources) => {
 
       const narratives = {}
       const narrativeSkeleton = id => ({ id, steps: [] })
@@ -109,7 +111,8 @@ export const selectNarratives = createSelector(
 
           // add evt to steps
           if (isInNarrative)
-            narratives[narrative].steps.push(evt)
+            // NB: insetSourceFrom is a 'curried' function to allow with maps
+            narratives[narrative].steps.push(insetSourceFrom(sources)(evt))
         })
       })
 
@@ -173,6 +176,8 @@ export const selectLocations = createSelector(
   }
 )
 
+
+
 /**
  * Of all the sources, select those that are relevant to the selected events.
  */
@@ -183,21 +188,7 @@ export const selectSelected = createSelector(
       return []
     }
 
-    // NB: return source object if exists, otherwise null
-    const srcs = selected
-      .map(e => e.sources)
-      .map(_sources => {
-        if (!_sources) return []
-        return _sources.map(id => (
-          sources.hasOwnProperty(id) ? sources[id] : null
-        ))
-      }
-      )
-
-    return selected.map((s, idx) => ({
-      ...s,
-      sources: srcs[idx]
-    }))
+    return selected.map(insetSourceFrom(sources))
   }
 )
 

@@ -79,6 +79,29 @@ export function compareTimestamp (a, b) {
   return (parseTimestamp(a.timestamp) > parseTimestamp(b.timestamp));
 }
 
+/**
+ * Inset the full source represenation from 'allSources' into an event. The
+ * function is 'curried' to allow easy use with maps. To use for a single
+ * source, call with two sets of parentheses:
+ *      const src = insetSourceFrom(sources)(anEvent)
+ */
+export function insetSourceFrom(allSources) {
+  return (event) => {
+    let sources
+    if (!event.sources) {
+      sources = []
+    } else {
+      sources = event.sources.map(id => (
+        allSources.hasOwnProperty(id) ? allSources[id] : null
+      ))
+    }
+    return {
+      ...event,
+      sources
+    }
+  }
+
+}
 
 /**
  * Debugging function: put in place of a mapStateToProps function to

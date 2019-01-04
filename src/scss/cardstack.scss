@@ -11,17 +11,16 @@ $timeline-height: 170px;
   right: 10px;
   max-height: calc(100% - 208px);
   height: auto;
-  overflow: auto;
+  overflow: hidden;
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   z-index: $header;
   color: white;
-  -webkit-font-smoothing: antialiased;
 
   &.narrative-mode {
     right: auto;
     left: 10px;
     top: $narrative-info-max-height + 12px;
-    height: calc(100% - #{$narrative-info-max-height} - #{$timeline-height});
+    height: calc(100% - #{$narrative-info-max-height} - #{$timeline-height} - 12px);
   }
 
   &.full-height {

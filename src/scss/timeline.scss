@@ -1,4 +1,3 @@
-
 .timeline-wrapper {
   position: fixed;
   box-sizing: border-box;
@@ -67,6 +66,10 @@
     }
 
     .timeline-info {
+      &.hidden {
+        display: none;
+      }
+      width: calc(#{$card-width} - 20px);
       position: absolute;
       margin-top: -70px;
       margin-left: 10px;

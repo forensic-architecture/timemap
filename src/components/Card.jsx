@@ -21,19 +21,13 @@ class Card extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isHighlighted: false
+      isOpen: false
     }
   }
 
   toggle() {
     this.setState({
-      isHighlighted: !this.state.isHighlighted
-    }, () => {
-      if (!this.state.isHighlighted) {
-        this.props.onHighlight(this.props.event)
-      } else {
-        this.props.onHighlight(null)
-      }
+      isOpen: !this.state.isOpen
     })
   }
 
@@ -49,13 +43,14 @@ class Card extends React.Component {
     const categoryLabel = this.props.event.category
     const color = this.props.getCategoryColor(this.props.event.category)
 
-    return (
-      <CardCategory
-        categoryTitle={categoryTitle}
-        categoryLabel={categoryLabel}
-        color={color}
-      />
-    )
+    return null
+    // return (
+    //   <CardCategory
+    //     categoryTitle={categoryTitle}
+    //     categoryLabel={categoryLabel}
+    //     color={color}
+    //   />
+    // )
   }
 
   renderSummary() {
@@ -63,7 +58,7 @@ class Card extends React.Component {
       <CardSummary
         language={this.props.language}
         description={this.props.event.description}
-        isHighlighted={this.state.isHighlighted}
+        isOpen={this.state.isOpen}
       />
     )
   }
@@ -96,7 +91,7 @@ class Card extends React.Component {
 
     const source_lang = copy[this.props.language].cardstack.sources
     return (
-      <div className="card-col">
+      <div className='card-col'>
         <h4>{source_lang}: </h4>
         {this.props.event.sources.map(source => (
           <CardSource
@@ -136,49 +131,45 @@ class Card extends React.Component {
     }
   }
 
-  renderHeader() {
+  renderMain() {
     return (
-      <div className="card-collapsed">
-        <div className="card-row">
+      <div className='card-container'>
+        <div className='card-row details'>
           {this.renderTimestamp()}
           {this.renderLocation()}
         </div>
         {this.renderCategory()}
-        <br/>
         {this.renderSummary()}
       </div>
     )
   }
 
-  renderContent() {
-    if (this.state.isHighlighted) {
-      return (
-        <div className="card-bottomhalf">
-          {this.renderTags()}
-          {this.renderSources()}
-          {this.renderNarrative()}
-        </div>
-      )
-    } else {
-      return <div classname="card-bottomhalf"></div>
-    }
+  renderExtra() {
+    return (
+      <div className='card-bottomhalf'>
+        {this.renderTags()}
+        {this.renderSources()}
+        {this.renderNarrative()}
+      </div>
+    )
   }
 
   renderCaret() {
     return (
       <CardCaret
         toggle={() => this.toggle()}
-        isHighlighted={this.state.isHighlighted}
+        isOpen={this.state.isOpen}
       />
     )
   }
 
   render() {
+    const { isSelected } = this.props
     return (
-      <li className='event-card'>
-        {this.renderHeader()}
-        {this.renderContent()}
-        {this.renderCaret()}
+     <li className={`event-card ${isSelected ? 'selected' : ''}`}>
+        {this.renderMain()}
+        {this.state.isOpen ? this.renderExtra() : null}
+        {isSelected ? this.renderCaret() : null}
       </li>
     )
   }
