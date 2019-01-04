@@ -41,27 +41,40 @@ class Timeline extends React.Component {
 
   componentDidMount() {
     this.computeDims();
-    window.addEventListener('resize', () => { this.computeDims(); });
+    this.addEventListeners();
   }
 
   componentWillReceiveProps(nextProps) {
     if (hash(nextProps) !== hash(this.props)) {
-      const categories = nextProps.domain.categories;
-      const catsYpos = categories.map((g, i) => (i + 1) * 80 / categories.length);
-
+      console.log(nextProps.domain.categories)
       this.setState({
         timerange: nextProps.app.timerange,
-        scaleX: d3.scaleTime().domain(nextProps.app.timerange).range([this.state.dims.margin_left, this.state.dims.width]),
-        scaleY: d3.scaleOrdinal().domain(nextProps.domain.categories).range(catsYpos)
+        scaleX: this.makeScaleX(),
+        scaleY: this.makeScaleY(nextProps.domain.categories)
       });
     }
   }
 
+  addEventListeners() {
+    window.addEventListener('resize', () => { this.computeDims(); });
+  }
+
+  makeScaleX() {
+    return d3.scaleTime()
+    .domain(this.state.timerange)
+    .range([this.state.dims.margin_left, this.state.dims.width - this.state.dims.width_controls]);
+  }
+
+  makeScaleY(categories) {
+    const catsYpos = categories.map((g, i) => (i + 1) * this.state.dims.trackHeight / categories.length);
+    return d3.scaleOrdinal()
+      .domain(categories)
+      .range(catsYpos);
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.timerange !== this.state.timerange) {
-      this.setState({
-        scaleX: d3.scaleTime().domain(this.state.timerange).range([this.state.dims.margin_left, this.state.dims.width])
-      });
+      this.setState({ scaleX: this.makeScaleX() });
     }
   }
 
@@ -78,6 +91,7 @@ class Timeline extends React.Component {
    * @param {object} eventPoint: regular eventPoint data
    */
   getEventY(eventPoint) {
+    console.log(eventPoint.category, this.state.scaleY(eventPoint.category))
     return this.state.scaleY(eventPoint.category);
   }
 
@@ -186,13 +200,12 @@ class Timeline extends React.Component {
     this.onSoftTimeRangeUpdate([newDomain0, newDomainF]);
   }
 
+  /**
+   * Stop dragging and update data
+   */
   onDragEnd() {
     this.toggleTransition(true);
-    this.setState({
-      timerange: this.state.scaleX.domain()
-    }, () => {
-      this.props.methods.onUpdateTimerange(this.state.scaleX.domain());  
-    });
+    this.props.methods.onUpdateTimerange(this.state.timerange);
   }
 
   renderSVG() {
@@ -204,7 +217,9 @@ class Timeline extends React.Component {
         width={dims.width}
         height={dims.height}
       >
-        <TimelineClip dims={dims} />
+        <TimelineClip
+          dims={dims}
+        />
         <TimelineAxis
           dims={dims}
           timerange={this.props.app.timerange}
