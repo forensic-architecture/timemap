@@ -34,18 +34,20 @@ class Timeline extends React.Component {
   }
 
   render() {
+    const { isNarrative, app, ui } = this.props
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`;
-    classes += (this.props.app.narrative !== null) ? ' narrative-mode' : '';
+    classes += (app.narrative !== null) ? ' narrative-mode' : '';
     return (
       <div className={classes}>
         <TimelineHeader
-          title={copy[this.props.app.language].timeline.info}
-          date0={formatterWithYear(this.props.app.timerange[0])}
-          date1={formatterWithYear(this.props.app.timerange[1])}
+          title={copy[app.language].timeline.info}
+          date0={formatterWithYear(app.timerange[0])}
+          date1={formatterWithYear(app.timerange[1])}
           onClick={() => { this.onClickArrow(); }}
+          hideInfo={isNarrative}
         />
         <div className="timeline-content">
-          <div id={this.props.ui.dom.timeline} className="timeline" />
+          <div id={ui.dom.timeline} className="timeline" />
         </div>
       </div>
     );
@@ -54,6 +56,7 @@ class Timeline extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    isNarrative: !!state.app.narrative,
     domain: {
       events: state.domain.events,
       categories: selectors.selectCategories(state),

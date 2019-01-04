@@ -1,86 +1,65 @@
-import React from 'react';
+import React from 'react'
 import { connect } from 'react-redux'
+import { selectActiveNarrative } from '../selectors'
 
-class NarrativeCard extends React.Component {
-
-  constructor() {
-    super();
-
-    this.state = {
-      step: 0
-    }
-  }
-
-  goToPrevKeyFrame() {
-    if (this.state.step > 0) {
-      this.setState({ step: this.state.step - 1 });
-    }
-  }
-
-  goToNextKeyFrame() {
-    if (this.state.step < this.props.narrative.steps.length - 1) {
-      this.setState({ step: this.state.step + 1 });
-    }
-  }
-
-  componentDidMount() {
-    const step = this.props.narrative.steps[this.state.step];
-    this.props.onSelect([step]);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.narrative === this.props.narrative && this.state.step !== prevState.step) {
-      const step = this.props.narrative.steps[this.state.step];
-      this.props.onSelect([step]);
-    } else if (prevProps.narrative !== this.props.narrative && this.props.narrative !== null) {
-      this.setState({
-        step: 0
-      }, () => {
-        const step = this.props.narrative.steps[this.state.step];
-        this.props.onSelect([step]);
-      });
-    }
-  }
-
-  renderClose() {
+function NarrativeCard ({ narrative, methods }) {
+  const { onSelectNarrative, onNext, onPrev  } = methods
+  function renderClose() {
     return (
       <button
-        className="side-menu-burg is-active"
-        onClick={() => { this.props.onSelectNarrative(null); }}
+        className='side-menu-burg is-active'
+        onClick={() => { onSelectNarrative(null) }}
       >
         <span></span>
       </button>
     )
   }
 
-  render() {
-    if (this.props.narrative.steps[this.state.step]) {
-      const steps = this.props.narrative.steps;
-      const step = steps[this.state.step];
-
-      return (
-        <div className="narrative-info">
-          {this.renderClose()}
-          <h3>{this.props.narrative.label}</h3>
-          <p>{this.props.narrative.description}</p>
-          <h6>
-            <i className="material-icons left">location_on</i>
-            {this.state.step + 1}/{steps.length}. {step.location}
-          </h6>
-          <div className="actions">
-            <div className={`${(!this.state.step) ? 'disabled ' : ''} action`} onClick={() => this.goToPrevKeyFrame()}>&larr;</div>
-            <div className={`${(this.state.step >= this.props.narrative.steps.length - 1) ? 'disabled ' : ''} action`} onClick={() => this.goToNextKeyFrame()}>&rarr;</div>
-          </div>
+  function _renderActions(current, steps) {
+    const prevExists = current !== 0
+    const nextExists = current < steps.length - 1
+    return (
+      <div className='actions'>
+        <div
+          className={`${prevExists ? '' : 'disabled'} action`}
+          onClick={prevExists ? onPrev : null}>&larr;
         </div>
-      );
-    }
-    return (<div/>);
+        <div
+          className={`${nextExists ? '' : 'disabled'} action`}
+          onClick={nextExists ? onNext : null}>&rarr;
+        </div>
+      </div>
+    )
+  }
+
+  // no display if no narrative
+  if (!narrative) return null
+
+  const { steps, current } = narrative
+
+  if (steps[current]) {
+    const step = steps[current]
+
+    return (
+      <div className='narrative-info'>
+        {renderClose()}
+        <h3>{narrative.label}</h3>
+        <p>{narrative.description}</p>
+        <h6>
+          <i className='material-icons left'>location_on</i>
+          {current + 1}/{steps.length}. {step.location}
+        </h6>
+        {_renderActions(current, steps)}
+      </div>
+    )
+  } else {
+    return null
   }
 }
 
 function mapStateToProps(state) {
   return {
-    narrative: state.app.narrative
+    narrative: selectActiveNarrative(state)
   }
 }
-export default connect(mapStateToProps)(NarrativeCard);
+export default connect(mapStateToProps)(NarrativeCard)

@@ -33,6 +33,9 @@ const initial = {
     selected: [],
     source: null,
     narrative: null,
+    narrativeState: {
+      current: null
+    },
     filters: {
       timerange: [
         d3.timeParse("%Y-%m-%dT%H:%M:%S")("2013-02-23T12:00:00"),

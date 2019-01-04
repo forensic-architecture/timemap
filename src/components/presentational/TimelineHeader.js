@@ -1,11 +1,11 @@
 import React from 'react';
 
-const TimelineHeader = ({ title, date0, date1, onClick }) => (
-  <div className="timeline-header">
-    <div className="timeline-toggle" onClick={() => onClick()}>
-      <p><i className="arrow-down"></i></p>
+const TimelineHeader = ({ title, date0, date1, onClick, hideInfo }) => (
+  <div className='timeline-header'>
+    <div className='timeline-toggle' onClick={() => onClick()}>
+      <p><i className='arrow-down'></i></p>
     </div>
-    <div className="timeline-info">
+    <div className={`timeline-info ${hideInfo ? 'hidden' : ''}`}>
       <p>{title}</p>
       <p>{date0} - {date1}</p>
     </div>

@@ -1,3 +1,5 @@
+$narrative-info-width: 370px;
+
 /*
 NARRATIVE INFO
 */
@@ -5,8 +7,9 @@ NARRATIVE INFO
   position: fixed;
   top: 10px;
   left: 10px;
-  height: auto;
-  width: 370px;
+  // height: auto;
+  height: 170px;
+  width: $narrative-info-width;
   box-sizing: border-box;
   padding: 15px;
   max-height: calc(100% - 250px);

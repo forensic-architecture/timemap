@@ -33,8 +33,10 @@ class MapEvents extends React.Component {
     })
 
     if (this.props.narrative) {
-      const { byId } = this.props.narrative
-      const eventsInNarrative = events.filter(e => byId.hasOwnProperty(e.id))
+      const { steps } = this.props.narrative
+      const onlyIfInNarrative = e => steps.map(s => s.id).includes(e.id)
+      const eventsInNarrative = events.filter(onlyIfInNarrative)
+
       if (eventsInNarrative.length <= 0) {
         styleProps = {
           ...styleProps,

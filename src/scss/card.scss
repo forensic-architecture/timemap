@@ -2,10 +2,10 @@
   box-sizing: border-box;
   margin: 1px 0 0 0;
   padding: 15px;
-  border: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 3px;
+  border: 1px solid $black;
+  // border-radius: 3px;
   transition: 0.2 ease;
-  background: $offwhite;
+  background: $darkwhite;
   color: $darkgrey;
   box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   font-size: $large;
@@ -39,9 +39,12 @@
   .card-row, .card-col {
     display: flex;
     flex-direction: row;
-    border-bottom: 1px solid $lightwhite;
     margin: 5px 0 10px 0;
     padding-bottom: 10px;
+
+    &.details {
+      border-bottom: 1px solid $lightwhite;
+    }
 
     .card-cell {
       flex: 1;
@@ -120,6 +123,7 @@
       height: 0;
       overflow: hidden;
     }
+
   }
 
   .card-toggle p {
@@ -197,11 +201,20 @@
   .summary {
     overflow: auto;
     margin-top: 0;
+    border-bottom: none;
   }
 
   .tag {
     display: inline-block;
     margin: 0;
     margin-right: 5px;
+  }
+
+  &.selected {
+    background: $offwhite;
+  }
+
+  .card-row {
+    border-color: darkgray;
   }
 }

@@ -1,32 +1,33 @@
-import React from 'react';
+import React from 'react'
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import * as actions from '../actions';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as actions from '../actions'
 
-import SourceOverlay from './SourceOverlay.jsx';
-import LoadingOverlay from './presentational/LoadingOverlay';
-import Map from './Map.jsx';
-import Toolbar from './Toolbar.jsx';
-import CardStack from './CardStack.jsx';
-import NarrativeCard from './NarrativeCard.js';
-import InfoPopUp from './InfoPopup.jsx';
-import Timeline from './Timeline.jsx';
-import Notification from './Notification.jsx';
+import SourceOverlay from './SourceOverlay.jsx'
+import LoadingOverlay from './presentational/LoadingOverlay'
+import Map from './Map.jsx'
+import Toolbar from './Toolbar.jsx'
+import CardStack from './CardStack.jsx'
+import NarrativeCard from './NarrativeCard.js'
+import InfoPopUp from './InfoPopup.jsx'
+import Timeline from './Timeline.jsx'
+import Notification from './Notification.jsx'
 
-import { parseDate } from '../js/utilities';
+import { parseDate } from '../js/utilities'
+
+import { injectNarrative } from '../js/utilities'
 
 class Dashboard extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.handleViewSource = this.handleViewSource.bind(this)
-    this.handleHighlight = this.handleHighlight.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
-    this.handleSelectNarrative = this.handleSelectNarrative.bind(this);
-    this.handleTagFilter = this.handleTagFilter.bind(this);
-    this.updateTimerange = this.updateTimerange.bind(this);
-    this.getCategoryColor = this.getCategoryColor.bind(this);
+    this.handleHighlight = this.handleHighlight.bind(this)
+    this.setNarrative = this.setNarrative.bind(this)
+    this.moveInNarrative = this.moveInNarrative.bind(this)
+    this.handleSelect = this.handleSelect.bind(this)
+    this.getCategoryColor = this.getCategoryColor.bind(this)
 
     this.eventsById = {}
   }
@@ -34,18 +35,18 @@ class Dashboard extends React.Component {
   componentDidMount() {
     if (!this.props.app.isMobile) {
       this.props.actions.fetchDomain()
-        .then(domain => this.props.actions.updateDomain(domain));
+        .then(domain => this.props.actions.updateDomain(domain))
     }
   }
 
   handleHighlight(highlighted) {
-    this.props.actions.updateHighlighted((highlighted) ? highlighted : null);
+    this.props.actions.updateHighlighted((highlighted) ? highlighted : null)
   }
 
   getEventById(eventId) {
-    if (this.eventsById[eventId]) return this.eventsById[eventId];
-    this.eventsById[eventId] = this.props.domain.events.find(ev => ev.id === eventId);
-    return this.eventsById[eventId];
+    if (this.eventsById[eventId]) return this.eventsById[eventId]
+    this.eventsById[eventId] = this.props.domain.events.find(ev => ev.id === eventId)
+    return this.eventsById[eventId]
   }
 
   handleViewSource(source) {
@@ -54,23 +55,11 @@ class Dashboard extends React.Component {
 
   handleSelect(selected) {
     if (selected) {
-      let eventsToSelect = selected.map(event => this.getEventById(event.id));
+      let eventsToSelect = selected.map(event => this.getEventById(event.id))
       eventsToSelect = eventsToSelect.sort((a, b) => parseDate(a.timestamp) - parseDate(b.timestamp))
 
       this.props.actions.updateSelected(eventsToSelect)
     }
-  }
-
-  handleSelectNarrative(narrative) {
-    this.props.actions.updateNarrative(narrative);
-  }
-
-  handleTagFilter(tag) {
-    this.props.actions.updateTagFilters(tag);
-  }
-
-  updateTimerange(timeRange) {
-    this.props.actions.updateTimeRange(timeRange);
   }
 
   getCategoryColor(category='other') {
@@ -78,80 +67,104 @@ class Dashboard extends React.Component {
   }
 
   getNarrativeLinks(event) {
-    const narrative = this.props.domain.narratives.find(nv => nv.id === event.narrative);
-    if (narrative) return narrative.byId[event.id];
-    return null;
+    const narrative = this.props.domain.narratives.find(nv => nv.id === event.narrative)
+    if (narrative) return narrative.byId[event.id]
+    return null
+  }
+
+  setNarrative(narrative) {
+    // only handleSelect if narrative is not null
+    if (!!narrative)
+      this.handleSelect([ narrative.steps[0] ])
+    this.props.actions.updateNarrative(narrative)
+  }
+
+  moveInNarrative(amt) {
+    const { current } = this.props.app.narrativeState
+    const { narrative } = this.props.app
+
+    if (amt === 1) {
+      this.handleSelect([ narrative.steps[current + 1] ])
+      this.props.actions.incrementNarrativeCurrent()
+    }
+    if (amt === -1) {
+      this.handleSelect([ narrative.steps[current - 1] ])
+      this.props.actions.decrementNarrativeCurrent()
+    }
   }
 
   render() {
+    const { actions, app, domain, ui } = this.props
     return (
       <div>
         <Toolbar
-          onFilter={this.handleTagFilter}
-          onSelectNarrative={this.handleSelectNarrative}
-          actions={this.props.actions}
+          isNarrative={!!app.narrative}
+          methods={{
+            onFilter: actions.updateTagFilters,
+            onSelectNarrative: this.setNarrative
+          }}
         />
         <Map
-          mapId="map"
+          mapId='map'
           methods={{
             onSelect: this.handleSelect,
-            onSelectNarrative: this.handleSelectNarrative,
+            onSelectNarrative: this.setNarrative,
             getCategoryColor: this.getCategoryColor,
           }}
         />
         <Timeline
           methods={{
             onSelect: this.handleSelect,
-            onUpdateTimerange: this.updateTimerange,
+            onUpdateTimerange: actions.updateTimeRange,
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
-        {(this.props.app.narrative !== null)
-            ? <NarrativeCard
-              onSelect={this.handleSelect}
-              onSelectNarrative={this.handleSelectNarrative}
-            />
-            : ''
-        }
+        <NarrativeCard
+          methods={{
+            onNext: () => this.moveInNarrative(1),
+            onPrev: () => this.moveInNarrative(-1),
+            onSelectNarrative: this.setNarrative
+          }}
+        />
         <CardStack
           onViewSource={this.handleViewSource}
           onSelect={this.handleSelect}
           onHighlight={this.handleHighlight}
-          onToggleCardstack={() => this.props.actions.updateSelected([])}
+          onToggleCardstack={() => actions.updateSelected([])}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <InfoPopUp
-          ui={this.props.ui}
-          app={this.props.app}
-          toggle={() => this.props.actions.toggleInfoPopup()}
+          ui={ui}
+          app={app}
+          toggle={() => actions.toggleInfoPopup()}
         />
         <Notification
-          isNotification={this.props.app.flags.isNotification}
-          notifications={this.props.domain.notifications}
-          onToggle={this.props.actions.markNotificationsRead}
+          isNotification={app.flags.isNotification}
+          notifications={domain.notifications}
+          onToggle={actions.markNotificationsRead}
         />
-        {this.props.app.source ? (
+        {app.source ? (
           <SourceOverlay
-            source={this.props.app.source}
+            source={app.source}
             onCancel={() => {
-              this.props.actions.updateSource(null)}
+              actions.updateSource(null)}
             }
           />
         ) : null}
         <LoadingOverlay
-          ui={this.props.app.flags.isFetchingDomain}
-          language={this.props.app.language}
+          ui={app.flags.isFetchingDomain}
+          language={app.language}
         />
       </div>
-    );
+    )
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(actions, dispatch)
-  };
+  }
 }
 
 function injectSource(id) {
@@ -167,4 +180,4 @@ function injectSource(id) {
 export default connect(
   state => state,
   mapDispatchToProps,
-)(Dashboard);
+)(Dashboard)
