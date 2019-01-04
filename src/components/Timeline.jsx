@@ -9,10 +9,10 @@ import TimelineHeader from './presentational/TimelineHeader';
 import TimelineAxis from './TimelineAxis.jsx';
 import TimelineClip from './presentational/TimelineClip';
 import TimelineHandles from './presentational/TimelineHandles.js';
-import TimelineZoomControls from './TimelineZoomControls.jsx';
+import TimelineZoomControls from './presentational/TimelineZoomControls.js';
 import TimelineLabels from './presentational/TimelineLabels.js';
-import TimelineMarkers from './TimelineMarkers.jsx'
-import TimelineEvents from './TimelineEvents.jsx';
+import TimelineMarkers from './presentational/TimelineMarkers.js'
+import TimelineEvents from './presentational/TimelineEvents.js';
 import TimelineCategories from './TimelineCategories.jsx';
 
 class Timeline extends React.Component {
@@ -30,7 +30,6 @@ class Timeline extends React.Component {
         margin_top: 20,
         trackHeight: 80      
       },
-      softTimeUpdate: 0,
       scaleX: null,
       scaleY: null,
       timerange: [null, null],
