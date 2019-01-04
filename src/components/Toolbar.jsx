@@ -29,7 +29,7 @@ class Toolbar extends React.Component {
   }
 
   renderSearch() {
-    if (this.props.features.USE_SEARCH) {
+    if (process.env.features.USE_SEARCH) {
       return (
         <TabPanel>
           <Search
@@ -70,7 +70,7 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarTagPanel() {
-    if (this.props.features.USE_TAGS &&
+    if (process.env.features.USE_TAGS &&
       this.props.tags.children) {
       return (
         <TabPanel>
