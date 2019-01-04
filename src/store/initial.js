@@ -55,27 +55,27 @@ const initial = {
     language: 'en-US',
     mapAnchor: process.env.MAP_ANCHOR,
     zoomLevels: [{
-      label: '3 años',
+      label: '3 years',
       duration: 1576800,
       active: false
     },
       {
-        label: '3 meses',
+        label: '3 months',
         duration: 129600,
         active: false
       },
       {
-        label: '3 días',
+        label: '3 days',
         duration: 4320,
         active: false
       },
       {
-        label: '12 horas',
+        label: '12 hours',
         duration: 720,
         active: false
       },
       {
-        label: '2 horas',
+        label: '2 hours',
         duration: 120,
         active: false
       },

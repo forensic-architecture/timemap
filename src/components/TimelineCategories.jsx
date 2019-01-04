@@ -33,7 +33,7 @@ class TimelineCategories extends React.Component {
     return (
       <g class="tick" opacity="1" transform={`translate(0,${this.getY(idx)})`}>
         <line x1={dims.margin_left} x2={dims.width - dims.width_controls}></line>
-        <text x={dims.margin_left} dy="0.32em">{category.category}</text>
+        <text x={dims.margin_left - 5} dy="0.32em">{category.category}</text>
       </g>
     )
   }

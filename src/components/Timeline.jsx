@@ -46,10 +46,14 @@ class Timeline extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (hash(nextProps) !== hash(this.props)) {
-      console.log(nextProps.domain.categories)
       this.setState({
         timerange: nextProps.app.timerange,
-        scaleX: this.makeScaleX(),
+        scaleX: this.makeScaleX()
+      });
+    }
+
+    if (hash(nextProps.domain.categories) !== hash(this.props.domain.categories)) {
+      this.setState({
         scaleY: this.makeScaleY(nextProps.domain.categories)
       });
     }
@@ -91,7 +95,6 @@ class Timeline extends React.Component {
    * @param {object} eventPoint: regular eventPoint data
    */
   getEventY(eventPoint) {
-    console.log(eventPoint.category, this.state.scaleY(eventPoint.category))
     return this.state.scaleY(eventPoint.category);
   }
 
@@ -145,9 +148,9 @@ class Timeline extends React.Component {
   }
 
   /**
-   * Shift time range by moving forward or backwards
-   * WITHOUT updating the store
-   * @param {String} direction: 'forward' / 'backwards'
+   * Change display of time range
+   * WITHOUT updating the store, or data shown.
+   * Used for updates in the middle of a transition, for performance purposes
    */
   onSoftTimeRangeUpdate(timerange) {
     this.setState({ timerange });
