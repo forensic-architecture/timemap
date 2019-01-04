@@ -12,6 +12,9 @@ class Md extends React.Component {
     fetch(this.props.path)
       .then(resp => resp.text())
       .then(text => {
+        if (text.length <= 0)
+          throw new Error()
+
         this.setState({ md: marked(text) })
       })
       .catch(err => {
@@ -34,7 +37,7 @@ class Md extends React.Component {
 
 Md.propTypes = {
   loader: PropTypes.func,
-  unloader: PropTypes.func,
+  unloader: PropTypes.func.isRequired,
   path: PropTypes.string.isRequired
 }
 

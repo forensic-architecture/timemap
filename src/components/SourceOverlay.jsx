@@ -7,15 +7,21 @@ import NoSource from './presentational/NoSource'
 // TODO: move render functions into presentational components
 
 function SourceOverlay ({ source, onCancel }) {
+  function renderError() {
+    return (
+      <NoSource failedUrls={["NOT ALL SOURCES AVAILABLE IN APPLICATION YET"]} />
+    )
+  }
+
   function renderImage(path) {
     return (
       <div className='source-image-container'>
-        <Img
-          className='source-image'
-          src={path}
-          loader={<Spinner />}
-          unloader={<NoSource failedUrls={source.paths} />}
-        />
+      <Img
+      className='source-image'
+      src={path}
+      loader={<Spinner />}
+      unloader={<NoSource failedUrls={source.paths} />}
+      />
       </div>
     )
   }
@@ -45,11 +51,6 @@ function SourceOverlay ({ source, onCancel }) {
     )
   }
 
-  function renderError() {
-    return (
-      <NoSource failedUrls={["NOT ALL SOURCES AVAILABLE IN APPLICATION YET"]} />
-    )
-  }
 
   function renderNoSupport(ext) {
     return (
