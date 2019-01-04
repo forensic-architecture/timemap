@@ -33,27 +33,25 @@ class Timeline extends React.Component {
       softTimeUpdate: 0,
       scaleX: null,
       scaleY: null,
-      timerange: [null, null]
+      timerange: [null, null],
+      dragPos0: null
     };
   }
 
   componentDidMount() {
-    this.methods = Object.assign({}, this.props.methods, {
-      onSoftUpdate: (toggle) => { this.setState({ softTimeUpdate: toggle }) }
-    });
-    
     this.computeDims();
     window.addEventListener('resize', () => { this.computeDims(); });
   }
 
   componentWillReceiveProps(nextProps) {
     if (hash(nextProps) !== hash(this.props)) {
-      let groupYs = Array.apply(null, Array(nextProps.domain.categories.length));
-      groupYs = groupYs.map((g, i) => (i + 1) * 80 / groupYs.length);
+      const categories = nextProps.domain.categories;
+      const cats = categories.map((g, i) => (i + 1) * 80 / categories.length);
 
       this.setState({
+        timerange: nextProps.app.timerange,
         scaleX: d3.scaleTime().domain(nextProps.app.timerange).range([this.state.dims.margin_left, this.state.dims.width]),
-        scaleY: d3.scaleOrdinal().domain(nextProps.domain.categories).range(groupYs)
+        scaleY: d3.scaleOrdinal().domain(nextProps.domain.categories).range(cats)
       });
     }
   }
@@ -102,7 +100,7 @@ class Timeline extends React.Component {
    * @param {String} direction: 'forward' / 'backwards'
    */
   onMoveTime(direction) {
-    this.methods.onSelect();
+    this.props.methods.onSelect();
     const extent = this.getTimeScaleExtent();
     const newCentralTime = d3.timeMinute.offset(this.state.scaleX.domain()[0], extent / 2);
 
@@ -117,9 +115,17 @@ class Timeline extends React.Component {
     }
 
     this.state.scaleX.domain([domain0, domainF]);
-    this.methods.onUpdateTimerange(this.state.scaleX.domain());
+    this.props.methods.onUpdateTimerange(this.state.scaleX.domain());
   }
 
+  /**
+   * Shift time range by moving forward or backwards
+   * WITHOUT updating the store
+   * @param {String} direction: 'forward' / 'backwards'
+   */
+  onSoftTimeRangeUpdate(timerange) {
+    this.setState({ timerange });
+  }
 
   /**
    * Apply zoom level to timeline
@@ -134,42 +140,48 @@ class Timeline extends React.Component {
       d3.timeMinute.offset(newCentralTime, zoom.duration / 2)
     ]);
 
-    this.methods.onUpdateTimerange(this.state.scaleX.domain());
+    this.props.methods.onUpdateTimerange(this.state.scaleX.domain());
+  }
+
+  toggleTransition(isTransition) {
+    this.setState({ transitionDuration: (isTransition) ? 300 : 0 });
   }
 
   /*
    * Setup drag behavior
    */
-  onDragStart(ev) {
+  onDragStart() {
     d3.event.sourceEvent.stopPropagation();
-    dragPos0 = d3.event.x;
-    this.toggleTransition(false);
+    this.setState({
+      dragPos0: d3.event.x
+    }, () => {
+      this.toggleTransition(false);
+    });
   }
 
   /*
    * Drag and update
    */
   onDrag() {
-    const drag0 = this.state.scaleX.invert(dragPos0).getTime();
+    const drag0 = this.state.scaleX.invert(this.state.dragPos0).getTime();
     const dragNow = this.state.scaleX.invert(d3.event.x).getTime();
     const timeShift = (drag0 - dragNow) / 1000;
 
-    const newDomain0 = d3.timeSecond.offset(timerange[0], timeShift);
-    const newDomainF = d3.timeSecond.offset(timerange[1], timeShift);
+    const newDomain0 = d3.timeSecond.offset(this.state.timerange[0], timeShift);
+    const newDomainF = d3.timeSecond.offset(this.state.timerange[1], timeShift);
 
     this.state.scaleX.domain([newDomain0, newDomainF]);
-    //render();
+
     // Updates components without updating timerange
-    this.methods.onSoftUpdate(1);
+    this.onSoftTimeRangeUpdate([newDomain0, newDomainF]);
   }
 
   onDragEnd() {
-    toggleTransition(true);
+    this.toggleTransition(true);
     this.setState({
       timerange: this.state.scaleX.domain()
     }, () => {
-      this.methods.onSoftUpdate(0);
-      this.methods.onUpdateTimerange(scale.x.domain());  
+      this.props.methods.onUpdateTimerange(this.state.scaleX.domain());  
     });
   }
 
@@ -186,13 +198,14 @@ class Timeline extends React.Component {
         <TimelineAxis
           dims={dims}
           timerange={this.props.app.timerange}
+          transitionDuration={this.state.transitionDuration}
           scaleX={this.state.scaleX}
         />
         <TimelineCategories 
           dims={dims}
-          onDragStart={this.onDragStart}
-          onDrag={this.onDrag}
-          onDragEnd={this.onDragEnd}          
+          onDragStart={() => { this.onDragStart() }}
+          onDrag={() => { this.onDrag() }}
+          onDragEnd={() => { this.onDragEnd() }}
           categories={this.props.domain.categories}
         />
         <TimelineHandles
@@ -206,7 +219,7 @@ class Timeline extends React.Component {
         />
         <TimelineLabels
           dims={dims}
-          timelabels={this.props.app.timerange}
+          timelabels={this.state.timerange}
         />
         <TimelineMarkers
           selected={this.props.app.selected}
@@ -218,6 +231,7 @@ class Timeline extends React.Component {
           getEventX={(e) => this.getEventX(e)}
           getEventY={(e) => this.getEventY(e)}
           getCategoryColor={this.props.methods.getCategoryColor}
+          transitionDuration={this.state.transitionDuration}
           onSelect={this.props.methods.onSelect}
         />
       </svg>
@@ -231,9 +245,9 @@ class Timeline extends React.Component {
     return (
       <div className={classes}>
         <TimelineHeader
-          title={copy[app.language].timeline.info}
-          date0={formatterWithYear(app.timerange[0])}
-          date1={formatterWithYear(app.timerange[1])}
+          title={copy[this.props.app.language].timeline.info}
+          date0={formatterWithYear(this.state.timerange[0])}
+          date1={formatterWithYear(this.state.timerange[1])}
           onClick={() => { this.onClickArrow(); }}
           hideInfo={isNarrative}
         />

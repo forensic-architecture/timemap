@@ -17,7 +17,7 @@ class TimelineEvents extends React.Component {
         cy={0}
         style={{
           'transform': `translate(${this.props.getEventX(event)}px, ${this.props.getEventY(event)}px)`,
-          'transition': 'transform 0.3s ease'
+          'transition': `transform ${this.props.transitionDuration / 1000}s ease`
         }}
         r={5}        
         fill={this.props.getCategoryColor(event.category)}

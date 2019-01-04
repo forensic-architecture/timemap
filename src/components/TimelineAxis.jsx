@@ -8,7 +8,6 @@ class TimelineAxis extends React.Component {
     this.xAxis1Ref = React.createRef();
     this.state = {
       isInitialized: false,
-      transitionDuration: 300
     }
   }
 
@@ -35,12 +34,12 @@ class TimelineAxis extends React.Component {
     if (this.state.isInitialized) {
       d3.select(this.xAxis0Ref.current)
         .transition()
-        .duration(this.state.transitionDuration)
+        .duration(this.props.transitionDuration)
         .call(this.x0);
 
       d3.select(this.xAxis1Ref.current)
         .transition()
-        .duration(this.state.transitionDuration)
+        .duration(this.props.transitionDuration)
         .call(this.x1);
     }
   }
