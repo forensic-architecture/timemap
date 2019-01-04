@@ -34,48 +34,7 @@ export default function(svg, ui, methods) {
       .domain(timerange)
       .range([margin.left, WIDTH]);
 
-  /**
-   * Initilize SVG elements and groups
-   */
-  const dom = {};
 
-  dom.svg = d3.select(svg)
-
-  /*
-   * Axis group elements
-   */
-  dom.axis = {};
-
-  dom.axis.x0 = dom.svg.append('g')
-    .attr('transform', `translate(0, 25)`)
-    .attr('clip-path', 'url(#clip')
-    .attr('class', 'axis xAxis');
-
-  dom.axis.x1 = dom.svg.append('g')
-    .attr('transform', `translate(0, 105)`)
-    .attr('clip-path', 'url(#clip')
-    .attr('class', 'axis axisHourText');
-
-  /*
-   * Initialize axis function and element group
-   */
-  const axis = {};
-
-  axis.x0 =
-    d3.axisBottom(scale.x)
-    .ticks(10)
-    .tickPadding(5)
-    .tickSize(HEIGHT)
-    .tickFormat(d3.timeFormat('%d %b'));
-
-  axis.x1 =
-    d3.axisBottom(scale.x)
-    .ticks(10)
-    .tickPadding(margin.top)
-    .tickSize(0)
-    .tickFormat(d3.timeFormat('%H:%M'));
-
-  updateAxis();
 
   /**
    * Adapt dimensions when resizing
@@ -118,46 +77,6 @@ export default function(svg, ui, methods) {
     return (scale.x.domain()[1].getTime() - scale.x.domain()[0].getTime()) / 60000;
   }
 
-  /**
-   * Apply zoom level to timeline
-   * @param {object} zoom: zoom level from zoomLevels
-   */
-  function applyZoom(zoom) {
-    const extent = getTimeScaleExtent();
-    const newCentralTime = d3.timeMinute.offset(scale.x.domain()[0], extent / 2);
-
-    scale.x.domain([
-      d3.timeMinute.offset(newCentralTime, -zoom.duration / 2),
-      d3.timeMinute.offset(newCentralTime, zoom.duration / 2)
-    ]);
-
-    methods.onUpdateTimerange(scale.x.domain());
-  }
-
-
-  /**
-   * Shift time range by moving forward or backwards
-   * @param {String} direction: 'forward' / 'backwards'
-   */
-  function moveTime(direction) {
-    methods.onSelect();
-    const extent = getTimeScaleExtent();
-    const newCentralTime = d3.timeMinute.offset(scale.x.domain()[0], extent / 2);
-
-    // if forward
-    let domain0 = newCentralTime;
-    let domainF = d3.timeMinute.offset(newCentralTime, extent);
-
-    // if backwards
-    if (direction === 'backwards') {
-      domain0 = d3.timeMinute.offset(newCentralTime, -extent);
-      domainF = newCentralTime;
-    }
-
-    scale.x.domain([domain0, domainF]);
-    methods.onUpdateTimerange(scale.x.domain());
-  }
-
   function toggleTransition(isTransition) {
     transitionDuration = (isTransition) ? 500 : 0;
   }
@@ -167,7 +86,6 @@ export default function(svg, ui, methods) {
    * Setup drag behavior
    */
   function onDragStart(ev) {
-    console.log('ohoh')
     d3.event.sourceEvent.stopPropagation();
     dragPos0 = d3.event.x;
     toggleTransition(false);
@@ -199,22 +117,6 @@ export default function(svg, ui, methods) {
 
 
   /**
-   * Render axis on timeline and viewbox boundaries
-   */
-  function renderAxis() {
-    dom.axis.x0
-      .transition()
-      .duration(transitionDuration)
-      .call(axis.x0);
-
-    dom.axis.x1
-      .transition()
-      .duration(transitionDuration)
-      .call(axis.x1);
-  }
-
-
-  /**
    * Updates displayable data on the timeline: events, selected and
    * potentially adjusts time range
    * @param {Object} newCategories: object of arrays of categories
@@ -227,14 +129,8 @@ export default function(svg, ui, methods) {
     render();
   }
 
-  function render() {
-    renderAxis();
-  }
-
   return {
     getEventX,
-    applyZoom,
-    moveTime,
     update,
     onDragStart,
     onDrag,
