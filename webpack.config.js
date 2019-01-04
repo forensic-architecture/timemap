@@ -1,8 +1,6 @@
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const userConfig = require('./config');
-const userConfigJSON = {};
 
 const devMode = process.env.NODE_ENV !== 'production';
 const path = require('path');
@@ -10,8 +8,16 @@ const path = require('path');
 const APP_DIR = path.resolve(__dirname, './src');
 const BUILD_DIR = path.resolve(__dirname, './build');
 
-for (const k in userConfig) {
-  userConfigJSON[k] = JSON.stringify(userConfig[k]);
+/** env variables from config.js */
+const envConfig = require('./config');
+const userConfig = {}
+const userFeatures = {}
+for (const k in envConfig) {
+  userConfig[k] = JSON.stringify(envConfig[k]);
+}
+
+for (const k in envConfig['features']) {
+  userFeatures[k] = JSON.stringify(envConfig['features'][k])
 }
 
 const config = {
@@ -59,14 +65,9 @@ const config = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        ...userConfigJSON,
+        ...userConfig,
         'NODE_ENV': JSON.stringify('production'),
-        'features': {
-          'USE_TAGS': JSON.stringify(userConfig.features.USE_TAGS),
-          'USE_SEARCH': JSON.stringify(userConfig.features.USE_SEARCH),
-          'USE_SITES': JSON.stringify(userConfig.features.USE_SITES),
-          'USE_SOURCES': JSON.stringify(userConfig.features.USE_SOURCES)
-        }
+        'features': userFeatures
       }
     }),
     new MiniCssExtractPlugin({

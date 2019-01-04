@@ -12,11 +12,13 @@ const eventSchema = Joi.object().keys({
     type:             Joi.string().allow(''),
     category:         Joi.string().required(),
     narratives:       Joi.array(),
-    narrative___movements: Joi.array(),
     sources:          Joi.array(),
     tags:             Joi.string().allow(''),
     comments:         Joi.string().allow(''),
     timestamp:        Joi.string().required(),
+
+    // nested
+    narrative___stepStyles: Joi.array(),
 });
 
 export default eventSchema;
