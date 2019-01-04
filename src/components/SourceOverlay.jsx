@@ -1,122 +1,159 @@
 import React from 'react'
 import Img from 'react-image'
 import { Player } from 'video-react'
+import Md from './Md.jsx'
 import Spinner from './presentational/Spinner'
 import NoSource from './presentational/NoSource'
+// TODO: move render functions into presentational components
 
-class SourceOverlay extends React.Component {
-  constructor(props) {
-    super(props)
-    this.renderVideo = this.renderVideo.bind(this)
-    this.renderPhoto = this.renderPhoto.bind(this)
-    this.renderPhotobook = this.renderPhotobook.bind(this)
-    this.renderTestimony = this.renderTestimony.bind(this)
+function SourceOverlay ({ source, onCancel }) {
+  function renderImage(path) {
+    return (
+      <div className='source-image-container'>
+        <Img
+          className='source-image'
+          src={path}
+          loader={<Spinner />}
+          unloader={<NoSource failedUrls={source.paths} />}
+        />
+      </div>
+    )
   }
 
-  renderVideo() {
+  function renderVideo(path) {
     // NB: assume only one video
     return (
       <div className="media-player">
         <Player
           className='source-video'
           playsInline
-          src={this.props.source.paths[0]}
+          src={path}
         />
       </div>
     )
   }
 
-  renderPhoto() {
+  function renderText(path) {
     return (
-      <div className='source-image-container'>
-        <Img
-          className='source-image'
-          src={this.props.source.paths}
+      <div className='source-text-container'>
+        <Md
+          path={path}
           loader={<Spinner />}
-          unloader={<NoSource failedUrls={this.props.source.paths} />}
+          unloader={renderError()}
         />
       </div>
     )
   }
 
-  renderPhotobook() {
-    return (
-      <div className='source-image-container'>
-        {this.props.source.paths.map((url, idx) => (
-          <Img
-            key={idx}
-            className='source-image'
-            src={url}
-            loader={<Spinner />}
-            unloader={<NoSource failedUrls={[this.props.source.path]} />}
-          />
-
-        ))}
-      </div>
-    )
-  }
-
-  renderError() {
+  function renderError() {
     return (
       <NoSource failedUrls={["NOT ALL SOURCES AVAILABLE IN APPLICATION YET"]} />
     )
   }
 
-  renderTestimony() {
+  function renderNoSupport(ext) {
+    return (
+      <NoSource failedUrls={[`Application does not support extension: ${ext}`]} />
+    )
+  }
+
+  function toMedia(path) {
+    let type;
+    switch (true) {
+      case /\.(png|jpg)$/.test(path):
+        type = 'Image'; break
+      case /\.(mp4)$/.test(path):
+        type = 'Video'; break
+      case /\.(md)$/.test(path):
+        type = 'Text'; break
+      default:
+        type = 'Unknown'; break
+    }
+    return { type, path }
+  }
+
+  function getTypeCounts(media) {
+    let counts = { Image: 0, Video: 0, Text: 0 }
+    media.forEach(m => {
+      counts[m.type] += 1
+    })
+    return counts
+  }
+
+  function _renderPath(media) {
+    const { path, type } = media
+    switch (type) {
+      case 'Image':
+        return renderImage(path)
+      case 'Video':
+        return renderVideo(path)
+      case 'Text':
+        return renderText(path)
+      default:
+        return renderNoSupport(path.split('.')[1])
+    }
+  }
+
+  function _renderCounts(counts) {
+    const strFor = type =>
+    counts[type] > 0 ?
+      `${counts[type]} ${type.toLowerCase()}${counts[type] > 1 ? 's': ''}`
+      : ''
+    const img = strFor('Image')
+    const vid = strFor('Video')
+    const txt = strFor('Text')
+
     return (
       <div>
-        <a href={`${this.props.source.path}.docx`}>Download Testimony</a>
+        {img ? img : ''}
+        {vid ? `, ${vid}`: ''}
+        {txt ? `, ${txt}`: ''}
       </div>
     )
   }
 
-  _renderSwitch() {
-    switch(this.props.source.type) {
-      case 'Video':
-        return this.renderVideo()
-      case 'Photo':
-        return this.renderPhoto()
-      case 'Photobook':
-        return this.renderPhotobook()
-      case 'Eyewitness Testimony':
-        return this.renderTestimony()
-      default:
-        return this.renderError()
-    }
+  function _renderContent(media) {
+    return (
+      <React.Fragment>
+        {media.map(_renderPath)}
+      </React.Fragment>
+    )
   }
 
-  render() {
-    if (typeof(this.props.source) !== 'object') {
-      return this.renderError()
-    }
-    const {id, url, title, date, type, affil_1, affil_2} = this.props.source
-    return (
-      <div className="mo-overlay">
-        <div className="mo-container">
-          <div className="mo-header">
-            <div className="mo-header-close" onClick={this.props.onCancel}>
-              <button className="side-menu-burg is-active"><span></span></button>
-            </div>
-            <div className="mo-header-text">{this.props.source.id}</div>
+  if (typeof(source) !== 'object') {
+    return renderError()
+  }
+  const {id, url, title, paths, date, type, desc} = source
+  const media = paths.map(toMedia)
+  const counts = getTypeCounts(media)
+
+
+  return (
+    <div className="mo-overlay">
+      <div className="mo-container">
+        <div className="mo-header">
+          <div className="mo-header-close" onClick={onCancel}>
+            <button className="side-menu-burg is-active"><span></span></button>
           </div>
-          <div className="mo-media-container">
-            {this._renderSwitch()}
-          </div>
-          <div className="mo-meta-container">
-            <div className="mo-box">
-              {id ? <div><b>{id}</b></div> : null}
-              {title? <div><b>{title}</b></div> : null}
-              <hr/>
-              {type ? <div>Type: <span className="indent">{type}</span></div> : null}
-              {date ? <div>Date:<span className="indent">{date}</span></div> : null}
-              <hr/>
-              {url ? <div><a href={url} target="_blank">Link to original URL</a></div> : null}
-            </div>
+          <div className="mo-header-text">{source.title}</div>
+        </div>
+        <div className="mo-media-container">
+          {_renderContent(media)}
+        </div>
+        <div className="mo-meta-container">
+          <div className="mo-box">
+            {title? <div><b>{title}</b></div> : null}
+            <div>{_renderCounts(counts)}</div>
+            {type ? <div>{type}</div> : null}
+            {date ? <div>Date:<span className="indent">{date}</span></div> : null}
+            {url ? <div><a href={url} target="_blank">Link to original URL</a></div> : null}
+            <hr />
+            {desc ? <div>{desc}</div> : null}
           </div>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default SourceOverlay

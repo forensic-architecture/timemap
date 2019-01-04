@@ -154,6 +154,16 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
+function injectSource(id) {
+  return state => ({
+    ...state,
+    app: {
+      ...state.app,
+      source: state.domain.sources[id]
+    }
+  })
+}
+
 export default connect(
   state => state,
   mapDispatchToProps,

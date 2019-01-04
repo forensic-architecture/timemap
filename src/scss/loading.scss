@@ -42,6 +42,12 @@ https://github.com/tobiasahlin/SpinKit/blob/master/LICENSE
 
   position: relative;
   margin: 10px auto;
+
+  &.small {
+    width: 15px;
+    height: 15px;
+    margin: 5px 20px 5px 10px;
+  }
 }
 
 .double-bounce, .double-bounce-overlay {
