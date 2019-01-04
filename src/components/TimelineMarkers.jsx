@@ -10,7 +10,7 @@ class TimelineMarkers extends React.Component {
         cy={0}
         style={{
           'transform': `translate(${this.props.getEventX(event)}px, ${this.props.getEventY(event)}px)`,
-          'transition': 'transform 0.3s ease',
+          'transition': `transform ${transitionDuration}s ease`,
           'opacity': 0.9
         }}        
         r="10"
