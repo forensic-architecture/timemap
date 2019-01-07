@@ -89,10 +89,6 @@ const initial = {
         duration: 10,
         active: false
       }],
-    features: {
-      USE_TAGS: process.env.features.USE_TAGS,
-      USE_SEARCH: process.env.features.USE_SEARCH
-    },
     flags: {
       isFetchingDomain: false,
       isFetchingSources: false,
@@ -120,16 +116,22 @@ const initial = {
 
       narratives: {
         default: {
-          style: 'solid',                  // ['dotted', 'solid']
-          opacity: 0.9,                     // range between 0 and 1
-          stroke: 'red',               // Any hex or rgb code
+          opacity: 0.9,
+          stroke: 'red',
           strokeWidth: 3
         },
         narrative_1: {
-          style: 'solid',                  // ['dotted', 'solid']
-          opacity: 0.4,                     // range between 0 and 1
-          stroke: '#f18f01',               // Any hex or rgb code
+          opacity: 0.4,
+          stroke: '#f18f01',
           strokeWidth: 3
+        },
+        // process.env.features.NARRATIVE_STEP_STYLES
+        stepStyles: {
+          Physical: {
+            stroke: 'yellow',
+            strokeWidth: 3,
+            opacity: 0.9,
+          }
         }
       }
     },

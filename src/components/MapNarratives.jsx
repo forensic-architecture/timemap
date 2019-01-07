@@ -18,59 +18,79 @@ class MapNarratives extends React.Component {
     return this.props.narrativeProps[styleName]
   }
 
-  getStrokeWidth(narrative, step) {
-    if (!step) return 0
-    return this.getNarrativeStyle(narrative.id).strokeWidth
-  }
-
-  getStrokeDashArray(narrative, step) {
-    if (!step) return 'none'
-    return (this.getNarrativeStyle(narrative.id).style === 'dotted') ? "2px 5px" : 'none'
-  }
-
-  getStroke(narrative, step) {
-    if (!step || this.props.narrative === null) return 'none'
-    return this.getNarrativeStyle(narrative.id).stroke
-  }
-
-  getStrokeOpacity(narrative, step) {
-    if (this.props.narrative === null) return 0
-    if (!step || narrative.id !== this.props.narrative.id) return 0.1
-    return 1
+  getStepStyle(name) {
+    if (name === 'None') return null
+    return this.props.narrativeProps.stepStyles[name]
   }
 
   hasNoLocation(step) {
     return (step.latitude === '' || step.longitude === '')
   }
 
-  renderNarrativeStep(allSteps, step, idx, n) {
-    const { x, y } = this.projectPoint([step.latitude, step.longitude])
-    const step2 = allSteps[idx + 1]
+  renderNarrativeStep(idx, n) {
+    const step = n.steps[idx]
+    const step2 = n.steps[idx + 1]
 
     // don't draw if one of the steps has no location
     if (this.hasNoLocation(step) || this.hasNoLocation(step2))
       return null
 
+    // 0 if not in narrative mode, 1 if active narrative, 0.1 if inactive
+    let styles = {
+      strokeOpacity:  (n === null) ? 0
+      : (step && (n.id === this.props.narrative.id)) ? 1 : 0.1,
+      strokeWidth: 0,
+      strokeDasharray: 'none',
+      stroke: 'none'
+    }
+
+    const p1  = this.projectPoint([step.latitude, step.longitude])
     const p2 = this.projectPoint([step2.latitude, step2.longitude])
 
+    if (step) {
+      if (process.env.features.NARRATIVE_STEP_STYLES) {
+        const _idx = step.narratives.indexOf(n.id)
+        const stepStyle = step.narrative___stepStyles[_idx]
+
+        return this._renderNarrativeStep(
+          p1,
+          p2,
+          { ...styles, ...this.getStepStyle(stepStyle) }
+        )
+
+      // otherwise steps are styled per narrative
+      } else {
+        styles = {
+          ...styles,
+          ...this.getNarrativeStyle(n.id)
+        }
+        return this._renderNarrativeStep(p1,p2,styles)
+      }
+    }
+
+  }
+
+  _renderNarrativeStep(p1, p2, styles) {
+    const { stroke, strokeWidth, strokeDasharray, strokeOpacity } = styles
     return (
       <line
         className="narrative-step"
-        x1={x}
+        x1={p1.x}
         x2={p2.x}
-        y1={y}
+        y1={p1.y}
         y2={p2.y}
         markerStart="none"
         onClick={() => this.props.onSelectNarrative(n)}
         style={{
-          strokeWidth: this.getStrokeWidth(n, step),
-          strokeDasharray: this.getStrokeDashArray(n, step),
-          strokeOpacity: this.getStrokeOpacity(n, step),
-          stroke: this.getStroke(n, step)
+          strokeWidth,
+          strokeDasharray,
+          strokeOpacity,
+          stroke,
         }}
       >
       </line>
     )
+
   }
 
   renderNarrative(n) {
@@ -78,7 +98,7 @@ class MapNarratives extends React.Component {
 
     return (
       <g id={`narrative-${n.id.replace(/ /g,"_")}`} className="narrative">
-        {steps.map((s, idx) => this.renderNarrativeStep(n.steps, s, idx, n))}
+        {steps.map((s, idx) => this.renderNarrativeStep(idx, n))}
       </g>
     )
   }
