@@ -256,6 +256,7 @@ class Timeline extends React.Component {
         />
         <TimelineEvents
           events={this.props.domain.events}
+          narrative={this.props.app.narrative}
           getEventX={(e) => this.getEventX(e)}
           getEventY={(e) => this.getEventY(e)}
           getCategoryColor={this.props.methods.getCategoryColor}
