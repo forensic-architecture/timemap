@@ -171,10 +171,24 @@
 
       .yAxis {
         .tick line {
+          stroke: $midwhite;
           stroke-width: 15px;
           cursor: -webkit-grab;
           cursor: -moz-grab;
         }
+
+        .tick text {
+          font-size: 10px;
+          font-family: 'Lato';
+          text-anchor: end;
+        }
+      }
+
+      .drag-grabber {
+        cursor: -webkit-grab;
+        cursor: -moz-grab;     
+        fill: $offwhite;
+        opacity: 0.05;   
       }
 
       .axisBoundaries {
@@ -184,7 +198,6 @@
       }
 
       .event {
-        fill: $event_default;
         cursor: pointer;
         opacity: .7;
 
