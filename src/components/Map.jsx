@@ -52,7 +52,7 @@ class Map extends React.Component {
     const map =
       L.map(this.props.mapId)
         .setView(this.props.app.mapAnchor, 14)
-        .setMinZoom(10)
+        .setMinZoom(7)
         .setMaxZoom(18)
         .setMaxBounds([[180, -180], [-180, 180]])
 
