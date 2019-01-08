@@ -10,13 +10,6 @@ const TimelineEvents = ({
   transitionDuration,
   styleDatetime
 }) => {
-  function getAllEventsAtOnce(eventPoint) {
-    const datetime = eventPoint.datetime;
-    const category = eventPoint.category;
-    return events
-      .filter(event => (event.datetime === datetime && category === event.category))
-  }
-
   function renderDatetime(datetime) {
     const customStyles = styleDatetime ? styleDatetime(datetime) : null
     const styleProps = ({
@@ -43,7 +36,7 @@ const TimelineEvents = ({
         cy={0}
         style={styleProps}
         r={5}
-        onClick={() => {onSelect(getAllEventsAtOnce(event))}}
+        onClick={() => onSelect(datetime.events)}
       >
       </circle>
     )
