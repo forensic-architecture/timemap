@@ -42,15 +42,21 @@ function NarrativeCard ({ narrative, methods }) {
 
     return (
       <div className='narrative-info'>
-        {renderClose()}
-        <h3>{narrative.label}</h3>
-        <p>{narrative.description}</p>
-        <h6>
-          <i className='material-icons left'>location_on</i>
-          {current + 1}/{steps.length}. {step.location}
-        </h6>
-        {_renderActions(current, steps)}
-      </div>
+        <div className='narrative-info-header'>
+          <div className='count-container'>
+            <div className='count'>
+              {current + 1}/{steps.length}
+            </div>
+          </div>
+          <div>
+            <h3>{narrative.label}</h3>
+          </div>
+        </div>
+
+        {/* <i className='material-icons left'>location_on</i> */}
+        {/* {_renderActions(current, steps)} */}
+        <p className='narrative-info-desc'>{narrative.description}</p>
+              </div>
     )
   } else {
     return null

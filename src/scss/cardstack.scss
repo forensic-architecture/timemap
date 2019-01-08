@@ -17,8 +17,8 @@ $timeline-height: 170px;
   color: white;
 
   &.narrative-mode {
-    right: auto;
-    left: 10px;
+    right: 10px;
+    left: auto;
     top: $narrative-info-max-height + 12px;
     height: calc(100% - #{$narrative-info-max-height} - #{$timeline-height} - 12px);
   }

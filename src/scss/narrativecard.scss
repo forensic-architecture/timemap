@@ -6,19 +6,45 @@ NARRATIVE INFO
 .narrative-info {
   position: fixed;
   top: 10px;
-  left: 10px;
+  left: auto;
+  right: 10px;
   // height: auto;
   height: 170px;
   width: $narrative-info-width;
   box-sizing: border-box;
-  padding: 15px;
   max-height: calc(100% - 250px);
-  overflow: auto;
   box-shadow: 0 19px 38px rgba($black, 0.3), 0 15px 12px rgba($black, 0.22);
   background: $black;
   border: 1px solid $midgrey;
   color: $offwhite;
   font-family: 'Merriweather', 'Georgia', serif;
+
+  .narrative-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    border-bottom: 1px solid $darkwhite;
+    padding: 0 15px;
+
+    .count-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-right: 1px solid $darkwhite;
+    }
+    .count {
+      position: relative;
+      padding-right: 15px;
+    }
+  }
+
+  .narrative-info-desc {
+    overflow: auto;
+  }
+
+  p {
+    padding: 0 15px;
+  }
 
   h3, h6 {
     text-align: center;
