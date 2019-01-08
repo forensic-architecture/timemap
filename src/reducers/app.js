@@ -36,11 +36,29 @@ function updateSelected(appState, action) {
 }
 
 function updateNarrative(appState, action) {
+  let minTime = appState.filters.timerange[0];
+  let maxTime = appState.filters.timerange[1];
+
+  if (!!action.narrative) {
+    minTime = parseDate('2100-01-01T00:00:00');
+    maxTime = parseDate('1900-01-01T00:00:00');
+
+    action.narrative.steps.forEach(step => {
+      const stepTime = parseDate(step.timestamp);
+      if (stepTime < minTime) minTime = stepTime;
+      if (stepTime > maxTime) maxTime = stepTime;
+    });
+  }
+
   return {
     ...appState,
     narrative: action.narrative,
     narrativeState: {
       current: !!action.narrative ? 0 : null
+    },
+    filters: {
+      ...appState.filters,
+      timerange: [minTime, maxTime]
     }
   }
 }
