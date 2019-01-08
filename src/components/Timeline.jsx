@@ -58,6 +58,12 @@ class Timeline extends React.Component {
         scaleY: this.makeScaleY(nextProps.domain.categories)
       });
     }
+
+    if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
+      if (nextProps.app.selected !== null) {
+       this.onCenterTime(parseDate(nextProps.app.selected[0].timestamp));
+      }
+    }
   }
 
   addEventListeners() {
@@ -130,6 +136,17 @@ class Timeline extends React.Component {
     this.setState({ timerange: [domain0, domainF] }, () => {
       this.props.methods.onUpdateTimerange(this.state.timerange);
     });
+  }
+
+  onCenterTime(newCentralTime) {
+    const extent = this.getTimeScaleExtent();
+
+    const domain0 = d3.timeMinute.offset(newCentralTime, -extent/2);
+    const domainF = d3.timeMinute.offset(newCentralTime, +extent/2);
+
+    this.setState({ timerange: [domain0, domainF] }, () => {
+      this.props.methods.onUpdateTimerange(this.state.timerange);
+    });    
   }
 
   /**
