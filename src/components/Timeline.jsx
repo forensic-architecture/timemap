@@ -211,10 +211,18 @@ class Timeline extends React.Component {
     this.props.methods.onUpdateTimerange(this.state.timerange);
   }
 
+  /**
+   * Determines additional styles on the <circle> for each location.
+   * A datetime consists of an array of events (see selectors). The function
+   * also has full access to the domain and redux state to derive values if
+   * necessary. The function should return an array, where the value at the
+   * first index is a styles object for the SVG at the location, and the value
+   * at the second index is an optional function that renders additional
+   * components in the <g/> div.
+   */
   styleDatetime(timestamp) {
     return [
       { fill: 'orange' },
-      () => <text>ciao</text>
     ]
   }
 
