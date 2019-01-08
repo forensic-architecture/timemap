@@ -126,6 +126,10 @@ class Dashboard extends React.Component {
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <NarrativeControls
+          narrative={!!app.narrative ? {
+            ...app.narrative,
+            current: app.narrativeState.current
+          } : null}
           methods={{
             onNext: () => this.moveInNarrative(1),
             onPrev: () => this.moveInNarrative(-1),
@@ -163,16 +167,6 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(actions, dispatch)
   }
-}
-
-function injectSource(id) {
-  return state => ({
-    ...state,
-    app: {
-      ...state.app,
-      source: state.domain.sources[id]
-    }
-  })
 }
 
 export default connect(
