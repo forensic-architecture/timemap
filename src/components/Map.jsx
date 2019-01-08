@@ -162,6 +162,7 @@ class Map extends React.Component {
       <MapEvents
         svg={this.svgRef.current}
         locations={this.props.domain.locations}
+        styleLocation={(loc) => ({ /* TODO: add styles by location */ })}
         categories={this.props.domain.categories}
         map={this.map}
         mapTransformX={this.state.mapTransformX}

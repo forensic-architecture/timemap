@@ -27,7 +27,7 @@ class MapEvents extends React.Component {
   }
 
   renderCategory(events, category) {
-    let styleProps = ({
+    let styles = ({
       fill: this.props.getCategoryColor(category),
       fillOpacity: 0.8
     })
@@ -38,8 +38,8 @@ class MapEvents extends React.Component {
       const eventsInNarrative = events.filter(onlyIfInNarrative)
 
       if (eventsInNarrative.length <= 0) {
-        styleProps = {
-          ...styleProps,
+        styles = {
+          ...styles,
           fillOpacity: 0.1
         }
       }
@@ -48,8 +48,8 @@ class MapEvents extends React.Component {
     return (
       <circle
         className="location-event-marker"
-        r={(events.length > 0) ? Math.sqrt(16 * events.length) + 3 : 0}
-        style={styleProps}
+        r={7}
+        style={styles}
         onClick={() => this.props.onSelect(events)}
       >
       </circle>
@@ -57,17 +57,48 @@ class MapEvents extends React.Component {
   }
 
   renderLocation(location) {
+    /**
+    {
+      events: [...],
+      label: 'Location name',
+      latitude: '47.7',
+      longitude: '32.2'
+    }
+     */
     const { x, y } = this.projectPoint([location.latitude, location.longitude]);
-    const eventsByCategory = this.getLocationEventsDistribution(location);
+      // const eventsByCategory = this.getLocationEventsDistribution(location);
+
+    const locCategory = location.events.length > 0 ? location.events[0].category : 'default'
+    const customStyles = this.props.styleLocation ? this.props.styleLocation(location) : null
+    const styles = ({
+      fill: this.props.getCategoryColor(locCategory),
+      fillOpacity: 1,
+      ...customStyles
+    })
+
+    // in narrative mode, only render events in narrative
+    if (this.props.narrative) {
+      const { steps } = this.props.narrative
+      const onlyIfInNarrative = e => steps.map(s => s.id).includes(e.id)
+      const eventsInNarrative = location.events.filter(onlyIfInNarrative)
+
+      if (eventsInNarrative.length <= 0) {
+        return null
+      }
+    }
 
     return (
       <g
         className="location"
         transform={`translate(${x}, ${y})`}
       >
-        {Object.keys(eventsByCategory).map(cat => {
-          return this.renderCategory(eventsByCategory[cat], cat)
-        })}
+        <circle
+          className="location-event-marker"
+          r={7}
+          style={styles}
+          onClick={() => this.props.onSelect(events)}
+        >
+        </circle>
       </g>
     )
   }
