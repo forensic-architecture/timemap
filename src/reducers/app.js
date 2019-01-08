@@ -57,6 +57,9 @@ function updateNarrative(appState, action) {
       if (+step.latitude < cornerBound0[0]) cornerBound0[0] = +step.latitude;
       if (+step.latitude > cornerBound1[0]) cornerBound1[0] = +step.latitude;
     });
+
+    minTime = new Date(minTime.getTime() - Math.abs((maxTime - minTime) / 10));
+    maxTime = new Date(maxTime.getTime() + Math.abs((maxTime - minTime) / 10));
   }
 
   return {
