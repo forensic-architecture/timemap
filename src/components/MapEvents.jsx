@@ -64,12 +64,12 @@ class MapEvents extends React.Component {
       <g
         className="location"
         transform={`translate(${x}, ${y})`}
+        onClick={() => this.props.onSelect(location.events)}
       >
         <circle
           className="location-event-marker"
           r={7}
           style={styles}
-          onClick={() => this.props.onSelect(events)}
         >
         </circle>
         {extraRender ? extraRender() : null}

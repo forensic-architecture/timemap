@@ -165,19 +165,23 @@
 * Elements
 */
 
+.location {
+  cursor: pointer;
+}
+
 .location-event-marker {
   fill: $event_default;
   stroke-width: 0;
-  cursor: pointer;
-
-  &:hover {
-    fill-opacity: 1;
-  }
 }
 
 .path-polyline {
   stroke: $darkgrey;
   stroke-width: 2px;
+}
+
+.location-count {
+  z-index: 100;
+  fill: #a4a4a4;
 }
 
 

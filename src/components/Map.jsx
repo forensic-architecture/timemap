@@ -168,8 +168,10 @@ class Map extends React.Component {
    * components in the <g/> div.
    */
   styleLocation(location) {
+    const noEvents = location.events.length
     return [
-      { fill: 'orange' },
+      null,
+      () => noEvents > 1 ? <text className='location-count' dx='-3' dy='4'>{noEvents}</text> : null
     ]
   }
 

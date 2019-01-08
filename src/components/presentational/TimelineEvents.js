@@ -35,6 +35,7 @@ const TimelineEvents = ({
       <g
         className='datetime'
         transform={`translate(${getDatetimeX(datetime)}, ${getDatetimeY(datetime)})`}
+        onClick={() => onSelect(datetime.events)}
       >
         <circle
           className="event"
@@ -42,7 +43,6 @@ const TimelineEvents = ({
           cy={0}
           style={styleProps}
           r={5}
-          onClick={() => onSelect(datetime.events)}
         >
         </circle>
         { extraRender ? extraRender() : null }
