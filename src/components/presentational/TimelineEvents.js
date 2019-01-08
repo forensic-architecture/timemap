@@ -12,12 +12,14 @@ const TimelineEvents = ({
 }) => {
   function renderDatetime(datetime) {
     const customStyles = styleDatetime ? styleDatetime(datetime) : null
+    const extraStyles = customStyles[0]
+    const extraRender = customStyles[1]
+
     const styleProps = ({
       fill: getCategoryColor(datetime.events[0].category),
       fillOpacity: 1,
-      transform: `translate(${getDatetimeX(datetime)}px, ${getDatetimeY(datetime)}px)`,
       transition: `transform ${transitionDuration / 1000}s ease`,
-      ...customStyles
+      ...extraStyles
     });
 
     if (narrative) {
@@ -30,15 +32,21 @@ const TimelineEvents = ({
     }
 
     return (
-      <circle
-        className="event"
-        cx={0}
-        cy={0}
-        style={styleProps}
-        r={5}
-        onClick={() => onSelect(datetime.events)}
+      <g
+        className='datetime'
+        transform={`translate(${getDatetimeX(datetime)}, ${getDatetimeY(datetime)})`}
       >
-      </circle>
+        <circle
+          className="event"
+          cx={0}
+          cy={0}
+          style={styleProps}
+          r={5}
+          onClick={() => onSelect(datetime.events)}
+        >
+        </circle>
+        { extraRender ? extraRender() : null }
+      </g>
     )
   }
 

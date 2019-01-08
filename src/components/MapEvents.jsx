@@ -26,36 +26,6 @@ class MapEvents extends React.Component {
     return eventCount;
   }
 
-  renderCategory(events, category) {
-    let styles = ({
-      fill: this.props.getCategoryColor(category),
-      fillOpacity: 0.8
-    })
-
-    if (this.props.narrative) {
-      const { steps } = this.props.narrative
-      const onlyIfInNarrative = e => steps.map(s => s.id).includes(e.id)
-      const eventsInNarrative = events.filter(onlyIfInNarrative)
-
-      if (eventsInNarrative.length <= 0) {
-        styles = {
-          ...styles,
-          fillOpacity: 0.1
-        }
-      }
-    }
-
-    return (
-      <circle
-        className="location-event-marker"
-        r={7}
-        style={styles}
-        onClick={() => this.props.onSelect(events)}
-      >
-      </circle>
-    );
-  }
-
   renderLocation(location) {
     /**
     {
@@ -64,16 +34,19 @@ class MapEvents extends React.Component {
       latitude: '47.7',
       longitude: '32.2'
     }
-     */
+    */
     const { x, y } = this.projectPoint([location.latitude, location.longitude]);
-      // const eventsByCategory = this.getLocationEventsDistribution(location);
+    // const eventsByCategory = this.getLocationEventsDistribution(location);
 
     const locCategory = location.events.length > 0 ? location.events[0].category : 'default'
     const customStyles = this.props.styleLocation ? this.props.styleLocation(location) : null
+    const extraStyles = customStyles[0]
+    const extraRender = customStyles[1]
+
     const styles = ({
       fill: this.props.getCategoryColor(locCategory),
       fillOpacity: 1,
-      ...customStyles
+      ...customStyles[0]
     })
 
     // in narrative mode, only render events in narrative
@@ -99,6 +72,7 @@ class MapEvents extends React.Component {
           onClick={() => this.props.onSelect(events)}
         >
         </circle>
+        {extraRender ? extraRender() : null}
       </g>
     )
   }

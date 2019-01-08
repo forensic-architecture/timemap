@@ -165,9 +165,10 @@ class Map extends React.Component {
    * necessary. The function should return a regular style object.
    */
   styleLocation(location) {
-    return {
-      fill: 'orange'
-    }
+    return [
+      { fill: 'orange' },
+      () => <text>ciao</text>
+    ]
   }
 
   renderEvents() {

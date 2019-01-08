@@ -212,9 +212,10 @@ class Timeline extends React.Component {
   }
 
   styleDatetime(timestamp) {
-    return {
-      fill: 'orange'
-    }
+    return [
+      { fill: 'orange' },
+      () => <text>ciao</text>
+    ]
   }
 
   render() {
