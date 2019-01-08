@@ -25,6 +25,7 @@ class Map extends React.Component {
       mapTransformX: 0,
       mapTransformY: 0
     }
+    this.styleLocation = this.styleLocation.bind(this)
   }
 
   componentDidMount(){
@@ -157,12 +158,24 @@ class Map extends React.Component {
     );
   }
 
+  /**
+   * Determines additional styles on the <circle> for each location.
+   * A location consists of an array of events (location.events). The function
+   * also has full access to the domain and redux state to derive values if
+   * necessary. The function should return a regular style object.
+   */
+  styleLocation(location) {
+    return {
+      fill: 'orange'
+    }
+  }
+
   renderEvents() {
     return (
       <MapEvents
         svg={this.svgRef.current}
         locations={this.props.domain.locations}
-        styleLocation={(loc) => ({ /* TODO: add styles by location */ })}
+        styleLocation={this.styleLocation}
         categories={this.props.domain.categories}
         map={this.map}
         mapTransformX={this.state.mapTransformX}

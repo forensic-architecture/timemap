@@ -18,6 +18,7 @@ import TimelineCategories from './TimelineCategories.jsx';
 class Timeline extends React.Component {
   constructor(props) {
     super(props);
+    this.styleDatetime = this.styleDatetime.bind(this)
     this.svgRef = React.createRef()
     this.state = {
       isFolded: false,
@@ -210,67 +211,18 @@ class Timeline extends React.Component {
     this.props.methods.onUpdateTimerange(this.state.timerange);
   }
 
-  renderSVG() {
-    const dims = this.state.dims;
-
-    return (
-      <svg
-        ref={this.svgRef}
-        width={dims.width}
-        height={dims.height}
-      >
-        <TimelineClip
-          dims={dims}
-        />
-        <TimelineAxis
-          dims={dims}
-          timerange={this.props.app.timerange}
-          transitionDuration={this.state.transitionDuration}
-          scaleX={this.state.scaleX}
-        />
-        <TimelineCategories
-          dims={dims}
-          onDragStart={() => { this.onDragStart() }}
-          onDrag={() => { this.onDrag() }}
-          onDragEnd={() => { this.onDragEnd() }}
-          categories={this.props.domain.categories}
-        />
-        <TimelineHandles
-          dims={dims}
-          onMoveTime={(dir) => { this.onMoveTime(dir) }}
-        />
-        <TimelineZoomControls
-          zoomLevels={this.props.app.zoomLevels}
-          dims={dims}
-          onApplyZoom={(zoom) => { this.onApplyZoom(zoom); }}
-        />
-        <TimelineLabels
-          dims={dims}
-          timelabels={this.state.timerange}
-        />
-        <TimelineMarkers
-          selected={this.props.app.selected}
-          getEventX={(e) => this.getEventX(e)}
-          getEventY={(e) => this.getEventY(e)}
-          transitionDuration={this.state.transitionDuration}
-        />
-        <TimelineEvents
-          events={this.props.domain.events}
-          narrative={this.props.app.narrative}
-          getEventX={(e) => this.getEventX(e)}
-          getEventY={(e) => this.getEventY(e)}
-          getCategoryColor={this.props.methods.getCategoryColor}
-          transitionDuration={this.state.transitionDuration}
-          onSelect={this.props.methods.onSelect}
-        />
-      </svg>
-    )
+  styleDatetime(timestamp) {
+    return {
+      fill: 'orange'
+    }
   }
 
   render() {
     const { isNarrative, app, ui } = this.props
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`;
     classes += (app.narrative !== null) ? ' narrative-mode' : '';
+    const dims = this.state.dims;
+
     return (
       <div className={classes}>
         <TimelineHeader
@@ -282,7 +234,57 @@ class Timeline extends React.Component {
         />
         <div className="timeline-content">
           <div id={this.props.ui.dom.timeline} className="timeline">
-            {this.renderSVG()}
+            <svg
+              ref={this.svgRef}
+              width={dims.width}
+              height={dims.height}
+            >
+              <TimelineClip
+                dims={dims}
+              />
+              <TimelineAxis
+                dims={dims}
+                timerange={this.props.app.timerange}
+                transitionDuration={this.state.transitionDuration}
+                scaleX={this.state.scaleX}
+              />
+              <TimelineCategories
+                dims={dims}
+                onDragStart={() => { this.onDragStart() }}
+                onDrag={() => { this.onDrag() }}
+                onDragEnd={() => { this.onDragEnd() }}
+                categories={this.props.domain.categories}
+              />
+              <TimelineHandles
+                dims={dims}
+                onMoveTime={(dir) => { this.onMoveTime(dir) }}
+              />
+              <TimelineZoomControls
+                zoomLevels={this.props.app.zoomLevels}
+                dims={dims}
+                onApplyZoom={(zoom) => { this.onApplyZoom(zoom); }}
+              />
+              <TimelineLabels
+                dims={dims}
+                timelabels={this.state.timerange}
+              />
+              <TimelineMarkers
+                selected={this.props.app.selected}
+                getEventX={(e) => this.getEventX(e)}
+                getEventY={(e) => this.getEventY(e)}
+                transitionDuration={this.state.transitionDuration}
+              />
+              <TimelineEvents
+                datetimes={this.props.domain.datetimes}
+                styleDatetime={this.styleDatetime}
+                narrative={this.props.app.narrative}
+                getDatetimeX={(e) => this.getEventX(e)}
+                getDatetimeY={(e) => this.getEventY(e)}
+                getCategoryColor={this.props.methods.getCategoryColor}
+                transitionDuration={this.state.transitionDuration}
+                onSelect={this.props.methods.onSelect}
+              />
+            </svg>
           </div>
         </div>
       </div>
@@ -294,7 +296,7 @@ function mapStateToProps(state) {
   return {
     isNarrative: !!state.app.narrative,
     domain: {
-      events: state.domain.events,
+      datetimes: selectors.selectDatetimes(state),
       categories: selectors.selectCategories(state),
       narratives: state.domain.narratives
     },

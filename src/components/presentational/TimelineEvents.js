@@ -1,21 +1,30 @@
 import React from 'react';
 
-const TimelineEvents = ({ events, narrative, getEventX, getEventY,
-  getCategoryColor, onSelect, transitionDuration }) => {
-
+const TimelineEvents = ({
+  datetimes,
+  narrative,
+  getDatetimeX,
+  getDatetimeY,
+  getCategoryColor,
+  onSelect,
+  transitionDuration,
+  styleDatetime
+}) => {
   function getAllEventsAtOnce(eventPoint) {
-    const timestamp = eventPoint.timestamp;
+    const datetime = eventPoint.datetime;
     const category = eventPoint.category;
     return events
-      .filter(event => (event.timestamp === timestamp && category === event.category))
+      .filter(event => (event.datetime === datetime && category === event.category))
   }
 
-  function renderEvent(event) {
-    let styleProps = ({
-      fill: getCategoryColor(event.category),
-      fillOpacity: 0.8,
-      transform: `translate(${getEventX(event)}px, ${getEventY(event)}px)`,
-      transition: `transform ${transitionDuration / 1000}s ease`
+  function renderDatetime(datetime) {
+    const customStyles = styleDatetime ? styleDatetime(datetime) : null
+    const styleProps = ({
+      fill: getCategoryColor(datetime.events[0].category),
+      fillOpacity: 1,
+      transform: `translate(${getDatetimeX(datetime)}px, ${getDatetimeY(datetime)}px)`,
+      transition: `transform ${transitionDuration / 1000}s ease`,
+      ...customStyles
     });
 
     if (narrative) {
@@ -23,10 +32,7 @@ const TimelineEvents = ({ events, narrative, getEventX, getEventY,
       const isInNarrative = steps.map(s => s.id).includes(event.id)
 
       if (!isInNarrative) {
-        styleProps = {
-          ...styleProps,
-          fillOpacity: 0.1
-        }
+        return null
       }
     }
 
@@ -36,7 +42,7 @@ const TimelineEvents = ({ events, narrative, getEventX, getEventY,
         cx={0}
         cy={0}
         style={styleProps}
-        r={5}        
+        r={5}
         onClick={() => {onSelect(getAllEventsAtOnce(event))}}
       >
       </circle>
@@ -47,7 +53,7 @@ const TimelineEvents = ({ events, narrative, getEventX, getEventY,
     <g
       clipPath={"url(#clip)"}
     >
-      {events.map(event => renderEvent(event))}
+      {datetimes.map(datetime => renderDatetime(datetime))}
     </g>
   );
 }
