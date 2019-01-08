@@ -244,6 +244,13 @@ export function updateSource(source) {
 
 // UI
 
+export const TOGGLE_SITES = 'TOGGLE_SITES'
+export function toggleSites() {
+  return {
+    type: TOGGLE_SITES
+  }
+}
+
 export const TOGGLE_FETCHING_DOMAIN = 'TOGGLE_FETCHING_DOMAIN'
 export function toggleFetchingDomain() {
   return {

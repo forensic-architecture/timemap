@@ -43,13 +43,13 @@ class Map extends React.Component {
         this.map.setView([eventPoint.latitude, eventPoint.longitude]);
       }
     }
-  }  
+  }
 
   initializeMap() {
     /**
      * Creates a Leaflet map and a tilelayer for the map background
      */
-    const map = 
+    const map =
       L.map(this.props.mapId)
         .setView(this.props.app.mapAnchor, 14)
         .setMinZoom(10)
@@ -95,7 +95,7 @@ class Map extends React.Component {
       .getComputedStyle(mapNode)
       .getPropertyValue('transform');
 
-    // Offset with leaflet map transform boundaries    
+    // Offset with leaflet map transform boundaries
     this.setState({
       mapTransformX: +transform.split(',')[4],
       mapTransformY: +transform.split(',')[5].split(')')[0]
@@ -126,7 +126,7 @@ class Map extends React.Component {
         >
         </svg>
       </Portal>
-    );      
+    );
   }
 
   renderSites() {
@@ -197,6 +197,7 @@ class Map extends React.Component {
 
 
   render() {
+    const { isShowingSites } = this.props.app.flags
     const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper';
 
     return (
@@ -204,7 +205,7 @@ class Map extends React.Component {
         <div id={this.props.mapId} />
         {(this.map !== null) ? this.renderSVG() : ''}
         {(this.map !== null) ? this.renderMarkers() : ''}
-        {(this.map !== null) ? this.renderSites() : ''}
+        {(this.map !== null) && isShowingSites ? this.renderSites() : ''}
         {(this.map !== null) ? this.renderEvents() : ''}
         {(this.map !== null) ? this.renderNarratives() : ''}
         {(this.map !== null) ? this.renderSelected() : ''}
@@ -226,7 +227,10 @@ function mapStateToProps(state) {
       selected: state.app.selected,
       highlighted: state.app.highlighted,
       mapAnchor: state.app.mapAnchor,
-      narrative: state.app.narrative
+      narrative: state.app.narrative,
+      flags: {
+        isShowingSites: state.app.flags.isShowingSites
+      }
     },
     ui: {
       dom: state.ui.dom,
