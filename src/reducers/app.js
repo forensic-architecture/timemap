@@ -39,6 +39,10 @@ function updateNarrative(appState, action) {
   let minTime = appState.filters.timerange[0];
   let maxTime = appState.filters.timerange[1];
 
+  let cornerBound0 = [180, 180];
+  let cornerBound1 = [-180, -180];
+
+  // Compute narrative time range and map bounds
   if (!!action.narrative) {
     minTime = parseDate('2100-01-01T00:00:00');
     maxTime = parseDate('1900-01-01T00:00:00');
@@ -47,6 +51,11 @@ function updateNarrative(appState, action) {
       const stepTime = parseDate(step.timestamp);
       if (stepTime < minTime) minTime = stepTime;
       if (stepTime > maxTime) maxTime = stepTime;
+
+      if (+step.longitude < cornerBound0[1]) cornerBound0[1] = +step.longitude;
+      if (+step.longitude > cornerBound1[1]) cornerBound1[1] = +step.longitude;
+      if (+step.latitude < cornerBound0[0]) cornerBound0[0] = +step.latitude;
+      if (+step.latitude > cornerBound1[0]) cornerBound1[0] = +step.latitude;
     });
   }
 
@@ -58,7 +67,8 @@ function updateNarrative(appState, action) {
     },
     filters: {
       ...appState.filters,
-      timerange: [minTime, maxTime]
+      timerange: [minTime, maxTime],
+      mapBounds: [cornerBound0, cornerBound1]
     }
   }
 }

@@ -44,7 +44,10 @@ class Map extends React.Component {
         this.map.setView([eventPoint.latitude, eventPoint.longitude]);
       }
     }
-  }
+    if (hash(nextProps.app.mapBounds) !== hash(this.props.app.mapBounds) && nextProps.app.mapBounds !== null) {
+      this.map.fitBounds(nextProps.app.mapBounds);
+    }
+  }  
 
   initializeMap() {
     /**
@@ -246,6 +249,7 @@ function mapStateToProps(state) {
       selected: state.app.selected,
       highlighted: state.app.highlighted,
       mapAnchor: state.app.mapAnchor,
+      mapBounds: state.app.filters.mapBounds
       narrative: state.app.narrative,
       flags: {
         isShowingSites: state.app.flags.isShowingSites
