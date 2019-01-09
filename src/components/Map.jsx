@@ -251,7 +251,7 @@ function mapStateToProps(state) {
       selected: state.app.selected,
       highlighted: state.app.highlighted,
       mapAnchor: state.app.mapAnchor,
-      mapBounds: state.app.filters.mapBounds
+      mapBounds: state.app.filters.mapBounds,
       narrative: state.app.narrative,
       flags: {
         isShowingSites: state.app.flags.isShowingSites
