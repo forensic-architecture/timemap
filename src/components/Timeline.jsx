@@ -60,8 +60,8 @@ class Timeline extends React.Component {
     }
 
     if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
-      if (nextProps.app.selected !== null) {
-       this.onCenterTime(parseDate(nextProps.app.selected[0].timestamp));
+      if (!!nextProps.app.selected && nextProps.app.selected.length > 0) {
+        this.onCenterTime(parseDate(nextProps.app.selected[0].timestamp));
       }
     }
   }
