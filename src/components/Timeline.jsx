@@ -270,16 +270,16 @@ class Timeline extends React.Component {
               />
               <TimelineMarkers
                 selected={this.props.app.selected}
-                getEventX={(e) => this.getEventX(e)}
-                getEventY={(e) => this.getEventY(e)}
+                getEventX={this.getDatetimeX}
+                getCategoryY={this.getCategoryY}
                 transitionDuration={this.state.transitionDuration}
               />
               <TimelineEvents
                 datetimes={this.props.domain.datetimes}
                 styleDatetime={this.styleDatetime}
                 narrative={this.props.app.narrative}
-                getDatetimeX={this.getDatetimeX}
-                getCategoryY={this.state.scaleY}
+                getEventX={this.getEventX}
+                getCategoryY={this.getCategoryY}
                 getCategoryColor={this.props.methods.getCategoryColor}
                 transitionDuration={this.state.transitionDuration}
                 onSelect={this.props.methods.onSelect}

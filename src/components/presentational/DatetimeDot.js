@@ -11,7 +11,7 @@ export default ({
   <g
     className='datetime'
     transform={`translate(${x}, ${y})`}
-    onClick={() => onSelect(datetime.events)}
+    onClick={() => onSelect(events)}
   >
     <circle
       className="event"
