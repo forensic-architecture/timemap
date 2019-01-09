@@ -19,6 +19,7 @@ class Timeline extends React.Component {
   constructor(props) {
     super(props);
     this.styleDatetime = this.styleDatetime.bind(this)
+    this.getDatetimeX = this.getDatetimeX.bind(this)
     this.svgRef = React.createRef()
     this.state = {
       isFolded: false,
@@ -80,22 +81,6 @@ class Timeline extends React.Component {
     if (prevState.timerange !== this.state.timerange) {
       this.setState({ scaleX: this.makeScaleX() });
     }
-  }
-
-  /**
-   * Get x position of eventPoint, considering the time scale
-   * @param {object} eventPoint: regular eventPoint data
-   */
-  getEventX(eventPoint) {
-    return this.state.scaleX(parseDate(eventPoint.timestamp));
-  }
-
-    /**
-   * Get y height of eventPoint, considering the ordinal Y scale
-   * @param {object} eventPoint: regular eventPoint data
-   */
-  getEventY(eventPoint) {
-    return this.state.scaleY(eventPoint.category);
   }
 
   /**
@@ -211,8 +196,16 @@ class Timeline extends React.Component {
     this.props.methods.onUpdateTimerange(this.state.timerange);
   }
 
+  getDatetimeX(dt) {
+    return this.state.scaleX(parseDate(dt.timestamp))
+  }
+
   /**
-   * Determines additional styles on the <circle> for each location.
+   * Determines additional styles on the <circle> for each timestamp. Note that
+   * timestamp visualisation functions slightly differently from locations, as
+   * a timestamp can be shown as multiple <circle>s (one per category of the
+   * events contained therein). Thus the function below has a category as an
+   * argumnent as well, in case timestamps ought to be styled per category.
    * A datetime consists of an array of events (see selectors). The function
    * also has full access to the domain and redux state to derive values if
    * necessary. The function should return an array, where the value at the
@@ -220,7 +213,7 @@ class Timeline extends React.Component {
    * at the second index is an optional function that renders additional
    * components in the <g/> div.
    */
-  styleDatetime(timestamp) {
+  styleDatetime(timestamp, category) {
     return []
   }
 
@@ -285,8 +278,8 @@ class Timeline extends React.Component {
                 datetimes={this.props.domain.datetimes}
                 styleDatetime={this.styleDatetime}
                 narrative={this.props.app.narrative}
-                getDatetimeX={(e) => this.getEventX(e)}
-                getDatetimeY={(e) => this.getEventY(e)}
+                getDatetimeX={this.getDatetimeX}
+                getCategoryY={this.state.scaleY}
                 getCategoryColor={this.props.methods.getCategoryColor}
                 transitionDuration={this.state.transitionDuration}
                 onSelect={this.props.methods.onSelect}
