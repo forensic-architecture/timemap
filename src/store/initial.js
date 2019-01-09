@@ -95,7 +95,7 @@ const initial = {
 
       isCardstack: true,
       isInfopopup: false,
-      isNotification: true
+      isShowingSites: true
     }
   },
 

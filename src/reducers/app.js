@@ -14,6 +14,7 @@ import {
   RESET_ALLFILTERS,
   TOGGLE_LANGUAGE,
   TOGGLE_MAPVIEW,
+  TOGGLE_SITES,
   TOGGLE_FETCHING_DOMAIN,
   TOGGLE_FETCHING_SOURCES,
   TOGGLE_INFOPOPUP,
@@ -126,6 +127,16 @@ function toggleMapView(appState, action) {
   })
 }
 
+function toggleSites(appState, action) {
+  return {
+    ...appState,
+    flags: {
+      ...appState.flags,
+      isShowingSites: !appState.flags.isShowingSites
+    }
+  }
+}
+
 function updateSource(appState, action) {
   return {
     ...appState,
@@ -209,6 +220,8 @@ function app(appState = initial.app, action) {
       return toggleLanguage(appState, action)
     case TOGGLE_MAPVIEW:
       return toggleMapView(appState, action)
+    case TOGGLE_SITES:
+      return toggleSites(appState, action)
     case FETCH_ERROR:
       return fetchError(appState, action)
     case TOGGLE_FETCHING_DOMAIN:
