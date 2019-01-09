@@ -6,7 +6,7 @@ NARRATIVE INFO
 */
 .narrative-info {
   position: fixed;
-  top: 10px;
+  top: 30px;
   left: auto;
   right: 10px;
   height: 170px;
@@ -106,17 +106,18 @@ NARRATIVE INFO
   position: fixed;
   // top: calc(50vh - 100pt);
   bottom: $timeline-height;
+  // top: 0;
   right: auto;
   background-color: rgba(0,0,0,0.8);
   z-index: 15; // z-index of card-stack is 10
 
   &.left {
-    left: 0;
+    right: calc(#{$narrative-info-width} - 70px);
   }
 
   &.right {
     // right: calc(#{$narrative-info-width} + 10px);
-    right: 0;
+    right: 10px;
   }
 
   .material-icons {
@@ -131,6 +132,53 @@ NARRATIVE INFO
     &:hover {
       cursor: pointer;
       color: $darkgrey;
+    }
+  }
+}
+
+.narrative-close {
+  display: flex;
+  justify-content: flex-start;
+  position: fixed;
+  padding: 2px 5px 0 5px;
+  // right: $narrative-info-width - 15px - 10px;
+  right: 10px;
+  top: 5px;
+  width: $narrative-info-width - 10px - 2px;
+  // width: 15px;
+  background-color: black;
+  height: 20px;
+  transition: background-color 0.2s ease;
+  border: 1px solid black;
+
+  button {
+    height: 15px;
+    width: 15px;
+  }
+
+  .close-text {
+    display: none;
+    color: $midgrey;
+    flex: 1;
+    width: 100%;
+    justify-content: center;
+    font-size: 10pt;
+  }
+
+  // disable whitening of crosshair on hover
+  button {
+    span, span:before, span:after {
+      background: $midwhite !important;
+    }
+  }
+
+
+  &:hover {
+    cursor: pointer;
+    background-color: $offwhite;
+    color: black;
+    .close-text {
+      display: flex;
     }
   }
 }

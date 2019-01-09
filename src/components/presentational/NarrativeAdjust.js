@@ -9,7 +9,7 @@ export default ({ isDisabled, direction, onClickHandler }) => {
       <i
         className={`material-icons ${isDisabled ? 'disabled' : ''}`}
       >
-        chevron_{direction}
+        {`chevron_${direction}`}
       </i>
     </div>
   )
