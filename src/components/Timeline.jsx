@@ -68,6 +68,11 @@ class Timeline extends React.Component {
 
   addEventListeners() {
     window.addEventListener('resize', () => { this.computeDims(); });
+    let element = document.querySelector('.timeline-wrapper');
+    element.addEventListener("transitionend", (event) => {
+      this.computeDims();
+    }, false);
+
   }
 
   makeScaleX() {
@@ -109,7 +114,8 @@ class Timeline extends React.Component {
       const boundingClient = document.querySelector(`#${dom}`).getBoundingClientRect();
 
       this.setState({
-        dims: Object.assign({}, this.state.dims, { width: boundingClient.width })
+          dims: Object.assign({}, this.state.dims, { width: boundingClient.width })
+        }, () => { this.setState({ scaleX: this.makeScaleX() })
       });
     }
   }
