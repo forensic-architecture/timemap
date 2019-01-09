@@ -9,14 +9,12 @@ import LoadingOverlay from './presentational/LoadingOverlay'
 import Map from './Map.jsx'
 import Toolbar from './Toolbar.jsx'
 import CardStack from './CardStack.jsx'
-import NarrativeCard from './NarrativeCard.js'
+import NarrativeControls from './presentational/NarrativeControls.js'
 import InfoPopUp from './InfoPopup.jsx'
 import Timeline from './Timeline.jsx'
 import Notification from './Notification.jsx'
 
 import { parseDate } from '../js/utilities'
-
-import { injectNarrative } from '../js/utilities'
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -119,13 +117,6 @@ class Dashboard extends React.Component {
             getCategoryColor: category => this.getCategoryColor(category)
           }}
         />
-        <NarrativeCard
-          methods={{
-            onNext: () => this.moveInNarrative(1),
-            onPrev: () => this.moveInNarrative(-1),
-            onSelectNarrative: this.setNarrative
-          }}
-        />
         <CardStack
           onViewSource={this.handleViewSource}
           onSelect={this.handleSelect}
@@ -133,6 +124,17 @@ class Dashboard extends React.Component {
           onToggleCardstack={() => actions.updateSelected([])}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={category => this.getCategoryColor(category)}
+        />
+        <NarrativeControls
+          narrative={!!app.narrative ? {
+            ...app.narrative,
+            current: app.narrativeState.current
+          } : null}
+          methods={{
+            onNext: () => this.moveInNarrative(1),
+            onPrev: () => this.moveInNarrative(-1),
+            onSelectNarrative: this.setNarrative
+          }}
         />
         <InfoPopUp
           ui={ui}
@@ -165,16 +167,6 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(actions, dispatch)
   }
-}
-
-function injectSource(id) {
-  return state => ({
-    ...state,
-    app: {
-      ...state.app,
-      source: state.domain.sources[id]
-    }
-  })
 }
 
 export default connect(

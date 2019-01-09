@@ -1,24 +1,50 @@
 $narrative-info-width: 370px;
+$timeline-height: 170px;
 
 /*
 NARRATIVE INFO
 */
 .narrative-info {
   position: fixed;
-  top: 10px;
-  left: 10px;
-  // height: auto;
+  top: 30px;
+  left: auto;
+  right: 10px;
   height: 170px;
   width: $narrative-info-width;
   box-sizing: border-box;
-  padding: 15px;
   max-height: calc(100% - 250px);
-  overflow: auto;
   box-shadow: 0 19px 38px rgba($black, 0.3), 0 15px 12px rgba($black, 0.22);
   background: $black;
   border: 1px solid $midgrey;
   color: $offwhite;
   font-family: 'Merriweather', 'Georgia', serif;
+
+  .narrative-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    border-bottom: 1px solid $darkwhite;
+    padding: 0 15px;
+
+    .count-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-right: 1px solid $darkwhite;
+    }
+    .count {
+      position: relative;
+      padding-right: 15px;
+    }
+  }
+
+  .narrative-info-desc {
+    overflow: auto;
+  }
+
+  p {
+    padding: 0 15px;
+  }
 
   h3, h6 {
     text-align: center;
@@ -72,6 +98,87 @@ NARRATIVE INFO
       &:first-child {
         margin-right: 10px;
       }
+    }
+  }
+}
+
+.narrative-adjust {
+  position: fixed;
+  // top: calc(50vh - 100pt);
+  bottom: $timeline-height;
+  // top: 0;
+  right: auto;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 15; // z-index of card-stack is 10
+
+  &.left {
+    right: calc(#{$narrative-info-width} - 70px);
+  }
+
+  &.right {
+    // right: calc(#{$narrative-info-width} + 10px);
+    right: 10px;
+  }
+
+  .material-icons {
+    font-size: 60pt;
+    color: $offwhite;
+    transition: color 0.2s ease;
+
+    &.disabled {
+      color: $darkgrey;
+    }
+
+    &:hover {
+      cursor: pointer;
+      color: $darkgrey;
+    }
+  }
+}
+
+.narrative-close {
+  display: flex;
+  justify-content: flex-start;
+  position: fixed;
+  padding: 2px 5px 0 5px;
+  // right: $narrative-info-width - 15px - 10px;
+  right: 10px;
+  top: 5px;
+  width: $narrative-info-width - 10px - 2px;
+  // width: 15px;
+  background-color: black;
+  height: 20px;
+  transition: background-color 0.2s ease;
+  border: 1px solid black;
+
+  button {
+    height: 15px;
+    width: 15px;
+  }
+
+  .close-text {
+    display: none;
+    color: $midgrey;
+    flex: 1;
+    width: 100%;
+    justify-content: center;
+    font-size: 10pt;
+  }
+
+  // disable whitening of crosshair on hover
+  button {
+    span, span:before, span:after {
+      background: $midwhite !important;
+    }
+  }
+
+
+  &:hover {
+    cursor: pointer;
+    background-color: $offwhite;
+    color: black;
+    .close-text {
+      display: flex;
     }
   }
 }

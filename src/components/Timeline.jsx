@@ -28,7 +28,7 @@ class Timeline extends React.Component {
         height_controls: 115,
         margin_left: 120,
         margin_top: 20,
-        trackHeight: 80      
+        trackHeight: 80
       },
       scaleX: null,
       scaleY: null,
@@ -228,7 +228,7 @@ class Timeline extends React.Component {
           transitionDuration={this.state.transitionDuration}
           scaleX={this.state.scaleX}
         />
-        <TimelineCategories 
+        <TimelineCategories
           dims={dims}
           onDragStart={() => { this.onDragStart() }}
           onDrag={() => { this.onDrag() }}
@@ -264,7 +264,7 @@ class Timeline extends React.Component {
           onSelect={this.props.methods.onSelect}
         />
       </svg>
-    ); 
+    )
   }
 
   render() {
