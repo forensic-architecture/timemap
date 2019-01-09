@@ -5,6 +5,7 @@ export default ({
   events,
   x,
   y,
+  onSelect,
   styleProps,
   extraRender
 }) => (

@@ -58,6 +58,7 @@ const TimelineEvents = ({
 
       return (
         <DatetimeDot
+          onSelect={onSelect}
           category={dot.category}
           events={dot.events}
           x={getDatetimeX(datetime)}
