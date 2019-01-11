@@ -18,6 +18,8 @@ import TimelineCategories from './TimelineCategories.jsx';
 class Timeline extends React.Component {
   constructor(props) {
     super(props);
+    this.styleDatetime = this.styleDatetime.bind(this)
+    this.getDatetimeX = this.getDatetimeX.bind(this)
     this.svgRef = React.createRef()
     this.state = {
       isFolded: false,
@@ -79,22 +81,6 @@ class Timeline extends React.Component {
     if (prevState.timerange !== this.state.timerange) {
       this.setState({ scaleX: this.makeScaleX() });
     }
-  }
-
-  /**
-   * Get x position of eventPoint, considering the time scale
-   * @param {object} eventPoint: regular eventPoint data
-   */
-  getEventX(eventPoint) {
-    return this.state.scaleX(parseDate(eventPoint.timestamp));
-  }
-
-    /**
-   * Get y height of eventPoint, considering the ordinal Y scale
-   * @param {object} eventPoint: regular eventPoint data
-   */
-  getEventY(eventPoint) {
-    return this.state.scaleY(eventPoint.category);
   }
 
   /**
@@ -210,67 +196,33 @@ class Timeline extends React.Component {
     this.props.methods.onUpdateTimerange(this.state.timerange);
   }
 
-  renderSVG() {
-    const dims = this.state.dims;
+  getDatetimeX(dt) {
+    return this.state.scaleX(parseDate(dt.timestamp))
+  }
 
-    return (
-      <svg
-        ref={this.svgRef}
-        width={dims.width}
-        height={dims.height}
-      >
-        <TimelineClip
-          dims={dims}
-        />
-        <TimelineAxis
-          dims={dims}
-          timerange={this.props.app.timerange}
-          transitionDuration={this.state.transitionDuration}
-          scaleX={this.state.scaleX}
-        />
-        <TimelineCategories
-          dims={dims}
-          onDragStart={() => { this.onDragStart() }}
-          onDrag={() => { this.onDrag() }}
-          onDragEnd={() => { this.onDragEnd() }}
-          categories={this.props.domain.categories}
-        />
-        <TimelineHandles
-          dims={dims}
-          onMoveTime={(dir) => { this.onMoveTime(dir) }}
-        />
-        <TimelineZoomControls
-          zoomLevels={this.props.app.zoomLevels}
-          dims={dims}
-          onApplyZoom={(zoom) => { this.onApplyZoom(zoom); }}
-        />
-        <TimelineLabels
-          dims={dims}
-          timelabels={this.state.timerange}
-        />
-        <TimelineMarkers
-          selected={this.props.app.selected}
-          getEventX={(e) => this.getEventX(e)}
-          getEventY={(e) => this.getEventY(e)}
-          transitionDuration={this.state.transitionDuration}
-        />
-        <TimelineEvents
-          events={this.props.domain.events}
-          narrative={this.props.app.narrative}
-          getEventX={(e) => this.getEventX(e)}
-          getEventY={(e) => this.getEventY(e)}
-          getCategoryColor={this.props.methods.getCategoryColor}
-          transitionDuration={this.state.transitionDuration}
-          onSelect={this.props.methods.onSelect}
-        />
-      </svg>
-    )
+  /**
+   * Determines additional styles on the <circle> for each timestamp. Note that
+   * timestamp visualisation functions slightly differently from locations, as
+   * a timestamp can be shown as multiple <circle>s (one per category of the
+   * events contained therein). Thus the function below has a category as an
+   * argumnent as well, in case timestamps ought to be styled per category.
+   * A datetime consists of an array of events (see selectors). The function
+   * also has full access to the domain and redux state to derive values if
+   * necessary. The function should return an array, where the value at the
+   * first index is a styles object for the SVG at the location, and the value
+   * at the second index is an optional function that renders additional
+   * components in the <g/> div.
+   */
+  styleDatetime(timestamp, category) {
+    return []
   }
 
   render() {
     const { isNarrative, app, ui } = this.props
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`;
     classes += (app.narrative !== null) ? ' narrative-mode' : '';
+    const dims = this.state.dims;
+
     return (
       <div className={classes}>
         <TimelineHeader
@@ -282,7 +234,57 @@ class Timeline extends React.Component {
         />
         <div className="timeline-content">
           <div id={this.props.ui.dom.timeline} className="timeline">
-            {this.renderSVG()}
+            <svg
+              ref={this.svgRef}
+              width={dims.width}
+              height={dims.height}
+            >
+              <TimelineClip
+                dims={dims}
+              />
+              <TimelineAxis
+                dims={dims}
+                timerange={this.props.app.timerange}
+                transitionDuration={this.state.transitionDuration}
+                scaleX={this.state.scaleX}
+              />
+              <TimelineCategories
+                dims={dims}
+                onDragStart={() => { this.onDragStart() }}
+                onDrag={() => { this.onDrag() }}
+                onDragEnd={() => { this.onDragEnd() }}
+                categories={this.props.domain.categories}
+              />
+              <TimelineHandles
+                dims={dims}
+                onMoveTime={(dir) => { this.onMoveTime(dir) }}
+              />
+              <TimelineZoomControls
+                zoomLevels={this.props.app.zoomLevels}
+                dims={dims}
+                onApplyZoom={(zoom) => { this.onApplyZoom(zoom); }}
+              />
+              <TimelineLabels
+                dims={dims}
+                timelabels={this.state.timerange}
+              />
+              <TimelineMarkers
+                selected={this.props.app.selected}
+                getEventX={this.getDatetimeX}
+                getCategoryY={this.state.scaleY}
+                transitionDuration={this.state.transitionDuration}
+              />
+              <TimelineEvents
+                datetimes={this.props.domain.datetimes}
+                styleDatetime={this.styleDatetime}
+                narrative={this.props.app.narrative}
+                getDatetimeX={this.getDatetimeX}
+                getCategoryY={this.state.scaleY}
+                getCategoryColor={this.props.methods.getCategoryColor}
+                transitionDuration={this.state.transitionDuration}
+                onSelect={this.props.methods.onSelect}
+              />
+            </svg>
           </div>
         </div>
       </div>
@@ -294,7 +296,7 @@ function mapStateToProps(state) {
   return {
     isNarrative: !!state.app.narrative,
     domain: {
-      events: state.domain.events,
+      datetimes: selectors.selectDatetimes(state),
       categories: selectors.selectCategories(state),
       narratives: state.domain.narratives
     },

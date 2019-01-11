@@ -113,7 +113,6 @@ const initial = {
         beta: '#ff0000',
         other: '#f3de2c'
       },
-
       narratives: {
         default: {
           opacity: 0.9,

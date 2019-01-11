@@ -103,7 +103,6 @@ class Dashboard extends React.Component {
           }}
         />
         <Map
-          mapId='map'
           methods={{
             onSelect: this.handleSelect,
             onSelectNarrative: this.setNarrative,

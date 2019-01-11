@@ -25,6 +25,7 @@ class Map extends React.Component {
       mapTransformX: 0,
       mapTransformY: 0
     }
+    this.styleLocation = this.styleLocation.bind(this)
   }
 
   componentDidMount(){
@@ -50,9 +51,9 @@ class Map extends React.Component {
      * Creates a Leaflet map and a tilelayer for the map background
      */
     const map =
-      L.map(this.props.mapId)
+      L.map(this.props.ui.dom.map)
         .setView(this.props.app.mapAnchor, 14)
-        .setMinZoom(10)
+        .setMinZoom(7)
         .setMaxZoom(18)
         .setMaxBounds([[180, -180], [-180, 180]])
 
@@ -103,7 +104,7 @@ class Map extends React.Component {
   }
 
   getClientDims() {
-    const boundingClient = document.querySelector(`#${this.props.mapId}`).getBoundingClientRect();
+    const boundingClient = document.querySelector(`#${this.props.ui.dom.map}`).getBoundingClientRect();
 
     return {
       width: boundingClient.width,
@@ -111,7 +112,7 @@ class Map extends React.Component {
     }
   }
 
-  renderSVG() {
+  renderTiles() {
     const pane = this.map.getPanes().overlayPane;
     const { width, height } = this.getClientDims();
 
@@ -157,11 +158,29 @@ class Map extends React.Component {
     );
   }
 
+  /**
+   * Determines additional styles on the <circle> for each location.
+   * A location consists of an array of events (see selectors). The function
+   * also has full access to the domain and redux state to derive values if
+   * necessary. The function should return an array, where the value at the
+   * first index is a styles object for the SVG at the location, and the value
+   * at the second index is an optional function that renders additional
+   * components in the <g/> div.
+   */
+  styleLocation(location) {
+    const noEvents = location.events.length
+    return [
+      null,
+      () => noEvents > 1 ? <text className='location-count' dx='-3' dy='4'>{noEvents}</text> : null
+    ]
+  }
+
   renderEvents() {
     return (
       <MapEvents
         svg={this.svgRef.current}
         locations={this.props.domain.locations}
+        styleLocation={this.styleLocation}
         categories={this.props.domain.categories}
         map={this.map}
         mapTransformX={this.state.mapTransformX}
@@ -202,8 +221,8 @@ class Map extends React.Component {
 
     return (
       <div className={classes}>
-        <div id={this.props.mapId} />
-        {(this.map !== null) ? this.renderSVG() : ''}
+        <div id={this.props.ui.dom.map} />
+        {(this.map !== null) ? this.renderTiles() : ''}
         {(this.map !== null) ? this.renderMarkers() : ''}
         {(this.map !== null) && isShowingSites ? this.renderSites() : ''}
         {(this.map !== null) ? this.renderEvents() : ''}

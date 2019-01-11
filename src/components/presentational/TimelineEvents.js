@@ -1,53 +1,80 @@
 import React from 'react';
+import DatetimeDot from './DatetimeDot'
 
-const TimelineEvents = ({ events, narrative, getEventX, getEventY,
-  getCategoryColor, onSelect, transitionDuration }) => {
+// return a list of lists, where each list corresponds to a single category
+function getDotsToRender(events) {
+  // each datetime needs to render as many dots as there are distinct
+  // categories in the events contained by the datetime.
+  // To this end, eventsByCategory is an intermediate data structure that
+  // groups a datetime's events by distinct categories
+  const eventsByCategory = {}
+  events.forEach(ev => {
+    if (eventsByCategory[ev.category]) {
+      eventsByCategory[ev.category].events.push((ev))
+    } else {
+      eventsByCategory[ev.category] = {
+        category: ev.category,
+        events: [ ev ]
+      }
+    }
+  })
 
-  function getAllEventsAtOnce(eventPoint) {
-    const timestamp = eventPoint.timestamp;
-    const category = eventPoint.category;
-    return events
-      .filter(event => (event.timestamp === timestamp && category === event.category))
-  }
+  return Object.values(eventsByCategory)
+}
 
-  function renderEvent(event) {
-    let styleProps = ({
-      fill: getCategoryColor(event.category),
-      fillOpacity: 0.8,
-      transform: `translate(${getEventX(event)}px, ${getEventY(event)}px)`,
-      transition: `transform ${transitionDuration / 1000}s ease`
-    });
-
+const TimelineEvents = ({
+  datetimes,
+  narrative,
+  getDatetimeX,
+  getCategoryY,
+  getCategoryColor,
+  onSelect,
+  transitionDuration,
+  styleDatetime
+}) => {
+  function renderDatetime(datetime) {
     if (narrative) {
       const { steps } = narrative
       const isInNarrative = steps.map(s => s.id).includes(event.id)
 
       if (!isInNarrative) {
-        styleProps = {
-          ...styleProps,
-          fillOpacity: 0.1
-        }
+        return null
       }
     }
 
-    return (
-      <circle
-        className="event"
-        cx={0}
-        cy={0}
-        style={styleProps}
-        r={5}        
-        onClick={() => {onSelect(getAllEventsAtOnce(event))}}
-      >
-      </circle>
-    )
+    const dotsToRender = getDotsToRender(datetime.events)
+
+    return dotsToRender.map(dot => {
+      const customStyles = styleDatetime ? styleDatetime(datetime, dot.category) : null
+      const extraStyles = customStyles[0]
+      const extraRender = customStyles[1]
+
+      const styleProps = ({
+        fill: getCategoryColor(dot.category),
+        fillOpacity: 1,
+        transition: `transform ${transitionDuration / 1000}s ease`,
+        ...extraStyles
+      })
+
+      return (
+        <DatetimeDot
+          onSelect={onSelect}
+          category={dot.category}
+          events={dot.events}
+          x={getDatetimeX(datetime)}
+          y={getCategoryY(dot.category)}
+          styleProps={styleProps}
+          extraRender={extraRender}
+        />
+      )
+    })
   }
 
   return (
     <g
       clipPath={"url(#clip)"}
     >
-      {events.map(event => renderEvent(event))}
+      {datetimes.map(datetime => renderDatetime(datetime))}
     </g>
   );
 }

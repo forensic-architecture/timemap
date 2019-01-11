@@ -23,7 +23,6 @@ export const getTagsFilter = state => state.app.filters.tags
 export const getTimeRange = state => state.app.filters.timerange
 
 
-
 /**
 * Some handy helpers
 */
@@ -148,9 +147,15 @@ export const selectActiveNarrative = createSelector(
     ? { ...narrative, current }
     : null
 )
+
 /**
- * Of all the filtered events, group them by location and return a list of
- * locations with at least one event in it, based on the time range and tags
+ * Group events by location. Each location is an object:
+  {
+    events: [...],
+    label: 'Location name',
+    latitude: '47.7',
+    longitude: '32.2'
+  }
  */
 export const selectLocations = createSelector(
   [selectEvents],
@@ -171,11 +176,39 @@ export const selectLocations = createSelector(
         }
       }
     })
-
     return Object.values(selectedLocations)
   }
 )
 
+/**
+ * Group events by 'datetime'. Each datetime is  an object:
+  {
+    timestamp: '',
+    date: '8/23/2016',
+    time: '12:00',
+    events: [...]
+  }
+ */
+export const selectDatetimes = createSelector(
+  [selectEvents],
+  events => {
+    const datetimes = {}
+    events.forEach(event => {
+      const { timestamp } = event
+      if (datetimes.hasOwnProperty(timestamp)) {
+        datetimes[timestamp].events.push(event)
+      } else {
+        datetimes[timestamp] = {
+          timestamp: event.timestamp,
+          date: event.date,
+          time: event.time,
+          events: [event]
+        }
+      }
+    })
+    return Object.values(datetimes)
+  }
+)
 
 
 /**
