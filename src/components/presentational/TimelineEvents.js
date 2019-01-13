@@ -35,7 +35,15 @@ const TimelineEvents = ({
   function renderDatetime(datetime) {
     if (narrative) {
       const { steps } = narrative
-      const isInNarrative = steps.map(s => s.id).includes(event.id)
+      // check all events in the datetime before rendering in narrative
+      let isInNarrative = false
+      for (let i = 0; i < datetime.events.length; i++) {
+        const event = datetime.events[i]
+        if (steps.map(s => s.id).includes(event.id)) {
+          isInNarrative = true
+          break;
+        }
+      }
 
       if (!isInNarrative) {
         return null
