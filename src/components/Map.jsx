@@ -35,16 +35,21 @@ class Map extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
-
-      // Fly to first  of events selected
-      const eventPoint = (nextProps.app.selected.length > 0) ? nextProps.app.selected[0] : null;
-
-      if (eventPoint !== null && eventPoint.latitude && eventPoint.longitude) {
-        this.map.setView([eventPoint.latitude, eventPoint.longitude]);
-      }
+    // Set appropriate zoom for narrative 
+    if (hash(nextProps.app.mapBounds) !== hash(this.props.app.mapBounds)
+      && nextProps.app.mapBounds !== null) {
+        this.map.fitBounds(nextProps.app.mapBounds);
+    } else {
+      if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
+        // Fly to first  of events selected
+        const eventPoint = (nextProps.app.selected.length > 0) ? nextProps.app.selected[0] : null;
+  
+        if (eventPoint !== null && eventPoint.latitude && eventPoint.longitude) {
+          this.map.setView([eventPoint.latitude, eventPoint.longitude]);
+        }
+      }  
     }
-  }
+  }  
 
   initializeMap() {
     /**
@@ -246,6 +251,7 @@ function mapStateToProps(state) {
       selected: state.app.selected,
       highlighted: state.app.highlighted,
       mapAnchor: state.app.mapAnchor,
+      mapBounds: state.app.filters.mapBounds,
       narrative: state.app.narrative,
       flags: {
         isShowingSites: state.app.flags.isShowingSites

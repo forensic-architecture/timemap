@@ -36,11 +36,61 @@ function updateSelected(appState, action) {
 }
 
 function updateNarrative(appState, action) {
+  let minTime = appState.filters.timerange[0];
+  let maxTime = appState.filters.timerange[1];
+
+  let cornerBound0 = [180, 180];
+  let cornerBound1 = [-180, -180];
+
+  // Compute narrative time range and map bounds
+  if (!!action.narrative) {
+    minTime = parseDate('2100-01-01T00:00:00');
+    maxTime = parseDate('1900-01-01T00:00:00');
+
+    // Find max and mins coordinates of narrative events
+    action.narrative.steps.forEach(step => {
+      const stepTime = parseDate(step.timestamp);
+      if (stepTime < minTime) minTime = stepTime;
+      if (stepTime > maxTime) maxTime = stepTime;
+
+      if (!!step.longitude && !!step.latitude) {
+        if (+step.longitude < cornerBound0[1]) cornerBound0[1] = +step.longitude;
+        if (+step.longitude > cornerBound1[1]) cornerBound1[1] = +step.longitude;
+        if (+step.latitude < cornerBound0[0]) cornerBound0[0] = +step.latitude;
+        if (+step.latitude > cornerBound1[0]) cornerBound1[0] = +step.latitude;  
+      }
+    });
+    // Adjust bounds to center around first event, while keeping visible all others
+    // Takes first event, finds max ditance with first attempt bounds, and use this max distance
+    // on the other side, both in latitude and longitude
+    const first = action.narrative.steps[0];
+    if (!!first.longitude && !!first.latitude) {
+      const firstToLong0 = Math.abs(+first.longitude - cornerBound0[1]);
+      const firstToLong1 = Math.abs(+first.longitude - cornerBound1[1]);
+      const firstToLat0 = Math.abs(+first.latitude - cornerBound0[0]);
+      const firstToLat1 = Math.abs(+first.latitude - cornerBound1[0]);
+
+      if (firstToLong0 > firstToLong1) cornerBound1[1] = +first.longitude + firstToLong0;
+      if (firstToLong0 < firstToLong1) cornerBound0[1] = +first.longitude - firstToLong1;
+      if (firstToLat0 > firstToLat1) cornerBound1[0] = +first.latitude + firstToLat0;
+      if (firstToLat0 < firstToLat1) cornerBound0[0] = +first.latitude - firstToLat1;
+    }
+    
+    // Add some buffer on both sides of the time extent
+    minTime = new Date(minTime.getTime() - Math.abs((maxTime - minTime) / 10));
+    maxTime = new Date(maxTime.getTime() + Math.abs((maxTime - minTime) / 10));
+  }
+
   return {
     ...appState,
     narrative: action.narrative,
     narrativeState: {
       current: !!action.narrative ? 0 : null
+    },
+    filters: {
+      ...appState.filters,
+      timerange: [minTime, maxTime],
+      mapBounds: (action.narrative) ? [cornerBound0, cornerBound1] : null
     }
   }
 }

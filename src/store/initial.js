@@ -41,6 +41,7 @@ const initial = {
         d3.timeParse("%Y-%m-%dT%H:%M:%S")("2013-02-23T12:00:00"),
         d3.timeParse("%Y-%m-%dT%H:%M:%S")("2016-02-23T12:00:00")
       ],
+      mapBounds: null,
       tags: [],
       categories: [],
       views: {

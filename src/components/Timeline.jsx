@@ -58,10 +58,21 @@ class Timeline extends React.Component {
         scaleY: this.makeScaleY(nextProps.domain.categories)
       });
     }
+
+    if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
+      if (!!nextProps.app.selected && nextProps.app.selected.length > 0) {
+        this.onCenterTime(parseDate(nextProps.app.selected[0].timestamp));
+      }
+    }
   }
 
   addEventListeners() {
     window.addEventListener('resize', () => { this.computeDims(); });
+    let element = document.querySelector('.timeline-wrapper');
+    element.addEventListener("transitionend", (event) => {
+      this.computeDims();
+    }, { once: true });
+
   }
 
   makeScaleX() {
@@ -103,7 +114,8 @@ class Timeline extends React.Component {
       const boundingClient = document.querySelector(`#${dom}`).getBoundingClientRect();
 
       this.setState({
-        dims: Object.assign({}, this.state.dims, { width: boundingClient.width })
+          dims: Object.assign({}, this.state.dims, { width: boundingClient.width })
+        }, () => { this.setState({ scaleX: this.makeScaleX() })
       });
     }
   }
@@ -130,6 +142,17 @@ class Timeline extends React.Component {
     this.setState({ timerange: [domain0, domainF] }, () => {
       this.props.methods.onUpdateTimerange(this.state.timerange);
     });
+  }
+
+  onCenterTime(newCentralTime) {
+    const extent = this.getTimeScaleExtent();
+
+    const domain0 = d3.timeMinute.offset(newCentralTime, -extent/2);
+    const domainF = d3.timeMinute.offset(newCentralTime, +extent/2);
+
+    this.setState({ timerange: [domain0, domainF] }, () => {
+      this.props.methods.onUpdateTimerange(this.state.timerange);
+    });    
   }
 
   /**
