@@ -1,12 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import store from './store/index.js'
-import App from './components/App.jsx'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import configureStore, { history } from './store/index.js'
+import { Provider } from 'react-redux';
+
+import App from './components/App.jsx';
+
+const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+      <App history={history} />
   </Provider>,
   document.getElementById('explore-app')
 )

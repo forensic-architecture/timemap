@@ -1,5 +1,13 @@
-/* global fetch, alert */
-import { urlFromEnv } from '../js/utilities'
+import { push } from 'connected-react-router'
+
+// TODO: move to util lib
+function urlFromEnv(ext) {
+  if (process.env[ext]) {
+    return `${process.env.SERVER_ROOT}${process.env[ext]}`
+  } else {
+    return null
+  }
+}
 
 // TODO: relegate these URLs entirely to environment variables
 const EVENT_DATA_URL = urlFromEnv('EVENT_EXT')
@@ -156,7 +164,8 @@ export function updateHighlighted (highlighted) {
 }
 
 export const UPDATE_SELECTED = 'UPDATE_SELECTED'
-export function updateSelected (selected) {
+export function updateSelected(selected) {
+  push('/about-us')
   return {
     type: UPDATE_SELECTED,
     selected: selected

@@ -25,6 +25,9 @@ const config = {
     index: `${APP_DIR}/index.jsx`,
   },
   devtool: 'source-map',
+  devServer: {
+    historyApiFallback: true
+  },  
   module: {
     rules: [
       {
