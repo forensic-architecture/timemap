@@ -7,12 +7,12 @@
   background: rgba($black, 0.8);
   box-shadow: 0 -10px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   color: white;
-  transition: 0.2s ease;
+  transition: left 0.2s ease, bottom 0.2s ease;
   bottom: 0px;
   z-index: $timeline;
 
   &.folded {
-    transition: 0.2s ease;
+    transition: bottom 0.2s ease;
     bottom: -170px;
 
     .timeline-header .timeline-toggle p .arrow-down {
@@ -23,6 +23,7 @@
 
   &.narrative-mode {
     left: 0;
+    transition: left 0.2s ease;
   }
 
   .timeline-header {

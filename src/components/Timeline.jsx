@@ -71,7 +71,7 @@ class Timeline extends React.Component {
     let element = document.querySelector('.timeline-wrapper');
     element.addEventListener("transitionend", (event) => {
       this.computeDims();
-    }, { once: true });
+    }/*, { once: true }*/);
 
   }
 
