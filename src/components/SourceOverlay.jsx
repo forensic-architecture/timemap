@@ -6,27 +6,36 @@ import Spinner from './presentational/Spinner'
 import NoSource from './presentational/NoSource'
 // TODO: move render functions into presentational components
 
-function SourceOverlay ({ source, onCancel }) {
-  function renderError() {
+class SourceOverlay extends React.Component {
+
+  constructor() {
+    super()
+
+    this.state = {
+      idx: 0
+    }
+  }
+
+  renderError() {
     return (
       <NoSource failedUrls={["NOT ALL SOURCES AVAILABLE IN APPLICATION YET"]} />
     )
   }
 
-  function renderImage(path) {
+  renderImage(path) {
     return (
       <div className='source-image-container'>
       <Img
       className='source-image'
       src={path}
       loader={<div style={{ width: '400px', height: '400px' }}><Spinner /></div>}
-      unloader={<NoSource failedUrls={source.paths} />}
+      unloader={<NoSource failedUrls={this.props.source.paths} />}
       />
       </div>
     )
   }
 
-  function renderVideo(path) {
+  renderVideo(path) {
     // NB: assume only one video
     return (
       <div className="media-player">
@@ -39,26 +48,26 @@ function SourceOverlay ({ source, onCancel }) {
     )
   }
 
-  function renderText(path) {
+  renderText(path) {
     return (
       <div className='source-text-container'>
         <Md
           path={path}
           loader={<Spinner />}
-          unloader={renderError()}
+          unloader={() => this.renderError()}
         />
       </div>
     )
   }
 
 
-  function renderNoSupport(ext) {
+  renderNoSupport(ext) {
     return (
       <NoSource failedUrls={[`Application does not support extension: ${ext}`]} />
     )
   }
 
-  function toMedia(path) {
+  toMedia(path) {
     let type;
     switch (true) {
       case /\.(png|jpg)$/.test(path):
@@ -73,7 +82,7 @@ function SourceOverlay ({ source, onCancel }) {
     return { type, path }
   }
 
-  function getTypeCounts(media) {
+  getTypeCounts(media) {
     let counts = { Image: 0, Video: 0, Text: 0 }
     media.forEach(m => {
       counts[m.type] += 1
@@ -81,21 +90,21 @@ function SourceOverlay ({ source, onCancel }) {
     return counts
   }
 
-  function _renderPath(media) {
+  _renderPath(media) {
     const { path, type } = media
     switch (type) {
       case 'Image':
-        return renderImage(path)
+        return this.renderImage(path)
       case 'Video':
-        return renderVideo(path)
+        return this.renderVideo(path)
       case 'Text':
-        return renderText(path)
+        return this.renderText(path)
       default:
-        return renderNoSupport(path.split('.')[1])
+        return this.renderNoSupport(path.split('.')[1])
     }
   }
 
-  function _renderCounts(counts) {
+  _renderCounts(counts) {
     const strFor = type =>
     counts[type] > 0 ?
       `${counts[type]} ${type.toLowerCase()}${counts[type] > 1 ? 's': ''}`
@@ -113,52 +122,72 @@ function SourceOverlay ({ source, onCancel }) {
     )
   }
 
-  function _renderContent(media) {
+  _renderContent(media) {
+    const el = document.querySelector(`.source-media-gallery`);
+    const shiftW = (!!el) ? el.getBoundingClientRect().width : 0;
     return (
-      <React.Fragment>
-        {media.map(_renderPath)}
-      </React.Fragment>
+      <div className="source-media-gallery" style={{ transition: 'transform 0.2s ease', transform: `translate(${this.state.idx * -shiftW}px)`}}>
+        {media.map((m) => this._renderPath(m))}
+      </div>
     )
   }
 
-  if (typeof(source) !== 'object') {
-    return renderError()
+  onShiftGallery(shift) {
+    if (this.state.idx === 0 && shift === -1) return;
+    if (this.state.idx - 1 === this.props.source.paths.length && shift === 1) return
+    this.setState({ idx: this.state.idx+shift });
   }
-  const {id, url, title, paths, date, type, desc} = source
-  const media = paths.map(toMedia)
-  const counts = getTypeCounts(media)
 
+  _renderControls() {
+    return (
+      <React.Fragment>
+        <div className="back" onClick={() => this.onShiftGallery(-1)}><svg><path d="M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z"></path></svg></div>
+        <div className="next" onClick={() => this.onShiftGallery(1)}><svg><path d="M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z"></path></svg></div>
+      </React.Fragment>
+    );
+  }
 
-  return (
-    <div className="mo-overlay" onClick={onCancel}>
-      <div className="mo-container" onClick={(e) => { e.stopPropagation(); }}>
-        <div className="mo-header">
-          <div className="mo-header-close" onClick={onCancel}>
-            <button className="side-menu-burg is-active"><span></span></button>
+  render () {
+    if (typeof(this.props.source) !== 'object') {
+      return this.renderError()
+    }
+    const {id, url, title, paths, date, type, desc} = this.props.source
+    const media = paths.map(this.toMedia)
+    const counts = this.getTypeCounts(media)
+  
+    return (
+      <div className="mo-overlay" onClick={this.props.onCancel}>
+        <div className="mo-container" onClick={(e) => { e.stopPropagation(); }}>
+          <div className="mo-header">
+            <div className="mo-header-close" onClick={this.props.onCancel}>
+              <button className="side-menu-burg is-active"><span></span></button>
+            </div>
+            <div className="mo-header-text">{this.props.source.title}</div>
           </div>
-          <div className="mo-header-text">{source.title}</div>
-        </div>
-        <div className="mo-media-container">
-          {_renderContent(media)}
-        </div>
-        <div className="mo-meta-container">
-          <div className="mo-box">
-            {title? <p><b>{title}</b></p> : null}
-            <div>{_renderCounts(counts)}</div>
-            <hr />
-            {type ? <h4>Media type</h4> : null}
-            {type ? <p><i className="material-icons left">perm_media</i>{type}</p> : null}
-            {date ? <h4>Date</h4> : null}
-            {date ? <p><i className="material-icons left">today</i>{date}</p>: null}
-            {url ? <h4>Link</h4> : null}
-            {url ? <span><i className="material-icons left">link</i><a href={url} target="_blank">Link to original URL</a></span> : null}
-            {desc ? <hr /> : null}
-            {desc ? <div>{desc}</div> : null}
+          <div className="mo-media-container">
+            {(media.length > 1) ? this._renderControls() : ''}
+            {this._renderContent(media)}
+          </div>
+          <div className="mo-meta-container">
+            <div className="mo-box">
+              <p style={{ textAlign: 'center'}}>{`${this.state.idx+1} / ${paths.length}`}</p>
+              {title? <p><b>{title}</b></p> : null}
+              <div>{this._renderCounts(counts)}</div>
+              {type ? <h4>Media type</h4> : null}
+              {type ? <p><i className="material-icons left">perm_media</i>{type}</p> : null}
+              {date ? <h4>Date</h4> : null}
+              {date ? <p><i className="material-icons left">today</i>{date}</p>: null}
+              {url ? <h4>Link</h4> : null}
+              {url ? <span><i className="material-icons left">link</i><a href={url} target="_blank">Link to original URL</a></span> : null}
+              {desc ? <hr /> : null}
+              {desc ? <div>{desc}</div> : null}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  
+  }
 }
 
 export default SourceOverlay
