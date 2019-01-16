@@ -1,5 +1,6 @@
 import React from 'react';
 import Checkbox from './presentational/Checkbox';
+import copy from '../js/data/copy.json';
 
 class TagListPanel extends React.Component {
 
@@ -20,9 +21,10 @@ class TagListPanel extends React.Component {
     this.computeTree(nextProps.tags);//.children[nextProps.tagType]);
   }
 
-  onClickCheckbox(tag) {
-    tag.active = !tag.active
-    this.props.onFilter(tag);
+  onClickCheckbox(obj, type) {
+    obj.active = !obj.active
+    if (type === 'category') this.props.onCategoryFilter(obj);
+    if (type === 'tag') this.props.onTagFilter(obj);
   }
 
   createNodeComponent (node, depth) {
@@ -35,7 +37,7 @@ class TagListPanel extends React.Component {
           <Checkbox
             label={node.key}
             isActive={node.active}
-            onClickCheckbox={() => this.onClickCheckbox(node)}
+            onClickCheckbox={() => this.onClickCheckbox(node, 'tag')}
           />
       </li>
     );
@@ -61,15 +63,42 @@ class TagListPanel extends React.Component {
   }
 
   renderTree() {
-    return this.state.treeComponents.map(c => c);
+    return (
+      <div>
+        <h2>{copy[this.props.language].toolbar.tags}</h2>
+        {this.state.treeComponents.map(c => c)}
+      </div>
+    )
+  }
+
+  renderCategoryTree() {
+    return (
+      <div>
+        <h2>{copy[this.props.language].toolbar.categories}</h2>
+        {this.props.categories.map(cat => {
+          return (<li
+            key={cat.category.replace(/ /g,"_")}
+            className={'tag-filter active'}
+            style={{ marginLeft: '20px' }}
+          >
+            <Checkbox
+              label={cat.category}
+              isActive={cat.active}
+              onClickCheckbox={() => this.onClickCheckbox(cat, 'category')}
+            />
+          </li>)
+          })
+        }
+      </div>
+    )
   }
 
   render() {
-
     return (
       <div className="react-innertabpanel">
-        <h2>Explore data by tag</h2>
-        <p>Explore freely all the data by selecting tags.</p>
+        <h2>{copy[this.props.language].toolbar.explore_by_tag__title}</h2>
+        <p>{copy[this.props.language].toolbar.explore_by_tag__description}</p>
+        {this.renderCategoryTree()}
         {this.renderTree()}
       </div>
     );

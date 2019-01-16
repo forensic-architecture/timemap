@@ -20,6 +20,7 @@ export const getSources = state => {
 export const getNotifications = state => state.domain.notifications
 export const getTagTree = state => state.domain.tags
 export const getTagsFilter = state => state.app.filters.tags
+export const getCategoriesFilter = state => state.app.filters.categories
 export const getTimeRange = state => state.app.filters.timerange
 
 
@@ -42,6 +43,19 @@ function isTaggedIn(event, tagFilters) {
   }
 }
 
+/**
+ * Given an event and all categories,
+ * returns true/false if event has a category that is active
+ */
+function isTaggedInWithCategory(event, categories) {
+  if (event.category) {
+    if (categories.find(c => (c.category === event.category && c.active))) return true
+    return false;
+  } else {
+    return false
+  }
+}
+
 /*
 * Returns true if no tags are selected
 */
@@ -50,6 +64,17 @@ function isNoTags(tagFilters) {
     tagFilters.length === 0
     || !process.env.features.USE_TAGS
     || tagFilters.every(t => !t.active)
+  )
+}
+
+/*
+* Returns true if no categories are selected
+*/
+function isNoCategories(categories) {
+  return (
+    categories.length === 0
+    || !process.env.features.CATEGORIES_AS_TAGS
+    || categories.every(c => !c.active)
   )
 }
 
@@ -69,14 +94,15 @@ function isTimeRangedIn(event, timeRange) {
  * and if TAGS are being used, select them if their tags are enabled
  */
 export const selectEvents = createSelector(
-    [getEvents, getTagsFilter, getTimeRange],
-    (events, tagFilters, timeRange) => {
+    [getEvents, getTagsFilter, getCategoriesFilter, getTimeRange],
+    (events, tagFilters, categories, timeRange) => {
 
       return events.reduce((acc, event) => {
         const isTagged = isTaggedIn(event, tagFilters) || isNoTags(tagFilters)
+        const isTaggedWithCategory = isTaggedInWithCategory(event, categories) || isNoCategories(categories)
         const isTimeRanged = isTimeRangedIn(event, timeRange)
 
-        if (isTimeRanged && isTagged) {
+        if (isTimeRanged && isTagged && isTaggedWithCategory) {
           const eventClone = Object.assign({}, event)
           acc[event.id] = eventClone
         }
@@ -90,16 +116,14 @@ export const selectEvents = createSelector(
  * and if TAGS are being used, select them if their tags are enabled
  */
 export const selectNarratives = createSelector(
-    [getEvents, getNarratives, getTagsFilter, getTimeRange, getSources],
-    (events, narrativesMeta, tagFilters, timeRange, sources) => {
+    [getEvents, getNarratives, getSources],
+    (events, narrativesMeta, sources) => {
 
       const narratives = {}
       const narrativeSkeleton = id => ({ id, steps: [] })
 
       /* populate narratives dict with events */
       events.forEach(evt => {
-        const isTagged = isTaggedIn(evt, tagFilters) || isNoTags(tagFilters)
-        const isTimeRanged = isTimeRangedIn(evt, timeRange)
         const isInNarrative =  evt.narratives.length > 0
 
         evt.narratives.forEach(narrative => {
@@ -229,7 +253,13 @@ export const selectSelected = createSelector(
 */
 export const selectCategories = createSelector(
   [getCategories],
-  (categories) => categories
+  (categories) => {
+    categories.map(cat => {
+      cat.active = (!cat.hasOwnProperty('active')) ? false : cat.active
+    });
+    console.log(categories)
+    return categories;
+  }
 )
 
 

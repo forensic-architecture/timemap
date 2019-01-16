@@ -189,11 +189,19 @@ export function updateDistrict(district) {
   }
 }
 
-export const UPDATE_TAGFILTERS = 'UPDATE_TIMEFILTERS'
+export const UPDATE_TAGFILTERS = 'UPDATE_TAGFILTERS'
 export function updateTagFilters(tag) {
   return {
     type: UPDATE_TAGFILTERS,
     tag
+  }
+}
+
+export const UPDATE_CATEGORYFILTERS = 'UPDATE_CATEGORYFILTERS'
+export function updateCategoryFilters(category) {
+  return {
+    type: UPDATE_CATEGORYFILTERS,
+    category
   }
 }
 

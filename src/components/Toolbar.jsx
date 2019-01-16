@@ -81,7 +81,8 @@ class Toolbar extends React.Component {
             categories={this.props.categories}
             tagFilters={this.props.tagFilters}
             categoryFilters={this.props.categoryFilters}
-            onFilter={this.props.methods.onFilter}
+            onTagFilter={this.props.methods.onTagFilter}
+            onCategoryFilter={this.props.methods.onCategoryFilter}
             language={this.props.language}
           />
         </TabPanel>
@@ -185,11 +186,11 @@ class Toolbar extends React.Component {
 function mapStateToProps(state) {
   return {
     tags: selectors.getTagTree(state),
-    categories: selectors.selectCategories(state),
+    categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
     language: state.app.language,
     tagFilters: selectors.selectTagList(state),
-    categoryFilter: state.app.filters.categories,
+    categoryFilters: selectors.selectCategories(state),
     viewFilters: state.app.filters.views,
     features: state.app.features,
     narrative: state.app.narrative,
