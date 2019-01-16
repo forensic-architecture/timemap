@@ -130,8 +130,8 @@ function SourceOverlay ({ source, onCancel }) {
 
 
   return (
-    <div className="mo-overlay">
-      <div className="mo-container">
+    <div className="mo-overlay" onClick={onCancel}>
+      <div className="mo-container" onClick={(e) => { e.stopPropagation(); }}>
         <div className="mo-header">
           <div className="mo-header-close" onClick={onCancel}>
             <button className="side-menu-burg is-active"><span></span></button>
@@ -143,12 +143,15 @@ function SourceOverlay ({ source, onCancel }) {
         </div>
         <div className="mo-meta-container">
           <div className="mo-box">
-            {title? <div><b>{title}</b></div> : null}
+            {title? <p><b>{title}</b></p> : null}
             <div>{_renderCounts(counts)}</div>
-            {type ? <div>{type}</div> : null}
-            {date ? <div>Date:<span className="indent">{date}</span></div> : null}
-            {url ? <div><a href={url} target="_blank">Link to original URL</a></div> : null}
-            <hr />
+            {type ? <h4>Media type</h4> : null}
+            {type ? <p><i className="material-icons left">perm_media</i>{type}</p> : null}
+            {date ? <h4>Date</h4> : null}
+            {date ? <p><i className="material-icons left">today</i>{date}</p>: null}
+            {url ? <h4>Link</h4> : null}
+            {url ? <span><i className="material-icons left">link</i><a href={url} target="_blank">Link to original URL</a></span> : null}
+            {desc ? <hr /> : null}
             {desc ? <div>{desc}</div> : null}
           </div>
         </div>

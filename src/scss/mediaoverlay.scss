@@ -3,6 +3,7 @@ $panel-height: 700px;
 $vimeo-width: $panel-width - 100;
 $vimeo-height: $panel-height / 2;
 
+$padding: 20px;
 $header-inset: 10px;
 
 .mo-overlay {
@@ -17,33 +18,6 @@ $header-inset: 10px;
   height: 100vh;
   background-color: rgba(239, 239, 239, 0.5);
   z-index: 20;
-}
-
-.mo-header {
-  min-height: 38px;
-  max-height: 38px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  background-color: black;
-  color: white;
-
-  .mo-header-close {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: $header-inset + 8px;
-  }
-
-  .mo-header-text {
-    flex: 1;
-    margin-left: -4em;
-    margin-right: $header-inset;
-    display: flex;
-    align-items: center;
-    justify-content: right;
-  }
 }
 
 .mo-container {
@@ -68,11 +42,39 @@ $header-inset: 10px;
   }
 }
 
+.mo-header {
+  min-height: 42px;
+  max-height: 42px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: black;
+  color: white;
+
+  .mo-header-close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: $header-inset + 8px;
+  }
+
+  .mo-header-text {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: $padding;
+    font-family: "Lato", Helvetica, sans-serif;
+  }
+}
+
 .mo-media-container {
-  font-family: "Lato", Helvetica, sans-serif;
+  box-sizing: border-box;
   min-width: 100%;
   max-height: 60vh;
+  padding: 20px;
   overflow-y: auto;
+  font-family: "Lato", Helvetica, sans-serif;
 
   .media-player {
     width: 100%;
@@ -91,20 +93,48 @@ $header-inset: 10px;
 }
 
 .mo-meta-container {
-  padding: 3*$header-inset;
-  min-height: 100px;
-  min-width: $panel-width;
-  max-width: $panel-height;
   display: flex;
-  justify-content: center;
+  justify-content: center;  
+  box-sizing: border-box;
+  min-height: 100px;
+  width: 100%;
+  padding: $padding;
 
   .mo-box {
     display: flex;
     flex-direction: column;
-    max-width: $panel-width - (6*$header-inset);
-    min-width: $panel-width - (6*$header-inset);
-    border: 1px solid rgb(189,189,189);
-    padding: $header-inset;
+    max-width: $panel-width;
+    width: 100%;
+    padding: $padding 0;
+    border-top: 1px solid rgb(189,189,189);
+    font-family: "Lato", Helvetica, sans-serif;
+    font-size: $normal;
+
+    h4 {
+      margin: 0 0 5px 0;
+      text-transform: uppercase;
+      font-size: $xsmall;
+      color: $darkwhite;
+      font-weight: 100;      
+    }
+
+    p {
+      margin-top: 0;
+      font-size: $large;
+    }
+
+    .material-icons {
+      font-size: $normal;
+      color: $darkwhite;
+      margin-right: 5px;
+    }      
+
+    a {
+      font-size: $large;
+      color: $darkgrey;
+      border-bottom: 1px solid $red;
+      &:hover { border-bottom: 1px solid $darkgrey; }
+    }
   }
 
   .indent {
@@ -139,20 +169,24 @@ $header-inset: 10px;
 
 /* source overlay specific styles */
 .no-source-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   border: 1px solid black;
   padding: 2em;
   min-height: 200px;
 }
 
 .no-source-row {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 0.7em;
-  // min-width: 150px;
-  // max-width: 150px;
 
-  .no-source-icon {
-    margin-right: 1em;
+  p {
+    text-align: center;
+    color: $midgrey;
+
+    .no-source-icon {
+      font-size: $xxxlarge;
+      color: $darkwhite;
+    }
   }
 }
 
