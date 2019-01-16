@@ -81,7 +81,7 @@ class Toolbar extends React.Component {
             categories={this.props.categories}
             tagFilters={this.props.tagFilters}
             categoryFilters={this.props.categoryFilters}
-            filter={this.props.filter}
+            onFilter={this.props.methods.onFilter}
             language={this.props.language}
           />
         </TabPanel>
@@ -90,13 +90,13 @@ class Toolbar extends React.Component {
     return '';
   }
 
-  renderToolbarTab(_selected, label) {
+  renderToolbarTab(_selected, label, icon_key) {
     const isActive = (this.state._selected === _selected);
     let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab';
 
     return (
       <div className={classes} onClick={() => { this.selectTab(_selected); }}>
-        <i className="material-icons">timeline</i>
+        <i className="material-icons">{icon_key}</i>
         <div className="tab-caption">{label}</div>
       </div>
     );
@@ -104,7 +104,7 @@ class Toolbar extends React.Component {
 
   renderToolbarTabs() {
     const title = copy[this.props.language].toolbar.title;
-    const isTags = this.props.tags && (this.props.tags.children > 0);
+    const isTags = this.props.tags && (Object.keys(this.props.tags.children) > 0);
 
     return (
       <div className="toolbar">
@@ -125,7 +125,7 @@ class Toolbar extends React.Component {
         {this.renderClosePanel()}
         <Tabs selectedIndex={this.state._selected}>
           {this.renderToolbarNarrativePanel()}
-          {/* {this.renderToolbarTagPanel()} */}
+          {this.renderToolbarTagPanel()}}
         </Tabs>
       </div>
     )
@@ -150,15 +150,15 @@ class Toolbar extends React.Component {
 
   renderToolbarTabs() {
     const title = copy[this.props.language].toolbar.title;
-    const isTags = this.props.tags && (this.props.tags.children > 0);
+    const isTags = this.props.tags && this.props.tags.children;
 
     return (
       <div className="toolbar">
         <div className="toolbar-header"><p>{title}</p></div>
         <div className="toolbar-tabs">
           {/*this.renderToolbarTab(0, 'search')*/}
-          {this.renderToolbarTab(0, 'Narratives')}
-          {(isTags) ? this.renderToolbarTab(1, 'Explore by tag') : ''}
+          {this.renderToolbarTab(0, 'Narratives', 'timeline')}
+          {(isTags) ? this.renderToolbarTab(1, 'Explore by tag', 'style') : ''}
         </div>
         <ToolbarBottomActions
           sites={{

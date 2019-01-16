@@ -22,7 +22,7 @@ class TagListPanel extends React.Component {
 
   onClickCheckbox(tag) {
     tag.active = !tag.active
-    this.props.filter(tag);
+    this.props.onFilter(tag);
   }
 
   createNodeComponent (node, depth) {

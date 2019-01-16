@@ -33,8 +33,7 @@ export const getTimeRange = state => state.app.filters.timerange
  */
 function isTaggedIn(event, tagFilters) {
   if (event.tags) {
-    const tagsInEvent = event.tags.split(",")
-    const isTagged = tagsInEvent.some((tag) => {
+    const isTagged = event.tags.some((tag) => {
       return tagFilters.find(tF => (tF.key === tag && tF.active))
     })
     return isTagged

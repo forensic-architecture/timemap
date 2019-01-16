@@ -198,6 +198,10 @@
         stroke-dasharray: 1px 2px;
       }
 
+      .datetime {
+        /*transition: transform 0.2s ease;*/
+      }
+
       .event {
         cursor: pointer;
         opacity: .7;
@@ -212,6 +216,7 @@
         stroke: $offwhite;
         stroke-width: 2;
         stroke-dasharray: 5px 2px;
+        transition: transform 0.2s ease;
       }
 
       .coevent {
