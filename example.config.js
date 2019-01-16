@@ -14,7 +14,8 @@ module.exports = {
     USE_TAGS: false,
     USE_SEARCH: false,
     USE_SITES: true,
-    USE_SOURCES: true
+    USE_SOURCES: true,
+    CATEGORIES_AS_TAGS: true
   }
 }
 
