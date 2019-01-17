@@ -145,11 +145,6 @@ export const selectNarratives = createSelector(
 
         steps.sort(compareTimestamp)
 
-        // steps.forEach((step, i) => {
-        //   narratives[key].byId[step.id].next = (i < steps.length - 2) ? steps[i + 1] : null
-        //   narratives[key].byId[step.id].prev = (i > 0) ? steps[i - 1] : null
-        // })
-
         if (narrativesMeta.find(n => n.id === key)) {
           narratives[key] = {
             ...narrativesMeta.find(n => n.id === key),
@@ -158,7 +153,9 @@ export const selectNarratives = createSelector(
         }
       })
 
-      return Object.values(narratives)
+      // Return narratives in original order
+      // + filter those that are undefined
+      return narrativesMeta.map(n => narratives[n.id]).filter(d => d);
 })
 
 /** Aggregate information about the narrative and the current step into
