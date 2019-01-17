@@ -82,7 +82,8 @@ class Timeline extends React.Component {
   }
 
   makeScaleY(categories) {
-    const catsYpos = categories.map((g, i) => (i + 1) * this.state.dims.trackHeight / categories.length);
+    const tickHeight = 15;
+    const catsYpos = categories.map((g, i) => (i + 1) * this.state.dims.trackHeight / categories.length + tickHeight / 2);
     return d3.scaleOrdinal()
       .domain(categories)
       .range(catsYpos);

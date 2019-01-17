@@ -25,7 +25,7 @@ class TimelineCategories extends React.Component {
   }
 
   getY(idx) {
-    return (idx + 1) * this.props.dims.trackHeight / this.props.categories.length
+    return (idx + 1) * this.props.dims.trackHeight / this.props.categories.length + 7.5;
   }
 
   renderCategory(category, idx) {

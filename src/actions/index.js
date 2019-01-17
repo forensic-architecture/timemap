@@ -1,54 +1,25 @@
-// TODO: move to util lib
-function urlFromEnv(ext) {
-  if (process.env[ext]) {
-    return `${process.env.SERVER_ROOT}${process.env[ext]}`
-  } else {
-    return null
-  }
-}
+import { urlFromEnv } from '../js/utilities'
 
-// TODO: relegate these URLs entirely to environment variables
 const EVENT_DATA_URL = urlFromEnv('EVENT_EXT');
 const CATEGORY_URL = urlFromEnv('CATEGORY_EXT');
-const TAG_URL = urlFromEnv('TAGS_EXT');
+const TAGS_URL = urlFromEnv('TAGS_EXT');
 const SOURCES_URL = urlFromEnv('SOURCES_EXT');
 const NARRATIVE_URL = urlFromEnv('NARRATIVE_EXT');
 const SITES_URL = urlFromEnv('SITES_EXT');
 const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`;
 
+const domainMsg = (domainType) => `Something went wrong fetching ${domainType}. Check the URL or try disabling them in the config file.`
 
-const DEBUG_GER = 'DEBUG_GER'
-function _debugger(value) {
-  console.log(value)
-  return {
-    type: DEBUG_GER,
-    value
-  }
-}
-
-/*
-* Create an error notification object
-* Types: ['error', 'warning', 'good', 'neural']
-*/
-function makeError (type, id, message) {
-  return {
-    type: 'error',
-    id,
-    message: `${type} ${id}: ${message}`
-  }
-}
 
 export function fetchDomain () {
   let notifications = []
 
-  function handleError (domainType) {
-    return () => {
-      notifications.push({
-        message: `Something went wrong fetching ${domainType}. Check the URL or try disabling them in the config file.`,
-        type: 'error'
-      })
-      return []
-    }
+  function handleError (message) {
+    notifications.push({
+      message,
+      type: 'error'
+    })
+    return []
   }
 
   return dispatch => {
@@ -57,35 +28,43 @@ export function fetchDomain () {
 
     const eventPromise = fetch(EVENT_DATA_URL)
       .then(response => response.json())
-      .catch(handleError('events'))
+      .catch(() => handleError('events'))
 
     const catPromise = fetch(CATEGORY_URL)
       .then(response => response.json())
-      .catch(handleError('categories'))
+      .catch(() => handleError(domainMsg('categories')))
 
     const narPromise = fetch(NARRATIVE_URL)
       .then(response => response.json())
-      .catch(handleError('narratives'))
+      .catch(() => handleError(domainMsg('narratives')))
 
     let sitesPromise = Promise.resolve([])
     if (process.env.features.USE_SITES) {
       sitesPromise = fetch(SITES_URL)
         .then(response => response.json())
-        .catch(handleError('sites'))
+        .catch(() => handleError(domainMsg('sites')))
     }
 
     let tagsPromise = Promise.resolve([])
     if (process.env.features.USE_TAGS) {
-      tagsPromise = fetch(TAG_URL)
-        .then(response => response.json())
-        .catch(handleError('tags'))
+      if (!TAGS_URL) {
+        tagsPromise = Promise.resolve(handleError('USE_TAGS is true, but you have not provided a TAGS_EXT'))
+      } else {
+        tagsPromise = fetch(TAGS_URL)
+          .then(response => response.json())
+          .catch(() => handleError(domainMsg('tags')))
+      }
     }
 
     let sourcesPromise = Promise.resolve([])
     if (process.env.features.USE_SOURCES) {
-      sourcesPromise = fetch(SOURCES_URL)
-        .then(response => response.json())
-        .catch(handleError('sources'))
+      if (!SOURCES_URL) {
+        sourcesPromise = Promise.resolve(makeError('USE_SOURCES is true, but you have not provided a SOURCES_EXT'))
+      } else {
+        sourcesPromise = fetch(SOURCES_URL)
+          .then(response => response.json())
+          .catch(() => handleError(domainMsg('sources')))
+      }
     }
 
     return Promise.all([
@@ -152,9 +131,6 @@ export function fetchSource(source) {
             return response.json()
           }
         })
-        .then(sources => {
-          dispatch(_debugger(sources))
-        })
         .catch(err => {
           dispatch(fetchSourceError(err.message))
           dispatch(toggleFetchingSources())
@@ -189,11 +165,19 @@ export function updateDistrict(district) {
   }
 }
 
-export const UPDATE_TAGFILTERS = 'UPDATE_TIMEFILTERS'
+export const UPDATE_TAGFILTERS = 'UPDATE_TAGFILTERS'
 export function updateTagFilters(tag) {
   return {
     type: UPDATE_TAGFILTERS,
     tag
+  }
+}
+
+export const UPDATE_CATEGORYFILTERS = 'UPDATE_CATEGORYFILTERS'
+export function updateCategoryFilters(category) {
+  return {
+    type: UPDATE_CATEGORYFILTERS,
+    category
   }
 }
 

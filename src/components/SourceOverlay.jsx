@@ -19,7 +19,7 @@ function SourceOverlay ({ source, onCancel }) {
       <Img
       className='source-image'
       src={path}
-      loader={<Spinner />}
+      loader={<div style={{ width: '400px', height: '400px' }}><Spinner /></div>}
       unloader={<NoSource failedUrls={source.paths} />}
       />
       </div>
@@ -107,8 +107,8 @@ function SourceOverlay ({ source, onCancel }) {
     return (
       <div>
         {img ? img : ''}
-        {vid ? `, ${vid}`: ''}
-        {txt ? `, ${txt}`: ''}
+        {(img && vid) ? `, ${vid}`: (vid || '')}
+        {((img || vid) && txt) ? `, ${txt}`: (txt || '')}
       </div>
     )
   }
@@ -145,6 +145,7 @@ function SourceOverlay ({ source, onCancel }) {
           <div className="mo-box">
             {title? <p><b>{title}</b></p> : null}
             <div>{_renderCounts(counts)}</div>
+            <hr />
             {type ? <h4>Media type</h4> : null}
             {type ? <p><i className="material-icons left">perm_media</i>{type}</p> : null}
             {date ? <h4>Date</h4> : null}

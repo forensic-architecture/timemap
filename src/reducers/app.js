@@ -1,11 +1,10 @@
 import initial from '../store/initial.js'
 
-import { parseDate } from '../js/utilities.js'
-
 import {
   UPDATE_HIGHLIGHTED,
   UPDATE_SELECTED,
   UPDATE_TAGFILTERS,
+  UPDATE_CATEGORYFILTERS,
   UPDATE_TIMERANGE,
   UPDATE_NARRATIVE,
   INCREMENT_NARRATIVE_CURRENT,
@@ -136,6 +135,25 @@ function updateTagFilters(appState, action) {
   })
 }
 
+function updateCategoryFilters(appState, action) {
+  const categoryFilters = appState.filters.categories.slice(0)
+
+  const catFilter = categoryFilters.find(cF => cF.category === action.category.category);
+
+  if (!catFilter) {
+    categoryFilters.push(action.category)
+  } else {
+    catFilter.active = (!!action.category.active);
+  }
+  
+
+  return Object.assign({}, appState, {
+    filters: Object.assign({}, appState.filters, {
+      categories: categoryFilters
+    })
+  })
+}
+
 function updateTimeRange(appState, action) { // XXX
   return Object.assign({}, appState, {
     filters: Object.assign({}, appState.filters, {
@@ -254,6 +272,8 @@ function app(appState = initial.app, action) {
       return updateSelected(appState, action)
     case UPDATE_TAGFILTERS:
       return updateTagFilters(appState, action)
+    case UPDATE_CATEGORYFILTERS:
+      return updateCategoryFilters(appState, action)
     case UPDATE_TIMERANGE:
       return updateTimeRange(appState, action)
     case UPDATE_NARRATIVE:
