@@ -26,17 +26,18 @@ function _debugger(value) {
   }
 }
 
+const domainMsg = (domainType) => `Something went wrong fetching ${domainType}. Check the URL or try disabling them in the config file.`
+
+
 export function fetchDomain () {
   let notifications = []
 
-  function handleError (domainType) {
-    return () => {
-      notifications.push({
-        message: `Something went wrong fetching ${domainType}. Check the URL or try disabling them in the config file.`,
-        type: 'error'
-      })
-      return []
-    }
+  function handleError (message) {
+    notifications.push({
+      message,
+      type: 'error'
+    })
+    return []
   }
 
   return dispatch => {
@@ -45,56 +46,45 @@ export function fetchDomain () {
 
     const eventPromise = fetch(EVENT_DATA_URL)
       .then(response => response.json())
-      .catch(handleError('events'))
+      .catch(() => handleError('events'))
 
     const catPromise = fetch(CATEGORY_URL)
       .then(response => response.json())
-      .catch(handleError('categories'))
+      .catch(() => handleError(domainMsg('categories')))
 
     const narPromise = fetch(NARRATIVE_URL)
       .then(response => response.json())
-      .catch(handleError('narratives'))
+      .catch(() => handleError(domainMsg('narratives')))
 
     let sitesPromise = Promise.resolve([])
     if (process.env.features.USE_SITES) {
       sitesPromise = fetch(SITES_URL)
         .then(response => response.json())
-        .catch(handleError('sites'))
+        .catch(() => handleError(domainMsg('sites')))
     }
 
     let tagsPromise = Promise.resolve([])
     if (process.env.features.USE_TAGS) {
       if (!TAGS_URL) {
-        notifications.push({
-          message: 'USE_TAGS is true, but you have not provided a TAGS_URL',
-          type: 'error'
-        })
-        tagsPromise = Promise.resolve({})
+        tagsPromise = Promise.resolve(handleError('USE_TAGS is true, but you have not provided a TAGS_URL'))
       } else {
         tagsPromise = fetch(TAGS_URL)
           .then(response => {
             console.log(response)
             return response.json()
           })
-          .catch(err => {
-            console.log(err)
-            return handleError('tags')
-          })
+          .catch(() => handleError(domainMsg('tags')))
       }
     }
 
     let sourcesPromise = Promise.resolve([])
     if (process.env.features.USE_SOURCES) {
       if (!SOURCES_URL) {
-        notifications.push({
-          message: 'USE_SOURCES is true, but you have not provided a SOURCES_URL',
-          type: 'error'
-        })
-        tagsPromise = Prommise.resolve([])
+        sourcesPromise = Promise.resolve(makeError('USE_SOURCES is true, but you have not provided a SOURCES_URL'))
       } else {
         sourcesPromise = fetch(SOURCES_URL)
           .then(response => response.json())
-          .catch(handleError('sources'))
+          .catch(() => handleError(domainMsg('sources')))
       }
     }
 
