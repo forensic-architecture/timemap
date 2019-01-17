@@ -14,7 +14,7 @@ function ToolbarBottomActions (props) {
           {/*   isEnabled={this.props.viewFilters.routes} */}
           {/* /> */}
           <SitesIcon
-            isEnabled={props.sites.enabled}
+            isActive={props.sites.enabled}
             onClickHandler={props.sites.toggle}
           />
           {/* <CoeventIcon */}

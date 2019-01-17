@@ -24,7 +24,9 @@ function NarrativeCard ({ narrative }) {
 
         {/* <i className='material-icons left'>location_on</i> */}
         {/* {_renderActions(current, steps)} */}
-        <p className='narrative-info-desc'>{narrative.description}</p>
+        <div className='narrative-info-desc'>
+          <p>{narrative.description}</p>
+        </div>
               </div>
     )
   } else {

@@ -1,11 +1,11 @@
 import React from 'react';
 
-const TimelineZoomControls = ({ zoomLevels, dims, onApplyZoom }) => {
-  
+const TimelineZoomControls = ({ extent, zoomLevels, dims, onApplyZoom }) => {
   function renderZoom(zoom, idx) {
+    const isActive = (zoom.duration === extent)
     return (
       <text
-        className={`zoom-level-button ${zoom.active ? 'active' : ''}`}
+        className={`zoom-level-button ${isActive ? 'active' : ''}`}
         x="60"
         y={(idx * 15) + 20}
         onClick={() => onApplyZoom(zoom)}

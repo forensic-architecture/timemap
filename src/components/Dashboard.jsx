@@ -14,7 +14,7 @@ import InfoPopUp from './InfoPopup.jsx'
 import Timeline from './Timeline.jsx'
 import Notification from './Notification.jsx'
 
-import { parseDate } from '../js/utilities'
+import { parseDate, injectSource } from '../js/utilities'
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -60,8 +60,8 @@ class Dashboard extends React.Component {
     }
   }
 
-  getCategoryColor(category='other') {
-    return this.props.ui.style.categories[category] || this.props.ui.style.categories['other']
+  getCategoryColor(category) {
+    return this.props.ui.style.categories[category] || this.props.ui.style.categories['default']
   }
 
   getNarrativeLinks(event) {
@@ -171,5 +171,6 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(
   state => state,
+  // state => injectSource("Youtube - Novodvirske Tank Separatist Patrol Video"),
   mapDispatchToProps,
 )(Dashboard)

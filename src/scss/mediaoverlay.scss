@@ -1,7 +1,8 @@
-$panel-width: 800px;
+$panel-width: 1000px;
 $panel-height: 700px;
 $vimeo-width: $panel-width - 100;
 $vimeo-height: $panel-height / 2;
+
 $padding: 20px;
 $header-inset: 10px;
 
@@ -20,6 +21,7 @@ $header-inset: 10px;
 }
 
 .mo-container {
+  background-color: rgba(239, 239, 239, 0.9);
   // max-width: $panel-width;
   // min-width: $panel-width;
   // max-height: $panel-height;
@@ -27,43 +29,30 @@ $header-inset: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-height: 80vh;
+  height: 80vh;
+  width: $panel-width;
   max-width: 90vw;
   box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
 
-  .mo-media-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-.mo-header {
-  min-height: 42px;
-  max-height: 42px;
-  margin-bottom: 2px;
-  border-radius: 2px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  background-color: black;
-  color: white;
-
-  .mo-header-close {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: $header-inset + 8px;
+  .back, .next {
+    width: 30px;
+    height: 30px;
+    background: $darkgrey;
+    color: $offwhite;
+    cursor: pointer;
+    box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+    svg path { fill: $offwhite; }
+    z-index: 1;
   }
 
-  .mo-header-text {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: $padding;
-    font-family: "Lato", Helvetica, sans-serif;
+  .back {
+    left: 10px;
+    svg path { transform: translate(17px,15px)rotate(-90deg)}
+  }
+  .next {
+    margin-left: calc(100% - 60px);
+    right: 10px;
+    svg path { transform: translate(17px,15px)rotate(90deg)}
   }
 }
 
@@ -94,12 +83,17 @@ $header-inset: 10px;
 }
 
 .mo-media-container {
-  background-color: rgba(239, 239, 239, 0.9);
+  flex: 1;
+  /*display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;*/
+  display: inline-block;
+  overflow-x: hidden;
   box-sizing: border-box;
-  min-width: 100%;
+  width: 100%;
   max-height: 60vh;
   padding: 20px;
-  overflow-y: auto;
   font-family: "Lato", Helvetica, sans-serif;
 
   .media-player {
@@ -112,6 +106,14 @@ $header-inset: 10px;
     flex-direction: column;
   }
 
+  .media-gallery-controls {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -50%;
+  }
+
   // NB: topcushion seems to be necessary with certain overflows..
   &.topcushion {
     padding-top: 150px;
@@ -119,23 +121,24 @@ $header-inset: 10px;
 }
 
 .mo-meta-container {
-  background-color: rgba(239, 239, 239, 0.9);
   display: flex;
-  justify-content: center;  
-  box-sizing: border-box;
-  min-height: 100px;
-  min-width: $panel-width;
-  max-width: $panel-height;
-  display: flex;
-  justify-content: center;  
+  flex-direction: column;
+  justify-content: center;
   box-sizing: border-box;
   min-height: 100px;
   width: 100%;
   padding: $padding;
 
+  .mo-box-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
   .mo-box {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-around;
     max-width: $panel-width;
     width: 100%;
     padding: $padding 0;
@@ -148,7 +151,7 @@ $header-inset: 10px;
       text-transform: uppercase;
       font-size: $xsmall;
       color: $darkwhite;
-      font-weight: 100;      
+      font-weight: 100;
     }
 
     p {
@@ -160,7 +163,7 @@ $header-inset: 10px;
       font-size: $normal;
       color: $darkwhite;
       margin-right: 5px;
-    }      
+    }
 
     a {
       font-size: $large;
@@ -223,19 +226,73 @@ $header-inset: 10px;
   }
 }
 
-.source-image-container, .source-text-container {
-  padding: $padding;
-  display: inline-block;
-  align-items: center;
+.source-media-gallery {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  transition: transform 0.6s ease 0s;
+  width: 100%;
+  // min-width: $panel-width - 30px;
+  // min-height: $panel-height;
+}
+
+.source-text-container {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  background: $lightwhite;
+  box-sizing: border-box;
+  padding: 0 calc(50% - 400px);
+  overflow-y: scroll;
+  font-family: 'Merriweather', Georgia, serif;
+  line-height: 1.5em;
+
+  a {
+    color: $darkgrey;
+    border-bottom: 1px solid $red;
+    &:hover { border-bottom: 1px solid $darkgrey; color: $darkgrey; }
+  }
+
+  .md-container {
+    width: 100%;
+    overflow-wrap: break-word;
+  }
+}
+
+.source-image-container, .media-player {
+  display: flex;
+  justify-content: center;
+  width: calc(100% - 20px);
+  height: 100%;
+  min-width: calc(100% - 20px);
+  margin: 0 10px;
+  background: $lightwhite;
+  border-radius: 2px;
+}
+
+.media-player {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  padding: 20px 10%;
+  align-self: center;  
 }
 
 .source-image, .source-video {
   max-width: calc(100% - 20px);
-  max-height: 350px !important;
-  // height: 100%;
-  padding: 10px;
+  max-height: calc(100% - 20px);
+  padding: 0px;
+  font-family: 'Lato', Helvetica, sans-serif;
 }
 
-.media-player {
-  overflow-y: hidden;
+.video-react .video-react-progress-control {
+  align-self: center;
+}
+
+.video-react .video-react-control {
+  min-height: 100%;
 }

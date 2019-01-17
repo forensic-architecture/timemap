@@ -108,13 +108,15 @@ export function insetSourceFrom(allSources) {
  * view that source modal by default
  */
 export function injectSource(id) {
-  return state => ({
-    ...state,
-    app: {
-      ...state.app,
-      source: state.domain.sources[id]
+  return state => {
+    return {
+      ...state,
+      app: {
+        ...state.app,
+        source: state.domain.sources[id]
+      }
     }
-  })
+  }
 }
 
 export function urlFromEnv(ext) {
