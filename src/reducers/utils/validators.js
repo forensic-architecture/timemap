@@ -133,9 +133,6 @@ export function validateDomain (domain) {
     }
   })
 
-  console.log(sanitizedDomain)
-
-
   // Message the number of failed items in domain
   Object.keys(discardedDomain).forEach(disc => {
     const len = discardedDomain[disc].length

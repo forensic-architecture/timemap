@@ -145,7 +145,7 @@ class SourceOverlay extends React.Component {
           <div className="back" onClick={() => this.onShiftGallery(-1)}><svg><path d="M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z"></path></svg></div>
           <div className="next" onClick={() => this.onShiftGallery(1)}><svg><path d="M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z"></path></svg></div>
         </div>
-      );  
+      );
     }
     return (
       <div className="media-gallery-controls"></div>
@@ -175,7 +175,7 @@ class SourceOverlay extends React.Component {
           </div>
           <div className="mo-meta-container">
             <div className="mo-box-title">
-              <p>{`${this.state.idx+1} / ${paths.length}`}</p>
+              {/* <p>{`${this.state.idx+1} / ${paths.length}`}</p> */}
               {title? <p><b>{title}</b></p> : null}
               <div>{desc}</div>
             </div>
