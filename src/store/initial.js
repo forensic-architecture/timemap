@@ -56,15 +56,26 @@ const initial = {
     isMobile: (/Mobi/.test(navigator.userAgent)),
     language: 'en-US',
     mapAnchor: [31.356397, 34.784818],
-    zoomLevels: [
-      { label: '3 years', duration: 1576800 },
-      { label: '3 months', duration: 129600 },
-      { label: '3 days', duration: 4320 },
-      { label: '12 hours', duration: 720 },
-      { label: '2 hours', duration: 120 },
-      { label: '30 min', duration: 30 },
-      { label: '10 min', duration: 10 }
-    ],
+    timeline: {
+      dimensions: {
+        height: 140,
+        width: 0,
+        width_controls: 100,
+        height_controls: 115,
+        margin_left: 200,
+        margin_top: 20,
+        trackHeight: 80
+      },
+      zoomLevels: [
+        { label: '3 years', duration: 1576800 },
+        { label: '3 months', duration: 129600 },
+        { label: '3 days', duration: 4320 },
+        { label: '12 hours', duration: 720 },
+        { label: '2 hours', duration: 120 },
+        { label: '30 min', duration: 30 },
+        { label: '10 min', duration: 10 }
+      ],
+    },
     flags: {
       isFetchingDomain: false,
       isFetchingSources: false,

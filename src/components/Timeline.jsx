@@ -24,15 +24,7 @@ class Timeline extends React.Component {
     this.svgRef = React.createRef()
     this.state = {
       isFolded: false,
-      dims: {
-        height: 140,
-        width: 0,
-        width_controls: 100,
-        height_controls: 115,
-        margin_left: 120,
-        margin_top: 20,
-        trackHeight: 80
-      },
+      dims: props.app.dims,
       scaleX: null,
       scaleY: null,
       timerange: [null, null],
@@ -117,9 +109,15 @@ class Timeline extends React.Component {
       const boundingClient = document.querySelector(`#${dom}`).getBoundingClientRect();
 
       this.setState({
-          dims: Object.assign({}, this.state.dims, { width: boundingClient.width })
-        }, () => { this.setState({ scaleX: this.makeScaleX() })
-      });
+        dims: {
+          ...this.state.dims,
+          width: boundingClient.width
+        }
+      },
+        () => {
+          this.setState({ scaleX: this.makeScaleX()
+          })
+        });
     }
   }
 
@@ -329,9 +327,10 @@ function mapStateToProps(state) {
     },
     app: {
       timerange: selectors.getTimeRange(state),
+      dims: state.app.timeline.dimensions,
       selected: state.app.selected,
       language: state.app.language,
-      zoomLevels: state.app.zoomLevels,
+      zoomLevels: state.app.timeline.zoomLevels,
       narrative: state.app.narrative
     },
     ui: {
