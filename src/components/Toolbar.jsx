@@ -103,22 +103,6 @@ class Toolbar extends React.Component {
     );
   }
 
-  renderToolbarTabs() {
-    const title = copy[this.props.language].toolbar.title;
-    const isTags = this.props.tags && (Object.keys(this.props.tags.children) > 0);
-
-    return (
-      <div className="toolbar">
-        <div className="toolbar-header"><p>{title}</p></div>
-        <div className="toolbar-tabs">
-          {/*this.renderToolbarTab(0, 'search')*/}
-          {this.renderToolbarTab(0, 'Focus stories')}
-          {this.renderToolbarTab(1, 'Explore freely')}
-        </div>
-      </div>
-    )
-  }
-
   renderToolbarPanels() {
     let classes = (this.state._selected >= 0) ? 'toolbar-panels' : 'toolbar-panels folded';
     return (
@@ -151,6 +135,8 @@ class Toolbar extends React.Component {
 
   renderToolbarTabs() {
     const title = copy[this.props.language].toolbar.title;
+    const narratives_label = copy[this.props.language].toolbar.narratives_label;
+    const tags_label = copy[this.props.language].toolbar.tags_label;
     const isTags = this.props.tags && this.props.tags.children;
 
     return (
@@ -158,8 +144,8 @@ class Toolbar extends React.Component {
         <div className="toolbar-header"><p>{title}</p></div>
         <div className="toolbar-tabs">
           {/*this.renderToolbarTab(0, 'search')*/}
-          {this.renderToolbarTab(0, 'Narratives', 'timeline')}
-          {(isTags) ? this.renderToolbarTab(1, 'Explore by tag', 'style') : ''}
+          {this.renderToolbarTab(0, narratives_label, 'timeline')}
+          {(isTags) ? this.renderToolbarTab(1, tags_label, 'style') : ''}
         </div>
         <ToolbarBottomActions
           sites={{

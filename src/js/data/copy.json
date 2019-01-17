@@ -108,12 +108,14 @@
           "placeholder": "Search"
         }
       },
-      "narrative_panel_title": "Focus narratives",
+      "narratives_label": "Narratives",
       "narrative_summary": "Here you can follow some curated stories we have found in the data.",
       "categories": "Categories",
       "tags": "Tags",
+      "tags_label": "Tags",
       "explore_by_tag__title": "Explore by tag or category",
       "explore_by_tag__description": "Selecting tags or categories, you'll see only those events that are tagged accordingly. If you select nothing, as well as everything, all data will be displayed."
+
     },
     "timeline": {
       "zooms": [
