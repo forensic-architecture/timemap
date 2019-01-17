@@ -40,8 +40,8 @@ const initial = {
     },
     filters: {
       timerange: [
-        d3.timeParse("%Y-%m-%dT%H:%M:%S")("2013-02-23T12:00:00"),
-        d3.timeParse("%Y-%m-%dT%H:%M:%S")("2016-02-23T12:00:00")
+        new Date(2013, 2, 23, 12),
+        new Date(2016, 2, 23, 12)
       ],
       mapBounds: null,
       tags: [],
@@ -107,4 +107,9 @@ if (process.env.store) {
 } else {
   appStore = initial
 }
+
+// NB: config.js dates get implicitly converted to strings in mergeDeepLeft
+appStore.app.filters.timerange[0] = new Date(appStore.app.filters.timerange[0])
+appStore.app.filters.timerange[1] = new Date(appStore.app.filters.timerange[1])
+
 export default appStore
