@@ -25,7 +25,7 @@ class Md extends React.Component {
   render() {
     if (this.state.md && !this.state.error) {
       return (
-        <div dangerouslySetInnerHTML={{ __html: this.state.md }} />
+        <div className="md-container" dangerouslySetInnerHTML={{ __html: this.state.md }} />
       )
     } else if (this.state.error) {
       return this.props.unloader || <div>Error: couldn't load source</div>

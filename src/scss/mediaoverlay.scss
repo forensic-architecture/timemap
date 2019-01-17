@@ -71,7 +71,6 @@ $header-inset: 10px;
     font-family: "Lato", Helvetica, sans-serif;
   }
   .back, .next {
-    position: absolute;
     width: 30px;
     height: 30px;
     background: $darkgrey;
@@ -79,10 +78,18 @@ $header-inset: 10px;
     cursor: pointer;
     box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
     svg path { fill: $offwhite; }
+    z-index: 1;
   }
 
-  .back { left: 10px; svg path { transform: translate(17px,15px)rotate(-90deg)} }
-  .next { right: 10px; svg path { transform: translate(17px,15px)rotate(90deg)} }
+  .back {
+    left: 10px;
+    svg path { transform: translate(17px,15px)rotate(-90deg)}
+  }
+  .next {
+    margin-left: calc(100% - 60px);
+    right: 10px;
+    svg path { transform: translate(17px,15px)rotate(90deg)}
+  }
 }
 
 .mo-header {
@@ -114,10 +121,11 @@ $header-inset: 10px;
 .mo-media-container {
   background-color: rgba(239, 239, 239, 0.9);
   flex: 1;
-  display: flex;
+  /*display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: center;*/
+  display: inline-block;
   overflow-x: hidden;
   box-sizing: border-box;
   width: 100%;
@@ -133,6 +141,14 @@ $header-inset: 10px;
   .media-content {
     display: flex;
     flex-direction: column;
+  }
+
+  .media-gallery-controls {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -50%;
   }
 
   // NB: topcushion seems to be necessary with certain overflows..
@@ -279,6 +295,11 @@ $header-inset: 10px;
     color: $darkgrey;
     border-bottom: 1px solid $red;
     &:hover { border-bottom: 1px solid $darkgrey; color: $darkgrey; }
+  }
+
+  .md-container {
+    width: 100%;
+    overflow-wrap: break-word;
   }
 }
 

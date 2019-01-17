@@ -139,11 +139,16 @@ class SourceOverlay extends React.Component {
   }
 
   _renderControls() {
+    if (this.props.source.paths.length > 1) {
+      return (
+        <div className="media-gallery-controls">
+          <div className="back" onClick={() => this.onShiftGallery(-1)}><svg><path d="M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z"></path></svg></div>
+          <div className="next" onClick={() => this.onShiftGallery(1)}><svg><path d="M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z"></path></svg></div>
+        </div>
+      );  
+    }
     return (
-      <React.Fragment>
-        <div className="back" onClick={() => this.onShiftGallery(-1)}><svg><path d="M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z"></path></svg></div>
-        <div className="next" onClick={() => this.onShiftGallery(1)}><svg><path d="M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z"></path></svg></div>
-      </React.Fragment>
+      <div className="media-gallery-controls"></div>
     );
   }
 
@@ -165,8 +170,8 @@ class SourceOverlay extends React.Component {
             <div className="mo-header-text">{this.props.source.title}</div>
           </div>
           <div className="mo-media-container">
-            {(media.length > 1) ? this._renderControls() : ''}
             {this._renderContent(media)}
+            {this._renderControls()}
           </div>
           <div className="mo-meta-container">
             <div className="mo-box-title">
