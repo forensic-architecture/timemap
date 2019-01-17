@@ -1,12 +1,13 @@
-import Joi from 'joi';
+import Joi from 'joi'
 
-import eventSchema from '../schema/eventSchema';
-import categorySchema from '../schema/categorySchema';
-import siteSchema from '../schema/siteSchema';
-import narrativeSchema from '../schema/narrativeSchema';
+import eventSchema from '../schema/eventSchema'
+import categorySchema from '../schema/categorySchema'
+import siteSchema from '../schema/siteSchema'
+import narrativeSchema from '../schema/narrativeSchema'
 import sourceSchema from '../schema/sourceSchema'
+import shapeSchema from '../schema/shapeSchema'
 
-import { capitalize } from './helpers.js';
+import { capitalize } from './helpers.js'
 
 /*
 * Create an error notification object
@@ -21,8 +22,8 @@ function makeError(type, id, message) {
 }
 
 
-const isLeaf = node => (Object.keys(node.children).length === 0);
-const isDuplicate = (node, set) => { return (set.has(node.key)); };
+const isLeaf = node => (Object.keys(node.children).length === 0)
+const isDuplicate = (node, set) => { return (set.has(node.key)) }
 
 
 /*
@@ -61,8 +62,9 @@ export function validateDomain (domain) {
     sites: [],
     narratives: [],
     sources: {},
+    tags: {},
+    shapes: [],
     notifications: domain.notifications,
-    tags: {}
   }
 
   const discardedDomain = {
@@ -71,18 +73,19 @@ export function validateDomain (domain) {
     sites: [],
     narratives: [],
     sources: [],
+    shapes: []
   }
 
   function validateArrayItem(item, domainKey, schema) {
-    const result = Joi.validate(item, schema);
+    const result = Joi.validate(item, schema)
     if (result.error !== null) {
-      const id = item.id || '-';
-      const domainStr = capitalize(domainKey);
-      const error = makeError(domainStr, id, result.error.message);
+      const id = item.id || '-'
+      const domainStr = capitalize(domainKey)
+      const error = makeError(domainStr, id, result.error.message)
 
-      discardedDomain[domainKey].push(Object.assign(item, { error }));
+      discardedDomain[domainKey].push(Object.assign(item, { error }))
     } else {
-      sanitizedDomain[domainKey].push(item);
+      sanitizedDomain[domainKey].push(item)
     }
   }
 
@@ -109,29 +112,46 @@ export function validateDomain (domain) {
     })
   }
 
-  validateArray(domain.events, 'events', eventSchema);
-  validateArray(domain.categories, 'categories', categorySchema);
-  validateArray(domain.sites, 'sites', siteSchema);
-  validateArray(domain.narratives, 'narratives', narrativeSchema);
-  validateObject(domain.sources, 'sources', sourceSchema);
+  validateArray(domain.events, 'events', eventSchema)
+  validateArray(domain.categories, 'categories', categorySchema)
+  validateArray(domain.sites, 'sites', siteSchema)
+  validateArray(domain.narratives, 'narratives', narrativeSchema)
+  validateObject(domain.sources, 'sources', sourceSchema)
+  validateObject(domain.shapes, 'shapes', shapeSchema)
+
+  sanitizedDomain.shapes = sanitizedDomain.shapes.map(shape => {
+    const points = shape.items.map(coords => {
+      const _coords = coords.replace(/\s/g, '').split(',')
+      return {
+        lat: parseFloat(_coords[0]),
+        lon: parseFloat(_coords[1])
+      }
+    })
+    return {
+      name: shape.name,
+      points
+    }
+  })
+
+  console.log(sanitizedDomain)
 
 
   // Message the number of failed items in domain
   Object.keys(discardedDomain).forEach(disc => {
-    const len = discardedDomain[disc].length;
+    const len = discardedDomain[disc].length
     if (len) {
       sanitizedDomain.notifications.push({
         message: `${len} invalid ${disc} not displayed.`,
         items: discardedDomain[disc],
         type: 'error'
-      });
+      })
     }
-  });
+  })
 
   // Validate uniqueness of tags
-  const tagSet = new Set([]);
-  const duplicateTags = [];
-  validateTree(domain.tags, {}, tagSet, duplicateTags);
+  const tagSet = new Set([])
+  const duplicateTags = []
+  validateTree(domain.tags, {}, tagSet, duplicateTags)
 
   // Duplicated tags
   if (duplicateTags.length > 0) {
@@ -139,9 +159,9 @@ export function validateDomain (domain) {
       message: `Tags are required to be unique. Ignoring duplicates for now.`,
       items: duplicateTags,
       type: 'error'
-    });
+    })
   }
-  sanitizedDomain.tags = domain.tags;
+  sanitizedDomain.tags = domain.tags
 
-  return sanitizedDomain;
+  return sanitizedDomain
 }
