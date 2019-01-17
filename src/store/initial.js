@@ -1,3 +1,5 @@
+import { mergeDeepLeft } from 'ramda'
+
 const initial = {
   /*
    * The Domain or 'domain' of this state refers to the tree of data
@@ -51,45 +53,18 @@ const initial = {
         sites: true
       },
     },
-    base_uri: 'http://127.0.0.1:8000/', // Modify accordingly on production setup.
     isMobile: (/Mobi/.test(navigator.userAgent)),
     language: 'en-US',
-    mapAnchor: process.env.MAP_ANCHOR,
-    zoomLevels: [{
-      label: '3 years',
-      duration: 1576800,
-      active: false
-    },
-      {
-        label: '3 months',
-        duration: 129600,
-        active: false
-      },
-      {
-        label: '3 days',
-        duration: 4320,
-        active: false
-      },
-      {
-        label: '12 hours',
-        duration: 720,
-        active: false
-      },
-      {
-        label: '2 hours',
-        duration: 120,
-        active: false
-      },
-      {
-        label: '30 min',
-        duration: 30,
-        active: false
-      },
-      {
-        label: '10 min',
-        duration: 10,
-        active: false
-      }],
+    mapAnchor: [31.356397, 34.784818],
+    zoomLevels: [
+      { label: '3 years', duration: 1576800 },
+      { label: '3 months', duration: 129600 },
+      { label: '3 days', duration: 4320 },
+      { label: '12 hours', duration: 720 },
+      { label: '2 hours', duration: 120 },
+      { label: '30 min', duration: 30 },
+      { label: '10 min', duration: 10 }
+    ],
     flags: {
       isFetchingDomain: false,
       isFetchingSources: false,
@@ -108,30 +83,13 @@ const initial = {
   ui: {
     style: {
       categories: {
-        default: 'yellow',
-        // Add here other categories to differentiate by color, like:
-        alpha: '#00ff00',
-        beta: '#ff0000',
-        other: '#f3de2c'
+        default: '#f3de2c',
       },
       narratives: {
         default: {
           opacity: 0.9,
           stroke: 'red',
           strokeWidth: 3
-        },
-        narrative_1: {
-          opacity: 0.4,
-          stroke: '#f18f01',
-          strokeWidth: 3
-        },
-        // process.env.features.NARRATIVE_STEP_STYLES
-        stepStyles: {
-          Physical: {
-            stroke: 'yellow',
-            strokeWidth: 3,
-            opacity: 0.9,
-          }
         }
       }
     },
@@ -143,4 +101,10 @@ const initial = {
   }
 };
 
-export default initial;
+let appStore;
+if (process.env.store) {
+  appStore = mergeDeepLeft(process.env.store, initial);
+} else {
+  appStore = initial
+}
+export default appStore

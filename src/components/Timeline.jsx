@@ -20,6 +20,7 @@ class Timeline extends React.Component {
     super(props);
     this.styleDatetime = this.styleDatetime.bind(this)
     this.getDatetimeX = this.getDatetimeX.bind(this)
+    this.onApplyZoom = this.onApplyZoom.bind(this)
     this.svgRef = React.createRef()
     this.state = {
       isFolded: false,
@@ -99,6 +100,7 @@ class Timeline extends React.Component {
    * Returns the time scale (x) extent in minutes
    */
   getTimeScaleExtent() {
+    if (!this.state.scaleX) return 0
     const timeDomain = this.state.scaleX.domain();
     return (timeDomain[1].getTime() - timeDomain[0].getTime()) / 60000;
   }
@@ -153,7 +155,7 @@ class Timeline extends React.Component {
 
     this.setState({ timerange: [domain0, domainF] }, () => {
       this.props.methods.onUpdateTimerange(this.state.timerange);
-    });    
+    });
   }
 
   /**
@@ -284,9 +286,10 @@ class Timeline extends React.Component {
                 onMoveTime={(dir) => { this.onMoveTime(dir) }}
               />
               <TimelineZoomControls
+                extent={this.getTimeScaleExtent()}
                 zoomLevels={this.props.app.zoomLevels}
                 dims={dims}
-                onApplyZoom={(zoom) => { this.onApplyZoom(zoom); }}
+                onApplyZoom={this.onApplyZoom}
               />
               <TimelineLabels
                 dims={dims}
