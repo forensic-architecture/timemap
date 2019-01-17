@@ -10,7 +10,7 @@ function urlFromEnv(ext) {
 // TODO: relegate these URLs entirely to environment variables
 const EVENT_DATA_URL = urlFromEnv('EVENT_EXT');
 const CATEGORY_URL = urlFromEnv('CATEGORY_EXT');
-const TAG_URL = urlFromEnv('TAGS_EXT');
+const TAGS_URL = urlFromEnv('TAGS_EXT');
 const SOURCES_URL = urlFromEnv('SOURCES_EXT');
 const NARRATIVE_URL = urlFromEnv('NARRATIVE_EXT');
 const SITES_URL = urlFromEnv('SITES_EXT');
@@ -23,18 +23,6 @@ function _debugger(value) {
   return {
     type: DEBUG_GER,
     value
-  }
-}
-
-/*
-* Create an error notification object
-* Types: ['error', 'warning', 'good', 'neural']
-*/
-function makeError (type, id, message) {
-  return {
-    type: 'error',
-    id,
-    message: `${type} ${id}: ${message}`
   }
 }
 
@@ -76,16 +64,38 @@ export function fetchDomain () {
 
     let tagsPromise = Promise.resolve([])
     if (process.env.features.USE_TAGS) {
-      tagsPromise = fetch(TAG_URL)
-        .then(response => response.json())
-        .catch(handleError('tags'))
+      if (!TAGS_URL) {
+        notifications.push({
+          message: 'USE_TAGS is true, but you have not provided a TAGS_URL',
+          type: 'error'
+        })
+        tagsPromise = Promise.resolve({})
+      } else {
+        tagsPromise = fetch(TAGS_URL)
+          .then(response => {
+            console.log(response)
+            return response.json()
+          })
+          .catch(err => {
+            console.log(err)
+            return handleError('tags')
+          })
+      }
     }
 
     let sourcesPromise = Promise.resolve([])
     if (process.env.features.USE_SOURCES) {
-      sourcesPromise = fetch(SOURCES_URL)
-        .then(response => response.json())
-        .catch(handleError('sources'))
+      if (!SOURCES_URL) {
+        notifications.push({
+          message: 'USE_SOURCES is true, but you have not provided a SOURCES_URL',
+          type: 'error'
+        })
+        tagsPromise = Prommise.resolve([])
+      } else {
+        sourcesPromise = fetch(SOURCES_URL)
+          .then(response => response.json())
+          .catch(handleError('sources'))
+      }
     }
 
     return Promise.all([

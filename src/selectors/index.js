@@ -257,7 +257,6 @@ export const selectCategories = createSelector(
     categories.map(cat => {
       cat.active = (!cat.hasOwnProperty('active')) ? false : cat.active
     });
-    console.log(categories)
     return categories;
   }
 )
