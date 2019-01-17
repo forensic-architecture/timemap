@@ -1,13 +1,5 @@
-// TODO: move to util lib
-function urlFromEnv(ext) {
-  if (process.env[ext]) {
-    return `${process.env.SERVER_ROOT}${process.env[ext]}`
-  } else {
-    return null
-  }
-}
+import { urlFromEnv } from '../js/utilities'
 
-// TODO: relegate these URLs entirely to environment variables
 const EVENT_DATA_URL = urlFromEnv('EVENT_EXT');
 const CATEGORY_URL = urlFromEnv('CATEGORY_EXT');
 const TAGS_URL = urlFromEnv('TAGS_EXT');
@@ -15,16 +7,6 @@ const SOURCES_URL = urlFromEnv('SOURCES_EXT');
 const NARRATIVE_URL = urlFromEnv('NARRATIVE_EXT');
 const SITES_URL = urlFromEnv('SITES_EXT');
 const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`;
-
-
-const DEBUG_GER = 'DEBUG_GER'
-function _debugger(value) {
-  console.log(value)
-  return {
-    type: DEBUG_GER,
-    value
-  }
-}
 
 const domainMsg = (domainType) => `Something went wrong fetching ${domainType}. Check the URL or try disabling them in the config file.`
 
@@ -66,13 +48,10 @@ export function fetchDomain () {
     let tagsPromise = Promise.resolve([])
     if (process.env.features.USE_TAGS) {
       if (!TAGS_URL) {
-        tagsPromise = Promise.resolve(handleError('USE_TAGS is true, but you have not provided a TAGS_URL'))
+        tagsPromise = Promise.resolve(handleError('USE_TAGS is true, but you have not provided a TAGS_EXT'))
       } else {
         tagsPromise = fetch(TAGS_URL)
-          .then(response => {
-            console.log(response)
-            return response.json()
-          })
+          .then(response => response.json())
           .catch(() => handleError(domainMsg('tags')))
       }
     }
@@ -80,7 +59,7 @@ export function fetchDomain () {
     let sourcesPromise = Promise.resolve([])
     if (process.env.features.USE_SOURCES) {
       if (!SOURCES_URL) {
-        sourcesPromise = Promise.resolve(makeError('USE_SOURCES is true, but you have not provided a SOURCES_URL'))
+        sourcesPromise = Promise.resolve(makeError('USE_SOURCES is true, but you have not provided a SOURCES_EXT'))
       } else {
         sourcesPromise = fetch(SOURCES_URL)
           .then(response => response.json())
@@ -151,9 +130,6 @@ export function fetchSource(source) {
           } else {
             return response.json()
           }
-        })
-        .then(sources => {
-          dispatch(_debugger(sources))
         })
         .catch(err => {
           dispatch(fetchSourceError(err.message))

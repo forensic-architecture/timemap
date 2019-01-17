@@ -116,3 +116,11 @@ export function injectSource(id) {
     }
   })
 }
+
+export function urlFromEnv(ext) {
+  if (process.env[ext]) {
+    return `${process.env.SERVER_ROOT}${process.env[ext]}`
+  } else {
+    return null
+  }
+}
