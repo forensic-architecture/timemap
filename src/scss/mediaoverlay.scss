@@ -2,6 +2,7 @@ $panel-width: 1000px;
 $panel-height: 700px;
 $vimeo-width: $panel-width - 100;
 $vimeo-height: $panel-height / 2;
+
 $padding: 20px;
 $header-inset: 10px;
 
@@ -20,6 +21,7 @@ $header-inset: 10px;
 }
 
 .mo-container {
+  background-color: rgba(239, 239, 239, 0.9);
   // max-width: $panel-width;
   // min-width: $panel-width;
   // max-height: $panel-height;
@@ -27,49 +29,11 @@ $header-inset: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-<<<<<<< HEAD
-  max-height: 80vh;
-=======
   height: 80vh;
   width: $panel-width;
->>>>>>> adjust media styling, rm timeline text
   max-width: 90vw;
   box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
 
-  .mo-media-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-.mo-header {
-  min-height: 42px;
-  max-height: 42px;
-  margin-bottom: 2px;
-  border-radius: 2px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  background-color: black;
-  color: white;
-
-  .mo-header-close {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: $header-inset + 8px;
-  }
-
-  .mo-header-text {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: $padding;
-    font-family: "Lato", Helvetica, sans-serif;
-  }
   .back, .next {
     width: 30px;
     height: 30px;
@@ -119,7 +83,6 @@ $header-inset: 10px;
 }
 
 .mo-media-container {
-  background-color: rgba(239, 239, 239, 0.9);
   flex: 1;
   /*display: flex;
   flex-direction: row;
@@ -158,13 +121,6 @@ $header-inset: 10px;
 }
 
 .mo-meta-container {
-  background-color: rgba(239, 239, 239, 0.9);
-  display: flex;
-  justify-content: center;  
-  box-sizing: border-box;
-  min-height: 100px;
-  min-width: $panel-width;
-  max-width: $panel-height;
   display: flex;
   flex-direction: column;
   justify-content: center;
