@@ -22,21 +22,21 @@ const TimelineLabels = ({ dims, timelabels }) => {
         y2="20"
       >
       </line>
-      <text
-        class="timeLabel0 timeLabel"
-        x="5"
-        y="15"
-      >
-        {formatterWithYear(timelabels[0])}
-      </text>
-      <text
-        class="timelabelF timeLabel"
-        x={dims.width - dims.width_controls - 5}
-        y="15"
-        style={{ textAnchor: 'end' }}
-      >
-        {formatterWithYear(timelabels[1])}
-      </text>      
+      {/* <text */}
+      {/*   class="timeLabel0 timeLabel" */}
+      {/*   x="5" */}
+      {/*   y="15" */}
+      {/* > */}
+      {/*   {formatterWithYear(timelabels[0])} */}
+      {/* </text> */}
+      {/* <text */}
+      {/*   class="timelabelF timeLabel" */}
+      {/*   x={dims.width - dims.width_controls - 5} */}
+      {/*   y="15" */}
+      {/*   style={{ textAnchor: 'end' }} */}
+      {/* > */}
+      {/*   {formatterWithYear(timelabels[1])} */}
+      {/* </text> */}
     </g>
   )
 }

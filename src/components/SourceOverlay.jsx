@@ -154,7 +154,7 @@ class SourceOverlay extends React.Component {
     const {id, url, title, paths, date, type, desc} = this.props.source
     const media = paths.map(this.toMedia)
     const counts = this.getTypeCounts(media)
-  
+
     return (
       <div className="mo-overlay" onClick={this.props.onCancel}>
         <div className="mo-container" onClick={(e) => { e.stopPropagation(); }}>
@@ -169,24 +169,31 @@ class SourceOverlay extends React.Component {
             {this._renderContent(media)}
           </div>
           <div className="mo-meta-container">
-            <div className="mo-box">
-              <p style={{ textAlign: 'center'}}>{`${this.state.idx+1} / ${paths.length}`}</p>
+            <div className="mo-box-title">
+              <p>{`${this.state.idx+1} / ${paths.length}`}</p>
               {title? <p><b>{title}</b></p> : null}
-              <div>{this._renderCounts(counts)}</div>
-              {type ? <h4>Media type</h4> : null}
-              {type ? <p><i className="material-icons left">perm_media</i>{type}</p> : null}
-              {date ? <h4>Date</h4> : null}
-              {date ? <p><i className="material-icons left">today</i>{date}</p>: null}
-              {url ? <h4>Link</h4> : null}
-              {url ? <span><i className="material-icons left">link</i><a href={url} target="_blank">Link to original URL</a></span> : null}
-              {desc ? <hr /> : null}
-              {desc ? <div>{desc}</div> : null}
+              <div>{desc}</div>
+            </div>
+
+            <div className="mo-box">
+              <div>
+                {type ? <h4>Media type</h4> : null}
+                {type ? <p><i className="material-icons left">perm_media</i>{type}</p> : null}
+              </div>
+              <div>
+                {date ? <h4>Date</h4> : null}
+                {date ? <p><i className="material-icons left">today</i>{date}</p>: null}
+              </div>
+              <div>
+                {url ? <h4>Link</h4> : null}
+                {url ? <span><i className="material-icons left">link</i><a href={url} target="_blank">Link to original URL</a></span> : null}
+              </div>
             </div>
           </div>
         </div>
       </div>
     )
-  
+
   }
 }
 
