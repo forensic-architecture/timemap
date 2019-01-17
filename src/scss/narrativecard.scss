@@ -1,4 +1,4 @@
-$narrative-info-width: 370px;
+$narrative-info-width: 386px;
 $timeline-height: 170px;
 
 /*
@@ -8,8 +8,8 @@ NARRATIVE INFO
   position: fixed;
   top: 30px;
   left: auto;
-  right: 25px;
-  height: 170px;
+  right: 9px;
+  height: 205px;
   width: $narrative-info-width;
   box-sizing: border-box;
   max-height: calc(100% - 250px);
@@ -39,7 +39,8 @@ NARRATIVE INFO
   }
 
   .narrative-info-desc {
-    overflow: auto;
+    height: 153px;
+    overflow-y: auto;
   }
 
   p {
@@ -117,7 +118,7 @@ NARRATIVE INFO
 
   &.right {
     // right: calc(#{$narrative-info-width} + 10px);
-    right: 10px;
+    right: 25px;
   }
 
   .material-icons {
@@ -142,7 +143,7 @@ NARRATIVE INFO
   position: fixed;
   padding: 2px 5px 0 5px;
   // right: $narrative-info-width - 15px - 10px;
-  right: 25px;
+  right: 10px;
   top: 5px;
   width: $narrative-info-width - 10px - 2px;
   // width: 15px;
