@@ -15,6 +15,10 @@ export const getSites = (state) => {
 }
 export const getSources = state => {
   if (process.env.features.USE_SOURCES) return state.domain.sources
+  return {}
+}
+export const getShapes = state => {
+  if (process.env.features.USE_SHAPES) return state.domain.shapes
   return []
 }
 export const getNotifications = state => state.domain.notifications

@@ -1,35 +1,32 @@
 import React from 'react';
 
-class MapSites extends React.Component {
-
-  projectPoint(location) {
+function MapSites({ map, sites, mapTransformX, mapTransformY }) {
+  function projectPoint(location) {
     const latLng = new L.LatLng(location[0], location[1]);
     return {
-      x: this.props.map.latLngToLayerPoint(latLng).x + this.props.mapTransformX,
-      y: this.props.map.latLngToLayerPoint(latLng).y + this.props.mapTransformY
+      x: map.latLngToLayerPoint(latLng).x + mapTransformX,
+      y: map.latLngToLayerPoint(latLng).y + mapTransformY
     };
   }
 
-  renderSite(site) {
-    const { x, y } = this.projectPoint([site.latitude, site.longitude]);
+  function renderSite(site) {
+    const { x, y } = projectPoint([site.latitude, site.longitude]);
 
     return (<div
-        className="leaflet-tooltip site-label leaflet-zoom-animated leaflet-tooltip-top"
-        style={{ opacity: 1, transform: `translate3d(calc(${x}px - 50%), ${y - 25}px, 0px)`}}>
-        {site.site}
-      </div>
+      className="leaflet-tooltip site-label leaflet-zoom-animated leaflet-tooltip-top"
+      style={{ opacity: 1, transform: `translate3d(calc(${x}px - 50%), ${y - 25}px, 0px)`}}>
+      {site.site}
+    </div>
     );
   }
 
-  render () {
-    if (!this.props.sites || !this.props.sites.length) return <div />;
+  if (!sites || !sites.length) return null;
 
-    return (
-      <div className="sites-layer">
-        {this.props.sites.map(site => { return this.renderSite(site); })}
-      </div>
-    )
-  }
+  return (
+    <div className="sites-layer">
+      {sites.map(renderSite)}
+    </div>
+  )
 
 }
 

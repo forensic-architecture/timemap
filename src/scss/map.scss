@@ -65,14 +65,14 @@
     }
   }
 
-  .sites-layer {
+  .sites-layer, .shapes-layer {
     position: fixed;
     top: 0px;
     left: 110px;
   }
 
   &.narrative-mode {
-    .sites-layer {
+    .sites-layer, .shapes-layer {
       position: fixed;
       top: 0px;
       left: 0px;

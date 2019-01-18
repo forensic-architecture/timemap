@@ -119,19 +119,14 @@ export function validateDomain (domain) {
   validateObject(domain.sources, 'sources', sourceSchema)
   validateObject(domain.shapes, 'shapes', shapeSchema)
 
-  sanitizedDomain.shapes = sanitizedDomain.shapes.map(shape => {
-    const points = shape.items.map(coords => {
-      const _coords = coords.replace(/\s/g, '').split(',')
-      return {
-        lat: parseFloat(_coords[0]),
-        lon: parseFloat(_coords[1])
-      }
-    })
-    return {
+  // NB: [lat, lon] array is best format for projecting into map
+  sanitizedDomain.shapes = sanitizedDomain.shapes.map(shape => ({
       name: shape.name,
-      points
-    }
-  })
+      points: shape.items.map(coords => (
+        coords.replace(/\s/g, '').split(',')
+      ))
+    })
+  )
 
   // Message the number of failed items in domain
   Object.keys(discardedDomain).forEach(disc => {

@@ -10,6 +10,7 @@ import 'leaflet';
 import { isNotNullNorUndefined } from '../js/utilities';
 
 import MapSites from './MapSites.jsx';
+import MapShapes from './MapShapes.jsx';
 import MapEvents from './MapEvents.jsx';
 import MapSelectedEvents from './MapSelectedEvents.jsx';
 import MapNarratives from './MapNarratives.jsx';
@@ -147,6 +148,17 @@ class Map extends React.Component {
     );
   }
 
+  renderShapes() {
+    return (
+      <MapShapes
+        shapes={this.props.domain.shapes}
+        map={this.map}
+        mapTransformX={this.state.mapTransformX}
+        mapTransformY={this.state.mapTransformY}
+      />
+    )
+  }
+
   renderNarratives() {
     return (
       <MapNarratives
@@ -223,16 +235,22 @@ class Map extends React.Component {
   render() {
     const { isShowingSites } = this.props.app.flags
     const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper';
+    const innerMap = !!this.map ? (
+      <React.Fragment>
+        {this.renderTiles()}
+        {this.renderMarkers()}
+        {isShowingSites ? this.renderSites() : null}
+        {this.renderShapes()}
+        {this.renderEvents()}
+        {this.renderNarratives()}
+        {this.renderSelected()}
+      </React.Fragment>
+    ) : null
 
     return (
       <div className={classes}>
         <div id={this.props.ui.dom.map} />
-        {(this.map !== null) ? this.renderTiles() : ''}
-        {(this.map !== null) ? this.renderMarkers() : ''}
-        {(this.map !== null) && isShowingSites ? this.renderSites() : ''}
-        {(this.map !== null) ? this.renderEvents() : ''}
-        {(this.map !== null) ? this.renderNarratives() : ''}
-        {(this.map !== null) ? this.renderSelected() : ''}
+        {innerMap}
       </div>
     );
   }
@@ -244,7 +262,8 @@ function mapStateToProps(state) {
       locations: selectors.selectLocations(state),
       narratives: selectors.selectNarratives(state),
       categories: selectors.selectCategories(state),
-      sites: selectors.getSites(state)
+      sites: selectors.getSites(state),
+      shapes: selectors.getShapes(state)
     },
     app: {
       views: state.app.filters.views,
