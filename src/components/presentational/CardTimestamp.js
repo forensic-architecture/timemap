@@ -1,34 +1,31 @@
-import React from 'react';
+import React from 'react'
 
-import copy from '../../js/data/copy.json';
-import { isNotNullNorUndefined } from '../../js/utilities';
+import copy from '../../js/data/copy.json'
+import { isNotNullNorUndefined } from '../../js/utilities'
 
 const CardTimestamp = ({ makeTimelabel, language, timestamp }) => {
-
-  const daytime_lang = copy[language].cardstack.timestamp;
-  const estimated_lang = copy[language].cardstack.estimated;
-  const unknown_lang = copy[language].cardstack.unknown_time;
+  const unknownLang = copy[language].cardstack.unknown_time
 
   if (isNotNullNorUndefined(timestamp)) {
-    const timelabel = makeTimelabel(timestamp);
+    const timelabel = makeTimelabel(timestamp)
     return (
-      <div className="card-cell timestamp">
+      <div className='card-cell timestamp'>
         <p>
-          <i className="material-icons left">today</i>
+          <i className='material-icons left'>today</i>
           {timelabel}
         </p>
       </div>
-    );
+    )
   } else {
     return (
-      <div className="card-cell timestamp">
+      <div className='card-cell timestamp'>
         <p>
-          <i className="material-icons left">today</i>
-          {unknown_lang}
+          <i className='material-icons left'>today</i>
+          {unknownLang}
         </p>
       </div>
-    );
+    )
   }
 }
 
-export default CardTimestamp;
+export default CardTimestamp

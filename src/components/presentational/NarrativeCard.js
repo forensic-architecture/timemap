@@ -3,12 +3,10 @@ import { connect } from 'react-redux'
 import { selectActiveNarrative } from '../../selectors'
 
 function NarrativeCard ({ narrative }) {
-    // no display if no narrative
+  // no display if no narrative
   const { steps, current } = narrative
 
   if (steps[current]) {
-    const step = steps[current]
-
     return (
       <div className='narrative-info'>
         <div className='narrative-info-header'>
@@ -27,14 +25,14 @@ function NarrativeCard ({ narrative }) {
         <div className='narrative-info-desc'>
           <p>{narrative.description}</p>
         </div>
-              </div>
+      </div>
     )
   } else {
     return null
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     narrative: selectActiveNarrative(state)
   }

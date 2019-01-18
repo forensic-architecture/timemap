@@ -1,3 +1,4 @@
+/* global d3 */
 import initial from '../store/initial.js'
 import { parseDate } from '../js/utilities'
 
@@ -20,22 +21,22 @@ import {
   TOGGLE_INFOPOPUP,
   TOGGLE_NOTIFICATIONS,
   FETCH_ERROR,
-  FETCH_SOURCE_ERROR,
+  FETCH_SOURCE_ERROR
 } from '../actions'
 
-function updateHighlighted(appState, action) {
+function updateHighlighted (appState, action) {
   return Object.assign({}, appState, {
     highlighted: action.highlighted
   })
 }
 
-function updateSelected(appState, action) {
+function updateSelected (appState, action) {
   return Object.assign({}, appState, {
     selected: action.selected
   })
 }
 
-function updateNarrative(appState, action) {
+function updateNarrative (appState, action) {
   let minTime = appState.filters.timerange[0]
   let maxTime = appState.filters.timerange[1]
 
@@ -43,7 +44,7 @@ function updateNarrative(appState, action) {
   let cornerBound1 = [-180, -180]
 
   // Compute narrative time range and map bounds
-  if (!!action.narrative) {
+  if (action.narrative) {
     minTime = parseDate('2100-01-01T00:00:00')
     maxTime = parseDate('1900-01-01T00:00:00')
 
@@ -85,7 +86,7 @@ function updateNarrative(appState, action) {
     ...appState,
     narrative: action.narrative,
     narrativeState: {
-      current: !!action.narrative ? 0 : null
+      current: action.narrative ? 0 : null
     },
     filters: {
       ...appState.filters,
@@ -95,29 +96,33 @@ function updateNarrative(appState, action) {
   }
 }
 
-function incrementNarrativeCurrent(appState, action) {
+function incrementNarrativeCurrent (appState, action) {
+  appState.narrativeState.current += 1
+
   return {
     ...appState,
     narrativeState: {
-      current: appState.narrativeState.current += 1
+      current: appState.narrativeState.current
     }
   }
 }
 
-function decrementNarrativeCurrent(appState, action) {
+function decrementNarrativeCurrent (appState, action) {
+  appState.narrativeState.current -= 1
+
   return {
     ...appState,
     narrativeState: {
-      current: appState.narrativeState.current -= 1
+      current: appState.narrativeState.current
     }
   }
 }
 
-function updateTagFilters(appState, action) {
+function updateTagFilters (appState, action) {
   const tagFilters = appState.filters.tags.slice(0)
   const nextActiveState = action.tag.active
 
-  function traverseNode(node) {
+  function traverseNode (node) {
     const tagFilter = tagFilters.find(tF => tF.key === node.key)
     node.active = nextActiveState
     if (!tagFilter) tagFilters.push(node)
@@ -136,7 +141,7 @@ function updateTagFilters(appState, action) {
   })
 }
 
-function updateCategoryFilters(appState, action) {
+function updateCategoryFilters (appState, action) {
   const categoryFilters = appState.filters.categories.slice(0)
 
   const catFilter = categoryFilters.find(cF => cF.category === action.category.category)
@@ -147,7 +152,6 @@ function updateCategoryFilters(appState, action) {
     catFilter.active = (!!action.category.active)
   }
 
-
   return Object.assign({}, appState, {
     filters: Object.assign({}, appState.filters, {
       categories: categoryFilters
@@ -155,36 +159,36 @@ function updateCategoryFilters(appState, action) {
   })
 }
 
-function updateTimeRange(appState, action) { // XXX
+function updateTimeRange (appState, action) { // XXX
   return Object.assign({}, appState, {
     filters: Object.assign({}, appState.filters, {
       timerange: action.timerange
-    }),
+    })
   })
 }
 
-function resetAllFilters(appState) { // XXX
+function resetAllFilters (appState) { // XXX
   return Object.assign({}, appState, {
     filters: Object.assign({}, appState.filters, {
       tags: [],
       categories: [],
       timerange: [
-        d3.timeParse("%Y-%m-%dT%H:%M:%S")("2014-09-25T12:00:00"),
-        d3.timeParse("%Y-%m-%dT%H:%M:%S")("2014-09-28T12:00:00")
-      ],
+        d3.timeParse('%Y-%m-%dT%H:%M:%S')('2014-09-25T12:00:00'),
+        d3.timeParse('%Y-%m-%dT%H:%M:%S')('2014-09-28T12:00:00')
+      ]
     }),
-    selected: [],
+    selected: []
   })
 }
 
-function toggleLanguage(appState, action) {
+function toggleLanguage (appState, action) {
   let otherLanguage = (appState.language === 'es-MX') ? 'en-US' : 'es-MX'
   return Object.assign({}, appState, {
     language: action.language || otherLanguage
   })
 }
 
-function toggleMapView(appState, action) {
+function toggleMapView (appState, action) {
   const isLayerInView = !appState.views[layer]
   const newViews = {}
   newViews[layer] = isLayerInView
@@ -196,7 +200,7 @@ function toggleMapView(appState, action) {
   })
 }
 
-function toggleSites(appState, action) {
+function toggleSites (appState, action) {
   return {
     ...appState,
     flags: {
@@ -206,14 +210,14 @@ function toggleSites(appState, action) {
   }
 }
 
-function updateSource(appState, action) {
+function updateSource (appState, action) {
   return {
     ...appState,
     source: action.source
   }
 }
 
-function fetchError(state, action) {
+function fetchError (state, action) {
   return {
     ...state,
     error: action.message,
@@ -221,7 +225,7 @@ function fetchError(state, action) {
   }
 }
 
-function toggleFetchingDomain(appState, action) {
+function toggleFetchingDomain (appState, action) {
   return Object.assign({}, appState, {
     flags: Object.assign({}, appState.flags, {
       isFetchingDomain: !appState.flags.isFetchingDomain
@@ -229,7 +233,7 @@ function toggleFetchingDomain(appState, action) {
   })
 }
 
-function toggleFetchingSources(appState, action) {
+function toggleFetchingSources (appState, action) {
   return Object.assign({}, appState, {
     flags: Object.assign({}, appState.flags, {
       isFetchingSources: !appState.flags.isFetchingSources
@@ -237,7 +241,7 @@ function toggleFetchingSources(appState, action) {
   })
 }
 
-function toggleInfoPopup(appState, action) {
+function toggleInfoPopup (appState, action) {
   return Object.assign({}, appState, {
     flags: Object.assign({}, appState.flags, {
       isInfopopup: !appState.flags.isInfopopup
@@ -245,7 +249,7 @@ function toggleInfoPopup(appState, action) {
   })
 }
 
-function toggleNotifications(appState, action) {
+function toggleNotifications (appState, action) {
   return Object.assign({}, appState, {
     flags: Object.assign({}, appState.flags, {
       isNotification: !appState.flags.isNotification
@@ -253,7 +257,7 @@ function toggleNotifications(appState, action) {
   })
 }
 
-function fetchSourceError(appState, action) {
+function fetchSourceError (appState, action) {
   return {
     ...appState,
     errors: {
@@ -263,9 +267,7 @@ function fetchSourceError(appState, action) {
   }
 }
 
-
-
-function app(appState = initial.app, action) {
+function app (appState = initial.app, action) {
   switch (action.type) {
     case UPDATE_HIGHLIGHTED:
       return updateHighlighted(appState, action)

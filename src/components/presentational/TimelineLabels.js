@@ -1,27 +1,22 @@
-import React from 'react';
-
-import { formatterWithYear } from '../../js/utilities.js';
+import React from 'react'
 
 const TimelineLabels = ({ dims, timelabels }) => {
-
   return (
     <g>
       <line
-        class="axisBoundaries"
+        class='axisBoundaries'
         x1={dims.margin_left}
         x2={dims.margin_left}
-        y1="10"
-        y2="20"
-      >
-      </line>
+        y1='10'
+        y2='20'
+      />
       <line
-        class="axisBoundaries"
+        class='axisBoundaries'
         x1={dims.width - dims.width_controls}
         x2={dims.width - dims.width_controls}
-        y1="10"
-        y2="20"
-      >
-      </line>
+        y1='10'
+        y2='20'
+      />
       {/* <text */}
       {/*   class="timeLabel0 timeLabel" */}
       {/*   x="5" */}
@@ -41,4 +36,4 @@ const TimelineLabels = ({ dims, timelabels }) => {
   )
 }
 
-export default TimelineLabels;
+export default TimelineLabels

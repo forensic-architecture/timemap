@@ -16,7 +16,7 @@ const initial = {
     sources: {},
     sites: [],
     tags: {},
-    notifications: [],
+    notifications: []
   },
 
   /*
@@ -29,7 +29,7 @@ const initial = {
    */
   app: {
     errors: {
-      source: null,
+      source: null
     },
     highlighted: null,
     selected: [],
@@ -51,7 +51,7 @@ const initial = {
         coevents: false,
         routes: false,
         sites: true
-      },
+      }
     },
     isMobile: (/Mobi/.test(navigator.userAgent)),
     language: 'en-US',
@@ -83,7 +83,7 @@ const initial = {
   ui: {
     style: {
       categories: {
-        default: '#f3de2c',
+        default: '#f3de2c'
       },
       narratives: {
         default: {
@@ -94,16 +94,16 @@ const initial = {
       }
     },
     dom: {
-      timeline: "timeline",
-      timeslider: "timeslider",
-      map: "map"
-    },
+      timeline: 'timeline',
+      timeslider: 'timeslider',
+      map: 'map'
+    }
   }
-};
+}
 
-let appStore;
+let appStore
 if (process.env.store) {
-  appStore = mergeDeepLeft(process.env.store, initial);
+  appStore = mergeDeepLeft(process.env.store, initial)
 } else {
   appStore = initial
 }

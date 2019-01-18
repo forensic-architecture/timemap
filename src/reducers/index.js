@@ -8,4 +8,4 @@ export default combineReducers({
   app,
   domain,
   ui
-});;
+})
