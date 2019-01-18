@@ -1,15 +1,7 @@
 import React from 'react'
 import { Portal } from 'react-portal'
 
-function MapShapes({ svg, map, shapes, mapTransformX, mapTransformY }) {
-  function projectPoint(location) {
-    const latLng = new L.LatLng(location[0], location[1])
-    return {
-      x: map.latLngToLayerPoint(latLng).x + mapTransformX,
-      y: map.latLngToLayerPoint(latLng).y + mapTransformY
-    }
-  }
-
+function MapShapes({ svg, shapes, projectPoint }) {
   function renderShape(shape, lineStyle) {
     const lineCoords = []
     const points = shape.points

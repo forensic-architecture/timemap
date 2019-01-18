@@ -7,14 +7,14 @@ import {
 import React from 'react'
 
 import Spinner from './presentational/Spinner'
-import CardTimestamp from './presentational/CardTimestamp'
-import CardLocation from './presentational/CardLocation'
-import CardCaret from './presentational/CardCaret'
-import CardTags from './presentational/CardTags'
-import CardSummary from './presentational/CardSummary'
-import CardSource from './presentational/CardSource'
-import CardCategory from './presentational/CardCategory'
-import CardNarrative from './presentational/CardNarrative'
+import CardTimestamp from './presentational/Card/Timestamp'
+import CardLocation from './presentational/Card/Location'
+import CardCaret from './presentational/Card/Caret'
+import CardTags from './presentational/Card/Tags'
+import CardSummary from './presentational/Card/Summary'
+import CardSource from './presentational/Card/Source'
+import CardCategory from './presentational/Card/Category'
+import CardNarrative from './presentational/Card/Narrative'
 
 class Card extends React.Component {
 

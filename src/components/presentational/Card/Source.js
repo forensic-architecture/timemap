@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Spinner from './Spinner'
 import Img from 'react-image'
 
-import copy from '../../js/data/copy.json'
+import Spinner from '../Spinner'
+import copy from '../../../js/data/copy.json'
 
 const CardSource = ({ source, isLoading, onClickHandler }) => {
   function renderIconText(type) {

@@ -2,17 +2,8 @@ import React from 'react';
 import { Portal } from 'react-portal';
 
 class MapSelectedEvents extends React.Component {
-
-  projectPoint(location) {
-    const latLng = new L.LatLng(location[0], location[1]);
-    return {
-      x: this.props.map.latLngToLayerPoint(latLng).x + this.props.mapTransformX,
-      y: this.props.map.latLngToLayerPoint(latLng).y + this.props.mapTransformY
-    };
-  }
-
   renderMarker (event) {
-    const { x, y } = this.projectPoint([event.latitude, event.longitude]);
+    const { x, y } = this.props.projectPoint([event.latitude, event.longitude]);
     return (
       <g
         className="location-marker"

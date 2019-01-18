@@ -5,14 +5,14 @@ import hash from 'object-hash';
 
 import copy from '../js/data/copy.json';
 import { formatterWithYear, parseDate } from '../js/utilities';
-import TimelineHeader from './presentational/TimelineHeader';
+import TimelineHeader from './presentational/Timeline/Header';
 import TimelineAxis from './TimelineAxis.jsx';
-import TimelineClip from './presentational/TimelineClip';
-import TimelineHandles from './presentational/TimelineHandles.js';
-import TimelineZoomControls from './presentational/TimelineZoomControls.js';
-import TimelineLabels from './presentational/TimelineLabels.js';
-import TimelineMarkers from './presentational/TimelineMarkers.js'
-import TimelineEvents from './presentational/TimelineEvents.js';
+import TimelineClip from './presentational/Timeline/Clip';
+import TimelineHandles from './presentational/Timeline/Handles.js';
+import TimelineZoomControls from './presentational/Timeline/ZoomControls.js';
+import TimelineLabels from './presentational/Timeline/Labels.js';
+import TimelineMarkers from './presentational/Timeline/Markers.js'
+import TimelineEvents from './presentational/Timeline/Events.js';
 import TimelineCategories from './TimelineCategories.jsx';
 
 class Timeline extends React.Component {

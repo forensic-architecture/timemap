@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { formatterWithYear } from '../../js/utilities.js';
+import { formatterWithYear } from '../../../js/utilities.js';
 
 const TimelineLabels = ({ dims, timelabels }) => {
 

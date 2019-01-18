@@ -1,7 +1,7 @@
 import React from 'react';
 
-import copy from '../../js/data/copy.json';
-import { isNotNullNorUndefined } from '../../js/utilities';
+import copy from '../../../js/data/copy.json';
+import { isNotNullNorUndefined } from '../../../js/utilities';
 
 const CardTimestamp = ({ makeTimelabel, language, timestamp }) => {
 

@@ -1,7 +1,7 @@
 import React from 'react'
-import NarrativeCard from './NarrativeCard'
-import NarrativeAdjust from './NarrativeAdjust'
-import NarrativeClose from './NarrativeClose'
+import Card from './Card'
+import Adjust from './Adjust'
+import Close from './Close'
 
 export default ({ narrative, methods }) => {
   if (!narrative) return null
@@ -12,18 +12,18 @@ export default ({ narrative, methods }) => {
 
   return (
     <React.Fragment>
-      <NarrativeCard narrative={narrative} />
-      <NarrativeAdjust
+      <Card narrative={narrative} />
+      <Adjust
         isDisabled={!prevExists}
         direction='left'
         onClickHandler={methods.onPrev}
       />
-      <NarrativeAdjust
+      <Adjust
         isDisabled={!nextExists}
         direction='right'
         onClickHandler={methods.onNext}
       />
-      <NarrativeClose
+      <Close
         onClickHandler={() => methods.onSelectNarrative(null)}
         closeMsg='-- exit from narrative --'
       />

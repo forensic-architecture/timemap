@@ -9,17 +9,18 @@ import 'leaflet';
 
 import { isNotNullNorUndefined } from '../js/utilities';
 
-import MapSites from './MapSites.jsx';
-import MapShapes from './MapShapes.jsx';
-import MapEvents from './MapEvents.jsx';
-import MapSelectedEvents from './MapSelectedEvents.jsx';
-import MapNarratives from './MapNarratives.jsx';
-import MapDefsMarkers from './MapDefsMarkers.jsx';
+import MapSites from './presentational/Map/Sites.jsx';
+import MapShapes from './presentational/Map/Shapes.jsx';
+import MapEvents from './presentational/Map/Events.jsx';
+import MapSelectedEvents from './presentational/Map/SelectedEvents.jsx';
+import MapNarratives from './presentational/Map/Narratives.jsx';
+import MapDefsMarkers from './presentational/Map/DefsMarkers.jsx';
 
 class Map extends React.Component {
 
   constructor() {
     super();
+    this.projectPoint = this.projectPoint.bind(this)
     this.svgRef = React.createRef();
     this.map = null;
     this.state = {
@@ -109,6 +110,14 @@ class Map extends React.Component {
     })
   }
 
+  projectPoint(location) {
+    const latLng = new L.LatLng(location[0], location[1])
+    return {
+      x: this.map.latLngToLayerPoint(latLng).x + this.state.mapTransformX,
+      y: this.map.latLngToLayerPoint(latLng).y + this.state.mapTransformY
+    }
+  }
+
   getClientDims() {
     const boundingClient = document.querySelector(`#${this.props.ui.dom.map}`).getBoundingClientRect();
 
@@ -140,9 +149,7 @@ class Map extends React.Component {
     return (
       <MapSites
         sites={this.props.domain.sites}
-        map={this.map}
-        mapTransformX={this.state.mapTransformX}
-        mapTransformY={this.state.mapTransformY}
+        projectPoint={this.projectPoint}
         isEnabled={this.props.app.views.sites}
       />
     );
@@ -153,9 +160,7 @@ class Map extends React.Component {
       <MapShapes
         svg={this.svgRef.current}
         shapes={this.props.domain.shapes}
-        map={this.map}
-        mapTransformX={this.state.mapTransformX}
-        mapTransformY={this.state.mapTransformY}
+        projectPoint={this.projectPoint}
       />
     )
   }
@@ -165,9 +170,7 @@ class Map extends React.Component {
       <MapNarratives
         svg={this.svgRef.current}
         narratives={this.props.domain.narratives}
-        map={this.map}
-        mapTransformX={this.state.mapTransformX}
-        mapTransformY={this.state.mapTransformY}
+        projectPoint={this.projectPoint}
         narrative={this.props.app.narrative}
         narrativeProps={this.props.ui.narratives}
         onSelect={this.props.methods.onSelect}
@@ -200,9 +203,7 @@ class Map extends React.Component {
         locations={this.props.domain.locations}
         styleLocation={this.styleLocation}
         categories={this.props.domain.categories}
-        map={this.map}
-        mapTransformX={this.state.mapTransformX}
-        mapTransformY={this.state.mapTransformY}
+        projectPoint={this.projectPoint}
         narrative={this.props.app.narrative}
         onSelect={this.props.methods.onSelect}
         onSelectNarrative={this.props.methods.onSelectNarrative}
@@ -216,9 +217,7 @@ class Map extends React.Component {
       <MapSelectedEvents
         svg={this.svgRef.current}
         selected={this.props.app.selected}
-        map={this.map}
-        mapTransformX={this.state.mapTransformX}
-        mapTransformY={this.state.mapTransformY}
+        projectPoint={this.projectPoint}
       />
     );
   }

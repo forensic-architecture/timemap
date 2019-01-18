@@ -1,14 +1,6 @@
 import React from 'react';
 
-function MapSites({ map, sites, mapTransformX, mapTransformY }) {
-  function projectPoint(location) {
-    const latLng = new L.LatLng(location[0], location[1]);
-    return {
-      x: map.latLngToLayerPoint(latLng).x + mapTransformX,
-      y: map.latLngToLayerPoint(latLng).y + mapTransformY
-    };
-  }
-
+function MapSites({ sites, projectPoint }) {
   function renderSite(site) {
     const { x, y } = projectPoint([site.latitude, site.longitude]);
 
