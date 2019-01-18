@@ -13,10 +13,10 @@ function ToolbarBottomActions (props) {
           {/*   onClick={(view) => this.toggleMapViews(view)} */}
           {/*   isEnabled={this.props.viewFilters.routes} */}
           {/* /> */}
-          <SitesIcon
-            isActive={props.sites.enabled}
-            onClickHandler={props.sites.toggle}
-          />
+        {process.env.features.USE_SITES ? <SitesIcon
+          isActive={props.sites.enabled}
+          onClickHandler={props.sites.toggle}
+        /> : null}
           {/* <CoeventIcon */}
           {/*   onClick={(view) => this.toggleMapViews(view)} */}
           {/*   isEnabled={this.props.viewFilters.coevents} */}

@@ -51,7 +51,7 @@ const initial = {
     language: 'en-US',
     map: {
       anchor: [31.356397, 34.784818],
-      startZoom: 10,
+      startZoom: 11,
       minZoom: 7,
       maxZoom: 18,
       bounds: null,
