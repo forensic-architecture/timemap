@@ -275,6 +275,7 @@ class Timeline extends React.Component {
               />
               <Categories
                 dims={dims}
+                getCategoryY={this.state.scaleY}
                 onDragStart={() => { this.onDragStart() }}
                 onDrag={() => { this.onDrag() }}
                 onDragEnd={() => { this.onDragEnd() }}
@@ -290,10 +291,10 @@ class Timeline extends React.Component {
                 dims={dims}
                 onApplyZoom={this.onApplyZoom}
               />
-              <Labels
-                dims={dims}
-                timelabels={this.state.timerange}
-              />
+              {/* <Labels */}
+              {/*   dims={dims} */}
+              {/*   timelabels={this.state.timerange} */}
+              {/* /> */}
               <Markers
                 selected={this.props.app.selected}
                 getEventX={this.getDatetimeX}
