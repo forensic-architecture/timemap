@@ -25,7 +25,7 @@ export const getNotifications = state => state.domain.notifications
 export const getTagTree = state => state.domain.tags
 export const getTagsFilter = state => state.app.filters.tags
 export const getCategoriesFilter = state => state.app.filters.categories
-export const getTimeRange = state => state.app.filters.timerange
+export const getTimeRange = state => state.app.timeline.range
 
 
 /**

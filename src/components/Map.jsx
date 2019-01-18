@@ -1,27 +1,31 @@
-import React from 'react';
-import { Portal } from 'react-portal';
+import React from 'react'
+import { Portal } from 'react-portal'
 
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
 
-import hash from 'object-hash';
-import 'leaflet';
+import hash from 'object-hash'
+import 'leaflet'
 
-import { isNotNullNorUndefined } from '../js/utilities';
+import { isNotNullNorUndefined } from '../js/utilities'
 
-import Sites from './presentational/Map/Sites.jsx';
-import Shapes from './presentational/Map/Shapes.jsx';
-import Events from './presentational/Map/Events.jsx';
-import SelectedEvents from './presentational/Map/SelectedEvents.jsx';
-import Narratives from './presentational/Map/Narratives.jsx';
-import DefsMarkers from './presentational/Map/DefsMarkers.jsx';
+import Sites from './presentational/Map/Sites.jsx'
+import Shapes from './presentational/Map/Shapes.jsx'
+import Events from './presentational/Map/Events.jsx'
+import SelectedEvents from './presentational/Map/SelectedEvents.jsx'
+import Narratives from './presentational/Map/Narratives.jsx'
+import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
+
+// NB: important constants for map, TODO: make statics
+const supportedMapboxMap = ['streets', 'satellite']
+const defaultToken = 'your_token'
 
 class Map extends React.Component {
   constructor() {
-    super();
+    super()
     this.projectPoint = this.projectPoint.bind(this)
-    this.svgRef = React.createRef();
-    this.map = null;
+    this.svgRef = React.createRef()
+    this.map = null
     this.state = {
       mapTransformX: 0,
       mapTransformY: 0
@@ -31,22 +35,23 @@ class Map extends React.Component {
 
   componentDidMount(){
     if (this.map === null) {
-      this.initializeMap();
+      this.initializeMap()
     }
   }
 
   componentWillReceiveProps(nextProps) {
     // Set appropriate zoom for narrative
-    if (hash(nextProps.app.mapBounds) !== hash(this.props.app.mapBounds)
-      && nextProps.app.mapBounds !== null) {
-        this.map.fitBounds(nextProps.app.mapBounds);
+    const { bounds } = nextProps.app.map
+    if (hash(bounds) !== hash(this.props.app.map.bounds)
+      && bounds !== null) {
+        this.map.fitBounds(bounds)
     } else {
       if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
         // Fly to first  of events selected
-        const eventPoint = (nextProps.app.selected.length > 0) ? nextProps.app.selected[0] : null;
+        const eventPoint = (nextProps.app.selected.length > 0) ? nextProps.app.selected[0] : null
 
         if (eventPoint !== null && eventPoint.latitude && eventPoint.longitude) {
-          this.map.setView([eventPoint.latitude, eventPoint.longitude]);
+          this.map.setView([eventPoint.latitude, eventPoint.longitude])
         }
       }
     }
@@ -56,51 +61,50 @@ class Map extends React.Component {
     /**
      * Creates a Leaflet map and a tilelayer for the map background
      */
+    const { map: mapConf } = this.props.app
     const map =
       L.map(this.props.ui.dom.map)
-        .setView(this.props.app.mapAnchor, 14)
-        .setMinZoom(7)
-        .setMaxZoom(18)
-        .setMaxBounds([[180, -180], [-180, 180]])
+        .setView(mapConf.anchor, mapConf.startZoom)
+        .setMinZoom(mapConf.minZoom)
+        .setMaxZoom(mapConf.maxZoom)
+        .setMaxBounds(mapConf.maxBounds)
 
-    let s;
-    if (process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== 'your_token') {
+    let s
+
+    if ((supportedMapboxMap.indexOf(this.props.ui.tiles) !== -1) && process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== defaultToken) {
       s = L.tileLayer(
-        `http://a.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`
-      );
+        `http://a.tiles.mapbox.com/v4/mapbox.${this.props.ui.tiles}/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`
+      )
+    } else if (process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== defaultToken) {
+      s = L.tileLayer(
+        `http://a.tiles.mapbox.com/v4/${this.props.ui.tiles}/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`
+      )
     } else {
-      // eslint-disable-next-line
-      alert(`No mapbox token specified in config.
-            Timemap does not currently support any other tiling layer,
-            so you will need to sign up for one at:
-
-            https://www.mapbox.com/
-
-            Stop and start the development process in terminal after you have added your token to config.js`
-        )
-        return
+      s = L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+      )
     }
-    s = s.addTo(map);
+    s = s.addTo(map)
 
-    map.keyboard.disable();
+    map.keyboard.disable()
 
-    map.on('move zoomend viewreset moveend', () => this.alignLayers());
-    map.on('zoomstart', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.add('hide') });
-    map.on('zoomend', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.remove('hide'); });
-    window.addEventListener('resize', () => { this.alignLayers(); });
+    map.on('move zoomend viewreset moveend', () => this.alignLayers())
+    map.on('zoomstart', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.add('hide') })
+    map.on('zoomend', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.remove('hide') })
+    window.addEventListener('resize', () => { this.alignLayers() })
 
-    this.map = map;
+    this.map = map
   }
 
   alignLayers() {
-    const mapNode = document.querySelector('.leaflet-map-pane');
-    if (mapNode === null) return { transformX: 0, transformY: 0 };
+    const mapNode = document.querySelector('.leaflet-map-pane')
+    if (mapNode === null) return { transformX: 0, transformY: 0 }
 
     // We'll get the transform of the leaflet container,
     // which will let us offset the SVG by the same quantity
     const transform = window
       .getComputedStyle(mapNode)
-      .getPropertyValue('transform');
+      .getPropertyValue('transform')
 
     // Offset with leaflet map transform boundaries
     this.setState({
@@ -118,7 +122,7 @@ class Map extends React.Component {
   }
 
   getClientDims() {
-    const boundingClient = document.querySelector(`#${this.props.ui.dom.map}`).getBoundingClientRect();
+    const boundingClient = document.querySelector(`#${this.props.ui.dom.map}`).getBoundingClientRect()
 
     return {
       width: boundingClient.width,
@@ -127,8 +131,8 @@ class Map extends React.Component {
   }
 
   renderTiles() {
-    const pane = this.map.getPanes().overlayPane;
-    const { width, height } = this.getClientDims();
+    const pane = this.map.getPanes().overlayPane
+    const { width, height } = this.getClientDims()
 
     return (
       <Portal node={pane}>
@@ -141,7 +145,7 @@ class Map extends React.Component {
         >
         </svg>
       </Portal>
-    );
+    )
   }
 
   renderSites() {
@@ -151,7 +155,7 @@ class Map extends React.Component {
         projectPoint={this.projectPoint}
         isEnabled={this.props.app.views.sites}
       />
-    );
+    )
   }
 
   renderShapes() {
@@ -176,7 +180,7 @@ class Map extends React.Component {
         onSelect={this.props.methods.onSelect}
         onSelectNarrative={this.props.methods.onSelectNarrative}
       />
-    );
+    )
   }
 
   /**
@@ -209,7 +213,7 @@ class Map extends React.Component {
         onSelectNarrative={this.props.methods.onSelectNarrative}
         getCategoryColor={this.props.methods.getCategoryColor}
       />
-    );
+    )
   }
 
   renderSelected() {
@@ -219,7 +223,7 @@ class Map extends React.Component {
         selected={this.props.app.selected}
         projectPoint={this.projectPoint}
       />
-    );
+    )
   }
 
 
@@ -234,7 +238,7 @@ class Map extends React.Component {
 
   render() {
     const { isShowingSites } = this.props.app.flags
-    const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper';
+    const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'
     const innerMap = !!this.map ? (
       <React.Fragment>
         {this.renderTiles()}
@@ -252,7 +256,7 @@ class Map extends React.Component {
         <div id={this.props.ui.dom.map} />
         {innerMap}
       </div>
-    );
+    )
   }
 }
 
@@ -269,14 +273,14 @@ function mapStateToProps(state) {
       views: state.app.filters.views,
       selected: state.app.selected,
       highlighted: state.app.highlighted,
-      mapAnchor: state.app.mapAnchor,
-      mapBounds: state.app.filters.mapBounds,
+      map: state.app.map,
       narrative: state.app.narrative,
       flags: {
         isShowingSites: state.app.flags.isShowingSites
       }
     },
     ui: {
+      tiles: state.ui.tiles,
       dom: state.ui.dom,
       narratives: state.ui.style.narratives,
       shapes: state.ui.style.shapes

@@ -39,23 +39,24 @@ const initial = {
       current: null
     },
     filters: {
-      timerange: [
-        new Date(2013, 2, 23, 12),
-        new Date(2016, 2, 23, 12)
-      ],
-      mapBounds: null,
       tags: [],
       categories: [],
       views: {
         events: true,
-        coevents: false,
         routes: false,
         sites: true
       },
     },
     isMobile: (/Mobi/.test(navigator.userAgent)),
     language: 'en-US',
-    mapAnchor: [31.356397, 34.784818],
+    map: {
+      anchor: [31.356397, 34.784818],
+      startZoom: 10,
+      minZoom: 7,
+      maxZoom: 18,
+      bounds: null,
+      maxBounds: [[180, -180], [-180, 180]]
+    },
     timeline: {
       dimensions: {
         height: 140,
@@ -66,6 +67,10 @@ const initial = {
         margin_top: 20,
         trackHeight: 80
       },
+      range: [
+        new Date(2013, 2, 23, 12),
+        new Date(2016, 2, 23, 12)
+      ],
       zoomLevels: [
         { label: '3 years', duration: 1576800 },
         { label: '3 months', duration: 129600 },
@@ -92,6 +97,7 @@ const initial = {
    *   as well as dom elements to attach SVG
    */
   ui: {
+    tiles: 'openstreetmap', // ['openstreetmap', 'streets', 'satellite']
     style: {
       categories: {
         default: '#f3de2c',
@@ -127,7 +133,7 @@ if (process.env.store) {
 }
 
 // NB: config.js dates get implicitly converted to strings in mergeDeepLeft
-appStore.app.filters.timerange[0] = new Date(appStore.app.filters.timerange[0])
-appStore.app.filters.timerange[1] = new Date(appStore.app.filters.timerange[1])
+appStore.app.timeline.range[0] = new Date(appStore.app.timeline.range[0])
+appStore.app.timeline.range[1] = new Date(appStore.app.timeline.range[1])
 
 export default appStore
