@@ -9,15 +9,14 @@ import 'leaflet';
 
 import { isNotNullNorUndefined } from '../js/utilities';
 
-import MapSites from './presentational/Map/Sites.jsx';
-import MapShapes from './presentational/Map/Shapes.jsx';
-import MapEvents from './presentational/Map/Events.jsx';
-import MapSelectedEvents from './presentational/Map/SelectedEvents.jsx';
-import MapNarratives from './presentational/Map/Narratives.jsx';
-import MapDefsMarkers from './presentational/Map/DefsMarkers.jsx';
+import Sites from './presentational/Map/Sites.jsx';
+import Shapes from './presentational/Map/Shapes.jsx';
+import Events from './presentational/Map/Events.jsx';
+import SelectedEvents from './presentational/Map/SelectedEvents.jsx';
+import Narratives from './presentational/Map/Narratives.jsx';
+import DefsMarkers from './presentational/Map/DefsMarkers.jsx';
 
 class Map extends React.Component {
-
   constructor() {
     super();
     this.projectPoint = this.projectPoint.bind(this)
@@ -147,7 +146,7 @@ class Map extends React.Component {
 
   renderSites() {
     return (
-      <MapSites
+      <Sites
         sites={this.props.domain.sites}
         projectPoint={this.projectPoint}
         isEnabled={this.props.app.views.sites}
@@ -157,22 +156,23 @@ class Map extends React.Component {
 
   renderShapes() {
     return (
-      <MapShapes
+      <Shapes
         svg={this.svgRef.current}
         shapes={this.props.domain.shapes}
         projectPoint={this.projectPoint}
+        styles={this.props.ui.shapes}
       />
     )
   }
 
   renderNarratives() {
     return (
-      <MapNarratives
+      <Narratives
         svg={this.svgRef.current}
         narratives={this.props.domain.narratives}
         projectPoint={this.projectPoint}
         narrative={this.props.app.narrative}
-        narrativeProps={this.props.ui.narratives}
+        styles={this.props.ui.narratives}
         onSelect={this.props.methods.onSelect}
         onSelectNarrative={this.props.methods.onSelectNarrative}
       />
@@ -198,7 +198,7 @@ class Map extends React.Component {
 
   renderEvents() {
     return (
-      <MapEvents
+      <Events
         svg={this.svgRef.current}
         locations={this.props.domain.locations}
         styleLocation={this.styleLocation}
@@ -214,7 +214,7 @@ class Map extends React.Component {
 
   renderSelected() {
     return (
-      <MapSelectedEvents
+      <SelectedEvents
         svg={this.svgRef.current}
         selected={this.props.app.selected}
         projectPoint={this.projectPoint}
@@ -226,7 +226,7 @@ class Map extends React.Component {
   renderMarkers() {
     return (
       <Portal node={this.svgRef.current}>
-        <MapDefsMarkers />
+        <DefsMarkers />
       </Portal>
     )
   }
@@ -278,7 +278,8 @@ function mapStateToProps(state) {
     },
     ui: {
       dom: state.ui.dom,
-      narratives: state.ui.style.narratives
+      narratives: state.ui.style.narratives,
+      shapes: state.ui.style.shapes
     }
   }
 }

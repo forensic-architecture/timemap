@@ -1,8 +1,8 @@
 import React from 'react'
 import { Portal } from 'react-portal'
 
-function MapShapes({ svg, shapes, projectPoint }) {
-  function renderShape(shape, lineStyle) {
+function MapShapes({ svg, shapes, projectPoint, styles }) {
+  function renderShape(shape) {
     const lineCoords = []
     const points = shape.points
       .map(projectPoint)
@@ -19,15 +19,21 @@ function MapShapes({ svg, shapes, projectPoint }) {
       }
     })
 
-    return lineCoords.map(coords => (
-      <line
-        className={shape.name}
-        markerStart="none"
-        {...coords}
-        style={lineStyle}
-      >
-      </line>
-    ))
+    return lineCoords.map(coords => {
+      const shapeStyles = (shape.name in styles)
+        ? styles[shape.name]
+        : styles.default
+
+      return (
+        <line
+          id={`${shape.name}_style`}
+          markerStart="none"
+          {...coords}
+          style={shapeStyles}
+        >
+        </line>
+      )
+    })
   }
 
   if (!shapes || !shapes.length) return null
@@ -35,10 +41,7 @@ function MapShapes({ svg, shapes, projectPoint }) {
   return (
     <Portal node={svg}>
       <g id={`shapes-layer`} className="narrative">
-        {shapes.map(s => renderShape(s, {
-          strokeWidth: 3,
-          stroke: 'blue'
-        }))}
+        {shapes.map(renderShape)}
       </g>
     </Portal>
   )

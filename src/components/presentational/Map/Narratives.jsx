@@ -1,17 +1,17 @@
 import React from 'react'
 import { Portal } from 'react-portal'
 
-function MapNarratives ({ narrativeProps, onSelectNarrative, svg, narrative, narratives, projectPoint }) {
+function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives, projectPoint }) {
   function getNarrativeStyle(narrativeId) {
-    const styleName = (narrativeId && narrativeId in narrativeProps)
+    const styleName = (narrativeId && narrativeId in styles)
       ? narrativeId
       : 'default'
-    return narrativeProps[styleName]
+    return styles[styleName]
   }
 
   function getStepStyle(name) {
     if (name === 'None') return null
-    return narrativeProps.stepStyles[name]
+    return styles.stepStyles[name]
   }
 
   function hasNoLocation(step) {

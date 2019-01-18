@@ -102,6 +102,13 @@ const initial = {
           stroke: 'red',
           strokeWidth: 3
         }
+      },
+      shapes: {
+        default: {
+          stroke: 'blue',
+          strokeWidth: 3,
+          opacity: 0.9
+        }
       }
     },
     dom: {
