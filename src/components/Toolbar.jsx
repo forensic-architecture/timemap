@@ -1,15 +1,15 @@
-import React from 'react';
+import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../actions'
 import * as selectors from '../selectors'
 
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import Search from './Search.jsx';
-import TagListPanel from './TagListPanel.jsx';
-import ToolbarBottomActions from './ToolbarBottomActions.jsx';
-import copy from '../js/data/copy.json';
-import { trimAndEllipse } from '../js/utilities.js';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import Search from './Search.jsx'
+import TagListPanel from './TagListPanel.jsx'
+import ToolbarBottomActions from './ToolbarBottomActions.jsx'
+import copy from '../js/data/copy.json'
+import { trimAndEllipse } from '../js/utilities.js'
 
 class Toolbar extends React.Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class Toolbar extends React.Component {
 
   selectTab(selected) {
     const _selected = (this.state._selected === selected) ? -1 : selected
-    this.setState({ _selected });
+    this.setState({ _selected })
   }
 
   renderClosePanel() {
@@ -27,7 +27,7 @@ class Toolbar extends React.Component {
       <div className="panel-header" onClick={() => this.selectTab(-1)}>
         <div className="caret"></div>
       </div>
-     );
+     )
   }
 
   renderSearch() {
@@ -49,7 +49,7 @@ class Toolbar extends React.Component {
 
   goToNarrative(narrative) {
     this.selectTab(-1) // set all unselected within this component
-    this.props.methods.onSelectNarrative(narrative);
+    this.props.methods.onSelectNarrative(narrative)
   }
 
   renderToolbarNarrativePanel() {
@@ -68,7 +68,7 @@ class Toolbar extends React.Component {
           )
         })}
       </TabPanel>
-    );
+    )
   }
 
   renderToolbarTagPanel() {
@@ -88,23 +88,23 @@ class Toolbar extends React.Component {
         </TabPanel>
       )
     }
-    return '';
+    return ''
   }
 
   renderToolbarTab(_selected, label, icon_key) {
-    const isActive = (this.state._selected === _selected);
-    let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab';
+    const isActive = (this.state._selected === _selected)
+    let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab'
 
     return (
-      <div className={classes} onClick={() => { this.selectTab(_selected); }}>
+      <div className={classes} onClick={() => { this.selectTab(_selected) }}>
         <i className="material-icons">{icon_key}</i>
         <div className="tab-caption">{label}</div>
       </div>
-    );
+    )
   }
 
   renderToolbarPanels() {
-    let classes = (this.state._selected >= 0) ? 'toolbar-panels' : 'toolbar-panels folded';
+    let classes = (this.state._selected >= 0) ? 'toolbar-panels' : 'toolbar-panels folded'
     return (
       <div className={classes}>
         {this.renderClosePanel()}
@@ -119,25 +119,26 @@ class Toolbar extends React.Component {
   renderToolbarNavs() {
     if (this.props.narratives) {
       return this.props.narratives.map((nar, idx) => {
-        const isActive = (idx === this.state._selected);
+        const isActive = (idx === this.state._selected)
 
-        let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab';
+        let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab'
 
         return (
-          <div className={classes} onClick={() => { this.selectTab(idx); }}>
+          <div className={classes} onClick={() => { this.selectTab(idx) }}>
             <div className="tab-caption">{nar.label}</div>
           </div>
-        );
+        )
       })
     }
-    return '';
+    return ''
   }
 
   renderToolbarTabs() {
-    const title = copy[this.props.language].toolbar.title;
-    const narratives_label = copy[this.props.language].toolbar.narratives_label;
-    const tags_label = copy[this.props.language].toolbar.tags_label;
-    const isTags = this.props.tags && this.props.tags.children;
+    let title = copy[this.props.language].toolbar.title
+    if (process.env.title) title = process.env.title
+    const narratives_label = copy[this.props.language].toolbar.narratives_label
+    const tags_label = copy[this.props.language].toolbar.tags_label
+    const isTags = this.props.tags && this.props.tags.children
 
     return (
       <div className="toolbar">
@@ -165,7 +166,7 @@ class Toolbar extends React.Component {
         {this.renderToolbarTabs()}
         {this.renderToolbarPanels()}
       </div>
-    );
+    )
   }
 }
 

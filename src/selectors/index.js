@@ -15,13 +15,17 @@ export const getSites = (state) => {
 }
 export const getSources = state => {
   if (process.env.features.USE_SOURCES) return state.domain.sources
+  return {}
+}
+export const getShapes = state => {
+  if (process.env.features.USE_SHAPES) return state.domain.shapes
   return []
 }
 export const getNotifications = state => state.domain.notifications
 export const getTagTree = state => state.domain.tags
 export const getTagsFilter = state => state.app.filters.tags
 export const getCategoriesFilter = state => state.app.filters.categories
-export const getTimeRange = state => state.app.filters.timerange
+export const getTimeRange = state => state.app.timeline.range
 
 
 /**

@@ -1,12 +1,14 @@
 import { urlFromEnv } from '../js/utilities'
 
-const EVENT_DATA_URL = urlFromEnv('EVENT_EXT');
-const CATEGORY_URL = urlFromEnv('CATEGORY_EXT');
-const TAGS_URL = urlFromEnv('TAGS_EXT');
-const SOURCES_URL = urlFromEnv('SOURCES_EXT');
-const NARRATIVE_URL = urlFromEnv('NARRATIVE_EXT');
-const SITES_URL = urlFromEnv('SITES_EXT');
-const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`;
+// TODO: relegate these URLs entirely to environment variables
+const EVENT_DATA_URL = urlFromEnv('EVENT_EXT')
+const CATEGORY_URL = urlFromEnv('CATEGORY_EXT')
+const TAGS_URL = urlFromEnv('TAGS_EXT')
+const SOURCES_URL = urlFromEnv('SOURCES_EXT')
+const NARRATIVE_URL = urlFromEnv('NARRATIVE_EXT')
+const SITES_URL = urlFromEnv('SITES_EXT')
+const SHAPES_URL = urlFromEnv('SHAPES_EXT')
+const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`
 
 const domainMsg = (domainType) => `Something went wrong fetching ${domainType}. Check the URL or try disabling them in the config file.`
 
@@ -67,13 +69,21 @@ export function fetchDomain () {
       }
     }
 
+    let shapesPromise = Promise.resolve([])
+    if (process.env.features.USE_SHAPES) {
+      shapesPromise = fetch(SHAPES_URL)
+        .then(response => response.json())
+        .catch(() => handleError(domainMsg('shapes')))
+    }
+
     return Promise.all([
       eventPromise,
       catPromise,
       narPromise,
       sitesPromise,
       tagsPromise,
-      sourcesPromise
+      sourcesPromise,
+      shapesPromise
     ])
       .then(response => {
         const result = {
@@ -83,6 +93,7 @@ export function fetchDomain () {
           sites: response[3],
           tags: response[4],
           sources: response[5],
+          shapes: response[6],
           notifications
         }
         if (Object.values(result).some(resp => resp.hasOwnProperty('error'))) {
@@ -96,7 +107,7 @@ export function fetchDomain () {
         // TODO: handle this appropriately in React hierarchy
         alert(err.message)
       })
-  };
+  }
 }
 
 export const FETCH_ERROR = 'FETCH_ERROR'
@@ -189,7 +200,7 @@ export function updateTimeRange(timerange) {
   }
 }
 
-export const UPDATE_NARRATIVE = 'UPDATE_NARRATIVE';
+export const UPDATE_NARRATIVE = 'UPDATE_NARRATIVE'
 export function updateNarrative(narrative) {
   return {
     type: UPDATE_NARRATIVE,
@@ -197,14 +208,14 @@ export function updateNarrative(narrative) {
   }
 }
 
-export const INCREMENT_NARRATIVE_CURRENT = 'INCREMENT_NARRATIVE_CURRENT';
+export const INCREMENT_NARRATIVE_CURRENT = 'INCREMENT_NARRATIVE_CURRENT'
 export function incrementNarrativeCurrent() {
   return {
     type: INCREMENT_NARRATIVE_CURRENT
   }
 }
 
-export const DECREMENT_NARRATIVE_CURRENT = 'DECREMENT_NARRATIVE_CURRENT';
+export const DECREMENT_NARRATIVE_CURRENT = 'DECREMENT_NARRATIVE_CURRENT'
 export function decrementNarrativeCurrent() {
   return {
     type: DECREMENT_NARRATIVE_CURRENT
@@ -249,7 +260,7 @@ export function toggleFetchingSources() {
   }
 }
 
-export const TOGGLE_LANGUAGE = 'TOGGLE_LANGUAGE';
+export const TOGGLE_LANGUAGE = 'TOGGLE_LANGUAGE'
 export function toggleLanguage(language) {
   return {
     type: TOGGLE_LANGUAGE,
@@ -257,21 +268,21 @@ export function toggleLanguage(language) {
   }
 }
 
-export const CLOSE_TOOLBAR = 'CLOSE_TOOLBAR';
+export const CLOSE_TOOLBAR = 'CLOSE_TOOLBAR'
 export function closeToolbar() {
   return {
     type: CLOSE_TOOLBAR
   }
 }
 
-export const TOGGLE_INFOPOPUP = 'TOGGLE_INFOPOPUP';
+export const TOGGLE_INFOPOPUP = 'TOGGLE_INFOPOPUP'
 export function toggleInfoPopup() {
   return {
     type: TOGGLE_INFOPOPUP
   }
 }
 
-export const TOGGLE_MAPVIEW = 'TOGGLE_MAPVIEW';
+export const TOGGLE_MAPVIEW = 'TOGGLE_MAPVIEW'
  export function toggleMapView(layer) {
    return {
      type: TOGGLE_MAPVIEW,

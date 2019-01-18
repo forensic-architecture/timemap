@@ -1,19 +1,10 @@
 import React from 'react';
 import { Portal } from 'react-portal';
 
-class MapEvents extends React.Component {
-
-  projectPoint(location) {
-    const latLng = new L.LatLng(location[0], location[1]);
-    return {
-      x: this.props.map.latLngToLayerPoint(latLng).x + this.props.mapTransformX,
-      y: this.props.map.latLngToLayerPoint(latLng).y + this.props.mapTransformY
-    };
-  }
-
-  getLocationEventsDistribution(location) {
+function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation, narrative, onSelect, svg, locations }){
+  function getLocationEventsDistribution(location) {
     const eventCount = {};
-    const categories = this.props.categories;
+    const categories = categories;
 
     categories.forEach(cat => {
       eventCount[cat.category] = [];
@@ -26,7 +17,7 @@ class MapEvents extends React.Component {
     return eventCount;
   }
 
-  renderLocation(location) {
+  function renderLocation(location) {
     /**
     {
       events: [...],
@@ -35,23 +26,23 @@ class MapEvents extends React.Component {
       longitude: '32.2'
     }
     */
-    const { x, y } = this.projectPoint([location.latitude, location.longitude]);
-    // const eventsByCategory = this.getLocationEventsDistribution(location);
+    const { x, y } = projectPoint([location.latitude, location.longitude]);
+    // const eventsByCategory = getLocationEventsDistribution(location);
 
     const locCategory = location.events.length > 0 ? location.events[0].category : 'default'
-    const customStyles = this.props.styleLocation ? this.props.styleLocation(location) : null
+    const customStyles = styleLocation ? styleLocation(location) : null
     const extraStyles = customStyles[0]
     const extraRender = customStyles[1]
 
     const styles = ({
-      fill: this.props.getCategoryColor(locCategory),
+      fill: getCategoryColor(locCategory),
       fillOpacity: 1,
       ...customStyles[0]
     })
 
     // in narrative mode, only render events in narrative
-    if (this.props.narrative) {
-      const { steps } = this.props.narrative
+    if (narrative) {
+      const { steps } = narrative
       const onlyIfInNarrative = e => steps.map(s => s.id).includes(e.id)
       const eventsInNarrative = location.events.filter(onlyIfInNarrative)
 
@@ -64,7 +55,7 @@ class MapEvents extends React.Component {
       <g
         className="location"
         transform={`translate(${x}, ${y})`}
-        onClick={() => this.props.onSelect(location.events)}
+        onClick={() => onSelect(location.events)}
       >
         <circle
           className="location-event-marker"
@@ -77,13 +68,11 @@ class MapEvents extends React.Component {
     )
   }
 
-  render() {
-    return (
-      <Portal node={this.props.svg}>
-        {this.props.locations.map(loc => this.renderLocation(loc))}
-      </Portal>
-    );
-  }
+  return (
+    <Portal node={svg}>
+      {locations.map(renderLocation)}
+    </Portal>
+  );
 }
 
 export default MapEvents;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import copy from '../../js/data/copy.json';
+import copy from '../../../js/data/copy.json';
 
 const CardSummary = ({ language, description, isHighlighted }) => {
 

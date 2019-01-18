@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CardNarrativeLink from './CardNarrativeLink';
+import CardNarrativeLink from './NarrativeLink';
 
 const CardNarrative = (props) => (
   <div className="card-row">
