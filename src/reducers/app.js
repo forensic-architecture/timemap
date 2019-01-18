@@ -156,11 +156,13 @@ function updateCategoryFilters(appState, action) {
 }
 
 function updateTimeRange(appState, action) { // XXX
-  return Object.assign({}, appState, {
-    filters: Object.assign({}, appState.filters, {
-      timerange: action.timerange
-    }),
-  })
+  return {
+    ...appState,
+    timeline: {
+      ...appState.timeline,
+      range: action.timerange
+    },
+  }
 }
 
 function resetAllFilters(appState) { // XXX
