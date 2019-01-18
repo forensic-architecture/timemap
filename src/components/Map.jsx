@@ -77,7 +77,7 @@ class Map extends React.Component {
       )
     } else if (process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== defaultToken) {
       s = L.tileLayer(
-        `http://a.tiles.mapbox.com/v4/${this.props.ui.tiles}/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`
+        `http://a.tiles.mapbox.com/styles/v1/${this.props.ui.tiles}/tiles/{z}/{x}/{y}?access_token=${process.env.MAPBOX_TOKEN}`
       )
     } else {
       s = L.tileLayer(
