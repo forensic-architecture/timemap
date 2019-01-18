@@ -96,6 +96,7 @@ class MapNarratives extends React.Component {
   renderNarrative(n) {
     const steps = n.steps.slice(0, n.steps.length - 1)
 
+    console.log(n)
     return (
       <g id={`narrative-${n.id.replace(/ /g,"_")}`} className="narrative">
         {steps.map((s, idx) => this.renderNarrativeStep(idx, n))}

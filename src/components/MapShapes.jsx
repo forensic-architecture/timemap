@@ -1,33 +1,56 @@
-import React from 'react';
+import React from 'react'
+import { Portal } from 'react-portal'
 
-function MapShapes({ map, shapes, mapTransformX, mapTransformY }) {
+function MapShapes({ svg, map, shapes, mapTransformX, mapTransformY }) {
   function projectPoint(location) {
-    const latLng = new L.LatLng(location[0], location[1]);
+    const latLng = new L.LatLng(location[0], location[1])
     return {
       x: map.latLngToLayerPoint(latLng).x + mapTransformX,
       y: map.latLngToLayerPoint(latLng).y + mapTransformY
-    };
+    }
   }
 
-  function renderShape(shape) {
-    const coords = shape.points.map(projectPoint)
-    return coords.map(pt => (
-      <div
-        className="leaflet-tooltip shape-label leaflet-zoom-animated leaflet-tooltip-top"
-        style={{ opacity: 1, transform: `translate3d(calc(${pt.x}px - 50%), ${pt.y - 25}px, 0px)`}}>
-        {shape.name}
-      </div>
-    ));
+  function renderShape(shape, lineStyle) {
+    const lineCoords = []
+    const points = shape.points
+      .map(projectPoint)
+
+    points.forEach((p1, idx) => {
+      if (idx < shape.points.length - 1) {
+        const p2 = points[idx+1]
+        lineCoords.push({
+          x1: p1.x,
+          y1: p1.y,
+          x2: p2.x,
+          y2: p2.y
+        })
+      }
+    })
+
+    return lineCoords.map(coords => (
+      <line
+        className={shape.name}
+        markerStart="none"
+        {...coords}
+        style={lineStyle}
+      >
+      </line>
+    ))
   }
 
-  if (!shapes || !shapes.length) return null;
+  if (!shapes || !shapes.length) return null
 
   return (
-    <div className="shapes-layer">
-      {shapes.map(renderShape)}
-    </div>
+    <Portal node={svg}>
+      <g id={`shapes-layer`} className="narrative">
+        {shapes.map(s => renderShape(s, {
+          strokeWidth: 3,
+          stroke: 'blue'
+        }))}
+      </g>
+    </Portal>
   )
 
 }
 
-export default MapShapes;
+export default MapShapes

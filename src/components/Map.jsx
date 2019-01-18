@@ -151,6 +151,7 @@ class Map extends React.Component {
   renderShapes() {
     return (
       <MapShapes
+        svg={this.svgRef.current}
         shapes={this.props.domain.shapes}
         map={this.map}
         mapTransformX={this.state.mapTransformX}
