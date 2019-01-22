@@ -13,7 +13,7 @@ import { capitalize } from './helpers.js'
 * Create an error notification object
 * Types: ['error', 'warning', 'good', 'neural']
 */
-function makeError(type, id, message) {
+function makeError (type, id, message) {
   return {
     type: 'error',
     id,
@@ -21,10 +21,8 @@ function makeError(type, id, message) {
   }
 }
 
-
 const isLeaf = node => (Object.keys(node.children).length === 0)
 const isDuplicate = (node, set) => { return (set.has(node.key)) }
-
 
 /*
 * Traverse a tag tree and check its duplicates
@@ -64,7 +62,7 @@ export function validateDomain (domain) {
     sources: {},
     tags: {},
     shapes: [],
-    notifications: domain.notifications,
+    notifications: domain.notifications
   }
 
   const discardedDomain = {
@@ -76,7 +74,7 @@ export function validateDomain (domain) {
     shapes: []
   }
 
-  function validateArrayItem(item, domainKey, schema) {
+  function validateArrayItem (item, domainKey, schema) {
     const result = Joi.validate(item, schema)
     if (result.error !== null) {
       const id = item.id || '-'
@@ -89,13 +87,13 @@ export function validateDomain (domain) {
     }
   }
 
-  function validateArray(items, domainKey, schema) {
+  function validateArray (items, domainKey, schema) {
     items.forEach(item => {
       validateArrayItem(item, domainKey, schema)
     })
   }
 
-  function validateObject(obj, domainKey, itemSchema) {
+  function validateObject (obj, domainKey, itemSchema) {
     Object.keys(obj).forEach(key => {
       const vl = obj[key]
       const result = Joi.validate(vl, itemSchema)
@@ -121,11 +119,11 @@ export function validateDomain (domain) {
 
   // NB: [lat, lon] array is best format for projecting into map
   sanitizedDomain.shapes = sanitizedDomain.shapes.map(shape => ({
-      name: shape.name,
-      points: shape.items.map(coords => (
-        coords.replace(/\s/g, '').split(',')
-      ))
-    })
+    name: shape.name,
+    points: shape.items.map(coords => (
+      coords.replace(/\s/g, '').split(',')
+    ))
+  })
   )
 
   // Message the number of failed items in domain

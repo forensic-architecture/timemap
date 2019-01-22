@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 
 const TimelineMarkers = ({ getEventX, getCategoryY, transitionDuration, selected }) => {
-  function renderMarker(event) {
+  function renderMarker (event) {
     return (
       <circle
-        className="timeline-marker"
+        className='timeline-marker'
         cx={0}
         cy={0}
         style={{
@@ -13,19 +13,18 @@ const TimelineMarkers = ({ getEventX, getCategoryY, transitionDuration, selected
           '-moz-transition': 'none',
           'opacity': 0.9
         }}
-        r="10"
-      >
-      </circle>
+        r='10'
+      />
     )
   }
 
   return (
     <g
-      clipPath={"url(#clip)"}
+      clipPath={'url(#clip)'}
     >
       {selected.map(event => renderMarker(event))}
     </g>
-  );
+  )
 }
 
-export default TimelineMarkers;
+export default TimelineMarkers

@@ -1,8 +1,8 @@
-import React from 'react';
+import React from 'react'
 import DatetimeDot from './DatetimeDot'
 
 // return a list of lists, where each list corresponds to a single category
-function getDotsToRender(events) {
+function getDotsToRender (events) {
   // each datetime needs to render as many dots as there are distinct
   // categories in the events contained by the datetime.
   // To this end, eventsByCategory is an intermediate data structure that
@@ -32,7 +32,7 @@ const TimelineEvents = ({
   transitionDuration,
   styleDatetime
 }) => {
-  function renderDatetime(datetime) {
+  function renderDatetime (datetime) {
     if (narrative) {
       const { steps } = narrative
       // check all events in the datetime before rendering in narrative
@@ -41,7 +41,7 @@ const TimelineEvents = ({
         const event = datetime.events[i]
         if (steps.map(s => s.id).includes(event.id)) {
           isInNarrative = true
-          break;
+          break
         }
       }
 
@@ -80,11 +80,11 @@ const TimelineEvents = ({
 
   return (
     <g
-      clipPath={"url(#clip)"}
+      clipPath={'url(#clip)'}
     >
       {datetimes.map(datetime => renderDatetime(datetime))}
     </g>
-  );
+  )
 }
 
-export default TimelineEvents;
+export default TimelineEvents

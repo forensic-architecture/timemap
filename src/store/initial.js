@@ -16,7 +16,7 @@ const initial = {
     sources: {},
     sites: [],
     tags: {},
-    notifications: [],
+    notifications: []
   },
 
   /*
@@ -29,7 +29,7 @@ const initial = {
    */
   app: {
     errors: {
-      source: null,
+      source: null
     },
     highlighted: null,
     selected: [],
@@ -45,7 +45,7 @@ const initial = {
         events: true,
         routes: false,
         sites: true
-      },
+      }
     },
     isMobile: (/Mobi/.test(navigator.userAgent)),
     language: 'en-US',
@@ -79,7 +79,7 @@ const initial = {
         { label: '2 hours', duration: 120 },
         { label: '30 min', duration: 30 },
         { label: '10 min', duration: 10 }
-      ],
+      ]
     },
     flags: {
       isFetchingDomain: false,
@@ -100,7 +100,7 @@ const initial = {
     tiles: 'openstreetmap', // ['openstreetmap', 'streets', 'satellite']
     style: {
       categories: {
-        default: '#f3de2c',
+        default: '#f3de2c'
       },
       narratives: {
         default: {
@@ -118,16 +118,16 @@ const initial = {
       }
     },
     dom: {
-      timeline: "timeline",
-      timeslider: "timeslider",
-      map: "map"
-    },
+      timeline: 'timeline',
+      timeslider: 'timeslider',
+      map: 'map'
+    }
   }
-};
+}
 
-let appStore;
+let appStore
 if (process.env.store) {
-  appStore = mergeDeepLeft(process.env.store, initial);
+  appStore = mergeDeepLeft(process.env.store, initial)
 } else {
   appStore = initial
 }

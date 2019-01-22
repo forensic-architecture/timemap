@@ -9,7 +9,7 @@ export default ({ onClickHandler, closeMsg }) => {
       <button
         className='side-menu-burg is-active'
       >
-        <span></span>
+        <span />
       </button>
       <div className='close-text'>{closeMsg}</div>
     </div>

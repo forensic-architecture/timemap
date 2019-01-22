@@ -15,14 +15,12 @@ export default ({
     onClick={() => onSelect(events)}
   >
     <circle
-      className="event"
+      className='event'
       cx={0}
       cy={0}
       style={styleProps}
       r={5}
-    >
-    </circle>
+    />
     { extraRender ? extraRender() : null }
   </g>
 )
-

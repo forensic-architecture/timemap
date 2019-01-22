@@ -1,26 +1,18 @@
 import React from 'react';
 
 import SitesIcon from './presentational/Icons/SitesIcon.js';
-import RefreshIcon from './presentational/Icons/RefreshIcon.js';
-import CoeventIcon from './presentational/Icons/CoeventIcon.js';
-import RouteIcon from './presentational/Icons/RouteIcon.js';
+// import RefreshIcon from './presentational/Icons/RefreshIcon.js';
+// import CoeventIcon from './presentational/Icons/CoeventIcon.js';
+// import RouteIcon from './presentational/Icons/RouteIcon.js';
 
 function ToolbarBottomActions (props) {
   function renderMapActions() {
     return (
       <div className="bottom-action-block">
-          {/* <RouteIcon */}
-          {/*   onClick={(view) => this.toggleMapViews(view)} */}
-          {/*   isEnabled={this.props.viewFilters.routes} */}
-          {/* /> */}
         {process.env.features.USE_SITES ? <SitesIcon
           isActive={props.sites.enabled}
           onClickHandler={props.sites.toggle}
         /> : null}
-          {/* <CoeventIcon */}
-          {/*   onClick={(view) => this.toggleMapViews(view)} */}
-          {/*   isEnabled={this.props.viewFilters.coevents} */}
-          {/* /> */}
       </div>
     );
   }
