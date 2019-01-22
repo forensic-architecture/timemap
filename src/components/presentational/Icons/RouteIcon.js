@@ -3,7 +3,6 @@ import React from 'react'
 const RouteIcon = ({ isEnabled, toggleMapViews }) => {
   return (
     <button
-      className={sitesClass}
       onClick={() => toggleMapViews('routes')}
     >
       <svg x='0px' y='0px' width='30px' height='20px' viewBox='0 0 30 20' enableBackground='new 0 0 30 20'>

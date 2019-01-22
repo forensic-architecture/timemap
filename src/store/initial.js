@@ -79,7 +79,7 @@ const initial = {
         { label: '2 hours', duration: 120 },
         { label: '30 min', duration: 30 },
         { label: '10 min', duration: 10 }
-      ],
+      ]
     },
     flags: {
       isFetchingDomain: false,

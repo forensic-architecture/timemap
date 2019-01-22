@@ -9,7 +9,6 @@ const SOURCES_URL = urlFromEnv('SOURCES_EXT')
 const NARRATIVE_URL = urlFromEnv('NARRATIVE_EXT')
 const SITES_URL = urlFromEnv('SITES_EXT')
 const SHAPES_URL = urlFromEnv('SHAPES_EXT')
-const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`
 
 const domainMsg = (domainType) => `Something went wrong fetching ${domainType}. Check the URL or try disabling them in the config file.`
 
@@ -60,7 +59,7 @@ export function fetchDomain () {
     let sourcesPromise = Promise.resolve([])
     if (process.env.features.USE_SOURCES) {
       if (!SOURCES_URL) {
-        sourcesPromise = Promise.resolve(makeError('USE_SOURCES is true, but you have not provided a SOURCES_EXT'))
+        sourcesPromise = Promise.resolve(handleError('USE_SOURCES is true, but you have not provided a SOURCES_EXT'))
       } else {
         sourcesPromise = fetch(SOURCES_URL)
           .then(response => response.json())
@@ -275,14 +274,6 @@ export const TOGGLE_INFOPOPUP = 'TOGGLE_INFOPOPUP'
 export function toggleInfoPopup () {
   return {
     type: TOGGLE_INFOPOPUP
-  }
-}
-
-export const TOGGLE_MAPVIEW = 'TOGGLE_MAPVIEW'
-export function toggleMapView (layer) {
-  return {
-    type: TOGGLE_MAPVIEW,
-    layer
   }
 }
 

@@ -14,7 +14,6 @@ import {
   UPDATE_SOURCE,
   RESET_ALLFILTERS,
   TOGGLE_LANGUAGE,
-  TOGGLE_MAPVIEW,
   TOGGLE_SITES,
   TOGGLE_FETCHING_DOMAIN,
   TOGGLE_FETCHING_SOURCES,
@@ -36,7 +35,7 @@ function updateSelected (appState, action) {
   })
 }
 
-function updateNarrative(appState, action) {
+function updateNarrative (appState, action) {
   let minTime = appState.timeline.range[0]
   let maxTime = appState.timeline.range[1]
 
@@ -159,13 +158,13 @@ function updateCategoryFilters (appState, action) {
   })
 }
 
-function updateTimeRange(appState, action) { // XXX
+function updateTimeRange (appState, action) { // XXX
   return {
     ...appState,
     timeline: {
       ...appState.timeline,
       range: action.timerange
-    },
+    }
   }
 }
 
@@ -187,18 +186,6 @@ function toggleLanguage (appState, action) {
   let otherLanguage = (appState.language === 'es-MX') ? 'en-US' : 'es-MX'
   return Object.assign({}, appState, {
     language: action.language || otherLanguage
-  })
-}
-
-function toggleMapView (appState, action) {
-  const isLayerInView = !appState.views[layer]
-  const newViews = {}
-  newViews[layer] = isLayerInView
-  const views = Object.assign({}, appState.views, newViews)
-  return Object.assign({}, appState, {
-    filters: Object.assign({}, appState.filters, {
-      views
-    })
   })
 }
 
@@ -293,8 +280,6 @@ function app (appState = initial.app, action) {
       return resetAllFilters(appState, action)
     case TOGGLE_LANGUAGE:
       return toggleLanguage(appState, action)
-    case TOGGLE_MAPVIEW:
-      return toggleMapView(appState, action)
     case TOGGLE_SITES:
       return toggleSites(appState, action)
     case FETCH_ERROR:

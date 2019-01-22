@@ -3,7 +3,6 @@ import { parseTimestamp, compareTimestamp, insetSourceFrom } from '../js/utiliti
 
 // Input selectors
 export const getEvents = state => state.domain.events
-export const getLocations = state => state.domain.locations
 export const getCategories = state => state.domain.categories
 export const getNarratives = state => state.domain.narratives
 export const getActiveNarrative = state => state.app.narrative
@@ -86,9 +85,10 @@ function isNoCategories (categories) {
  * returns true/false if the event falls within timeRange
  */
 function isTimeRangedIn (event, timeRange) {
+  const eventTime = parseTimestamp(event.timestamp)
   return (
-    timeRange[0] < parseTimestamp(event.timestamp) &&
-    parseTimestamp(event.timestamp) < timeRange[1]
+    timeRange[0] < eventTime &&
+    eventTime < timeRange[1]
   )
 }
 

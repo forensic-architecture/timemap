@@ -5,7 +5,7 @@ export function parseDateTimes (arrayToParse) {
   arrayToParse.forEach(item => {
     let incomingDateTime = `${item.date}T00:00`
     if (item.time) incomingDateTime = `${item.date}T${item.time}`
-    const parser = d3.timeParse(process.env.incomingDateTime_FORMAT)
+    const parser = d3.timeParse(process.env.INCOMING_DATETIME_FORMAT)
     item.timestamp = d3.timeFormat('%Y-%m-%dT%H:%M:%S')(parser(incomingDateTime))
 
     parsedArray.push(item)

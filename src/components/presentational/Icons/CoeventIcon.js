@@ -3,7 +3,6 @@ import React from 'react'
 const CoeventIcon = ({ isEnabled, toggleMapViews }) => {
   return (
     <button
-      className={sitesClass}
       onClick={() => toggleMapViews('coevents')}
     >
       <svg className='coevents' x='0px' y='0px' width='30px' height='20px' viewBox='0 0 30 20' enableBackground='new 0 0 30 20'>

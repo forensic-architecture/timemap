@@ -62,7 +62,7 @@ export function validateDomain (domain) {
     sources: {},
     tags: {},
     shapes: [],
-    notifications: domain.notifications,
+    notifications: domain.notifications
   }
 
   const discardedDomain = {
@@ -119,11 +119,11 @@ export function validateDomain (domain) {
 
   // NB: [lat, lon] array is best format for projecting into map
   sanitizedDomain.shapes = sanitizedDomain.shapes.map(shape => ({
-      name: shape.name,
-      points: shape.items.map(coords => (
-        coords.replace(/\s/g, '').split(',')
-      ))
-    })
+    name: shape.name,
+    points: shape.items.map(coords => (
+      coords.replace(/\s/g, '').split(',')
+    ))
+  })
   )
 
   // Message the number of failed items in domain
