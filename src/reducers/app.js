@@ -36,9 +36,9 @@ function updateSelected (appState, action) {
   })
 }
 
-function updateNarrative (appState, action) {
-  let minTime = appState.filters.timerange[0]
-  let maxTime = appState.filters.timerange[1]
+function updateNarrative(appState, action) {
+  let minTime = appState.timeline.range[0]
+  let maxTime = appState.timeline.range[1]
 
   let cornerBound0 = [180, 180]
   let cornerBound1 = [-180, -180]
@@ -159,12 +159,14 @@ function updateCategoryFilters (appState, action) {
   })
 }
 
-function updateTimeRange (appState, action) { // XXX
-  return Object.assign({}, appState, {
-    filters: Object.assign({}, appState.filters, {
-      timerange: action.timerange
-    })
-  })
+function updateTimeRange(appState, action) { // XXX
+  return {
+    ...appState,
+    timeline: {
+      ...appState.timeline,
+      range: action.timerange
+    },
+  }
 }
 
 function resetAllFilters (appState) { // XXX

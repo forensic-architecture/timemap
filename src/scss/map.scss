@@ -16,11 +16,11 @@
   .leaflet-container {
     height: 100%;
 
-    img.leaflet-tile {
-      -webkit-filter: contrast(120%) brightness(115%) grayscale(95%); /* Webkit */
-     filter: gray; /* IE6-9 */
-     filter: contrast(120%) brightness(115%) grayscale(95%); /* W3C */
-    }
+    // img.leaflet-tile {
+    //   -webkit-filter: contrast(120%) brightness(115%) grayscale(95%); /* Webkit */
+    //  filter: gray; /* IE6-9 */
+    //  filter: contrast(120%) brightness(115%) grayscale(95%); /* W3C */
+    // }
   }
 
   &.hidden {
@@ -65,14 +65,14 @@
     }
   }
 
-  .sites-layer {
+  .sites-layer, .shapes-layer {
     position: fixed;
     top: 0px;
     left: 110px;
   }
 
   &.narrative-mode {
-    .sites-layer {
+    .sites-layer, .shapes-layer {
       position: fixed;
       top: 0px;
       left: 0px;

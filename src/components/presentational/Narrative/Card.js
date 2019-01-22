@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { selectActiveNarrative } from '../../selectors'
+import { selectActiveNarrative } from '../../../selectors'
 
 function NarrativeCard ({ narrative }) {
   // no display if no narrative

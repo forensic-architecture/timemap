@@ -24,14 +24,10 @@ class TimelineCategories extends React.Component {
     }
   }
 
-  getY(idx) {
-    return (idx + 1) * this.props.dims.trackHeight / this.props.categories.length + 7.5;
-  }
-
   renderCategory(category, idx) {
     const dims = this.props.dims;
     return (
-      <g class="tick" opacity="1" transform={`translate(0,${this.getY(idx)})`}>
+      <g class="tick" opacity="1" transform={`translate(0,${this.props.getCategoryY(category.category)})`}>
         <line x1={dims.margin_left} x2={dims.width - dims.width_controls}></line>
         <text x={dims.margin_left - 5} dy="0.32em">{category.category}</text>
       </g>

@@ -1,12 +1,15 @@
 /* global fetch, alert */
 import { urlFromEnv } from '../js/utilities'
 
+// TODO: relegate these URLs entirely to environment variables
 const EVENT_DATA_URL = urlFromEnv('EVENT_EXT')
 const CATEGORY_URL = urlFromEnv('CATEGORY_EXT')
 const TAGS_URL = urlFromEnv('TAGS_EXT')
 const SOURCES_URL = urlFromEnv('SOURCES_EXT')
 const NARRATIVE_URL = urlFromEnv('NARRATIVE_EXT')
 const SITES_URL = urlFromEnv('SITES_EXT')
+const SHAPES_URL = urlFromEnv('SHAPES_EXT')
+const eventUrlMap = (event) => `${process.env.SERVER_ROOT}${process.env.EVENT_DESC_ROOT}/${(event.id) ? event.id : event}`
 
 const domainMsg = (domainType) => `Something went wrong fetching ${domainType}. Check the URL or try disabling them in the config file.`
 
@@ -65,13 +68,21 @@ export function fetchDomain () {
       }
     }
 
+    let shapesPromise = Promise.resolve([])
+    if (process.env.features.USE_SHAPES) {
+      shapesPromise = fetch(SHAPES_URL)
+        .then(response => response.json())
+        .catch(() => handleError(domainMsg('shapes')))
+    }
+
     return Promise.all([
       eventPromise,
       catPromise,
       narPromise,
       sitesPromise,
       tagsPromise,
-      sourcesPromise
+      sourcesPromise,
+      shapesPromise
     ])
       .then(response => {
         const result = {
@@ -81,6 +92,7 @@ export function fetchDomain () {
           sites: response[3],
           tags: response[4],
           sources: response[5],
+          shapes: response[6],
           notifications
         }
         if (Object.values(result).some(resp => resp.hasOwnProperty('error'))) {

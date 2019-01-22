@@ -5,6 +5,7 @@ import categorySchema from '../schema/categorySchema'
 import siteSchema from '../schema/siteSchema'
 import narrativeSchema from '../schema/narrativeSchema'
 import sourceSchema from '../schema/sourceSchema'
+import shapeSchema from '../schema/shapeSchema'
 
 import { capitalize } from './helpers.js'
 
@@ -59,8 +60,9 @@ export function validateDomain (domain) {
     sites: [],
     narratives: [],
     sources: {},
+    tags: {},
+    shapes: [],
     notifications: domain.notifications,
-    tags: {}
   }
 
   const discardedDomain = {
@@ -68,7 +70,8 @@ export function validateDomain (domain) {
     categories: [],
     sites: [],
     narratives: [],
-    sources: []
+    sources: [],
+    shapes: []
   }
 
   function validateArrayItem (item, domainKey, schema) {
@@ -112,6 +115,16 @@ export function validateDomain (domain) {
   validateArray(domain.sites, 'sites', siteSchema)
   validateArray(domain.narratives, 'narratives', narrativeSchema)
   validateObject(domain.sources, 'sources', sourceSchema)
+  validateObject(domain.shapes, 'shapes', shapeSchema)
+
+  // NB: [lat, lon] array is best format for projecting into map
+  sanitizedDomain.shapes = sanitizedDomain.shapes.map(shape => ({
+      name: shape.name,
+      points: shape.items.map(coords => (
+        coords.replace(/\s/g, '').split(',')
+      ))
+    })
+  )
 
   // Message the number of failed items in domain
   Object.keys(discardedDomain).forEach(disc => {

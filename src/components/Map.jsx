@@ -1,26 +1,31 @@
-import React from 'react';
-import { Portal } from 'react-portal';
+import React from 'react'
+import { Portal } from 'react-portal'
 
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
 
-import hash from 'object-hash';
-import 'leaflet';
+import hash from 'object-hash'
+import 'leaflet'
 
-import { isNotNullNorUndefined } from '../js/utilities';
+import { isNotNullNorUndefined } from '../js/utilities'
 
-import MapSites from './MapSites.jsx';
-import MapEvents from './MapEvents.jsx';
-import MapSelectedEvents from './MapSelectedEvents.jsx';
-import MapNarratives from './MapNarratives.jsx';
-import MapDefsMarkers from './MapDefsMarkers.jsx';
+import Sites from './presentational/Map/Sites.jsx'
+import Shapes from './presentational/Map/Shapes.jsx'
+import Events from './presentational/Map/Events.jsx'
+import SelectedEvents from './presentational/Map/SelectedEvents.jsx'
+import Narratives from './presentational/Map/Narratives.jsx'
+import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
+
+// NB: important constants for map, TODO: make statics
+const supportedMapboxMap = ['streets', 'satellite']
+const defaultToken = 'your_token'
 
 class Map extends React.Component {
-
   constructor() {
-    super();
-    this.svgRef = React.createRef();
-    this.map = null;
+    super()
+    this.projectPoint = this.projectPoint.bind(this)
+    this.svgRef = React.createRef()
+    this.map = null
     this.state = {
       mapTransformX: 0,
       mapTransformY: 0
@@ -30,76 +35,76 @@ class Map extends React.Component {
 
   componentDidMount(){
     if (this.map === null) {
-      this.initializeMap();
+      this.initializeMap()
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    // Set appropriate zoom for narrative 
-    if (hash(nextProps.app.mapBounds) !== hash(this.props.app.mapBounds)
-      && nextProps.app.mapBounds !== null) {
-        this.map.fitBounds(nextProps.app.mapBounds);
+    // Set appropriate zoom for narrative
+    const { bounds } = nextProps.app.map
+    if (hash(bounds) !== hash(this.props.app.map.bounds)
+      && bounds !== null) {
+        this.map.fitBounds(bounds)
     } else {
       if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
         // Fly to first  of events selected
-        const eventPoint = (nextProps.app.selected.length > 0) ? nextProps.app.selected[0] : null;
-  
+        const eventPoint = (nextProps.app.selected.length > 0) ? nextProps.app.selected[0] : null
+
         if (eventPoint !== null && eventPoint.latitude && eventPoint.longitude) {
-          this.map.setView([eventPoint.latitude, eventPoint.longitude]);
+          this.map.setView([eventPoint.latitude, eventPoint.longitude])
         }
-      }  
+      }
     }
-  }  
+  }
 
   initializeMap() {
     /**
      * Creates a Leaflet map and a tilelayer for the map background
      */
+    const { map: mapConf } = this.props.app
     const map =
       L.map(this.props.ui.dom.map)
-        .setView(this.props.app.mapAnchor, 14)
-        .setMinZoom(7)
-        .setMaxZoom(18)
-        .setMaxBounds([[180, -180], [-180, 180]])
+        .setView(mapConf.anchor, mapConf.startZoom)
+        .setMinZoom(mapConf.minZoom)
+        .setMaxZoom(mapConf.maxZoom)
+        .setMaxBounds(mapConf.maxBounds)
 
-    let s;
-    if (process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== 'your_token') {
+    let s
+
+    if ((supportedMapboxMap.indexOf(this.props.ui.tiles) !== -1) && process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== defaultToken) {
       s = L.tileLayer(
-        `http://a.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`
-      );
+        `http://a.tiles.mapbox.com/v4/mapbox.${this.props.ui.tiles}/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`
+      )
+    } else if (process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== defaultToken) {
+      s = L.tileLayer(
+        `http://a.tiles.mapbox.com/styles/v1/${this.props.ui.tiles}/tiles/{z}/{x}/{y}?access_token=${process.env.MAPBOX_TOKEN}`
+      )
     } else {
-      // eslint-disable-next-line
-      alert(`No mapbox token specified in config.
-            Timemap does not currently support any other tiling layer,
-            so you will need to sign up for one at:
-
-            https://www.mapbox.com/
-
-            Stop and start the development process in terminal after you have added your token to config.js`
-        )
-        return
+      s = L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+      )
     }
-    s = s.addTo(map);
+    s = s.addTo(map)
 
-    map.keyboard.disable();
+    map.keyboard.disable()
 
-    map.on('move zoomend viewreset moveend', () => this.alignLayers());
-    map.on('zoomstart', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.add('hide') });
-    map.on('zoomend', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.remove('hide'); });
-    window.addEventListener('resize', () => { this.alignLayers(); });
+    map.on('move zoomend viewreset moveend', () => this.alignLayers())
+    map.on('zoomstart', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.add('hide') })
+    map.on('zoomend', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.remove('hide') })
+    window.addEventListener('resize', () => { this.alignLayers() })
 
-    this.map = map;
+    this.map = map
   }
 
   alignLayers() {
-    const mapNode = document.querySelector('.leaflet-map-pane');
-    if (mapNode === null) return { transformX: 0, transformY: 0 };
+    const mapNode = document.querySelector('.leaflet-map-pane')
+    if (mapNode === null) return { transformX: 0, transformY: 0 }
 
     // We'll get the transform of the leaflet container,
     // which will let us offset the SVG by the same quantity
     const transform = window
       .getComputedStyle(mapNode)
-      .getPropertyValue('transform');
+      .getPropertyValue('transform')
 
     // Offset with leaflet map transform boundaries
     this.setState({
@@ -108,8 +113,16 @@ class Map extends React.Component {
     })
   }
 
+  projectPoint(location) {
+    const latLng = new L.LatLng(location[0], location[1])
+    return {
+      x: this.map.latLngToLayerPoint(latLng).x + this.state.mapTransformX,
+      y: this.map.latLngToLayerPoint(latLng).y + this.state.mapTransformY
+    }
+  }
+
   getClientDims() {
-    const boundingClient = document.querySelector(`#${this.props.ui.dom.map}`).getBoundingClientRect();
+    const boundingClient = document.querySelector(`#${this.props.ui.dom.map}`).getBoundingClientRect()
 
     return {
       width: boundingClient.width,
@@ -118,8 +131,8 @@ class Map extends React.Component {
   }
 
   renderTiles() {
-    const pane = this.map.getPanes().overlayPane;
-    const { width, height } = this.getClientDims();
+    const pane = this.map.getPanes().overlayPane
+    const { width, height } = this.getClientDims()
 
     return (
       <Portal node={pane}>
@@ -132,35 +145,42 @@ class Map extends React.Component {
         >
         </svg>
       </Portal>
-    );
+    )
   }
 
   renderSites() {
     return (
-      <MapSites
+      <Sites
         sites={this.props.domain.sites}
-        map={this.map}
-        mapTransformX={this.state.mapTransformX}
-        mapTransformY={this.state.mapTransformY}
+        projectPoint={this.projectPoint}
         isEnabled={this.props.app.views.sites}
       />
-    );
+    )
+  }
+
+  renderShapes() {
+    return (
+      <Shapes
+        svg={this.svgRef.current}
+        shapes={this.props.domain.shapes}
+        projectPoint={this.projectPoint}
+        styles={this.props.ui.shapes}
+      />
+    )
   }
 
   renderNarratives() {
     return (
-      <MapNarratives
+      <Narratives
         svg={this.svgRef.current}
         narratives={this.props.domain.narratives}
-        map={this.map}
-        mapTransformX={this.state.mapTransformX}
-        mapTransformY={this.state.mapTransformY}
+        projectPoint={this.projectPoint}
         narrative={this.props.app.narrative}
-        narrativeProps={this.props.ui.narratives}
+        styles={this.props.ui.narratives}
         onSelect={this.props.methods.onSelect}
         onSelectNarrative={this.props.methods.onSelectNarrative}
       />
-    );
+    )
   }
 
   /**
@@ -182,39 +202,35 @@ class Map extends React.Component {
 
   renderEvents() {
     return (
-      <MapEvents
+      <Events
         svg={this.svgRef.current}
         locations={this.props.domain.locations}
         styleLocation={this.styleLocation}
         categories={this.props.domain.categories}
-        map={this.map}
-        mapTransformX={this.state.mapTransformX}
-        mapTransformY={this.state.mapTransformY}
+        projectPoint={this.projectPoint}
         narrative={this.props.app.narrative}
         onSelect={this.props.methods.onSelect}
         onSelectNarrative={this.props.methods.onSelectNarrative}
         getCategoryColor={this.props.methods.getCategoryColor}
       />
-    );
+    )
   }
 
   renderSelected() {
     return (
-      <MapSelectedEvents
+      <SelectedEvents
         svg={this.svgRef.current}
         selected={this.props.app.selected}
-        map={this.map}
-        mapTransformX={this.state.mapTransformX}
-        mapTransformY={this.state.mapTransformY}
+        projectPoint={this.projectPoint}
       />
-    );
+    )
   }
 
 
   renderMarkers() {
     return (
       <Portal node={this.svgRef.current}>
-        <MapDefsMarkers />
+        <DefsMarkers />
       </Portal>
     )
   }
@@ -222,19 +238,25 @@ class Map extends React.Component {
 
   render() {
     const { isShowingSites } = this.props.app.flags
-    const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper';
+    const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'
+    const innerMap = !!this.map ? (
+      <React.Fragment>
+        {this.renderTiles()}
+        {this.renderMarkers()}
+        {isShowingSites ? this.renderSites() : null}
+        {this.renderShapes()}
+        {this.renderEvents()}
+        {this.renderNarratives()}
+        {this.renderSelected()}
+      </React.Fragment>
+    ) : null
 
     return (
       <div className={classes}>
         <div id={this.props.ui.dom.map} />
-        {(this.map !== null) ? this.renderTiles() : ''}
-        {(this.map !== null) ? this.renderMarkers() : ''}
-        {(this.map !== null) && isShowingSites ? this.renderSites() : ''}
-        {(this.map !== null) ? this.renderEvents() : ''}
-        {(this.map !== null) ? this.renderNarratives() : ''}
-        {(this.map !== null) ? this.renderSelected() : ''}
+        {innerMap}
       </div>
-    );
+    )
   }
 }
 
@@ -244,22 +266,24 @@ function mapStateToProps(state) {
       locations: selectors.selectLocations(state),
       narratives: selectors.selectNarratives(state),
       categories: selectors.selectCategories(state),
-      sites: selectors.getSites(state)
+      sites: selectors.getSites(state),
+      shapes: selectors.getShapes(state)
     },
     app: {
       views: state.app.filters.views,
       selected: state.app.selected,
       highlighted: state.app.highlighted,
-      mapAnchor: state.app.mapAnchor,
-      mapBounds: state.app.filters.mapBounds,
+      map: state.app.map,
       narrative: state.app.narrative,
       flags: {
         isShowingSites: state.app.flags.isShowingSites
       }
     },
     ui: {
+      tiles: state.ui.tiles,
       dom: state.ui.dom,
-      narratives: state.ui.style.narratives
+      narratives: state.ui.style.narratives,
+      shapes: state.ui.style.shapes
     }
   }
 }
