@@ -9,7 +9,6 @@ const App = ({ history }) => {
     <ConnectedRouter history={history}>
       <Switch>
         <Route path="/" component={Dashboard} />
-        <Route path="/event/:eventId" component={Dashboard} />
       </Switch>
     </ConnectedRouter>
   );

@@ -200,7 +200,11 @@ export const UPDATE_TIMERANGE = 'UPDATE_TIMERANGE'
 export function updateTimeRange (timerange) {
   return {
     type: UPDATE_TIMERANGE,
-    timerange
+    timerange,
+    pushQueryParams: {
+      timerange0: timerange[0],
+      timerangeF: timerange[1]
+    }
   }
 }
 

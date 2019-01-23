@@ -1,6 +1,8 @@
 /* global d3 */
 import initial from '../store/initial.js'
 import { parseDate } from '../js/utilities'
+import { getValueFromUrl } from '../js/utilities'
+import { history } from '../store/index.js'
 
 import {
   UPDATE_HIGHLIGHTED,
@@ -158,7 +160,11 @@ function updateCategoryFilters (appState, action) {
   })
 }
 
-function updateTimeRange (appState, action) { // XXX
+function updateTimeRange (appState, action, history) { // XXX
+  console.log(appState, action, history)
+  const maxAgeFilter = getValueFromUrl('timerange');
+  //history.push(`?timerange=${maxAgeFilter}`)
+  console.log(maxAgeFilter)
   return {
     ...appState,
     timeline: {
@@ -267,7 +273,7 @@ function app (appState = initial.app, action) {
     case UPDATE_CATEGORYFILTERS:
       return updateCategoryFilters(appState, action)
     case UPDATE_TIMERANGE:
-      return updateTimeRange(appState, action)
+      return updateTimeRange(appState, action, history)
     case UPDATE_NARRATIVE:
       return updateNarrative(appState, action)
     case INCREMENT_NARRATIVE_CURRENT:

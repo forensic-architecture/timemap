@@ -171,7 +171,6 @@ function mapDispatchToProps (dispatch) {
 }
 
 function mapStateToProps(state, ownProps) {
-  console.log(ownProps);
   return { ...state, ...ownProps }
 }
 
