@@ -52,7 +52,7 @@ const initial = {
     map: {
       anchor: [31.356397, 34.784818],
       startZoom: 11,
-      minZoom: 7,
+      minZoom: 6,
       maxZoom: 18,
       bounds: null,
       maxBounds: [[180, -180], [-180, 180]]
