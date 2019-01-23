@@ -1,3 +1,4 @@
+/* global L */
 import React from 'react'
 import { Portal } from 'react-portal'
 
@@ -6,8 +7,6 @@ import * as selectors from '../selectors'
 
 import hash from 'object-hash'
 import 'leaflet'
-
-import { isNotNullNorUndefined } from '../js/utilities'
 
 import Sites from './presentational/Map/Sites.jsx'
 import Shapes from './presentational/Map/Shapes.jsx'
@@ -21,7 +20,7 @@ const supportedMapboxMap = ['streets', 'satellite']
 const defaultToken = 'your_token'
 
 class Map extends React.Component {
-  constructor() {
+  constructor () {
     super()
     this.projectPoint = this.projectPoint.bind(this)
     this.svgRef = React.createRef()
@@ -33,18 +32,18 @@ class Map extends React.Component {
     this.styleLocation = this.styleLocation.bind(this)
   }
 
-  componentDidMount(){
+  componentDidMount () {
     if (this.map === null) {
       this.initializeMap()
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     // Set appropriate zoom for narrative
     const { bounds } = nextProps.app.map
-    if (hash(bounds) !== hash(this.props.app.map.bounds)
-      && bounds !== null) {
-        this.map.fitBounds(bounds)
+    if (hash(bounds) !== hash(this.props.app.map.bounds) &&
+      bounds !== null) {
+      this.map.fitBounds(bounds)
     } else {
       if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
         // Fly to first  of events selected
@@ -57,7 +56,7 @@ class Map extends React.Component {
     }
   }
 
-  initializeMap() {
+  initializeMap () {
     /**
      * Creates a Leaflet map and a tilelayer for the map background
      */
@@ -69,22 +68,22 @@ class Map extends React.Component {
         .setMaxZoom(mapConf.maxZoom)
         .setMaxBounds(mapConf.maxBounds)
 
-    let s
+    let firstLayer
 
     if ((supportedMapboxMap.indexOf(this.props.ui.tiles) !== -1) && process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== defaultToken) {
-      s = L.tileLayer(
+      firstLayer = L.tileLayer(
         `http://a.tiles.mapbox.com/v4/mapbox.${this.props.ui.tiles}/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`
       )
     } else if (process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== defaultToken) {
-      s = L.tileLayer(
+      firstLayer = L.tileLayer(
         `http://a.tiles.mapbox.com/styles/v1/${this.props.ui.tiles}/tiles/{z}/{x}/{y}?access_token=${process.env.MAPBOX_TOKEN}`
       )
     } else {
-      s = L.tileLayer(
+      firstLayer = L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       )
     }
-    s = s.addTo(map)
+    firstLayer.addTo(map)
 
     map.keyboard.disable()
 
@@ -96,7 +95,7 @@ class Map extends React.Component {
     this.map = map
   }
 
-  alignLayers() {
+  alignLayers () {
     const mapNode = document.querySelector('.leaflet-map-pane')
     if (mapNode === null) return { transformX: 0, transformY: 0 }
 
@@ -113,7 +112,7 @@ class Map extends React.Component {
     })
   }
 
-  projectPoint(location) {
+  projectPoint (location) {
     const latLng = new L.LatLng(location[0], location[1])
     return {
       x: this.map.latLngToLayerPoint(latLng).x + this.state.mapTransformX,
@@ -121,7 +120,7 @@ class Map extends React.Component {
     }
   }
 
-  getClientDims() {
+  getClientDims () {
     const boundingClient = document.querySelector(`#${this.props.ui.dom.map}`).getBoundingClientRect()
 
     return {
@@ -130,7 +129,7 @@ class Map extends React.Component {
     }
   }
 
-  renderTiles() {
+  renderTiles () {
     const pane = this.map.getPanes().overlayPane
     const { width, height } = this.getClientDims()
 
@@ -140,15 +139,14 @@ class Map extends React.Component {
           ref={this.svgRef}
           width={width}
           height={height}
-          style={{ transform: `translate3d(${-this.state.mapTransformX}px, ${-this.state.mapTransformY}px, 0)`}}
+          style={{ transform: `translate3d(${-this.state.mapTransformX}px, ${-this.state.mapTransformY}px, 0)` }}
           className='leaflet-svg'
-        >
-        </svg>
+        />
       </Portal>
     )
   }
 
-  renderSites() {
+  renderSites () {
     return (
       <Sites
         sites={this.props.domain.sites}
@@ -158,7 +156,7 @@ class Map extends React.Component {
     )
   }
 
-  renderShapes() {
+  renderShapes () {
     return (
       <Shapes
         svg={this.svgRef.current}
@@ -169,7 +167,7 @@ class Map extends React.Component {
     )
   }
 
-  renderNarratives() {
+  renderNarratives () {
     return (
       <Narratives
         svg={this.svgRef.current}
@@ -192,7 +190,7 @@ class Map extends React.Component {
    * at the second index is an optional function that renders additional
    * components in the <g/> div.
    */
-  styleLocation(location) {
+  styleLocation (location) {
     const noEvents = location.events.length
     return [
       null,
@@ -200,7 +198,7 @@ class Map extends React.Component {
     ]
   }
 
-  renderEvents() {
+  renderEvents () {
     return (
       <Events
         svg={this.svgRef.current}
@@ -216,7 +214,7 @@ class Map extends React.Component {
     )
   }
 
-  renderSelected() {
+  renderSelected () {
     return (
       <SelectedEvents
         svg={this.svgRef.current}
@@ -226,8 +224,7 @@ class Map extends React.Component {
     )
   }
 
-
-  renderMarkers() {
+  renderMarkers () {
     return (
       <Portal node={this.svgRef.current}>
         <DefsMarkers />
@@ -235,11 +232,10 @@ class Map extends React.Component {
     )
   }
 
-
-  render() {
+  render () {
     const { isShowingSites } = this.props.app.flags
     const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'
-    const innerMap = !!this.map ? (
+    const innerMap = this.map ? (
       <React.Fragment>
         {this.renderTiles()}
         {this.renderMarkers()}
@@ -260,7 +256,7 @@ class Map extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     domain: {
       locations: selectors.selectLocations(state),
@@ -289,4 +285,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(Map)
-

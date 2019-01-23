@@ -14,10 +14,10 @@ import InfoPopUp from './InfoPopup.jsx'
 import Timeline from './Timeline.jsx'
 import Notification from './Notification.jsx'
 
-import { parseDate, injectSource } from '../js/utilities'
+import { parseDate } from '../js/utilities'
 
 class Dashboard extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.handleViewSource = this.handleViewSource.bind(this)
@@ -30,28 +30,28 @@ class Dashboard extends React.Component {
     this.eventsById = {}
   }
 
-  componentDidMount() {
+  componentDidMount () {
     if (!this.props.app.isMobile) {
       this.props.actions.fetchDomain()
         .then(domain => this.props.actions.updateDomain(domain))
     }
   }
 
-  handleHighlight(highlighted) {
-    this.props.actions.updateHighlighted((highlighted) ? highlighted : null)
+  handleHighlight (highlighted) {
+    this.props.actions.updateHighlighted((highlighted) || null)
   }
 
-  getEventById(eventId) {
+  getEventById (eventId) {
     if (this.eventsById[eventId]) return this.eventsById[eventId]
     this.eventsById[eventId] = this.props.domain.events.find(ev => ev.id === eventId)
     return this.eventsById[eventId]
   }
 
-  handleViewSource(source) {
+  handleViewSource (source) {
     this.props.actions.updateSource(source)
   }
 
-  handleSelect(selected) {
+  handleSelect (selected) {
     if (selected) {
       let eventsToSelect = selected.map(event => this.getEventById(event.id))
       eventsToSelect = eventsToSelect.sort((a, b) => parseDate(a.timestamp) - parseDate(b.timestamp))
@@ -60,24 +60,23 @@ class Dashboard extends React.Component {
     }
   }
 
-  getCategoryColor(category) {
+  getCategoryColor (category) {
     return this.props.ui.style.categories[category] || this.props.ui.style.categories['default']
   }
 
-  getNarrativeLinks(event) {
+  getNarrativeLinks (event) {
     const narrative = this.props.domain.narratives.find(nv => nv.id === event.narrative)
     if (narrative) return narrative.byId[event.id]
     return null
   }
 
-  setNarrative(narrative) {
+  setNarrative (narrative) {
     // only handleSelect if narrative is not null
-    if (!!narrative)
-      this.handleSelect([ narrative.steps[0] ])
+    if (narrative) { this.handleSelect([ narrative.steps[0] ]) }
     this.props.actions.updateNarrative(narrative)
   }
 
-  moveInNarrative(amt) {
+  moveInNarrative (amt) {
     const { current } = this.props.app.narrativeState
     const { narrative } = this.props.app
 
@@ -91,7 +90,7 @@ class Dashboard extends React.Component {
     }
   }
 
-  render() {
+  render () {
     const { actions, app, domain, ui } = this.props
     return (
       <div>
@@ -107,7 +106,7 @@ class Dashboard extends React.Component {
           methods={{
             onSelect: this.handleSelect,
             onSelectNarrative: this.setNarrative,
-            getCategoryColor: this.getCategoryColor,
+            getCategoryColor: this.getCategoryColor
           }}
         />
         <Timeline
@@ -126,7 +125,7 @@ class Dashboard extends React.Component {
           getCategoryColor={category => this.getCategoryColor(category)}
         />
         <NarrativeControls
-          narrative={!!app.narrative ? {
+          narrative={app.narrative ? {
             ...app.narrative,
             current: app.narrativeState.current
           } : null}
@@ -150,7 +149,8 @@ class Dashboard extends React.Component {
           <SourceOverlay
             source={app.source}
             onCancel={() => {
-              actions.updateSource(null)}
+              actions.updateSource(null)
+            }
             }
           />
         ) : null}
@@ -163,7 +163,7 @@ class Dashboard extends React.Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   return {
     actions: bindActionCreators(actions, dispatch)
   }
@@ -172,5 +172,5 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   state => state,
   // state => injectSource("Youtube - Novodvirske Tank Separatist Patrol Video"),
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Dashboard)

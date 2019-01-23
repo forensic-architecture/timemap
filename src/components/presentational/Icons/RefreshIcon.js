@@ -1,6 +1,6 @@
 import React from 'react'
 
-const RefreshIcon = () => {
+export default ({ isActive, isDisabled, onClickHandler }) => {
   return (
     <svg className='reset' x='0px' y='0px' width='25px' height='25px' viewBox='7.5 7.5 25 25' enableBackground='new 7.5 7.5 25 25'>
       <path stroke-width='2' stroke-miterlimit='10' d='M28.822,16.386c1.354,3.219,0.898,7.064-1.5,9.924
@@ -9,5 +9,3 @@ const RefreshIcon = () => {
     </svg>
   )
 }
-
-export default RefreshIcon

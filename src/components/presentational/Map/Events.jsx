@@ -1,23 +1,23 @@
-import React from 'react';
-import { Portal } from 'react-portal';
+import React from 'react'
+import { Portal } from 'react-portal'
 
-function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation, narrative, onSelect, svg, locations }){
-  function getLocationEventsDistribution(location) {
-    const eventCount = {};
-    const categories = categories;
+function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation, narrative, onSelect, svg, locations }) {
+  // function getLocationEventsDistribution (location) {
+  //   const eventCount = {}
+  //
+  //   categories.forEach(cat => {
+  //     eventCount[cat.category] = []
+  //   })
+  //
+  //   location.events.forEach((event) => {
+  //     ;
+  //     eventCount[event.category].push(event)
+  //   })
+  //
+  //   return eventCount
+  // }
 
-    categories.forEach(cat => {
-      eventCount[cat.category] = [];
-    });
-
-    location.events.forEach((event) => {;
-      eventCount[event.category].push(event);
-    });
-
-    return eventCount;
-  }
-
-  function renderLocation(location) {
+  function renderLocation (location) {
     /**
     {
       events: [...],
@@ -26,7 +26,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
       longitude: '32.2'
     }
     */
-    const { x, y } = projectPoint([location.latitude, location.longitude]);
+    const { x, y } = projectPoint([location.latitude, location.longitude])
     // const eventsByCategory = getLocationEventsDistribution(location);
 
     const locCategory = location.events.length > 0 ? location.events[0].category : 'default'
@@ -37,7 +37,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
     const styles = ({
       fill: getCategoryColor(locCategory),
       fillOpacity: 1,
-      ...customStyles[0]
+      ...extraStyles
     })
 
     // in narrative mode, only render events in narrative
@@ -53,16 +53,15 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
 
     return (
       <g
-        className="location"
+        className='location'
         transform={`translate(${x}, ${y})`}
         onClick={() => onSelect(location.events)}
       >
         <circle
-          className="location-event-marker"
+          className='location-event-marker'
           r={7}
           style={styles}
-        >
-        </circle>
+        />
         {extraRender ? extraRender() : null}
       </g>
     )
@@ -72,7 +71,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
     <Portal node={svg}>
       {locations.map(renderLocation)}
     </Portal>
-  );
+  )
 }
 
-export default MapEvents;
+export default MapEvents

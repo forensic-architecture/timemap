@@ -4,15 +4,11 @@ import * as selectors from '../selectors'
 
 import Card from './Card.jsx'
 import copy from '../js/data/copy.json'
-import {
-  isNotNullNorUndefined
-} from '../js/utilities.js'
 
 class CardStack extends React.Component {
-  renderCards(events, selections) {
+  renderCards (events, selections) {
     // if no selections provided, select all
-    if (!selections)
-      selections = events.map(e => true)
+    if (!selections) { selections = events.map(e => true) }
 
     return events.map((event, idx) => (
       <Card
@@ -32,7 +28,7 @@ class CardStack extends React.Component {
     ))
   }
 
-  renderSelectedCards() {
+  renderSelectedCards () {
     const { selected } = this.props
     if (selected.length > 0) {
       return this.renderCards(selected)
@@ -40,7 +36,7 @@ class CardStack extends React.Component {
     return null
   }
 
-  renderNarrativeCards() {
+  renderNarrativeCards () {
     const { narrative } = this.props
     const showing = narrative.steps.slice(narrative.current)
     const selections = showing
@@ -49,8 +45,8 @@ class CardStack extends React.Component {
     return this.renderCards(showing, selections)
   }
 
-  renderCardStackHeader() {
-    const header_lang = copy[this.props.language].cardstack.header
+  renderCardStackHeader () {
+    const headerLang = copy[this.props.language].cardstack.header
 
     return (
       <div
@@ -58,17 +54,17 @@ class CardStack extends React.Component {
         className='card-stack-header'
         onClick={() => this.props.onToggleCardstack()}
       >
-        <button className="side-menu-burg is-active"><span></span></button>
-        <p className="header-copy top">
-          {`${this.props.selected.length} ${header_lang}`}
+        <button className='side-menu-burg is-active'><span /></button>
+        <p className='header-copy top'>
+          {`${this.props.selected.length} ${headerLang}`}
         </p>
       </div>
     )
   }
 
-  renderCardStackContent() {
+  renderCardStackContent () {
     return (
-      <div id="card-stack-content" className="card-stack-content">
+      <div id='card-stack-content' className='card-stack-content'>
         <ul>
           {this.renderSelectedCards()}
         </ul>
@@ -76,9 +72,9 @@ class CardStack extends React.Component {
     )
   }
 
-  renderNarrativeContent() {
+  renderNarrativeContent () {
     return (
-      <div id="card-stack-content" className="card-stack-content">
+      <div id='card-stack-content' className='card-stack-content'>
         <ul>
           {this.renderNarrativeCards()}
         </ul>
@@ -86,14 +82,14 @@ class CardStack extends React.Component {
     )
   }
 
-  render() {
+  render () {
     const { isCardstack, selected, narrative } = this.props
 
     if (selected.length > 0) {
       if (!narrative) {
         return (
           <div
-            id="card-stack"
+            id='card-stack'
             className={`card-stack
             ${isCardstack ? '' : ' folded'}`
             }
@@ -105,7 +101,7 @@ class CardStack extends React.Component {
       } else {
         return (
           <div
-            id="card-stack"
+            id='card-stack'
             className={`card-stack narrative-mode
             ${isCardstack ? '' : ' folded'}`
             }
@@ -116,11 +112,11 @@ class CardStack extends React.Component {
       }
     }
 
-    return <div/>
+    return <div />
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     narrative: selectors.selectActiveNarrative(state),
     selected: selectors.selectSelected(state),

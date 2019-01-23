@@ -1,31 +1,31 @@
-import React  from 'react'
+/* global fetch */
+import React from 'react'
 import PropTypes from 'prop-types'
 import marked from 'marked'
 
 class Md extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = { md: null, error: null }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     fetch(this.props.path)
       .then(resp => resp.text())
       .then(text => {
-        if (text.length <= 0)
-          throw new Error()
+        if (text.length <= 0) { throw new Error() }
 
         this.setState({ md: marked(text) })
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({ error: true })
       })
   }
 
-  render() {
+  render () {
     if (this.state.md && !this.state.error) {
       return (
-        <div className="md-container" dangerouslySetInnerHTML={{ __html: this.state.md }} />
+        <div className='md-container' dangerouslySetInnerHTML={{ __html: this.state.md }} />
       )
     } else if (this.state.error) {
       return this.props.unloader || <div>Error: couldn't load source</div>

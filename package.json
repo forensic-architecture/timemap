@@ -9,7 +9,7 @@
     "build": "NODE_ENV=production webpack --mode production",
     "test": "ava --verbose",
     "test-watch": "ava --watch",
-    "lint": "standard \"src/**/*.js\" \"test/**/*.js\""
+    "lint": "standard \"src/**/*.js\" \"src/**/*.jsx\" \"test/**/*.js\""
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
