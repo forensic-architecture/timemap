@@ -92,7 +92,6 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarTab (_selected, label, iconKey) {
-    console.log(label)
     const isActive = (this.state._selected === _selected)
     let classes = (isActive) ? 'toolbar-tab active' : 'toolbar-tab'
 
