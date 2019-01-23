@@ -1,3 +1,4 @@
+/* global d3 */
 import React from 'react'
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
@@ -10,13 +11,12 @@ import Axis from './TimelineAxis.jsx'
 import Clip from './presentational/Timeline/Clip'
 import Handles from './presentational/Timeline/Handles.js'
 import ZoomControls from './presentational/Timeline/ZoomControls.js'
-import Labels from './presentational/Timeline/Labels.js'
 import Markers from './presentational/Timeline/Markers.js'
 import Events from './presentational/Timeline/Events.js'
 import Categories from './TimelineCategories.jsx'
 
 class Timeline extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.styleDatetime = this.styleDatetime.bind(this)
     this.getDatetimeX = this.getDatetimeX.bind(this)
@@ -33,12 +33,12 @@ class Timeline extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.computeDims()
     this.addEventListeners()
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (hash(nextProps) !== hash(this.props)) {
       this.setState({
         timerange: nextProps.app.timeline.range,
@@ -59,22 +59,21 @@ class Timeline extends React.Component {
     }
   }
 
-  addEventListeners() {
+  addEventListeners () {
     window.addEventListener('resize', () => { this.computeDims() })
     let element = document.querySelector('.timeline-wrapper')
-    element.addEventListener("transitionend", (event) => {
+    element.addEventListener('transitionend', (event) => {
       this.computeDims()
     })
-
   }
 
-  makeScaleX() {
+  makeScaleX () {
     return d3.scaleTime()
-    .domain(this.state.timerange)
-    .range([this.state.dims.margin_left, this.state.dims.width - this.state.dims.width_controls])
+      .domain(this.state.timerange)
+      .range([this.state.dims.margin_left, this.state.dims.width - this.state.dims.width_controls])
   }
 
-  makeScaleY(categories) {
+  makeScaleY (categories) {
     const tickHeight = 15
     const catsYpos = categories.map((g, i) => (i + 1) * this.state.dims.trackHeight / categories.length + tickHeight / 2)
     return d3.scaleOrdinal()
@@ -82,7 +81,7 @@ class Timeline extends React.Component {
       .range(catsYpos)
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate (prevProps, prevState) {
     if (prevState.timerange !== this.state.timerange) {
       this.setState({ scaleX: this.makeScaleX() })
     }
@@ -91,19 +90,19 @@ class Timeline extends React.Component {
   /**
    * Returns the time scale (x) extent in minutes
    */
-  getTimeScaleExtent() {
+  getTimeScaleExtent () {
     if (!this.state.scaleX) return 0
     const timeDomain = this.state.scaleX.domain()
     return (timeDomain[1].getTime() - timeDomain[0].getTime()) / 60000
   }
 
-  onClickArrow() {
+  onClickArrow () {
     this.setState((prevState, props) => {
-      return {isFolded: !prevState.isFolded}
+      return { isFolded: !prevState.isFolded }
     })
   }
 
-  computeDims() {
+  computeDims () {
     const dom = this.props.ui.dom.timeline
     if (document.querySelector(`#${dom}`) !== null) {
       const boundingClient = document.querySelector(`#${dom}`).getBoundingClientRect()
@@ -114,18 +113,18 @@ class Timeline extends React.Component {
           width: boundingClient.width
         }
       },
-        () => {
-          this.setState({ scaleX: this.makeScaleX()
-          })
+      () => {
+        this.setState({ scaleX: this.makeScaleX()
         })
+      })
     }
   }
 
-    /**
+  /**
    * Shift time range by moving forward or backwards
    * @param {String} direction: 'forward' / 'backwards'
    */
-  onMoveTime(direction) {
+  onMoveTime (direction) {
     this.props.methods.onSelect()
     const extent = this.getTimeScaleExtent()
     const newCentralTime = d3.timeMinute.offset(this.state.scaleX.domain()[0], extent / 2)
@@ -145,11 +144,11 @@ class Timeline extends React.Component {
     })
   }
 
-  onCenterTime(newCentralTime) {
+  onCenterTime (newCentralTime) {
     const extent = this.getTimeScaleExtent()
 
-    const domain0 = d3.timeMinute.offset(newCentralTime, -extent/2)
-    const domainF = d3.timeMinute.offset(newCentralTime, +extent/2)
+    const domain0 = d3.timeMinute.offset(newCentralTime, -extent / 2)
+    const domainF = d3.timeMinute.offset(newCentralTime, +extent / 2)
 
     this.setState({ timerange: [domain0, domainF] }, () => {
       this.props.methods.onUpdateTimerange(this.state.timerange)
@@ -161,7 +160,7 @@ class Timeline extends React.Component {
    * WITHOUT updating the store, or data shown.
    * Used for updates in the middle of a transition, for performance purposes
    */
-  onSoftTimeRangeUpdate(timerange) {
+  onSoftTimeRangeUpdate (timerange) {
     this.setState({ timerange })
   }
 
@@ -169,26 +168,26 @@ class Timeline extends React.Component {
    * Apply zoom level to timeline
    * @param {object} zoom: zoom level from zoomLevels
    */
-  onApplyZoom(zoom) {
+  onApplyZoom (zoom) {
     const extent = this.getTimeScaleExtent()
     const newCentralTime = d3.timeMinute.offset(this.state.scaleX.domain()[0], extent / 2)
 
     this.setState({ timerange: [
       d3.timeMinute.offset(newCentralTime, -zoom.duration / 2),
       d3.timeMinute.offset(newCentralTime, zoom.duration / 2)
-    ]}, () => {
+    ] }, () => {
       this.props.methods.onUpdateTimerange(this.state.timerange)
     })
   }
 
-  toggleTransition(isTransition) {
+  toggleTransition (isTransition) {
     this.setState({ transitionDuration: (isTransition) ? 300 : 0 })
   }
 
   /*
    * Setup drag behavior
    */
-  onDragStart() {
+  onDragStart () {
     d3.event.sourceEvent.stopPropagation()
     this.setState({
       dragPos0: d3.event.x
@@ -200,7 +199,7 @@ class Timeline extends React.Component {
   /*
    * Drag and update
    */
-  onDrag() {
+  onDrag () {
     const drag0 = this.state.scaleX.invert(this.state.dragPos0).getTime()
     const dragNow = this.state.scaleX.invert(d3.event.x).getTime()
     const timeShift = (drag0 - dragNow) / 1000
@@ -216,12 +215,12 @@ class Timeline extends React.Component {
   /**
    * Stop dragging and update data
    */
-  onDragEnd() {
+  onDragEnd () {
     this.toggleTransition(true)
     this.props.methods.onUpdateTimerange(this.state.timerange)
   }
 
-  getDatetimeX(dt) {
+  getDatetimeX (dt) {
     return this.state.scaleX(parseDate(dt.timestamp))
   }
 
@@ -238,12 +237,12 @@ class Timeline extends React.Component {
    * at the second index is an optional function that renders additional
    * components in the <g/> div.
    */
-  styleDatetime(timestamp, category) {
+  styleDatetime (timestamp, category) {
     return []
   }
 
-  render() {
-    const { isNarrative, app, ui } = this.props
+  render () {
+    const { isNarrative, app } = this.props
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`
     classes += (app.narrative !== null) ? ' narrative-mode' : ''
     const { dims } = this.state
@@ -257,8 +256,8 @@ class Timeline extends React.Component {
           onClick={() => { this.onClickArrow() }}
           hideInfo={isNarrative}
         />
-        <div className="timeline-content">
-          <div id={this.props.ui.dom.timeline} className="timeline">
+        <div className='timeline-content'>
+          <div id={this.props.ui.dom.timeline} className='timeline'>
             <svg
               ref={this.svgRef}
               width={dims.width}
@@ -319,7 +318,7 @@ class Timeline extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     isNarrative: !!state.app.narrative,
     domain: {
@@ -334,7 +333,7 @@ function mapStateToProps(state) {
       narrative: state.app.narrative
     },
     ui: {
-      dom: state.ui.dom,
+      dom: state.ui.dom
     }
   }
 }
