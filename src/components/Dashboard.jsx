@@ -139,7 +139,9 @@ class Dashboard extends React.Component {
         <InfoPopUp
           ui={ui}
           app={app}
-          toggle={() => actions.toggleInfoPopup()}
+          methods={{
+            onClose: actions.toggleInfoPopup
+          }}
         />
         <Notification
           isNotification={app.flags.isNotification}

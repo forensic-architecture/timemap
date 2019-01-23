@@ -90,6 +90,11 @@
           { "class": "category_group03", "label": "Category Group 03" },
           { "class": "other", "label": "Other categories" }
         ]
+      },
+      "default": {
+        "intro": [
+          "Each event represents an occurence that is distinct in either time, space, or both. An event is represented by a coloured circle on both the map and the timeline."
+        ]
       }
     },
     "toolbar": {

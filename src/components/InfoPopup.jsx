@@ -1,14 +1,13 @@
 import React from 'react'
 import copy from '../js/data/copy.json'
-// NB: should we make this componetn part of a future feature?
 
-export default class InfoPopUp extends React.Component {
-  renderView2DCopy () {
-    return copy[this.props.app.language].legend.view2d.paragraphs.map(paragraph => <p>{paragraph}</p>)
+export default ({ app, methods }) => {
+  function renderIntro () {
+    return copy[app.language].legend.default.intro.map(txt => <p>{txt}</p>)
   }
 
-  renderCategoryColors () {
-    const colors = copy[this.props.app.language].legend.view2d.colors.slice(0)
+  function renderCategoryColors () {
+    const colors = copy[app.language].legend.view2d.colors.slice(0)
     colors.reverse()
     return (
       <div className='legend-labels' style={{ 'margin-left': '-10px' }}>
@@ -24,11 +23,11 @@ export default class InfoPopUp extends React.Component {
     )
   }
 
-  renderView2DLegend () {
+  function renderView2DLegend () {
     return (
-      <div className={`infopopup ${(this.props.app.flags.isInfopopup) ? '' : 'hidden'}`}>
-        <button onClick={() => this.props.toggle()} className='side-menu-burg over-white is-active'><span /></button>
-        {this.renderView2DCopy()}
+      <div className={`infopopup ${(app.flags.isInfopopup) ? '' : 'hidden'}`}>
+        <button onClick={methods.onClose} className='side-menu-burg over-white is-active'><span /></button>
+        {renderIntro()}
         <div className='legend'>
           <div className='legend-section' style={{ 'height': '100px' }}>
             <svg x='0px' y='0px' width='100px' height='100px' viewBox='0 0 100 100' enableBackground='new 0 0 100 100'>
@@ -38,7 +37,7 @@ export default class InfoPopUp extends React.Component {
               <circle fill='#256C36' cx='50' cy='50' r='20' />
               <circle fill='#FF0000' cx='50' cy='50' r='10' />
             </svg>
-            {this.renderCategoryColors()}
+            {renderCategoryColors()}
           </div>
           <div className='legend-section'>
             <svg x='0px' y='0px' width='100px' height='30px' viewBox='0 0 100 30' enableBackground='new 0 0 100 30'>
@@ -76,9 +75,7 @@ export default class InfoPopUp extends React.Component {
     )
   }
 
-  render () {
-    return (
-      <div>{this.renderView2DLegend()}</div>
-    )
-  }
+  return (
+    <div>{renderView2DLegend()}</div>
+  )
 }

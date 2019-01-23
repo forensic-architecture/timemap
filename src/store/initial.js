@@ -86,7 +86,7 @@ const initial = {
       isFetchingSources: false,
 
       isCardstack: true,
-      isInfopopup: false,
+      isInfopopup: true,
       isShowingSites: true
     }
   },
