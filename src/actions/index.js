@@ -1,4 +1,4 @@
-import { push } from 'connected-react-router'
+import { formatTimestamp } from '../js/utilities';
 
 // TODO: move to util lib
 function urlFromEnv(ext) {
@@ -165,7 +165,6 @@ export function updateHighlighted (highlighted) {
 
 export const UPDATE_SELECTED = 'UPDATE_SELECTED'
 export function updateSelected(selected) {
-  push('/about-us')
   return {
     type: UPDATE_SELECTED,
     selected: selected
@@ -202,8 +201,8 @@ export function updateTimeRange (timerange) {
     type: UPDATE_TIMERANGE,
     timerange,
     pushQueryParams: {
-      timerange0: timerange[0],
-      timerangeF: timerange[1]
+      timerange0: formatTimestamp(timerange[0]),
+      timerangeF: formatTimestamp(timerange[1])
     }
   }
 }

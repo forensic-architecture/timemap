@@ -7,7 +7,7 @@ import ui from './ui.js'
 
 export default (history) => combineReducers({
   router: connectRouter(history),
-  app,//: (appState, action) => { return app(appState, action, history); },
+  app,
   domain,
   ui
 });

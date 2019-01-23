@@ -1,4 +1,5 @@
 import { mergeDeepLeft } from 'ramda'
+import { parseTimestamp } from '../js/utilities'
 
 const initial = {
   /*
@@ -125,15 +126,30 @@ const initial = {
   }
 }
 
+/**
+ * Merge the store config included from config.js
+ */
 let appStore
 if (process.env.store) {
   appStore = mergeDeepLeft(process.env.store, initial)
 } else {
   appStore = initial
 }
-
 // NB: config.js dates get implicitly converted to strings in mergeDeepLeft
 appStore.app.timeline.range[0] = new Date(appStore.app.timeline.range[0])
 appStore.app.timeline.range[1] = new Date(appStore.app.timeline.range[1])
+
+/**
+ * Merge also the store as determined by query params
+ */
+const paramsObj = new URLSearchParams(window.location.search);
+if (paramsObj.has('timerange0')) {
+  appStore.app.timeline.range[0] = parseTimestamp(paramsObj.get('timerange0'));
+}
+if (paramsObj.has('timerangeF')) {
+  appStore.app.timeline.range[1] = parseTimestamp(paramsObj.get('timerangeF'));
+}
+
+
 
 export default appStore

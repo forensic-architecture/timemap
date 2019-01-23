@@ -75,6 +75,7 @@ export function formatter (datetime) {
 }
 
 export const parseTimestamp = ts => d3.timeParse('%Y-%m-%dT%H:%M:%S')(ts)
+export const formatTimestamp = ts => d3.timeFormat('%Y-%m-%dT%H:%M:%S')(ts)
 
 export function compareTimestamp (a, b) {
   return (parseTimestamp(a.timestamp) > parseTimestamp(b.timestamp))

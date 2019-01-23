@@ -1,6 +1,6 @@
 /* global d3 */
 import initial from '../store/initial.js'
-import { parseDate } from '../js/utilities'
+import { parseDate, parseTimestamp } from '../js/utilities'
 import { getValueFromUrl } from '../js/utilities'
 import { history } from '../store/index.js'
 
@@ -160,16 +160,15 @@ function updateCategoryFilters (appState, action) {
   })
 }
 
-function updateTimeRange (appState, action, history) { // XXX
-  console.log(appState, action, history)
-  const maxAgeFilter = getValueFromUrl('timerange');
-  //history.push(`?timerange=${maxAgeFilter}`)
-  console.log(maxAgeFilter)
+function updateTimeRange (appState, action) { // XXX
+  const timerangeF = parseTimestamp(getValueFromUrl('timerangeF'));
+  const timerange0 = parseTimestamp(getValueFromUrl('timerange0'));
+  
   return {
     ...appState,
     timeline: {
       ...appState.timeline,
-      range: action.timerange
+      range: [timerange0, timerangeF]
     }
   }
 }
