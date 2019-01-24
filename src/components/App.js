@@ -1,6 +1,6 @@
 import '../scss/main.scss';
 import React from 'react';
-import Dashboard from './Dashboard.jsx';
+import Dashboard from './Dashboard';
 import { ConnectedRouter } from 'connected-react-router'
 import { Route, Switch } from 'react-router'
 

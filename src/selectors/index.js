@@ -162,10 +162,22 @@ export const selectNarratives = createSelector(
  *  a single object. If narrative is null, the whole object is null.
  */
 export const selectActiveNarrative = createSelector(
-  [getActiveNarrative, getActiveStep],
-  (narrative, current) => narrative
-    ? { ...narrative, current }
-    : null
+  [selectNarratives, getActiveNarrative, getActiveStep],
+  (narratives, narrative, current) => {
+    let activeNarrativeFull = null
+    if (typeof narrative === 'string' || narrative instanceof String) {
+      activeNarrativeFull = narratives.find(n => n.id === narrative)
+    } else if (typeof narrative === 'object' && !!narrative && narrative.id) {
+      activeNarrativeFull = narratives.find(n => n.id === narrative.id)
+    }
+    
+    return activeNarrativeFull
+      ? {
+        ...activeNarrativeFull,
+        current
+      }
+      : null
+  }
 )
 
 /**

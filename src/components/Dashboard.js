@@ -2,19 +2,21 @@ import React from 'react'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import * as selectors from '../selectors'
 import * as actions from '../actions'
 
-import SourceOverlay from './SourceOverlay.jsx'
+import SourceOverlay from './SourceOverlay.js'
 import LoadingOverlay from './presentational/LoadingOverlay'
-import Map from './Map.jsx'
-import Toolbar from './Toolbar.jsx'
-import CardStack from './CardStack.jsx'
-import NarrativeControls from './presentational/Narrative/Controls.js'
-import InfoPopUp from './InfoPopup.jsx'
-import Timeline from './Timeline.jsx'
-import Notification from './Notification.jsx'
+import Map from './Map'
+import Toolbar from './Toolbar'
+import CardStack from './CardStack'
+import Narrative from './Narrative'
+import InfoPopUp from './InfoPopup'
+import Timeline from './Timeline'
+import Notification from './Notification'
 
 import { parseDate } from '../js/utilities'
+import { selectCategories } from '../selectors';
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -73,20 +75,20 @@ class Dashboard extends React.Component {
 
   setNarrative (narrative) {
     // only handleSelect if narrative is not null
-    if (narrative) { this.handleSelect([ narrative.steps[0] ]) }
+    if (narrative) { this.handleSelect([ +narrative.steps[0].id ]) }
     this.props.actions.updateNarrative(narrative)
   }
 
   moveInNarrative (amt) {
     const { current } = this.props.app.narrativeState
-    const { narrative } = this.props.app
+    const { narrative } = this.props.domain
 
     if (amt === 1) {
-      this.handleSelect([ narrative.steps[current + 1] ])
+      this.handleSelect([ +narrative.steps[current + 1].id ])
       this.props.actions.incrementNarrativeCurrent()
     }
     if (amt === -1) {
-      this.handleSelect([ narrative.steps[current - 1] ])
+      this.handleSelect([ +narrative.steps[current - 1].id ])
       this.props.actions.decrementNarrativeCurrent()
     }
   }
@@ -126,11 +128,7 @@ class Dashboard extends React.Component {
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={category => this.getCategoryColor(category)}
         />
-        <NarrativeControls
-          narrative={app.narrative ? {
-            ...app.narrative,
-            current: app.narrativeState.current
-          } : null}
+        <Narrative
           methods={{
             onNext: () => this.moveInNarrative(1),
             onPrev: () => this.moveInNarrative(-1),
@@ -172,7 +170,15 @@ function mapDispatchToProps (dispatch) {
 }
 
 function mapStateToProps(state, ownProps) {
-  return { ...state, ...ownProps }
+  return { 
+    domain: { 
+      ...state.domain,
+      narrative: selectors.selectActiveNarrative(state)
+    },
+    app: { ...state.app },
+    ui: { ...state.ui },
+    ...ownProps
+  }
 }
 
 export default connect(

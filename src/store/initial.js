@@ -164,4 +164,9 @@ if (paramsObj.has('selected')) {
   appStore.app.selected = selected
 }
 
+// Select narrative id
+if (paramsObj.has('narrative')) {
+  appStore.app.narrative = paramsObj.get('narrative')
+}
+
 export default appStore

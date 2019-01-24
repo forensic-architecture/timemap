@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import configureStore, { history } from './store/index.js'
 import { Provider } from 'react-redux';
 
-import App from './components/App.jsx';
+import App from './components/App';
 
 const store = configureStore();
 

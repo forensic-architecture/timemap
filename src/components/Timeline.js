@@ -7,13 +7,13 @@ import hash from 'object-hash'
 import copy from '../js/data/copy.json'
 import { formatterWithYear, parseDate } from '../js/utilities'
 import Header from './presentational/Timeline/Header'
-import Axis from './TimelineAxis.jsx'
+import Axis from './TimelineAxis'
 import Clip from './presentational/Timeline/Clip'
-import Handles from './presentational/Timeline/Handles.js'
-import ZoomControls from './presentational/Timeline/ZoomControls.js'
-import Markers from './presentational/Timeline/Markers.js'
-import Events from './presentational/Timeline/Events.js'
-import Categories from './TimelineCategories.jsx'
+import Handles from './presentational/Timeline/Handles'
+import ZoomControls from './presentational/Timeline/ZoomControls'
+import Markers from './presentational/Timeline/Markers'
+import Events from './presentational/Timeline/Events'
+import Categories from './TimelineCategories'
 
 class Timeline extends React.Component {
   constructor (props) {
@@ -271,9 +271,9 @@ class Timeline extends React.Component {
   }
 
   render () {
-    const { isNarrative, app } = this.props
+    const { isNarrative, domain, app } = this.props
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`
-    classes += (app.narrative !== null) ? ' narrative-mode' : ''
+    classes += (domain.activeNarrative !== null) ? ' narrative-mode' : ''
     const { dims } = this.state
 
     return (
@@ -329,7 +329,7 @@ class Timeline extends React.Component {
               <Events
                 datetimes={this.props.domain.datetimes}
                 styleDatetime={this.styleDatetime}
-                narrative={this.props.app.narrative}
+                narrative={this.props.domain.activeNarrative}
                 getDatetimeX={this.getDatetimeX}
                 getCategoryY={this.state.scaleY}
                 getCategoryColor={this.props.methods.getCategoryColor}
@@ -351,7 +351,8 @@ function mapStateToProps (state) {
       datetimes: selectors.selectDatetimes(state),
       categories: selectors.selectCategories(state),
       narratives: state.domain.narratives,
-      selected: selectors.selectSelected(state)
+      selected: selectors.selectSelected(state),
+      activeNarrative: selectors.selectActiveNarrative(state)
     },
     app: {
       selected: state.app.selected,

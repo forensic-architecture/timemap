@@ -6,7 +6,7 @@ function NarrativeCard ({ narrative }) {
   // no display if no narrative
   const { steps, current } = narrative
 
-  if (steps[current]) {
+  if (steps[current || 0]) {
     return (
       <div className='narrative-info'>
         <div className='narrative-info-header'>

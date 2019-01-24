@@ -1,7 +1,7 @@
 import React from 'react'
 import Img from 'react-image'
 import { Player } from 'video-react'
-import Md from './Md.jsx'
+import Md from './Md'
 import Spinner from './presentational/Spinner'
 import NoSource from './presentational/NoSource'
 // TODO: move render functions into presentational components

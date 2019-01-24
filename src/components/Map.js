@@ -8,12 +8,12 @@ import * as selectors from '../selectors'
 import hash from 'object-hash'
 import 'leaflet'
 
-import Sites from './presentational/Map/Sites.jsx'
-import Shapes from './presentational/Map/Shapes.jsx'
-import Events from './presentational/Map/Events.jsx'
-import SelectedEvents from './presentational/Map/SelectedEvents.jsx'
-import Narratives from './presentational/Map/Narratives.jsx'
-import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
+import Sites from './presentational/Map/Sites'
+import Shapes from './presentational/Map/Shapes'
+import Events from './presentational/Map/Events'
+import SelectedEvents from './presentational/Map/SelectedEvents'
+import Narratives from './presentational/Map/Narratives'
+import DefsMarkers from './presentational/Map/DefsMarkers'
 
 // NB: important constants for map, TODO: make statics
 const supportedMapboxMap = ['streets', 'satellite']
@@ -173,7 +173,7 @@ class Map extends React.Component {
         svg={this.svgRef.current}
         narratives={this.props.domain.narratives}
         projectPoint={this.projectPoint}
-        narrative={this.props.app.narrative}
+        narrative={this.props.domain.activeNarrative}
         styles={this.props.ui.narratives}
         onSelect={this.props.methods.onSelect}
         onSelectNarrative={this.props.methods.onSelectNarrative}
@@ -207,7 +207,7 @@ class Map extends React.Component {
         styleLocation={this.styleLocation}
         categories={this.props.domain.categories}
         projectPoint={this.projectPoint}
-        narrative={this.props.app.narrative}
+        narrative={this.props.domain.activeNarrative}
         onSelect={this.props.methods.onSelect}
         onSelectNarrative={this.props.methods.onSelectNarrative}
         getCategoryColor={this.props.methods.getCategoryColor}
@@ -236,7 +236,7 @@ class Map extends React.Component {
 
   render () {
     const { isShowingSites } = this.props.app.flags
-    const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'
+    const classes = this.props.domain.activeNarrative ? 'map-wrapper narrative-mode' : 'map-wrapper'
     const innerMap = this.map ? (
       <React.Fragment>
         {this.renderTiles()}
@@ -266,14 +266,14 @@ function mapStateToProps (state) {
       categories: selectors.selectCategories(state),
       sites: selectors.getSites(state),
       shapes: selectors.getShapes(state),
-      selected: selectors.selectSelected(state)
+      selected: selectors.selectSelected(state),
+      activeNarrative: selectors.selectActiveNarrative(state)
     },
     app: {
       views: state.app.filters.views,
       selected: state.app.selected,
       highlighted: state.app.highlighted,
       map: state.app.map,
-      narrative: state.app.narrative,
       flags: {
         isShowingSites: state.app.flags.isShowingSites
       }
