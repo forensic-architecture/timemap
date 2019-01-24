@@ -142,14 +142,26 @@ appStore.app.timeline.range[1] = new Date(appStore.app.timeline.range[1])
 /**
  * Merge also the store as determined by query params
  */
-const paramsObj = new URLSearchParams(window.location.search);
-if (paramsObj.has('timerange0')) {
-  appStore.app.timeline.range[0] = parseTimestamp(paramsObj.get('timerange0'));
-}
-if (paramsObj.has('timerangeF')) {
-  appStore.app.timeline.range[1] = parseTimestamp(paramsObj.get('timerangeF'));
+const paramsObj = new URLSearchParams(window.location.search)
+
+// If _both_ timerange params are available
+if (paramsObj.has('timerange0') && paramsObj.has('timerangeF')) {
+  appStore.app.timeline.range[0] = parseTimestamp(paramsObj.get('timerange0'))
+  appStore.app.timeline.range[1] = parseTimestamp(paramsObj.get('timerangeF'))
 }
 
+// Initial map anchor
+if (paramsObj.has('anchor')) {
+  const lat = +paramsObj.get('anchor').split(',')[0]
+  const long = +paramsObj.get('anchor').split(',')[1]
+  appStore.app.map.anchor = [lat, long]
+}
 
+// Selected event ids
+if (paramsObj.has('selected')) {
+  let selected = +paramsObj.get('selected').split(',')
+  if (typeof selected === 'number') selected = [selected]
+  appStore.app.selected = selected
+}
 
 export default appStore

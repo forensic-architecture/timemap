@@ -233,13 +233,18 @@ export const selectDatetimes = createSelector(
  * Of all the sources, select those that are relevant to the selected events.
  */
 export const selectSelected = createSelector(
-  [getSelected, getSources],
-  (selected, sources) => {
+  [getSelected, getSources, getEvents],
+  (selected, sources, events) => {
     if (selected.length === 0) {
       return []
     }
 
-    return selected.map(insetSourceFrom(sources))
+    const selectedEvents = 
+      events
+        .filter(e => selected.includes(+e.id))
+        .map(insetSourceFrom(sources))
+
+    return selectedEvents
   }
 )
 

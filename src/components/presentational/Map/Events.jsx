@@ -97,7 +97,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
       <g
         className='location'
         transform={`translate(${x}, ${y})`}
-        onClick={() => onSelect(location.events)}
+        onClick={() => onSelect(location.events.map(e => +e.id))}
       >
         {renderLocationSlicesByCategory(location)}
         {extraRender ? extraRender() : null}

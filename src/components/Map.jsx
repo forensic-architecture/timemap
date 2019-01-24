@@ -45,9 +45,9 @@ class Map extends React.Component {
       bounds !== null) {
       this.map.fitBounds(bounds)
     } else {
-      if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
+      if (hash(nextProps.domain.selected) !== hash(this.props.domain.selected)) {
         // Fly to first  of events selected
-        const eventPoint = (nextProps.app.selected.length > 0) ? nextProps.app.selected[0] : null
+        const eventPoint = (nextProps.domain.selected.length > 0) ? nextProps.domain.selected[0] : null
 
         if (eventPoint !== null && eventPoint.latitude && eventPoint.longitude) {
           this.map.setView([eventPoint.latitude, eventPoint.longitude])
@@ -219,7 +219,7 @@ class Map extends React.Component {
     return (
       <SelectedEvents
         svg={this.svgRef.current}
-        selected={this.props.app.selected}
+        selected={this.props.domain.selected}
         projectPoint={this.projectPoint}
         styles={this.props.ui.mapSelectedEvents}
       />
@@ -265,7 +265,8 @@ function mapStateToProps (state) {
       narratives: selectors.selectNarratives(state),
       categories: selectors.selectCategories(state),
       sites: selectors.getSites(state),
-      shapes: selectors.getShapes(state)
+      shapes: selectors.getShapes(state),
+      selected: selectors.selectSelected(state)
     },
     app: {
       views: state.app.filters.views,

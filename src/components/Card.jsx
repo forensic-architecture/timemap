@@ -119,7 +119,7 @@ class Card extends React.Component {
     if (links !== null) {
       return (
         <CardNarrative
-          select={(event) => this.props.onSelect([event])}
+          select={(event) => this.props.onSelect([+event.id])}
           makeTimelabel={(timestamp) => this.makeTimelabel(timestamp)}
           next={links.next}
           prev={links.prev}

@@ -52,9 +52,9 @@ class Timeline extends React.Component {
       })
     }
 
-    if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
-      if (!!nextProps.app.selected && nextProps.app.selected.length > 0) {
-        this.onCenterTime(parseDate(nextProps.app.selected[0].timestamp))
+    if (hash(nextProps.domain.selected) !== hash(this.props.domain.selected)) {
+      if (!!nextProps.domain.selected && nextProps.domain.selected.length > 0) {
+        this.onCenterTime(parseDate(nextProps.domain.selected[0].timestamp))
       }
     }
   }
@@ -145,7 +145,7 @@ class Timeline extends React.Component {
   }
 
   onCenterTime (newCentralTime) {
-    const extent = this.getTimeScaleExtent()
+    const extent = this.getTimeScaleExtent() || 24 * 3600 * 3 // 3 days default extent
 
     const domain0 = d3.timeMinute.offset(newCentralTime, -extent / 2)
     const domainF = d3.timeMinute.offset(newCentralTime, +extent / 2)
@@ -320,7 +320,7 @@ class Timeline extends React.Component {
                 onApplyZoom={this.onApplyZoom}
               />
               <Markers
-                selected={this.props.app.selected}
+                selected={this.props.domain.selected}
                 getEventX={this.getDatetimeX}
                 getCategoryY={this.state.scaleY}
                 transitionDuration={this.state.transitionDuration}
@@ -350,7 +350,8 @@ function mapStateToProps (state) {
     domain: {
       datetimes: selectors.selectDatetimes(state),
       categories: selectors.selectCategories(state),
-      narratives: state.domain.narratives
+      narratives: state.domain.narratives,
+      selected: selectors.selectSelected(state)
     },
     app: {
       selected: state.app.selected,

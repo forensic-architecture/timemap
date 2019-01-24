@@ -12,7 +12,7 @@ export default ({
   <g
     className='datetime'
     transform={`translate(${x}, ${y})`}
-    onClick={() => onSelect(events)}
+    onClick={() => onSelect(events.map(e => +e.id))}
   >
     <circle
       className='event'
