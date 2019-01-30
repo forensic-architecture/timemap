@@ -14,7 +14,7 @@ import InfoPopUp from './InfoPopup.jsx'
 import Timeline from './Timeline.jsx'
 import Notification from './Notification.jsx'
 
-import { parseDate } from '../js/utilities'
+import { parseDate, injectSource } from '../js/utilities'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -170,7 +170,7 @@ function mapDispatchToProps (dispatch) {
 }
 
 export default connect(
-  state => state,
-  // state => injectSource("Youtube - Novodvirske Tank Separatist Patrol Video"),
+  // state => state,
+  state => injectSource("Hromadske.tv - Paratroopers Video"),
   mapDispatchToProps
 )(Dashboard)

@@ -9,16 +9,7 @@ import NoSource from './presentational/NoSource'
 class SourceOverlay extends React.Component {
   constructor () {
     super()
-
-    this.state = {
-      idx: 0
-    }
-  }
-
-  renderError () {
-    return (
-      <NoSource failedUrls={['NOT ALL SOURCES AVAILABLE IN APPLICATION YET']} />
-    )
+    this.state = { idx: 0 }
   }
 
   renderImage (path) {
@@ -27,7 +18,7 @@ class SourceOverlay extends React.Component {
         <Img
           className='source-image'
           src={path}
-          loader={<div style={{ width: '400px', height: '400px' }}><Spinner /></div>}
+          loader={<div className='source-image-loader'><Spinner /></div>}
           unloader={<NoSource failedUrls={this.props.source.paths} />}
         />
       </div>
@@ -35,7 +26,6 @@ class SourceOverlay extends React.Component {
   }
 
   renderVideo (path) {
-    // NB: assume only one video
     return (
       <div className='media-player'>
         <Player
@@ -81,11 +71,13 @@ class SourceOverlay extends React.Component {
   }
 
   getTypeCounts (media) {
-    let counts = { Image: 0, Video: 0, Text: 0 }
-    media.forEach(m => {
-      counts[m.type] += 1
-    })
-    return counts
+    return media.reduce(
+      (acc, vl) => {
+        acc[vl.type] += 1
+        return acc
+      },
+      { Image: 0, Video: 0, Text: 0 }
+    )
   }
 
   _renderPath (media) {
@@ -122,26 +114,52 @@ class SourceOverlay extends React.Component {
 
   _renderContent (media) {
     const el = document.querySelector(`.source-media-gallery`)
-    const shiftW = (el) ? el.getBoundingClientRect().width : 0
+    const shiftW = el ? el.getBoundingClientRect().width : 0
     return (
-      <div className='source-media-gallery' style={{ transition: 'transform 0.2s ease', transform: `translate(${this.state.idx * -shiftW}px)` }}>
+      <div className='source-media-gallery' style={{ transform: `translate(${this.state.idx * -shiftW}px)` }}>
         {media.map((m) => this._renderPath(m))}
       </div>
     )
   }
 
   onShiftGallery (shift) {
+    // no more left
     if (this.state.idx === 0 && shift === -1) return
-    if (this.state.idx - 1 === this.props.source.paths.length && shift === 1) return
+    // no more right
+    if (this.state.idx === this.props.source.paths.length - 1 && shift === 1) return
     this.setState({ idx: this.state.idx + shift })
   }
 
   _renderControls () {
+    const backArrow = this.state.idx !== 0 ? (
+      <div
+        className='back'
+        onClick={() => this.onShiftGallery(-1)}
+      >
+        <svg>
+          <path d='M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z' />
+        </svg>
+      </div>
+    ) : null
+
+    console.log(this.state.idx)
+    console.log(this.props.source.paths.length)
+    const forwardArrow = this.state.idx < this.props.source.paths.length - 1 ? (
+      <div
+        className='next'
+        onClick={() => this.onShiftGallery(1)}
+      >
+        <svg>
+          <path d='M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z' />
+        </svg>
+      </div>
+    ) : null
+
     if (this.props.source.paths.length > 1) {
       return (
         <div className='media-gallery-controls'>
-          <div className='back' onClick={() => this.onShiftGallery(-1)}><svg><path d='M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z' /></svg></div>
-          <div className='next' onClick={() => this.onShiftGallery(1)}><svg><path d='M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z' /></svg></div>
+          {backArrow}
+          {forwardArrow}
         </div>
       )
     }
@@ -159,7 +177,7 @@ class SourceOverlay extends React.Component {
 
     return (
       <div className='mo-overlay' onClick={this.props.onCancel}>
-        <div className='mo-container' onClick={(e) => { e.stopPropagation() }}>
+        <div className='mo-container' onClick={e => e.stopPropagation()}>
           <div className='mo-header'>
             <div className='mo-header-close' onClick={this.props.onCancel}>
               <button className='side-menu-burg is-active'><span /></button>
