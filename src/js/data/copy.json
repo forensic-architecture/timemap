@@ -111,10 +111,12 @@
       "narratives_label": "Narratives",
       "narrative_summary": "Here you can follow some curated stories we have found in the data.",
       "categories": "Categories",
-      "tags": "Tags",
-      "tags_label": "Tags",
-      "explore_by_tag__title": "Explore by tag or category",
-      "explore_by_tag__description": "Selecting tags or categories, you'll see only those events that are tagged accordingly. If you select nothing, as well as everything, all data will be displayed."
+      "tags": "Filters",
+      "tags_label": "Filters",
+      "explore_by_tag__title": "Explore by filter",
+      "explore_by_tag__description": "Selecting a filter will show you only those events that are annotated with the filter. If you select nothing, as well as everything, all data will be displayed.",
+      "explore_by_category__title": "Explore by category",
+      "explore_by_category__description": "Selecting a category will show you only the events in that category. If you select a filter on top, it will filter events only in the selected categories."
 
     },
     "timeline": {
