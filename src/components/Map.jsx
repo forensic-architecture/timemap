@@ -192,6 +192,7 @@ class Map extends React.Component {
    */
   styleLocation (location) {
     const noEvents = location.events.length
+
     return [
       null,
       () => noEvents > 1 ? <text className='location-count' dx='-3' dy='4'>{noEvents}</text> : null

@@ -2,20 +2,73 @@ import React from 'react'
 import { Portal } from 'react-portal'
 
 function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation, narrative, onSelect, svg, locations }) {
-  // function getLocationEventsDistribution (location) {
-  //   const eventCount = {}
-  //
-  //   categories.forEach(cat => {
-  //     eventCount[cat.category] = []
-  //   })
-  //
-  //   location.events.forEach((event) => {
-  //     ;
-  //     eventCount[event.category].push(event)
-  //   })
-  //
-  //   return eventCount
-  // }
+
+  function getCoordinatesForPercent(radius, percent) {
+    const x = radius * Math.cos(2 * Math.PI * percent);
+    const y = radius * Math.sin(2 * Math.PI * percent);
+    return [x, y];
+  }
+
+  function renderLocationSlicesByCategory(location) {
+
+    const locCategory = location.events.length > 0 ? location.events[0].category : 'default'
+    const customStyles = styleLocation ? styleLocation(location) : null
+    const extraStyles = customStyles[0]
+
+    let styles = ({
+      fill: getCategoryColor(locCategory),
+      stroke: '#ffffff',
+      strokeWidth: 0,
+      fillOpacity: 0.85,
+      ...extraStyles
+    })
+
+    const colorSlices = location.events.map(e => getCategoryColor(e.category))
+
+    let cumulativeAngleSweep = 0;
+
+    return (
+      <g>
+        {colorSlices.map((color, idx) => {
+          const r = 10
+
+          // Based on the number of events in each location,
+          // create a slice per event filled with its category color
+          const [startX, startY] = getCoordinatesForPercent(r, cumulativeAngleSweep);
+          
+          cumulativeAngleSweep = (idx + 1) / colorSlices.length;
+          
+          const [endX, endY] = getCoordinatesForPercent(r, cumulativeAngleSweep);
+
+          // if the slices are less than 2, take the long arc
+          const largeArcFlag = (colorSlices.length === 1) ? 1 : 0;
+
+          // create an array and join it just for code readability
+          const arc = [
+            `M ${startX} ${startY}`,                           // Move
+            `A ${r} ${r} 0 ${largeArcFlag} 1 ${endX} ${endY}`, // Arc
+            `L 0 0 `,                                          // Line
+            `L ${startX} ${startY} `,                          // Line
+          ].join(' ');
+
+          const extraStyles = ({
+            ...styles,
+            fill: color
+          })
+
+          return (
+            <path
+              class='location-event-marker'
+              id={`arc_${idx}`}
+              d={arc}
+              style={extraStyles}
+            />
+          )
+        })}
+        
+      </g>
+    ) 
+  }
 
   function renderLocation (location) {
     /**
@@ -26,19 +79,8 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
       longitude: '32.2'
     }
     */
-    const { x, y } = projectPoint([location.latitude, location.longitude])
-    // const eventsByCategory = getLocationEventsDistribution(location);
+   const { x, y } = projectPoint([location.latitude, location.longitude])
 
-    const locCategory = location.events.length > 0 ? location.events[0].category : 'default'
-    const customStyles = styleLocation ? styleLocation(location) : null
-    const extraStyles = customStyles[0]
-    const extraRender = customStyles[1]
-
-    const styles = ({
-      fill: getCategoryColor(locCategory),
-      fillOpacity: 1,
-      ...extraStyles
-    })
 
     // in narrative mode, only render events in narrative
     if (narrative) {
@@ -51,19 +93,19 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
       }
     }
 
+    const customStyles = styleLocation ? styleLocation(location) : null
+    const extraRender = (customStyles) ? customStyles[1] : null
+
     return (
       <g
         className='location'
         transform={`translate(${x}, ${y})`}
-        onClick={() => onSelect(location.events)}
+        onClick={() => onSelect(location.events)}        
       >
-        <circle
-          className='location-event-marker'
-          r={7}
-          style={styles}
-        />
+        {renderLocationSlicesByCategory(location)}
         {extraRender ? extraRender() : null}
       </g>
+
     )
   }
 
