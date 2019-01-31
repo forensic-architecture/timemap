@@ -141,7 +141,7 @@ class SourceOverlay extends React.Component {
         </svg>
       </div>
     ) : null
-
+    console.log(this.props)
     console.log(this.state.idx)
     console.log(this.props.source.paths.length)
     const forwardArrow = this.state.idx < this.props.source.paths.length - 1 ? (

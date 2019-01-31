@@ -161,7 +161,7 @@ class Toolbar extends React.Component {
         <div className='toolbar-header'><p>{title}</p></div>
         <div className='toolbar-tabs'>
           {this.renderToolbarTab(0, narrativesLabel, 'timeline')}
-          {(isCategories) ? this.renderToolbarTab(1, categoriesLabel, 'category') : null}
+          {(isCategories) ? this.renderToolbarTab(1, categoriesLabel, 'widgets') : null}
           {(isTags) ? this.renderToolbarTab(2, tagsLabel, 'filter_list') : null}
         </div>
         <ToolbarBottomActions
