@@ -220,6 +220,7 @@ class Map extends React.Component {
         svg={this.svgRef.current}
         selected={this.props.app.selected}
         projectPoint={this.projectPoint}
+        styles={this.props.ui.mapSelectedEvents}
       />
     )
   }
@@ -279,6 +280,7 @@ function mapStateToProps (state) {
       tiles: state.ui.tiles,
       dom: state.ui.dom,
       narratives: state.ui.style.narratives,
+      mapSelectedEvents: state.ui.style.mapSelectedEvents,
       shapes: state.ui.style.shapes
     }
   }
