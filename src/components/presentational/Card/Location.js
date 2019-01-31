@@ -3,13 +3,13 @@ import React from 'react'
 import copy from '../../../js/data/copy.json'
 import { isNotNullNorUndefined } from '../../../js/utilities'
 
-const CardLocation = ({ language, location }) => {
+const CardLocation = ({ language, location, isPrecise }) => {
   if (isNotNullNorUndefined(location)) {
     return (
       <div className='card-cell location'>
         <p>
           <i className='material-icons left'>location_on</i>
-          {location}
+          {`${location}${(isPrecise) ? '' : ' (Approximated)'}`}
         </p>
       </div>
     )

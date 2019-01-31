@@ -28,7 +28,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
     let cumulativeAngleSweep = 0;
 
     return (
-      <g>
+      <React.Fragment>
         {colorSlices.map((color, idx) => {
           const r = 10
 
@@ -48,7 +48,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
             `M ${startX} ${startY}`,                           // Move
             `A ${r} ${r} 0 ${largeArcFlag} 1 ${endX} ${endY}`, // Arc
             `L 0 0 `,                                          // Line
-            `L ${startX} ${startY} `,                          // Line
+            `L ${startX} ${startY} Z`,                          // Line
           ].join(' ');
 
           const extraStyles = ({
@@ -66,7 +66,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
           )
         })}
         
-      </g>
+      </React.Fragment>
     ) 
   }
 

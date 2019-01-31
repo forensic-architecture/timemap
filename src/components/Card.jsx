@@ -61,6 +61,7 @@ class Card extends React.Component {
       <CardLocation
         language={this.props.language}
         location={this.props.event.location}
+        isPrecise={(this.props.event.type === 'Structure')}
       />
     )
   }
