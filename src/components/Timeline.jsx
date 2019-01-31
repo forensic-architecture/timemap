@@ -172,9 +172,28 @@ class Timeline extends React.Component {
     const extent = this.getTimeScaleExtent()
     const newCentralTime = d3.timeMinute.offset(this.state.scaleX.domain()[0], extent / 2)
 
+    let newDomain0 = d3.timeMinute.offset(newCentralTime, -zoom.duration / 2)
+    let newDomainF = d3.timeMinute.offset(newCentralTime, zoom.duration / 2)
+
+    if (this.props.app.timeline.rangeLimits) {
+      // If the store contains absolute time limits,
+      // make sure the zoom doesn't go over them
+      const minDate = parseDate(this.props.app.timeline.rangeLimits[0])
+      const maxDate = parseDate(this.props.app.timeline.rangeLimits[1])
+
+      if (newDomain0 < minDate) {
+        newDomain0 = minDate
+        newDomainF = d3.timeMinute.offset(newDomain0, zoom.duration)
+      }
+      if (newDomainF > maxDate) {
+        newDomainF = maxDate
+        newDomain0 = d3.timeMinute.offset(newDomainF, -zoom.duration)
+      }
+    }
+
     this.setState({ timerange: [
-      d3.timeMinute.offset(newCentralTime, -zoom.duration / 2),
-      d3.timeMinute.offset(newCentralTime, zoom.duration / 2)
+      newDomain0,
+      newDomainF
     ] }, () => {
       this.props.methods.onUpdateTimerange(this.state.timerange)
     })
@@ -205,8 +224,18 @@ class Timeline extends React.Component {
     const timeShift = (drag0 - dragNow) / 1000
 
     const { range } = this.props.app.timeline
-    const newDomain0 = d3.timeSecond.offset(range[0], timeShift)
-    const newDomainF = d3.timeSecond.offset(range[1], timeShift)
+    let newDomain0 = d3.timeSecond.offset(range[0], timeShift)
+    let newDomainF = d3.timeSecond.offset(range[1], timeShift)
+
+    if (this.props.app.timeline.rangeLimits) {
+      // If the store contains absolute time limits,
+      // make sure the zoom doesn't go over them
+      const minDate = parseDate(this.props.app.timeline.rangeLimits[0])
+      const maxDate = parseDate(this.props.app.timeline.rangeLimits[1])
+    
+      newDomain0 = (newDomain0 < minDate) ? minDate : newDomain0
+      newDomainF = (newDomainF > maxDate) ? maxDate : newDomainF
+    }
 
     // Updates components without updating timerange
     this.onSoftTimeRangeUpdate([newDomain0, newDomainF])
