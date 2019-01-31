@@ -290,15 +290,12 @@ class Timeline extends React.Component {
                 dims={dims}
                 onApplyZoom={this.onApplyZoom}
               />
-              {/* <Labels */}
-              {/*   dims={dims} */}
-              {/*   timelabels={this.state.timerange} */}
-              {/* /> */}
               <Markers
                 selected={this.props.app.selected}
                 getEventX={this.getDatetimeX}
                 getCategoryY={this.state.scaleY}
                 transitionDuration={this.state.transitionDuration}
+                styles={this.props.ui.styles}
               />
               <Events
                 datetimes={this.props.domain.datetimes}
@@ -333,7 +330,8 @@ function mapStateToProps (state) {
       narrative: state.app.narrative
     },
     ui: {
-      dom: state.ui.dom
+      dom: state.ui.dom,
+      styles: state.ui.style.selectedEvents
     }
   }
 }

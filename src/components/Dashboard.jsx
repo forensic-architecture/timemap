@@ -92,7 +92,7 @@ class Dashboard extends React.Component {
 
   render () {
     const { actions, app, domain, ui } = this.props
-    console.log(app)
+
     return (
       <div>
         <Toolbar
