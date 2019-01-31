@@ -170,7 +170,7 @@
 }
 
 .location-event-marker {
-  pointer-events: all;
+  pointer-events: all !important;
   fill: $event_default;
   stroke-width: 0;
 }

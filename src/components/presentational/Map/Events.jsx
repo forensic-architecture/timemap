@@ -58,6 +58,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
 
           return (
             <path
+              onClick={() => { console.log('uo')}}
               class='location-event-marker'
               id={`arc_${idx}`}
               d={arc}
