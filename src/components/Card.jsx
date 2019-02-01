@@ -161,10 +161,12 @@ class Card extends React.Component {
 
   render () {
     const { isSelected, idx } = this.props
+
     return (
       <li
         className={`event-card ${isSelected ? 'selected' : ''}`}
         id={`event-card-${idx}`}
+        ref={this.props.innerRef}
       >
         {this.renderMain()}
         {this.state.isOpen ? this.renderExtra() : null}
@@ -174,4 +176,6 @@ class Card extends React.Component {
   }
 }
 
-export default Card
+// The ref to each card will be used in CardStack for programmatic scrolling
+export default React.forwardRef((props, ref) => <Card innerRef={ref} {...props}/>);
+
