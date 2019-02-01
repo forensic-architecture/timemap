@@ -141,9 +141,6 @@ class SourceOverlay extends React.Component {
         </svg>
       </div>
     ) : null
-    console.log(this.props)
-    console.log(this.state.idx)
-    console.log(this.props.source.paths.length)
     const forwardArrow = this.state.idx < this.props.source.paths.length - 1 ? (
       <div
         className='next'
@@ -182,7 +179,7 @@ class SourceOverlay extends React.Component {
             <div className='mo-header-close' onClick={this.props.onCancel}>
               <button className='side-menu-burg is-active'><span /></button>
             </div>
-            <div className='mo-header-text'>{this.props.source.title}</div>
+            <div className='mo-header-text'>{this.props.source.title.substring(0, 200)}</div>
           </div>
           <div className='mo-media-container'>
             {this._renderContent(media)}
