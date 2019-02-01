@@ -30,7 +30,7 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
     // 0 if not in narrative mode, 1 if active narrative, 0.1 if inactive
     let styles = {
       strokeOpacity: (n === null) ? 0
-        : (step && (n.id === narrative.id)) ? 1 : 0.1,
+        : (step && (n.id === narrative.id)) ? 1 : 0.0,
       strokeWidth: 0,
       strokeDasharray: 'none',
       stroke: 'none'
