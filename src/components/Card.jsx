@@ -90,7 +90,7 @@ class Card extends React.Component {
   renderTimestamp () {
     let timelabel = this.makeTimelabel(this.props.event.timestamp)
 
-    let precision = this.props.event.time_display;
+    let precision = this.props.event.time_display
     if (precision === '_date_only') {
       precision = ''
       timelabel = timelabel.substring(0, 11)
@@ -160,9 +160,12 @@ class Card extends React.Component {
   }
 
   render () {
-    const { isSelected } = this.props
+    const { isSelected, idx } = this.props
     return (
-      <li className={`event-card ${isSelected ? 'selected' : ''}`}>
+      <li
+        className={`event-card ${isSelected ? 'selected' : ''}`}
+        id={`event-card-${idx}`}
+      >
         {this.renderMain()}
         {this.state.isOpen ? this.renderExtra() : null}
         {isSelected ? this.renderCaret() : null}

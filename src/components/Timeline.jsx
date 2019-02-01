@@ -232,7 +232,7 @@ class Timeline extends React.Component {
       // make sure the zoom doesn't go over them
       const minDate = parseDate(this.props.app.timeline.rangeLimits[0])
       const maxDate = parseDate(this.props.app.timeline.rangeLimits[1])
-    
+
       newDomain0 = (newDomain0 < minDate) ? minDate : newDomain0
       newDomainF = (newDomainF > maxDate) ? maxDate : newDomainF
     }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Portal } from 'react-portal'
-import { concatStatic } from 'rxjs/operator/concat';
-import { single } from 'rxjs/operator/single';
+// import { concatStatic } from 'rxjs/operator/concat'
+// import { single } from 'rxjs/operator/single'
 
 function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives, projectPoint }) {
   function getNarrativeStyle (narrativeId) {
@@ -66,22 +66,22 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
     const theta = Math.atan2(p2.y - p1.y, p2.x - p1.x) // Angle of narrative step line
     const alpha = Math.atan2(1, 2) // Angle of arrow overture
     const edge = 10 // Arrow edge length
-    const offset = (distance < 24) ? distance / 2 : 24;
+    const offset = (distance < 24) ? distance / 2 : 24
 
     // Arrow corners
     const coord0 = {
       x: p2.x - offset * Math.cos(theta),
       y: p2.y - offset * Math.sin(theta)
-    } 
+    }
     const coord1 = {
       x: coord0.x - edge * Math.cos(-theta - alpha),
       y: coord0.y + edge * Math.sin(-theta - alpha)
-    } 
+    }
     const coord2 = {
       x: coord0.x - edge * Math.cos(-theta + alpha),
       y: coord0.y + edge * Math.sin(-theta + alpha)
-    } 
-     
+    }
+
     return (<path
       className='narrative-step-arrow'
       d={`
@@ -92,9 +92,9 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
       style={{
         ...styles,
         fillOpacity: styles.strokeOpacity,
-        fill: styles.stroke,
+        fill: styles.stroke
       }}
-    ></path>)    
+    />)
   }
 
   function _renderNarrativeStep (p1, p2, styles) {
@@ -102,25 +102,25 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
 
     return (
       <g>
-      <line
-        className='narrative-step'
-        x1={p1.x}
-        x2={p2.x}
-        y1={p1.y}
-        y2={p2.y}
-        markerStart='none'
-        onClick={n => onSelectNarrative(n)}
-        style={{
-          strokeWidth,
-          strokeDasharray,
-          strokeOpacity,
-          stroke
-        }}
-      />
-      {(stroke !== 'none')
-        ? _renderNarrativeStepArrow(p1, p2, styles)
-        : ''
-      }
+        <line
+          className='narrative-step'
+          x1={p1.x}
+          x2={p2.x}
+          y1={p1.y}
+          y2={p2.y}
+          markerStart='none'
+          onClick={n => onSelectNarrative(n)}
+          style={{
+            strokeWidth,
+            strokeDasharray,
+            strokeOpacity,
+            stroke
+          }}
+        />
+        {(stroke !== 'none')
+          ? _renderNarrativeStepArrow(p1, p2, styles)
+          : ''
+        }
       </g>
     )
   }

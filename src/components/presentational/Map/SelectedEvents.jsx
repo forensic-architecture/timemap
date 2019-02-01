@@ -20,7 +20,7 @@ class MapSelectedEvents extends React.Component {
           stroke-linejoin='round'
           stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
           fill='none'
-          d={`M0,0a${r},${r} 0 1,0 ${r*2},0 a${r},${r} 0 1,0 -${r*2},0 `}
+          d={`M0,0a${r},${r} 0 1,0 ${r * 2},0 a${r},${r} 0 1,0 -${r * 2},0 `}
         />
       </g>
     )
