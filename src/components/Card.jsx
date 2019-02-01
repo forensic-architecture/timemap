@@ -88,11 +88,27 @@ class Card extends React.Component {
 
   // NB: should be internaionalized.
   renderTimestamp () {
+    let timelabel = this.makeTimelabel(this.props.event.timestamp)
+
+    let precision = this.props.event.time_display;
+    if (precision === '_date_only') {
+      precision = ''
+      timelabel = timelabel.substring(0, 11)
+    } else if (precision === '_approximate_date_only') {
+      precision = ' (Approximate date)'
+      timelabel = timelabel.substring(0, 11)
+    } else if (precision === '_approximate_datetime') {
+      precision = ' (Approximate datetime)'
+    } else {
+      timelabel = timelabel.substring(0, 11)
+    }
+
     return (
       <CardTimestamp
-        makeTimelabel={(timestamp) => this.makeTimelabel(timestamp)}
+        makeTimelabel={timelabel}
         language={this.props.language}
-        timestamp={this.props.event.timestamp}
+        timelabel={timelabel}
+        precision={precision}
       />
     )
   }
