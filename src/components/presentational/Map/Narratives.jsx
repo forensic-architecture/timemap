@@ -61,8 +61,7 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
     }
   }
 
-  function _renderNarrativeStep (p1, p2, styles) {
-    const { stroke, strokeWidth, strokeDasharray, strokeOpacity } = styles
+  function _renderNarrativeStepArrow (p1, p2, styles) {
     const distance = Math.sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y))
     const theta = Math.atan2(p2.y - p1.y, p2.x - p1.x) // Angle of narrative step line
     const alpha = Math.atan2(1, 2) // Angle of arrow overture
@@ -82,7 +81,24 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
       x: coord0.x - edge * Math.cos(-theta + alpha),
       y: coord0.y + edge * Math.sin(-theta + alpha)
     } 
- 
+     
+    return (<path
+      className='narrative-step-arrow'
+      d={`
+        M ${coord0.x} ${coord0.y}
+        L ${coord1.x} ${coord1.y}
+        L ${coord2.x} ${coord2.y} Z
+      `}
+      style={{
+        ...styles,
+        fillOpacity: styles.strokeOpacity,
+        fill: styles.stroke,
+      }}
+    ></path>)    
+  }
+
+  function _renderNarrativeStep (p1, p2, styles) {
+    const { stroke, strokeWidth, strokeDasharray, strokeOpacity } = styles
 
     return (
       <g>
@@ -102,22 +118,7 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
         }}
       />
       {(stroke !== 'none')
-        ? (<path
-            className='narrative-step-arrow'
-            d={`
-              M ${coord0.x} ${coord0.y}
-              L ${coord1.x} ${coord1.y}
-              L ${coord2.x} ${coord2.y} Z
-            `}
-            style={{
-              strokeWidth,
-              strokeDasharray,
-              strokeOpacity,
-              stroke,
-              fillOpacity: strokeOpacity,
-              fill: stroke,
-            }}
-          ></path>)
+        ? _renderNarrativeStepArrow(p1, p2, styles)
         : ''
       }
       </g>
