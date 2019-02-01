@@ -175,6 +175,10 @@
   stroke-width: 0;
 }
 
+.narrative-step-arrow {
+  pointer-events: all !important;
+}
+
 .path-polyline {
   stroke: $darkgrey;
   stroke-width: 2px;

@@ -1,5 +1,7 @@
 import React from 'react'
 import { Portal } from 'react-portal'
+import { concatStatic } from 'rxjs/operator/concat';
+import { single } from 'rxjs/operator/single';
 
 function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives, projectPoint }) {
   function getNarrativeStyle (narrativeId) {
@@ -61,7 +63,29 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
 
   function _renderNarrativeStep (p1, p2, styles) {
     const { stroke, strokeWidth, strokeDasharray, strokeOpacity } = styles
+    const distance = Math.sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y))
+    const theta = Math.atan2(p2.y - p1.y, p2.x - p1.x) // Angle of narrative step line
+    const alpha = Math.atan2(1, 2) // Angle of arrow overture
+    const edge = 10 // Arrow edge length
+    const offset = (distance < 24) ? distance / 2 : 24;
+
+    // Arrow corners
+    const coord0 = {
+      x: p2.x - offset * Math.cos(theta),
+      y: p2.y - offset * Math.sin(theta)
+    } 
+    const coord1 = {
+      x: coord0.x - edge * Math.cos(-theta - alpha),
+      y: coord0.y + edge * Math.sin(-theta - alpha)
+    } 
+    const coord2 = {
+      x: coord0.x - edge * Math.cos(-theta + alpha),
+      y: coord0.y + edge * Math.sin(-theta + alpha)
+    } 
+ 
+
     return (
+      <g>
       <line
         className='narrative-step'
         x1={p1.x}
@@ -77,6 +101,26 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
           stroke
         }}
       />
+      {(stroke !== 'none')
+        ? (<path
+            className='narrative-step-arrow'
+            d={`
+              M ${coord0.x} ${coord0.y}
+              L ${coord1.x} ${coord1.y}
+              L ${coord2.x} ${coord2.y} Z
+            `}
+            style={{
+              strokeWidth,
+              strokeDasharray,
+              strokeOpacity,
+              stroke,
+              fillOpacity: strokeOpacity,
+              fill: stroke,
+            }}
+          ></path>)
+        : ''
+      }
+      </g>
     )
   }
 
