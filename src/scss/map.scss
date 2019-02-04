@@ -170,8 +170,13 @@
 }
 
 .location-event-marker {
+  pointer-events: all !important;
   fill: $event_default;
   stroke-width: 0;
+}
+
+.narrative-step-arrow {
+  pointer-events: all !important;
 }
 
 .path-polyline {
@@ -181,7 +186,8 @@
 
 .location-count {
   z-index: 100;
-  fill: #a4a4a4;
+  font-weight: 900;
+  fill: #d0d0d0;
 }
 
 

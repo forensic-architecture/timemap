@@ -16,6 +16,7 @@ const eventSchema = Joi.object().keys({
   tags: Joi.array().allow(''),
   comments: Joi.string().allow(''),
   timestamp: Joi.string(),
+  time_display: Joi.string().allow(''),
 
   // nested
   narrative___stepStyles: Joi.array()

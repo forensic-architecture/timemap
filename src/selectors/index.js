@@ -9,7 +9,7 @@ export const getActiveNarrative = state => state.app.narrative
 export const getActiveStep = state => state.app.narrativeState.current
 export const getSelected = state => state.app.selected
 export const getSites = (state) => {
-  if (process.env.features.USE_SITES) return state.domain.sites
+  if (process.env.features.USE_SITES) return state.domain.sites.filter(s => !!(+s.enabled))
   return []
 }
 export const getSources = state => {

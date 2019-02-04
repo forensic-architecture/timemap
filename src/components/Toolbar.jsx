@@ -7,6 +7,7 @@ import * as selectors from '../selectors'
 import { Tabs, TabPanel } from 'react-tabs'
 import Search from './Search.jsx'
 import TagListPanel from './TagListPanel.jsx'
+import CategoriesListPanel from './CategoriesListPanel.jsx'
 import ToolbarBottomActions from './ToolbarBottomActions.jsx'
 import copy from '../js/data/copy.json'
 import { trimAndEllipse } from '../js/utilities.js'
@@ -71,6 +72,21 @@ class Toolbar extends React.Component {
     )
   }
 
+  renderToolbarCategoriesPanel () {
+    if (process.env.features.CATEGORIES_AS_TAGS) {
+      return (
+        <TabPanel>
+          <CategoriesListPanel
+            categories={this.props.categories}
+            categoryFilters={this.props.categoryFilters}
+            onCategoryFilter={this.props.methods.onCategoryFilter}
+            language={this.props.language}
+          />
+        </TabPanel>
+      )
+    }
+  }
+
   renderToolbarTagPanel () {
     if (process.env.features.USE_TAGS &&
       this.props.tags.children) {
@@ -78,17 +94,14 @@ class Toolbar extends React.Component {
         <TabPanel>
           <TagListPanel
             tags={this.props.tags}
-            categories={this.props.categories}
             tagFilters={this.props.tagFilters}
-            categoryFilters={this.props.categoryFilters}
             onTagFilter={this.props.methods.onTagFilter}
-            onCategoryFilter={this.props.methods.onCategoryFilter}
             language={this.props.language}
           />
         </TabPanel>
       )
     }
-    return ''
+    return null
   }
 
   renderToolbarTab (_selected, label, iconKey) {
@@ -110,6 +123,7 @@ class Toolbar extends React.Component {
         {this.renderClosePanel()}
         <Tabs selectedIndex={this.state._selected}>
           {this.renderToolbarNarrativePanel()}
+          {this.renderToolbarCategoriesPanel()}
           {this.renderToolbarTagPanel()}}
         </Tabs>
       </div>
@@ -130,7 +144,7 @@ class Toolbar extends React.Component {
         )
       })
     }
-    return ''
+    return null
   }
 
   renderToolbarTabs () {
@@ -138,14 +152,17 @@ class Toolbar extends React.Component {
     if (process.env.title) title = process.env.title
     const narrativesLabel = copy[this.props.language].toolbar.narratives_label
     const tagsLabel = copy[this.props.language].toolbar.tags_label
+    const categoriesLabel = 'Categories' // TODO:
     const isTags = this.props.tags && this.props.tags.children
+    const isCategories = true
 
     return (
       <div className='toolbar'>
         <div className='toolbar-header'><p>{title}</p></div>
         <div className='toolbar-tabs'>
           {this.renderToolbarTab(0, narrativesLabel, 'timeline')}
-          {(isTags) ? this.renderToolbarTab(1, tagsLabel, 'style') : ''}
+          {(isCategories) ? this.renderToolbarTab(1, categoriesLabel, 'widgets') : null}
+          {(isTags) ? this.renderToolbarTab(2, tagsLabel, 'filter_list') : null}
         </div>
         <ToolbarBottomActions
           sites={{

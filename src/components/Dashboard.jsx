@@ -92,6 +92,7 @@ class Dashboard extends React.Component {
 
   render () {
     const { actions, app, domain, ui } = this.props
+
     return (
       <div>
         <Toolbar
@@ -171,6 +172,5 @@ function mapDispatchToProps (dispatch) {
 
 export default connect(
   state => state,
-  // state => injectSource("Youtube - Novodvirske Tank Separatist Patrol Video"),
   mapDispatchToProps
 )(Dashboard)

@@ -5,13 +5,19 @@
   border: 1px solid $black;
   // border-radius: 3px;
   transition: 0.2 ease;
-  background: $darkwhite;
+  background: $midwhite;
   color: $darkgrey;
   box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   font-size: $large;
   line-height: $xxlarge;
   height: auto;
   opacity: 0.9;
+  transition: background-color 0.4s;
+
+  &:hover {
+    background: $lightwhite;
+    transition: background-color 0.4s;
+  }
 
   h4 {
     margin-bottom: 0;

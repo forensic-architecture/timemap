@@ -192,6 +192,7 @@ class Map extends React.Component {
    */
   styleLocation (location) {
     const noEvents = location.events.length
+
     return [
       null,
       () => noEvents > 1 ? <text className='location-count' dx='-3' dy='4'>{noEvents}</text> : null
@@ -220,6 +221,7 @@ class Map extends React.Component {
         svg={this.svgRef.current}
         selected={this.props.app.selected}
         projectPoint={this.projectPoint}
+        styles={this.props.ui.mapSelectedEvents}
       />
     )
   }
@@ -279,6 +281,7 @@ function mapStateToProps (state) {
       tiles: state.ui.tiles,
       dom: state.ui.dom,
       narratives: state.ui.style.narratives,
+      mapSelectedEvents: state.ui.style.selectedEvents,
       shapes: state.ui.style.shapes
     }
   }

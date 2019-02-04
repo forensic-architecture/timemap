@@ -22,8 +22,7 @@ class TagListPanel extends React.Component {
 
   onClickCheckbox (obj, type) {
     obj.active = !obj.active
-    if (type === 'category') this.props.onCategoryFilter(obj)
-    if (type === 'tag') this.props.onTagFilter(obj)
+    this.props.onTagFilter(obj)
   }
 
   createNodeComponent (node, depth) {
@@ -70,34 +69,11 @@ class TagListPanel extends React.Component {
     )
   }
 
-  renderCategoryTree () {
-    return (
-      <div>
-        <h2>{copy[this.props.language].toolbar.categories}</h2>
-        {this.props.categories.map(cat => {
-          return (<li
-            key={cat.category.replace(/ /g, '_')}
-            className={'tag-filter active'}
-            style={{ marginLeft: '20px' }}
-          >
-            <Checkbox
-              label={cat.category}
-              isActive={cat.active}
-              onClickCheckbox={() => this.onClickCheckbox(cat, 'category')}
-            />
-          </li>)
-        })
-        }
-      </div>
-    )
-  }
-
   render () {
     return (
       <div className='react-innertabpanel'>
         <h2>{copy[this.props.language].toolbar.explore_by_tag__title}</h2>
         <p>{copy[this.props.language].toolbar.explore_by_tag__description}</p>
-        {this.renderCategoryTree()}
         {this.renderTree()}
       </div>
     )

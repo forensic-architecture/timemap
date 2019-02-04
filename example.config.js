@@ -20,19 +20,26 @@ module.exports = {
   },
   store: {
     app: {
-      mapAnchor: [31.356397, 34.784818],
-      filters: {
-        // timerange: [
-        //   new Date(2015, 7, 9),
-        //   new Date(2015, 10, 6, 23)
-        // ]
-      }
+      map: {
+        anchor: [31.356397, 34.784818]
+      },
+      timeline: {
+        range: [
+          new Date(2014, 7, 9),
+          new Date(2014, 10, 6, 23)
+        ],
+        rangeLimits: [
+          new Date(2014, 5, 9),
+          new Date(2018, 1, 6, 23)
+        ]
+      }      }
     },
     ui: {
       style: {
         categories: {},
         shapes: {},
-        narratives: {}
+        narratives: {},
+        selectedEvent: {},
       }
     }
   }

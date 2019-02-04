@@ -6,13 +6,62 @@ import Card from './Card.jsx'
 import copy from '../js/data/copy.json'
 
 class CardStack extends React.Component {
+  constructor () {
+    super()
+    this.refs = {}
+    this.refCardStack = React.createRef()
+    this.refCardStackContent = React.createRef()
+  }
+
+  componentDidUpdate () {
+    const isNarrative = !!this.props.narrative
+
+    if (isNarrative) {
+      this.scrollToCard()
+    }
+  }
+
+  scrollToCard () {
+    const duration = 500
+    const element = this.refCardStack.current
+    const cardScroll = this.refs[this.props.narrative.current].current.offsetTop - 20
+
+    let start = element.scrollTop
+    let change = cardScroll - start
+    let currentTime = 0
+    const increment = 20
+
+    // t = current time
+    // b = start value
+    // c = change in value
+    // d = duration
+    Math.easeInOutQuad = function (t, b, c, d) {
+      t /= d / 2
+      if (t < 1) return c / 2 * t * t + b
+      t -= 1
+      return -c / 2 * (t * (t - 2) - 1) + b
+    }
+
+    const animateScroll = function () {
+      currentTime += increment
+      const val = Math.easeInOutQuad(currentTime, start, change, duration)
+      element.scrollTop = val
+      if (currentTime < duration) setTimeout(animateScroll, increment)
+    }
+    animateScroll()
+  }
+
   renderCards (events, selections) {
     // if no selections provided, select all
     if (!selections) { selections = events.map(e => true) }
+    this.refs = []
 
-    return events.map((event, idx) => (
-      <Card
+    return events.map((event, idx) => {
+      const thisRef = React.createRef()
+      this.refs[idx] = thisRef
+      return (<Card
         event={event}
+        ref={thisRef}
         sourceError={this.props.sourceError}
         language={this.props.language}
         isLoading={this.props.isLoading}
@@ -24,8 +73,8 @@ class CardStack extends React.Component {
         onViewSource={this.props.onViewSource}
         onHighlight={this.props.onHighlight}
         onSelect={this.props.onSelect}
-      />
-    ))
+      />)
+    })
   }
 
   renderSelectedCards () {
@@ -38,9 +87,10 @@ class CardStack extends React.Component {
 
   renderNarrativeCards () {
     const { narrative } = this.props
-    const showing = narrative.steps.slice(narrative.current)
+    const showing = narrative.steps
+
     const selections = showing
-      .map((_, idx) => (idx === 0))
+      .map((_, idx) => (idx === narrative.current))
 
     return this.renderCards(showing, selections)
   }
@@ -74,7 +124,9 @@ class CardStack extends React.Component {
 
   renderNarrativeContent () {
     return (
-      <div id='card-stack-content' className='card-stack-content'>
+      <div id='card-stack-content' className='card-stack-content'
+        ref={this.refCardStackContent}
+      >
         <ul>
           {this.renderNarrativeCards()}
         </ul>
@@ -102,6 +154,7 @@ class CardStack extends React.Component {
         return (
           <div
             id='card-stack'
+            ref={this.refCardStack}
             className={`card-stack narrative-mode
             ${isCardstack ? '' : ' folded'}`
             }

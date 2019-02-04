@@ -122,17 +122,17 @@ NARRATIVE INFO
   }
 
   .material-icons {
-    font-size: 60pt;
+    font-size: 40pt;
     color: $offwhite;
     transition: color 0.2s ease;
 
     &.disabled {
-      color: $darkgrey;
+      color: $midgrey;
     }
 
     &:hover {
       cursor: pointer;
-      color: $darkgrey;
+      color: $midwhite;
     }
   }
 }

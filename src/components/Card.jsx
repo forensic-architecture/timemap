@@ -61,6 +61,7 @@ class Card extends React.Component {
       <CardLocation
         language={this.props.language}
         location={this.props.event.location}
+        isPrecise={(this.props.event.type === 'Structure')}
       />
     )
   }
@@ -87,11 +88,27 @@ class Card extends React.Component {
 
   // NB: should be internaionalized.
   renderTimestamp () {
+    let timelabel = this.makeTimelabel(this.props.event.timestamp)
+
+    let precision = this.props.event.time_display
+    if (precision === '_date_only') {
+      precision = ''
+      timelabel = timelabel.substring(0, 11)
+    } else if (precision === '_approximate_date_only') {
+      precision = ' (Approximate date)'
+      timelabel = timelabel.substring(0, 11)
+    } else if (precision === '_approximate_datetime') {
+      precision = ' (Approximate datetime)'
+    } else {
+      timelabel = timelabel.substring(0, 11)
+    }
+
     return (
       <CardTimestamp
-        makeTimelabel={(timestamp) => this.makeTimelabel(timestamp)}
+        makeTimelabel={timelabel}
         language={this.props.language}
-        timestamp={this.props.event.timestamp}
+        timelabel={timelabel}
+        precision={precision}
       />
     )
   }
@@ -143,9 +160,14 @@ class Card extends React.Component {
   }
 
   render () {
-    const { isSelected } = this.props
+    const { isSelected, idx } = this.props
+
     return (
-      <li className={`event-card ${isSelected ? 'selected' : ''}`}>
+      <li
+        className={`event-card ${isSelected ? 'selected' : ''}`}
+        id={`event-card-${idx}`}
+        ref={this.props.innerRef}
+      >
         {this.renderMain()}
         {this.state.isOpen ? this.renderExtra() : null}
         {isSelected ? this.renderCaret() : null}
@@ -154,4 +176,5 @@ class Card extends React.Component {
   }
 }
 
-export default Card
+// The ref to each card will be used in CardStack for programmatic scrolling
+export default React.forwardRef((props, ref) => <Card innerRef={ref} {...props} />)
