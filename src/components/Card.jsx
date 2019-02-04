@@ -177,5 +177,4 @@ class Card extends React.Component {
 }
 
 // The ref to each card will be used in CardStack for programmatic scrolling
-export default React.forwardRef((props, ref) => <Card innerRef={ref} {...props}/>);
-
+export default React.forwardRef((props, ref) => <Card innerRef={ref} {...props} />)

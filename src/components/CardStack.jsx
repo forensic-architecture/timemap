@@ -6,15 +6,14 @@ import Card from './Card.jsx'
 import copy from '../js/data/copy.json'
 
 class CardStack extends React.Component {
-
-  constructor() {
+  constructor () {
     super()
     this.refs = {}
     this.refCardStack = React.createRef()
     this.refCardStackContent = React.createRef()
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     const isNarrative = !!this.props.narrative
 
     if (isNarrative) {
@@ -22,34 +21,34 @@ class CardStack extends React.Component {
     }
   }
 
-  scrollToCard() {
+  scrollToCard () {
     const duration = 500
     const element = this.refCardStack.current
     const cardScroll = this.refs[this.props.narrative.current].current.offsetTop - 20
 
-    let start = element.scrollTop;
-    let change = cardScroll - start;
-    let currentTime = 0;
-    const increment = 20;
+    let start = element.scrollTop
+    let change = cardScroll - start
+    let currentTime = 0
+    const increment = 20
 
-    //t = current time
-    //b = start value
-    //c = change in value
-    //d = duration
+    // t = current time
+    // b = start value
+    // c = change in value
+    // d = duration
     Math.easeInOutQuad = function (t, b, c, d) {
-      t /= d / 2;
-      if (t < 1) return c / 2 * t * t + b;
-      t--;
-      return - c / 2 * (t * (t - 2) - 1) + b;
-    };
+      t /= d / 2
+      if (t < 1) return c / 2 * t * t + b
+      t -= 1
+      return -c / 2 * (t * (t - 2) - 1) + b
+    }
 
-    const animateScroll = function() {
-      currentTime += increment;
-      const val = Math.easeInOutQuad(currentTime, start, change, duration);
-      element.scrollTop = val;
-      if (currentTime < duration) setTimeout(animateScroll, increment);
-    };
-    animateScroll();    
+    const animateScroll = function () {
+      currentTime += increment
+      const val = Math.easeInOutQuad(currentTime, start, change, duration)
+      element.scrollTop = val
+      if (currentTime < duration) setTimeout(animateScroll, increment)
+    }
+    animateScroll()
   }
 
   renderCards (events, selections) {
