@@ -11,7 +11,6 @@ export default (props) => {
   function renderCategoryTree () {
     return (
       <div>
-        <h2>{copy[props.language].toolbar.categories}</h2>
         {props.categories.map(cat => {
           return (<li
             key={cat.category.replace(/ /g, '_')}
@@ -31,7 +30,7 @@ export default (props) => {
 
   return (
     <div className='react-innertabpanel'>
-      <h2>{copy[props.language].toolbar.explore_by_category__title}</h2>
+      <h2>{copy[props.language].toolbar.categories}</h2>
       <p>{copy[props.language].toolbar.explore_by_category__description}</p>
       {renderCategoryTree()}
     </div>
