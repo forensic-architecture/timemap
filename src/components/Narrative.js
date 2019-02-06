@@ -7,8 +7,7 @@ import Adjust from './presentational/Narrative/Adjust'
 import Close from './presentational/Narrative/Close'
 
 class Narrative extends React.Component {
-
-  render() {
+  render () {
     if (!this.props.narrative) return null
 
     const { steps } = this.props.narrative
@@ -34,7 +33,6 @@ class Narrative extends React.Component {
         />
       </React.Fragment>
     )
-  
   }
 }
 

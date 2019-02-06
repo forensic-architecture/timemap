@@ -62,5 +62,8 @@
     "files": [
       "test/**/*.js"
     ]
-  }
+  },
+  "standard": {
+    "globals": [ "fetch", "location", "alert" ]
+  }  
 }

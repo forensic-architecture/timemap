@@ -1,7 +1,6 @@
 /* global d3 */
 import initial from '../store/initial.js'
-import { parseDate, parseTimestamp } from '../js/utilities'
-import { getValueFromUrl } from '../js/utilities'
+import { parseDate, parseTimestamp, getValueFromUrl } from '../js/utilities'
 import { history } from '../store/index.js'
 
 import {
@@ -161,9 +160,9 @@ function updateCategoryFilters (appState, action) {
 }
 
 function updateTimeRange (appState, action) { // XXX
-  const timerangeF = parseTimestamp(getValueFromUrl('timerangeF'));
-  const timerange0 = parseTimestamp(getValueFromUrl('timerange0'));
-  
+  const timerangeF = parseTimestamp(getValueFromUrl('timerangeF'))
+  const timerange0 = parseTimestamp(getValueFromUrl('timerange0'))
+
   return {
     ...appState,
     timeline: {

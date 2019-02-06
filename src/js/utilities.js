@@ -128,18 +128,15 @@ export function urlFromEnv (ext) {
   }
 }
 
-
 /**
- * Get URL query params 
+ * Get URL query params
  */
-export function getValueFromUrl(input) {
-  const [pathname, prop] = input.split('.');
-
-  var urlParams = new URLSearchParams(location.search);
+export function getValueFromUrl (input) {
+  var urlParams = new URLSearchParams(location.search)
 
   if (urlParams.has(input)) {
-    const param = urlParams.get(input);
-    if (!!param) return param;
+    const param = urlParams.get(input)
+    if (param) return param
   }
-  return null;
+  return null
 }

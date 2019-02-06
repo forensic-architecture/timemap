@@ -178,7 +178,7 @@ class Toolbar extends React.Component {
     const { narrative } = this.props
 
     return (
-      <div id='toolbar-wrapper' className={`toolbar-wrapper ${(!!narrative) ? 'narrative-mode' : ''}`}>
+      <div id='toolbar-wrapper' className={`toolbar-wrapper ${(narrative) ? 'narrative-mode' : ''}`}>
         {this.renderToolbarTabs()}
         {this.renderToolbarPanels()}
       </div>

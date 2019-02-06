@@ -10,4 +10,4 @@ export default (history) => combineReducers({
   app,
   domain,
   ui
-});
+})

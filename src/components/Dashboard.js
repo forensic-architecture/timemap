@@ -15,9 +15,6 @@ import InfoPopUp from './InfoPopup'
 import Timeline from './Timeline'
 import Notification from './Notification'
 
-import { parseDate } from '../js/utilities'
-import { selectCategories } from '../selectors';
-
 class Dashboard extends React.Component {
   constructor (props) {
     super(props)
@@ -55,10 +52,10 @@ class Dashboard extends React.Component {
 
   handleSelect (selected) {
     if (selected) {
-      /*let eventsToSelect = selected.map(event => this.getEventById(event.id))
+      /* let eventsToSelect = selected.map(event => this.getEventById(event.id))
       eventsToSelect = eventsToSelect.sort((a, b) => parseDate(a.timestamp) - parseDate(b.timestamp))
 
-      this.props.actions.updateSelected(eventsToSelect)*/
+      this.props.actions.updateSelected(eventsToSelect) */
       this.props.actions.updateSelected(selected)
     }
   }
@@ -169,9 +166,9 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  return { 
-    domain: { 
+function mapStateToProps (state, ownProps) {
+  return {
+    domain: {
       ...state.domain,
       narrative: selectors.selectActiveNarrative(state)
     },
@@ -183,5 +180,5 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Dashboard)

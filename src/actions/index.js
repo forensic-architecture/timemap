@@ -1,7 +1,7 @@
-import { formatTimestamp } from '../js/utilities';
+import { formatTimestamp } from '../js/utilities'
 
 // TODO: move to util lib
-function urlFromEnv(ext) {
+function urlFromEnv (ext) {
   if (process.env[ext]) {
     return `${process.env.SERVER_ROOT}${process.env[ext]}`
   } else {
@@ -164,12 +164,12 @@ export function updateHighlighted (highlighted) {
 }
 
 export const UPDATE_SELECTED = 'UPDATE_SELECTED'
-export function updateSelected(selected) {
+export function updateSelected (selected) {
   return {
     type: UPDATE_SELECTED,
     selected,
     pushQueryParams: {
-      selected,
+      selected
     }
   }
 }
@@ -212,12 +212,11 @@ export function updateTimeRange (timerange) {
 
 export const UPDATE_NARRATIVE = 'UPDATE_NARRATIVE'
 export function updateNarrative (narrative) {
-
   return {
     type: UPDATE_NARRATIVE,
     narrative,
     pushQueryParams: {
-      narrative: (!!narrative) ? narrative.id : null
+      narrative: (narrative) ? narrative.id : null
     }
   }
 }

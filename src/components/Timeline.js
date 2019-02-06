@@ -271,7 +271,7 @@ class Timeline extends React.Component {
   }
 
   render () {
-    const { isNarrative, domain, app } = this.props
+    const { isNarrative, domain } = this.props
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`
     classes += (domain.activeNarrative !== null) ? ' narrative-mode' : ''
     const { dims } = this.state

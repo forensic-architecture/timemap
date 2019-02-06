@@ -170,7 +170,7 @@ export const selectActiveNarrative = createSelector(
     } else if (typeof narrative === 'object' && !!narrative && narrative.id) {
       activeNarrativeFull = narratives.find(n => n.id === narrative.id)
     }
-    
+
     return activeNarrativeFull
       ? {
         ...activeNarrativeFull,
@@ -251,7 +251,7 @@ export const selectSelected = createSelector(
       return []
     }
 
-    const selectedEvents = 
+    const selectedEvents =
       events
         .filter(e => selected.includes(+e.id))
         .map(insetSourceFrom(sources))
