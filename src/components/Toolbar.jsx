@@ -165,9 +165,16 @@ class Toolbar extends React.Component {
           {(isTags) ? this.renderToolbarTab(2, tagsLabel, 'filter_list') : null}
         </div>
         <ToolbarBottomActions
+          info={{
+            enabled: this.props.infoShowing,
+            toggle: this.props.actions.toggleInfoPopup
+          }}
           sites={{
             enabled: this.props.sitesShowing,
             toggle: this.props.actions.toggleSites
+          }}
+          cover={{
+            toggle: this.props.actions.toggleCover
           }}
         />
       </div>
@@ -197,7 +204,8 @@ function mapStateToProps (state) {
     viewFilters: state.app.filters.views,
     features: state.app.features,
     narrative: state.app.narrative,
-    sitesShowing: state.app.flags.isShowingSites
+    sitesShowing: state.app.flags.isShowingSites,
+    infoShowing: state.app.flags.isInfopopup
   }
 }
 

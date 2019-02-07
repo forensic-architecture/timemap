@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SitesIcon = ({ isActive, isDisabled, onClickHandler }) => {
+const CoverIcon = ({ isActive, isDisabled, onClickHandler }) => {
   let classes = (isActive) ? 'action-button enabled' : 'action-button'
   if (isDisabled) {
     classes = 'action-button disabled'
@@ -12,10 +12,10 @@ const SitesIcon = ({ isActive, isDisabled, onClickHandler }) => {
       onClick={onClickHandler}
     >
       <i class='material-icons'>
-        location_on
+        info
       </i>
     </button>
   )
 }
 
-export default SitesIcon
+export default CoverIcon
