@@ -132,7 +132,7 @@ export function toggleFlagAC (flag) {
     ...appState,
     flags: {
       ...appState.flags,
-      isCover: !appState.flags[flag]
+      [flag]: !appState.flags[flag]
     }
   })
 }
