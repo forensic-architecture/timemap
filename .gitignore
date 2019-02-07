@@ -3,5 +3,10 @@ build/
 node_modules/
 config.js
 dev.config.js
+# ignore all covers but the default
+src/components/presentational/covers/
+!src/src/components/presentational/covers/Default.js
 
 src/\.DS_Store
+
+\.DS_Store

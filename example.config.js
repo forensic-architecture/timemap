@@ -11,6 +11,7 @@ module.exports = {
   INCOMING_DATETIME_FORMAT: '%m/%d/%YT%H:%M',
   MAPBOX_TOKEN: 'pk.EXAMPLE_MAPBOX_TOKEN',
   features: {
+    USE_COVER: false,
     USE_TAGS: false,
     USE_SEARCH: false,
     USE_SITES: true,
@@ -32,16 +33,15 @@ module.exports = {
           new Date(2014, 5, 9),
           new Date(2018, 1, 6, 23)
         ]
-      }      }
-    },
-    ui: {
-      style: {
-        categories: {},
-        shapes: {},
-        narratives: {},
-        selectedEvent: {},
       }
+    }
+  },
+  ui: {
+    style: {
+      categories: {},
+      shapes: {},
+      narratives: {},
+      selectedEvent: {}
     }
   }
 }
-

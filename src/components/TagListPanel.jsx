@@ -63,7 +63,6 @@ class TagListPanel extends React.Component {
   renderTree () {
     return (
       <div>
-        <h2>{copy[this.props.language].toolbar.tags}</h2>
         {this.state.treeComponents.map(c => c)}
       </div>
     )
@@ -72,7 +71,7 @@ class TagListPanel extends React.Component {
   render () {
     return (
       <div className='react-innertabpanel'>
-        <h2>{copy[this.props.language].toolbar.explore_by_tag__title}</h2>
+        <h2>{copy[this.props.language].toolbar.tags}</h2>
         <p>{copy[this.props.language].toolbar.explore_by_tag__description}</p>
         {this.renderTree()}
       </div>

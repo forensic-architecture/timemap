@@ -13,6 +13,8 @@ import NarrativeControls from './presentational/Narrative/Controls.js'
 import InfoPopUp from './InfoPopup.jsx'
 import Timeline from './Timeline.jsx'
 import Notification from './Notification.jsx'
+import StaticPage from './StaticPage'
+import DefaultCover from './presentational/covers/Default'
 
 import { parseDate } from '../js/utilities'
 
@@ -139,7 +141,9 @@ class Dashboard extends React.Component {
         <InfoPopUp
           ui={ui}
           app={app}
-          toggle={() => actions.toggleInfoPopup()}
+          methods={{
+            onClose: actions.toggleInfoPopup
+          }}
         />
         <Notification
           isNotification={app.flags.isNotification}
@@ -155,6 +159,13 @@ class Dashboard extends React.Component {
             }
           />
         ) : null}
+        {process.env.features.USE_COVER && (
+          <StaticPage showing={app.flags.isCover}>
+            {/* enable USE_COVER in config.js features, and customise your header */}
+            {/* pass 'actions.toggleCover' as a prop to your custom header */}
+            <DefaultCover showAppHandler={actions.toggleCover} />
+          </StaticPage>
+        )}
         <LoadingOverlay
           ui={app.flags.isFetchingDomain}
           language={app.language}

@@ -1,6 +1,6 @@
 /* global d3 */
 import initial from '../store/initial.js'
-import { parseDate } from '../js/utilities'
+import { parseDate, toggleFlagAC } from '../js/utilities'
 
 import {
   UPDATE_HIGHLIGHTED,
@@ -19,6 +19,7 @@ import {
   TOGGLE_FETCHING_SOURCES,
   TOGGLE_INFOPOPUP,
   TOGGLE_NOTIFICATIONS,
+  TOGGLE_COVER,
   FETCH_ERROR,
   FETCH_SOURCE_ERROR
 } from '../actions'
@@ -189,16 +190,6 @@ function toggleLanguage (appState, action) {
   })
 }
 
-function toggleSites (appState, action) {
-  return {
-    ...appState,
-    flags: {
-      ...appState.flags,
-      isShowingSites: !appState.flags.isShowingSites
-    }
-  }
-}
-
 function updateSource (appState, action) {
   return {
     ...appState,
@@ -214,37 +205,12 @@ function fetchError (state, action) {
   }
 }
 
-function toggleFetchingDomain (appState, action) {
-  return Object.assign({}, appState, {
-    flags: Object.assign({}, appState.flags, {
-      isFetchingDomain: !appState.flags.isFetchingDomain
-    })
-  })
-}
-
-function toggleFetchingSources (appState, action) {
-  return Object.assign({}, appState, {
-    flags: Object.assign({}, appState.flags, {
-      isFetchingSources: !appState.flags.isFetchingSources
-    })
-  })
-}
-
-function toggleInfoPopup (appState, action) {
-  return Object.assign({}, appState, {
-    flags: Object.assign({}, appState.flags, {
-      isInfopopup: !appState.flags.isInfopopup
-    })
-  })
-}
-
-function toggleNotifications (appState, action) {
-  return Object.assign({}, appState, {
-    flags: Object.assign({}, appState.flags, {
-      isNotification: !appState.flags.isNotification
-    })
-  })
-}
+const toggleSites = toggleFlagAC('isShowingSites')
+const toggleFetchingDomain = toggleFlagAC('isFetchingDomain')
+const toggleFetchingSources = toggleFlagAC('isFetchingSources')
+const toggleInfoPopup = toggleFlagAC('isInfopopup')
+const toggleNotifications = toggleFlagAC('isNotification')
+const toggleCover = toggleFlagAC('isCover')
 
 function fetchSourceError (appState, action) {
   return {
@@ -278,20 +244,24 @@ function app (appState = initial.app, action) {
       return updateSource(appState, action)
     case RESET_ALLFILTERS:
       return resetAllFilters(appState, action)
+    /* toggles */
     case TOGGLE_LANGUAGE:
       return toggleLanguage(appState, action)
     case TOGGLE_SITES:
-      return toggleSites(appState, action)
+      return toggleSites(appState)
+    case TOGGLE_FETCHING_DOMAIN:
+      return toggleFetchingDomain(appState)
+    case TOGGLE_FETCHING_SOURCES:
+      return toggleFetchingSources(appState)
+    case TOGGLE_INFOPOPUP:
+      return toggleInfoPopup(appState)
+    case TOGGLE_NOTIFICATIONS:
+      return toggleNotifications(appState)
+    case TOGGLE_COVER:
+      return toggleCover(appState)
+    /* errors */
     case FETCH_ERROR:
       return fetchError(appState, action)
-    case TOGGLE_FETCHING_DOMAIN:
-      return toggleFetchingDomain(appState, action)
-    case TOGGLE_FETCHING_SOURCES:
-      return toggleFetchingSources(appState, action)
-    case TOGGLE_INFOPOPUP:
-      return toggleInfoPopup(appState, action)
-    case TOGGLE_NOTIFICATIONS:
-      return toggleNotifications(appState, action)
     case FETCH_SOURCE_ERROR:
       return fetchSourceError(appState, action)
     default:
