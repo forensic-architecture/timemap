@@ -84,7 +84,7 @@ const initial = {
     flags: {
       isFetchingDomain: false,
       isFetchingSources: false,
-
+      isCover: true,
       isCardstack: true,
       isInfopopup: true,
       isShowingSites: true

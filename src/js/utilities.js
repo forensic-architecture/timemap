@@ -126,3 +126,13 @@ export function urlFromEnv (ext) {
     return null
   }
 }
+
+export function toggleFlagAC (flag) {
+  return (appState) => ({
+    ...appState,
+    flags: {
+      ...appState.flags,
+      isCover: !appState.flags[flag]
+    }
+  })
+}

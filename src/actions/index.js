@@ -291,6 +291,13 @@ export function markNotificationsRead () {
   }
 }
 
+export const TOGGLE_COVER = 'TOGGLE_COVER'
+export function toggleCover () {
+  return {
+    type: TOGGLE_COVER
+  }
+}
+
 // ERRORS
 
 export const FETCH_SOURCE_ERROR = 'FETCH_SOURCE_ERROR'

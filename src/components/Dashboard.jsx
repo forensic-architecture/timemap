@@ -13,6 +13,7 @@ import NarrativeControls from './presentational/Narrative/Controls.js'
 import InfoPopUp from './InfoPopup.jsx'
 import Timeline from './Timeline.jsx'
 import Notification from './Notification.jsx'
+import StaticPage from './StaticPage'
 
 import { parseDate } from '../js/utilities'
 
@@ -157,6 +158,12 @@ class Dashboard extends React.Component {
             }
           />
         ) : null}
+        {process.env.features.USE_COVER && (
+          <StaticPage showing={app.flags.isCover}>
+            {/* enable USE_COVER in config.js features, and put content here if you want a header */}
+            {/* pass 'actions.toggleCover' as a prop to your custom header */}
+          </StaticPage>
+        )}
         <LoadingOverlay
           ui={app.flags.isFetchingDomain}
           language={app.language}
