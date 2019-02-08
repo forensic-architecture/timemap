@@ -135,11 +135,17 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
     )
   }
 
-  if (narrative === null) return (<div />)
+  if (narrative === null) return (
+    <Portal node={svg}>
+      <g/>
+    </Portal>
+  )
 
   return (
     <Portal node={svg}>
-      {narratives.map(n => renderNarrative(n))}
+      <g className='narratives'>
+        {narratives.map(n => renderNarrative(n))}
+      </g>
     </Portal>
   )
 }

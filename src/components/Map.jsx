@@ -243,9 +243,9 @@ class Map extends React.Component {
         {this.renderMarkers()}
         {isShowingSites ? this.renderSites() : null}
         {this.renderShapes()}
-        {this.renderEvents()}
         {this.renderNarratives()}
-        {this.renderSelected()}
+        {this.renderEvents()}
+        {this.renderSelected()}        
       </React.Fragment>
     ) : null
 
