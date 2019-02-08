@@ -108,7 +108,9 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
 
   return (
     <Portal node={svg}>
-      {locations.map(renderLocation)}
+      <g className='event-locations'>
+        {locations.map(renderLocation)}
+      </g>
     </Portal>
   )
 }
