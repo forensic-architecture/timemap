@@ -18,6 +18,8 @@ import DefaultCover from './presentational/covers/Default'
 
 import { parseDate } from '../js/utilities'
 
+import { isMobile } from 'react-device-detect'
+
 class Dashboard extends React.Component {
   constructor (props) {
     super(props)
@@ -94,6 +96,24 @@ class Dashboard extends React.Component {
 
   render () {
     const { actions, app, domain, ui } = this.props
+
+    if (isMobile || window.innerWidth < 1000) {
+      return (
+        <div>
+          {process.env.features.USE_COVER && (
+            <StaticPage showing={app.flags.isCover}>
+              {/* enable USE_COVER in config.js features, and customise your header */}
+              {/* pass 'actions.toggleCover' as a prop to your custom header */}
+              <DefaultCover showAppHandler={() => {
+                /* eslint-disable no-undef */
+                alert('This platform is not suitable for mobile. Please re-visit the site on a device with a larger screen.')
+                /* eslint-enable no-undef */
+              }} />
+            </StaticPage>
+          )}
+        </div>
+      )
+    }
 
     return (
       <div>
