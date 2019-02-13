@@ -109,14 +109,7 @@ $overlay-bg: rgba(239,239,239,0.9);
   }
 }
 
-.mo-footer {
-  position: fixed;
-  min-height: 250px;
-  background-color: $offwhite;
-  width: 100%;
-  opacity: 0.9;
-  bottom: 0;
-}
+
 
 // .mo-header {
 //   min-height: 42px;
@@ -144,6 +137,14 @@ $overlay-bg: rgba(239,239,239,0.9);
 //   }
 // }
 
+.media-gallery-controls {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -50%;
+}
+
 .mo-media-container {
   flex: 1;
   flex-direction: row;
@@ -155,22 +156,9 @@ $overlay-bg: rgba(239,239,239,0.9);
   max-height: calc(#{$panel-height} - 100px);
   font-family: "Lato", Helvetica, sans-serif;
 
-  // .media-player {
-  //   width: 100%;
-  //   max-width: $vimeo-width;
-  // }
-
   .media-content {
     display: flex;
     flex-direction: column;
-  }
-
-  .media-gallery-controls {
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: -50%;
   }
 
   // NB: topcushion seems to be necessary with certain overflows..
@@ -179,64 +167,73 @@ $overlay-bg: rgba(239,239,239,0.9);
   }
 }
 
-// .mo-meta-container {
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   box-sizing: border-box;
-//   min-height: 100px;
-//   width: 100%;
-//   // padding: $padding;
-//
-//   .mo-box-title {
-//     display: flex;
-//     flex-direction: row;
-//     justify-content: space-between;
-//     padding: 0 20px;
-//   }
 
-  // .mo-box {
-  //   display: flex;
-  //   flex-direction: row;
-  //   justify-content: space-around;
-  //   max-width: $panel-width;
-  //   width: 100%;
-  //   padding: $padding 0;
-  //   border-top: 1px solid rgb(189,189,189);
-  //   font-family: "Lato", Helvetica, sans-serif;
-  //   font-size: $normal;
-  //
-  //   h4 {
-  //     margin: 0 0 5px 0;
-  //     text-transform: uppercase;
-  //     font-size: $xsmall;
-  //     color: $darkwhite;
-  //     font-weight: 100;
-  //   }
-  //
-  //   p {
-  //     margin-top: 0;
-  //     font-size: $large;
-  //   }
-  //
-  //   .material-icons {
-  //     font-size: $normal;
-  //     color: $darkwhite;
-  //     margin-right: 5px;
-  //   }
-  //
-  //   a {
-  //     font-size: $large;
-  //     color: $darkgrey;
-  //     border-bottom: 1px solid $red;
-  //     &:hover { border-bottom: 1px solid $darkgrey; }
-  //   }
-  // }
-  //
-  // .indent {
-  //   margin-left: 2*$header-inset;
-  // }
-// }
+.mo-footer {
+  position: fixed;
+  height: 250px;
+  background-color: transparent;
+  width: 100%;
+  opacity: 0.9;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.mo-meta-container {
+  color: $overlay-bg;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 100px;
+
+  .mo-box-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .mo-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: $panel-width;
+    padding: $padding 0;
+    border-top: 1px solid rgb(189,189,189);
+    font-family: "Lato", Helvetica, sans-serif;
+    font-size: $normal;
+
+    h4 {
+      margin: 0 0 5px 0;
+      text-transform: uppercase;
+      font-size: $xsmall;
+      color: $darkwhite;
+      font-weight: 100;
+    }
+
+    p {
+      margin-top: 0;
+      font-size: $large;
+    }
+
+    .material-icons {
+      font-size: $normal;
+      color: $darkwhite;
+      margin-right: 5px;
+    }
+
+    a {
+      font-size: $large;
+      color: $yellow;
+      border-bottom: 1px solid $yellow;
+    }
+  }
+
+  .indent {
+    margin-left: 2*$header-inset;
+  }
+}
 
 .mo-controls {
   color: white;
@@ -291,10 +288,11 @@ $overlay-bg: rgba(239,239,239,0.9);
   line-height: 1.5em;
   min-width: 100%;
 
+  color: $overlay-bg;
+
   a {
-    color: $darkgrey;
-    border-bottom: 1px solid $red;
-    &:hover { border-bottom: 1px solid $darkgrey; color: $darkgrey; }
+    color: $yellow;
+    border-bottom: 1px solid $yellow;
   }
 
   .md-container {

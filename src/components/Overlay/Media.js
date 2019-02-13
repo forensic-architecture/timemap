@@ -46,12 +46,22 @@ class SourceOverlay extends React.Component {
             <h3>{shortenedTitle}</h3>
           </div>
         </div>
+
+        <div className='mo-container' onClick={e => e.stopPropagation()}>
+          <div className='mo-media-container'>
+            <Content media={paths.map(selectTypeFromPath)} viewIdx={this.state.idx} />
+          </div>
+
+        </div>
+
         <div className='mo-footer'>
+          <Controls paths={paths} viewIdx={this.state.idx} onShiftHandler={this.onShiftGallery} />
+
           <div className='mo-meta-container'>
-            <div className='mo-box-title'>
-              {title ? <p><b>{title}</b></p> : null}
-              <div>{desc}</div>
-            </div>
+            {/* <div className='mo-box-title'> */}
+            {/*   {title ? <p><b>{title}</b></p> : null} */}
+            {/*   <div>{desc}</div> */}
+            {/* </div> */}
 
             <div className='mo-box'>
               <div>
@@ -68,13 +78,6 @@ class SourceOverlay extends React.Component {
               </div>
             </div>
           </div>
-        </div>
-        <div className='mo-container' onClick={e => e.stopPropagation()}>
-          <div className='mo-media-container'>
-            <Content media={paths.map(selectTypeFromPath)} viewIdx={this.state.idx} />
-            <Controls paths={paths} viewIdx={this.state.idx} onShiftHandler={this.onShiftGallery} />
-          </div>
-
         </div>
 
       </div>
