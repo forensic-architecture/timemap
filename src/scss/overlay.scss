@@ -6,27 +6,30 @@ $vimeo-height: $panel-height / 2;
 $padding: 20px;
 $header-inset: 10px;
 
+$banner-height: 100px;
+
 .mo-overlay {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  // justify-content: center;
   align-items: center;
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(239, 239, 239, 0.5);
+  background-color: rgba(0,0,0, 0.85);
   z-index: 20;
 }
 
 .mo-container {
-  background-color: rgba(239, 239, 239, 0.9);
+  margin-top: $banner-height;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: $panel-height;
-  max-height: calc(100% - 40px);
+  height: calc(100vh - 350px);
+  max-height: calc(100vh - 350px);
   width: $panel-width;
   max-width: 90vw;
   box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
@@ -55,31 +58,91 @@ $header-inset: 10px;
   }
 }
 
-.mo-header {
-  min-height: 42px;
-  max-height: 42px;
+$overlay-bg: rgba(239,239,239,0.9);
+
+.mo-banner {
+  position: fixed;
+  min-height: 100px;
+  background-color: transparent;
+  top: 0;
   width: 100%;
   display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
   flex-direction: row;
-  background-color: black;
-  color: white;
 
-  .mo-header-close {
+  .mo-banner-close {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: $header-inset + 8px;
+    min-width: $banner-height;
+    .material-icons {
+      font-size: 40pt;
+      background-color: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.3s all ease;
+      color: $overlay-bg;
+
+      &:hover {
+        text-decoration: none;
+        cursor: pointer;
+        color: white;
+      }
+    }
   }
 
-  .mo-header-text {
-    flex: 1;
+  .mo-banner-content {
+    flex: 11;
+    text-align: center;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: flex-end;
-    padding-right: $padding;
-    font-family: "Lato", Helvetica, sans-serif;
+    h3 {
+      border-radius: 2px;
+      padding: 10px 15px;
+      background-color: transparent;
+      color: $overlay-bg;
+      margin-left: -$banner-height;
+    }
   }
 }
+
+.mo-footer {
+  position: fixed;
+  min-height: 250px;
+  background-color: $offwhite;
+  width: 100%;
+  opacity: 0.9;
+  bottom: 0;
+}
+
+// .mo-header {
+//   min-height: 42px;
+//   max-height: 42px;
+//   width: 100%;
+//   display: flex;
+//   flex-direction: row;
+//   background-color: black;
+//   color: white;
+//
+//   .mo-header-close {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     margin-left: $header-inset + 8px;
+//   }
+//
+//   .mo-header-text {
+//     flex: 1;
+//     display: flex;
+//     align-items: center;
+//     justify-content: flex-end;
+//     padding-right: $padding;
+//     font-family: "Lato", Helvetica, sans-serif;
+//   }
+// }
 
 .mo-media-container {
   flex: 1;
@@ -90,13 +153,12 @@ $header-inset: 10px;
   box-sizing: border-box;
   width: 100%;
   max-height: calc(#{$panel-height} - 100px);
-  padding: 20px;
   font-family: "Lato", Helvetica, sans-serif;
 
-  .media-player {
-    width: 100%;
-    max-width: $vimeo-width;
-  }
+  // .media-player {
+  //   width: 100%;
+  //   max-width: $vimeo-width;
+  // }
 
   .media-content {
     display: flex;
@@ -117,64 +179,64 @@ $header-inset: 10px;
   }
 }
 
-.mo-meta-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  box-sizing: border-box;
-  min-height: 100px;
-  width: 100%;
-  // padding: $padding;
+// .mo-meta-container {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   box-sizing: border-box;
+//   min-height: 100px;
+//   width: 100%;
+//   // padding: $padding;
+//
+//   .mo-box-title {
+//     display: flex;
+//     flex-direction: row;
+//     justify-content: space-between;
+//     padding: 0 20px;
+//   }
 
-  .mo-box-title {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0 20px;
-  }
-
-  .mo-box {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    max-width: $panel-width;
-    width: 100%;
-    padding: $padding 0;
-    border-top: 1px solid rgb(189,189,189);
-    font-family: "Lato", Helvetica, sans-serif;
-    font-size: $normal;
-
-    h4 {
-      margin: 0 0 5px 0;
-      text-transform: uppercase;
-      font-size: $xsmall;
-      color: $darkwhite;
-      font-weight: 100;
-    }
-
-    p {
-      margin-top: 0;
-      font-size: $large;
-    }
-
-    .material-icons {
-      font-size: $normal;
-      color: $darkwhite;
-      margin-right: 5px;
-    }
-
-    a {
-      font-size: $large;
-      color: $darkgrey;
-      border-bottom: 1px solid $red;
-      &:hover { border-bottom: 1px solid $darkgrey; }
-    }
-  }
-
-  .indent {
-    margin-left: 2*$header-inset;
-  }
-}
+  // .mo-box {
+  //   display: flex;
+  //   flex-direction: row;
+  //   justify-content: space-around;
+  //   max-width: $panel-width;
+  //   width: 100%;
+  //   padding: $padding 0;
+  //   border-top: 1px solid rgb(189,189,189);
+  //   font-family: "Lato", Helvetica, sans-serif;
+  //   font-size: $normal;
+  //
+  //   h4 {
+  //     margin: 0 0 5px 0;
+  //     text-transform: uppercase;
+  //     font-size: $xsmall;
+  //     color: $darkwhite;
+  //     font-weight: 100;
+  //   }
+  //
+  //   p {
+  //     margin-top: 0;
+  //     font-size: $large;
+  //   }
+  //
+  //   .material-icons {
+  //     font-size: $normal;
+  //     color: $darkwhite;
+  //     margin-right: 5px;
+  //   }
+  //
+  //   a {
+  //     font-size: $large;
+  //     color: $darkgrey;
+  //     border-bottom: 1px solid $red;
+  //     &:hover { border-bottom: 1px solid $darkgrey; }
+  //   }
+  // }
+  //
+  // .indent {
+  //   margin-left: 2*$header-inset;
+  // }
+// }
 
 .mo-controls {
   color: white;
@@ -220,7 +282,6 @@ $header-inset: 10px;
 }
 
 .source-text-container {
-  padding: 20px;
   display: flex;
   justify-content: center;
   box-sizing: border-box;
@@ -261,7 +322,7 @@ $header-inset: 10px;
 .source-image, .source-video {
   padding: 0px;
   font-family: 'Lato', Helvetica, sans-serif;
-  max-width: calc(#{$panel-width} - 100px);
+  // max-width: calc(#{$panel-width} - 100px);
   max-height: $panel-height;
   margin: auto;
   width: auto;

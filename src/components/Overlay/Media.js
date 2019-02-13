@@ -33,20 +33,20 @@ class SourceOverlay extends React.Component {
       return this.renderError()
     }
     const { url, title, paths, date, type, desc } = this.props.source
+    const shortenedTitle = this.props.source.title.substring(0, 100)
 
     return (
       <div className='mo-overlay' onClick={this.props.onCancel}>
-        <div className='mo-container' onClick={e => e.stopPropagation()}>
-          <div className='mo-header'>
-            <div className='mo-header-close' onClick={this.props.onCancel}>
-              <button className='side-menu-burg is-active'><span /></button>
-            </div>
-            <div className='mo-header-text'>{this.props.source.title.substring(0, 200)}</div>
+        <div className='mo-banner'>
+          <div className='mo-banner-close' onClick={this.props.onCancel}>
+            <i className='material-icons'>close</i>
           </div>
-          <div className='mo-media-container'>
-            <Content media={paths.map(selectTypeFromPath)} viewIdx={this.state.idx} />
-            <Controls paths={paths} viewIdx={this.state.idx} onShiftHandler={this.onShiftGallery} />
+
+          <div className='mo-banner-content'>
+            <h3>{shortenedTitle}</h3>
           </div>
+        </div>
+        <div className='mo-footer'>
           <div className='mo-meta-container'>
             <div className='mo-box-title'>
               {title ? <p><b>{title}</b></p> : null}
@@ -69,6 +69,14 @@ class SourceOverlay extends React.Component {
             </div>
           </div>
         </div>
+        <div className='mo-container' onClick={e => e.stopPropagation()}>
+          <div className='mo-media-container'>
+            <Content media={paths.map(selectTypeFromPath)} viewIdx={this.state.idx} />
+            <Controls paths={paths} viewIdx={this.state.idx} onShiftHandler={this.onShiftGallery} />
+          </div>
+
+        </div>
+
       </div>
     )
   }
