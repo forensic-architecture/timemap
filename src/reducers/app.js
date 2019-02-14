@@ -5,9 +5,8 @@ import { parseDate, toggleFlagAC } from '../js/utilities'
 import {
   UPDATE_HIGHLIGHTED,
   UPDATE_SELECTED,
-  CLEAR_TAGFILTERS,
-  TOGGLE_TAGFILTER,
-  UPDATE_CATEGORYFILTERS,
+  CLEAR_FILTER,
+  TOGGLE_FILTER,
   UPDATE_TIMERANGE,
   UPDATE_NARRATIVE,
   INCREMENT_NARRATIVE_CURRENT,
@@ -129,39 +128,22 @@ function clearTagFilters (appState) {
   }
 }
 
-function toggleTagFilter (appState, action) {
-  let newTags = appState.filters.tags.slice(0)
-  if (newTags.includes(action.tag)) {
-    newTags = newTags.filter(s => s !== action.tag)
+function toggleFilter (appState, action) {
+  let newTags = appState.filters[action.filter].slice(0)
+  if (newTags.includes(action.value)) {
+    newTags = newTags.filter(s => s !== action.value)
   } else {
-    newTags.push(action.tag)
+    newTags.push(action.value)
   }
   return {
     ...appState,
     filters: {
       ...appState.filters,
-      tags: newTags
+      [action.filter]: newTags
     }
   }
 }
 
-function updateCategoryFilters (appState, action) {
-  const categoryFilters = appState.filters.categories.slice(0)
-
-  const catFilter = categoryFilters.find(cF => cF.category === action.category.category)
-
-  if (!catFilter) {
-    categoryFilters.push(action.category)
-  } else {
-    catFilter.active = (!!action.category.active)
-  }
-
-  return Object.assign({}, appState, {
-    filters: Object.assign({}, appState.filters, {
-      categories: categoryFilters
-    })
-  })
-}
 
 function updateTimeRange (appState, action) { // XXX
   return {
@@ -232,12 +214,10 @@ function app (appState = initial.app, action) {
       return updateHighlighted(appState, action)
     case UPDATE_SELECTED:
       return updateSelected(appState, action)
-    case CLEAR_TAGFILTERS:
-      return clearTagFilters(appState)
-    case TOGGLE_TAGFILTER:
-      return toggleTagFilter(appState, action)
-    case UPDATE_CATEGORYFILTERS:
-      return updateCategoryFilters(appState, action)
+    case CLEAR_FILTER:
+      return clearFilter(appState, action)
+    case TOGGLE_FILTER:
+      return toggleFilter(appState, action)
     case UPDATE_TIMERANGE:
       return updateTimeRange(appState, action)
     case UPDATE_NARRATIVE:

@@ -7,8 +7,8 @@ import * as selectors from '../selectors'
 import { Tabs, TabPanel } from 'react-tabs'
 import Search from './Search.jsx'
 import TagListPanel from './TagListPanel'
-import CategoriesListPanel from './CategoriesListPanel.jsx'
-import ToolbarBottomActions from './ToolbarBottomActions.jsx'
+import CategoriesListPanel from './CategoriesListPanel'
+import ToolbarBottomActions from './ToolbarBottomActions'
 import copy from '../js/data/copy.json'
 import { trimAndEllipse } from '../js/utilities.js'
 
@@ -78,7 +78,7 @@ class Toolbar extends React.Component {
         <TabPanel>
           <CategoriesListPanel
             categories={this.props.categories}
-            categoryFilters={this.props.categoryFilters}
+            activeCategories={this.props.activeCategories}
             onCategoryFilter={this.props.methods.onCategoryFilter}
             language={this.props.language}
           />
@@ -94,7 +94,7 @@ class Toolbar extends React.Component {
         <TabPanel>
           <TagListPanel
             tags={this.props.tags}
-            tagFilters={this.props.tagFilters}
+            activeTags={this.props.activeTags}
             onTagFilter={this.props.methods.onTagFilter}
             language={this.props.language}
           />
@@ -199,8 +199,8 @@ function mapStateToProps (state) {
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
     language: state.app.language,
-    tagFilters: selectors.getTagsFilter(state),
-    categoryFilters: selectors.selectCategories(state),
+    activeTags: selectors.getActiveTags(state),
+    activeCategories: selectors.getActiveCategories(state),
     viewFilters: state.app.filters.views,
     features: state.app.features,
     narrative: state.app.narrative,

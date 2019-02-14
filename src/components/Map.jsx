@@ -203,7 +203,7 @@ class Map extends React.Component {
     return (
       <Events
         svg={this.svgRef.current}
-        locations={this.props.domain.visibleLocations}
+        locations={this.props.domain.locations}
         styleLocation={this.styleLocation}
         categories={this.props.domain.categories}
         projectPoint={this.projectPoint}
@@ -261,9 +261,9 @@ class Map extends React.Component {
 function mapStateToProps (state) {
   return {
     domain: {
-      visibleLocations: selectors.selectVisibleLocations(state),
+      locations: selectors.selectLocations(state),
       narratives: selectors.selectNarratives(state),
-      categories: selectors.selectCategories(state),
+      categories: selectors.getCategories(state),
       sites: selectors.getSites(state),
       shapes: selectors.getShapes(state)
     },

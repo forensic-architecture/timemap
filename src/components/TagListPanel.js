@@ -4,7 +4,7 @@ import copy from '../js/data/copy.json'
 
 function TagListPanel ({
   tags,
-  tagFilters,
+  activeTags,
   onTagFilter,
   language
 }) {
@@ -17,7 +17,7 @@ function TagListPanel ({
       >
         <Checkbox
           label={node.key}
-          isActive={tagFilters.includes(node.key)}
+          isActive={activeTags.includes(node.key)}
           onClickCheckbox={() => onTagFilter(node.key)}
         />
       </li>

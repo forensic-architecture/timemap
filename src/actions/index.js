@@ -171,26 +171,20 @@ export function updateDistrict (district) {
   }
 }
 
-export const CLEAR_TAGFILTERS = 'CLEAR_TAGFILTERS'
-export function clearTagFilters () {
+export const CLEAR_FILTER = 'CLEAR_FILTER'
+export function clearFilter (filter) {
   return {
-    type: CLEAR_TAGFILTERS
+    type: CLEAR_FILTER,
+    filter
   }
 }
 
-export const TOGGLE_TAGFILTER = 'TOGGLE_TAGFILTER'
-export function toggleTagFilter (tag) {
+export const TOGGLE_FILTER = 'TOGGLE_FILTER'
+export function toggleFilter (filter, value) {
   return {
-    type: TOGGLE_TAGFILTER,
-    tag
-  }
-}
-
-export const UPDATE_CATEGORYFILTERS = 'UPDATE_CATEGORYFILTERS'
-export function updateCategoryFilters (category) {
-  return {
-    type: UPDATE_CATEGORYFILTERS,
-    category
+    type: TOGGLE_FILTER,
+    filter,
+    value
   }
 }
 

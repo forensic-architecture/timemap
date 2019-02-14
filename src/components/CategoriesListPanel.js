@@ -2,16 +2,16 @@ import React from 'react'
 import Checkbox from './presentational/Checkbox'
 import copy from '../js/data/copy.json'
 
-export default (props) => {
-  function onClickCheckbox (obj, type) {
-    obj.active = !obj.active
-    props.onCategoryFilter(obj)
-  }
-
+export default ({
+  categories,
+  activeCategories,
+  onCategoryFilter,
+  language
+}) => {
   function renderCategoryTree () {
     return (
       <div>
-        {props.categories.map(cat => {
+        {categories.map(cat => {
           return (<li
             key={cat.category.replace(/ /g, '_')}
             className={'tag-filter active'}
@@ -19,8 +19,8 @@ export default (props) => {
           >
             <Checkbox
               label={cat.category}
-              isActive={cat.active}
-              onClickCheckbox={() => onClickCheckbox(cat, 'category')}
+              isActive={activeCategories.includes(cat.category)}
+              onClickCheckbox={() => onCategoryFilter(cat.category)}
             />
           </li>)
         })}
@@ -30,8 +30,8 @@ export default (props) => {
 
   return (
     <div className='react-innertabpanel'>
-      <h2>{copy[props.language].toolbar.categories}</h2>
-      <p>{copy[props.language].toolbar.explore_by_category__description}</p>
+      <h2>{copy[language].toolbar.categories}</h2>
+      <p>{copy[language].toolbar.explore_by_category__description}</p>
       {renderCategoryTree()}
     </div>
   )
