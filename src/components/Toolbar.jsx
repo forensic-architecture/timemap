@@ -124,7 +124,7 @@ class Toolbar extends React.Component {
         <Tabs selectedIndex={this.state._selected}>
           {this.renderToolbarNarrativePanel()}
           {this.renderToolbarCategoriesPanel()}
-          {this.renderToolbarTagPanel()}}
+          {this.renderToolbarTagPanel()}
         </Tabs>
       </div>
     )
