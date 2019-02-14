@@ -5,8 +5,8 @@ import { parseDate, toggleFlagAC } from '../js/utilities'
 import {
   UPDATE_HIGHLIGHTED,
   UPDATE_SELECTED,
-  UPDATE_TAGFILTERS,
-  UPDATE_CATEGORYFILTERS,
+  CLEAR_FILTER,
+  TOGGLE_FILTER,
   UPDATE_TIMERANGE,
   UPDATE_NARRATIVE,
   INCREMENT_NARRATIVE_CURRENT,
@@ -118,45 +118,40 @@ function decrementNarrativeCurrent (appState, action) {
   }
 }
 
-function updateTagFilters (appState, action) {
-  const tagFilters = appState.filters.tags.slice(0)
-  const nextActiveState = action.tag.active
-
-  function traverseNode (node) {
-    const tagFilter = tagFilters.find(tF => tF.key === node.key)
-    node.active = nextActiveState
-    if (!tagFilter) tagFilters.push(node)
-
-    if (node && Object.keys(node.children).length > 0) {
-      Object.values(node.children).forEach((childNode) => { traverseNode(childNode) })
+function clearTagFilters (appState) {
+  return {
+    ...appState,
+    filters: {
+      ...appState.filters,
+      tags: []
     }
   }
-
-  traverseNode(action.tag)
-
-  return Object.assign({}, appState, {
-    filters: Object.assign({}, appState.filters, {
-      tags: tagFilters
-    })
-  })
 }
 
-function updateCategoryFilters (appState, action) {
-  const categoryFilters = appState.filters.categories.slice(0)
-
-  const catFilter = categoryFilters.find(cF => cF.category === action.category.category)
-
-  if (!catFilter) {
-    categoryFilters.push(action.category)
+function toggleFilter (appState, action) {
+  let newTags = appState.filters[action.filter].slice(0)
+  if (newTags.includes(action.value)) {
+    newTags = newTags.filter(s => s !== action.value)
   } else {
-    catFilter.active = (!!action.category.active)
+    newTags.push(action.value)
   }
+  return {
+    ...appState,
+    filters: {
+      ...appState.filters,
+      [action.filter]: newTags
+    }
+  }
+}
 
-  return Object.assign({}, appState, {
-    filters: Object.assign({}, appState.filters, {
-      categories: categoryFilters
-    })
-  })
+function clearFilter (appState, action) {
+  return {
+    ...appState,
+    filters: {
+      ...appState.filters,
+      [action.filter]: []
+    }
+  }
 }
 
 function updateTimeRange (appState, action) { // XXX
@@ -167,20 +162,6 @@ function updateTimeRange (appState, action) { // XXX
       range: action.timerange
     }
   }
-}
-
-function resetAllFilters (appState) { // XXX
-  return Object.assign({}, appState, {
-    filters: Object.assign({}, appState.filters, {
-      tags: [],
-      categories: [],
-      timerange: [
-        d3.timeParse('%Y-%m-%dT%H:%M:%S')('2014-09-25T12:00:00'),
-        d3.timeParse('%Y-%m-%dT%H:%M:%S')('2014-09-28T12:00:00')
-      ]
-    }),
-    selected: []
-  })
 }
 
 function toggleLanguage (appState, action) {
@@ -228,10 +209,10 @@ function app (appState = initial.app, action) {
       return updateHighlighted(appState, action)
     case UPDATE_SELECTED:
       return updateSelected(appState, action)
-    case UPDATE_TAGFILTERS:
-      return updateTagFilters(appState, action)
-    case UPDATE_CATEGORYFILTERS:
-      return updateCategoryFilters(appState, action)
+    case CLEAR_FILTER:
+      return clearFilter(appState, action)
+    case TOGGLE_FILTER:
+      return toggleFilter(appState, action)
     case UPDATE_TIMERANGE:
       return updateTimeRange(appState, action)
     case UPDATE_NARRATIVE:

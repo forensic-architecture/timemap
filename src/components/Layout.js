@@ -7,7 +7,7 @@ import * as actions from '../actions'
 import MediaOverlay from './Overlay/Media'
 import LoadingOverlay from './Overlay/Loading'
 import Map from './Map.jsx'
-import Toolbar from './Toolbar.jsx'
+import Toolbar from './Toolbar/Layout'
 import CardStack from './CardStack.jsx'
 import NarrativeControls from './presentational/Narrative/Controls.js'
 import InfoPopUp from './InfoPopup.jsx'
@@ -76,7 +76,11 @@ class Dashboard extends React.Component {
 
   setNarrative (narrative) {
     // only handleSelect if narrative is not null
-    if (narrative) { this.handleSelect([ narrative.steps[0] ]) }
+    if (narrative) {
+      this.props.actions.clearFilter('tags')
+      this.props.actions.clearFilter('categories')
+      this.handleSelect([ narrative.steps[0] ])
+    }
     this.props.actions.updateNarrative(narrative)
   }
 
@@ -120,8 +124,8 @@ class Dashboard extends React.Component {
         <Toolbar
           isNarrative={!!app.narrative}
           methods={{
-            onTagFilter: actions.updateTagFilters,
-            onCategoryFilter: actions.updateCategoryFilters,
+            onTagFilter: tag => actions.toggleFilter('tags', tag),
+            onCategoryFilter: category => actions.toggleFilter('categories', category),
             onSelectNarrative: this.setNarrative
           }}
         />

@@ -349,7 +349,7 @@ function mapStateToProps (state) {
     isNarrative: !!state.app.narrative,
     domain: {
       datetimes: selectors.selectDatetimes(state),
-      categories: selectors.selectCategories(state),
+      categories: selectors.getCategories(state),
       narratives: state.domain.narratives
     },
     app: {

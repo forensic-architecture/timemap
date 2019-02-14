@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
-import { parseTimestamp, compareTimestamp, insetSourceFrom } from '../js/utilities'
+import { compareTimestamp, insetSourceFrom } from '../js/utilities'
+import { isTaggedIn, isNoTags, isTaggedInWithCategory, isNoCategories, isTimeRangedIn } from './helpers'
 
 // Input selectors
 export const getEvents = state => state.domain.events
@@ -22,91 +23,28 @@ export const getShapes = state => {
 }
 export const getNotifications = state => state.domain.notifications
 export const getTagTree = state => state.domain.tags
-export const getTagsFilter = state => state.app.filters.tags
-export const getCategoriesFilter = state => state.app.filters.categories
+export const getActiveTags = state => state.app.filters.tags
+export const getActiveCategories = state => state.app.filters.categories
 export const getTimeRange = state => state.app.timeline.range
+export const selectNarrative = state => state.app.narrative
 
 /**
-* Some handy helpers
-*/
-
-/**
- * Given an event and all tags,
- * returns true/false if event has any tag that is active
- */
-function isTaggedIn (event, tagFilters) {
-  if (event.tags) {
-    const isTagged = event.tags.some((tag) => {
-      return tagFilters.find(tF => (tF.key === tag && tF.active))
-    })
-    return isTagged
-  } else {
-    return false
-  }
-}
-
-/**
- * Given an event and all categories,
- * returns true/false if event has a category that is active
- */
-function isTaggedInWithCategory (event, categories) {
-  if (event.category) {
-    if (categories.find(c => (c.category === event.category && c.active))) return true
-    return false
-  } else {
-    return false
-  }
-}
-
-/*
-* Returns true if no tags are selected
-*/
-function isNoTags (tagFilters) {
-  return (
-    tagFilters.length === 0 ||
-    !process.env.features.USE_TAGS ||
-    tagFilters.every(t => !t.active)
-  )
-}
-
-/*
-* Returns true if no categories are selected
-*/
-function isNoCategories (categories) {
-  return (
-    categories.length === 0 ||
-    !process.env.features.CATEGORIES_AS_TAGS ||
-    categories.every(c => !c.active)
-  )
-}
-
-/**
- * Given an event and a time range,
- * returns true/false if the event falls within timeRange
- */
-function isTimeRangedIn (event, timeRange) {
-  const eventTime = parseTimestamp(event.timestamp)
-  return (
-    timeRange[0] < eventTime &&
-    eventTime < timeRange[1]
-  )
-}
-
-/**
- * Of all available events, selects those that fall within the time range,
- * and if TAGS are being used, select them if their tags are enabled
+ * Of all available events, selects those that
+ * 1. fall in time range
+ * 2. exist in an active tag
+ * 3. exist in an active category
  */
 export const selectEvents = createSelector(
-  [getEvents, getTagsFilter, getCategoriesFilter, getTimeRange],
-  (events, tagFilters, categories, timeRange) => {
+  [getEvents, getActiveTags, getActiveCategories, getTimeRange],
+  (events, activeTags, activeCategories, timeRange) => {
     return events.reduce((acc, event) => {
-      const isTagged = isTaggedIn(event, tagFilters) || isNoTags(tagFilters)
-      const isTaggedWithCategory = isTaggedInWithCategory(event, categories) || isNoCategories(categories)
-      const isTimeRanged = isTimeRangedIn(event, timeRange)
+      const isMatchingTag = event.tags.map(tag => activeTags.includes(tag)).some(s => s)
+      const isActiveTag = isMatchingTag || activeTags.length === 0
+      const isActiveCategory = activeCategories.includes(event.category) || activeCategories.length === 0
+      const isActiveTime = isTimeRangedIn(event, timeRange)
 
-      if (isTimeRanged && isTagged && isTaggedWithCategory) {
-        const eventClone = Object.assign({}, event)
-        acc[event.id] = eventClone
+      if (isActiveTime && isActiveTag && isActiveCategory) {
+        acc[event.id] = { ...event }
       }
 
       return acc
@@ -180,14 +118,14 @@ export const selectActiveNarrative = createSelector(
 export const selectLocations = createSelector(
   [selectEvents],
   (events) => {
-    const selectedLocations = {}
+    const activeLocations = {}
     events.forEach(event => {
       const location = event.location
 
-      if (selectedLocations[location]) {
-        selectedLocations[location].events.push(event)
+      if (activeLocations[location]) {
+        activeLocations[location].events.push(event)
       } else {
-        selectedLocations[location] = {
+        activeLocations[location] = {
           label: location,
           events: [event],
           latitude: event.latitude,
@@ -195,7 +133,8 @@ export const selectLocations = createSelector(
         }
       }
     })
-    return Object.values(selectedLocations)
+
+    return Object.values(activeLocations)
   }
 )
 
@@ -240,46 +179,5 @@ export const selectSelected = createSelector(
     }
 
     return selected.map(insetSourceFrom(sources))
-  }
-)
-
-/*
-* Select categories, return them as a list
-*/
-export const selectCategories = createSelector(
-  [getCategories],
-  (categories) => {
-    categories.map(cat => {
-      cat.active = (!cat.hasOwnProperty('active')) ? false : cat.active
-    })
-    return categories
-  }
-)
-
-/**
- * Given a tree of tags, return those tags as a list
- * Each node has been aware of its depth, and given an 'active' flag
- */
-export const selectTagList = createSelector(
-  [getTagTree],
-  (tags) => {
-    const tagList = []
-    let depth = 0
-    function traverseNode (node, depth) {
-      node.active = (!node.hasOwnProperty('active')) ? false : node.active
-      node.depth = depth
-
-      if (node.active) tagList.push(node)
-
-      if (Object.keys(node.children).length > 0) {
-        Object.values(node.children).forEach((childNode) => {
-          traverseNode(childNode, depth + 1)
-        })
-      }
-    }
-    if (tags && tags !== undefined) {
-      if (tags.key && tags.children) traverseNode(tags, depth)
-    }
-    return tagList
   }
 )

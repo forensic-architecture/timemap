@@ -171,19 +171,20 @@ export function updateDistrict (district) {
   }
 }
 
-export const UPDATE_TAGFILTERS = 'UPDATE_TAGFILTERS'
-export function updateTagFilters (tag) {
+export const CLEAR_FILTER = 'CLEAR_FILTER'
+export function clearFilter (filter) {
   return {
-    type: UPDATE_TAGFILTERS,
-    tag
+    type: CLEAR_FILTER,
+    filter
   }
 }
 
-export const UPDATE_CATEGORYFILTERS = 'UPDATE_CATEGORYFILTERS'
-export function updateCategoryFilters (category) {
+export const TOGGLE_FILTER = 'TOGGLE_FILTER'
+export function toggleFilter (filter, value) {
   return {
-    type: UPDATE_CATEGORYFILTERS,
-    category
+    type: TOGGLE_FILTER,
+    filter,
+    value
   }
 }
 
@@ -214,13 +215,6 @@ export const DECREMENT_NARRATIVE_CURRENT = 'DECREMENT_NARRATIVE_CURRENT'
 export function decrementNarrativeCurrent () {
   return {
     type: DECREMENT_NARRATIVE_CURRENT
-  }
-}
-
-export const RESET_ALLFILTERS = 'RESET_ALLFILTERS'
-export function resetAllFilters () {
-  return {
-    type: RESET_ALLFILTERS
   }
 }
 

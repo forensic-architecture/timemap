@@ -245,7 +245,7 @@ class Map extends React.Component {
         {this.renderShapes()}
         {this.renderNarratives()}
         {this.renderEvents()}
-        {this.renderSelected()}        
+        {this.renderSelected()}
       </React.Fragment>
     ) : null
 
@@ -263,7 +263,7 @@ function mapStateToProps (state) {
     domain: {
       locations: selectors.selectLocations(state),
       narratives: selectors.selectNarratives(state),
-      categories: selectors.selectCategories(state),
+      categories: selectors.getCategories(state),
       sites: selectors.getSites(state),
       shapes: selectors.getShapes(state)
     },
