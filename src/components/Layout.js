@@ -76,7 +76,11 @@ class Dashboard extends React.Component {
 
   setNarrative (narrative) {
     // only handleSelect if narrative is not null
-    if (narrative) { this.handleSelect([ narrative.steps[0] ]) }
+    if (narrative) {
+      this.props.actions.clearFilter('tags')
+      this.props.actions.clearFilter('categories')
+      this.handleSelect([ narrative.steps[0] ])
+    }
     this.props.actions.updateNarrative(narrative)
   }
 

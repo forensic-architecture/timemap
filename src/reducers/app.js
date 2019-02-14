@@ -144,6 +144,15 @@ function toggleFilter (appState, action) {
   }
 }
 
+function clearFilter (appState, action) {
+  return {
+    ...appState,
+    filters: {
+      ...appState.filters,
+      [action.filter]: []
+    }
+  }
+}
 
 function updateTimeRange (appState, action) { // XXX
   return {
