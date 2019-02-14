@@ -34,28 +34,7 @@ $banner-height: 100px;
   max-width: 90vw;
   box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
 
-  .back, .next {
-    width: 30px;
-    max-width: 30px;
-    max-height: 30px;
-    height: 30px;
-    background: $darkgrey;
-    color: $offwhite;
-    cursor: pointer;
-    box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
-    svg path { fill: $offwhite; }
-    z-index: 1;
-  }
 
-  .back {
-    left: 10px;
-    svg path { transform: translate(17px,15px)rotate(-90deg)}
-  }
-  .next {
-    margin-left: calc(100% - 60px);
-    right: 10px;
-    svg path { transform: translate(17px,15px)rotate(90deg)}
-  }
 }
 
 $overlay-bg: rgba(239,239,239,0.9);
@@ -109,40 +88,46 @@ $overlay-bg: rgba(239,239,239,0.9);
   }
 }
 
-
-
-// .mo-header {
-//   min-height: 42px;
-//   max-height: 42px;
-//   width: 100%;
-//   display: flex;
-//   flex-direction: row;
-//   background-color: black;
-//   color: white;
-//
-//   .mo-header-close {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     margin-left: $header-inset + 8px;
-//   }
-//
-//   .mo-header-text {
-//     flex: 1;
-//     display: flex;
-//     align-items: center;
-//     justify-content: flex-end;
-//     padding-right: $padding;
-//     font-family: "Lato", Helvetica, sans-serif;
-//   }
-// }
-
 .media-gallery-controls {
   height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: -50%;
+
+  .back, .next {
+    position: fixed;
+    bottom: 0;
+    height: 170px;
+    background: transparent;
+    color: $offwhite;
+    cursor: pointer;
+    box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+    svg path { fill: $offwhite; }
+    z-index: 1;
+  }
+
+  .centerer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .material-icons {
+    font-size: 40pt;
+  }
+
+  .back {
+    left: 10px;
+    svg path { transform: translate(17px,15px)rotate(-90deg)}
+  }
+  .next {
+    margin-left: calc(100% - 60px);
+    right: 10px;
+    svg path { transform: translate(17px,15px)rotate(90deg)}
+  }
 }
 
 .mo-media-container {
@@ -234,17 +219,6 @@ $overlay-bg: rgba(239,239,239,0.9);
     margin-left: 2*$header-inset;
   }
 }
-
-.mo-controls {
-  color: white;
-  width: $vimeo-width;
-  background-color: black;
-}
-
-.media-controls {
-  padding: 0 50px;
-}
-
 
 /* source overlay specific styles */
 .no-source-container {

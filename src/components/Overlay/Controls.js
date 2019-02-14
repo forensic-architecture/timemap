@@ -6,9 +6,9 @@ export default ({ viewIdx, paths, onShiftHandler }) => {
       className='back'
       onClick={() => onShiftHandler(-1)}
     >
-      <svg>
-        <path d='M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z' />
-      </svg>
+      <div className='centerer'>
+        <i className='material-icons'>arrow_left</i>
+      </div>
     </div>
   ) : null
   const forwardArrow = viewIdx < paths.length - 1 ? (
@@ -16,9 +16,9 @@ export default ({ viewIdx, paths, onShiftHandler }) => {
       className='next'
       onClick={() => onShiftHandler(1)}
     >
-      <svg>
-        <path d='M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z' />
-      </svg>
+      <div className='centerer'>
+        <i className='material-icons'>arrow_right</i>
+      </div>
     </div>
   ) : null
 

@@ -32,11 +32,11 @@ class SourceOverlay extends React.Component {
     if (typeof (this.props.source) !== 'object') {
       return this.renderError()
     }
-    const { url, title, paths, date, type, desc } = this.props.source
-    const shortenedTitle = this.props.source.title.substring(0, 100)
+    const { url, title, paths, date, type } = this.props.source
+    const shortenedTitle = title.substring(0, 100)
 
     return (
-      <div className='mo-overlay' onClick={this.props.onCancel}>
+      <div className='mo-overlay'>
         <div className='mo-banner'>
           <div className='mo-banner-close' onClick={this.props.onCancel}>
             <i className='material-icons'>close</i>
