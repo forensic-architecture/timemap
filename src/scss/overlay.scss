@@ -6,42 +6,117 @@ $vimeo-height: $panel-height / 2;
 $padding: 20px;
 $header-inset: 10px;
 
+$banner-height: 100px;
+
 .mo-overlay {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  // justify-content: center;
   align-items: center;
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(239, 239, 239, 0.5);
+  background-color: rgba(0,0,0, 0.85);
   z-index: 20;
 }
 
 .mo-container {
-  background-color: rgba(239, 239, 239, 0.9);
+  margin-top: $banner-height;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: $panel-height;
-  max-height: calc(100% - 40px);
+  height: calc(100vh - 350px);
+  max-height: calc(100vh - 350px);
   width: $panel-width;
   max-width: 90vw;
   box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
 
+
+}
+
+$overlay-bg: rgba(239,239,239,0.9);
+
+.mo-banner {
+  position: fixed;
+  min-height: 100px;
+  background-color: transparent;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-direction: row;
+
+  .mo-banner-close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: $banner-height;
+    .material-icons {
+      font-size: 40pt;
+      background-color: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.3s all ease;
+      color: $overlay-bg;
+
+      &:hover {
+        text-decoration: none;
+        cursor: pointer;
+        color: white;
+      }
+    }
+  }
+
+  .mo-banner-content {
+    flex: 11;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    h3 {
+      border-radius: 2px;
+      padding: 10px 15px;
+      background-color: transparent;
+      color: $overlay-bg;
+      margin-left: -$banner-height;
+    }
+  }
+}
+
+.media-gallery-controls {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -50%;
+
   .back, .next {
-    width: 30px;
-    max-width: 30px;
-    max-height: 30px;
-    height: 30px;
-    background: $darkgrey;
+    position: fixed;
+    bottom: 0;
+    height: 170px;
+    background: transparent;
     color: $offwhite;
     cursor: pointer;
     box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
     svg path { fill: $offwhite; }
     z-index: 1;
+  }
+
+  .centerer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .material-icons {
+    font-size: 40pt;
   }
 
   .back {
@@ -55,32 +130,6 @@ $header-inset: 10px;
   }
 }
 
-.mo-header {
-  min-height: 42px;
-  max-height: 42px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  background-color: black;
-  color: white;
-
-  .mo-header-close {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: $header-inset + 8px;
-  }
-
-  .mo-header-text {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: $padding;
-    font-family: "Lato", Helvetica, sans-serif;
-  }
-}
-
 .mo-media-container {
   flex: 1;
   flex-direction: row;
@@ -90,25 +139,11 @@ $header-inset: 10px;
   box-sizing: border-box;
   width: 100%;
   max-height: calc(#{$panel-height} - 100px);
-  padding: 20px;
   font-family: "Lato", Helvetica, sans-serif;
-
-  .media-player {
-    width: 100%;
-    max-width: $vimeo-width;
-  }
 
   .media-content {
     display: flex;
     flex-direction: column;
-  }
-
-  .media-gallery-controls {
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: -50%;
   }
 
   // NB: topcushion seems to be necessary with certain overflows..
@@ -117,14 +152,25 @@ $header-inset: 10px;
   }
 }
 
+
+.mo-footer {
+  position: fixed;
+  height: 250px;
+  background-color: transparent;
+  width: 100%;
+  opacity: 0.9;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+}
+
 .mo-meta-container {
+  color: $overlay-bg;
   display: flex;
   flex-direction: column;
   justify-content: center;
   box-sizing: border-box;
   min-height: 100px;
-  width: 100%;
-  // padding: $padding;
 
   .mo-box-title {
     display: flex;
@@ -137,8 +183,7 @@ $header-inset: 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    max-width: $panel-width;
-    width: 100%;
+    width: $panel-width;
     padding: $padding 0;
     border-top: 1px solid rgb(189,189,189);
     font-family: "Lato", Helvetica, sans-serif;
@@ -165,9 +210,8 @@ $header-inset: 10px;
 
     a {
       font-size: $large;
-      color: $darkgrey;
-      border-bottom: 1px solid $red;
-      &:hover { border-bottom: 1px solid $darkgrey; }
+      color: $yellow;
+      border-bottom: 1px solid $yellow;
     }
   }
 
@@ -175,17 +219,6 @@ $header-inset: 10px;
     margin-left: 2*$header-inset;
   }
 }
-
-.mo-controls {
-  color: white;
-  width: $vimeo-width;
-  background-color: black;
-}
-
-.media-controls {
-  padding: 0 50px;
-}
-
 
 /* source overlay specific styles */
 .no-source-container {
@@ -220,7 +253,6 @@ $header-inset: 10px;
 }
 
 .source-text-container {
-  padding: 20px;
   display: flex;
   justify-content: center;
   box-sizing: border-box;
@@ -230,10 +262,11 @@ $header-inset: 10px;
   line-height: 1.5em;
   min-width: 100%;
 
+  color: $overlay-bg;
+
   a {
-    color: $darkgrey;
-    border-bottom: 1px solid $red;
-    &:hover { border-bottom: 1px solid $darkgrey; color: $darkgrey; }
+    color: $yellow;
+    border-bottom: 1px solid $yellow;
   }
 
   .md-container {
@@ -261,7 +294,7 @@ $header-inset: 10px;
 .source-image, .source-video {
   padding: 0px;
   font-family: 'Lato', Helvetica, sans-serif;
-  max-width: calc(#{$panel-width} - 100px);
+  // max-width: calc(#{$panel-width} - 100px);
   max-height: $panel-height;
   margin: auto;
   width: auto;

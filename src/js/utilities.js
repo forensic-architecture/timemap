@@ -136,3 +136,18 @@ export function toggleFlagAC (flag) {
     }
   })
 }
+
+export function selectTypeFromPath (path) {
+  let type
+  switch (true) {
+    case /\.(png|jpg)$/.test(path):
+      type = 'Image'; break
+    case /\.(mp4)$/.test(path):
+      type = 'Video'; break
+    case /\.(md)$/.test(path):
+      type = 'Text'; break
+    default:
+      type = 'Unknown'; break
+  }
+  return { type, path }
+}
