@@ -5,7 +5,8 @@ import { parseDate, toggleFlagAC } from '../js/utilities'
 import {
   UPDATE_HIGHLIGHTED,
   UPDATE_SELECTED,
-  UPDATE_TAGFILTERS,
+  CLEAR_TAGFILTERS,
+  TOGGLE_TAGFILTER,
   UPDATE_CATEGORYFILTERS,
   UPDATE_TIMERANGE,
   UPDATE_NARRATIVE,
@@ -118,27 +119,30 @@ function decrementNarrativeCurrent (appState, action) {
   }
 }
 
-function updateTagFilters (appState, action) {
-  const tagFilters = appState.filters.tags.slice(0)
-  const nextActiveState = action.tag.active
-
-  function traverseNode (node) {
-    const tagFilter = tagFilters.find(tF => tF.key === node.key)
-    node.active = nextActiveState
-    if (!tagFilter) tagFilters.push(node)
-
-    if (node && Object.keys(node.children).length > 0) {
-      Object.values(node.children).forEach((childNode) => { traverseNode(childNode) })
+function clearTagFilters (appState) {
+  return {
+    ...appState,
+    filters: {
+      ...appState.filters,
+      tags: []
     }
   }
+}
 
-  traverseNode(action.tag)
-
-  return Object.assign({}, appState, {
-    filters: Object.assign({}, appState.filters, {
-      tags: tagFilters
-    })
-  })
+function toggleTagFilter (appState, action) {
+  let newTags = appState.filters.tags.slice(0)
+  if (newTags.includes(action.tag)) {
+    newTags = newTags.filter(s => s !== action.tag)
+  } else {
+    newTags.push(action.tag)
+  }
+  return {
+    ...appState,
+    filters: {
+      ...appState.filters,
+      tags: newTags
+    }
+  }
 }
 
 function updateCategoryFilters (appState, action) {
@@ -228,8 +232,10 @@ function app (appState = initial.app, action) {
       return updateHighlighted(appState, action)
     case UPDATE_SELECTED:
       return updateSelected(appState, action)
-    case UPDATE_TAGFILTERS:
-      return updateTagFilters(appState, action)
+    case CLEAR_TAGFILTERS:
+      return clearTagFilters(appState)
+    case TOGGLE_TAGFILTER:
+      return toggleTagFilter(appState, action)
     case UPDATE_CATEGORYFILTERS:
       return updateCategoryFilters(appState, action)
     case UPDATE_TIMERANGE:

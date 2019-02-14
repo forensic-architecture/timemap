@@ -25,6 +25,7 @@ export const getTagTree = state => state.domain.tags
 export const getTagsFilter = state => state.app.filters.tags
 export const getCategoriesFilter = state => state.app.filters.categories
 export const getTimeRange = state => state.app.timeline.range
+export const selectNarrative = state => state.app.narrative
 
 /**
 * Some handy helpers
@@ -180,14 +181,14 @@ export const selectActiveNarrative = createSelector(
 export const selectLocations = createSelector(
   [selectEvents],
   (events) => {
-    const selectedLocations = {}
+    const activeLocations = {}
     events.forEach(event => {
       const location = event.location
 
-      if (selectedLocations[location]) {
-        selectedLocations[location].events.push(event)
+      if (activeLocations[location]) {
+        activeLocations[location].events.push(event)
       } else {
-        selectedLocations[location] = {
+        activeLocations[location] = {
           label: location,
           events: [event],
           latitude: event.latitude,
@@ -195,7 +196,30 @@ export const selectLocations = createSelector(
         }
       }
     })
-    return Object.values(selectedLocations)
+
+    return Object.values(activeLocations)
+  }
+)
+
+export const selectVisibleLocations = createSelector(
+  [selectLocations, getTagsFilter, selectNarrative],
+  (locations, filters, narrative) => {
+    if (filters.length === 0) {
+      return locations
+    }
+
+    return locations.map(loc => {
+      loc.events = loc.events.filter(ev => {
+        let isShowing = false
+        ev.tags.forEach(tag => {
+          if (filters.includes(tag)) {
+            isShowing = true
+          }
+        })
+        return isShowing
+      })
+      return loc
+    })
   }
 )
 
@@ -260,26 +284,26 @@ export const selectCategories = createSelector(
  * Given a tree of tags, return those tags as a list
  * Each node has been aware of its depth, and given an 'active' flag
  */
-export const selectTagList = createSelector(
-  [getTagTree],
-  (tags) => {
-    const tagList = []
-    let depth = 0
-    function traverseNode (node, depth) {
-      node.active = (!node.hasOwnProperty('active')) ? false : node.active
-      node.depth = depth
-
-      if (node.active) tagList.push(node)
-
-      if (Object.keys(node.children).length > 0) {
-        Object.values(node.children).forEach((childNode) => {
-          traverseNode(childNode, depth + 1)
-        })
-      }
-    }
-    if (tags && tags !== undefined) {
-      if (tags.key && tags.children) traverseNode(tags, depth)
-    }
-    return tagList
-  }
-)
+// export const selectTagList = createSelector(
+//   [getTagTree],
+//   (tags) => {
+//     const tagList = []
+//     let depth = 0
+//     function traverseNode (node, depth) {
+//       node.active = (!node.hasOwnProperty('active')) ? false : node.active
+//       node.depth = depth
+//
+//       if (node.active) tagList.push(node)
+//
+//       if (Object.keys(node.children).length > 0) {
+//         Object.values(node.children).forEach((childNode) => {
+//           traverseNode(childNode, depth + 1)
+//         })
+//       }
+//     }
+//     if (tags && tags !== undefined) {
+//       if (tags.key && tags.children) traverseNode(tags, depth)
+//     }
+//     return tagList
+//   }
+// )

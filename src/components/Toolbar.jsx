@@ -6,7 +6,7 @@ import * as selectors from '../selectors'
 
 import { Tabs, TabPanel } from 'react-tabs'
 import Search from './Search.jsx'
-import TagListPanel from './TagListPanel.jsx'
+import TagListPanel from './TagListPanel'
 import CategoriesListPanel from './CategoriesListPanel.jsx'
 import ToolbarBottomActions from './ToolbarBottomActions.jsx'
 import copy from '../js/data/copy.json'
@@ -199,7 +199,7 @@ function mapStateToProps (state) {
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
     language: state.app.language,
-    tagFilters: selectors.selectTagList(state),
+    tagFilters: selectors.getTagsFilter(state),
     categoryFilters: selectors.selectCategories(state),
     viewFilters: state.app.filters.views,
     features: state.app.features,

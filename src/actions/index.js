@@ -171,10 +171,17 @@ export function updateDistrict (district) {
   }
 }
 
-export const UPDATE_TAGFILTERS = 'UPDATE_TAGFILTERS'
-export function updateTagFilters (tag) {
+export const CLEAR_TAGFILTERS = 'CLEAR_TAGFILTERS'
+export function clearTagFilters () {
   return {
-    type: UPDATE_TAGFILTERS,
+    type: CLEAR_TAGFILTERS
+  }
+}
+
+export const TOGGLE_TAGFILTER = 'TOGGLE_TAGFILTER'
+export function toggleTagFilter (tag) {
+  return {
+    type: TOGGLE_TAGFILTER,
     tag
   }
 }

@@ -1,7 +1,7 @@
 /* global fetch */
 import React from 'react'
 import copy from '../js/data/copy.json'
-import TagFilter from './TagFilter.jsx'
+import TagFilter from './TagFilter'
 
 export default class Search extends React.Component {
   constructor (props) {

@@ -80,6 +80,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
     const { x, y } = projectPoint([location.latitude, location.longitude])
 
     // in narrative mode, only render events in narrative
+    // TODO: move this to a selector
     if (narrative) {
       const { steps } = narrative
       const onlyIfInNarrative = e => steps.map(s => s.id).includes(e.id)
