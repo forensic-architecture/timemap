@@ -1,10 +1,10 @@
 import React from 'react'
 
-import SitesIcon from './presentational/Icons/Sites'
-import CoverIcon from './presentational/Icons/Cover'
-import InfoIcon from './presentational/Icons/Info'
+import SitesIcon from '../presentational/Icons/Sites'
+import CoverIcon from '../presentational/Icons/Cover'
+import InfoIcon from '../presentational/Icons/Info'
 
-function ToolbarBottomActions (props) {
+function BottomActions (props) {
   function renderToggles () {
     return [
       <div className='bottom-action-block'>
@@ -34,4 +34,4 @@ function ToolbarBottomActions (props) {
   )
 }
 
-export default ToolbarBottomActions
+export default BottomActions

@@ -1,16 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as actions from '../actions'
-import * as selectors from '../selectors'
+import * as actions from '../../actions'
+import * as selectors from '../../selectors'
 
 import { Tabs, TabPanel } from 'react-tabs'
-import Search from './Search.jsx'
+import Search from './Search'
 import TagListPanel from './TagListPanel'
 import CategoriesListPanel from './CategoriesListPanel'
-import ToolbarBottomActions from './ToolbarBottomActions'
-import copy from '../js/data/copy.json'
-import { trimAndEllipse } from '../js/utilities.js'
+import BottomActions from './BottomActions'
+import copy from '../../js/data/copy.json'
+import { trimAndEllipse } from '../../js/utilities.js'
 
 class Toolbar extends React.Component {
   constructor (props) {
@@ -164,7 +164,7 @@ class Toolbar extends React.Component {
           {(isCategories) ? this.renderToolbarTab(1, categoriesLabel, 'widgets') : null}
           {(isTags) ? this.renderToolbarTab(2, tagsLabel, 'filter_list') : null}
         </div>
-        <ToolbarBottomActions
+        <BottomActions
           info={{
             enabled: this.props.infoShowing,
             toggle: this.props.actions.toggleInfoPopup

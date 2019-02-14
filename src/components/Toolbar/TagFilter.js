@@ -1,5 +1,5 @@
 import React from 'react'
-import Checkbox from './presentational/Checkbox'
+import Checkbox from '../presentational/Checkbox'
 
 function TagFilter (props) {
   function isActive () {
