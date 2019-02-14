@@ -218,13 +218,6 @@ export function decrementNarrativeCurrent () {
   }
 }
 
-export const RESET_ALLFILTERS = 'RESET_ALLFILTERS'
-export function resetAllFilters () {
-  return {
-    type: RESET_ALLFILTERS
-  }
-}
-
 export const UPDATE_SOURCE = 'UPDATE_SOURCE'
 export function updateSource (source) {
   return {

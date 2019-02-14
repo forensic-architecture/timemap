@@ -164,20 +164,6 @@ function updateTimeRange (appState, action) { // XXX
   }
 }
 
-function resetAllFilters (appState) { // XXX
-  return Object.assign({}, appState, {
-    filters: Object.assign({}, appState.filters, {
-      tags: [],
-      categories: [],
-      timerange: [
-        d3.timeParse('%Y-%m-%dT%H:%M:%S')('2014-09-25T12:00:00'),
-        d3.timeParse('%Y-%m-%dT%H:%M:%S')('2014-09-28T12:00:00')
-      ]
-    }),
-    selected: []
-  })
-}
-
 function toggleLanguage (appState, action) {
   let otherLanguage = (appState.language === 'es-MX') ? 'en-US' : 'es-MX'
   return Object.assign({}, appState, {
