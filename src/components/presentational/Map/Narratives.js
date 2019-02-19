@@ -3,6 +3,13 @@ import { Portal } from 'react-portal'
 // import { concatStatic } from 'rxjs/operator/concat'
 // import { single } from 'rxjs/operator/single'
 
+const defaultStyles = {
+  strokeOpacity: 1,
+  strokeWidth: 0,
+  strokeDasharray: 'none',
+  stroke: 'none'
+}
+
 function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives, projectPoint }) {
   function getNarrativeStyle (narrativeId) {
     const styleName = (narrativeId && narrativeId in styles)
@@ -11,54 +18,8 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
     return styles[styleName]
   }
 
-  function getStepStyle (name) {
-    if (name === 'None') return null
-    return styles.stepStyles[name]
-  }
-
   function hasNoLocation (step) {
     return (step.latitude === '' || step.longitude === '')
-  }
-
-  function renderNarrativeStep (idx, n) {
-    const step = n.steps[idx]
-    const step2 = n.steps[idx + 1]
-
-    // don't draw if one of the steps has no location
-    if (hasNoLocation(step) || hasNoLocation(step2)) { return null }
-
-    // 0 if not in narrative mode, 1 if active narrative, 0.1 if inactive
-    let styles = {
-      strokeOpacity: (n === null) ? 0
-        : (step && (n.id === narrative.id)) ? 1 : 0.0,
-      strokeWidth: 0,
-      strokeDasharray: 'none',
-      stroke: 'none'
-    }
-
-    const p1 = projectPoint([step.latitude, step.longitude])
-    const p2 = projectPoint([step2.latitude, step2.longitude])
-
-    if (step) {
-      if (process.env.features.NARRATIVE_STEP_STYLES) {
-        const _idx = step.narratives.indexOf(n.id)
-        const stepStyle = step.narrative___stepStyles[_idx]
-
-        return _renderNarrativeStep(
-          p1,
-          p2,
-          { ...styles, ...getStepStyle(stepStyle) }
-        )
-
-      // otherwise steps are styled per narrative
-      } else {
-        styles = {
-          ...styles,
-          ...getNarrativeStyle(n.id)
-        }
-        return _renderNarrativeStep(p1, p2, styles)
-      }
-    }
   }
 
   function _renderNarrativeStepArrow (p1, p2, styles) {
@@ -125,26 +86,90 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
     )
   }
 
+  function renderBetweenSteps (step1, step2, extraStyles) {
+    // don't draw if one of the steps has no location, or not in narrative
+    if (hasNoLocation(step1) || hasNoLocation(step2)) {
+      return null
+    }
+
+    // don't draw if something else is up
+    if (!step1 || !step2) {
+      return null
+    }
+
+    const p1 = projectPoint([step1.latitude, step1.longitude])
+    const p2 = projectPoint([step2.latitude, step2.longitude])
+
+    return _renderNarrativeStep(p1, p2, {
+      ...defaultStyles,
+      ...(extraStyles || {})
+    })
+  }
+
+  function renderFullNarrative (n) {
+    if (n === null || n.id !== narrative.id) {
+      return null
+    }
+
+    const arrows = []
+
+    for (let idx = 0; idx < n.steps.length - 1; idx += 1) {
+      const step1 = n.steps[idx]
+      const step2 = n.steps[idx + 1]
+      arrows.push(renderBetweenSteps(step1, step2, getNarrativeStyle(n.id)))
+    }
+
+    return arrows
+  }
+
+  function renderBetweenMarked (n) {
+    // this function should only be called if features.NARRATIVE_STEP_STYLES
+    // is true, and thus there is a 'stepStyles' attributes in events
+    if (n === null || n.id !== narrative.id) {
+      return null
+    }
+
+    const arrows = []
+
+    let lastMarked = null
+    for (let idx = 0; idx < n.steps.length; idx += 1) {
+      const step = n.steps[idx]
+      const _idx = step.narratives.indexOf(n.id)
+      const stepStyle = step.narrative___stepStyles[_idx]
+
+      if (stepStyle !== 'None') {
+        if (lastMarked) {
+          arrows.push(renderBetweenSteps(lastMarked, step, styles.stepStyles[stepStyle]))
+        }
+        lastMarked = step
+      }
+    }
+
+    return arrows
+  }
+
   function renderNarrative (n) {
-    const steps = n.steps.slice(0, n.steps.length - 1)
+    const narrativeId = `narrative-${n.id.replace(/ /g, '_')}`
 
     return (
-      <g id={`narrative-${n.id.replace(/ /g, '_')}`} className='narrative'>
-        {steps.map((s, idx) => renderNarrativeStep(idx, n))}
+      <g id={narrativeId} className='narrative'>
+        {(process.env.features.NARRATIVE_STEP_STYLES
+          ? renderBetweenMarked(n)
+          : renderFullNarrative(n)
+        )}
       </g>
     )
   }
 
-  if (narrative === null) return (
-    <Portal node={svg}>
-      <g/>
-    </Portal>
-  )
+  // don't render in explore mode
+  if (narrative === null) {
+    return null
+  }
 
   return (
     <Portal node={svg}>
       <g className='narratives'>
-        {narratives.map(n => renderNarrative(n))}
+        {narratives.map(renderNarrative)}
       </g>
     </Portal>
   )

@@ -118,16 +118,6 @@ function decrementNarrativeCurrent (appState, action) {
   }
 }
 
-function clearTagFilters (appState) {
-  return {
-    ...appState,
-    filters: {
-      ...appState.filters,
-      tags: []
-    }
-  }
-}
-
 function toggleFilter (appState, action) {
   let newTags = appState.filters[action.filter].slice(0)
   if (newTags.includes(action.value)) {
@@ -223,8 +213,6 @@ function app (appState = initial.app, action) {
       return decrementNarrativeCurrent(appState, action)
     case UPDATE_SOURCE:
       return updateSource(appState, action)
-    case RESET_ALLFILTERS:
-      return resetAllFilters(appState, action)
     /* toggles */
     case TOGGLE_LANGUAGE:
       return toggleLanguage(appState, action)

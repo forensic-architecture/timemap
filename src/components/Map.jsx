@@ -12,7 +12,7 @@ import Sites from './presentational/Map/Sites.jsx'
 import Shapes from './presentational/Map/Shapes.jsx'
 import Events from './presentational/Map/Events.jsx'
 import SelectedEvents from './presentational/Map/SelectedEvents.jsx'
-import Narratives from './presentational/Map/Narratives.jsx'
+import Narratives from './presentational/Map/Narratives'
 import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
 
 // NB: important constants for map, TODO: make statics
