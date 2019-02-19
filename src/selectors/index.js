@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import { compareTimestamp, insetSourceFrom } from '../js/utilities'
-import { isTaggedIn, isNoTags, isTaggedInWithCategory, isNoCategories, isTimeRangedIn } from './helpers'
+import { isTimeRangedIn } from './helpers'
 
 // Input selectors
 export const getEvents = state => state.domain.events

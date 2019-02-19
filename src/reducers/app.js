@@ -1,4 +1,3 @@
-/* global d3 */
 import initial from '../store/initial.js'
 import { parseDate, toggleFlagAC } from '../js/utilities'
 
@@ -12,7 +11,6 @@ import {
   INCREMENT_NARRATIVE_CURRENT,
   DECREMENT_NARRATIVE_CURRENT,
   UPDATE_SOURCE,
-  RESET_ALLFILTERS,
   TOGGLE_LANGUAGE,
   TOGGLE_SITES,
   TOGGLE_FETCHING_DOMAIN,
