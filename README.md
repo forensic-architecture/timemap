@@ -68,21 +68,22 @@ yarn dev      # npm run dev
 
 Congratulations! You now have a running local instance of timemap. If you now visit [localhost:8080](http://localhost:8080), you should be greeted with an alert that tells you that timemap could not locate a server. In order to display interesting information, you'll need a backend to provide timemap events. This is covered in the next section.
 
-### Serving data
+### Serving events
 
-In order to see anything interesting on a timemap instance, you will need to have a way to serve data to it. The easiest way is to create the appropriate routes through [datesheet-server](), another Forensic Architecture open source project that has been developed as a configurable proxy between a frontend application (such as a timemap instance) and a Google Spreadsheet. It is thought for users that do not want or know how to run their own server or backend application.
-
-However, you can also use timemap as a frontend for a different type of server, for instance pulling information from a relational database.
+The easiest way to serve events to timemap is through [datesheet-server](https://github.com/forensic-architecture/datasheet-server), another Forensic Architecture open source project that serves data from a Google Spreadsheet as structured JSON. Unless you need to serve events from a pre-existing backend, setting up a datasheet-server instance is the friendliest way to create a timemap instance that displays meaningful data.
 
 #### Data requirements
 
-timemap is backend agnostic, but it requires a series of endpoints to provide data for it to visualize. The data is expected in JSON format. Some data elements are required and their format has some required fields. Other additional endpoints are optional, and if enabled, they simply add features to your taste.
+timemap queries data from an HTTP endpoint that serves well-defined JSON objects, in which certain endpoints, such as `events`, are required. Other endpoints, such as `tags`, are optional; when provided, they enhance a timemap instance with additional features and capabilities related to the additional data.
 
-The combination of all these data types is called the `domain` of the application in the context of timemap.
+The sum total of data that is fetched asynchronously in a timemap instance is
+referred to as the application `domain`. The base endpoint for the domain-- and
+the paths to required and optional endpoints-- are configured through
+a `config.js` file in timemap's root folder (explained in the next section).
 
 #### Required endpoints
 
-1. Events: incidents to be mapped in time and space are called `events`. They must include the following fields:
+1. **Events**: incidents mapped in time and space are called `events`. They must include the following fields:
 
 ```json
 [
@@ -96,15 +97,12 @@ The combination of all these data types is called the `domain` of the applicatio
     "source":"",
     "tags": "",
     "category": ""
-  },
-  {}
+  }
 ]
-
 ```
 
-Events can have zero, one or multiple tags (comma-separated in one single string), but MUST have one, and only one, category. Category properties are also a required endpoint.
 
-2. Categories: events must be grouped in `categories`. All `events` must contain one (and only one) `category` for them to be displayed in the timeline and map. They are designed to aggregate incidents, for example, according to a population group, or obtained by a type of measure. Categories can be bundled in groups.
+2. **Categories**: events must be grouped in `categories`. **All `events` must contain one (and only one) `category`.** An event's category determines how it is displayed in the both the timeline and the map. (Category styling is configurable, but by default each category has an associated color, and a separate timeline for events in it.) Categories are designed to aggregate incidents according to some kind of categorical distinction, which will differ depending on your dataset. For example, categories may correspond to population groups, actions committed by particular persons. Categories should probably not be coded according to locality or temporality, as these axes are already represented.
 
 ```json
 [
@@ -113,52 +111,50 @@ Events can have zero, one or multiple tags (comma-separated in one single string
     "category_label":"Category Label",
     "group":"category_group00",
     "group_label":"Events"
-  },
-  {}
+  }
 ]
 ```
 
 #### Optional endpoints
 
-3. Tags: `events` can be tagged by multiple `tags`. These will further characterize the event, and allow to select or deselect based on them. Tags are or can be distributed in a tree-like hierarchy, and each node on the tree can be a tag, including those who are not leafs.
+3. **Tags**: `events` can be tagged by multiple `tags`. These will further characterize the event, and allow to select or deselect based on them. Tags are or can be distributed in a tree-like hierarchy, and each node on the tree can be a tag, including those who are not leafs.
 
 ```json
-{  
+{
    "key":"tags",
-   "children":{  
-      "tag0":{  
-         "key":"tag0 ",
-         "children":{  
-            "tag00":{  
-               "key":"tag00",
-               "children":{  
-                 "tag001":{  
-                    "key":"tag001",
-                    "children":{}
+   "children": {
+      "tag0": {
+         "key": "tag0 ",
+         "children": {
+            "tag00": {
+               "key": "tag00",
+               "children": {
+                 "tag001": {
+                    "key": "tag001",
+                    "children": {}
                  }
                }
             },
-            "tag01":{  
-               "key":"tag01",
-               "children":{}
-            },            
-         }
-      },
-      "tag1":{  
-         "key":"tag1",
-         "children":{  
-            "tag10":{  
-               "key":"tag10",
-               "children":{}
+            "tag01": {
+               "key": "tag01",
+               "children": {}
             }
          }
       },
+      "tag1": {
+         "key": "tag1",
+         "children": {
+            "tag10": {
+               "key": "tag10",
+               "children": {}
+            }
+         }
+      }
    }
 }
-
 ```
 
-4. Sites: sites are labels on the map, aiming to highlight particularly relevant locations that should not be a function of time or tags.
+4. **Sites**: sites are labels on the map, aiming to highlight particularly relevant locations that should not be a function of time or tags.
 
 ```json
 [
@@ -168,8 +164,7 @@ Events can have zero, one or multiple tags (comma-separated in one single string
     "site":"SITE_LABEL",
     "latitude":"17.810358",
     "longitude":"-18.2251664"
-  },
-  {}
+  }
 ]
 ```
 
