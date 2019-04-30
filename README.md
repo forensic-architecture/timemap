@@ -72,9 +72,37 @@ Congratulations! You now have a running local instance of timemap. If you now vi
 
 The easiest way to serve events to timemap is through [datesheet-server](https://github.com/forensic-architecture/datasheet-server), another Forensic Architecture open source project that serves data from a Google Spreadsheet as structured JSON. Unless you need to serve events from a pre-existing backend, setting up a datasheet-server instance is the friendliest way to create a timemap instance that displays meaningful data.
 
-#### Data requirements
+To set up timemap with datasheet-server, follow [this tutorial](https://github.com/forensic-architecture/timemap/wiki/Setting-up-a-local-instance-of-Timemap). This is the easiest way to get up and running with a timemap instance.
 
-timemap queries data from an HTTP endpoint that serves well-defined JSON objects, in which certain endpoints, such as `events`, are required. Other endpoints, such as `tags`, are optional; when provided, they enhance a timemap instance with additional features and capabilities related to the additional data.
+### Configuration
+
+**NOTE: WIP. These settings are currently slightly out of date.**
+
+In order to make timemap interesting, you need to configure it to read events. When loaded in a browser, timemap queries HTTP endpoint, expecting from them well-defined JSON objects. There are certain endpoints, such as `events`, that are required, while others , such as `tags`, are optional; when provided, they enhance a timemap instance with additional features and capabilities related to the additional data.
+
+The URLs for these endpoints, as well as other configurable settings in your timemap instance, are read from the `config.js` that you created in step 3 of the setup above. The example contains sensible defaults. This section covers each option in more detail: 
+
+| Option  | Description | Type | Nullable |
+| ------- | ----------- | ---- | -------- |
+| title | Title of the application, display in the toolbar | String | No |
+| SERVER_ROOT | Base URI for the server | String | No |
+| EVENT_EXT | Endpoint for events, which will be concatenated with SERVER_ROOT | String | No |
+| EVENT_DESC_ROOT | Endpoint for additional metadata for each individual event, concatenated to SERVER_ROOT | String | Yes |
+| CATEGORY_EXT | Endpoint for categories, concatenated with SERVER_ROOT | String | Yes |
+| NARRATIVE_EXT | Endpoint for narratives, concatenated with SERVER_ROOT | String | No |
+| TAG_TREE_EXT | Endpoint for tags, concatenated with SERVER_ROOT | String | Yes |
+| SITES_EXT | Endpoint for sites, concatenated with SERVER_ROOT | String | Yes |
+| MAP_ANCHOR | Geographic coordinates for original map anchor | Array of numbers | No |
+| MAPBOX_TOKEN | Access token for Mapbox satellite imagery | String | No |
+| features.USE_TAGS | Enable / Disable tags | boolean | No |
+| features.USE_SEARCH | Enable / Disable search | boolean | No |
+| features.USE_SITES | Enable / Disable sites | boolean | No |
+
+In this configuration file you'll need to add your Mapbox token (see [here for more info](https://www.mapbox.com/help/define-access-token/)). Additionally, you'll need to replace the required endpoints by functioning ones. Finally, you'll want to initialize your application set in `MAP_ANCHOR`, as a (lat, long) pair, which determines the specific location at which the application will center itself on start.
+
+### Data requirements
+
+This section outlines the data requirements for each HTTP endpoint.
 
 The sum total of data that is fetched asynchronously in a timemap instance is
 referred to as the application `domain`. The base endpoint for the domain-- and
@@ -167,28 +195,6 @@ a `config.js` file in timemap's root folder (explained in the next section).
   }
 ]
 ```
-
-### Configuration
-
-The application will require to include a few configuration settings. Configuration options are to be set in [app/config.js](app/config.js). You will find a file named `app/config.example.js` which you can copy as an example. It contains the following fields:
-
-| Option  | Description | Type | Nullable |
-| ------- | ----------- | ---- | -------- |
-| title | Title of the application, display in the toolbar | String | No |
-| SERVER_ROOT | Base URI for the server | String | No |
-| EVENT_EXT | Endpoint for events, which will be concatenated with SERVER_ROOT | String | No |
-| EVENT_DESC_ROOT | Endpoint for additional metadata for each individual event, concatenated to SERVER_ROOT | String | Yes |
-| CATEGORY_EXT | Endpoint for categories, concatenated with SERVER_ROOT | String | Yes |
-| NARRATIVE_EXT | Endpoint for narratives, concatenated with SERVER_ROOT | String | No |
-| TAG_TREE_EXT | Endpoint for tags, concatenated with SERVER_ROOT | String | Yes |
-| SITES_EXT | Endpoint for sites, concatenated with SERVER_ROOT | String | Yes |
-| MAP_ANCHOR | Geographic coordinates for original map anchor | Array of numbers | No |
-| MAPBOX_TOKEN | Access token for Mapbox satellite imagery | String | No |
-| features.USE_TAGS | Enable / Disable tags | boolean | No |
-| features.USE_SEARCH | Enable / Disable search | boolean | No |
-| features.USE_SITES | Enable / Disable sites | boolean | No |
-
-In this configuration file you'll need to add your Mapbox token (see [here for more info](https://www.mapbox.com/help/define-access-token/)). Additionally, you'll need to replace the required endpoints by functioning ones. Finally, you'll want to initialize your application set in `MAP_ANCHOR`, as a (lat, long) pair, which determines the specific location at which the application will center itself on start.
 
 ## For developers
 

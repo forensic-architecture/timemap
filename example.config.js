@@ -34,14 +34,15 @@ module.exports = {
           new Date(2018, 1, 6, 23)
         ]
       }
-    }
-  },
-  ui: {
-    style: {
-      categories: {},
-      shapes: {},
-      narratives: {},
-      selectedEvent: {}
+    },
+    ui: {
+      style: {
+        categories: {},
+        shapes: {},
+        narratives: {},
+        selectedEvent: {}
+      }
     }
   }
+
 }
