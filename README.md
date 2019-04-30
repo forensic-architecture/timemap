@@ -1,13 +1,13 @@
 <h1 align="center">
-  TimeMap v0
+  timemap
 </h1>
 
 <p align="center">
-  <strong>TimeMap is a tool for exploration, monitoring and classification of incidents in time and space.</strong><br>
+  <strong>timemap is a tool for exploration, monitoring and classification of incidents in time and space.</strong><br>
 </p>
 <p align="center">
   <a href="https://github.com/forensic-architecture/timemap/blob/master/LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="TimeMap is released under the MIT license." />
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="timemap is released under the MIT license." />
   </a>
   <a href="https://travis-ci.com/forensic-architecture/timemap">
     <img src="https://travis-ci.com/forensic-architecture/timemap.svg?branch=develop" alt="Build Status"/>
@@ -16,31 +16,32 @@
 
 ## Overview
 
-TimeMap is a standalone frontend application that allows to explore and monitor events in time and space. TimeMap uses [mapbox](https://www.mapbox.com/) satellite imagery as a backdrop by default, and uses Leaflet and d3 to visually map information.
+timemap is a standalone frontend application that allows to explore and monitor events in time and space. timemap uses [mapbox](https://www.mapbox.com/) satellite imagery as a backdrop by default, and uses Leaflet and d3 to visually map information.
 
-The application is backend agnostic. It does, however, have some requirements regarding the format of data to be ingested. TimeMap works well in tandem with [datasheet-server](https://github.com/breezykermo/datasheet-server), particularly for journalist, activists and general users who are used to working using spreadsheets and just want a shell to visualize events.
+The application is backend agnostic. It does, however, have some requirements regarding the format of incoming data. timemap is designed to work well in tandem with [datasheet-server](https://github.com/breezykermo/datasheet-server). This makes it particularly useful for journalist, activists, and other general users who are used to working with spreadsheets, as the timemap/datasheet-server combination effectively allows users to create an interactive platform for geospatial events using only a spreadsheet as a backend.
 
-TimeMap has the following high-level features capabilites:
+timemap has the following high-level features capabilites:
 
-* Visualize incidents of particular events on a map.
-* Visualize and filter these incidents over time, on an adjustable timeline that allows to zoom in and out.
-* Visualize types of incidents by tag and by category, which can be displayed using different styles.
+* Visualize events (incidents distinct in time and/or space) on a map.
+* Filter events with respect  on an adjustable timeline, zooming in and out.
+* Filter events by either tag or category, mechanisms to associate related
+    events and display them with different styles.
 
-A fully-functioning live version can be found as a result of the Forensic Architecture investigation of the [Ayotzinapa case](https://www.plataforma-ayotzinapa.org).
+timemap is the result of generalising the platform that Forensic Architecture developed for the [Ayotzinapa case](https://www.plataforma-ayotzinapa.org), an investigation of an attack on school students coordinated by criminal organisations in collusion with local police.
 
 ## Get up and running
 
 ### Requirements
 
-To run a TimeMap instance, you'll need:
+To run a timemap instance, you'll need:
 
-* Git, node and npm / yarn installed.
-* A (free) account at Mapbox, so that you can get a token, in order for the satellite imagery in the map backdrop to be properly rendered.
-* A way to serve data. We recommend using [datasheet-server](https://github.com/breezykermo/datasheet-server), which allows to using Google Spreadsheets as the data source. See [the wiki](https://github.com/forensic-architecture/timemap/wiki/Setting-up-a-local-instance-of-Timemap) for a detailed tutorial.
+* Git, node, and npm/yarn.
+* A backend that serves data. We recommend using [datasheet-server](https://github.com/breezykermo/datasheet-server), which allows you to turn a Google Spreadsheet into an appropriate server. To set this up, follow [the detailed tutorial](https://github.com/forensic-architecture/timemap/wiki/Setting-up-a-local-instance-of-Timemap) on the wiki.
+* A (free) account at Mapbox, so that you can get a token. timemap uses Mapbox to power the satellite imagery in the map's backdrop. If you don't want to use Mapbox, timemap will default to using [OpenStreetMap](https://www.openstreetmap.org).
 
 ### Getting started
 
-Note that these commands assume a Bash shell in Mac/Linux:
+Open a bash/zsh shell:
 
 1. Pull this repository.
 
@@ -54,25 +55,30 @@ git clone https://github.com/forensic-architecture/timemap
 yarn          # npm install
 ```
 
-3. Run it via yarn.
+3. Create a configuration file from the example:
+```shell
+cp example.config.js config.js
+```
+
+4. Run the development server via yarn:
 
 ```shell
 yarn dev      # npm run dev
 ```
 
-IMPORTANT: Although the application will run _just like that_, in order for TimeMap to be able to display interesting information, you'll have to make sure to have the capacity to serve data, as well as adjusting some configuration parameters. See next section.
+Congratulations! You now have a running local instance of timemap. If you now visit [localhost:8080](http://localhost:8080), you should be greeted with an alert that tells you that timemap could not locate a server. In order to display interesting information, you'll need a backend to provide timemap events. This is covered in the next section.
 
 ### Serving data
 
-In order to see anything interesting on a TimeMap instance, you will need to have a way to serve data to it. The easiest way is to create the appropriate routes through [datesheet-server](), another Forensic Architecture open source project that has been developed as a configurable proxy between a frontend application (such as a TimeMap instance) and a Google Spreadsheet. It is thought for users that do not want or know how to run their own server or backend application.
+In order to see anything interesting on a timemap instance, you will need to have a way to serve data to it. The easiest way is to create the appropriate routes through [datesheet-server](), another Forensic Architecture open source project that has been developed as a configurable proxy between a frontend application (such as a timemap instance) and a Google Spreadsheet. It is thought for users that do not want or know how to run their own server or backend application.
 
-However, you can also use TimeMap as a frontend for a different type of server, for instance pulling information from a relational database.
+However, you can also use timemap as a frontend for a different type of server, for instance pulling information from a relational database.
 
 #### Data requirements
 
-TimeMap is backend agnostic, but it requires a series of endpoints to provide data for it to visualize. The data is expected in JSON format. Some data elements are required and their format has some required fields. Other additional endpoints are optional, and if enabled, they simply add features to your taste.
+timemap is backend agnostic, but it requires a series of endpoints to provide data for it to visualize. The data is expected in JSON format. Some data elements are required and their format has some required fields. Other additional endpoints are optional, and if enabled, they simply add features to your taste.
 
-The combination of all these data types is called the `domain` of the application in the context of TimeMap.
+The combination of all these data types is called the `domain` of the application in the context of timemap.
 
 #### Required endpoints
 
@@ -191,7 +197,7 @@ In this configuration file you'll need to add your Mapbox token (see [here for m
 
 ## For developers
 
-If you'd like to tailor the functionality of TimeMap to your use case, you can consult the [Wiki]() for more detailed documentation of the architecture of TimeMap.
+If you'd like to tailor the functionality of timemap to your use case, you can consult the [Wiki]() for more detailed documentation of the architecture of timemap.
 
 ## Contribute
 
@@ -208,4 +214,4 @@ If you have any questions or just want to chat, please join our team [fa_open_so
 
 ## License
 
-TimeMap is distributed under the MIT License.
+timemap is distributed under the MIT License.
