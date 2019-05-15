@@ -9,7 +9,7 @@ module.exports = {
   SITES_EXT: '/api/example/export_sites/rows',
   SHAPES_EXT: '/api/example/export_shapes/columns',
   INCOMING_DATETIME_FORMAT: '%m/%d/%YT%H:%M',
-  MAPBOX_TOKEN: 'pk.EXAMPLE_MAPBOX_TOKEN',
+  // MAPBOX_TOKEN: 'pk.EXAMPLE_MAPBOX_TOKEN',
   features: {
     USE_COVER: false,
     USE_TAGS: false,
