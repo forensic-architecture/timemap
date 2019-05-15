@@ -36,7 +36,7 @@ timemap is the result of generalising the platform that Forensic Architecture de
 To run a timemap instance, you'll need:
 
 * Git, node, and npm/yarn.
-* A backend that serves data. We recommend using [datasheet-server](https://github.com/breezykermo/datasheet-server), which allows you to turn a Google Spreadsheet into an appropriate server. To set this up, follow [the detailed tutorial](https://github.com/forensic-architecture/timemap/wiki/Setting-up-a-local-instance-of-Timemap) on the wiki.
+* A backend that serves data. We recommend using [datasheet-server](https://github.com/breezykermo/datasheet-server), which allows you to turn a Google Spreadsheet into an appropriate server. To set this up, follow [the detailed tutorial](https://github.com/forensic-architecture/timemap/wiki/running-timemap-and-datasheet-server-locally) on the wiki.
 * A (free) account at Mapbox, so that you can get a token. timemap uses Mapbox to power the satellite imagery in the map's backdrop. If you don't want to use Mapbox, timemap will default to using [OpenStreetMap](https://www.openstreetmap.org).
 
 ### Getting started
@@ -72,7 +72,7 @@ Congratulations! You now have a running local instance of timemap. If you now vi
 
 The easiest way to serve events to timemap is through [datesheet-server](https://github.com/forensic-architecture/datasheet-server), another Forensic Architecture open source project that serves data from a Google Spreadsheet as structured JSON. Unless you need to serve events from a pre-existing backend, setting up a datasheet-server instance is the friendliest way to create a timemap instance that displays meaningful data.
 
-To set up timemap with datasheet-server, follow [this tutorial](https://github.com/forensic-architecture/timemap/wiki/Setting-up-a-local-instance-of-Timemap). This is the easiest way to get up and running with a timemap instance.
+To set up timemap with datasheet-server, follow [this tutorial](https://github.com/forensic-architecture/timemap/wiki/running-timemap-and-datasheet-server-locally). This is the easiest way to get up and running with a timemap instance.
 
 ### Configuration
 
@@ -195,10 +195,6 @@ a `config.js` file in timemap's root folder (explained in the next section).
   }
 ]
 ```
-
-## For developers
-
-If you'd like to tailor the functionality of timemap to your use case, you can consult the [Wiki]() for more detailed documentation of the architecture of timemap.
 
 ## Contribute
 

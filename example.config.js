@@ -16,7 +16,7 @@ module.exports = {
     USE_SEARCH: false,
     USE_SITES: true,
     USE_SOURCES: true,
-    USE_SHAPES: true,
+    USE_SHAPES: false,
     CATEGORIES_AS_TAGS: true
   },
   store: {
