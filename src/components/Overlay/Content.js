@@ -10,7 +10,7 @@ export default ({ media, viewIdx }) => {
   const shiftW = el ? el.getBoundingClientRect().width : 0
 
   function renderMedia (media) {
-    const { path, type } = media
+    const { path, type, poster } = media
     switch (type) {
       case 'Image':
         return (
@@ -27,6 +27,7 @@ export default ({ media, viewIdx }) => {
         return (
           <div className='media-player'>
             <Player
+              poster={poster}
               className='source-video'
               playsInline
               src={path}

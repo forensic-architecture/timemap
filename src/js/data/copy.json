@@ -97,7 +97,9 @@
           "Each event represents an occurence that is distinct in either time, space, or both. An event is represented by a coloured circle on both the map and the timeline.",
           "Select an event to reveal its content and sources. You can filter events by category or other specified filters in the top left toolbar.",
           "Narratives compose events to reveal logical threads that emerge from them. Transition to narrative mode by selecting a narrative from the top left dashboard icon."
-        ]
+        ],
+        "notation": "Combinations of colours indicate multiple events in a single location.",
+        "arrows": "Arrows indicate physical movement between events."
       }
     },
     "toolbar": {
@@ -117,14 +119,14 @@
         }
       },
       "narratives_label": "Narratives",
-      "narrative_summary": "Here you can follow some curated stories we have found in the data.",
+      "narrative_summary": "Follow a path through the data, from one key event to the next.",
       "categories": "Categories",
       "tags": "Filters",
       "tags_label": "Filters",
       "explore_by_tag__title": "Explore by filter",
       "explore_by_tag__description": "Selecting a filter will show you only those events that are annotated with the filter. If you select nothing, as well as everything, all data will be displayed.",
-      "explore_by_category__title": "Explore by category",
-      "explore_by_category__description": "Selecting a category will show you only the events in that category. If you select a filter on top, it will filter events only in the selected categories."
+      "explore_by_category__title": "Explore events by category",
+      "explore_by_category__description": ""
 
     },
     "timeline": {

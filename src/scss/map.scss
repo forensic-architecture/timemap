@@ -39,10 +39,6 @@
     opacity: 0.45;
   }
 
-  .narrative {
-    cursor: pointer;
-  }
-
   .link {
     stroke: $midgrey;
     fill: none;
@@ -173,6 +169,10 @@
   pointer-events: all !important;
   fill: $event_default;
   stroke-width: 0;
+
+  &.blue {
+    fill: blue;
+  }
 }
 
 .narrative-step-arrow {
@@ -190,5 +190,6 @@
   fill: #d0d0d0;
 }
 
-
-
+.no-hover {
+  cursor: grab !important;
+}

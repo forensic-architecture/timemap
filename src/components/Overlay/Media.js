@@ -1,7 +1,7 @@
 import React from 'react'
 import Content from './Content'
 import Controls from './Controls'
-import { selectTypeFromPath } from '../../js/utilities'
+import { selectTypeFromPathWithPoster } from '../../js/utilities'
 
 class SourceOverlay extends React.Component {
   constructor () {
@@ -32,11 +32,11 @@ class SourceOverlay extends React.Component {
     if (typeof (this.props.source) !== 'object') {
       return this.renderError()
     }
-    const { url, title, paths, date, type } = this.props.source
+    const { url, title, paths, date, type, desc, poster } = this.props.source
     const shortenedTitle = title.substring(0, 100)
 
     return (
-      <div className='mo-overlay'>
+      <div className={`mo-overlay ${this.props.opaque ? 'opaque' : ''}`}>
         <div className='mo-banner'>
           <div className='mo-banner-close' onClick={this.props.onCancel}>
             <i className='material-icons'>close</i>
@@ -49,7 +49,7 @@ class SourceOverlay extends React.Component {
 
         <div className='mo-container' onClick={e => e.stopPropagation()}>
           <div className='mo-media-container'>
-            <Content media={paths.map(selectTypeFromPath)} viewIdx={this.state.idx} />
+            <Content media={paths.map(p => selectTypeFromPathWithPoster(p, poster))} viewIdx={this.state.idx} />
           </div>
 
         </div>
@@ -58,25 +58,24 @@ class SourceOverlay extends React.Component {
           <Controls paths={paths} viewIdx={this.state.idx} onShiftHandler={this.onShiftGallery} />
 
           <div className='mo-meta-container'>
-            {/* <div className='mo-box-title'> */}
-            {/*   {title ? <p><b>{title}</b></p> : null} */}
-            {/*   <div>{desc}</div> */}
-            {/* </div> */}
+            <div className='mo-box-title'>
+              <div>{desc}</div>
+            </div>
 
-            <div className='mo-box'>
+            {(type || date || url) ? <div className='mo-box'>
               <div>
                 {type ? <h4>Media type</h4> : null}
                 {type ? <p><i className='material-icons left'>perm_media</i>{type}</p> : null}
               </div>
               <div>
-                {date ? <h4>Date</h4> : null}
+                {date ? <h4>Date Published</h4> : null}
                 {date ? <p><i className='material-icons left'>today</i>{date}</p> : null}
               </div>
               <div>
                 {url ? <h4>Link</h4> : null}
                 {url ? <span><i className='material-icons left'>link</i><a href={url} target='_blank'>Link to original URL</a></span> : null}
               </div>
-            </div>
+            </div> : null}
           </div>
         </div>
 

@@ -1,10 +1,9 @@
 import React from 'react'
 
 import copy from '../../../js/data/copy.json'
-import { isNotNullNorUndefined } from '../../../js/utilities'
 
 const CardLocation = ({ language, location, isPrecise }) => {
-  if (isNotNullNorUndefined(location)) {
+  if (location !== '') {
     return (
       <div className='card-cell location'>
         <p>

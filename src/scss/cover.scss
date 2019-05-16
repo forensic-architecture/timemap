@@ -5,10 +5,10 @@
   background-color: black;
   width: 100%;
   height: 100%;
-  opacity: 0.95;
+  opacity: 1;
   transition: top 0.4s ease;
   z-index: $overheader + 1;
-
+  overflow-y: auto;
   color: $offwhite;
 
   &.showing {
@@ -17,10 +17,212 @@
   }
 }
 
+.fullscreen-bg {
+  &.hidden {
+    top: -100%;
+  }
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: -100;
+  background: #000000; }
+
+.fullscreen-bg__video {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-filter: contrast(70%) brightness(70%) grayscale(100%);
+  /* Webkit */
+  /*  filter: gray; /* IE6-9 */
+  filter: contrast(70%) brightness(70%) grayscale(100%);
+  /* W3C */ }
+
 .default-cover-container {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
   height: 100%;
+}
+
+.cover-container {
+  font-size: 12pt;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+
+  hr, br {
+    width: 100%;
+  }
+
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: space-around;
+    position: fixed;
+    left: 0;
+    background-color: $offwhite;
+    margin-top: 60px;
+    min-height: calc(100% - 280px);
+    max-height: calc(100% - 280px);
+    min-width: 19%;
+    max-width: 19%;
+    color: black;
+    .il-video-pill {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+      background-color: transparent;
+      border-bottom: 5px solid black;
+      transition: all 0.4s ease;
+      &.explore {
+        background-color: $yellow;
+      }
+      &.videos {
+        background-color: blue;
+      }
+      &:hover {
+        cursor: pointer;
+        background-color: $darkwhite;
+        color: white;
+      }
+    }
+  }
+
+  .hero {
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100px;
+    &.thin {
+      min-width: 250px;
+      max-width: 400px;
+    }
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    .row {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+      @media only screen and (max-width: 1200px) {
+        flex-direction: column;
+      }
+      justify-content: space-around;
+      .cell {
+        border: 1px solid white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        flex: 1;
+        background-color: $darkgrey;
+        padding: 10px 0;
+        transition: all 0.4s ease;
+        letter-spacing: 2px;
+        min-height: 40px;
+        &.small {
+          letter-spacing: inherit;
+          font-size: 10pt;
+        }
+        &.plain {
+          min-height: 10px;
+          background-color: black;
+          letter-spacing: 1px;
+        }
+        &.yellow {
+          color: black;
+          background-color: $yellow;
+        }
+        &:hover {
+          cursor: pointer;
+          background-color: $darkwhite;
+          color: white;
+        }
+      }
+    }
+  }
+
+  .cover-content {
+    display: flex;
+    flex-direction: column;
+    // min-width: 100%;
+    padding: 20px 40px 0px 40px;
+
+    @media only screen and (min-width: 992px) {
+      padding: 20px 30% 0px 30%;
+    }
+
+    .verify-tabs {
+      background-color: $yellow;
+      color: black;
+      display: flex;
+      flex-direction: column;
+
+      .v-tab {
+        display: flex;
+        margin: auto;
+        justify-content: center;
+        align-content: center;
+        flex: 1;
+        // border-right: 4px solid black;
+        // padding: 0 10px;
+        // min-height: 60px;
+      }
+    }
+
+    .il-cover-verification-container {
+      display: flex;
+      flex-direction: column;
+
+      .il-cover-verification {
+        .il-video {
+          border-radius: 1em;
+          background-color: rgba(240,240,240,0.5);
+        }
+      }
+    }
+
+
+  }
+}
+
+.cover-footer {
+  &.disabled {
+    display: none;
+  }
+  position: fixed;
+  bottom: 0;
+  min-height: 150px;
+  min-width: 100%;
+  padding: 10px;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  .il-cover-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 300px;
+    max-height: 80px;
+    margin-top: 30px;
+    background-color: $offwhite;
+    color: black;
+    transition: all 0.3s ease;
+    &:hover {
+      cursor: pointer;
+      background-color: darken($offwhite, 30%);
+      color: black;
+    }
+  }
 }

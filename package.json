@@ -25,6 +25,7 @@
     "react-device-detect": "^1.6.2",
     "react-dom": "^16.6.3",
     "react-image": "^1.5.1",
+    "react-markdown": "^4.0.8",
     "react-portal": "^4.2.0",
     "react-redux": "^5.0.4",
     "react-tabs": "^1.0.0",
