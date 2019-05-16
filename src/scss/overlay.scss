@@ -13,12 +13,15 @@ $banner-height: 100px;
   flex-direction: column;
   // justify-content: center;
   align-items: center;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0,0,0, 0.85);
+  &.opaque {
+    background-color: black;
+  }
   z-index: 20;
 }
 
@@ -28,13 +31,12 @@ $banner-height: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: calc(100vh - 350px);
-  max-height: calc(100vh - 350px);
+  // height: calc(100vh - 350px);
+  // max-height: calc(100vh - 350px);
   width: $panel-width;
   max-width: 90vw;
   box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
-
-
+  overflow: auto;
 }
 
 $overlay-bg: rgba(239,239,239,0.9);
@@ -155,7 +157,7 @@ $overlay-bg: rgba(239,239,239,0.9);
 
 .mo-footer {
   position: fixed;
-  height: 250px;
+  // height: 250px;
   background-color: transparent;
   width: 100%;
   opacity: 0.9;
@@ -166,6 +168,8 @@ $overlay-bg: rgba(239,239,239,0.9);
 
 .mo-meta-container {
   color: $overlay-bg;
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 2em;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -177,13 +181,15 @@ $overlay-bg: rgba(239,239,239,0.9);
     flex-direction: row;
     justify-content: space-between;
     padding: 0 20px;
+    max-width: $panel-width;
   }
 
   .mo-box {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    width: $panel-width;
+    min-width: 800px;
+    max-width: $panel-width;
     padding: $padding 0;
     border-top: 1px solid rgb(189,189,189);
     font-family: "Lato", Helvetica, sans-serif;
@@ -283,6 +289,7 @@ $overlay-bg: rgba(239,239,239,0.9);
 }
 
 .media-player {
+  background-color: transparent;
   box-sizing: border-box;
   width: 100%;
   min-width: 100%;
@@ -299,6 +306,7 @@ $overlay-bg: rgba(239,239,239,0.9);
   margin: auto;
   width: auto;
   height: auto;
+  max-width: 100%;
   object-fit: contain;
 }
 
@@ -313,4 +321,19 @@ $overlay-bg: rgba(239,239,239,0.9);
 
 .video-react .video-react-control {
   min-height: 100%;
+}
+
+// full-screen overloads
+.mo-overlay.full-screen {
+  background-color: black;
+  .mo-container {
+    background-color: transparent;
+  }
+  .mo-media-container {
+    border-top: 1px solid $offwhite;
+    border-bottom: 1px solid $offwhite;
+  }
+  .mo-box {
+    border-color: transparent;
+  }
 }

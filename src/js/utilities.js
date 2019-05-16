@@ -151,3 +151,18 @@ export function selectTypeFromPath (path) {
   }
   return { type, path }
 }
+
+export function selectTypeFromPathWithPoster (path, poster) {
+  let type
+  switch (true) {
+    case /\.(png|jpg)$/.test(path):
+      type = 'Image'; break
+    case /\.(mp4)$/.test(path):
+      type = 'Video'; break
+    case /\.(md)$/.test(path):
+      type = 'Text'; break
+    default:
+      type = 'Unknown'; break
+  }
+  return { type, path, poster }
+}

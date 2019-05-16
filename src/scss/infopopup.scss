@@ -2,14 +2,14 @@
 
 .infopopup {
   width: 400px;
-  height: 400px;
+  // height: 400px;
   box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3), 10px 15px 12px rgba(0, 0, 0, 0.22);
   color: $darkgrey;
   position: absolute;
   background: $offwhite;
   border-radius: 5px;
-  bottom: 20px;
-  left: 100px;
+  bottom: 180px;
+  left: 120px;
   border: 3px solid $offwhite;
   padding: 20px;
   box-sizing: border-box;
@@ -48,11 +48,22 @@
   .legend-container {
     height: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+
+    .legend-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &.one {
+        flex: 1;
+      }
+      &.three {
+        flex: 5;
+      }
+    }
   }
 
   .legend-section {
-    width: 300px;
     height: 25px;
     display: flex;
     align-items: center;
@@ -67,7 +78,7 @@
       display: flex;
 
       .label {
-        font-size: $xsmall;
+        // font-size: $xsmall;
       }
     }
 

@@ -14,7 +14,7 @@ import InfoPopUp from './InfoPopup.jsx'
 import Timeline from './Timeline.jsx'
 import Notification from './Notification.jsx'
 import StaticPage from './StaticPage'
-import DefaultCover from './presentational/covers/Default'
+import TemplateCover from './presentational/covers/TemplateCover'
 
 import { parseDate } from '../js/utilities'
 
@@ -108,7 +108,7 @@ class Dashboard extends React.Component {
             <StaticPage showing={app.flags.isCover}>
               {/* enable USE_COVER in config.js features, and customise your header */}
               {/* pass 'actions.toggleCover' as a prop to your custom header */}
-              <DefaultCover showAppHandler={() => {
+              <TemplateCover showAppHandler={() => {
                 /* eslint-disable no-undef */
                 alert('This platform is not suitable for mobile. Please re-visit the site on a device with a larger screen.')
                 /* eslint-enable no-undef */
@@ -187,7 +187,7 @@ class Dashboard extends React.Component {
           <StaticPage showing={app.flags.isCover}>
             {/* enable USE_COVER in config.js features, and customise your header */}
             {/* pass 'actions.toggleCover' as a prop to your custom header */}
-            <DefaultCover showAppHandler={actions.toggleCover} />
+            <TemplateCover showing={app.flags.isCover} showAppHandler={actions.toggleCover} />
           </StaticPage>
         )}
         <LoadingOverlay

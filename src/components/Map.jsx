@@ -17,6 +17,7 @@ import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
 
 // NB: important constants for map, TODO: make statics
 const supportedMapboxMap = ['streets', 'satellite']
+const defaultToken = 'your_token'
 
 class Map extends React.Component {
   constructor () {
@@ -69,17 +70,14 @@ class Map extends React.Component {
 
     let firstLayer
 
-    // if mapbox token and one of the default maps are specified
-    if ((supportedMapboxMap.indexOf(this.props.ui.tiles) !== -1) && process.env.MAPBOX_TOKEN) {
+    if ((supportedMapboxMap.indexOf(this.props.ui.tiles) !== -1) && process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== defaultToken) {
       firstLayer = L.tileLayer(
         `http://a.tiles.mapbox.com/v4/mapbox.${this.props.ui.tiles}/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`
       )
-    // if mapbox token and custom map
-    } else if (process.env.MAPBOX_TOKEN) {
+    } else if (process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== defaultToken) {
       firstLayer = L.tileLayer(
         `http://a.tiles.mapbox.com/styles/v1/${this.props.ui.tiles}/tiles/{z}/{x}/{y}?access_token=${process.env.MAPBOX_TOKEN}`
       )
-    // no mapbox token
     } else {
       firstLayer = L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'

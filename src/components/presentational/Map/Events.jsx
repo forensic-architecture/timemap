@@ -96,9 +96,9 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
 
     return (
       <g
-        className='location'
+        className={`location ${narrative ? 'no-hover' : ''}`}
         transform={`translate(${x}, ${y})`}
-        onClick={() => onSelect(location.events)}
+        onClick={(!narrative) ? () => onSelect(location.events) : null}
       >
         {renderLocationSlicesByCategory(location)}
         {extraRender ? extraRender() : null}
