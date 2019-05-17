@@ -28,6 +28,10 @@
     transition: 0.2s ease;
     z-index: $header;
 
+    button {
+      background: #222222;
+    }
+
     .toolbar-header {
       margin: 0 15px 10px 15px;
       padding: 10px 0 25px 0;
@@ -470,10 +474,13 @@
       margin-bottom: 10px;
       transition: 0.2s ease;
       letter-spacing: 0.1em;
+      background-color: #000;
 
       &:hover {
         transition: 0.2s ease;
         letter-spacing: 0.15em;
+        background-color: $yellow;
+        color: $black;
       }
 
       p {
