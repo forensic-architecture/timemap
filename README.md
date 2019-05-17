@@ -34,9 +34,9 @@ A fully-functioning live version can be found as a result of the Forensic Archit
 
 To run a TimeMap instance, you'll need:
 
-* Git, node and npm / yarn installed.
-* A (free) account at Mapbox, so that you can get a token, in order for the satellite imagery in the map backdrop to be properly rendered.
-* A way to serve data. We recommend using [datasheet-server](https://github.com/breezykermo/datasheet-server), which allows to using Google Spreadsheets as the data source. See [the wiki](https://github.com/forensic-architecture/timemap/wiki/Setting-up-a-local-instance-of-Timemap) for a detailed tutorial.
+* Git, node, and npm/yarn.
+* A backend that serves data. We recommend using [datasheet-server](https://github.com/breezykermo/datasheet-server), which allows you to turn a Google Spreadsheet into an appropriate server. **To set up timemap with datasheet-server, follow [this tutorial on our website](https://engineering.forensic-architecture.org/timemap-and-datsheet-server)**.
+* (Optional) An account at Mapbox. timemap uses Mapbox to power the satellite imagery in the map's backdrop. If you don't specify a Mapbox token, timemap will default to using [OpenStreetMap](https://www.openstreetmap.org).
 
 ### Getting started
 
