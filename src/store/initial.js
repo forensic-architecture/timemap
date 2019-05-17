@@ -1,5 +1,7 @@
 import { mergeDeepLeft } from 'ramda'
 
+const FA_RED = '#eb443e';
+
 const initial = {
   /*
    * The Domain or 'domain' of this state refers to the tree of data
@@ -105,12 +107,12 @@ const initial = {
     tiles: 'openstreetmap', // ['openstreetmap', 'streets', 'satellite']
     style: {
       categories: {
-        default: '#f3de2c'
+        default: FA_RED
       },
       narratives: {
         default: {
           opacity: 0.9,
-          stroke: 'red',
+          stroke: FA_RED,
           strokeWidth: 3
         }
       },
