@@ -118,15 +118,17 @@ Events can have zero, one or multiple tags (comma-separated in one single string
 
 ### [Code of Conduct](CODE_OF_CONDUCT.md)
 
-Please read our adopted [code of conduct](CODE_OF_CONDUCT.md) before contributing, so that you can understand what actions will and will not be tolerated.
+Please read our [code of conduct](CODE_OF_CONDUCT.md) before contributing. We
+endeavour to cultivate a community around timemap and other OSS at Forensic
+Architecture that is inclusive and respectful. Please join us in this!
 
 ### [Contributing Guide](CONTRIBUTING.md)
 
-Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose bugfixes and improvements.
+Read our [contributing guide](CONTRIBUTING.md) to learn about our development process,  i.e. how to propose bugfixes and improvements.
 
 ## Community
-If you have any questions or just want to chat, please join our team [fa_open_source](https://keybase.io/team/fa_open_source) on Keybase for community discussion. Keybase is a great platform for encrypted chat and file sharing.
+If you have any questions or just want to chat, please join our team [fa_open_source](https://keybase.io/team/fa_open_source) on Keybase for community discussion. Keybase is a great platform for encrypted chat and file sharing that we use as a public forum.
 
 ## License
 
-TimeMap is distributed under the MIT License.
+timemap is distributed under the [DoNoHarm License](LICENSE.md).
