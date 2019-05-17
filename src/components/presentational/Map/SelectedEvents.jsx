@@ -13,7 +13,7 @@ class MapSelectedEvents extends React.Component {
       >
         <path
           className='leaflet-interactive'
-          stroke={styles ? styles.stroke : '#ffffff'}
+          stroke={styles ? styles.stroke : '#ffd800'}
           stroke-opacity='1'
           stroke-width={styles ? styles['stroke-width'] : 2}
           stroke-linecap=''
