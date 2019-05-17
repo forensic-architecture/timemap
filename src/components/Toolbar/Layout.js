@@ -61,7 +61,7 @@ class Toolbar extends React.Component {
         {this.props.narratives.map((narr) => {
           return (
             <div className='panel-action action'>
-              <button style={{ backgroundColor: '#000' }} onClick={() => { this.goToNarrative(narr) }}>
+              <button onClick={() => { this.goToNarrative(narr) }}>
                 <p>{narr.label}</p>
                 <p><small>{trimAndEllipse(narr.description, 120)}</small></p>
               </button>
