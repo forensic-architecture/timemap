@@ -7,15 +7,17 @@ export default ({ ui, app, methods }) => {
   }
 
   function renderHalfWithDot () {
-    const categories = Object.keys(ui.style.categories).filter(label => label !== 'default')
+    // extract category colors from store for combined display.
+    const categoryKeys = Object.keys(ui.style.categories)
     let firstFill = 'red'
-    let secondFill = 'yellow'
-    if (categories.length >= 1) {
-      firstFill = 'rgb(163, 22, 33)'
+    let secondFill = 'blue'
+    if (categoryKeys.length >= 1) {
+      firstFill = ui.style.categories[categoryKeys[0]]
     }
-    if (categories.length >= 2) {
-      secondFill = '#1c5df9'
+    if (categoryKeys.length >= 2) {
+      secondFill = ui.style.categories[categoryKeys[1]]
     }
+
     return [
       <style>{`.svg-demo { max-width: 30px } .first { fill: ${firstFill} } .second { fill: ${secondFill} } .demo-text { font-size: 9pt; color: white; font-weight:900 }`}</style>,
       <svg viewBox='0 0 30 30' className='svg-demo'>
