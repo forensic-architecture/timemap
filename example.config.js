@@ -9,22 +9,22 @@ module.exports = {
   SITES_EXT: '/api/example/export_sites/rows',
   SHAPES_EXT: '/api/example/export_shapes/columns',
   INCOMING_DATETIME_FORMAT: '%m/%d/%YT%H:%M',
-  MAPBOX_TOKEN: 'pk.EXAMPLE_MAPBOX_TOKEN',
+  // MAPBOX_TOKEN: 'pk.YOUR_MAPBOX_TOKEN',
   features: {
     USE_COVER: false,
     USE_TAGS: false,
     USE_SEARCH: false,
     USE_SITES: true,
     USE_SOURCES: true,
-    USE_SHAPES: true,
+    USE_SHAPES: false,
     CATEGORIES_AS_TAGS: true
   },
   store: {
     app: {
       cover: {
-        title: 'project title',         //required
-        subtitle: 'project subtitle',   //required
-        description: 'A description of the project goes here.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nThis description may contain markdown.\n\n#### markdown\n\n### markdown\n\n## markdown', //required
+        // title: 'project title',
+        // subtitle: 'project subtitle',
+        // description: 'A description of the project goes here.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nThis description may contain markdown.\n\n#### markdown\n\n### markdown\n\n## markdown',
         // subsubtitle: '<project subsubtitle>',
         // bgVideo:'<url for bakground video>',
         // howToVideo: {

@@ -72,9 +72,13 @@ const initial = {
         new Date(2016, 2, 23, 12)
       ],
       zoomLevels: [
+        { label: '3 years', duration: 1576800 },
         { label: '3 months', duration: 129600 },
         { label: '3 days', duration: 4320 },
-        { label: '12 hours', duration: 720 }
+        { label: '12 hours', duration: 720 },
+        { label: '2 hours', duration: 120 },
+        { label: '30 min', duration: 30 },
+        { label: '10 min', duration: 10 }
       ]
     },
     flags: {
@@ -84,6 +88,11 @@ const initial = {
       isCardstack: true,
       isInfopopup: true,
       isShowingSites: true
+    },
+    cover: {
+      title: 'project title',
+      subtitle: 'project subtitle',
+      description: 'A description of the project goes here.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nThis description may contain markdown.\n\n#### markdown\n\n### markdown\n\n## markdown'
     }
   },
 
