@@ -1,8 +1,15 @@
 import React from 'react'
 
+function zoomIsActive(duration, extent) {
+  if (duration > 1570000 && extent > 1570000) {
+    return true;
+  }
+  return duration === extent
+}
+
 const TimelineZoomControls = ({ extent, zoomLevels, dims, onApplyZoom }) => {
   function renderZoom (zoom, idx) {
-    const isActive = (zoom.duration === extent)
+    const isActive = zoomIsActive(zoom.duration, extent)
     return (
       <text
         className={`zoom-level-button ${isActive ? 'active' : ''}`}

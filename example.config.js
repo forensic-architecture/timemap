@@ -21,51 +21,21 @@ module.exports = {
   },
   store: {
     app: {
-      cover: {
-        // title: 'project title',
-        // subtitle: 'project subtitle',
-        // description: 'A description of the project goes here.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nThis description may contain markdown.\n\n#### markdown\n\n### markdown\n\n## markdown',
-        // subsubtitle: '<project subsubtitle>',
-        // bgVideo:'<url for bakground video>',
-        // howToVideo: {
-        //   title: '<how to video title>',
-        //   desc: 'This step-by-step guide explores the way that the platform arranges and presents information.',
-        //   file: '<url for how to video>',
-        //   poster: '<poster for how to video>'
-        // },
-        //  - up to 4 additional videos can be included -
-        // videos: [
-        //   {
-        //     title: '<video 1 title>',
-        //     desc: '<video 1 description>',
-        //     file: '<url for video 1 file>',
-        //     poster: '<url for video 1 poster>',
-        //     buttonTitle: '<video 1 button title>',
-        //     buttonSubtitle: '<video 1 button subtitle>'
-        //   }
-        // ]
-      },
       map: {
         anchor: [31.356397, 34.784818]
       },
-      timeline: {
-        range: [
-          new Date(2014, 7, 9),
-          new Date(2014, 10, 6, 23)
-        ],
-        rangeLimits: [
-          new Date(2014, 5, 9),
-          new Date(2018, 1, 6, 23)
-        ]
+    },
+    ui: {
+      style: {
+        categories: {
+          alpha: 'blue',
+          beta: 'orange'
+        },
+        shapes: {},
+        narratives: {},
+        selectedEvent: {}
       }
     }
   },
-  ui: {
-    style: {
-      categories: {},
-      shapes: {},
-      narratives: {},
-      selectedEvent: {}
-    }
-  }
+
 }
