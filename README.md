@@ -11,6 +11,8 @@
 <!--   </a> -->
 <!-- </p> -->
 
+![](docs/example-timemap.png)
+
 ## Overview
 
 TimeMap is a standalone frontend application that allows to explore and monitor events in time and space. TimeMap uses [mapbox](https://www.mapbox.com/) satellite imagery as a backdrop by default, and uses Leaflet and d3 to visually map information.
