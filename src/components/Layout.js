@@ -17,7 +17,6 @@ import StaticPage from './StaticPage'
 import TemplateCover from './presentational/covers/TemplateCover'
 
 import { parseDate } from '../js/utilities'
-
 import { isMobile } from 'react-device-detect'
 
 class Dashboard extends React.Component {
