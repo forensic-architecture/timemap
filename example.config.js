@@ -28,7 +28,7 @@ module.exports = {
     ui: {
       style: {
         categories: {
-          alpha: 'blue',
+          // alpha: 'blue',
           beta: 'orange'
         },
         shapes: {},
