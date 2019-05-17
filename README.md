@@ -5,14 +5,11 @@
 <p align="center">
   <strong>TimeMap is a tool for exploration, monitoring and classification of incidents in time and space.</strong><br>
 </p>
-<p align="center">
-  <a href="https://github.com/forensic-architecture/timemap/blob/master/LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="TimeMap is released under the MIT license." />
-  </a>
-  <a href="https://travis-ci.com/forensic-architecture/timemap">
-    <img src="https://travis-ci.com/forensic-architecture/timemap.svg?branch=develop" alt="Build Status"/>
-  </a>
-</p>
+<!-- <p align="center"> -->
+<!--   <a href="https://travis-ci.com/forensic-architecture/timemap"> -->
+<!--     <img src="https://travis-ci.com/forensic-architecture/timemap.svg?branch=develop" alt="Build Status"/> -->
+<!--   </a> -->
+<!-- </p> -->
 
 ## Overview
 
