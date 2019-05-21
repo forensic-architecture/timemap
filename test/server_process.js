@@ -1,8 +1,8 @@
 import test from 'ava'
-var childProcess = require('childProcess')
+var childProcess = require('child_process')
 var http = require('http')
 
-const SERVER_LAUNCH_WAIT_TIME = 5 * 1000
+const SERVER_LAUNCH_WAIT_TIME = 10 * 1000
 
 var serverProc = null
 var serverExited = false
