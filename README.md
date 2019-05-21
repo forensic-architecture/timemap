@@ -5,11 +5,8 @@
 <p align="center">
   <strong>TimeMap is a tool for exploration, monitoring and classification of incidents in time and space.</strong><br>
 </p>
-<!-- <p align="center"> -->
-<!--   <a href="https://travis-ci.com/forensic-architecture/timemap"> -->
-<!--     <img src="https://travis-ci.com/forensic-architecture/timemap.svg?branch=develop" alt="Build Status"/> -->
-<!--   </a> -->
-<!-- </p> -->
+
+[![Build status](https://travis-ci.com/forensic-architecture/timemap.svg?branch=develop)](https://travis-ci.com/forensic-architecture/timemap)
 
 ![](docs/example-timemap.png)
 
