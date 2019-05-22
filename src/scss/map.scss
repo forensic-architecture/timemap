@@ -161,7 +161,15 @@
 * Elements
 */
 
-.location {
+.event-hover {
+  opacity: 0;
+}
+
+.event-hover:hover {
+  opacity: 1;
+}
+
+.location-event {
   cursor: pointer;
 }
 

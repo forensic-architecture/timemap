@@ -50,7 +50,13 @@ class Map extends React.Component {
         const eventPoint = (nextProps.app.selected.length > 0) ? nextProps.app.selected[0] : null
 
         if (eventPoint !== null && eventPoint.latitude && eventPoint.longitude) {
-          this.map.setView([eventPoint.latitude, eventPoint.longitude])
+          // this.map.setView([eventPoint.latitude, eventPoint.longitude])
+          this.map.setView([eventPoint.latitude, eventPoint.longitude], this.map.getZoom(), {
+            "animate":true,
+            "pan":{
+              "duration": 0.7
+            }
+          })
         }
       }
     }
@@ -207,6 +213,7 @@ class Map extends React.Component {
         styleLocation={this.styleLocation}
         categories={this.props.domain.categories}
         projectPoint={this.projectPoint}
+        selected={this.props.app.selected}
         narrative={this.props.app.narrative}
         onSelect={this.props.methods.onSelect}
         onSelectNarrative={this.props.methods.onSelectNarrative}
