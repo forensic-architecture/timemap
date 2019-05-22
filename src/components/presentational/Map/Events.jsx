@@ -1,11 +1,26 @@
 import React from 'react'
 import { Portal } from 'react-portal'
 
-function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation, narrative, onSelect, svg, locations }) {
+function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation, selected, narrative, onSelect, svg, locations }) {
   function getCoordinatesForPercent (radius, percent) {
     const x = radius * Math.cos(2 * Math.PI * percent)
     const y = radius * Math.sin(2 * Math.PI * percent)
     return [x, y]
+  }
+
+  function renderBorder() {
+    return (
+      <React.Fragment>
+        {<circle
+          class='event-hover'
+          cx="0"
+          cy="0"
+          r="10"
+          stroke="#ffd800"
+          fill-opacity="0.0"
+        />}
+      </React.Fragment>
+    )
   }
 
   function renderLocationSlicesByCategory (location) {
@@ -94,16 +109,20 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
     const customStyles = styleLocation ? styleLocation(location) : null
     const extraRender = (customStyles) ? customStyles[1] : null
 
-    return (
-      <g
-        className={`location ${narrative ? 'no-hover' : ''}`}
-        transform={`translate(${x}, ${y})`}
-        onClick={(!narrative) ? () => onSelect(location.events) : null}
-      >
-        {renderLocationSlicesByCategory(location)}
-        {extraRender ? extraRender() : null}
-      </g>
+    const isSelected = selected.reduce( (acc, event) => {
+      return acc || (event.latitude == location.latitude && event.longitude == location.longitude)
+    }, false)
 
+    return (
+        <g
+          className={`location-event ${narrative ? 'no-hover' : ''}`}
+          transform={`translate(${x}, ${y})`}
+          onClick={(!narrative) ? () => onSelect(location.events) : null}
+        >
+          {renderLocationSlicesByCategory(location)}
+          {extraRender ? extraRender() : null}
+          {isSelected ? null : renderBorder()}
+        </g>
     )
   }
 
