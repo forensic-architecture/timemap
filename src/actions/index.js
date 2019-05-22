@@ -1,5 +1,5 @@
 /* global fetch, alert */
-import { urlFromEnv } from '../js/utilities'
+import { urlFromEnv } from '../common/utilities'
 
 // TODO: relegate these URLs entirely to environment variables
 const EVENT_DATA_URL = urlFromEnv('EVENT_EXT')

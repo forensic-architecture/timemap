@@ -1,8 +1,8 @@
-import copy from '../js/data/copy.json'
+import copy from '../common/data/copy.json'
 import {
   parseDate,
   formatterWithYear
-} from '../js/utilities'
+} from '../common/utilities'
 import React from 'react'
 
 import CardTimestamp from './presentational/Card/Timestamp'

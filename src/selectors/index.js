@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { compareTimestamp, insetSourceFrom } from '../js/utilities'
+import { compareTimestamp, insetSourceFrom } from '../common/utilities'
 import { isTimeRangedIn } from './helpers'
 
 // Input selectors

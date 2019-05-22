@@ -1,6 +1,6 @@
 import React from 'react'
 import Checkbox from '../presentational/Checkbox'
-import copy from '../../js/data/copy.json'
+import copy from '../../common/data/copy.json'
 
 function TagListPanel ({
   tags,

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import * as selectors from '../selectors'
 
 import Card from './Card.jsx'
-import copy from '../js/data/copy.json'
+import copy from '../common/data/copy.json'
 
 class CardStack extends React.Component {
   constructor () {

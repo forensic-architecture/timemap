@@ -1,5 +1,5 @@
 import initial from '../store/initial.js'
-import { parseDate, toggleFlagAC } from '../js/utilities'
+import { parseDate, toggleFlagAC } from '../common/utilities'
 
 import {
   UPDATE_HIGHLIGHTED,

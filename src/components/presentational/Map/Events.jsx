@@ -1,5 +1,6 @@
 import React from 'react'
 import { Portal } from 'react-portal'
+import colors from '../../../common/global.js'
 
 function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation, selected, narrative, onSelect, svg, locations }) {
   function getCoordinatesForPercent (radius, percent) {
@@ -16,7 +17,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
           cx="0"
           cy="0"
           r="10"
-          stroke="#ffd800"
+          stroke={colors.primaryHighlight}
           fill-opacity="0.0"
         />}
       </React.Fragment>
@@ -30,7 +31,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
 
     let styles = ({
       fill: getCategoryColor(locCategory),
-      stroke: '#ffffff',
+      stroke: colors.darkBackground,
       strokeWidth: 0,
       fillOpacity: 0.85,
       ...extraStyles

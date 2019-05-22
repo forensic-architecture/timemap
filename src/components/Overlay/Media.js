@@ -1,7 +1,7 @@
 import React from 'react'
 import Content from './Content'
 import Controls from './Controls'
-import { selectTypeFromPathWithPoster } from '../../js/utilities'
+import { selectTypeFromPathWithPoster } from '../../common/utilities'
 
 class SourceOverlay extends React.Component {
   constructor () {
