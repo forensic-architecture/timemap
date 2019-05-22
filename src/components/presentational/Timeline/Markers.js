@@ -1,4 +1,5 @@
 import React from 'react'
+import colors from '../../../common/global.js'
 
 const TimelineMarkers = ({ styles, getEventX, getCategoryY, transitionDuration, selected }) => {
   function renderMarker (event) {
@@ -7,7 +8,7 @@ const TimelineMarkers = ({ styles, getEventX, getCategoryY, transitionDuration, 
         className='timeline-marker'
         cx={0}
         cy={0}
-        stroke={styles ? styles.stroke : '#ffffff'}
+        stroke={styles ? styles.stroke : colors.secondaryHighlight}
         stroke-opacity='1'
         stroke-width={styles ? styles['stroke-width'] : 2}
         stroke-linecap=''

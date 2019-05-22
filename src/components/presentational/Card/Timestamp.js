@@ -1,7 +1,7 @@
 import React from 'react'
 
-import copy from '../../../js/data/copy.json'
-import { isNotNullNorUndefined } from '../../../js/utilities'
+import copy from '../../../common/data/copy.json'
+import { isNotNullNorUndefined } from '../../../common/utilities'
 
 const CardTimestamp = ({ timelabel, language, precision }) => {
   // const daytimeLang = copy[language].cardstack.timestamp

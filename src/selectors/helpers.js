@@ -1,4 +1,4 @@
-import { parseTimestamp } from '../js/utilities'
+import { parseTimestamp } from '../common/utilities'
 /**
 * Some handy helpers
 */

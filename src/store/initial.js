@@ -1,6 +1,5 @@
 import { mergeDeepLeft } from 'ramda'
-
-const FA_RED = '#eb443e';
+import colors from '../common/global.js'
 
 const initial = {
   /*
@@ -107,12 +106,12 @@ const initial = {
     tiles: 'openstreetmap', // ['openstreetmap', 'streets', 'satellite']
     style: {
       categories: {
-        default: FA_RED
+        default: colors.fa_red
       },
       narratives: {
         default: {
           opacity: 0.9,
-          stroke: FA_RED,
+          stroke: colors.fa_red,
           strokeWidth: 3
         }
       },

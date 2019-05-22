@@ -9,8 +9,8 @@ import Search from './Search'
 import TagListPanel from './TagListPanel'
 import CategoriesListPanel from './CategoriesListPanel'
 import BottomActions from './BottomActions'
-import copy from '../../js/data/copy.json'
-import { trimAndEllipse } from '../../js/utilities.js'
+import copy from '../../common/data/copy.json'
+import { trimAndEllipse } from '../../common/utilities.js'
 
 class Toolbar extends React.Component {
   constructor (props) {

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Portal } from 'react-portal'
+import colors from '../../../common/global.js'
 
 class MapSelectedEvents extends React.Component {
   renderMarker (event) {
@@ -13,7 +14,7 @@ class MapSelectedEvents extends React.Component {
       >
         <path
           className='leaflet-interactive'
-          stroke={styles ? styles.stroke : '#ffd800'}
+          stroke={styles ? styles.stroke : colors.primaryHighlight}
           stroke-opacity='1'
           stroke-width={styles ? styles['stroke-width'] : 2}
           stroke-linecap=''

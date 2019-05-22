@@ -1,5 +1,5 @@
 import React from 'react'
-import copy from '../js/data/copy.json'
+import copy from '../common/data/copy.json'
 
 export default ({ ui, app, methods }) => {
   function renderIntro () {
