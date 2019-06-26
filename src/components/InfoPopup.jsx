@@ -3,7 +3,9 @@ import copy from '../common/data/copy.json'
 
 export default ({ ui, app, methods }) => {
   function renderIntro () {
-    return copy[app.language].legend.default.intro.map(txt => <p>{txt}</p>)
+    var introCopy = copy[app.language].legend.default.intro
+    if (process.env.store.text && process.env.store.text.introCopy) introCopy = process.env.store.text.introCopy
+    return introCopy.map(txt => <p>{txt}</p>)
   }
 
   function renderHalfWithDot () {
@@ -83,7 +85,7 @@ export default ({ ui, app, methods }) => {
         </div>
         <br/>
         <div>
-          <p>In narratives, arrows indicate physical movement between two events.</p>
+          <p>In narrative mode, arrows indicate physical movement between two events.</p>
         </div>
 
         {
