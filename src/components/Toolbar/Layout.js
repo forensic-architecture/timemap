@@ -149,7 +149,7 @@ class Toolbar extends React.Component {
 
   renderToolbarTabs () {
     let title = copy[this.props.language].toolbar.title
-    if (process.env.title) title = process.env.title
+    if (process.env.display_title) title = process.env.display_title
     const narrativesLabel = copy[this.props.language].toolbar.narratives_label
     const tagsLabel = copy[this.props.language].toolbar.tags_label
     const categoriesLabel = 'Categories' // TODO:

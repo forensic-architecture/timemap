@@ -1,5 +1,6 @@
 module.exports = {
   title: 'example',
+  display_title: 'example',
   SERVER_ROOT: 'http://localhost:4040',
   EVENT_EXT: '/api/example/export_events/deeprows',
   CATEGORY_EXT: '/api/example/export_categories/rows',
