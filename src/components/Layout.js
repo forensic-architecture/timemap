@@ -123,6 +123,7 @@ class Dashboard extends React.Component {
         <Toolbar
           isNarrative={!!app.narrative}
           methods={{
+            onTitle: actions.toggleCover,
             onTagFilter: tag => actions.toggleFilter('tags', tag),
             onCategoryFilter: category => actions.toggleFilter('categories', category),
             onSelectNarrative: this.setNarrative

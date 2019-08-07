@@ -64,7 +64,7 @@ class SourceOverlay extends React.Component {
 
             {(type || date || url) ? <div className='mo-box'>
               <div>
-                {type ? <h4>Media type</h4> : null}
+                {type ? <h4>Evidence type</h4> : null}
                 {type ? <p><i className='material-icons left'>perm_media</i>{type}</p> : null}
               </div>
               <div>
