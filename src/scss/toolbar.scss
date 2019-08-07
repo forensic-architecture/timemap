@@ -38,7 +38,7 @@
       transition: 0.2s ease;
       border-bottom: 2px solid $midwhite;
       text-transform: uppercase;
-      font-family: 'Merriweather', serif;
+      font-family: Helvetica, serif;
       cursor: pointer;
 
       p {
@@ -259,7 +259,7 @@
   box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3), 10px 15px 12px rgba(0, 0, 0, 0.22);
 
   h2 {
-    font-family: 'Merriweather', 'Georgia', 'serif';
+    font-family: Helvetica, 'Georgia', 'serif';
     font-size: $large;
     text-transform: none;
     letter-spacing: normal;
@@ -267,7 +267,7 @@
 
   p {
     font-size: $normal;
-    font-family: 'Merriweather', 'Georgia', 'serif';
+    font-family: Helvetica, 'Georgia', 'serif';
     line-height: 1.4em;
   };
 
@@ -415,7 +415,7 @@
       line-height: 36px;
       float: left;
       font-size: $normal;
-      font-family: 'Merriweather', 'Georgia', 'serif';
+      font-family: Helvetica, 'Georgia', 'serif';
       color: $midwhite;
     }
 

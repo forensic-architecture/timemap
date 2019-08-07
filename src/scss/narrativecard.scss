@@ -17,7 +17,7 @@ NARRATIVE INFO
   background: $black;
   border: 1px solid $midgrey;
   color: $offwhite;
-  font-family: 'Merriweather', 'Georgia', serif;
+  font-family: Helvetica, 'Georgia', serif;
 
   .narrative-info-header {
     display: flex;
@@ -53,7 +53,7 @@ NARRATIVE INFO
 
   h3 {
     font-size: $large;
-    font-family: 'Merriweather', 'Georgia', serif;
+    font-family: Helvetica, 'Georgia', serif;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     font-weight: 100;
