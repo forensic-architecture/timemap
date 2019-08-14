@@ -33,7 +33,7 @@ $banner-height: 100px;
   align-items: center;
   // height: calc(100vh - 350px);
   // max-height: calc(100vh - 350px);
-  width: $panel-width;
+  width: 70vw;
   max-width: 90vw;
   box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   overflow: auto;
@@ -44,6 +44,7 @@ $overlay-bg: rgba(239,239,239,0.9);
 .mo-banner {
   position: fixed;
   min-height: 100px;
+  color: $offwhite;
   background-color: transparent;
   top: 0;
   width: 100%;
@@ -308,6 +309,7 @@ $overlay-bg: rgba(239,239,239,0.9);
   justify-content: center;
   padding: 20px;
   min-width: calc(100% - 40px);
+  z-index: 99999;
 }
 
 .media-player {
