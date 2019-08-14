@@ -48,7 +48,7 @@ $overlay-bg: rgba(239,239,239,0.9);
   top: 0;
   width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: stretch;
   flex-direction: row;
 
@@ -57,6 +57,7 @@ $overlay-bg: rgba(239,239,239,0.9);
     justify-content: center;
     align-items: center;
     min-width: $banner-height;
+    width: $banner-height;
     .material-icons {
       font-size: 40pt;
       background-color: transparent;
@@ -75,17 +76,37 @@ $overlay-bg: rgba(239,239,239,0.9);
   }
 
   .mo-banner-content {
-    flex: 11;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
-    h3 {
+    margin-left: $banner-height; // to offset the 2*$banner-height below
+    &.h3 {
       border-radius: 2px;
       padding: 10px 15px;
       background-color: transparent;
       color: $overlay-bg;
       margin-left: -$banner-height;
+    }
+  }
+
+  .mo-banner-trans {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 2 * $banner-height;
+    width: 2 * $banner-height;
+    // width: $banner-height;
+    .mo-trans {
+      padding: 15px;
+      margin: 10px;
+      border: 1px solid $darkwhite;
+      transition: 0.3s all ease;
+      &:hover {
+        background-color: $darkwhite;
+        cursor: pointer;
+      }
     }
   }
 }

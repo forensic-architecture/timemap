@@ -103,7 +103,8 @@
     max-width: 100%;
     min-height: 100px;
     &.thin {
-      min-width: 250px;
+      min-width: 350px;
+      width: 400px;
       max-width: 400px;
     }
     margin: auto;
@@ -119,6 +120,9 @@
         flex-direction: column;
       }
       justify-content: space-around;
+      &.vertical {
+          flex-direction: column;
+      }
       .cell {
         border: 1px solid white;
         display: flex;

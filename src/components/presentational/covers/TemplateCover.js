@@ -15,9 +15,9 @@ class TemplateCover extends React.Component {
     }
   }
 
-  getVideo(index) {
-    if(index == MEDIA_HOWTO) {
-      return this.props.cover.howToVideo
+  getVideo(index, headerEndIndex) {
+    if(index < headerEndIndex) {
+      return this.props.cover.headerVideos[index]
     } else if(index >= 0) {
       return this.props.cover.videos[index]
     } else {
@@ -26,7 +26,8 @@ class TemplateCover extends React.Component {
   }
 
   render () {
-    var video = this.getVideo(this.state.video)
+    const { headerVideos } = this.props.cover
+    var video = this.getVideo(this.state.video, headerVideos.length || 0)
     return (
       <div className='default-cover-container'>
         <div className="cover-content">
@@ -55,11 +56,13 @@ class TemplateCover extends React.Component {
           <hr />
           <div className='hero thin'>
           {
-            this.props.cover.howToVideo ? (
+            headerVideos ? (
               <div className='row'>
-                <div className='cell plain' onClick={() => this.setState({ video: -1 })}>
-                  How to Use the Platform
-                </div>
+                { headerVideos.slice(0,2).map( (media, index) => (
+                  <div className='cell plain' onClick={() => this.setState({ video: index })}>
+                    {media.buttonTitle}
+                  </div>
+                ) ) }
               </div>
             ) : null
           }
@@ -76,8 +79,9 @@ class TemplateCover extends React.Component {
             this.props.cover.videos ? (
               <div className='hero'>
                 <div className='row'>
+                  {/* NOTE: only take first four videos, drop any others for style reasons */}
                   { this.props.cover.videos.slice(0,4).map( (media, index) => (
-                    <div className='cell small' onClick={() => this.setState({ video: index })} >
+                    <div className='cell small' onClick={() => this.setState({ video: index + (headerVideos.length || 0)})} >
                       {media.buttonTitle}<br />{media.buttonSubtitle}
                     </div>
                   )) }
@@ -98,6 +102,7 @@ class TemplateCover extends React.Component {
               paths: [video.file],
               poster: video.poster
             }}
+            translations={video.translations}
             onCancel={() => this.setState({ video: MEDIA_HIDDEN })}
           />
         ) : null }

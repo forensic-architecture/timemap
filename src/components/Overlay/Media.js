@@ -33,6 +33,7 @@ class SourceOverlay extends React.Component {
       return this.renderError()
     }
     const { url, title, paths, date, type, desc, poster } = this.props.source
+    const { translations } = this.props
     const shortenedTitle = title.substring(0, 100)
 
     return (
@@ -42,9 +43,14 @@ class SourceOverlay extends React.Component {
             <i className='material-icons'>close</i>
           </div>
 
-          <div className='mo-banner-content'>
-            <h3>{shortenedTitle}</h3>
+          <h3 className='mo-banner-content'>{shortenedTitle}</h3>
+
+          <div className='mo-banner-trans'>
+            {translations ? translations.map(trans => (
+              <div className='mo-trans' onClick={() => alert("TODO:")}>{trans.code}</div>
+            )) : null}
           </div>
+
         </div>
 
         <div className='mo-container' onClick={e => e.stopPropagation()}>
@@ -62,20 +68,22 @@ class SourceOverlay extends React.Component {
               <div>{desc}</div>
             </div>
 
-            {(type || date || url) ? <div className='mo-box'>
-              <div>
-                {type ? <h4>Evidence type</h4> : null}
-                {type ? <p><i className='material-icons left'>perm_media</i>{type}</p> : null}
+            {(type || date || url) ? (
+              <div className='mo-box'>
+                <div>
+                  {type ? <h4>Evidence type</h4> : null}
+                  {type ? <p><i className='material-icons left'>perm_media</i>{type}</p> : null}
+                </div>
+                <div>
+                  {date ? <h4>Date Published</h4> : null}
+                  {date ? <p><i className='material-icons left'>today</i>{date}</p> : null}
+                </div>
+                <div>
+                  {url ? <h4>Link</h4> : null}
+                  {url ? <span><i className='material-icons left'>link</i><a href={url} target='_blank'>Link to original URL</a></span> : null}
+                </div>
               </div>
-              <div>
-                {date ? <h4>Date Published</h4> : null}
-                {date ? <p><i className='material-icons left'>today</i>{date}</p> : null}
-              </div>
-              <div>
-                {url ? <h4>Link</h4> : null}
-                {url ? <span><i className='material-icons left'>link</i><a href={url} target='_blank'>Link to original URL</a></span> : null}
-              </div>
-            </div> : null}
+            ) : null}
           </div>
         </div>
 
