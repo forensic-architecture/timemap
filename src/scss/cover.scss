@@ -2,9 +2,9 @@
   position: absolute;
   top: -100%;
   left: 0;
+  height: 100vh;
   background-color: black;
   width: 100%;
-  height: 100%;
   opacity: 1;
   transition: top 0.4s ease;
   z-index: $overheader + 1;
@@ -26,16 +26,16 @@
   right: 0;
   bottom: 0;
   left: 0;
-  overflow: hidden;
+  // overflow: hidden;
   z-index: -100;
   background: #000000; }
 
 .fullscreen-bg__video {
   position: relative;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  left: -25vw;
+  width: 150vw;
+  height: 100vh;
   -webkit-filter: contrast(70%) brightness(70%) grayscale(100%);
   /* Webkit */
   /*  filter: gray; /* IE6-9 */
@@ -47,7 +47,6 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  height: 100%;
 }
 
 .cover-container {
