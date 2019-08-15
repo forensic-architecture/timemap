@@ -9,16 +9,16 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
     return [x, y]
   }
 
-  function renderBorder() {
+  function renderBorder () {
     return (
       <React.Fragment>
         {<circle
           class='event-hover'
-          cx="0"
-          cy="0"
-          r="10"
+          cx='0'
+          cy='0'
+          r='10'
           stroke={colors.primaryHighlight}
-          fill-opacity="0.0"
+          fill-opacity='0.0'
         />}
       </React.Fragment>
     )
@@ -110,20 +110,20 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
     const customStyles = styleLocation ? styleLocation(location) : null
     const extraRender = (customStyles) ? customStyles[1] : null
 
-    const isSelected = selected.reduce( (acc, event) => {
-      return acc || (event.latitude == location.latitude && event.longitude == location.longitude)
+    const isSelected = selected.reduce((acc, event) => {
+      return acc || (event.latitude === location.latitude && event.longitude === location.longitude)
     }, false)
 
     return (
-        <g
-          className={`location-event ${narrative ? 'no-hover' : ''}`}
-          transform={`translate(${x}, ${y})`}
-          onClick={(!narrative) ? () => onSelect(location.events) : null}
-        >
-          {renderLocationSlicesByCategory(location)}
-          {extraRender ? extraRender() : null}
-          {isSelected ? null : renderBorder()}
-        </g>
+      <g
+        className={`location-event ${narrative ? 'no-hover' : ''}`}
+        transform={`translate(${x}, ${y})`}
+        onClick={(!narrative) ? () => onSelect(location.events) : null}
+      >
+        {renderLocationSlicesByCategory(location)}
+        {extraRender ? extraRender() : null}
+        {isSelected ? null : renderBorder()}
+      </g>
     )
   }
 

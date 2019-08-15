@@ -1,8 +1,8 @@
 import React from 'react'
 
-function zoomIsActive(duration, extent) {
+function zoomIsActive (duration, extent) {
   if (duration > 1570000 && extent > 1570000) {
-    return true;
+    return true
   }
   return duration === extent
 }
