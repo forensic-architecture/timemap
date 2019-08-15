@@ -311,7 +311,7 @@ $overlay-bg: rgba(239,239,239,0.9);
   justify-content: center;
   padding: 20px;
   min-width: calc(100% - 40px);
-  z-index: 99999;
+  z-index: $final-level;
 }
 
 .media-player {

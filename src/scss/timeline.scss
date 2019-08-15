@@ -1,9 +1,11 @@
+$timeline-height: 170px;
+
 .timeline-wrapper {
   position: fixed;
   box-sizing: border-box;
   left: 110px;
   right: 0px;
-  height: 170px;
+  height: $timeline-height;
   background: rgba($black, 0.8);
   box-shadow: 0 -10px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   color: white;
@@ -13,7 +15,7 @@
 
   &.folded {
     transition: bottom 0.2s ease;
-    bottom: -170px;
+    bottom: -$timeline-height;
 
     .timeline-header .timeline-toggle p .arrow-down {
       transform: translate(0, 5px)rotate(-135deg);
@@ -187,9 +189,9 @@
 
       .drag-grabber {
         cursor: -webkit-grab;
-        cursor: -moz-grab;     
+        cursor: -moz-grab;
         fill: $offwhite;
-        opacity: 0.05;   
+        opacity: 0.05;
       }
 
       .axisBoundaries {
