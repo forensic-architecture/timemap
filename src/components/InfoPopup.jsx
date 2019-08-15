@@ -24,9 +24,9 @@ export default ({ ui, app, methods }) => {
       <style>{`.svg-demo { max-width: 30px } .first { fill: ${firstFill} } .second { fill: ${secondFill} } .demo-text { font-size: 9pt; color: white; font-weight:900 }`}</style>,
       <svg viewBox='0 0 30 30' className='svg-demo'>
         <g className='location demo-element' transform='translate(15,15)'>
-          <path className="location-event-marker first" id="arc_0" d="M 10 0 A 10 10 0 0 1 -10 1.2246467991473533e-15 L 0 0  L 10 0 Z" />
-          <path class="location-event-marker second" id="arc_1" d="M -10 1.2246467991473533e-15 A 10 10 0 0 1 10 -2.4492935982947065e-15 L 0 0  L -10 1.2246467991473533e-15 Z" />
-          <text class="location-count demo-text" dx="-4" dy="4">2</text>
+          <path className='location-event-marker first' id='arc_0' d='M 10 0 A 10 10 0 0 1 -10 1.2246467991473533e-15 L 0 0  L 10 0 Z' />
+          <path class='location-event-marker second' id='arc_1' d='M -10 1.2246467991473533e-15 A 10 10 0 0 1 10 -2.4492935982947065e-15 L 0 0  L -10 1.2246467991473533e-15 Z' />
+          <text class='location-count demo-text' dx='-4' dy='4'>2</text>
         </g>
       </svg>
     ]
@@ -61,7 +61,6 @@ export default ({ ui, app, methods }) => {
   }
 
   function renderView2DLegend () {
-    const categories = Object.keys(ui.style.categories).filter(label => label !== 'default')
     return (
       <div className={`infopopup ${(app.flags.isInfopopup) ? '' : 'hidden'}`}>
         <div className='legend-header'>
@@ -83,7 +82,7 @@ export default ({ ui, app, methods }) => {
             </div>
           </div>
         </div>
-        <br/>
+        <br />
         <div>
           <p>In narrative mode, arrows indicate physical movement between two events.</p>
         </div>
@@ -91,7 +90,7 @@ export default ({ ui, app, methods }) => {
         {
           ui.style.arrows ? (
 
-            Object.keys(ui.style.arrows).map( arrowName => (
+            Object.keys(ui.style.arrows).map(arrowName => (
               <div className='legend-section'>
                 {renderArrow(ui.style.arrows[arrowName])}
                 <div className='legend-labels'>

@@ -52,9 +52,9 @@ class Map extends React.Component {
         if (eventPoint !== null && eventPoint.latitude && eventPoint.longitude) {
           // this.map.setView([eventPoint.latitude, eventPoint.longitude])
           this.map.setView([eventPoint.latitude, eventPoint.longitude], this.map.getZoom(), {
-            "animate":true,
-            "pan":{
-              "duration": 0.7
+            'animate': true,
+            'pan': {
+              'duration': 0.7
             }
           })
         }
