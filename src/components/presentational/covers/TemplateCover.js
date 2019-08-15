@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import MediaOverlay from '../../Overlay/Media'
-
-const ReactMarkdown = require('react-markdown')
+import marked from 'marked'
 
 const MEDIA_HIDDEN = -2
 
@@ -72,7 +71,7 @@ class TemplateCover extends React.Component {
             </div>
           </div>
 
-          <ReactMarkdown source={this.props.cover.description} />
+          <div className='md-container' dangerouslySetInnerHTML={{ __html: marked(this.props.cover.description) }} />
 
           {
             this.props.cover.videos ? (
