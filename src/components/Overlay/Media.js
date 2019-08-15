@@ -61,12 +61,12 @@ class SourceOverlay extends React.Component {
         </div>
         <div className='mo-container' onClick={e => e.stopPropagation()}>
           <div className='mo-media-container'>
-            <Content media={paths.map(p => selectTypeFromPathWithPoster(p, poster))} viewmediaIdx={this.state.mediaIdx} />
+            <Content media={paths.map(p => selectTypeFromPathWithPoster(p, poster))} viewIdx={this.state.mediaIdx} />
           </div>
         </div>
 
         <div className='mo-footer'>
-          <Controls paths={paths} viewmediaIdx={this.state.mediaIdx} onShiftHandler={this.onShiftGallery} />
+          <Controls paths={paths} viewIdx={this.state.mediaIdx} onShiftHandler={this.onShiftGallery} />
 
           <div className='mo-meta-container'>
             <div className='mo-box-title'>
