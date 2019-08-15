@@ -3,10 +3,15 @@ import Content from './Content'
 import Controls from './Controls'
 import { selectTypeFromPathWithPoster } from '../../common/utilities'
 
+/*
+ * Inside the SourceOverlay, both the currently displaying media and language
+ * can be changed by the user. These are both managed in this component's React
+ * state.
+ */
 class SourceOverlay extends React.Component {
   constructor () {
     super()
-    this.state = { mediaIdx: 0, transIdx: 0 }
+    this.state = { mediaIdx: 0, langIdx: 0 }
     this.onShiftGallery = this.onShiftGallery.bind(this)
   }
 
@@ -28,8 +33,8 @@ class SourceOverlay extends React.Component {
     this.setState({ mediaIdx: this.state.mediaIdx + shift })
   }
 
-  switchToTrans (idx) {
-    this.setState({ transIdx: idx })
+  switchLanguage (idx) {
+    this.setState({ langIdx: idx })
   }
 
   renderContent (source) {
@@ -46,10 +51,10 @@ class SourceOverlay extends React.Component {
 
           <div className='mo-banner-trans'>
             {this.props.translations ? this.props.translations.map((trans, idx) => (
-              this.state.transIdx !== idx + 1 ? (
-                <div className='mo-trans' onClick={() => this.switchToTrans(idx + 1)}>{trans.code}</div>
+              this.state.langIdx !== idx + 1 ? (
+                <div className='mo-trans' onClick={() => this.switchLanguage(idx + 1)}>{trans.code}</div>
               ) : (
-                <div className='mo-trans' onClick={() => this.switchToTrans(0)}>EN</div>
+                <div className='mo-trans' onClick={() => this.switchLanguage(0)}>EN</div>
               )
             )) : null}
           </div>
@@ -90,15 +95,20 @@ class SourceOverlay extends React.Component {
     )
   }
 
+  renderIntlContent () {
+    const { langIdx } = this.state
+    const source = langIdx === 0 ? this.props.source : this.props.translations[langIdx - 1]
+    return this.renderContent(source)
+  }
+
   render () {
     if (typeof (this.props.source) !== 'object') {
       return this.renderError()
     }
-    const { transIdx } = this.state
 
     return (
       <div className={`mo-overlay ${this.props.opaque ? 'opaque' : ''}`}>
-        {this.renderContent(transIdx === 0 ? this.props.source : this.props.translations[transIdx - 1])}
+        {this.renderIntlContent()}
       </div>
     )
   }
