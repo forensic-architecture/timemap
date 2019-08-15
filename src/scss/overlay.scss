@@ -8,6 +8,10 @@ $header-inset: 10px;
 
 $banner-height: 100px;
 
+a {
+    color: $yellow !important;
+}
+
 .mo-overlay {
   display: flex;
   flex-direction: column;

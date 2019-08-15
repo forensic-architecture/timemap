@@ -14,7 +14,7 @@ import InfoPopUp from './InfoPopup.jsx'
 import Timeline from './Timeline.jsx'
 import Notification from './Notification.jsx'
 import StaticPage from './StaticPage'
-import TemplateCover from './presentational/covers/TemplateCover'
+import TemplateCover from './TemplateCover'
 
 import { parseDate } from '../common/utilities'
 import { isMobile } from 'react-device-detect'
