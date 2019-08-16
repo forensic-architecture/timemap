@@ -5,7 +5,7 @@ import Md from './Md'
 import Spinner from '../presentational/Spinner'
 import NoSource from '../presentational/NoSource'
 
-export default ({ media, viewIdx }) => {
+export default ({ media, viewIdx, translations, switchLanguage, langIdx }) => {
   const el = document.querySelector(`.source-media-gallery`)
   const shiftW = el ? el.getBoundingClientRect().width : 0
 
@@ -26,6 +26,15 @@ export default ({ media, viewIdx }) => {
       case 'Video':
         return (
           <div className='media-player'>
+            <div className='banner-trans right-overlay'>
+              {translations ? translations.map((trans, idx) => (
+                langIdx !== idx + 1 ? (
+                  <div className='trans-button' onClick={() => switchLanguage(idx + 1)}>{trans.code}</div>
+                ) : (
+                  <div className='trans-button' onClick={() => switchLanguage(0)}>EN</div>
+                )
+              )) : null}
+            </div>
             <Player
               poster={poster}
               className='source-video'
