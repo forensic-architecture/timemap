@@ -94,8 +94,22 @@ class SourceOverlay extends React.Component {
 
   renderIntlContent () {
     const { langIdx } = this.state
-    const source = langIdx === 0 ? this.props.source : this.props.translations[langIdx - 1]
-    return this.renderContent(source)
+    const { translations, source } = this.props
+    let translated = null
+    if (translations && translations.length && langIdx > 0) {
+      translated = translations[langIdx - 1]
+    }
+    if (translated) {
+      translated = {
+        ...translated,
+        poster: source.poster,
+        // NOTE: this is to allow a slightly nicer syntax when using the Media
+        // overlay in cover videos.
+        paths: translated.file ? [translated.file] : translated.paths
+      }
+    }
+
+    return this.renderContent(langIdx === 0 ? source : translated)
   }
 
   render () {

@@ -43,11 +43,18 @@ class TemplateCover extends React.Component {
   renderFeature () {
     const { featureVideo } = this.props.cover
     const { featureLang } = this.state
-    const source = featureLang === 0 ? featureVideo : featureVideo.translations[featureLang - 1]
+    const { translations } = featureVideo
+    const source = featureLang === 0
+      ? featureVideo
+      : {
+        ...translations[featureLang - 1],
+        poster: featureVideo.poster
+      }
+
     return (
       <div>
         <div className='banner-trans right-overlay'>
-          {featureVideo.translations && featureVideo.translations.map((trans, idx) => {
+          {translations && translations.map((trans, idx) => {
             const langIdx = idx + 1 // default lang idx is 0
             if (featureLang !== langIdx) {
               return <div onClick={() => this.setState({ featureLang: langIdx })} className='trans-button'>{trans.code}</div>
