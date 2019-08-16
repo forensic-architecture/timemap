@@ -29,6 +29,7 @@ a {
   max-width: 1500px;
   box-shadow: 0 19px 19px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   overflow: auto;
+  z-index: $overheader;
 }
 
 $overlay-bg: rgba(239,239,239,0.9);
