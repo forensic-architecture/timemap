@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Player } from 'video-react'
 import marked from 'marked'
 import MediaOverlay from './Overlay/Media'
 
@@ -15,7 +16,8 @@ class TemplateCover extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      video: MEDIA_HIDDEN
+      video: MEDIA_HIDDEN,
+      featureLang: 0
     }
   }
 
@@ -36,6 +38,33 @@ class TemplateCover extends React.Component {
         video: index + buffer
       })
     }
+  }
+
+  renderFeature () {
+    const { featureVideo } = this.props.cover
+    const { featureLang } = this.state
+    const source = featureLang === 0 ? featureVideo : featureVideo.translations[featureLang - 1]
+    return (
+      <div>
+        <div className='banner-trans right-overlay'>
+          {featureVideo.translations && featureVideo.translations.map((trans, idx) => {
+            const langIdx = idx + 1 // default lang idx is 0
+            if (featureLang !== langIdx) {
+              return <div onClick={() => this.setState({ featureLang: langIdx })} className='trans-button'>{trans.code}</div>
+            } else {
+              return <div onClick={() => this.setState({ featureLang: 0 })} className='trans-button'>ENG</div>
+            }
+          })}
+        </div>
+
+        <Player
+          className='source-video'
+          poster={source.poster}
+          playsInline
+          src={source.file}
+        />
+      </div>
+    )
   }
 
   renderHeaderVideos () {
@@ -78,6 +107,7 @@ class TemplateCover extends React.Component {
       )
     }
 
+    const { videos } = this.props.cover
     return (
       <div className='default-cover-container'>
         <div className='cover-content'>
@@ -104,6 +134,8 @@ class TemplateCover extends React.Component {
             ) : null
           }
           <hr />
+
+          {this.props.cover.featureVideo ? this.renderFeature() : null}
           <div className='hero thin'>
             {
               this.props.cover.headerVideos ? this.renderHeaderVideos() : null
@@ -117,20 +149,25 @@ class TemplateCover extends React.Component {
 
           <div className='md-container' dangerouslySetInnerHTML={{ __html: marked(this.props.cover.description) }} />
 
-          {
-            this.props.cover.videos ? (
-              <div className='hero'>
-                <div className='row'>
-                  {/* NOTE: only take first four videos, drop any others for style reasons */}
-                  { this.props.cover.videos.slice(0, 4).map((media, index) => (
-                    <div className='cell small' onClick={this.onVideoClickHandler(index)} >
-                      {media.buttonTitle}<br />{media.buttonSubtitle}
-                    </div>
-                  )) }
-                </div>
+          {videos ? (
+            <div className='hero'>
+              <div className='row'>
+                {/* NOTE: only take first four videos, drop any others for style reasons */}
+                { videos && videos.slice(0, 2).map((media, index) => (
+                  <div className='cell small' onClick={this.onVideoClickHandler(index)} >
+                    {media.buttonTitle}<br />{media.buttonSubtitle}
+                  </div>
+                )) }
               </div>
-            ) : null
-          }
+              <div className='row'>
+                { videos.length > 2 && this.props.cover.videos.slice(2, 4).map((media, index) => (
+                  <div className='cell small' onClick={this.onVideoClickHandler(index + 2)} >
+                    {media.buttonTitle}<br />{media.buttonSubtitle}
+                  </div>
+                )) }
+              </div>
+            </div>
+          ) : null}
         </div>
 
         {

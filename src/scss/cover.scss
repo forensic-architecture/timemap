@@ -100,9 +100,9 @@
     max-width: 100%;
     min-height: 100px;
     &.thin {
-      min-width: 350px;
-      width: 400px;
-      max-width: 400px;
+      // min-width: 250px;
+      // width: 250px;
+      // max-width: 400px;
     }
     margin: auto;
     display: flex;
@@ -157,8 +157,8 @@
   .cover-content {
     display: flex;
     flex-direction: column;
-    // min-width: 100%;
-    padding: 20px 40px 0px 40px;
+    max-width: 600px;
+    // padding: 20px 40px 0px 40px;
 
     @media only screen and (min-width: 992px) {
       padding: 20px 30% 0px 30%;

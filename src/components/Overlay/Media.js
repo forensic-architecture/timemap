@@ -49,12 +49,12 @@ class SourceOverlay extends React.Component {
 
           <h3 className='mo-banner-content'>{shortenedTitle}</h3>
 
-          <div className='mo-banner-trans'>
+          <div className='banner-trans'>
             {this.props.translations ? this.props.translations.map((trans, idx) => (
               this.state.langIdx !== idx + 1 ? (
-                <div className='mo-trans' onClick={() => this.switchLanguage(idx + 1)}>{trans.code}</div>
+                <div className='trans-button' onClick={() => this.switchLanguage(idx + 1)}>{trans.code}</div>
               ) : (
-                <div className='mo-trans' onClick={() => this.switchLanguage(0)}>EN</div>
+                <div className='trans-button' onClick={() => this.switchLanguage(0)}>EN</div>
               )
             )) : null}
           </div>

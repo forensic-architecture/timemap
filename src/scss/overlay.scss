@@ -83,23 +83,37 @@ $overlay-bg: rgba(239,239,239,0.9);
       margin-left: -$banner-height;
     }
   }
+}
 
-  .mo-banner-trans {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    min-width: 2 * $banner-height;
-    width: 2 * $banner-height;
-    // width: $banner-height;
-    .mo-trans {
-      padding: 15px;
-      margin: 10px;
-      border: 1px solid $darkwhite;
-      transition: 0.3s all ease;
+.banner-trans {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 2 * $banner-height;
+  width: 2 * $banner-height;
+
+  .trans-button {
+    padding: 15px;
+    margin: 10px;
+    border: 1px solid $darkwhite;
+    transition: 0.1s all ease;
+    &:hover {
+      background-color: $darkwhite;
+      cursor: pointer;
+    }
+  }
+
+  &.right-overlay {
+    position: relative;
+    width: 25%;
+    float: right;
+    justify-content: flex-end;
+    z-index: $map;
+    .trans-button {
+      background-color: $black;
       &:hover {
         background-color: $darkwhite;
-        cursor: pointer;
       }
     }
   }
