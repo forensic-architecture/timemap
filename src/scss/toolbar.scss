@@ -10,12 +10,12 @@
   background: $midgrey;
 
   &.narrative-mode {
-    left: -110px;
+    left: -$toolbar-width;
   }
 
   .toolbar {
     position: relative;
-    width: 110px;
+    width: $toolbar-width;
     height: 100%;
     padding: 20px 0px;
     margin: 0;
@@ -61,7 +61,7 @@
 
     .bottom-actions {
       position: absolute;
-      width: 110px;
+      width: $toolbar-width;
       bottom: 10px;
       box-sizing: border-box;
 
@@ -178,8 +178,8 @@
     justify-content: center;
     flex-direction: column;
     height: 60px;
-    width: 110px;
-    padding: 5px 0 5px 0;
+    width: $toolbar-width;
+    padding: 5px 0;
     font-weight: 400;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -255,7 +255,7 @@
   color: $offwhite;
   position: fixed;
   transition: 0.2s ease;
-  left: 110px;
+  left: $toolbar-width;
   box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3), 10px 15px 12px rgba(0, 0, 0, 0.22);
 
   h2 {
@@ -487,20 +487,6 @@
         text-transform: none;
       }
     }
-
-    /*&:first-child {
-      button { background-image: url("/static/archive/img/scene01.jpg"); }
-    }
-    &:nth-child(2n) {
-      button { background-image: url("/static/archive/img/scene02.jpg"); }
-    }
-    &:nth-child(3n) {
-      button { background-image: url("/static/archive/img/scene03.jpg"); }
-    }
-
-    &.back-to-map {
-        button { background-image: url("/static/archive/img/map.jpg"); }
-    }*/
   }
 }
 
@@ -530,11 +516,6 @@
     .toolbar-tab {
       height: 60px;
       padding: 0;
-
-      /*.tab-caption {
-        transition: 0.2s ease;
-        opacity: 0;
-      }*/
 
       &:hover {
         .tab-caption {

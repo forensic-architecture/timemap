@@ -1,7 +1,4 @@
-@import 'colors';
-@import 'fonts';
-@import 'levels';
-@import 'animations';
+@import 'variables';
 @import 'common';
 @import 'loading';
 @import 'header';
@@ -10,10 +7,8 @@
 @import 'overlay';
 @import 'map';
 @import 'timeline';
-@import 'tag-filters';
 @import 'toolbar';
 @import 'infopopup';
 @import 'notification';
-@import 'scene';
 @import 'mediaplayer';
 @import 'cover';

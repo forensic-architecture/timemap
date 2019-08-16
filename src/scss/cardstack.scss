@@ -1,14 +1,10 @@
-@import 'burger';
+// @import 'burger';
 @import 'card';
-
-$card-width: 370px;
-$narrative-info-max-height: 200px;
-$timeline-height: 170px;
 
 .card-stack {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: $card-right;
+  right: $card-right;
   max-height: calc(100% - 180px);
   height: auto;
   overflow-y: scroll;
@@ -17,10 +13,10 @@ $timeline-height: 170px;
   color: white;
 
   &.narrative-mode {
-    right: 10px;
+    right: $card-right;
     left: auto;
-    top: $narrative-info-max-height + 12px + 20px;
-    height: calc(100% - #{$narrative-info-max-height} - #{$timeline-height} - 12px - 20px);
+    top: $narrative-info-height + 32px;
+    height: calc(100% - #{$narrative-info-height} - #{$timeline-height} - 32px);
   }
 
   &.full-height {

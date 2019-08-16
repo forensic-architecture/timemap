@@ -37,10 +37,8 @@
   width: 150vw;
   height: 100vh;
   -webkit-filter: contrast(70%) brightness(70%) grayscale(100%);
-  /* Webkit */
-  /*  filter: gray; /* IE6-9 */
   filter: contrast(70%) brightness(70%) grayscale(100%);
-  /* W3C */ }
+}
 
 .default-cover-container {
   display: flex;
@@ -178,9 +176,6 @@
         justify-content: center;
         align-content: center;
         flex: 1;
-        // border-right: 4px solid black;
-        // padding: 0 10px;
-        // min-height: 60px;
       }
     }
 
