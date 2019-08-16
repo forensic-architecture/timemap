@@ -1,0 +1,68 @@
+$event_default: red;
+
+$offwhite: #efefef;
+$lightwhite: #dfdfdf;
+$midwhite: #a0a0a0;
+$darkwhite: darken($midwhite, 15%);
+$yellow: #ffd800;
+// $yellow: rgb(240, 255, 0);
+$red: rgb(233, 0, 19);
+$green: rgb(61, 241, 79);
+$midgrey: rgb(44, 44, 44);
+$darkgrey: #232323;
+$black: #000000;
+
+// Category colors
+$default:   red;
+$alpha:     #00ff00;
+$beta:      #ff00ff;
+$other:     yellow;
+
+.default { background: $default; }
+.other { background: $other; }
+.alpha { background: $alpha; }
+.beta { background: $beta; }
+
+
+// Font sizes
+$xsmall: 10px;//0.7em;
+$small: 11px;//0.9em;
+$normal: 12px;//1em;
+$large: 14px;//1.1em;
+$xlarge: 16px;//1.2em;
+$xxlarge: 20px;//1.4em;
+$xxxlarge: 32px;
+
+// z-index levels
+$final-level: 10000;
+$loading-overlay: 1000;
+$overheader: 100;
+$header: 10;
+$map-overlay: 2;
+$map: 1;
+$scene: 1;
+$hidden: -1;
+$timeline: 3;
+
+
+// platform-specific sizes
+$infopopup-width: 400px;
+$infopopup-left: 122px;
+$infopopup-bottom: 180px;
+$card-width: 386px;
+$card-right: 9px;
+$narrative-info-height: 205px;
+$narrative-info-desc-height: 153px;
+$timeline-height: 170px;
+$toolbar-width: 110px;
+
+$panel-width: 1000px;
+$panel-height: 1000px;
+$vimeo-width: $panel-width - 100;
+$vimeo-height: $panel-height / 2;
+$banner-height: 100px;
+$padding: 20px;
+$header-inset: 10px;
+
+
+

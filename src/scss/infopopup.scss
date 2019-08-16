@@ -1,15 +1,15 @@
 @import 'burger';
 
 .infopopup {
-  width: 400px;
+  width: $infopopup-width;
   box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3), 10px 15px 12px rgba(0, 0, 0, 0.22);
   color: $darkgrey;
   position: absolute;
   background: $offwhite;
-  border-radius: 5px;
-  bottom: 180px;
-  left: 120px;
+  bottom: $timeline-height;
+  left: $toolbar-width;
   border: 3px solid $offwhite;
+  border-radius: 1px;
   padding: 20px;
   box-sizing: border-box;
   font-family: 'Lato', 'Helvetica', sans-serif;
@@ -75,11 +75,6 @@
 
     .legend-labels {
       display: flex;
-
-      .label {
-        // font-size: $xsmall;
-      }
     }
-
   }
 }

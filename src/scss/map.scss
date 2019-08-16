@@ -163,6 +163,9 @@
   opacity: 1;
 }
 
+.narrative-mode {
+}
+
 .location-event {
   cursor: pointer;
 }
@@ -193,5 +196,12 @@
 }
 
 .no-hover {
-  cursor: grab !important;
+  cursor: grab;
 }
+
+// no hover styles for events when in narrative mode
+.narrative-mode {
+  .event-hover:hover { opacity: 0; }
+  .no-hover { cursor: inherit; }
+}
+
