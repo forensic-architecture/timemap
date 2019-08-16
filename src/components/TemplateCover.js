@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Player } from 'video-react'
 import marked from 'marked'
 import MediaOverlay from './Overlay/Media'
-
+import logo from '../assets/fa-logo.png'
 const MEDIA_HIDDEN = -2
 
 /**
@@ -117,6 +117,7 @@ class TemplateCover extends React.Component {
     const { videos } = this.props.cover
     return (
       <div className='default-cover-container'>
+        <img className='cover-logo' src={logo} />
         <div className='cover-content'>
           {
             this.props.cover.bgVideo ? (
@@ -140,7 +141,6 @@ class TemplateCover extends React.Component {
               <h5>{this.props.cover.subsubtitle}</h5>
             ) : null
           }
-          <hr />
 
           {this.props.cover.featureVideo ? this.renderFeature() : null}
           <div className='hero thin'>

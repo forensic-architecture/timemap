@@ -17,6 +17,11 @@
   }
 }
 
+.cover-logo {
+  margin-top: 30px;
+  width: 200px;
+}
+
 .fullscreen-bg {
   &.hidden {
     top: -100%;
@@ -164,8 +169,8 @@
     overflow-y: auto;
     overflow-x: hidden;
     h1, h2, h3, h4, h5 { text-align: center; }
-    h1 { margin-bottom: -20px; }
-    h5 { margin-top: -10px; }
+    h1 { margin-bottom: -15px; margin-top: 30px; }
+    h5 { margin-top: -15px; }
 
     // mobile styles, remove overlay buttons
     @media only screen and (max-width: 992px) {

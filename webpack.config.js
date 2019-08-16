@@ -1,19 +1,19 @@
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const devMode = process.env.NODE_ENV !== 'production';
-const path = require('path');
+const devMode = process.env.NODE_ENV !== 'production'
+const path = require('path')
 
-const APP_DIR = path.resolve(__dirname, './src');
-const BUILD_DIR = path.resolve(__dirname, './build');
+const APP_DIR = path.resolve(__dirname, './src')
+const BUILD_DIR = path.resolve(__dirname, './build')
 
 /** env variables from config.js */
-const envConfig = require('./config');
+const envConfig = require('./config')
 const userConfig = {}
 const userFeatures = {}
 for (const k in envConfig) {
-  userConfig[k] = JSON.stringify(envConfig[k]);
+  userConfig[k] = JSON.stringify(envConfig[k])
 }
 
 for (const k in envConfig['features']) {
@@ -22,7 +22,7 @@ for (const k in envConfig['features']) {
 
 const config = {
   entry: {
-    index: `${APP_DIR}/index.jsx`,
+    index: `${APP_DIR}/index.jsx`
   },
   devtool: 'source-map',
   module: {
@@ -41,14 +41,14 @@ const config = {
         include: `${APP_DIR}`,
         use: {
           loader: 'babel-loader'
-        },
-      }, {
-        test: /\.(eot|svg|otf|ttf|woff|woff2)$/,
-        use: {
-          loader: 'file-loader',
         }
-      },
-    ],
+      }, {
+        test: /\.(eot|svg|otf|ttf|woff|woff2|png)$/,
+        use: {
+          loader: 'file-loader'
+        }
+      }
+    ]
   },
   node: {
     net: 'empty',
@@ -56,11 +56,11 @@ const config = {
     dns: 'empty'
   },
   resolve: {
-    extensions: ['*', '.js', ],
+    extensions: ['*', '.js']
   },
   output: {
     path: BUILD_DIR,
-    filename: 'js/[name].bundle.js',
+    filename: 'js/[name].bundle.js'
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -72,12 +72,12 @@ const config = {
     }),
     new MiniCssExtractPlugin({
       filename: devMode ? '[name].css' : '[name].[hash].css',
-      chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+      chunkFilename: devMode ? '[id].css' : '[id].[hash].css'
     }),
     new HtmlWebpackPlugin({
-      template: './index.html',
+      template: './index.html'
     })
-  ],
-};
+  ]
+}
 
-module.exports = config;
+module.exports = config
