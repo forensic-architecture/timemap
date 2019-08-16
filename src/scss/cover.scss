@@ -18,8 +18,18 @@
 }
 
 .cover-logo {
-  margin-top: 30px;
+  margin-top: 10px;
   width: 200px;
+
+}
+@media only screen and (max-width: 992px) {
+.cover-logo-container {
+  display: flex;
+  justify-content: center;
+}
+.fullscreen-bg__video {
+  display: none;
+}
 }
 
 .fullscreen-bg {
@@ -43,9 +53,6 @@
   height: 100vh;
   -webkit-filter: contrast(70%) brightness(70%) grayscale(100%);
   filter: contrast(70%) brightness(70%) grayscale(100%);
-  @media only screen and (max-width: 992px) {
-    display: none;
-  }
 }
 
 .default-cover-container {

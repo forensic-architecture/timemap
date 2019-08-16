@@ -117,7 +117,7 @@ class TemplateCover extends React.Component {
     const { videos } = this.props.cover
     return (
       <div className='default-cover-container'>
-        <a href='https://forensic-architecture.org'>
+        <a className='cover-logo-container' href='https://forensic-architecture.org'>
           <img className='cover-logo' src={logo} />
         </a>
         <div className='cover-content'>
