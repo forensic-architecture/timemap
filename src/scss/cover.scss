@@ -17,20 +17,17 @@
   }
 }
 
-.cover-logo {
-  margin-top: 10px;
-  width: 200px;
-
-}
-@media only screen and (max-width: 992px) {
 .cover-logo-container {
+  width: 100%;
   display: flex;
   justify-content: center;
 }
-.fullscreen-bg__video {
-  display: none;
+
+.cover-logo {
+  margin-top: 10px;
+  width: 200px;
 }
-}
+
 
 .fullscreen-bg {
   &.hidden {
@@ -53,6 +50,9 @@
   height: 100vh;
   -webkit-filter: contrast(70%) brightness(70%) grayscale(100%);
   filter: contrast(70%) brightness(70%) grayscale(100%);
+  @media only screen and (max-width: 992px) {
+    display: none;
+  }
 }
 
 .default-cover-container {
