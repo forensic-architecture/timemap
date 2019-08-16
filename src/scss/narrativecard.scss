@@ -104,7 +104,7 @@ NARRATIVE INFO
   bottom: $timeline-height;
   right: auto;
   background-color: rgba(0,0,0,0.8);
-  z-index: $overheader;
+  z-index: $header;
 
   &.left {
     right: $card-right + $card-width - 40pt;

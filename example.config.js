@@ -24,7 +24,7 @@ module.exports = {
     app: {
       map: {
         anchor: [31.356397, 34.784818]
-      },
+      }
     },
     ui: {
       style: {
@@ -37,6 +37,5 @@ module.exports = {
         selectedEvent: {}
       }
     }
-  },
-
+  }
 }
