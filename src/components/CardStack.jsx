@@ -24,7 +24,7 @@ class CardStack extends React.Component {
   scrollToCard () {
     const duration = 500
     const element = this.refCardStack.current
-    const cardScroll = this.refs[this.props.narrative.current].current.offsetTop - 20
+    const cardScroll = this.refs[this.props.narrative.current].current.offsetTop
 
     let start = element.scrollTop
     let change = cardScroll - start
