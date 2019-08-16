@@ -133,11 +133,11 @@ class TemplateCover extends React.Component {
               </div>
             ) : null
           }
-          <h1 style={{ 'margin-bottom': '-20px', 'text-align': 'center' }}>{this.props.cover.title}</h1>
-          <h3 style={{ 'text-align': 'center' }}>{this.props.cover.subtitle}</h3>
+          <h1>{this.props.cover.title}</h1>
+          <h3>{this.props.cover.subtitle}</h3>
           {
             this.props.cover.subsubtitle ? (
-              <h5 style={{ 'text-align': 'center', 'margin-top': '-10px' }}>{this.props.cover.subsubtitle}</h5>
+              <h5>{this.props.cover.subsubtitle}</h5>
             ) : null
           }
           <hr />

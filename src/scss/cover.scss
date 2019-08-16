@@ -38,6 +38,9 @@
   height: 100vh;
   -webkit-filter: contrast(70%) brightness(70%) grayscale(100%);
   filter: contrast(70%) brightness(70%) grayscale(100%);
+  @media only screen and (max-width: 992px) {
+    display: none;
+  }
 }
 
 .default-cover-container {
@@ -158,10 +161,18 @@
     display: flex;
     flex-direction: column;
     max-width: 600px;
-    // padding: 20px 40px 0px 40px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    h1, h2, h3, h4, h5 { text-align: center; }
+    h1 { margin-bottom: -20px; }
+    h5 { margin-top: -10px; }
 
-    @media only screen and (min-width: 992px) {
-      padding: 20px 30% 0px 30%;
+    // mobile styles, remove overlay buttons
+    @media only screen and (max-width: 992px) {
+      font-size: 22pt !important;
+      .cell.plain, .cell.small { display: none; }
+      max-width: 100vw;
+      padding: 0 40px;
     }
 
     .verify-tabs {
