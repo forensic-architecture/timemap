@@ -1,4 +1,5 @@
-/* global d3 */
+import { timeFormat, timeParse } from 'd3'
+
 /**
   * Get URI params to start with predefined set of
   * https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
@@ -67,14 +68,14 @@ export function parseDate (datetime) {
 }
 
 export function formatterWithYear (datetime) {
-  return d3.timeFormat('%d %b %Y, %H:%M')(datetime)
+  return timeFormat('%d %b %Y, %H:%M')(datetime)
 }
 
 export function formatter (datetime) {
-  return d3.timeFormat('%d %b, %H:%M')(datetime)
+  return timeFormat('%d %b, %H:%M')(datetime)
 }
 
-export const parseTimestamp = ts => d3.timeParse('%Y-%m-%dT%H:%M:%S')(ts)
+export const parseTimestamp = ts => timeParse('%Y-%m-%dT%H:%M:%S')(ts)
 
 export function compareTimestamp (a, b) {
   return (parseTimestamp(a.timestamp) > parseTimestamp(b.timestamp))
