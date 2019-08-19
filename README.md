@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-  <strong>TimeMap is a tool for exploration, monitoring and classification of incidents in time and space.</strong><br>
+  <strong>TimeMap is a tool for exploration, monitoring and classification of incidents in time and space.<br>See a <a href="https://ilovaisk.forensic-architecture.org">live instance here</a>.</strong><br>
 </p>
 
 ![](docs/example-timemap.png)
