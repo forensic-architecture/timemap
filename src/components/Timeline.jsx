@@ -1,6 +1,6 @@
-/* global d3 */
 import React from 'react'
 import { connect } from 'react-redux'
+import * as d3 from 'd3'
 import * as selectors from '../selectors'
 import hash from 'object-hash'
 
