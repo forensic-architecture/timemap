@@ -1,12 +1,13 @@
-/* global d3 */
+import { timeFormat, timeParse } from 'd3'
+
 export function parseDateTimes (arrayToParse) {
   const parsedArray = []
 
   arrayToParse.forEach(item => {
     let incomingDateTime = `${item.date}T00:00`
     if (item.time) incomingDateTime = `${item.date}T${item.time}`
-    const parser = d3.timeParse(process.env.INCOMING_DATETIME_FORMAT)
-    item.timestamp = d3.timeFormat('%Y-%m-%dT%H:%M:%S')(parser(incomingDateTime))
+    const parser = timeParse(process.env.INCOMING_DATETIME_FORMAT)
+    item.timestamp = timeFormat('%Y-%m-%dT%H:%M:%S')(parser(incomingDateTime))
 
     parsedArray.push(item)
   })
