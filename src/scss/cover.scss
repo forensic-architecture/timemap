@@ -9,6 +9,7 @@
   transition: top 0.4s ease;
   z-index: $overheader + 1;
   overflow-y: auto;
+  overflow-x: hidden;
   color: $offwhite;
 
   &.showing {
