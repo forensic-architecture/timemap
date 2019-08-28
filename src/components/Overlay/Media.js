@@ -1,4 +1,5 @@
 import React from 'react'
+import marked from 'marked'
 import Content from './Content'
 import Controls from './Controls'
 import { selectTypeFromPathWithPoster } from '../../common/utilities'
@@ -66,8 +67,8 @@ class SourceOverlay extends React.Component {
           <Controls paths={paths} viewIdx={this.state.mediaIdx} onShiftHandler={this.onShiftGallery} />
 
           <div className='mo-meta-container'>
-            <div className='mo-box-title'>
-              <div>{desc}</div>
+            <div className='mo-box-desc'>
+              <div className='md-container' dangerouslySetInnerHTML={{ __html: marked(desc) }} />
             </div>
 
             {(type || date || url) ? (

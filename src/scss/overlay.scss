@@ -188,7 +188,7 @@ $overlay-bg: rgba(239,239,239,0.9);
   background-color: transparent;
   width: 100%;
   opacity: 0.9;
-  bottom: 0;
+  bottom: 20px;
   display: flex;
   justify-content: center;
 }
@@ -203,7 +203,7 @@ $overlay-bg: rgba(239,239,239,0.9);
   box-sizing: border-box;
   min-height: 100px;
 
-  .mo-box-title {
+  .mo-box-desc {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
