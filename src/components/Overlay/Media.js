@@ -67,9 +67,9 @@ class SourceOverlay extends React.Component {
           <Controls paths={paths} viewIdx={this.state.mediaIdx} onShiftHandler={this.onShiftGallery} />
 
           <div className='mo-meta-container'>
-            <div className='mo-box-desc'>
+            {desc ? <div className='mo-box-desc'>
               <div className='md-container' dangerouslySetInnerHTML={{ __html: marked(desc) }} />
-            </div>
+            </div> : null}
 
             {(type || date || url) ? (
               <div className='mo-box'>
