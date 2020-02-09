@@ -154,7 +154,7 @@ class Toolbar extends React.Component {
     const tagsLabel = copy[this.props.language].toolbar.tags_label
     const categoriesLabel = 'Categories' // TODO:
     const isTags = this.props.tags && this.props.tags.children
-    const isCategories = true
+    const isCategories = process.env.features.CATEGORIES_AS_TAGS
 
     return (
       <div className='toolbar'>
