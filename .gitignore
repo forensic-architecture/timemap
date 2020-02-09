@@ -3,6 +3,7 @@ build/
 node_modules/
 config.js
 dev.config.js
+tags
 
 src/\.DS_Store
 
