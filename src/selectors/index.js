@@ -38,7 +38,7 @@ export const selectEvents = createSelector(
   [getEvents, getActiveTags, getActiveCategories, getTimeRange],
   (events, activeTags, activeCategories, timeRange) => {
     return events.reduce((acc, event) => {
-      const isMatchingTag = event.tags && event.tags.map(tag => activeTags.includes(tag)).some(s => s)
+      const isMatchingTag = (event.tags && event.tags.map(tag => activeTags.includes(tag)).some(s => s)) || activeTags.length === 0
       const isActiveTag = isMatchingTag || activeTags.length === 0
       const isActiveCategory = activeCategories.includes(event.category) || activeCategories.length === 0
       const isActiveTime = isTimeRangedIn(event, timeRange)

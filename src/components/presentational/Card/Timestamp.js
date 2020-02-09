@@ -8,7 +8,6 @@ const CardTimestamp = ({ timelabel, language, precision }) => {
   // const estimatedLang = copy[language].cardstack.estimated
   const unknownLang = copy[language].cardstack.unknown_time
 
-  console.log(precision)
   if (isNotNullNorUndefined(timelabel)) {
     return (
       <div className='card-cell timestamp'>

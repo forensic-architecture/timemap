@@ -69,10 +69,12 @@ const initial = {
         trackHeight: 80
       },
       range: [
-        new Date(2013, 2, 23, 12),
-        new Date(2016, 2, 23, 12)
+        new Date(1993, 2, 23, 12),
+        new Date(2023, 2, 23, 12)
       ],
       zoomLevels: [
+        { label: '30 years', duration: 15768000 },
+        { label: '3 years', duration: 1576800 },
         { label: '3 months', duration: 129600 },
         { label: '3 days', duration: 4320 },
         { label: '12 hours', duration: 720 }
