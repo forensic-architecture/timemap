@@ -78,6 +78,10 @@ const TimelineEvents = ({
     })
   }
 
+  // console.log(datetimes
+  //   .filter(d => d.events.some(e => e.category !== 'Legislation'))
+  // )
+
   return (
     <g
       clipPath={'url(#clip)'}
