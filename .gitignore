@@ -4,6 +4,8 @@ node_modules/
 config.js
 dev.config.js
 tags
+tags.lock
+tags.temp
 
 src/\.DS_Store
 
