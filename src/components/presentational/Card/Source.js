@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Img from 'react-image'
-
 import Spinner from '../Spinner'
+import { typeForPath } from '../../../common/utilities'
 
 const CardSource = ({ source, isLoading, onClickHandler }) => {
   function renderIconText (type) {
@@ -21,6 +21,8 @@ const CardSource = ({ source, isLoading, onClickHandler }) => {
         return 'photo'
       case 'Photobook':
         return 'photo_album'
+      case 'Document':
+        return 'picture_as_pdf'
       default:
         return 'help'
     }
@@ -43,6 +45,9 @@ const CardSource = ({ source, isLoading, onClickHandler }) => {
     thumbnail = imgs.length > 0 ? imgs[0] : null
   }
 
+  if (source.type === '' && source.paths.length >= 1) {
+    source.type = typeForPath(source.paths[0])
+  }
   const fallbackIcon = (
     <i className='material-icons source-icon'>
       {renderIconText(source.type)}

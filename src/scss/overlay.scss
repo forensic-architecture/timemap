@@ -347,6 +347,11 @@ $overlay-bg: rgba(239,239,239,0.9);
   height: 400px;
 }
 
+.source-document {
+  width: 100%;
+  min-height: 80vh;
+}
+
 .video-react .video-react-progress-control {
   align-self: center;
 }
