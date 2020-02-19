@@ -10,7 +10,7 @@ export default ({ media, viewIdx, translations, switchLanguage, langIdx }) => {
   const shiftW = el ? el.getBoundingClientRect().width : 0
 
   function renderMedia (media) {
-    const { path, type, poster } = media
+    let { path, type, poster } = media
     switch (type) {
       case 'Image':
         return (
@@ -52,6 +52,10 @@ export default ({ media, viewIdx, translations, switchLanguage, langIdx }) => {
               unloader={() => this.renderError()}
             />
           </div>
+        )
+      case 'Document':
+        return (
+          <iframe className='source-document' src={path} />
         )
       default:
         return (
