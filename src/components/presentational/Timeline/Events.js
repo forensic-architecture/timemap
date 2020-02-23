@@ -1,5 +1,6 @@
 import React from 'react'
 import DatetimeDot from './DatetimeDot'
+import DatetimeBar from './DatetimeBar'
 import { getEventOpacity } from '../../../common/utilities'
 
 // return a list of lists, where each list corresponds to a single category
@@ -57,42 +58,51 @@ const TimelineEvents = ({
       const customStyles = styleDatetime ? styleDatetime(datetime, dot.category) : null
       const extraStyles = customStyles[0]
 
-      // const isLocated = dot.events.map(ev => !ev.latitude || !ev.longitude)
+      const categoryColor = getCategoryColor(dot.category)
+      const locatedEvents = dot.events.filter(ev => ev.latitude && ev.longitude)
+      const unlocatedEvents = dot.events.filter(ev => !ev.latitude || !ev.longitude)
 
       // TODO: work out smarter way to manage opacity w.r.t. length
       // i.e. render (count - 1) extra dots with a bit of noise in position
       // and that, when clicked, all open the same events.
-      const styleProps = ({
-        fill: getCategoryColor(dot.category),
-        fillOpacity: getEventOpacity(dot.events),
+      const locatedProps = ({
+        fill: categoryColor,
+        fillOpacity: getEventOpacity(locatedEvents),
         transition: `transform ${transitionDuration / 1000}s ease`,
         ...extraStyles
       })
 
-      const extraRender = () => (
-        <React.Fragment>
-          {customStyles[1]}
-        </React.Fragment>
-      )
+      const unlocatedProps = {
+        fill: categoryColor,
+        fillOpacity: getEventOpacity(unlocatedEvents)
+      }
 
-      return (<React.Fragment>
-        <DatetimeDot
-          onSelect={onSelect}
-          category={dot.category}
-          events={dot.events}
-          x={getDatetimeX(datetime)}
-          y={getCategoryY(dot.category)}
-          styleProps={styleProps}
-          extraRender={extraRender}
-        />
-      </React.Fragment>
+      const extraRender = customStyles[1]
+
+      return (
+        <g className='datetime'>
+          {locatedEvents.length >= 1 && <DatetimeDot
+            onSelect={() => onSelect(locatedEvents)}
+            category={dot.category}
+            events={locatedEvents}
+            x={getDatetimeX(datetime)}
+            y={getCategoryY(dot.category)}
+            styleProps={locatedProps}
+            extraRender={extraRender}
+          />}
+          {unlocatedEvents.length >= 1 && <DatetimeBar
+            onSelect={() => onSelect(unlocatedEvents)}
+            category={dot.category}
+            events={unlocatedEvents}
+            x={getDatetimeX(datetime)}
+            y={40}
+            styleProps={unlocatedProps}
+          />}
+          {extraRender ? extraRender() : null}
+        </g>
       )
     })
   }
-
-  // console.log(datetimes
-  //   .filter(d => d.events.some(e => e.category !== 'Legislation'))
-  // )
 
   return (
     <g
