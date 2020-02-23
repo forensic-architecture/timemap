@@ -2,8 +2,8 @@ import React from 'react'
 import * as d3 from 'd3'
 
 class TimelineCategories extends React.Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.grabRef = React.createRef()
     this.state = {
       isInitialized: false
@@ -38,9 +38,7 @@ class TimelineCategories extends React.Component {
     const dims = this.props.dims
 
     return (
-      <g
-        class='yAxis'
-      >
+      <g class='yAxis'>
         {this.props.categories.map((cat, idx) => this.renderCategory(cat, idx))}
         <rect
           ref={this.grabRef}

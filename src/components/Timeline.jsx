@@ -303,7 +303,7 @@ class Timeline extends React.Component {
                 onDragStart={() => { this.onDragStart() }}
                 onDrag={() => { this.onDrag() }}
                 onDragEnd={() => { this.onDragEnd() }}
-                categories={this.props.domain.categories}
+                categories={this.props.domain.categoriesWithTimeline}
               />
               <Handles
                 dims={dims}
@@ -346,6 +346,7 @@ function mapStateToProps (state) {
     domain: {
       datetimes: selectors.selectDatetimes(state),
       categories: selectors.getCategories(state),
+      categoriesWithTimeline: selectors.selectCategoriesWithTimeline(state),
       narratives: state.domain.narratives
     },
     app: {

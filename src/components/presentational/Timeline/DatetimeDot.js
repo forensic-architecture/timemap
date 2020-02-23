@@ -9,18 +9,12 @@ export default ({
   styleProps,
   extraRender
 }) => (
-  <g
-    className='datetime'
-    transform={`translate(${x}, ${y})`}
-    onClick={() => onSelect(events)}
-  >
-    <circle
-      className='event'
-      cx={0}
-      cy={0}
-      style={styleProps}
-      r={5}
-    />
-    { extraRender ? extraRender() : null }
-  </g>
+  <circle
+    onClick={onSelect}
+    className='event'
+    cx={x}
+    cy={y}
+    style={styleProps}
+    r={5}
+  />
 )
