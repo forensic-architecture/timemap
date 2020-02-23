@@ -1,5 +1,6 @@
 import React from 'react'
 import DatetimeDot from './DatetimeDot'
+import { getEventOpacity } from '../../../common/utilities'
 
 // return a list of lists, where each list corresponds to a single category
 function getDotsToRender (events) {
@@ -55,16 +56,26 @@ const TimelineEvents = ({
     return dotsToRender.map(dot => {
       const customStyles = styleDatetime ? styleDatetime(datetime, dot.category) : null
       const extraStyles = customStyles[0]
-      const extraRender = customStyles[1]
 
+      // const isLocated = dot.events.map(ev => !ev.latitude || !ev.longitude)
+
+      // TODO: work out smarter way to manage opacity w.r.t. length
+      // i.e. render (count - 1) extra dots with a bit of noise in position
+      // and that, when clicked, all open the same events.
       const styleProps = ({
         fill: getCategoryColor(dot.category),
-        fillOpacity: 1,
+        fillOpacity: getEventOpacity(dot.events),
         transition: `transform ${transitionDuration / 1000}s ease`,
         ...extraStyles
       })
 
-      return (
+      const extraRender = () => (
+        <React.Fragment>
+          {customStyles[1]}
+        </React.Fragment>
+      )
+
+      return (<React.Fragment>
         <DatetimeDot
           onSelect={onSelect}
           category={dot.category}
@@ -74,6 +85,7 @@ const TimelineEvents = ({
           styleProps={styleProps}
           extraRender={extraRender}
         />
+      </React.Fragment>
       )
     })
   }

@@ -193,16 +193,11 @@ class Map extends React.Component {
    * also has full access to the domain and redux state to derive values if
    * necessary. The function should return an array, where the value at the
    * first index is a styles object for the SVG at the location, and the value
-   * at the second index is an optional function that renders additional
-   * components in the <g/> div.
+   * at the second index is an optional additional component that renders in
+   * the <g/> div.
    */
   styleLocation (location) {
-    const noEvents = location.events.length
-
-    return [
-      null,
-      () => noEvents > 1 ? <text className='location-count' dx='-3' dy='4'>{noEvents}</text> : null
-    ]
+    return [null, null]
   }
 
   renderEvents () {
