@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import { compareTimestamp, insetSourceFrom } from '../common/utilities'
-import { isTimeRangedIn } from './helpers'
+import { isTimeRangedIn, shuffle } from './helpers'
 
 // Input selectors
 export const getEvents = state => state.domain.events
@@ -179,5 +179,29 @@ export const selectSelected = createSelector(
     }
 
     return selected.map(insetSourceFrom(sources))
+  }
+)
+
+/**
+ * Only categories that have events which are located should show on the
+ * timeline.
+ */
+export const selectCategoriesWithTimeline = createSelector(
+  [getCategories, getEvents],
+  (categories, events) => {
+    if (categories.length === 0) {
+      return categories
+    }
+    // check for located events in category
+    // shuffle first to improve chances of stopping more quickly
+    const hasLocated = {}
+    for (let event of shuffle(events)) {
+      if (Object.keys(hasLocated).length === categories.length) break
+      const cat = event.category
+      if (hasLocated[cat]) continue
+      const isLocated = !!event.longitude && !!event.latitude
+      if (isLocated) hasLocated[cat] = true
+    }
+    return categories.filter(cat => hasLocated[cat.category])
   }
 )

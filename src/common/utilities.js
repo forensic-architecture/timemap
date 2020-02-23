@@ -180,5 +180,6 @@ export function getEventOpacity (events) {
    * other events there are in the same render. The idea here is that the
    * overlaying of events builds up a 'heat map' of the event space, where
    * darker areas represent more events with proportion */
-  return 0.3 + (Math.min(0.5, 0.08 * (events.length - 1)))
+  const base = events.length >= 1 ? 0.3 : 0
+  return base + (Math.min(0.5, 0.08 * (events.length - 1)))
 }
