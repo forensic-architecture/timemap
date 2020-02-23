@@ -254,20 +254,16 @@ class Timeline extends React.Component {
   }
 
   /**
-   * Determines additional styles on the <circle> for each timestamp. Note that
-   * timestamp visualisation functions slightly differently from locations, as
-   * a timestamp can be shown as multiple <circle>s (one per category of the
-   * events contained therein). Thus the function below has a category as an
-   * argumnent as well, in case timestamps ought to be styled per category.
-   * A datetime consists of an array of events (see selectors). The function
+   * Determines additional styles on the <circle> for each location.
+   * A location consists of an array of events (see selectors). The function
    * also has full access to the domain and redux state to derive values if
    * necessary. The function should return an array, where the value at the
    * first index is a styles object for the SVG at the location, and the value
-   * at the second index is an optional function that renders additional
-   * components in the <g/> div.
+   * at the second index is an optional additional component that renders in
+   * the <g/> div.
    */
   styleDatetime (timestamp, category) {
-    return []
+      return [null, null]
   }
 
   render () {
