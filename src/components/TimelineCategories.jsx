@@ -26,11 +26,17 @@ class TimelineCategories extends React.Component {
 
   renderCategory (category, idx) {
     const dims = this.props.dims
+    const strokeWidth = dims.trackHeight / (this.props.categories.length + 1)
+
     return (
-      <g class='tick' opacity='1' transform={`translate(0,${this.props.getCategoryY(category.category)})`}>
+      <React.Fragment>
+      <g class='tick' style={{strokeWidth}} opacity='0.5' transform={`translate(0,${this.props.getCategoryY(category.category)})`}>
         <line x1={dims.margin_left} x2={dims.width - dims.width_controls} />
+      </g>
+      <g class='tick' opacity='1' transform={`translate(0,${this.props.getCategoryY(category.category)})`}>
         <text x={dims.margin_left - 5} dy='0.32em'>{category.category}</text>
       </g>
+      </React.Fragment>
     )
   }
 

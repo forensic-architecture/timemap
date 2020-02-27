@@ -1,7 +1,14 @@
 import React from 'react'
 import colors from '../../../common/global.js'
 
-const TimelineMarkers = ({ styles, getEventX, getCategoryY, transitionDuration, selected }) => {
+const TimelineMarkers = ({
+  styles,
+  getEventX,
+  getCategoryY,
+  transitionDuration,
+  selected,
+  dims
+}) => {
   function renderMarker (event) {
     const isLocated = !!event.latitude && !!event.longitude
     return isLocated ? (
@@ -27,13 +34,14 @@ const TimelineMarkers = ({ styles, getEventX, getCategoryY, transitionDuration, 
       <rect
         className='timeline-marker'
         x={0}
-        y={0}
+        y={-dims.margin_top}
         width={4}
-        height={55}
+        height={dims.trackHeight}
         stroke={styles ? styles.stroke : colors.primaryHighlight}
         stroke-opacity='1'
         stroke-width={styles ? styles['stroke-width'] : 2}
         stroke-linecap=''
+        stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
         style={{
           'transform': `translate(${getEventX(event)}px, 40px)`,
           '-webkit-transition': `transform ${transitionDuration / 1000}s ease`,

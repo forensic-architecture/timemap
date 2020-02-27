@@ -174,8 +174,7 @@ $timeline-height: 170px;
 
       .yAxis {
         .tick line {
-          stroke: $midwhite;
-          stroke-width: 15px;
+          stroke: white; // $midwhite;
           cursor: -webkit-grab;
           cursor: -moz-grab;
         }
