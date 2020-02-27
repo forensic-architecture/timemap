@@ -64,7 +64,7 @@ const initial = {
         width: 0,
         width_controls: 100,
         height_controls: 115,
-        margin_left: 200,
+        margin_left: 100,
         margin_top: 20,
         trackHeight: 80
       },

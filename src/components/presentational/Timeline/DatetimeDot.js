@@ -5,6 +5,7 @@ export default ({
   events,
   x,
   y,
+  r,
   onSelect,
   styleProps,
   extraRender
@@ -15,6 +16,6 @@ export default ({
     cx={x}
     cy={y}
     style={styleProps}
-    r={5}
+    r={r}
   />
 )
