@@ -316,6 +316,7 @@ class Timeline extends React.Component {
                 onApplyZoom={this.onApplyZoom}
               />
               <Markers
+                dims={dims}
                 selected={this.props.app.selected}
                 getEventX={this.getDatetimeX}
                 getCategoryY={this.state.scaleY}
@@ -331,6 +332,7 @@ class Timeline extends React.Component {
                 getCategoryColor={this.props.methods.getCategoryColor}
                 transitionDuration={this.state.transitionDuration}
                 onSelect={this.props.methods.onSelect}
+                dims={dims}
               />
             </svg>
           </div>

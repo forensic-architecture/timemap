@@ -1,4 +1,4 @@
-const colors = {
+export const colors = {
   fa_red: '#eb443e',
   yellow: '#ffd800',
   black: '#000',

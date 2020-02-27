@@ -32,7 +32,8 @@ const TimelineEvents = ({
   getCategoryColor,
   onSelect,
   transitionDuration,
-  styleDatetime
+  styleDatetime,
+  dims
 }) => {
   function renderDatetime (datetime) {
     if (narrative) {
@@ -78,6 +79,7 @@ const TimelineEvents = ({
       }
 
       const extraRender = customStyles[1]
+      const eventWidth = 5
 
       return (
         <g className='datetime'>
@@ -87,6 +89,7 @@ const TimelineEvents = ({
             events={locatedEvents}
             x={getDatetimeX(datetime)}
             y={getCategoryY(dot.category)}
+            r={eventWidth}
             styleProps={locatedProps}
             extraRender={extraRender}
           />}
@@ -95,7 +98,9 @@ const TimelineEvents = ({
             category={dot.category}
             events={unlocatedEvents}
             x={getDatetimeX(datetime)}
-            y={40}
+            y={dims.margin_top}
+            width={eventWidth}
+            height={dims.trackHeight}
             styleProps={unlocatedProps}
           />}
           {extraRender ? extraRender() : null}
