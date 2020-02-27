@@ -293,7 +293,7 @@ class Timeline extends React.Component {
               />
               <Axis
                 dims={dims}
-                timerange={this.props.app.timerange}
+                extent={this.getTimeScaleExtent()}
                 transitionDuration={this.state.transitionDuration}
                 scaleX={this.state.scaleX}
               />

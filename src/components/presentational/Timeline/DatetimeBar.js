@@ -9,13 +9,13 @@ export default ({
   styleProps,
   extraRender
 }) => (
-    <rect
-      onClick={onSelect}
-      className='event'
-      x={x}
-      y={y}
-      style={styleProps}
-      width={4}
-      height={55}
-    />
+  <rect
+    onClick={onSelect}
+    className='event'
+    x={x}
+    y={y}
+    style={styleProps}
+    width={4}
+    height={55}
+  />
 )
