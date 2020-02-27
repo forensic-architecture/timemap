@@ -12,20 +12,35 @@ class TimelineAxis extends React.Component {
   }
 
   componentDidUpdate () {
+    let fstFmt, sndFmt
+
+    // 10yrs
+    if (this.props.extent > 5256000) {
+      fstFmt = '%Y'
+      sndFmt = ''
+    // 1yr
+    } else if (this.props.extent > 43200) {
+      sndFmt = '%Y'
+      fstFmt = '%d %b'
+    } else {
+      sndFmt = '%d %b'
+      fstFmt = '%H:%M'
+    }
+
     if (this.props.scaleX) {
       this.x0 =
         d3.axisBottom(this.props.scaleX)
           .ticks(10)
           .tickPadding(5)
           .tickSize(this.props.dims.trackHeight)
-          .tickFormat(d3.timeFormat('%d %b'))
+          .tickFormat(d3.timeFormat(fstFmt))
 
       this.x1 =
         d3.axisBottom(this.props.scaleX)
           .ticks(10)
           .tickPadding(this.props.dims.margin_top)
           .tickSize(0)
-          .tickFormat(d3.timeFormat('%H:%M'))
+          .tickFormat(d3.timeFormat(sndFmt))
 
       if (!this.state.isInitialized) this.setState({ isInitialized: true })
     }
