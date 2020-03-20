@@ -30,7 +30,12 @@ class TimelineCategories extends React.Component {
 
     return (
       <React.Fragment>
-      <g class='tick' style={{strokeWidth}} opacity='0.5' transform={`translate(0,${this.props.getCategoryY(category.category)})`}>
+      <g
+        class='tick'
+        style={{strokeWidth}}
+        opacity='0.5'
+        transform={`translate(0,${this.props.getCategoryY(category.category)})`}
+      >
         <line x1={dims.margin_left} x2={dims.width - dims.width_controls} />
       </g>
       <g class='tick' opacity='1' transform={`translate(0,${this.props.getCategoryY(category.category)})`}>
@@ -41,7 +46,7 @@ class TimelineCategories extends React.Component {
   }
 
   render () {
-    const dims = this.props.dims
+    const { dims } = this.props
 
     return (
       <g class='yAxis'>
@@ -50,7 +55,7 @@ class TimelineCategories extends React.Component {
           ref={this.grabRef}
           class='drag-grabber'
           x={dims.margin_left}
-          y='20'
+          y={dims.margin_top}
           width={dims.width - dims.margin_left - dims.width_controls}
           height={dims.trackHeight}
         />

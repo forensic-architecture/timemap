@@ -5,8 +5,13 @@ export const colors = {
   white: '#fff'
 }
 
+export const sizes = {
+  eventDotR: 5
+}
+
 export default {
   darkBackground: colors.black,
   primaryHighlight: colors.yellow,
-  secondaryHighlight: colors.white
+  secondaryHighlight: colors.white,
+  sizes
 }

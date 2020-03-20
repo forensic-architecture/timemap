@@ -7,6 +7,7 @@ import {
   CLEAR_FILTER,
   TOGGLE_FILTER,
   UPDATE_TIMERANGE,
+  UPDATE_DIMENSIONS,
   UPDATE_NARRATIVE,
   INCREMENT_NARRATIVE_CURRENT,
   DECREMENT_NARRATIVE_CURRENT,
@@ -152,6 +153,19 @@ function updateTimeRange (appState, action) { // XXX
   }
 }
 
+function updateDimensions (appState, action) {
+  return {
+    ...appState,
+    timeline: {
+      ...appState.timeline,
+      dimensions: {
+        ...appState.timeline.dimensions,
+        ...action.dims
+      }
+    }
+  }
+}
+
 function toggleLanguage (appState, action) {
   let otherLanguage = (appState.language === 'es-MX') ? 'en-US' : 'es-MX'
   return Object.assign({}, appState, {
@@ -203,6 +217,8 @@ function app (appState = initial.app, action) {
       return toggleFilter(appState, action)
     case UPDATE_TIMERANGE:
       return updateTimeRange(appState, action)
+    case UPDATE_DIMENSIONS:
+      return updateDimensions(appState, action)
     case UPDATE_NARRATIVE:
       return updateNarrative(appState, action)
     case INCREMENT_NARRATIVE_CURRENT:

@@ -65,8 +65,8 @@ const initial = {
         width_controls: 100,
         height_controls: 115,
         margin_left: 100,
-        margin_top: 20,
-        trackHeight: 80
+        margin_top: 15,
+        trackHeight: 60
       },
       range: [
         new Date(2001, 2, 23, 12),

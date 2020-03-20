@@ -5,6 +5,7 @@ import * as selectors from '../selectors'
 import hash from 'object-hash'
 
 import copy from '../common/data/copy.json'
+import { sizes } from '../common/global'
 import { formatterWithYear, parseDate } from '../common/utilities'
 import Header from './presentational/Timeline/Header'
 import Axis from './TimelineAxis.jsx'
@@ -46,10 +47,15 @@ class Timeline extends React.Component {
       })
     }
 
-    if (hash(nextProps.domain.categories) !== hash(this.props.domain.categories)) {
+    if ((hash(nextProps.domain.categories) !== hash(this.props.domain.categories)) || hash(nextProps.app.timeline.dimensions) != hash(this.props.app.timeline.dimensions)) {
+      const { trackHeight, margin_top } = nextProps.app.timeline.dimensions
       this.setState({
-        scaleY: this.makeScaleY(nextProps.domain.categories)
+        scaleY: this.makeScaleY(nextProps.domain.categoriesWithTimeline, trackHeight, margin_top )
       })
+    }
+
+    if (nextProps.app.timeline.dimensions.trackHeight !== this.props.app.timeline.dimensions.trackHeight) {
+      this.computeDims()
     }
 
     if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
@@ -73,9 +79,13 @@ class Timeline extends React.Component {
       .range([this.state.dims.margin_left, this.state.dims.width - this.state.dims.width_controls])
   }
 
-  makeScaleY (categories) {
-    const tickHeight = 15
-    const catsYpos = categories.map((g, i) => (i + 1) * this.state.dims.trackHeight / categories.length + tickHeight / 2)
+  makeScaleY (categories, trackHeight, marginTop) {
+    const tickHeight = sizes.eventDotR * 2
+    const catHeight = trackHeight / (categories.length)
+    const shiftUp = trackHeight / (categories.length + 1) / 2
+    const marginShift = marginTop === 0 ? 0 : marginTop
+    const manualAdjustment = trackHeight <= 60 ? (trackHeight <= 30 ? -8 : -5) : 0
+    const catsYpos = categories.map((g, i) => ((i + 1) * catHeight) - shiftUp + marginShift + manualAdjustment)
     return d3.scaleOrdinal()
       .domain(categories)
       .range(catsYpos)
@@ -109,13 +119,12 @@ class Timeline extends React.Component {
 
       this.setState({
         dims: {
-          ...this.state.dims,
+          ...this.props.app.timeline.dimensions,
           width: boundingClient.width
         }
       },
       () => {
-        this.setState({ scaleX: this.makeScaleX()
-        })
+        this.setState({ scaleX: this.makeScaleX() })
       })
     }
   }
@@ -322,6 +331,7 @@ class Timeline extends React.Component {
                 getCategoryY={this.state.scaleY}
                 transitionDuration={this.state.transitionDuration}
                 styles={this.props.ui.styles}
+                noCategories={this.props.domain.categories && this.props.domain.categories.length}
               />
               <Events
                 datetimes={this.props.domain.datetimes}
