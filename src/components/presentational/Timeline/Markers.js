@@ -1,13 +1,15 @@
 import React from 'react'
-import colors from '../../../common/global.js'
+import colors, { sizes } from '../../../common/global'
 
+const MARKER_DISPLACED = sizes.eventDotR * 2
 const TimelineMarkers = ({
   styles,
   getEventX,
   getCategoryY,
   transitionDuration,
   selected,
-  dims
+  dims,
+  noCategories
 }) => {
   function renderMarker (event) {
     const isLocated = !!event.latitude && !!event.longitude
@@ -18,8 +20,7 @@ const TimelineMarkers = ({
         cy={0}
         stroke={styles ? styles.stroke : colors.primaryHighlight}
         stroke-opacity='1'
-        stroke-width={styles ? styles['stroke-width'] : 2}
-        stroke-linecap=''
+        stroke-width={styles ? styles['stroke-width'] : 1}
         stroke-linejoin='round'
         stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
         style={{
@@ -28,19 +29,18 @@ const TimelineMarkers = ({
           '-moz-transition': 'none',
           'opacity': 0.9
         }}
-        r='10'
+        r={sizes.eventDotR * 2}
       />
     ) : (
       <rect
         className='timeline-marker'
         x={0}
-        y={-dims.margin_top}
-        width={4}
+        y={-dims.margin_top - (noCategories > 2 ? noCategories * MARKER_DISPLACED : MARKER_DISPLACED)}
+        width={(2 * sizes.eventDotR) * 0.9}
         height={dims.trackHeight}
         stroke={styles ? styles.stroke : colors.primaryHighlight}
         stroke-opacity='1'
-        stroke-width={styles ? styles['stroke-width'] : 2}
-        stroke-linecap=''
+        stroke-width={styles ? styles['stroke-width'] : 1}
         stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
         style={{
           'transform': `translate(${getEventX(event)}px, 40px)`,
@@ -48,7 +48,6 @@ const TimelineMarkers = ({
           '-moz-transition': 'none',
           'opacity': 0.9
         }}
-        r='10'
       />
 
     )

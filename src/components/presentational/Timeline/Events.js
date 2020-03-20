@@ -2,6 +2,7 @@ import React from 'react'
 import DatetimeDot from './DatetimeDot'
 import DatetimeBar from './DatetimeBar'
 import { getEventOpacity } from '../../../common/utilities'
+import { sizes } from '../../../common/global'
 
 // return a list of lists, where each list corresponds to a single category
 function getDotsToRender (events) {
@@ -79,7 +80,6 @@ const TimelineEvents = ({
       }
 
       const extraRender = customStyles[1]
-      const eventWidth = 5
 
       return (
         <g className='datetime'>
@@ -89,7 +89,7 @@ const TimelineEvents = ({
             events={locatedEvents}
             x={getDatetimeX(datetime)}
             y={getCategoryY(dot.category)}
-            r={eventWidth}
+            r={sizes.eventDotR}
             styleProps={locatedProps}
             extraRender={extraRender}
           />}
@@ -99,7 +99,7 @@ const TimelineEvents = ({
             events={unlocatedEvents}
             x={getDatetimeX(datetime)}
             y={dims.margin_top}
-            width={eventWidth}
+            width={(2 * sizes.eventDotR) * 0.9}
             height={dims.trackHeight}
             styleProps={unlocatedProps}
           />}

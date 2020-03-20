@@ -196,6 +196,14 @@ export function updateTimeRange (timerange) {
   }
 }
 
+export const UPDATE_DIMENSIONS = 'UPDATE_DIMENSIONS'
+export function updateDimensions (dims) {
+  return {
+    type: UPDATE_DIMENSIONS,
+    dims
+  }
+}
+
 export const UPDATE_NARRATIVE = 'UPDATE_NARRATIVE'
 export function updateNarrative (narrative) {
   return {
