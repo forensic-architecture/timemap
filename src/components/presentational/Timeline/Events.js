@@ -81,6 +81,31 @@ const TimelineEvents = ({
 
       const extraRender = customStyles[1]
 
+      let bar = <DatetimeBar
+        onSelect={() => onSelect(unlocatedEvents)}
+        category={dot.category}
+        events={unlocatedEvents}
+        x={getDatetimeX(datetime)}
+        y={dims.marginTop}
+        width={sizes.eventDotR}
+        height={dims.trackHeight}
+        styleProps={unlocatedProps}
+      />
+      if (process.env.features.ASSOCIATIVE_EVENTS_BY_TAG) {
+        // render all dots individually
+        bar = <React.Fragment>
+          {unlocatedEvents.map(ev => (<DatetimeBar
+            onSelect={() => onSelect(unlocatedEvents)}
+            category={dot.category}
+            events={[ev]}
+            x={getDatetimeX(datetime)}
+            y={ev.projectOffset >= 0 ? dims.trackHeight - ev.projectOffset : dims.marginTop}
+            width={sizes.eventDotR}
+            height={ev.projectOffset >= 0 ? sizes.eventDotR * 2 : 20}
+            styleProps={unlocatedProps}
+          />))}
+        </React.Fragment>
+      }
       return (
         <g className='datetime'>
           {locatedEvents.length >= 1 && <DatetimeDot
@@ -93,16 +118,7 @@ const TimelineEvents = ({
             styleProps={locatedProps}
             extraRender={extraRender}
           />}
-          {unlocatedEvents.length >= 1 && <DatetimeBar
-            onSelect={() => onSelect(unlocatedEvents)}
-            category={dot.category}
-            events={unlocatedEvents}
-            x={getDatetimeX(datetime)}
-            y={dims.marginTop}
-            width={(2 * sizes.eventDotR) * 0.9}
-            height={dims.trackHeight}
-            styleProps={unlocatedProps}
-          />}
+          {unlocatedEvents.length >= 1 && bar}
           {extraRender ? extraRender() : null}
         </g>
       )
