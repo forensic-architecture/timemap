@@ -149,13 +149,16 @@ export const selectLocations = createSelector(
     events: [...]
   }
  */
+const IS_PROJ = 'ASSOCIATIVE_EVENTS_BY_TAG' in process.env.features && process.env.features.ASSOCIATIVE_EVENTS_BY_TAG
 export const selectDatetimes = createSelector(
   [selectEvents],
   events => {
     const projects = {}
     const datetimes = {}
     events.forEach(event => {
-      if (process.env.features.ASSOCIATIVE_EVENTS_BY_TAG) {
+      const { timestamp } = event
+      const dtKey = `${timestamp}_1`
+      if (IS_PROJ) {
         const project = event.tags.length >= 1 ? event.tags[0] : null
         event = { ...event, project }
         if (project !== null) {
@@ -167,11 +170,16 @@ export const selectDatetimes = createSelector(
           }
         }
       }
-      const { timestamp } = event
-      if (datetimes.hasOwnProperty(timestamp)) {
-        datetimes[timestamp].events.push(event)
+      const tsExists = datetimes.hasOwnProperty(dtKey)
+      const isLocated = !!event.latitude && !!event.longitude
+      if (IS_PROJ && !isLocated && event.project !== null && tsExists) {
+        if (tsExists) {
+          alert('not yet handling cases with multiple... talk to lk@forensic-architecture.org')
+        }
+      } else if (tsExists) {
+        datetimes[dtKey].events.push(event)
       } else {
-        datetimes[timestamp] = {
+        datetimes[dtKey] = {
           timestamp: event.timestamp,
           date: event.date,
           time: event.time,
@@ -179,27 +187,47 @@ export const selectDatetimes = createSelector(
         }
       }
     })
-    // console.log(projects)
-    // console.log(datetimes)
     const projKeys = Object.keys(projects)
     function checkActive (pj, dt) {
       return dt >= projects[pj].start && dt <= projects[pj].end
     }
+    const output = []
     let sortedDts = Object.keys(datetimes)
-    sortedDts.sort((a, b) => new Date(a) - new Date(b))
+    sortedDts.sort((a, b) => {
+      const x = a.substring(0, a.length - 2)
+      const y = b.substring(0, b.length - 2)
+      return new Date(x) - new Date(y)
+    })
     sortedDts.forEach(dt => {
       const activeProjects = []
       projKeys.forEach((k, idx) => {
         if (checkActive(k, dt)) activeProjects.push(k)
       })
-      datetimes[dt].events = datetimes[dt].events.map(ev => ({
-        ...ev,
-        projectOffset: (activeProjects.indexOf(ev.project)) * (2 * sizes.eventDotR + 5)
-      }))
+      output.push({
+        ...datetimes[dt],
+        events: datetimes[dt].events.map(ev => {
+          let projectOffset = (activeProjects.indexOf(ev.project) + 1) * (2.5 * sizes.eventDotR)
+          if (ev.project !== null && !projects[ev.project].hasOwnProperty('offset')) {
+            projects[ev.project].offset = projectOffset
+            projects[ev.project].category = ev.category
+          } else if (ev.project !== null) {
+            projectOffset = projects[ev.project].offset
+          }
+          return {
+            ...ev,
+            projectOffset
+          }
+        })
+      })
     })
-
-    // TODO: calculate Y offset based on projects
-    return Object.values(datetimes)
+    const projectsOut = []
+    Object.keys(projects).forEach(projId => {
+      projectsOut.push({ ...projects[projId], id: projId })
+    })
+    if (IS_PROJ) {
+      return [output, projectsOut]
+    }
+    return output
   }
 )
 
