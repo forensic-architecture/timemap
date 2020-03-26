@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
-import { compareTimestamp, insetSourceFrom } from '../common/utilities'
+import { compareTimestamp, insetSourceFrom, dateMin, dateMax } from '../common/utilities'
 import { isTimeRangedIn, shuffle } from './helpers'
+import { sizes } from '../common/global'
 
 // Input selectors
 export const getEvents = state => state.domain.events
@@ -151,8 +152,21 @@ export const selectLocations = createSelector(
 export const selectDatetimes = createSelector(
   [selectEvents],
   events => {
+    const projects = {}
     const datetimes = {}
     events.forEach(event => {
+      if (process.env.features.ASSOCIATIVE_EVENTS_BY_TAG) {
+        const project = event.tags.length >= 1 ? event.tags[0] : null
+        event = { ...event, project }
+        if (project !== null) {
+          if (projects.hasOwnProperty(project)) {
+            projects[project].start = dateMin(projects[project].start, event.timestamp)
+            projects[project].end = dateMax(projects[project].end, event.timestamp)
+          } else {
+            projects[project] = { start: event.timestamp, end: event.timestamp }
+          }
+        }
+      }
       const { timestamp } = event
       if (datetimes.hasOwnProperty(timestamp)) {
         datetimes[timestamp].events.push(event)
@@ -165,6 +179,26 @@ export const selectDatetimes = createSelector(
         }
       }
     })
+    // console.log(projects)
+    // console.log(datetimes)
+    const projKeys = Object.keys(projects)
+    function checkActive (pj, dt) {
+      return dt >= projects[pj].start && dt <= projects[pj].end
+    }
+    let sortedDts = Object.keys(datetimes)
+    sortedDts.sort((a, b) => new Date(a) - new Date(b))
+    sortedDts.forEach(dt => {
+      const activeProjects = []
+      projKeys.forEach((k, idx) => {
+        if (checkActive(k, dt)) activeProjects.push(k)
+      })
+      datetimes[dt].events = datetimes[dt].events.map(ev => ({
+        ...ev,
+        projectOffset: (activeProjects.indexOf(ev.project)) * (2 * sizes.eventDotR + 5)
+      }))
+    })
+
+    // TODO: calculate Y offset based on projects
     return Object.values(datetimes)
   }
 )
