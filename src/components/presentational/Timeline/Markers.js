@@ -24,7 +24,7 @@ const TimelineMarkers = ({
         stroke-linejoin='round'
         stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
         style={{
-          'transform': `translate(${getEventX(event)}px, ${getCategoryY(event.category)}px)`,
+          'transform': `translate(${getEventX(event.timestamp)}px, ${getCategoryY(event.category)}px)`,
           '-webkit-transition': `transform ${transitionDuration / 1000}s ease`,
           '-moz-transition': 'none',
           'opacity': 0.9
@@ -43,7 +43,7 @@ const TimelineMarkers = ({
         stroke-width={styles ? styles['stroke-width'] : 1}
         stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
         style={{
-          'transform': `translate(${getEventX(event)}px, 40px)`,
+          'transform': `translate(${getEventX(event.timestamp)}px, 40px)`,
           '-webkit-transition': `transform ${transitionDuration / 1000}s ease`,
           '-moz-transition': 'none',
           'opacity': 0.9

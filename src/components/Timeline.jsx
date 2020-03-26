@@ -259,8 +259,8 @@ class Timeline extends React.Component {
     this.props.methods.onUpdateTimerange(this.state.timerange)
   }
 
-  getDatetimeX (dt) {
-    return this.state.scaleX(parseDate(dt.timestamp))
+  getDatetimeX (timestamp) {
+    return this.state.scaleX(parseDate(timestamp))
   }
 
   /**
