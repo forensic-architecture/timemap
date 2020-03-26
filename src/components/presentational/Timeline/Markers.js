@@ -35,7 +35,7 @@ const TimelineMarkers = ({
       <rect
         className='timeline-marker'
         x={0}
-        y={-dims.margin_top - (noCategories > 2 ? noCategories * MARKER_DISPLACED : MARKER_DISPLACED)}
+        y={-dims.marginTop - (noCategories > 2 ? noCategories * MARKER_DISPLACED : MARKER_DISPLACED)}
         width={(2 * sizes.eventDotR) * 0.9}
         height={dims.trackHeight}
         stroke={styles ? styles.stroke : colors.primaryHighlight}

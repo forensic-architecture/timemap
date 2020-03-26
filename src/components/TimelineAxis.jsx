@@ -38,7 +38,7 @@ class TimelineAxis extends React.Component {
       this.x1 =
         d3.axisBottom(this.props.scaleX)
           .ticks(10)
-          .tickPadding(this.props.dims.margin_top)
+          .tickPadding(this.props.dims.marginTop)
           .tickSize(0)
           .tickFormat(d3.timeFormat(sndFmt))
 
@@ -63,13 +63,13 @@ class TimelineAxis extends React.Component {
       <React.Fragment>
         <g
           ref={this.xAxis0Ref}
-          transform={`translate(0, 25)`}
+          transform={`translate(0, 15)`}
           clipPath={`url(#clip)`}
           className={`axis xAxis`}
         />
         <g
           ref={this.xAxis1Ref}
-          transform={`translate(0, 105)`}
+          transform={`translate(0, ${this.props.dims.trackHeight + 35})`}
           clipPath={`url(#clip)`}
           className={`axis axisHourText`}
         />

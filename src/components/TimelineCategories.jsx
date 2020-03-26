@@ -26,7 +26,7 @@ class TimelineCategories extends React.Component {
 
   renderCategory (category, idx) {
     const dims = this.props.dims
-    const strokeWidth = dims.trackHeight / (this.props.categories.length + 1)
+    const strokeWidth = 1 //dims.trackHeight / (this.props.categories.length + 1)
 
     return (
       <React.Fragment>
@@ -36,10 +36,10 @@ class TimelineCategories extends React.Component {
         opacity='0.5'
         transform={`translate(0,${this.props.getCategoryY(category.category)})`}
       >
-        <line x1={dims.margin_left} x2={dims.width - dims.width_controls} />
+        <line x1={dims.marginLeft} x2={dims.width - dims.width_controls} />
       </g>
       <g class='tick' opacity='1' transform={`translate(0,${this.props.getCategoryY(category.category)})`}>
-        <text x={dims.margin_left - 5} dy='0.32em'>{category.category}</text>
+        <text x={dims.marginLeft - 5} dy='0.32em'>{category.category}</text>
       </g>
       </React.Fragment>
     )
@@ -54,10 +54,10 @@ class TimelineCategories extends React.Component {
         <rect
           ref={this.grabRef}
           class='drag-grabber'
-          x={dims.margin_left}
-          y={dims.margin_top}
-          width={dims.width - dims.margin_left - dims.width_controls}
-          height={dims.trackHeight}
+          x={dims.marginLeft}
+          y={dims.marginTop}
+          width={dims.width - dims.marginLeft - dims.width_controls}
+          height='100%'
         />
       </g>
     )

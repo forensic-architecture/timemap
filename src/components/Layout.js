@@ -38,11 +38,8 @@ class Dashboard extends React.Component {
       this.props.actions.fetchDomain()
         .then(domain => this.props.actions.updateDomain(domain))
         .then(({ domain }) => {
-          // modify trackHeight according to number of categories
-          if (domain.categories.length === 1) {
-            this.props.actions.updateDimensions({ trackHeight: 30 })
-          } else if (domain.categories.length >= 4) {
-            this.props.actions.updateDimensions({ margin_top: 0, trackHeight: 90 })
+          if (domain.categories.length >= 4) {
+            this.props.actions.updateDimensions({ marginTop: 0 })
           }
         })
     }
