@@ -1,6 +1,7 @@
 import React from 'react'
 import DatetimeDot from './DatetimeDot'
 import DatetimeBar from './DatetimeBar'
+import Project from './Project'
 import { getEventOpacity } from '../../../common/utilities'
 import { sizes } from '../../../common/global'
 
@@ -85,7 +86,7 @@ const TimelineEvents = ({
         onSelect={() => onSelect(unlocatedEvents)}
         category={dot.category}
         events={unlocatedEvents}
-        x={getDatetimeX(datetime)}
+        x={getDatetimeX(datetime.timestamp)}
         y={dims.marginTop}
         width={sizes.eventDotR}
         height={dims.trackHeight}
@@ -98,7 +99,7 @@ const TimelineEvents = ({
             onSelect={() => onSelect(unlocatedEvents)}
             category={dot.category}
             events={[ev]}
-            x={getDatetimeX(datetime)}
+            x={getDatetimeX(datetime.timestamp)}
             y={ev.projectOffset >= 0 ? dims.trackHeight - ev.projectOffset : dims.marginTop}
             width={sizes.eventDotR}
             height={ev.projectOffset >= 0 ? sizes.eventDotR * 2 : 20}
@@ -112,7 +113,7 @@ const TimelineEvents = ({
             onSelect={() => onSelect(locatedEvents)}
             category={dot.category}
             events={locatedEvents}
-            x={getDatetimeX(datetime)}
+            x={getDatetimeX(datetime.timestamp)}
             y={getCategoryY(dot.category)}
             r={sizes.eventDotR}
             styleProps={locatedProps}
@@ -125,10 +126,32 @@ const TimelineEvents = ({
     })
   }
 
+  // const projOffsets = {}
+  // const pEvents = datetimes.filter(dt => dt.events.some(ev => ev.project !== null))
+  // pEvents.forEach(({ events }) => {
+  //   events.forEach(ev => {
+  //     if (!projOffsets.hasOwnProperty(ev.project)) {
+  //       projOffsets[ev.project] = ev.projectOffset
+  //     }
+  //   })
+  // })
+
+  let projects
+  if (process.env.features.ASSOCIATIVE_EVENTS_BY_TAG) {
+    projects = datetimes[1]
+    datetimes = datetimes[0]
+  }
+
   return (
     <g
       clipPath={'url(#clip)'}
     >
+      {projects.map(project => (<Project
+        {...project}
+        getX={getDatetimeX}
+        dims={dims}
+        colour={getCategoryColor(project.category)}
+      />))}
       {datetimes.map(datetime => renderDatetime(datetime))}
     </g>
   )
