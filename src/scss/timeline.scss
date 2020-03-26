@@ -15,7 +15,6 @@ $timeline-height: 170px;
 
   &.folded {
     transition: bottom 0.2s ease;
-    bottom: -$timeline-height;
 
     .timeline-header .timeline-toggle p .arrow-down {
       transform: translate(0, 5px)rotate(-135deg);
@@ -95,7 +94,9 @@ $timeline-height: 170px;
   }
 
   .timeline-content {
-    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding-top: 20px;
 
     .timeline-labels {

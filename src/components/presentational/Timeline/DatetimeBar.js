@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default ({
+const actual = ({
   category,
   events,
   x,
@@ -21,3 +21,5 @@ export default ({
     height={height}
   />
 )
+
+export default () => null

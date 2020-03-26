@@ -63,6 +63,7 @@ class Map extends React.Component {
   }
 
   initializeMap () {
+    return
     /**
      * Creates a Leaflet map and a tilelayer for the map background
      */

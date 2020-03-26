@@ -7,8 +7,8 @@ const TimelineLabels = ({ dims, timelabels }) => {
     <g>
       <line
         class='axisBoundaries'
-        x1={dims.margin_left}
-        x2={dims.margin_left}
+        x1={dims.marginLeft}
+        x2={dims.marginLeft}
         y1='10'
         y2='20'
       />

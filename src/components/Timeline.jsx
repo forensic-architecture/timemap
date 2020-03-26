@@ -25,7 +25,7 @@ class Timeline extends React.Component {
     this.svgRef = React.createRef()
     this.state = {
       isFolded: false,
-      dims: props.app.timeline.dimensions,
+      dims: props.dimensions,
       scaleX: null,
       scaleY: null,
       timerange: [null, null],
@@ -47,14 +47,14 @@ class Timeline extends React.Component {
       })
     }
 
-    if ((hash(nextProps.domain.categories) !== hash(this.props.domain.categories)) || hash(nextProps.app.timeline.dimensions) != hash(this.props.app.timeline.dimensions)) {
-      const { trackHeight, margin_top } = nextProps.app.timeline.dimensions
+    if ((hash(nextProps.domain.categories) !== hash(this.props.domain.categories)) || hash(nextProps.dimensions) != hash(this.props.dimensions)) {
+      const { trackHeight, marginTop } = nextProps.dimensions
       this.setState({
-        scaleY: this.makeScaleY(nextProps.domain.categoriesWithTimeline, trackHeight, margin_top )
+        scaleY: this.makeScaleY(nextProps.domain.categoriesWithTimeline, trackHeight, marginTop )
       })
     }
 
-    if (nextProps.app.timeline.dimensions.trackHeight !== this.props.app.timeline.dimensions.trackHeight) {
+    if (nextProps.dimensions.trackHeight !== this.props.dimensions.trackHeight) {
       this.computeDims()
     }
 
@@ -76,7 +76,7 @@ class Timeline extends React.Component {
   makeScaleX () {
     return d3.scaleTime()
       .domain(this.state.timerange)
-      .range([this.state.dims.margin_left, this.state.dims.width - this.state.dims.width_controls])
+      .range([this.state.dims.marginLeft, this.state.dims.width - this.state.dims.width_controls])
   }
 
   makeScaleY (categories, trackHeight, marginTop) {
@@ -119,7 +119,7 @@ class Timeline extends React.Component {
 
       this.setState({
         dims: {
-          ...this.props.app.timeline.dimensions,
+          ...this.props.dimensions,
           width: boundingClient.width
         }
       },
@@ -180,15 +180,16 @@ class Timeline extends React.Component {
   onApplyZoom (zoom) {
     const extent = this.getTimeScaleExtent()
     const newCentralTime = d3.timeMinute.offset(this.state.scaleX.domain()[0], extent / 2)
+    const { rangeLimits } = this.props.app.timeline
 
     let newDomain0 = d3.timeMinute.offset(newCentralTime, -zoom.duration / 2)
     let newDomainF = d3.timeMinute.offset(newCentralTime, zoom.duration / 2)
 
-    if (this.props.app.timeline.rangeLimits) {
+    if (rangeLimits) {
       // If the store contains absolute time limits,
       // make sure the zoom doesn't go over them
-      const minDate = parseDate(this.props.app.timeline.rangeLimits[0])
-      const maxDate = parseDate(this.props.app.timeline.rangeLimits[1])
+      const minDate = parseDate(rangeLimits[0])
+      const maxDate = parseDate(rangeLimits[1])
 
       if (newDomain0 < minDate) {
         newDomain0 = minDate
@@ -232,15 +233,15 @@ class Timeline extends React.Component {
     const dragNow = this.state.scaleX.invert(d3.event.x).getTime()
     const timeShift = (drag0 - dragNow) / 1000
 
-    const { range } = this.props.app.timeline
+    const { range, rangeLimits } = this.props.app.timeline
     let newDomain0 = d3.timeSecond.offset(range[0], timeShift)
     let newDomainF = d3.timeSecond.offset(range[1], timeShift)
 
-    if (this.props.app.timeline.rangeLimits) {
+    if (rangeLimits) {
       // If the store contains absolute time limits,
       // make sure the zoom doesn't go over them
-      const minDate = parseDate(this.props.app.timeline.rangeLimits[0])
-      const maxDate = parseDate(this.props.app.timeline.rangeLimits[1])
+      const minDate = parseDate(rangeLimits[0])
+      const maxDate = parseDate(rangeLimits[1])
 
       newDomain0 = (newDomain0 < minDate) ? minDate : newDomain0
       newDomainF = (newDomainF > maxDate) ? maxDate : newDomainF
@@ -280,9 +281,13 @@ class Timeline extends React.Component {
     let classes = `timeline-wrapper ${(this.state.isFolded) ? ' folded' : ''}`
     classes += (app.narrative !== null) ? ' narrative-mode' : ''
     const { dims } = this.state
+    const foldedStyle = { bottom: this.state.isFolded ? -dims.height : 0 }
+    const heightStyle = {height: dims.height}
+    const extraStyle = { ...heightStyle, ...foldedStyle }
+    const contentHeight = {height: dims.contentHeight}
 
     return (
-      <div className={classes}>
+      <div className={classes} style={extraStyle}>
         <Header
           title={copy[this.props.app.language].timeline.info}
           date0={formatterWithYear(this.state.timerange[0])}
@@ -290,12 +295,12 @@ class Timeline extends React.Component {
           onClick={() => { this.onClickArrow() }}
           hideInfo={isNarrative}
         />
-        <div className='timeline-content'>
-          <div id={this.props.ui.dom.timeline} className='timeline'>
+        <div className='timeline-content' style={heightStyle}>
+          <div id={this.props.ui.dom.timeline} className='timeline' style={contentHeight} >
             <svg
               ref={this.svgRef}
               width={dims.width}
-              height={dims.height}
+              style={contentHeight}
             >
               <Clip
                 dims={dims}
@@ -354,6 +359,7 @@ class Timeline extends React.Component {
 
 function mapStateToProps (state) {
   return {
+    dimensions: selectors.selectDimensions(state),
     isNarrative: !!state.app.narrative,
     domain: {
       datetimes: selectors.selectDatetimes(state),
@@ -365,7 +371,7 @@ function mapStateToProps (state) {
       selected: state.app.selected,
       language: state.app.language,
       timeline: state.app.timeline,
-      narrative: state.app.narrative
+      narrative: state.app.narrative,
     },
     ui: {
       dom: state.ui.dom,
