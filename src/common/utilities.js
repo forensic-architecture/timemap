@@ -183,3 +183,7 @@ export function getEventOpacity (events) {
   const base = events.length >= 1 ? 0.3 : 0
   return base + (Math.min(0.5, 0.08 * (events.length - 1)))
 }
+
+export const dateMin = function () { return Array.prototype.slice.call(arguments).reduce(function (a, b) { return a < b ? a : b }) }
+
+export const dateMax = function () { return Array.prototype.slice.call(arguments).reduce(function (a, b) { return a > b ? a : b }) }
