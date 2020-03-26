@@ -26,6 +26,7 @@ export const getTagTree = state => state.domain.tags
 export const getActiveTags = state => state.app.filters.tags
 export const getActiveCategories = state => state.app.filters.categories
 export const getTimeRange = state => state.app.timeline.range
+export const getTimelineDimensions = state => state.app.timeline.dimensions
 export const selectNarrative = state => state.app.narrative
 
 /**
@@ -203,5 +204,15 @@ export const selectCategoriesWithTimeline = createSelector(
       if (isLocated) hasLocated[cat] = true
     }
     return categories.filter(cat => hasLocated[cat.category])
+  }
+)
+
+export const selectDimensions = createSelector(
+  [getTimelineDimensions],
+  (dimensions) => {
+    return {
+      ...dimensions,
+      trackHeight: dimensions.contentHeight - 50 // height of time labels
+    }
   }
 )

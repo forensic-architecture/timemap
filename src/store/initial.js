@@ -60,13 +60,13 @@ const initial = {
     },
     timeline: {
       dimensions: {
-        height: 140,
+        height: 400,
         width: 0,
+        marginLeft: 100,
+        marginTop: 15,
+        marginBottom: 60,
+        contentHeight: 200,
         width_controls: 100,
-        height_controls: 115,
-        margin_left: 100,
-        margin_top: 15,
-        trackHeight: 60
       },
       range: [
         new Date(2001, 2, 23, 12),
@@ -86,7 +86,7 @@ const initial = {
       isFetchingSources: false,
       isCover: true,
       isCardstack: true,
-      isInfopopup: true,
+      isInfopopup: false,
       isShowingSites: true
     },
     cover: {
