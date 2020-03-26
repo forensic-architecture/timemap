@@ -60,13 +60,13 @@ const initial = {
     },
     timeline: {
       dimensions: {
-        height: 400,
+        height: 250,
         width: 0,
         marginLeft: 100,
         marginTop: 15,
         marginBottom: 60,
         contentHeight: 200,
-        width_controls: 100,
+        width_controls: 100
       },
       range: [
         new Date(2001, 2, 23, 12),
