@@ -34,9 +34,12 @@ export function fetchDomain () {
       .then(response => response.json())
       .catch(() => handleError(domainMsg('categories')))
 
-    const narPromise = fetch(NARRATIVE_URL)
-      .then(response => response.json())
-      .catch(() => handleError(domainMsg('narratives')))
+    let narPromise = Promise.resolve([])
+    if (process.env.features.USE_CATEGORIES) {
+      narPromise = fetch(NARRATIVE_URL)
+        .then(response => response.json())
+        .catch(() => handleError(domainMsg('narratives')))
+    }
 
     let sitesPromise = Promise.resolve([])
     if (process.env.features.USE_SITES) {

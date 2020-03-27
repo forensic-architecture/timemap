@@ -136,22 +136,27 @@ const TimelineEvents = ({
   //   })
   // })
 
-  let projects
+  let renderProjects = () => null
   if (process.env.features.ASSOCIATIVE_EVENTS_BY_TAG) {
-    projects = datetimes[1]
+    const projects = datetimes[1]
     datetimes = datetimes[0]
+    renderProjects = function () {
+      return <React.Fragment>
+        {projects.map(project => <Project
+          {...project}
+          getX={getDatetimeX}
+          dims={dims}
+          colour={getCategoryColor(project.category)}
+        />)}
+      </React.Fragment>
+    }
   }
 
   return (
     <g
       clipPath={'url(#clip)'}
     >
-      {projects.map(project => (<Project
-        {...project}
-        getX={getDatetimeX}
-        dims={dims}
-        colour={getCategoryColor(project.category)}
-      />))}
+      {renderProjects()}
       {datetimes.map(datetime => renderDatetime(datetime))}
     </g>
   )
