@@ -94,6 +94,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
       longitude: '32.2'
     }
     */
+    if (!location.latitude || !location.longitude) return null
     const { x, y } = projectPoint([location.latitude, location.longitude])
 
     // in narrative mode, only render events in narrative

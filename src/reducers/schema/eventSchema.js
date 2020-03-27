@@ -23,7 +23,7 @@ const eventSchema = Joi.object().keys({
   narrative___stepStyles: Joi.array()
 })
   .and('latitude', 'longitude')
-  .and('date', 'time', 'timestamp')
+  .and('date', 'timestamp')
   .or('timestamp', 'latitude')
 
 export default eventSchema

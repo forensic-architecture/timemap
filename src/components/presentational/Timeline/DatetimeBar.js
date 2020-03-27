@@ -21,5 +21,3 @@ export default ({
     height={height}
   />
 )
-
-// export default () => null
