@@ -25,6 +25,7 @@ function getDotsToRender (events) {
 
   return Object.values(eventsByCategory)
 }
+const HAS_PROJECTS = 'ASSOCIATIVE_EVENTS_BY_TAG' in process.env.features && process.env.features.ASSOCIATIVE_EVENTS_BY_TAG
 
 const TimelineEvents = ({
   datetimes,
@@ -77,7 +78,9 @@ const TimelineEvents = ({
 
       const unlocatedProps = {
         fill: categoryColor,
-        fillOpacity: getEventOpacity(unlocatedEvents)
+        fillOpacity: HAS_PROJECTS
+          ? unlocatedEvents.some(ev => ev.projectOffset >= 0) ? getEventOpacity(unlocatedEvents) : 0.05
+          : getEventOpacity(unlocatedEvents) / 3
       }
 
       const extraRender = customStyles[1]
@@ -102,7 +105,7 @@ const TimelineEvents = ({
             x={getDatetimeX(datetime.timestamp)}
             y={ev.projectOffset >= 0 ? dims.trackHeight - ev.projectOffset : dims.marginTop}
             width={sizes.eventDotR}
-            height={ev.projectOffset >= 0 ? sizes.eventDotR * 2 : 20}
+            height={ev.projectOffset >= 0 ? sizes.eventDotR * 2 : dims.trackHeight}
             styleProps={unlocatedProps}
           />))}
         </React.Fragment>
