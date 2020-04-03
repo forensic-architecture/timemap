@@ -306,6 +306,7 @@ $overlay-bg: rgba(239,239,239,0.9);
   .md-container {
     width: 100%;
     overflow-wrap: break-word;
+    white-space: pre-line;
   }
 }
 
