@@ -12,7 +12,7 @@ export default ({
 }) => {
   const length = getX(end) - getX(start)
   return <rect
-    onClick={() => alert('TODO: associate all events')}
+    onClick={() => console.error('TODO: associate all events')}
     className='project'
     x={getX(start)}
     y={dims.trackHeight - offset}

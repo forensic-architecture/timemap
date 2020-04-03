@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 import { compareTimestamp, insetSourceFrom, dateMin, dateMax } from '../common/utilities'
 import { isTimeRangedIn, shuffle } from './helpers'
 import { sizes } from '../common/global'
+const HAS_PROJECTS = 'ASSOCIATIVE_EVENTS_BY_TAG' in process.env.features && process.env.features.ASSOCIATIVE_EVENTS_BY_TAG
 
 // Input selectors
 export const getEvents = state => state.domain.events
@@ -43,7 +44,8 @@ export const selectEvents = createSelector(
       const isMatchingTag = (event.tags && event.tags.map(tag => activeTags.includes(tag)).some(s => s)) || activeTags.length === 0
       const isActiveTag = isMatchingTag || activeTags.length === 0
       const isActiveCategory = activeCategories.includes(event.category) || activeCategories.length === 0
-      const isActiveTime = isTimeRangedIn(event, timeRange)
+      let isActiveTime = isTimeRangedIn(event, timeRange)
+      isActiveTime = HAS_PROJECTS ? ((!event.latitude && !event.longitude) || isActiveTime) : isActiveTime
 
       if (isActiveTime && isActiveTag && isActiveCategory) {
         acc[event.id] = { ...event }
@@ -152,7 +154,6 @@ export const selectLocations = createSelector(
     events: [...]
   }
  */
-const IS_PROJ = 'ASSOCIATIVE_EVENTS_BY_TAG' in process.env.features && process.env.features.ASSOCIATIVE_EVENTS_BY_TAG
 export const selectDatetimes = createSelector(
   [selectEvents],
   events => {
@@ -170,8 +171,8 @@ export const selectDatetimes = createSelector(
         tsExists = datetimes.hasOwnProperty(dtKey)
       }
 
-      if (IS_PROJ) {
-        const project = event.tags.length >= 1 ? event.tags[0] : null
+      if (HAS_PROJECTS) {
+        const project = event.tags.length >= 1 && !event.latitude && !event.longitude ? event.tags[0] : null
         event = { ...event, project }
         if (project !== null) {
           if (projects.hasOwnProperty(project)) {
@@ -194,7 +195,7 @@ export const selectDatetimes = createSelector(
        * TODO: find a more module way to interface with this code.
        */
       let shouldCreate = true
-      if (IS_PROJ && dtIdx >= 2 && !(!!event.latitude && !!event.longitude) && event.project !== null) {
+      if (HAS_PROJECTS && dtIdx >= 2 && !(!!event.latitude && !!event.longitude) && event.project !== null) {
         const allExistingIdxs = [...Array(dtIdx - 1).keys()].map(k => k + 1)
         let foundMatching = false
         allExistingIdxs.forEach(_idx => {
@@ -222,7 +223,7 @@ export const selectDatetimes = createSelector(
     })
 
     const output = []
-    if (IS_PROJ) {
+    if (HAS_PROJECTS) {
       const projKeys = Object.keys(projects)
       let sortedDts = Object.keys(datetimes)
 
@@ -239,7 +240,9 @@ export const selectDatetimes = createSelector(
         output.push({
           ...datetimes[dt],
           events: datetimes[dt].events.map(ev => {
-            let projectOffset = (activeProjects.indexOf(ev.project) + 1) * (2.5 * sizes.eventDotR)
+            const activeIdx = activeProjects.indexOf(ev.project)
+            let projectOffset = (activeIdx + 1) * (2.5 * sizes.eventDotR)
+            if (activeIdx === -1) projectOffset = -1
             if (ev.project !== null && !projects[ev.project].hasOwnProperty('offset')) {
               projects[ev.project].offset = projectOffset
               projects[ev.project].category = ev.category

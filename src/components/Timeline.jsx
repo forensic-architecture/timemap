@@ -81,14 +81,18 @@ class Timeline extends React.Component {
 
   makeScaleY (categories, trackHeight, marginTop) {
     const tickHeight = sizes.eventDotR * 2
-    const catHeight = trackHeight / (categories.length)
-    const shiftUp = trackHeight / (categories.length + 1) / 2
+    const catHeight = trackHeight  / (categories.length)
+    const shiftUp = trackHeight / (categories.length) / 2
     const marginShift = marginTop === 0 ? 0 : marginTop
     const manualAdjustment = trackHeight <= 60 ? (trackHeight <= 30 ? -8 : -5) : 0
-    const catsYpos = categories.map((g, i) => ((i + 1) * catHeight) - shiftUp + marginShift + manualAdjustment)
-    return d3.scaleOrdinal()
-      .domain(categories)
-      .range(catsYpos)
+    const catsYpos = categories.map((g, i) => {
+      return ((i+1) * catHeight) - shiftUp + marginShift + manualAdjustment
+    })
+    const catMap = categories.map(c => c.category)
+    return (cat) => {
+      const idx = catMap.indexOf(cat)
+      return catsYpos[idx]
+    }
   }
 
   componentDidUpdate (prevProps, prevState) {
