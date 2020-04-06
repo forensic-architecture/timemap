@@ -1,11 +1,10 @@
 import React from 'react'
 import colors, { sizes } from '../../../common/global'
 
-const MARKER_DISPLACED = sizes.eventDotR * 2
 const TimelineMarkers = ({
   styles,
   getEventX,
-  getCategoryY,
+  getY,
   transitionDuration,
   selected,
   dims,
@@ -24,7 +23,7 @@ const TimelineMarkers = ({
         stroke-linejoin='round'
         stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
         style={{
-          'transform': `translate(${getEventX(event.timestamp)}px, ${getCategoryY(event.category)}px)`,
+          'transform': `translate(${getEventX(event.timestamp)}px, ${getY(event)}px)`,
           '-webkit-transition': `transform ${transitionDuration / 1000}s ease`,
           '-moz-transition': 'none',
           'opacity': 0.9
@@ -35,21 +34,18 @@ const TimelineMarkers = ({
       <rect
         className='timeline-marker'
         x={0}
-        y={-dims.marginTop - (noCategories > 2 ? noCategories * MARKER_DISPLACED : MARKER_DISPLACED)}
+        y={0}
         width={sizes.eventDotR}
-        height={dims.trackHeight}
+        height={dims.contentHeight - 55}
         stroke={styles ? styles.stroke : colors.primaryHighlight}
         stroke-opacity='1'
         stroke-width={styles ? styles['stroke-width'] : 1}
         stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
         style={{
-          'transform': `translate(${getEventX(event.timestamp)}px, 40px)`,
-          '-webkit-transition': `transform ${transitionDuration / 1000}s ease`,
-          '-moz-transition': 'none',
+          'transform': `translate(${getEventX(event.timestamp)}px)`,
           'opacity': 0.9
         }}
       />
-
     )
   }
 
