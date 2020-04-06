@@ -80,7 +80,7 @@ const TimelineEvents = ({
         fill: categoryColor,
         fillOpacity: HAS_PROJECTS
           ? unlocatedEvents.some(ev => ev.projectOffset >= 0) ? getEventOpacity(unlocatedEvents) : 0.05
-          : getEventOpacity(unlocatedEvents) / 3
+          : getEventOpacity(unlocatedEvents)
       }
 
       const extraRender = customStyles[1]

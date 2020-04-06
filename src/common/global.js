@@ -6,7 +6,7 @@ export const colors = {
 }
 
 export const sizes = {
-  eventDotR: 15
+  eventDotR: 8
 }
 
 export default {
