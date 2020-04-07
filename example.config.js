@@ -35,6 +35,7 @@ module.exports = {
         shapes: {},
         narratives: {},
         selectedEvent: {}
+        // tiles: 'your-mapbox-account-name/x5678-map-id'
       }
     }
   }
