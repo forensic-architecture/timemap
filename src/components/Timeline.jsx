@@ -337,7 +337,7 @@ class Timeline extends React.Component {
                 dims={dims}
                 selected={this.props.app.selected}
                 getEventX={this.getDatetimeX}
-                getCategoryY={this.state.scaleY}
+                getY={e => this.state.scaleY(e.category)}
                 transitionDuration={this.state.transitionDuration}
                 styles={this.props.ui.styles}
                 noCategories={this.props.domain.categories && this.props.domain.categories.length}
