@@ -59,7 +59,7 @@ class TimelineAxis extends React.Component {
   }
 
   render () {
-    const PADDING = 20;
+    const PADDING = 20
     return (
       <React.Fragment>
         <g

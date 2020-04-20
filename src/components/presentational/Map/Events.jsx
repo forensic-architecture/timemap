@@ -110,11 +110,11 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
     }
 
     const customStyles = styleLocation ? styleLocation(location) : null
-      const extraRender = () => (
-        <React.Fragment>
-          {customStyles[1]}
-        </React.Fragment>
-      )
+    const extraRender = () => (
+      <React.Fragment>
+        {customStyles[1]}
+      </React.Fragment>
+    )
 
     const isSelected = selected.reduce((acc, event) => {
       return acc || (event.latitude === location.latitude && event.longitude === location.longitude)
