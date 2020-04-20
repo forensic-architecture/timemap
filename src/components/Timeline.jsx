@@ -5,7 +5,6 @@ import * as selectors from '../selectors'
 import hash from 'object-hash'
 
 import copy from '../common/data/copy.json'
-import { sizes } from '../common/global'
 import { formatterWithYear, parseDate } from '../common/utilities'
 import Header from './presentational/Timeline/Header'
 import Axis from './TimelineAxis.jsx'
@@ -47,10 +46,10 @@ class Timeline extends React.Component {
       })
     }
 
-    if ((hash(nextProps.domain.categories) !== hash(this.props.domain.categories)) || hash(nextProps.dimensions) != hash(this.props.dimensions)) {
+    if ((hash(nextProps.domain.categories) !== hash(this.props.domain.categories)) || hash(nextProps.dimensions) !== hash(this.props.dimensions)) {
       const { trackHeight, marginTop } = nextProps.dimensions
       this.setState({
-        scaleY: this.makeScaleY(nextProps.domain.categoriesWithTimeline, trackHeight, marginTop )
+        scaleY: this.makeScaleY(nextProps.domain.categoriesWithTimeline, trackHeight, marginTop)
       })
     }
 
@@ -80,13 +79,12 @@ class Timeline extends React.Component {
   }
 
   makeScaleY (categories, trackHeight, marginTop) {
-    const tickHeight = sizes.eventDotR * 2
-    const catHeight = trackHeight  / (categories.length)
+    const catHeight = trackHeight / (categories.length)
     const shiftUp = trackHeight / (categories.length) / 2
     const marginShift = marginTop === 0 ? 0 : marginTop
     const manualAdjustment = trackHeight <= 60 ? (trackHeight <= 30 ? -8 : -5) : 0
     const catsYpos = categories.map((g, i) => {
-      return ((i+1) * catHeight) - shiftUp + marginShift + manualAdjustment
+      return ((i + 1) * catHeight) - shiftUp + marginShift + manualAdjustment
     })
     const catMap = categories.map(c => c.category)
     return (cat) => {
@@ -277,7 +275,7 @@ class Timeline extends React.Component {
    * the <g/> div.
    */
   styleDatetime (timestamp, category) {
-      return [null, null]
+    return [null, null]
   }
 
   render () {
@@ -286,9 +284,9 @@ class Timeline extends React.Component {
     classes += (app.narrative !== null) ? ' narrative-mode' : ''
     const { dims } = this.state
     const foldedStyle = { bottom: this.state.isFolded ? -dims.height : 0 }
-    const heightStyle = {height: dims.height}
+    const heightStyle = { height: dims.height }
     const extraStyle = { ...heightStyle, ...foldedStyle }
-    const contentHeight = {height: dims.contentHeight}
+    const contentHeight = { height: dims.contentHeight }
 
     return (
       <div className={classes} style={extraStyle}>
@@ -375,7 +373,7 @@ function mapStateToProps (state) {
       selected: state.app.selected,
       language: state.app.language,
       timeline: state.app.timeline,
-      narrative: state.app.narrative,
+      narrative: state.app.narrative
     },
     ui: {
       dom: state.ui.dom,
