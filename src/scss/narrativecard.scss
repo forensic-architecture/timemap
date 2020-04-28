@@ -37,6 +37,7 @@ NARRATIVE INFO
   .narrative-info-desc {
     height: $narrative-info-desc-height;
     overflow-y: auto;
+    white-space: pre-line;
   }
 
   p {
