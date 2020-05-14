@@ -9,16 +9,16 @@ export default ({
   styleProps,
   extraRender
 }) => {
+  const s = r * 2 / 3
+  const s2 = r * 4 / 3
   return (
-    <rect
+    <polygon
       onClick={onSelect}
       className='event'
       x={x}
       y={y - r}
       style={styleProps}
-      width={r}
-      height={r}
-      transform={`rotate(45, ${x}, ${y})`}
+      points={`${x},${y + s} ${x - s},${y - s} ${x + s},${y} ${x - s},${y} ${x + s},${y - s}`}
     />
   )
 }

@@ -1,6 +1,8 @@
 import React from 'react'
 import DatetimeDot from './DatetimeDot'
 import DatetimeBar from './DatetimeBar'
+import DatetimeSquare from './DatetimeSquare'
+import DatetimeStar from './DatetimeStar'
 import Project from './Project'
 import { calcOpacity } from '../../../common/utilities'
 import { sizes } from '../../../common/global'
@@ -73,6 +75,39 @@ const TimelineEvents = ({
       width={sizes.eventDotR / 4}
       height={dims.trackHeight}
       styleProps={props}
+    />
+  }
+
+  function renderDiamond (event, colour) {
+    const props = ({
+      fill: colour,
+      fillOpacity: calcOpacity(1),
+      transition: `transform ${transitionDuration / 1000}s ease`
+    })
+    return <DatetimeSquare
+      onSelect={() => onSelect([event])}
+      x={getDatetimeX(event.timestamp)}
+      y={getCategoryY(event.category)}
+      r={1.8 * sizes.eventDotR}
+      styleProps={props}
+    />
+  }
+
+  function renderStar (event, colour) {
+    const props = ({
+      fill: colour,
+      fillOpacity: calcOpacity(1),
+      transition: `transform ${transitionDuration / 1000}s ease`,
+      fillRule: 'nonzero'
+
+    })
+    return <DatetimeStar
+      onSelect={() => onSelect([event])}
+      x={getDatetimeX(event.timestamp)}
+      y={getCategoryY(event.category)}
+      r={1.8 * sizes.eventDotR}
+      styleProps={props}
+      transform='rotate(90)'
     />
   }
 
@@ -157,6 +192,10 @@ const TimelineEvents = ({
     if (event.shape) {
       if (event.shape === 'bar') {
         renderShape = renderBar
+      } else if (event.shape === 'diamond') {
+        renderShape = renderDiamond
+      } else if (event.shape === 'star') {
+        renderShape = renderStar
       }
     }
 
