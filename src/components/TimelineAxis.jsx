@@ -31,7 +31,7 @@ class TimelineAxis extends React.Component {
       this.x0 =
         d3.axisBottom(this.props.scaleX)
           .ticks(10)
-          .tickPadding(5)
+          .tickPadding(0)
           .tickSize(this.props.dims.trackHeight)
           .tickFormat(d3.timeFormat(fstFmt))
 

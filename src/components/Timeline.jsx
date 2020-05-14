@@ -49,7 +49,7 @@ class Timeline extends React.Component {
     if ((hash(nextProps.domain.categories) !== hash(this.props.domain.categories)) || hash(nextProps.dimensions) !== hash(this.props.dimensions)) {
       const { trackHeight, marginTop } = nextProps.dimensions
       this.setState({
-        scaleY: this.makeScaleY(nextProps.domain.categoriesWithTimeline, trackHeight, marginTop)
+        scaleY: this.makeScaleY(nextProps.domain.categories, trackHeight, marginTop)
       })
     }
 
@@ -319,7 +319,7 @@ class Timeline extends React.Component {
                 onDragStart={() => { this.onDragStart() }}
                 onDrag={() => { this.onDrag() }}
                 onDragEnd={() => { this.onDragEnd() }}
-                categories={this.props.domain.categoriesWithTimeline}
+                categories={this.props.domain.categories}
               />
               <Handles
                 dims={dims}
@@ -341,6 +341,7 @@ class Timeline extends React.Component {
                 noCategories={this.props.domain.categories && this.props.domain.categories.length}
               />
               <Events
+                events={this.props.domain.events}
                 datetimes={this.props.domain.datetimes}
                 styleDatetime={this.styleDatetime}
                 narrative={this.props.app.narrative}
@@ -364,9 +365,9 @@ function mapStateToProps (state) {
     dimensions: selectors.selectDimensions(state),
     isNarrative: !!state.app.narrative,
     domain: {
+      events: selectors.selectEvents(state),
       datetimes: selectors.selectDatetimes(state),
       categories: selectors.getCategories(state),
-      categoriesWithTimeline: selectors.selectCategoriesWithTimeline(state),
       narratives: state.domain.narratives
     },
     app: {

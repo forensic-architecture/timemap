@@ -281,30 +281,6 @@ export const selectSelected = createSelector(
   }
 )
 
-/**
- * Only categories that have events which are located should show on the
- * timeline.
- */
-export const selectCategoriesWithTimeline = createSelector(
-  [getCategories, getEvents],
-  (categories, events) => {
-    if (categories.length === 0) {
-      return categories
-    }
-    // check for located events in category
-    // shuffle first to improve chances of stopping more quickly
-    const hasLocated = {}
-    for (let event of shuffle(events)) {
-      if (Object.keys(hasLocated).length === categories.length) break
-      const cat = event.category
-      if (hasLocated[cat]) continue
-      const isLocated = !!event.longitude && !!event.latitude
-      if (isLocated) hasLocated[cat] = true
-    }
-    return categories.filter(cat => hasLocated[cat.category])
-  }
-)
-
 export const selectDimensions = createSelector(
   [getTimelineDimensions],
   (dimensions) => {

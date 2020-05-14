@@ -20,7 +20,9 @@ const eventSchema = Joi.object().keys({
   time_display: Joi.string().allow(''),
 
   // nested
-  narrative___stepStyles: Joi.array()
+  narrative___stepStyles: Joi.array(),
+  shape: Joi.string().allow(''),
+  colour: Joi.string().allow('')
 })
   .and('latitude', 'longitude')
   .and('date', 'timestamp')
