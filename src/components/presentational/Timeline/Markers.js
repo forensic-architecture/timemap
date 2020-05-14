@@ -53,6 +53,10 @@ const TimelineMarkers = ({
         return renderCircle()
       case 'bar':
         return renderBar()
+      case 'diamond':
+        return renderCircle()
+      case 'star':
+        return renderCircle()
       default:
         return isLocated ? renderBar() : renderCircle()
     }
