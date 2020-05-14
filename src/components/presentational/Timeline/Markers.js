@@ -11,9 +11,8 @@ const TimelineMarkers = ({
   noCategories
 }) => {
   function renderMarker (event) {
-    const isLocated = !!event.latitude && !!event.longitude
-    return isLocated ? (
-      <circle
+    function renderCircle () {
+      return <circle
         className='timeline-marker'
         cx={0}
         cy={0}
@@ -30,12 +29,13 @@ const TimelineMarkers = ({
         }}
         r={sizes.eventDotR * 2}
       />
-    ) : (
-      <rect
+    }
+    function renderBar () {
+      return <rect
         className='timeline-marker'
         x={0}
         y={0}
-        width={sizes.eventDotR}
+        width={sizes.eventDotR / 3}
         height={dims.contentHeight - 55}
         stroke={styles ? styles.stroke : colors.primaryHighlight}
         stroke-opacity='1'
@@ -43,10 +43,19 @@ const TimelineMarkers = ({
         stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
         style={{
           'transform': `translate(${getEventX(event.timestamp)}px)`,
-          'opacity': 0.9
+          'opacity': 0.7
         }}
       />
-    )
+    }
+    const isLocated = !!event.latitude && !!event.longitude
+    switch (event.shape) {
+      case 'circle':
+        return renderCircle()
+      case 'bar':
+        return renderBar()
+      default:
+        return isLocated ? renderBar() : renderCircle()
+    }
   }
 
   return (

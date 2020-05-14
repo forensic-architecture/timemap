@@ -1,5 +1,5 @@
 import { mergeDeepLeft } from 'ramda'
-import colors from '../common/global.js'
+import global from '../common/global'
 
 const initial = {
   /*
@@ -105,12 +105,12 @@ const initial = {
     tiles: 'openstreetmap', // ['openstreetmap', 'streets', 'satellite']
     style: {
       categories: {
-        default: colors.fa_red
+        default: global.fallbackEventColor
       },
       narratives: {
         default: {
           opacity: 0.9,
-          stroke: colors.fa_red,
+          stroke: global.fallbackEventColor,
           strokeWidth: 3
         }
       },

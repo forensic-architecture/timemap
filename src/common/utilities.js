@@ -175,13 +175,13 @@ export function selectTypeFromPathWithPoster (path, poster) {
   return { type: typeForPath(path), path, poster }
 }
 
-export function getEventOpacity (events) {
+export function calcOpacity (num) {
   /* Events have opacity 0.5 by default, and get added to according to how many
    * other events there are in the same render. The idea here is that the
    * overlaying of events builds up a 'heat map' of the event space, where
    * darker areas represent more events with proportion */
-  const base = events.length >= 1 ? 0.3 : 0
-  return base + (Math.min(0.5, 0.08 * (events.length - 1)))
+  const base = num >= 1 ? 0.6 : 0
+  return base + (Math.min(0.5, 0.08 * (num - 1)))
 }
 
 export const dateMin = function () { return Array.prototype.slice.call(arguments).reduce(function (a, b) { return a < b ? a : b }) }

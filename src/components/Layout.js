@@ -69,7 +69,12 @@ class Dashboard extends React.Component {
   }
 
   getCategoryColor (category) {
-    return this.props.ui.style.categories[category] || this.props.ui.style.categories['default']
+    const cat = this.props.ui.style.categories[category]
+    if (cat) {
+      return cat
+    } else {
+      return this.props.ui.style.categories['default']
+    }
   }
 
   getNarrativeLinks (event) {

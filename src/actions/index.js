@@ -35,7 +35,7 @@ export function fetchDomain () {
       .catch(() => handleError(domainMsg('categories')))
 
     let narPromise = Promise.resolve([])
-    if (process.env.features.USE_CATEGORIES) {
+    if (process.env.features.USE_NARRATIVES) {
       narPromise = fetch(NARRATIVE_URL)
         .then(response => response.json())
         .catch(() => handleError(domainMsg('narratives')))
