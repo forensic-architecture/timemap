@@ -341,8 +341,8 @@ class Timeline extends React.Component {
                 noCategories={this.props.domain.categories && this.props.domain.categories.length}
               />
               <Events
-                events={this.props.domain.events}
-                datetimes={this.props.domain.datetimes}
+                events={this.props.domain.eventsAndProjects[0]}
+                projects={this.props.domain.eventsAndProjects[1]}
                 styleDatetime={this.styleDatetime}
                 narrative={this.props.app.narrative}
                 getDatetimeX={this.getDatetimeX}
@@ -365,8 +365,7 @@ function mapStateToProps (state) {
     dimensions: selectors.selectDimensions(state),
     isNarrative: !!state.app.narrative,
     domain: {
-      events: selectors.selectEvents(state),
-      datetimes: selectors.selectDatetimes(state),
+      eventsAndProjects: selectors.selectEventsAndProjects(state),
       categories: selectors.getCategories(state),
       narratives: state.domain.narratives
     },

@@ -2,7 +2,7 @@ import { createSelector } from 'reselect'
 import { compareTimestamp, insetSourceFrom, dateMin, dateMax } from '../common/utilities'
 import { isTimeRangedIn, shuffle } from './helpers'
 import { sizes } from '../common/global'
-const HAS_PROJECTS = 'ASSOCIATIVE_EVENTS_BY_TAG' in process.env.features && process.env.features.ASSOCIATIVE_EVENTS_BY_TAG
+const GRAPH_NONLOCATED = 'GRAPH_NONLOCATED' in process.env.features && process.env.features.GRAPH_NONLOCATED
 
 // Input selectors
 export const getEvents = state => state.domain.events
@@ -45,7 +45,7 @@ export const selectEvents = createSelector(
       const isActiveTag = isMatchingTag || activeTags.length === 0
       const isActiveCategory = activeCategories.includes(event.category) || activeCategories.length === 0
       let isActiveTime = isTimeRangedIn(event, timeRange)
-      isActiveTime = HAS_PROJECTS ? ((!event.latitude && !event.longitude) || isActiveTime) : isActiveTime
+      isActiveTime = GRAPH_NONLOCATED ? ((!event.latitude && !event.longitude) || isActiveTime) : isActiveTime
 
       if (isActiveTime && isActiveTag && isActiveCategory) {
         acc[event.id] = { ...event }
@@ -145,6 +145,13 @@ export const selectLocations = createSelector(
   }
 )
 
+export const selectProjectedEvents = createSelector(
+  [selectEvents],
+  events => {
+
+  }
+)
+
 /**
  * Group events by 'datetime'. Each datetime is  an object:
   {
@@ -154,116 +161,77 @@ export const selectLocations = createSelector(
     events: [...]
   }
  */
-export const selectDatetimes = createSelector(
+export const selectEventsAndProjects = createSelector(
   [selectEvents],
   events => {
-    const projects = {}
-    const datetimes = {}
-    events.forEach(event => {
-      const { timestamp } = event
-      /** Create timestamp with fresh dtKey always by default */
-      let dtIdx = 1
-      let dtKey = `${timestamp}_${dtIdx}`
-      let tsExists = datetimes.hasOwnProperty(dtKey)
-      while (tsExists) {
-        dtIdx += 1
-        dtKey = `${timestamp}_${dtIdx}`
-        tsExists = datetimes.hasOwnProperty(dtKey)
-      }
-
-      if (HAS_PROJECTS) {
-        const project = event.tags.length >= 1 && !event.latitude && !event.longitude ? event.tags[0] : null
-        event = { ...event, project }
-        if (project !== null) {
-          if (projects.hasOwnProperty(project)) {
-            projects[project].start = dateMin(projects[project].start, event.timestamp)
-            projects[project].end = dateMax(projects[project].end, event.timestamp)
-          } else {
-            projects[project] = { start: event.timestamp, end: event.timestamp }
-          }
-        }
-      }
-
-      /** We need to work out whether we can add the event to an existing
-       * timestamp, or whether we need to create a new one. What determines
-       * this is whether or not ALL events in a timestamp have a matching
-       * project. We not only need to check the current dtKey, but also all
-       * dtKeys that have the same timestamp.
-       *
-       * It's a pretty whack algorithm, but I think it does what it's supposed
-       * to. This is only run when projects are showing.
-       * TODO: find a more module way to interface with this code.
-       */
-      let shouldCreate = true
-      if (HAS_PROJECTS && dtIdx >= 2 && !(!!event.latitude && !!event.longitude) && event.project !== null) {
-        const allExistingIdxs = [...Array(dtIdx - 1).keys()].map(k => k + 1)
-        let foundMatching = false
-        allExistingIdxs.forEach(_idx => {
-          const _dtKey = `${timestamp}_${_idx}`
-          const isSameTimestampAndAllSameProjects = datetimes[_dtKey].events.every(ev => ev.project === event.project)
-          if (isSameTimestampAndAllSameProjects) {
-            dtKey = _dtKey
-            foundMatching = true
-          }
-        })
-        if (!foundMatching) {
-          shouldCreate = true
-        }
-      }
-      if (shouldCreate) {
-        datetimes[dtKey] = {
-          timestamp: event.timestamp,
-          date: event.date,
-          time: event.time,
-          events: [event]
-        }
-      } else {
-        datetimes[dtKey].events.push(event)
-      }
-    })
-
-    const output = []
-    if (HAS_PROJECTS) {
-      const projKeys = Object.keys(projects)
-      let sortedDts = Object.keys(datetimes)
-
-      sortedDts.sort((a, b) => {
-        const x = a.substring(0, a.length - 2)
-        const y = b.substring(0, b.length - 2)
-        return new Date(x) - new Date(y)
-      })
-      sortedDts.forEach(dt => {
-        const activeProjects = []
-        projKeys.forEach((k, idx) => {
-          if (dt >= projects[k].start && dt <= projects[k].end) activeProjects.push(k)
-        })
-        output.push({
-          ...datetimes[dt],
-          events: datetimes[dt].events.map(ev => {
-            const activeIdx = activeProjects.indexOf(ev.project)
-            let projectOffset = (activeIdx + 1) * (2.5 * sizes.eventDotR)
-            if (activeIdx === -1) projectOffset = -1
-            if (ev.project !== null && !projects[ev.project].hasOwnProperty('offset')) {
-              projects[ev.project].offset = projectOffset
-              projects[ev.project].category = ev.category
-            } else if (ev.project !== null) {
-              projectOffset = projects[ev.project].offset
-            }
-            return {
-              ...ev,
-              projectOffset
-            }
-          })
-        })
-      })
-      const projectsOut = []
-      Object.keys(projects).forEach(projId => {
-        projectsOut.push({ ...projects[projId], id: projId })
-      })
-      return [output, projectsOut]
+    if (!GRAPH_NONLOCATED) {
+      return [events, []]
     }
 
-    return Object.values(datetimes)
+    // NOTE: change this line if you want to extract projects from a different column
+    function getProject (ev) {
+      return ev.tags[0]
+    }
+
+    events.sort((a, b) => {
+      const x = a.timestamp.substring(0, a.timestamp.length - 2)
+      const y = b.timestamp.substring(0, b.timestamp.length - 2)
+      return new Date(x) - new Date(y)
+    })
+
+    // reduce events to get projects
+    const projects = {}
+    // const activeProjects = []
+    const projEvents = events.reduce((acc, event) => {
+      const project = event.tags.length >= 1 && !event.latitude && !event.longitude ? getProject(event) : null
+
+      // add project if it doesn't exist
+      if (project !== null) {
+        if (projects.hasOwnProperty(project)) {
+          projects[project].start = dateMin(projects[project].start, event.timestamp)
+          projects[project].end = dateMax(projects[project].end, event.timestamp)
+        } else {
+          projects[project] = { start: event.timestamp, end: event.timestamp }
+        }
+      }
+      acc.push({ ...event, project })
+      return acc
+    }, [])
+
+    // reduce projEvents to get _events
+    const projKeys = Object.keys(projects)
+    const _events = projEvents.reduce((acc, event) => {
+      // infer activeProjects from timestamp
+      const activeProjects = []
+      projKeys.forEach((k, idx) => {
+        if (event.timestamp >= projects[k].start && event.timestamp <= projects[k].end) {
+          activeProjects.push(k)
+        }
+      })
+
+      // infer projectOffset using activeProjects
+      // TODO(lachlan) projects get overlaid on the first layer...
+      const activeIdx = activeProjects.indexOf(event.project)
+      let projectOffset = (activeIdx + 3) * (2.5 * sizes.eventDotR)
+      if (activeIdx === -1) {
+        projectOffset = -1
+      }
+      if (event.project !== null && !projects[event.project].hasOwnProperty('offset')) {
+        projects[event.project].offset = projectOffset
+        projects[event.project].category = event.category
+      } else if (event.project !== null) {
+        projectOffset = projects[event.project].offset
+      }
+      acc.push({ ...event, projectOffset })
+      return acc
+    }, [])
+
+    const _projects = []
+    projKeys.forEach(projId => {
+      _projects.push({ ...projects[projId], id: projId })
+    })
+
+    return [_events, _projects]
   }
 )
 
