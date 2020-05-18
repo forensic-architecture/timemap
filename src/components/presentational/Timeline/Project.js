@@ -16,9 +16,9 @@ export default ({
     onClick={onClick}
     className='project'
     x={getX(start)}
-    y={dims.trackHeight - offset}
+    y={dims.trackHeight - (offset + sizes.eventDotR)}
     width={length}
-    style={{ fill: colour, fillOpacity: 0.1 }}
+    style={{ fill: colour, fillOpacity: 0.2 }}
     height={2 * sizes.eventDotR}
   />
 }
