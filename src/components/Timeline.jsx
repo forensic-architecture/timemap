@@ -287,6 +287,7 @@ class Timeline extends React.Component {
     const heightStyle = { height: dims.height }
     const extraStyle = { ...heightStyle, ...foldedStyle }
     const contentHeight = { height: dims.contentHeight }
+    const { categories } = this.props.domain
 
     return (
       <div className={classes} style={extraStyle}>
@@ -347,10 +348,17 @@ class Timeline extends React.Component {
                 narrative={this.props.app.narrative}
                 getDatetimeX={this.getDatetimeX}
                 getCategoryY={this.state.scaleY}
+                getHighlights={group => {
+                  if (group === 'None') {
+                    return []
+                  }
+                  return categories.map(c => c.group === group)
+                }}
                 getCategoryColor={this.props.methods.getCategoryColor}
                 transitionDuration={this.state.transitionDuration}
                 onSelect={this.props.methods.onSelect}
                 dims={dims}
+                features={this.props.features}
               />
             </svg>
           </div>
@@ -378,7 +386,8 @@ function mapStateToProps (state) {
     ui: {
       dom: state.ui.dom,
       styles: state.ui.style.selectedEvents
-    }
+    },
+    features: selectors.getFeatures(state)
   }
 }
 

@@ -8,7 +8,7 @@ function BottomActions (props) {
   function renderToggles () {
     return [
       <div className='bottom-action-block'>
-        {process.env.features.USE_SITES ? <SitesIcon
+        {props.features.USE_SITES ? <SitesIcon
           isActive={props.sites.enabled}
           onClickHandler={props.sites.toggle}
         /> : null}
@@ -20,7 +20,7 @@ function BottomActions (props) {
         />
       </div>,
       <div className='botttom-action-block'>
-        {process.env.features.USE_COVER ? <CoverIcon
+        {props.features.USE_COVER ? <CoverIcon
           onClickHandler={props.cover.toggle}
         /> : null}
       </div>

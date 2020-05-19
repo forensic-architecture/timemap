@@ -7,8 +7,6 @@ import Project from './Project'
 import { calcOpacity } from '../../../common/utilities'
 import { sizes } from '../../../common/global'
 
-const GRAPH_NONLOCATED = 'GRAPH_NONLOCATED' in process.env.features && process.env.features.GRAPH_NONLOCATED
-
 function renderDot (event, styles, props) {
   return <DatetimeDot
     onSelect={props.onSelect}
@@ -22,7 +20,7 @@ function renderDot (event, styles, props) {
 }
 
 function renderBar (event, styles, props) {
-  const fillOpacity = GRAPH_NONLOCATED
+  const fillOpacity = props.features.GRAPH_NONLOCATED
     ? event.projectOffset >= 0 ? styles.opacity : 0.05
     : 0.6
 
@@ -35,6 +33,7 @@ function renderBar (event, styles, props) {
     width={sizes.eventDotR / 4}
     height={props.dims.trackHeight}
     styleProps={{ ...styles, fillOpacity }}
+    highlights={props.highlights}
   />
 }
 
@@ -66,10 +65,11 @@ const TimelineEvents = ({
   getDatetimeX,
   getCategoryY,
   getCategoryColor,
+  getHighlights,
   onSelect,
   transitionDuration,
-  // styleDatetime,
-  dims
+  dims,
+  features
 }) => {
   const narIds = narrative ? narrative.steps.map(s => s.id) : []
 
@@ -91,25 +91,28 @@ const TimelineEvents = ({
       }
     }
 
-    const colour = event.colour ? event.colour : getCategoryColor(event.category)
+    let colour = event.colour ? event.colour : getCategoryColor(event.category)
     const styles = {
       fill: colour,
       fillOpacity: calcOpacity(1),
       transition: `transform ${transitionDuration / 1000}s ease`
     }
+
     return renderShape(event, styles, {
       x: getDatetimeX(event.timestamp),
-      y: (GRAPH_NONLOCATED && !event.latitude && !event.longitude)
+      y: (features.GRAPH_NONLOCATED && !event.latitude && !event.longitude)
         ? event.projectOffset >= 0 ? dims.trackHeight - event.projectOffset : dims.marginTop
-        : getCategoryY(event.category),
+        : getCategoryY ? getCategoryY(event.category) : () => null,
       onSelect: () => onSelect([event]),
-      dims
+      dims,
+      highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.tags[0]) : [],
+      features
     })
   }
 
   /* set `renderProjects` */
   let renderProjects = () => null
-  if (GRAPH_NONLOCATED) {
+  if (features.GRAPH_NONLOCATED) {
     renderProjects = function () {
       return <React.Fragment>
         {projects.map(project => <Project

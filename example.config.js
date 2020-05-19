@@ -11,18 +11,6 @@ module.exports = {
   SHAPES_EXT: '/api/example/export_shapes/columns',
   INCOMING_DATETIME_FORMAT: '%m/%d/%YT%H:%M',
   // MAPBOX_TOKEN: 'pk.YOUR_MAPBOX_TOKEN',
-  features: {
-    USE_COVER: false,
-    USE_TAGS: false,
-    USE_SEARCH: false,
-    USE_SITES: true,
-    USE_SOURCES: true,
-    USE_SHAPES: false,
-    CATEGORIES_AS_TAGS: true,
-    /** setting this to true will 'graph' non-located events. TODO: document
-    * and rename **/
-    ASSOCIATIVE_EVENTS_BY_TAG: false
-  },
   store: {
     app: {
       map: {
@@ -40,6 +28,17 @@ module.exports = {
         selectedEvent: {}
         // tiles: 'your-mapbox-account-name/x5678-map-id'
       }
+    },
+    features: {
+      USE_COVER: false,
+      USE_TAGS: false,
+      USE_SEARCH: false,
+      USE_SITES: true,
+      USE_SOURCES: true,
+      USE_SHAPES: false,
+      CATEGORIES_AS_TAGS: true,
+      GRAPH_NONLOCATED: false,
+      HIGHLIGHT_GROUPS: false
     }
   }
 }

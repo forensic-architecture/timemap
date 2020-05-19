@@ -32,7 +32,7 @@ class Toolbar extends React.Component {
   }
 
   renderSearch () {
-    if (process.env.features.USE_SEARCH) {
+    if (this.props.features.USE_SEARCH) {
       return (
         <TabPanel>
           <Search
@@ -73,7 +73,7 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarCategoriesPanel () {
-    if (process.env.features.CATEGORIES_AS_TAGS) {
+    if (this.props.features.CATEGORIES_AS_TAGS) {
       return (
         <TabPanel>
           <CategoriesListPanel
@@ -88,7 +88,7 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarTagPanel () {
-    if (process.env.features.USE_TAGS &&
+    if (this.props.features.USE_TAGS &&
       this.props.tags.children) {
       return (
         <TabPanel>
@@ -154,7 +154,7 @@ class Toolbar extends React.Component {
     const tagsLabel = copy[this.props.language].toolbar.tags_label
     const categoriesLabel = 'Categories' // TODO:
     const isTags = this.props.tags && this.props.tags.children
-    const isCategories = process.env.features.CATEGORIES_AS_TAGS
+    const isCategories = this.props.features.CATEGORIES_AS_TAGS
 
     return (
       <div className='toolbar'>
@@ -176,6 +176,7 @@ class Toolbar extends React.Component {
           cover={{
             toggle: this.props.actions.toggleCover
           }}
+          features={this.props.features}
         />
       </div>
     )
@@ -195,6 +196,7 @@ class Toolbar extends React.Component {
 
 function mapStateToProps (state) {
   return {
+    features: selectors.getFeatures(state),
     tags: selectors.getTagTree(state),
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
@@ -202,7 +204,6 @@ function mapStateToProps (state) {
     activeTags: selectors.getActiveTags(state),
     activeCategories: selectors.getActiveCategories(state),
     viewFilters: state.app.filters.views,
-    features: state.app.features,
     narrative: state.app.narrative,
     sitesShowing: state.app.flags.isShowingSites,
     infoShowing: state.app.flags.isInfopopup

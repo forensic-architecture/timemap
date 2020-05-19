@@ -10,7 +10,7 @@ const defaultStyles = {
   stroke: 'none'
 }
 
-function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives, projectPoint }) {
+function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives, projectPoint, features }) {
   function getNarrativeStyle (narrativeId) {
     const styleName = (narrativeId && narrativeId in styles)
       ? narrativeId
@@ -153,7 +153,7 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
 
     return (
       <g id={narrativeId} className='narrative'>
-        {(process.env.features.NARRATIVE_STEP_STYLES
+        {(features.NARRATIVE_STEP_STYLES
           ? renderBetweenMarked(n)
           : renderFullNarrative(n)
         )}

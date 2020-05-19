@@ -1,8 +1,7 @@
 import { createSelector } from 'reselect'
 import { compareTimestamp, insetSourceFrom, dateMin, dateMax } from '../common/utilities'
-import { isTimeRangedIn, shuffle } from './helpers'
+import { isTimeRangedIn } from './helpers'
 import { sizes } from '../common/global'
-const GRAPH_NONLOCATED = 'GRAPH_NONLOCATED' in process.env.features && process.env.features.GRAPH_NONLOCATED
 
 // Input selectors
 export const getEvents = state => state.domain.events
@@ -11,18 +10,9 @@ export const getNarratives = state => state.domain.narratives
 export const getActiveNarrative = state => state.app.narrative
 export const getActiveStep = state => state.app.narrativeState.current
 export const getSelected = state => state.app.selected
-export const getSites = (state) => {
-  if (process.env.features.USE_SITES) return state.domain.sites.filter(s => !!(+s.enabled))
-  return []
-}
-export const getSources = state => {
-  if (process.env.features.USE_SOURCES) return state.domain.sources
-  return {}
-}
-export const getShapes = state => {
-  if (process.env.features.USE_SHAPES) return state.domain.shapes
-  return []
-}
+export const getSites = state => state.domain.sites
+export const getSources = state => state.domain.sources
+export const getShapes = state => state.domain.shapes
 export const getNotifications = state => state.domain.notifications
 export const getTagTree = state => state.domain.tags
 export const getActiveTags = state => state.app.filters.tags
@@ -30,6 +20,24 @@ export const getActiveCategories = state => state.app.filters.categories
 export const getTimeRange = state => state.app.timeline.range
 export const getTimelineDimensions = state => state.app.timeline.dimensions
 export const selectNarrative = state => state.app.narrative
+export const getFeatures = state => state.features
+
+export const selectSites = createSelector([getSites, getFeatures], (sites, features) => {
+  if (features.USE_SITES) {
+    return sites.filter(s => !!(+s.enabled))
+  }
+  return []
+})
+
+export const selectSources = createSelector([getSources, getFeatures], (sources, features) => {
+  if (features.USE_SOURCES) return sources
+  return {}
+})
+
+export const selectShapes = createSelector([getShapes, getFeatures], (shapes, features) => {
+  if (features.USE_SHAPES) return shapes
+  return []
+})
 
 /**
  * Of all available events, selects those that
@@ -38,14 +46,14 @@ export const selectNarrative = state => state.app.narrative
  * 3. exist in an active category
  */
 export const selectEvents = createSelector(
-  [getEvents, getActiveTags, getActiveCategories, getTimeRange],
-  (events, activeTags, activeCategories, timeRange) => {
+  [getEvents, getActiveTags, getActiveCategories, getTimeRange, getFeatures],
+  (events, activeTags, activeCategories, timeRange, features) => {
     return events.reduce((acc, event) => {
       const isMatchingTag = (event.tags && event.tags.map(tag => activeTags.includes(tag)).some(s => s)) || activeTags.length === 0
       const isActiveTag = isMatchingTag || activeTags.length === 0
       const isActiveCategory = activeCategories.includes(event.category) || activeCategories.length === 0
       let isActiveTime = isTimeRangedIn(event, timeRange)
-      isActiveTime = GRAPH_NONLOCATED ? ((!event.latitude && !event.longitude) || isActiveTime) : isActiveTime
+      isActiveTime = features.GRAPH_NONLOCATED ? ((!event.latitude && !event.longitude) || isActiveTime) : isActiveTime
 
       if (isActiveTime && isActiveTag && isActiveCategory) {
         acc[event.id] = { ...event }
@@ -60,9 +68,9 @@ export const selectEvents = createSelector(
  * and if TAGS are being used, select them if their tags are enabled
  */
 export const selectNarratives = createSelector(
-  [getEvents, getNarratives, getSources],
-  (events, narrativesMeta, sources) => {
-    if (!process.env.features.USE_NARRATIVES) {
+  [getEvents, getNarratives, getSources, getFeatures],
+  (events, narrativesMeta, sources, features) => {
+    if (!features.USE_NARRATIVES) {
       return []
     }
     const narratives = {}
@@ -162,9 +170,9 @@ export const selectProjectedEvents = createSelector(
   }
  */
 export const selectEventsAndProjects = createSelector(
-  [selectEvents],
-  events => {
-    if (!GRAPH_NONLOCATED) {
+  [selectEvents, getFeatures],
+  (events, features) => {
+    if (!features.GRAPH_NONLOCATED) {
       return [events, []]
     }
 
