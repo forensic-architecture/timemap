@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default ({
-  category,
+  highlights,
   events,
   x,
   y,
@@ -10,14 +10,34 @@ export default ({
   onSelect,
   styleProps,
   extraRender
-}) => (
-  <rect
-    onClick={onSelect}
-    className='event'
-    x={x}
-    y={y}
-    style={styleProps}
-    width={width}
-    height={height}
-  />
-)
+}) => {
+  if (highlights.length === 0) {
+    return (
+      <rect
+        onClick={onSelect}
+        className='event'
+        x={x}
+        y={y}
+        style={styleProps}
+        width={width}
+        height={height}
+      />
+    )
+  }
+  const sectionHeight = height / highlights.length
+  return (
+    <React.Fragment>
+      {highlights.map((h, idx) => (
+        <rect
+          onClick={onSelect}
+          className='event'
+          x={x}
+          y={y - sectionHeight + (idx * sectionHeight)}
+          style={{ ...styleProps, opacity: h ? 0.3 : 0.05 }}
+          width={width}
+          height={sectionHeight}
+        />
+      ))}
+    </React.Fragment>
+  )
+}

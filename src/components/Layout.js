@@ -108,12 +108,12 @@ class Dashboard extends React.Component {
   }
 
   render () {
-    const { actions, app, domain, ui } = this.props
+    const { actions, app, domain, ui, features } = this.props
 
     if (isMobile || window.innerWidth < 1000) {
       return (
         <div>
-          {process.env.features.USE_COVER && (
+          {features.USE_COVER && (
             <StaticPage showing={app.flags.isCover}>
               {/* enable USE_COVER in config.js features, and customise your header */}
               {/* pass 'actions.toggleCover' as a prop to your custom header */}
@@ -193,7 +193,7 @@ class Dashboard extends React.Component {
             }
           />
         ) : null}
-        {process.env.features.USE_COVER && (
+        {features.USE_COVER && (
           <StaticPage showing={app.flags.isCover}>
             {/* enable USE_COVER in config.js features, and customise your header */}
             {/* pass 'actions.toggleCover' as a prop to your custom header */}

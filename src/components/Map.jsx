@@ -34,7 +34,7 @@ class Map extends React.Component {
 
   componentDidMount () {
     if (this.map === null) {
-      this.initializeMap()
+      // this.initializeMap()
     }
   }
 
@@ -139,7 +139,7 @@ class Map extends React.Component {
     const pane = this.map.getPanes().overlayPane
     const { width, height } = this.getClientDims()
 
-    return (
+    return !!this.map ? (
       <Portal node={pane}>
         <svg
           ref={this.svgRef}
@@ -149,7 +149,7 @@ class Map extends React.Component {
           className='leaflet-svg'
         />
       </Portal>
-    )
+    ) : null
   }
 
   renderSites () {
@@ -183,6 +183,7 @@ class Map extends React.Component {
         styles={this.props.ui.narratives}
         onSelect={this.props.methods.onSelect}
         onSelectNarrative={this.props.methods.onSelectNarrative}
+        features={this.props.features}
       />
     )
   }
@@ -266,8 +267,8 @@ function mapStateToProps (state) {
       locations: selectors.selectLocations(state),
       narratives: selectors.selectNarratives(state),
       categories: selectors.getCategories(state),
-      sites: selectors.getSites(state),
-      shapes: selectors.getShapes(state)
+      sites: selectors.selectSites(state),
+      shapes: selectors.selectShapes(state)
     },
     app: {
       views: state.app.filters.views,
@@ -285,7 +286,8 @@ function mapStateToProps (state) {
       narratives: state.ui.style.narratives,
       mapSelectedEvents: state.ui.style.selectedEvents,
       shapes: state.ui.style.shapes
-    }
+    },
+    features: selectors.getFeatures(state)
   }
 }
 

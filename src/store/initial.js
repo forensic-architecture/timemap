@@ -127,6 +127,19 @@ const initial = {
       timeslider: 'timeslider',
       map: 'map'
     }
+  },
+
+  features: {
+    CATEGORIES_AS_TAGS: true,
+    USE_COVER: false,
+    USE_TAGS: false,
+    USE_SEARCH: false,
+    USE_SITES: false,
+    USE_SOURCES: false,
+    USE_SHAPES: false,
+    USE_NARRATIVES: false,
+    GRAPH_NONLOCATED: false,
+    HIGHLIGHT_GROUPS: false
   }
 }
 
