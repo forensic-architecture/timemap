@@ -105,7 +105,7 @@ const TimelineEvents = ({
         : getCategoryY ? getCategoryY(event.category) : () => null,
       onSelect: () => onSelect([event]),
       dims,
-      highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.tags[0]) : [],
+      highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.tags[features.HIGHLIGHT_GROUPS.tagIndexIndicatingGroup]) : [],
       features
     })
   }
