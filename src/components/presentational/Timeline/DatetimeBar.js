@@ -33,7 +33,7 @@ export default ({
           className='event'
           x={x}
           y={y - sectionHeight + (idx * sectionHeight)}
-          style={{ ...styleProps, opacity: h ? 0.3 : 0.05 }}
+          style={{ ...styleProps, opacity: h ? 0.5 : 0.1 }}
           width={width}
           height={sectionHeight}
         />
