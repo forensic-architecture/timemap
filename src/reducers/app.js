@@ -118,12 +118,19 @@ function decrementNarrativeCurrent (appState, action) {
 }
 
 function toggleFilter (appState, action) {
-  let newTags = appState.filters[action.filter].slice(0)
-  if (newTags.includes(action.value)) {
-    newTags = newTags.filter(s => s !== action.value)
-  } else {
-    newTags.push(action.value)
+  if (!(action.value instanceof Array)) {
+    action.value = [action.value]
   }
+
+  let newTags = appState.filters[action.filter].slice(0)
+  action.value.forEach(vl => {
+    if (newTags.includes(vl)) {
+      newTags = newTags.filter(s => s !== vl)
+    } else {
+      newTags.push(vl)
+    }
+  })
+
   return {
     ...appState,
     filters: {
