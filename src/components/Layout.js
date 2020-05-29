@@ -16,7 +16,7 @@ import Notification from './Notification.jsx'
 import StaticPage from './StaticPage'
 import TemplateCover from './TemplateCover'
 
-import { parseDate } from '../common/utilities'
+import { parseDate, binarySearch } from '../common/utilities'
 import { isMobile } from 'react-device-detect'
 
 class Dashboard extends React.Component {
@@ -29,8 +29,6 @@ class Dashboard extends React.Component {
     this.moveInNarrative = this.moveInNarrative.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.getCategoryColor = this.getCategoryColor.bind(this)
-
-    this.eventsById = {}
   }
 
   componentDidMount () {
@@ -49,23 +47,36 @@ class Dashboard extends React.Component {
     this.props.actions.updateHighlighted((highlighted) || null)
   }
 
-  getEventById (eventId) {
-    if (this.eventsById[eventId]) return this.eventsById[eventId]
-    this.eventsById[eventId] = this.props.domain.events.find(ev => ev.id === eventId)
-    return this.eventsById[eventId]
-  }
-
   handleViewSource (source) {
     this.props.actions.updateSource(source)
   }
 
-  handleSelect (selected) {
-    if (selected) {
-      let eventsToSelect = selected.map(event => this.getEventById(event.id))
-      eventsToSelect = eventsToSelect.sort((a, b) => parseDate(a.timestamp) - parseDate(b.timestamp))
-
-      this.props.actions.updateSelected(eventsToSelect)
+  handleSelect (selected, axis) {
+    const matchedEvents = [selected]
+    const TIMELINE_AXIS = 0
+    if (axis === TIMELINE_AXIS) {
+      // find in events
+      const { events } = this.props.domain
+      const idx = binarySearch(
+        events,
+        selected,
+        (e1, e2) => new Date(e1.timestamp) - new Date(e2.timestamp)
+      )
+      // check events before
+      let ptr = idx - 1
+      while (events[idx].timestamp === events[ptr].timestamp) {
+        matchedEvents.push(events[ptr])
+        ptr -= 1
+      }
+      // check events after
+      ptr = idx + 1
+      while (events[idx].timestamp === events[ptr].timestamp) {
+        matchedEvents.push(events[ptr])
+        ptr += 1
+      }
     }
+
+    this.props.actions.updateSelected(matchedEvents)
   }
 
   getCategoryColor (category) {

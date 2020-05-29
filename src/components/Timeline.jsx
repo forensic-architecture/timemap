@@ -14,6 +14,7 @@ import ZoomControls from './presentational/Timeline/ZoomControls.js'
 import Markers from './presentational/Timeline/Markers.js'
 import Events from './presentational/Timeline/Events.js'
 import Categories from './TimelineCategories.jsx'
+const TIMELINE_AXIS = 0
 
 class Timeline extends React.Component {
   constructor (props) {
@@ -336,14 +337,14 @@ class Timeline extends React.Component {
                 dims={dims}
                 selected={this.props.app.selected}
                 getEventX={this.getDatetimeX}
-                getY={e => this.state.scaleY(e.category)}
+                getCategoryY={this.state.scaleY}
                 transitionDuration={this.state.transitionDuration}
                 styles={this.props.ui.styles}
-                noCategories={this.props.domain.categories && this.props.domain.categories.length}
+                features={this.props.features}
               />
               <Events
-                events={this.props.domain.eventsAndProjects[0]}
-                projects={this.props.domain.eventsAndProjects[1]}
+                events={this.props.domain.events}
+                projects={this.props.domain.projects}
                 styleDatetime={this.styleDatetime}
                 narrative={this.props.app.narrative}
                 getDatetimeX={this.getDatetimeX}
@@ -356,7 +357,7 @@ class Timeline extends React.Component {
                 }}
                 getCategoryColor={this.props.methods.getCategoryColor}
                 transitionDuration={this.state.transitionDuration}
-                onSelect={this.props.methods.onSelect}
+                onSelect={ev => this.props.methods.onSelect(ev, TIMELINE_AXIS)}
                 dims={dims}
                 features={this.props.features}
               />
@@ -373,7 +374,8 @@ function mapStateToProps (state) {
     dimensions: selectors.selectDimensions(state),
     isNarrative: !!state.app.narrative,
     domain: {
-      eventsAndProjects: selectors.selectEventsAndProjects(state),
+      events: selectors.selectStackedEvents(state),
+      projects: selectors.selectProjects(state),
       categories: selectors.getCategories(state),
       narratives: state.domain.narratives
     },

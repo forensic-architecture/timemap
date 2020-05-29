@@ -187,3 +187,23 @@ export function calcOpacity (num) {
 export const dateMin = function () { return Array.prototype.slice.call(arguments).reduce(function (a, b) { return a < b ? a : b }) }
 
 export const dateMax = function () { return Array.prototype.slice.call(arguments).reduce(function (a, b) { return a > b ? a : b }) }
+
+/** Taken from
+  * https://stackoverflow.com/questions/22697936/binary-search-in-javascript
+  * **/
+export function binarySearch (ar, el, compareFn) {
+  var m = 0
+  var n = ar.length - 1
+  while (m <= n) {
+    var k = (n + m) >> 1
+    var cmp = compareFn(el, ar[k])
+    if (cmp > 0) {
+      m = k + 1
+    } else if (cmp < 0) {
+      n = k - 1
+    } else {
+      return k
+    }
+  }
+  return -m - 1
+}

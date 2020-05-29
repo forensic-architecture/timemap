@@ -153,5 +153,8 @@ export function validateDomain (domain) {
   }
   sanitizedDomain.tags = domain.tags
 
+  // sort events by timestamp
+  sanitizedDomain.events.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+
   return sanitizedDomain
 }

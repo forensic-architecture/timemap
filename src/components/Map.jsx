@@ -272,7 +272,7 @@ function mapStateToProps (state) {
     },
     app: {
       views: state.app.filters.views,
-      selected: state.app.selected,
+      selected: selectors.selectSelected(state),
       highlighted: state.app.highlighted,
       map: state.app.map,
       narrative: state.app.narrative,
