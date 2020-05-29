@@ -25,6 +25,11 @@ function TagListPanel ({
         className={'tag-filter'}
         style={{ marginLeft: `${depth * 20}px` }}
       >
+        {/* <svg width='10' height='10'> */}
+        {/*   <g className='tag-inline'> */}
+        {/*     <path d='M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z' transform='rotate(270)' /> */}
+        {/*   </g> */}
+        {/* </svg> */}
         <Checkbox
           label={node.key}
           isActive={activeTags.includes(node.key)}
@@ -38,7 +43,6 @@ function TagListPanel ({
   }
 
   function renderTree (children) {
-    /* NOTE: only render first layer of tags */
     return (
       <div>
         {Object.values(children).map(tag => createNodeComponent(tag, 1))}
