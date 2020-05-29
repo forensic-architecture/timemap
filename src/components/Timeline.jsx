@@ -357,7 +357,7 @@ class Timeline extends React.Component {
                 }}
                 getCategoryColor={this.props.methods.getCategoryColor}
                 transitionDuration={this.state.transitionDuration}
-                onSelect={ev => this.props.methods.onSelect(ev, TIMELINE_AXIS)}
+                onSelect={this.props.methods.onSelect}
                 dims={dims}
                 features={this.props.features}
               />

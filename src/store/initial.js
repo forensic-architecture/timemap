@@ -60,12 +60,12 @@ const initial = {
     },
     timeline: {
       dimensions: {
-        height: 1250,
+        height: 250,
         width: 0,
         marginLeft: 100,
         marginTop: 15,
         marginBottom: 60,
-        contentHeight: 800,
+        contentHeight: 200,
         width_controls: 100
       },
       range: [

@@ -52,9 +52,10 @@ class Dashboard extends React.Component {
   }
 
   handleSelect (selected, axis) {
-    const matchedEvents = [selected]
+    const matchedEvents = []
     const TIMELINE_AXIS = 0
     if (axis === TIMELINE_AXIS) {
+      matchedEvents.push(selected)
       // find in events
       const { events } = this.props.domain
       const idx = binarySearch(
@@ -74,6 +75,10 @@ class Dashboard extends React.Component {
         matchedEvents.push(events[ptr])
         ptr += 1
       }
+    } else { // Map...
+      const std = { ...selected }
+      delete std.sources
+      Object.values(std).forEach(ev => matchedEvents.push(ev))
     }
 
     this.props.actions.updateSelected(matchedEvents)
@@ -152,14 +157,14 @@ class Dashboard extends React.Component {
         />
         <Map
           methods={{
-            onSelect: this.handleSelect,
+            onSelect: ev => this.handleSelect(ev, 1),
             onSelectNarrative: this.setNarrative,
             getCategoryColor: this.getCategoryColor
           }}
         />
         <Timeline
           methods={{
-            onSelect: this.handleSelect,
+            onSelect: ev => this.handleSelect(ev, 0),
             onUpdateTimerange: actions.updateTimeRange,
             getCategoryColor: category => this.getCategoryColor(category)
           }}
