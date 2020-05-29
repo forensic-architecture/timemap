@@ -9,7 +9,8 @@ const APP_DIR = path.resolve(__dirname, './src')
 const BUILD_DIR = path.resolve(__dirname, './build')
 
 /** env variables from config.js */
-const envConfig = require('./config')
+const CONFIG = process.env.CONFIG || 'config.js'
+const envConfig = require('./' + CONFIG)
 const userConfig = {}
 const userFeatures = {}
 for (const k in envConfig) {

@@ -56,6 +56,11 @@ yarn          # npm install
 yarn dev      # npm run dev
 ```
 
+To run with a file that is not 'config.js' in the root directory, set the `CONFIG` environment variable:
+```
+CONFIG="myotherconfig.js" yarn dev
+```
+
 IMPORTANT: Although the application will run _just like that_, in order for TimeMap to be able to display interesting information, you'll have to make sure to have the capacity to serve data, as well as adjusting some configuration parameters. See next section.
 
 ### Serving data

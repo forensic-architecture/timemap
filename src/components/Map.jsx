@@ -34,7 +34,7 @@ class Map extends React.Component {
 
   componentDidMount () {
     if (this.map === null) {
-      // this.initializeMap()
+      this.initializeMap()
     }
   }
 
