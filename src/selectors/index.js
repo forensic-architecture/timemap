@@ -153,44 +153,17 @@ export const selectLocations = createSelector(
   }
 )
 
-export const selectProjectedEvents = createSelector(
-  [selectEvents],
-  events => {
-
-  }
-)
-
-/**
- * Group events by 'datetime'. Each datetime is  an object:
-  {
-    timestamp: '',
-    date: '8/23/2016',
-    time: '12:00',
-    events: [...]
-  }
- */
-export const selectEventsAndProjects = createSelector(
+export const selectEventsWithProjects = createSelector(
   [selectEvents, getFeatures],
   (events, features) => {
     if (!features.GRAPH_NONLOCATED) {
       return [events, []]
     }
-
-    // NOTE: change this line if you want to extract projects from a different column
-    function getProject (ev) {
-      return ev.tags[0]
-    }
-
-    events.sort((a, b) => {
-      const x = a.timestamp.substring(0, a.timestamp.length - 2)
-      const y = b.timestamp.substring(0, b.timestamp.length - 2)
-      return new Date(x) - new Date(y)
-    })
-
-    // reduce events to get projects
+    const projectIdx = features.GRAPH_NONLOCATED.projectIdx || 0
+    const getProject = ev => ev.tags[projectIdx]
     const projects = {}
-    // const activeProjects = []
-    const projEvents = events.reduce((acc, event) => {
+
+    events = events.reduce((acc, event) => {
       const project = event.tags.length >= 1 && !event.latitude && !event.longitude ? getProject(event) : null
 
       // add project if it doesn't exist
@@ -206,9 +179,8 @@ export const selectEventsAndProjects = createSelector(
       return acc
     }, [])
 
-    // reduce projEvents to get _events
     const projKeys = Object.keys(projects)
-    const _events = projEvents.reduce((acc, event) => {
+    events = events.reduce((acc, event) => {
       // infer activeProjects from timestamp
       const activeProjects = []
       projKeys.forEach((k, idx) => {
@@ -218,7 +190,7 @@ export const selectEventsAndProjects = createSelector(
       })
 
       // infer projectOffset using activeProjects
-      // TODO(lachlan) projects get overlaid on the first layer...
+      // TODO(lachlan) projects get overlaid if they start at the same time...
       const activeIdx = activeProjects.indexOf(event.project)
       let projectOffset = (activeIdx + 3) * (2.5 * sizes.eventDotR)
       if (activeIdx === -1) {
@@ -234,12 +206,32 @@ export const selectEventsAndProjects = createSelector(
       return acc
     }, [])
 
-    const _projects = []
+    return [events, projects]
+  }
+)
+
+export const selectStackedEvents = createSelector(
+  [selectEventsWithProjects],
+  eventsWithProjects => {
+    return eventsWithProjects[0]
+  }
+)
+
+export const selectProjects = createSelector(
+  [selectEventsWithProjects, getFeatures],
+  (eventsWithProjects, features) => {
+    if (!features.GRAPH_NONLOCATED) {
+      return []
+    }
+    // reduce projEvents to get _events
+    const projects = []
+    const projKeys = Object.keys(eventsWithProjects[1])
+
     projKeys.forEach(projId => {
-      _projects.push({ ...projects[projId], id: projId })
+      projects.push({ ...eventsWithProjects[1][projId], id: projId })
     })
 
-    return [_events, _projects]
+    return projects
   }
 )
 

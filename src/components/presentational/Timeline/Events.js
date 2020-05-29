@@ -21,7 +21,7 @@ function renderDot (event, styles, props) {
 
 function renderBar (event, styles, props) {
   const fillOpacity = props.features.GRAPH_NONLOCATED
-    ? event.projectOffset >= 0 ? styles.opacity : 0.05
+    ? event.projectOffset >= 0 ? styles.opacity : 0.5
     : 0.6
 
   return <DatetimeBar
@@ -80,7 +80,8 @@ const TimelineEvents = ({
       }
     }
 
-    let renderShape = renderDot
+    const isDot = (!!event.location && !!event.longitude) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
+    let renderShape = isDot ? renderDot : renderBar
     if (event.shape) {
       if (event.shape === 'bar') {
         renderShape = renderBar
@@ -103,7 +104,7 @@ const TimelineEvents = ({
       y: (features.GRAPH_NONLOCATED && !event.latitude && !event.longitude)
         ? event.projectOffset >= 0 ? dims.trackHeight - event.projectOffset : dims.marginTop
         : getCategoryY ? getCategoryY(event.category) : () => null,
-      onSelect: () => onSelect([event]),
+      onSelect: () => onSelect(event),
       dims,
       highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.tags[features.HIGHLIGHT_GROUPS.tagIndexIndicatingGroup]) : [],
       features

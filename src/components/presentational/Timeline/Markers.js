@@ -4,14 +4,18 @@ import colors, { sizes } from '../../../common/global'
 const TimelineMarkers = ({
   styles,
   getEventX,
-  getY,
+  getCategoryY,
   transitionDuration,
   selected,
   dims,
-  noCategories
+  features
 }) => {
   function renderMarker (event) {
     function renderCircle () {
+      const yVal = (features.GRAPH_NONLOCATED && !event.latitude && !event.longitude)
+        ? event.projectOffset >= 0 ? dims.trackHeight - event.projectOffset : dims.marginTop
+        : getCategoryY ? getCategoryY(event.category) : () => null
+
       return <circle
         className='timeline-marker'
         cx={0}
@@ -22,7 +26,7 @@ const TimelineMarkers = ({
         stroke-linejoin='round'
         stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
         style={{
-          'transform': `translate(${getEventX(event.timestamp)}px, ${getY(event)}px)`,
+          'transform': `translate(${getEventX(event.timestamp)}px, ${yVal}px)`,
           '-webkit-transition': `transform ${transitionDuration / 1000}s ease`,
           '-moz-transition': 'none',
           'opacity': 0.9
@@ -47,7 +51,7 @@ const TimelineMarkers = ({
         }}
       />
     }
-    const isLocated = !!event.latitude && !!event.longitude
+    const isDot = (!features.GRAPH_NONLOCATED && !!event.latitude && !!event.longitude) || (features.GRAPH_NONLOCATED && (event.projectOffset !== -1 || (!!event.latitude && !!event.longitude)))
     switch (event.shape) {
       case 'circle':
         return renderCircle()
@@ -58,7 +62,7 @@ const TimelineMarkers = ({
       case 'star':
         return renderCircle()
       default:
-        return isLocated ? renderBar() : renderCircle()
+        return isDot ? renderCircle() : renderBar()
     }
   }
 
