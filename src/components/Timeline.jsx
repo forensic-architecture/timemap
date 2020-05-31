@@ -5,7 +5,6 @@ import * as selectors from '../selectors'
 import hash from 'object-hash'
 
 import copy from '../common/data/copy.json'
-import { formatterWithYear, parseDate } from '../common/utilities'
 import Header from './presentational/Timeline/Header'
 import Axis from './TimelineAxis.jsx'
 import Clip from './presentational/Timeline/Clip'
@@ -28,14 +27,13 @@ class Timeline extends React.Component {
       dims: props.dimensions,
       scaleX: null,
       scaleY: null,
-      timerange: [null, null],
+      timerange: [null, null], // two datetimes
       dragPos0: null,
       transitionDuration: 300
     }
   }
 
   componentDidMount () {
-    this.computeDims()
     this.addEventListeners()
   }
 
@@ -60,7 +58,7 @@ class Timeline extends React.Component {
 
     if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
       if (!!nextProps.app.selected && nextProps.app.selected.length > 0) {
-        this.onCenterTime(parseDate(nextProps.app.selected[0].timestamp))
+        this.onCenterTime(nextProps.app.selected[0].datetime)
       }
     }
   }
@@ -68,9 +66,10 @@ class Timeline extends React.Component {
   addEventListeners () {
     window.addEventListener('resize', () => { this.computeDims() })
     let element = document.querySelector('.timeline-wrapper')
-    element.addEventListener('transitionend', (event) => {
-      this.computeDims()
-    })
+    if (element !== null)
+      element.addEventListener('transitionend', (event) => {
+        this.computeDims()
+      })
   }
 
   makeScaleX () {
@@ -191,8 +190,8 @@ class Timeline extends React.Component {
     if (rangeLimits) {
       // If the store contains absolute time limits,
       // make sure the zoom doesn't go over them
-      const minDate = parseDate(rangeLimits[0])
-      const maxDate = parseDate(rangeLimits[1])
+      const minDate = rangeLimits[0]
+      const maxDate = rangeLimits[1]
 
       if (newDomain0 < minDate) {
         newDomain0 = minDate
@@ -243,8 +242,8 @@ class Timeline extends React.Component {
     if (rangeLimits) {
       // If the store contains absolute time limits,
       // make sure the zoom doesn't go over them
-      const minDate = parseDate(rangeLimits[0])
-      const maxDate = parseDate(rangeLimits[1])
+      const minDate = rangeLimits[0]
+      const maxDate = rangeLimits[1]
 
       newDomain0 = (newDomain0 < minDate) ? minDate : newDomain0
       newDomainF = (newDomainF > maxDate) ? maxDate : newDomainF
@@ -262,8 +261,8 @@ class Timeline extends React.Component {
     this.props.methods.onUpdateTimerange(this.state.timerange)
   }
 
-  getDatetimeX (timestamp) {
-    return this.state.scaleX(parseDate(timestamp))
+  getDatetimeX (datetime) {
+    return this.state.scaleX(datetime)
   }
 
   /**
@@ -294,8 +293,8 @@ class Timeline extends React.Component {
       <div className={classes} style={extraStyle}>
         <Header
           title={copy[this.props.app.language].timeline.info}
-          date0={formatterWithYear(this.state.timerange[0])}
-          date1={formatterWithYear(this.state.timerange[1])}
+          from={this.state.timerange[0]}
+          to={this.state.timerange[1]}
           onClick={() => { this.onClickArrow() }}
           hideInfo={isNarrative}
         />

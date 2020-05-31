@@ -1,4 +1,3 @@
-import { parseTimestamp } from '../common/utilities'
 /**
 * Some handy helpers
 */
@@ -8,7 +7,7 @@ import { parseTimestamp } from '../common/utilities'
  * returns true/false if the event falls within timeRange
  */
 export function isTimeRangedIn (event, timeRange) {
-  const eventTime = parseTimestamp(event.timestamp)
+  const eventTime = event.datetime
   return (
     timeRange[0] < eventTime &&
     eventTime < timeRange[1]

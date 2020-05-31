@@ -16,7 +16,7 @@ import Notification from './Notification.jsx'
 import StaticPage from './StaticPage'
 import TemplateCover from './TemplateCover'
 
-import { parseDate, binarySearch } from '../common/utilities'
+import { binarySearch } from '../common/utilities'
 import { isMobile } from 'react-device-detect'
 
 class Dashboard extends React.Component {
@@ -61,17 +61,18 @@ class Dashboard extends React.Component {
       const idx = binarySearch(
         events,
         selected,
-        (e1, e2) => new Date(e1.timestamp) - new Date(e2.timestamp)
+        (e1, e2) => e1.datetime - e2.datetime
       )
       // check events before
       let ptr = idx - 1
-      while (events[idx].timestamp === events[ptr].timestamp) {
+      console.log(events)
+      while (events[idx].datetime === events[ptr].datetime) {
         matchedEvents.push(events[ptr])
         ptr -= 1
       }
       // check events after
       ptr = idx + 1
-      while (events[idx].timestamp === events[ptr].timestamp) {
+      while (events[idx].datetime === events[ptr].datetime) {
         matchedEvents.push(events[ptr])
         ptr += 1
       }

@@ -3,7 +3,7 @@ import React from 'react'
 import copy from '../../../common/data/copy.json'
 import { isNotNullNorUndefined } from '../../../common/utilities'
 
-const CardTimestamp = ({ timelabel, language, precision }) => {
+const CardTime = ({ timelabel, language, precision }) => {
   // const daytimeLang = copy[language].cardstack.timestamp
   // const estimatedLang = copy[language].cardstack.estimated
   const unknownLang = copy[language].cardstack.unknown_time
@@ -29,4 +29,4 @@ const CardTimestamp = ({ timelabel, language, precision }) => {
   }
 }
 
-export default CardTimestamp
+export default CardTime

@@ -1,5 +1,17 @@
 import { timeFormat, timeParse } from 'd3'
 
+import moment from 'moment'
+
+let { DATE_FMT, TIME_FMT } = process.env
+if (!DATE_FMT) DATE_FMT = 'MM/DD/YYYY'
+if (!TIME_FMT) TIME_FMT = 'HH:mm'
+
+export function calcDatetime (date, time) {
+  if (!time) time = '00:00'
+  const dt = moment(`${date} ${time}`, `${DATE_FMT} ${TIME_FMT}`)
+  return dt.toDate()
+}
+
 /**
   * Get URI params to start with predefined set of
   * https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
@@ -39,10 +51,9 @@ export function isNotNullNorUndefined (variable) {
 }
 
 /*
-* Capitalizes _only_ the first letter of a string
 * Taken from: https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
 */
-export function capitalizeFirstLetter (string) {
+export function capitalize (string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
@@ -51,34 +62,6 @@ export function trimAndEllipse (string, stringNum) {
     return string.substring(0, 120) + '...'
   }
   return string
-}
-
-/**
-* Return a Date object given a datetime string of the format: "2016-09-10T07:00:00"
-* @param {string} datetime
-*/
-export function parseDate (datetime) {
-  return new Date(datetime.slice(0, 4),
-    datetime.slice(5, 7) - 1,
-    datetime.slice(8, 10),
-    datetime.slice(11, 13),
-    datetime.slice(14, 16),
-    datetime.slice(17, 19)
-  )
-}
-
-export function formatterWithYear (datetime) {
-  return timeFormat('%d %b %Y, %H:%M')(datetime)
-}
-
-export function formatter (datetime) {
-  return timeFormat('%d %b, %H:%M')(datetime)
-}
-
-export const parseTimestamp = ts => timeParse('%Y-%m-%dT%H:%M:%S')(ts)
-
-export function compareTimestamp (a, b) {
-  return (parseTimestamp(a.timestamp) > parseTimestamp(b.timestamp))
 }
 
 /**
@@ -184,9 +167,17 @@ export function calcOpacity (num) {
   return base + (Math.min(0.5, 0.08 * (num - 1)))
 }
 
-export const dateMin = function () { return Array.prototype.slice.call(arguments).reduce(function (a, b) { return a < b ? a : b }) }
+export const dateMin = function () {
+  return Array.prototype.slice.call(arguments).reduce(function (a, b) {
+    return a < b ? a : b
+  })
+}
 
-export const dateMax = function () { return Array.prototype.slice.call(arguments).reduce(function (a, b) { return a > b ? a : b }) }
+export const dateMax = function () {
+  return Array.prototype.slice.call(arguments).reduce(function (a, b) {
+    return a > b ? a : b
+  })
+}
 
 /** Taken from
   * https://stackoverflow.com/questions/22697936/binary-search-in-javascript
