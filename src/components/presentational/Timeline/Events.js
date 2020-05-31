@@ -99,6 +99,8 @@ const TimelineEvents = ({
       if (project) {
         const { offset } = projects[project]
         eventY = dims.marginTop + offset + sizes.eventDotR
+      } else {
+        eventY = 0
       }
     }
 
@@ -112,7 +114,7 @@ const TimelineEvents = ({
     return renderShape(event, styles, {
       x: getDatetimeX(event.datetime),
       y: eventY,
-      onSelect: () => onSelect(event),
+      onSelect: () => { console.log(event); onSelect(event) },
       dims,
       highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.tags[features.HIGHLIGHT_GROUPS.tagIndexIndicatingGroup]) : [],
       features

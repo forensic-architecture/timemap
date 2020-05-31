@@ -65,7 +65,6 @@ class Dashboard extends React.Component {
       )
       // check events before
       let ptr = idx - 1
-      console.log(events)
       while (events[idx].datetime === events[ptr].datetime) {
         matchedEvents.push(events[ptr])
         ptr -= 1

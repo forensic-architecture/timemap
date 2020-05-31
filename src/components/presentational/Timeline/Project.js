@@ -18,7 +18,7 @@ export default ({
     onClick={onClick}
     className='project'
     x={getX(start)}
-    y={dims.marginTop + 100}
+    y={dims.marginTop + offset}
     width={length}
     style={{ fill: colour, fillOpacity: 0.2 }}
     height={2 * sizes.eventDotR}

@@ -174,7 +174,12 @@ export const selectEventsWithProjects = createSelector(
           projects[project].start = dateMin(projects[project].start, event.datetime)
           projects[project].end = dateMax(projects[project].end, event.datetime)
         } else {
-          projects[project] = { start: event.datetime, end: event.datetime, key: project }
+          projects[project] = {
+            start: event.datetime,
+            end: event.datetime,
+            key: project,
+            category: event.category
+          }
         }
       }
       acc.push({ ...event, project })
@@ -185,24 +190,18 @@ export const selectEventsWithProjects = createSelector(
     projObjs.sort((a, b) => a.start - b.start)
 
     // active projects is a data structure with projObjs.length empty slots
-    let activeProjs = {}
-    projObjs.forEach((_, idx) => { activeProjs[idx] = null })
+    let activeProjs = Object.keys(projects).map((_, idx) => null)
 
     const projectsWithOffset = projObjs.reduce((acc, proj, theIdx) => {
-      if (theIdx >= 1) { acc[proj.key] = proj; return acc }
       // remove any project that have ended from slots
-      let j = 0
-      while (j < projObjs.length) {
-        if (!activeProjs[j]) {
-          j++
-          continue
+      activeProjs.forEach((theProj, theProjIdx) => {
+        if (theProj !== null) {
+          const projInSlot = projects[theProj]
+          if (projInSlot.end < proj.start) {
+            activeProjs[theProjIdx] = null
+          }
         }
-        const projInSlot = projects[activeProjs[j]]
-        if (projInSlot.end > proj.start) {
-          activeProjs[j] = null
-        }
-        j++
-      }
+      })
       let i = 0
       // find the first empty slot
       while (activeProjs[i]) i++
@@ -210,42 +209,9 @@ export const selectEventsWithProjects = createSelector(
       activeProjs[i] = proj.key
 
       proj.offset = i * projSize
-      console.log(`${proj.key}:-- ${proj.offset}`)
       acc[proj.key] = proj
       return acc
     }, {})
-
-    /*
-    events = events.reduce((acc, event) => {
-      const activeProjects = []
-      projKeys.forEach((k, idx) => {
-        if (event.timestamp >= projects[k].start && event.timestamp <= projects[k].end) {
-          activeProjects.push(k)
-        }
-      })
-
-      // infer projectOffset using activeProjects
-      // TODO(lachlan) projects get overlaid if they start at the same time...
-      const activeIdx = activeProjects.indexOf(event.project)
-      let projectOffset = activeIdx * projSize
-      if (activeIdx === -1) {
-        // project isn't in previously calculated list of projects
-        projectOffset = -1
-      }
-      if (event.project !== null) {
-        if (projects[event.project].hasOwnProperty('offset')) {
-          // project is already active
-          projectOffset = (activeIdx + 1) * projSize
-        }
-        projects[event.project].offset = projectOffset
-        projects[event.project].category = event.category
-      } else if (event.project !== null) {
-        projectOffset = projects[event.project].offset
-      }
-      acc.push({ ...event, projectOffset })
-      return acc
-    }, [])
-    */
 
     return [events, projectsWithOffset]
   }
