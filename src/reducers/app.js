@@ -77,8 +77,8 @@ function updateNarrative (appState, action) {
     }
 
     // Add some buffer on both sides of the time extent
-    minTime = new Date(minTime.getTime() - Math.abs((maxTime - minTime) / 10))
-    maxTime = new Date(maxTime.getTime() + Math.abs((maxTime - minTime) / 10))
+    minTime = minTime - Math.abs((maxTime - minTime) / 10)
+    maxTime = maxTime + Math.abs((maxTime - minTime) / 10)
   }
 
   return {

@@ -110,8 +110,6 @@ const TimelineEvents = ({
     })
   }
 
-  /* set `renderProjects` */
-  // TODO(lachlan): remove hardcoded 'Legislation'
   let renderProjects = () => null
   if (features.GRAPH_NONLOCATED) {
     renderProjects = function () {
