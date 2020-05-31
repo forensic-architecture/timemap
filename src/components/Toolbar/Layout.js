@@ -87,21 +87,18 @@ class Toolbar extends React.Component {
     }
   }
 
-  renderToolbarTagPanel () {
-    if (this.props.features.USE_TAGS &&
-      this.props.tags.children) {
-      return (
-        <TabPanel>
-          <TagListPanel
-            tags={this.props.tags}
-            activeTags={this.props.activeTags}
-            onTagFilter={this.props.methods.onTagFilter}
-            language={this.props.language}
-          />
-        </TabPanel>
-      )
-    }
-    return null
+  renderToolbarFilterPanel () {
+    console.log(this.props)
+    return (
+      <TabPanel>
+        <TagListPanel
+          tags={this.props.tags}
+          activeTags={this.props.activeTags}
+          onTagFilter={this.props.methods.onTagFilter}
+          language={this.props.language}
+        />
+      </TabPanel>
+    )
   }
 
   renderToolbarTab (_selected, label, iconKey) {
@@ -117,14 +114,15 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarPanels () {
+    const { features } = this.props
     let classes = (this.state._selected >= 0) ? 'toolbar-panels' : 'toolbar-panels folded'
     return (
       <div className={classes}>
         {this.renderClosePanel()}
         <Tabs selectedIndex={this.state._selected}>
-          {this.renderToolbarNarrativePanel()}
-          {this.renderToolbarCategoriesPanel()}
-          {this.renderToolbarTagPanel()}
+          {features.USE_NARRATIVES ? this.renderToolbarNarrativePanel() : null}
+          {features.CATEGORIES_AS_TAGS ? this.renderToolbarCategoriesPanel() : null}
+          {features.USE_FILTERS ? this.renderToolbarFilterPanel() : null}
         </Tabs>
       </div>
     )
@@ -148,21 +146,20 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarTabs () {
+    const { features } = this.props
     let title = copy[this.props.language].toolbar.title
     if (process.env.display_title) title = process.env.display_title
     const narrativesLabel = copy[this.props.language].toolbar.narratives_label
     const tagsLabel = copy[this.props.language].toolbar.tags_label
     const categoriesLabel = 'Categories' // TODO:
-    const isTags = this.props.tags && this.props.tags.children
-    const isCategories = this.props.features.CATEGORIES_AS_TAGS
 
     return (
       <div className='toolbar'>
         <div className='toolbar-header'onClick={this.props.methods.onTitle}><p>{title}</p></div>
         <div className='toolbar-tabs'>
-          {this.renderToolbarTab(0, narrativesLabel, 'timeline')}
-          {(isCategories) ? this.renderToolbarTab(1, categoriesLabel, 'widgets') : null}
-          {(isTags) ? this.renderToolbarTab(2, tagsLabel, 'filter_list') : null}
+          {features.USE_NARRATIVES ? this.renderToolbarTab(0, narrativesLabel, 'timeline') : null}
+          {features.CATEGORIES_AS_TAGS ? this.renderToolbarTab(1, categoriesLabel, 'widgets') : null}
+          {features.USE_FILTERS ? this.renderToolbarTab(2, tagsLabel, 'filter_list') : null}
         </div>
         <BottomActions
           info={{
@@ -196,7 +193,6 @@ class Toolbar extends React.Component {
 
 function mapStateToProps (state) {
   return {
-    features: selectors.getFeatures(state),
     tags: selectors.getTagTree(state),
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
@@ -206,7 +202,8 @@ function mapStateToProps (state) {
     viewFilters: state.app.filters.views,
     narrative: state.app.narrative,
     sitesShowing: state.app.flags.isShowingSites,
-    infoShowing: state.app.flags.isInfopopup
+    infoShowing: state.app.flags.isInfopopup,
+    features: selectors.getFeatures(state)
   }
 }
 
