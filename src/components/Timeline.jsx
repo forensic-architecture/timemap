@@ -5,6 +5,7 @@ import * as selectors from '../selectors'
 import hash from 'object-hash'
 
 import copy from '../common/data/copy.json'
+import { sizes } from '../common/global'
 import Header from './presentational/Timeline/Header'
 import Axis from './TimelineAxis.jsx'
 import Clip from './presentational/Timeline/Clip'
@@ -20,6 +21,7 @@ class Timeline extends React.Component {
     super(props)
     this.styleDatetime = this.styleDatetime.bind(this)
     this.getDatetimeX = this.getDatetimeX.bind(this)
+    this.getY = this.getY.bind(this)
     this.onApplyZoom = this.onApplyZoom.bind(this)
     this.svgRef = React.createRef()
     this.state = {
@@ -269,6 +271,16 @@ class Timeline extends React.Component {
     return this.state.scaleX(datetime)
   }
 
+  getY (event) {
+    const { category, project } = event
+    const { features, domain } = this.props
+    const { GRAPH_NONLOCATED } = features
+    if (GRAPH_NONLOCATED && GRAPH_NONLOCATED.categories.includes(category)) {
+      return this.state.dims.marginTop + domain.projects[project].offset + sizes.eventDotR
+    }
+    return this.state.scaleY(category)
+  }
+
   /**
    * Determines additional styles on the <circle> for each location.
    * A location consists of an array of events (see selectors). The function
@@ -340,8 +352,8 @@ class Timeline extends React.Component {
               <Markers
                 dims={dims}
                 selected={this.props.app.selected}
-                getEventX={this.getDatetimeX}
-                getCategoryY={this.state.scaleY}
+                getEventX={ev => this.getDatetimeX(ev.datetime)}
+                getEventY={this.getY}
                 transitionDuration={this.state.transitionDuration}
                 styles={this.props.ui.styles}
                 features={this.props.features}
@@ -352,7 +364,7 @@ class Timeline extends React.Component {
                 styleDatetime={this.styleDatetime}
                 narrative={this.props.app.narrative}
                 getDatetimeX={this.getDatetimeX}
-                getCategoryY={this.state.scaleY}
+                getY={this.getY}
                 getHighlights={group => {
                   if (group === 'None') {
                     return []

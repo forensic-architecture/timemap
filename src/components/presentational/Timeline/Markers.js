@@ -4,7 +4,7 @@ import colors, { sizes } from '../../../common/global'
 const TimelineMarkers = ({
   styles,
   getEventX,
-  getCategoryY,
+  getEventY,
   transitionDuration,
   selected,
   dims,
@@ -12,10 +12,6 @@ const TimelineMarkers = ({
 }) => {
   function renderMarker (event) {
     function renderCircle () {
-      const yVal = (features.GRAPH_NONLOCATED && !event.latitude && !event.longitude)
-        ? event.projectOffset >= 0 ? dims.trackHeight - event.projectOffset : dims.marginTop
-        : getCategoryY ? getCategoryY(event.category) : () => null
-
       return <circle
         className='timeline-marker'
         cx={0}
@@ -26,7 +22,7 @@ const TimelineMarkers = ({
         stroke-linejoin='round'
         stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
         style={{
-          'transform': `translate(${getEventX(event.timestamp)}px, ${yVal}px)`,
+          'transform': `translate(${getEventX(event)}px, ${getEventY(event)}px)`,
           '-webkit-transition': `transform ${transitionDuration / 1000}s ease`,
           '-moz-transition': 'none',
           'opacity': 0.9
@@ -46,13 +42,12 @@ const TimelineMarkers = ({
         stroke-width={styles ? styles['stroke-width'] : 1}
         stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
         style={{
-          'transform': `translate(${getEventX(event.timestamp)}px)`,
+          'transform': `translate(${getEventX(event)}px)`,
           'opacity': 0.7
         }}
       />
     }
     const isNonlocated = !event.latitude && !event.longitude
-    const isBar = (!features.GRAPH_NONLOCATED && isNonlocated) || (features.GRAPH_NONLOCATED && features.GRAPH_NONLOCATED.categories.includes(event.category))
     switch (event.shape) {
       case 'circle':
         return renderCircle()
@@ -63,7 +58,7 @@ const TimelineMarkers = ({
       case 'star':
         return renderCircle()
       default:
-        return isBar ? renderBar() : renderCircle()
+        return (!features.GRAPH_NONLOCATED && isNonlocated) ? renderBar : renderCircle()
     }
   }
 
