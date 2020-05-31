@@ -50,7 +50,7 @@ export function fetchDomain () {
     }
 
     let tagsPromise = Promise.resolve([])
-    if (features.USE_TAGS) {
+    if (features.USE_FILTERS) {
       if (!TAGS_URL) {
         tagsPromise = Promise.resolve(handleError('USE_TAGS is true, but you have not provided a TAGS_EXT'))
       } else {
