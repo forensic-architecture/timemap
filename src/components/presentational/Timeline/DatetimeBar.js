@@ -32,7 +32,7 @@ export default ({
           onClick={onSelect}
           className='event'
           x={x}
-          y={y - sectionHeight + (idx * sectionHeight)}
+          y={y - sectionHeight + (idx * sectionHeight) + (sectionHeight / 2)}
           style={{ ...styleProps, opacity: h ? 0.5 : 0.1 }}
           width={width}
           height={sectionHeight}
