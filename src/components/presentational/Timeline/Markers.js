@@ -51,7 +51,8 @@ const TimelineMarkers = ({
         }}
       />
     }
-    const isDot = (!features.GRAPH_NONLOCATED && !!event.latitude && !!event.longitude) || (features.GRAPH_NONLOCATED && (event.projectOffset !== -1 || (!!event.latitude && !!event.longitude)))
+    const isNonlocated = !event.latitude && !event.longitude
+    const isBar = (!features.GRAPH_NONLOCATED && isNonlocated) || (features.GRAPH_NONLOCATED && features.GRAPH_NONLOCATED.categories.includes(event.category))
     switch (event.shape) {
       case 'circle':
         return renderCircle()
@@ -62,7 +63,7 @@ const TimelineMarkers = ({
       case 'star':
         return renderCircle()
       default:
-        return isDot ? renderCircle() : renderBar()
+        return isBar ? renderBar() : renderCircle()
     }
   }
 

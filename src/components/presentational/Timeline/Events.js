@@ -92,7 +92,7 @@ const TimelineEvents = ({
       }
     }
 
-    let eventY = getCategoryY(event.category)
+    let eventY = getCategoryY ? getCategoryY(event.category) : 0
     const isNonlocated = !event.latitude && !event.longitude
     if (features.GRAPH_NONLOCATED && isNonlocated) {
       const { project } = event

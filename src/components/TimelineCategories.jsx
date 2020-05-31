@@ -24,9 +24,15 @@ class TimelineCategories extends React.Component {
     }
   }
 
-  renderCategory (category, idx) {
-    const dims = this.props.dims
+  renderCategory (cat, idx) {
+    const { features, dims } = this.props
+    const { category } = cat
     const strokeWidth = 1 // dims.trackHeight / (this.props.categories.length + 1)
+    if (features.GRAPH_NONLOCATED
+      && features.GRAPH_NONLOCATED.categories
+      && features.GRAPH_NONLOCATED.categories.includes(category)) {
+      return null
+    }
 
     return (
       <React.Fragment>
@@ -34,12 +40,12 @@ class TimelineCategories extends React.Component {
           class='tick'
           style={{ strokeWidth }}
           opacity='0.5'
-          transform={`translate(0,${this.props.getCategoryY(category.category)})`}
+          transform={`translate(0,${this.props.getCategoryY(category)})`}
         >
           <line x1={dims.marginLeft} x2={dims.width - dims.width_controls} />
         </g>
-        <g class='tick' opacity='1' transform={`translate(0,${this.props.getCategoryY(category.category)})`}>
-          <text x={dims.marginLeft - 5} dy='0.32em'>{category.category}</text>
+        <g class='tick' opacity='1' transform={`translate(0,${this.props.getCategoryY(category)})`}>
+          <text x={dims.marginLeft - 5} dy='0.32em'>{category}</text>
         </g>
       </React.Fragment>
     )
