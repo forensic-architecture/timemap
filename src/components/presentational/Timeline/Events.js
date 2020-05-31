@@ -92,10 +92,11 @@ const TimelineEvents = ({
       }
     }
 
+    let defaultY = getCategoryY(event.category)
     let colour = event.colour ? event.colour : getCategoryColor(event.category)
     const styles = {
       fill: colour,
-      fillOpacity: calcOpacity(1),
+      fillOpacity: defaultY > 0 ? calcOpacity(1) : 0,
       transition: `transform ${transitionDuration / 1000}s ease`
     }
 
@@ -103,8 +104,8 @@ const TimelineEvents = ({
       x: getDatetimeX(event.timestamp),
       y: (features.GRAPH_NONLOCATED && !event.latitude && !event.longitude)
         ? event.projectOffset >= 0 ? dims.trackHeight - event.projectOffset : dims.marginTop
-        : getCategoryY ? getCategoryY(event.category) : () => null,
-      onSelect: () => onSelect(event),
+        : getCategoryY ? defaultY : () => null,
+      onSelect: () => onSelect([event]),
       dims,
       highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.tags[features.HIGHLIGHT_GROUPS.tagIndexIndicatingGroup]) : [],
       features
