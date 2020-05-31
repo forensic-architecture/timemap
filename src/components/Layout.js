@@ -61,7 +61,9 @@ class Dashboard extends React.Component {
       const idx = binarySearch(
         events,
         selected,
-        (e1, e2) => e1.datetime - e2.datetime
+        (e1, e2) => {
+          return e2.datetime - e1.datetime
+        }
       )
       // check events before
       let ptr = idx - 1

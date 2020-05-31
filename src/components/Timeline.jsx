@@ -79,6 +79,10 @@ class Timeline extends React.Component {
   }
 
   makeScaleY (categories, trackHeight, marginTop) {
+    const { features } = this.props
+    if (features.GRAPH_NONLOCATED && features.GRAPH_NONLOCATED.categories) {
+      categories = categories.filter(cat => !features.GRAPH_NONLOCATED.categories.includes(cat.category))
+    }
     const catHeight = trackHeight / (categories.length)
     const shiftUp = trackHeight / (categories.length) / 2
     const marginShift = marginTop === 0 ? 0 : marginTop
@@ -321,6 +325,7 @@ class Timeline extends React.Component {
                 onDrag={() => { this.onDrag() }}
                 onDragEnd={() => { this.onDragEnd() }}
                 categories={this.props.domain.categories}
+                features={this.props.features}
               />
               <Handles
                 dims={dims}
