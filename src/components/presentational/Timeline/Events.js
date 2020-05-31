@@ -105,7 +105,7 @@ const TimelineEvents = ({
       y: (features.GRAPH_NONLOCATED && !event.latitude && !event.longitude)
         ? event.projectOffset >= 0 ? dims.trackHeight - event.projectOffset : dims.marginTop
         : getCategoryY ? defaultY : () => null,
-      onSelect: () => onSelect([event]),
+      onSelect: () => onSelect(event),
       dims,
       highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.tags[features.HIGHLIGHT_GROUPS.tagIndexIndicatingGroup]) : [],
       features
