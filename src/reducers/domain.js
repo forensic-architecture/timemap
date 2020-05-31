@@ -1,13 +1,9 @@
 import initial from '../store/initial.js'
 
 import { UPDATE_DOMAIN, MARK_NOTIFICATIONS_READ } from '../actions'
-import { parseDateTimes } from './utils/helpers.js'
-import { validateDomain } from './utils/validators.js'
+import { validateDomain } from './validate/validators.js'
 
 function updateDomain (domainState, action) {
-  action.domain.events = parseDateTimes(action.domain.events)
-
-  // return Object.assign({}, domainState, validate(action.domain))
   return {
     ...domainState,
     ...validateDomain(action.domain)

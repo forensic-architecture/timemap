@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { compareTimestamp, insetSourceFrom, dateMin, dateMax } from '../common/utilities'
+import { insetSourceFrom, dateMin, dateMax } from '../common/utilities'
 import { isTimeRangedIn } from './helpers'
 import { sizes } from '../common/global'
 
@@ -96,7 +96,7 @@ export const selectNarratives = createSelector(
     Object.keys(narratives).forEach(key => {
       const steps = narratives[key].steps
 
-      steps.sort(compareTimestamp)
+      steps.sort((a, b) => a.datetime - b.datetime)
 
       if (narrativesMeta.find(n => n.id === key)) {
         narratives[key] = {
@@ -159,29 +159,64 @@ export const selectEventsWithProjects = createSelector(
     if (!features.GRAPH_NONLOCATED) {
       return [events, []]
     }
+    const projSize = 2 * sizes.eventDotR
     const projectIdx = features.GRAPH_NONLOCATED.projectIdx || 0
     const getProject = ev => ev.tags[projectIdx]
     const projects = {}
 
+    // get all projects
     events = events.reduce((acc, event) => {
       const project = event.tags.length >= 1 && !event.latitude && !event.longitude ? getProject(event) : null
 
       // add project if it doesn't exist
       if (project !== null) {
         if (projects.hasOwnProperty(project)) {
-          projects[project].start = dateMin(projects[project].start, event.timestamp)
-          projects[project].end = dateMax(projects[project].end, event.timestamp)
+          projects[project].start = dateMin(projects[project].start, event.datetime)
+          projects[project].end = dateMax(projects[project].end, event.datetime)
         } else {
-          projects[project] = { start: event.timestamp, end: event.timestamp }
+          projects[project] = { start: event.datetime, end: event.datetime, key: project }
         }
       }
       acc.push({ ...event, project })
       return acc
     }, [])
 
-    const projKeys = Object.keys(projects)
+    let projObjs = Object.values(projects)
+    projObjs.sort((a, b) => a.start - b.start)
+
+    // active projects is a data structure with projObjs.length empty slots
+    let activeProjs = {}
+    projObjs.forEach((_, idx) => { activeProjs[idx] = null })
+
+    const projectsWithOffset = projObjs.reduce((acc, proj, theIdx) => {
+      if (theIdx >= 1) { acc[proj.key] = proj; return acc }
+      // remove any project that have ended from slots
+      let j = 0
+      while (j < projObjs.length) {
+        if (!activeProjs[j]) {
+          j++
+          continue
+        }
+        const projInSlot = projects[activeProjs[j]]
+        if (projInSlot.end > proj.start) {
+          activeProjs[j] = null
+        }
+        j++
+      }
+      let i = 0
+      // find the first empty slot
+      while (activeProjs[i]) i++
+      // put proj in slot
+      activeProjs[i] = proj.key
+
+      proj.offset = i * projSize
+      console.log(`${proj.key}:-- ${proj.offset}`)
+      acc[proj.key] = proj
+      return acc
+    }, {})
+
+    /*
     events = events.reduce((acc, event) => {
-      // infer activeProjects from timestamp
       const activeProjects = []
       projKeys.forEach((k, idx) => {
         if (event.timestamp >= projects[k].start && event.timestamp <= projects[k].end) {
@@ -192,11 +227,16 @@ export const selectEventsWithProjects = createSelector(
       // infer projectOffset using activeProjects
       // TODO(lachlan) projects get overlaid if they start at the same time...
       const activeIdx = activeProjects.indexOf(event.project)
-      let projectOffset = (activeIdx + 3) * (2.5 * sizes.eventDotR)
+      let projectOffset = activeIdx * projSize
       if (activeIdx === -1) {
+        // project isn't in previously calculated list of projects
         projectOffset = -1
       }
-      if (event.project !== null && !projects[event.project].hasOwnProperty('offset')) {
+      if (event.project !== null) {
+        if (projects[event.project].hasOwnProperty('offset')) {
+          // project is already active
+          projectOffset = (activeIdx + 1) * projSize
+        }
         projects[event.project].offset = projectOffset
         projects[event.project].category = event.category
       } else if (event.project !== null) {
@@ -205,8 +245,9 @@ export const selectEventsWithProjects = createSelector(
       acc.push({ ...event, projectOffset })
       return acc
     }, [])
+    */
 
-    return [events, projects]
+    return [events, projectsWithOffset]
   }
 )
 
@@ -223,15 +264,7 @@ export const selectProjects = createSelector(
     if (!features.GRAPH_NONLOCATED) {
       return []
     }
-    // reduce projEvents to get _events
-    const projects = []
-    const projKeys = Object.keys(eventsWithProjects[1])
-
-    projKeys.forEach(projId => {
-      projects.push({ ...eventsWithProjects[1][projId], id: projId })
-    })
-
-    return projects
+    return eventsWithProjects[1]
   }
 )
 

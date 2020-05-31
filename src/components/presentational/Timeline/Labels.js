@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { formatterWithYear } from '../../../js/utilities.js'
-
 const TimelineLabels = ({ dims, timelabels }) => {
   return (
     <g>
@@ -24,7 +22,7 @@ const TimelineLabels = ({ dims, timelabels }) => {
         x='5'
         y='15'
       >
-        {formatterWithYear(timelabels[0])}
+        {timelabels[0]}
       </text>
       <text
         class='timelabelF timeLabel'
@@ -32,7 +30,7 @@ const TimelineLabels = ({ dims, timelabels }) => {
         y='15'
         style={{ textAnchor: 'end' }}
       >
-        {formatterWithYear(timelabels[1])}
+        {timelabels[1]}
       </text>
     </g>
   )

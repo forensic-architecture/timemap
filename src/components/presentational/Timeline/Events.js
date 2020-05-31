@@ -92,19 +92,26 @@ const TimelineEvents = ({
       }
     }
 
-    let defaultY = getCategoryY(event.category)
+    let eventY = getCategoryY(event.category)
+    const isNonlocated = !event.latitude && !event.longitude
+    if (features.GRAPH_NONLOCATED && isNonlocated) {
+      const { project } = event
+      if (project) {
+        const { offset } = projects[project]
+        eventY = dims.marginTop + offset + sizes.eventDotR
+      }
+    }
+
     let colour = event.colour ? event.colour : getCategoryColor(event.category)
     const styles = {
       fill: colour,
-      fillOpacity: defaultY > 0 ? calcOpacity(1) : 0,
+      fillOpacity: eventY > 0 ? calcOpacity(1) : 0,
       transition: `transform ${transitionDuration / 1000}s ease`
     }
 
     return renderShape(event, styles, {
-      x: getDatetimeX(event.timestamp),
-      y: (features.GRAPH_NONLOCATED && !event.latitude && !event.longitude)
-        ? event.projectOffset >= 0 ? dims.trackHeight - event.projectOffset : dims.marginTop
-        : getCategoryY ? defaultY : () => null,
+      x: getDatetimeX(event.datetime),
+      y: eventY,
       onSelect: () => onSelect(event),
       dims,
       highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.tags[features.HIGHLIGHT_GROUPS.tagIndexIndicatingGroup]) : [],
@@ -113,11 +120,12 @@ const TimelineEvents = ({
   }
 
   /* set `renderProjects` */
+  // TODO(lachlan): remove hardcoded 'Legislation'
   let renderProjects = () => null
   if (features.GRAPH_NONLOCATED) {
     renderProjects = function () {
       return <React.Fragment>
-        {projects.map(project => <Project
+        {Object.values(projects).map(project => <Project
           {...project}
           onClick={() => console.log(project)}
           getX={getDatetimeX}

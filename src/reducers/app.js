@@ -1,5 +1,5 @@
 import initial from '../store/initial.js'
-import { parseDate, toggleFlagAC } from '../common/utilities'
+import { toggleFlagAC } from '../common/utilities'
 
 import {
   UPDATE_HIGHLIGHTED,
@@ -44,12 +44,12 @@ function updateNarrative (appState, action) {
 
   // Compute narrative time range and map bounds
   if (action.narrative) {
-    minTime = parseDate('2100-01-01T00:00:00')
-    maxTime = parseDate('1900-01-01T00:00:00')
+    minTime = appState.timeline.rangeLimits[0]
+    maxTime = appState.timeline.rangeLimits[1]
 
     // Find max and mins coordinates of narrative events
     action.narrative.steps.forEach(step => {
-      const stepTime = parseDate(step.timestamp)
+      const stepTime = step.datetime
       if (stepTime < minTime) minTime = stepTime
       if (stepTime > maxTime) maxTime = stepTime
 

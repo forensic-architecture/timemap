@@ -1,11 +1,7 @@
 import copy from '../common/data/copy.json'
-import {
-  parseDate,
-  formatterWithYear
-} from '../common/utilities'
 import React from 'react'
 
-import CardTimestamp from './presentational/Card/Timestamp'
+import CardTime from './presentational/Card/Time'
 import CardLocation from './presentational/Card/Location'
 import CardCaret from './presentational/Card/Caret'
 import CardTags from './presentational/Card/Tags'
@@ -27,11 +23,9 @@ class Card extends React.Component {
     })
   }
 
-  makeTimelabel (timestamp) {
-    if (timestamp === null) return null
-    const parsedTimestamp = parseDate(timestamp)
-    const timelabel = formatterWithYear(parsedTimestamp)
-    return timelabel
+  makeTimelabel (datetime) {
+    if (datetime === null) return null
+    return datetime.toLocaleDateString()
   }
 
   renderSummary () {
@@ -87,8 +81,8 @@ class Card extends React.Component {
   }
 
   // NB: should be internaionalized.
-  renderTimestamp () {
-    let timelabel = this.makeTimelabel(this.props.event.timestamp)
+  renderTime() {
+    let timelabel = this.makeTimelabel(this.props.event.datetime)
 
     let precision = this.props.event.time_display
     if (precision === '_date_only') {
@@ -104,7 +98,7 @@ class Card extends React.Component {
     }
 
     return (
-      <CardTimestamp
+      <CardTime
         makeTimelabel={timelabel}
         language={this.props.language}
         timelabel={timelabel}
@@ -132,7 +126,7 @@ class Card extends React.Component {
     return (
       <div className='card-container'>
         <div className='card-row details'>
-          {this.renderTimestamp()}
+          {this.renderTime()}
           {this.renderLocation()}
         </div>
         {this.renderSummary()}

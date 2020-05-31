@@ -1,13 +1,13 @@
 import Joi from 'joi'
 
-import eventSchema from '../schema/eventSchema'
-import categorySchema from '../schema/categorySchema'
-import siteSchema from '../schema/siteSchema'
-import narrativeSchema from '../schema/narrativeSchema'
-import sourceSchema from '../schema/sourceSchema'
-import shapeSchema from '../schema/shapeSchema'
+import eventSchema from './eventSchema'
+import categorySchema from './categorySchema'
+import siteSchema from './siteSchema'
+import narrativeSchema from './narrativeSchema'
+import sourceSchema from './sourceSchema'
+import shapeSchema from './shapeSchema'
 
-import { capitalize } from './helpers.js'
+import { calcDatetime, capitalize } from '../../common/utilities'
 
 /*
 * Create an error notification object
@@ -153,8 +153,12 @@ export function validateDomain (domain) {
   }
   sanitizedDomain.tags = domain.tags
 
-  // sort events by timestamp
-  sanitizedDomain.events.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+  // append events with datetime and sort
+  sanitizedDomain.events.forEach(event => {
+    event.datetime = calcDatetime(event.date, event.time)
+  })
+
+  sanitizedDomain.events.sort((a, b) => a.datetime - b.datetime)
 
   return sanitizedDomain
 }
