@@ -63,7 +63,7 @@ const TimelineEvents = ({
   projects,
   narrative,
   getDatetimeX,
-  getCategoryY,
+  getY,
   getCategoryColor,
   getHighlights,
   onSelect,
@@ -92,18 +92,7 @@ const TimelineEvents = ({
       }
     }
 
-    let eventY = getCategoryY ? getCategoryY(event.category) : 0
-    const isNonlocated = !event.latitude && !event.longitude
-    if (features.GRAPH_NONLOCATED && isNonlocated) {
-      const { project } = event
-      if (project) {
-        const { offset } = projects[project]
-        eventY = dims.marginTop + offset + sizes.eventDotR
-      } else {
-        eventY = 0
-      }
-    }
-
+    const eventY = getY(event)
     let colour = event.colour ? event.colour : getCategoryColor(event.category)
     const styles = {
       fill: colour,
@@ -114,7 +103,7 @@ const TimelineEvents = ({
     return renderShape(event, styles, {
       x: getDatetimeX(event.datetime),
       y: eventY,
-      onSelect: () => { console.log(event); onSelect(event) },
+      onSelect: () => onSelect(event),
       dims,
       highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.tags[features.HIGHLIGHT_GROUPS.tagIndexIndicatingGroup]) : [],
       features
