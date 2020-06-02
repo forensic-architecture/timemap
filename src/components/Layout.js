@@ -219,6 +219,7 @@ class Dashboard extends React.Component {
           </StaticPage>
         )}
         <LoadingOverlay
+          isLoading={app.loading || app.flags.isFetchingDomain}
           ui={app.flags.isFetchingDomain}
           language={app.language}
         />

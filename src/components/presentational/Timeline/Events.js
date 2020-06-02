@@ -69,7 +69,9 @@ const TimelineEvents = ({
   onSelect,
   transitionDuration,
   dims,
-  features
+  features,
+  setLoading,
+  setNotLoading
 }) => {
   const narIds = narrative ? narrative.steps.map(s => s.id) : []
 

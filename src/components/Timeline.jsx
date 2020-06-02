@@ -1,7 +1,9 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as d3 from 'd3'
 import * as selectors from '../selectors'
+import { setLoading, setNotLoading } from '../actions'
 import hash from 'object-hash'
 
 import copy from '../common/data/copy.json'
@@ -376,6 +378,8 @@ class Timeline extends React.Component {
                 onSelect={this.props.methods.onSelect}
                 dims={dims}
                 features={this.props.features}
+                setLoading={this.props.actions.setLoading}
+                setNotLoading={this.props.actions.setNotLoading}
               />
             </svg>
           </div>
@@ -409,4 +413,13 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps)(Timeline)
+function mapDispatchToProps (dispatch) {
+  return {
+    actions: bindActionCreators({ setLoading, setNotLoading }, dispatch)
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Timeline)
