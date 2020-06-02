@@ -101,6 +101,7 @@ export function fetchDomain () {
         if (Object.values(result).some(resp => resp.hasOwnProperty('error'))) {
           throw new Error('Some URLs returned negative. If you are in development, check the server is running')
         }
+        dispatch(toggleFetchingDomain())
         return result
       })
       .catch(err => {
@@ -189,6 +190,20 @@ export function toggleFilter (filter, value) {
     type: TOGGLE_FILTER,
     filter,
     value
+  }
+}
+
+export const SET_LOADING = 'SET_LOADING'
+export function setLoading () {
+  return {
+    type: SET_LOADING
+  }
+}
+
+export const SET_NOT_LOADING = 'SET_NOT_LOADING'
+export function setNotLoading () {
+  return {
+    type: SET_NOT_LOADING
   }
 }
 

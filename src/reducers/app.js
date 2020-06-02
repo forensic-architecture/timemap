@@ -20,7 +20,9 @@ import {
   TOGGLE_NOTIFICATIONS,
   TOGGLE_COVER,
   FETCH_ERROR,
-  FETCH_SOURCE_ERROR
+  FETCH_SOURCE_ERROR,
+  SET_LOADING,
+  SET_NOT_LOADING
 } from '../actions'
 
 function updateHighlighted (appState, action) {
@@ -212,6 +214,20 @@ function fetchSourceError (appState, action) {
   }
 }
 
+function setLoading (appState) {
+  return {
+    ...appState,
+    loading: true
+  }
+}
+
+function setNotLoading (appState) {
+  return {
+    ...appState,
+    loading: false
+  }
+}
+
 function app (appState = initial.app, action) {
   switch (action.type) {
     case UPDATE_HIGHLIGHTED:
@@ -254,6 +270,10 @@ function app (appState = initial.app, action) {
       return fetchError(appState, action)
     case FETCH_SOURCE_ERROR:
       return fetchSourceError(appState, action)
+    case SET_LOADING:
+      return setLoading(appState)
+    case SET_NOT_LOADING:
+      return setNotLoading(appState)
     default:
       return appState
   }
