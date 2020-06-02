@@ -62,7 +62,7 @@ class Dashboard extends React.Component {
         events,
         selected,
         (e1, e2) => {
-          return e2.datetime - e1.datetime
+          return e1.datetime - e2.datetime
         }
       )
       // check events before

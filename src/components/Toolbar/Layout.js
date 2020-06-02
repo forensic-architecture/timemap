@@ -88,7 +88,6 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarFilterPanel () {
-    console.log(this.props)
     return (
       <TabPanel>
         <TagListPanel
