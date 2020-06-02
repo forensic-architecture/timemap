@@ -29,7 +29,7 @@ const isChrome = !!window.chrome && !!window.chrome.webstore
 // Blink engine detection
 const isBlink = (isChrome || isOpera) && !!window.CSS
 
-if (isEdge || isIE || isOpera) {
-  alert('Please view this website in Firefox or Chrome for best viewing. It is untested in your browser.')
+if (isEdge || isIE) {
+  alert('Please view this website in Opera for best viewing. It is untested in your browser.')
 }
 /* eslint-enable */
