@@ -91,6 +91,8 @@ const TimelineEvents = ({
         renderShape = renderDiamond
       } else if (event.shape === 'star') {
         renderShape = renderStar
+      } else {
+        renderShape = renderDot
       }
     }
 
