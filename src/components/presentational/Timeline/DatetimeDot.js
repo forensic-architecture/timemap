@@ -9,13 +9,16 @@ export default ({
   onSelect,
   styleProps,
   extraRender
-}) => (
-  <circle
-    onClick={onSelect}
-    className='event'
-    cx={x}
-    cy={y}
-    style={styleProps}
-    r={r}
-  />
-)
+}) => {
+  if (!y) return null
+  return (
+    <circle
+      onClick={onSelect}
+      className='event'
+      cx={x}
+      cy={y}
+      style={styleProps}
+      r={r}
+    />
+  )
+}
