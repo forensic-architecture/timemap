@@ -152,13 +152,18 @@ class Toolbar extends React.Component {
     const filtersLabel = copy[this.props.language].toolbar.filters_label
     const categoriesLabel = 'Categories' // TODO:
 
+    const narrativesIdx = 0
+    const categoriesIdx = features.USE_NARRATIVES ? 1 : 0
+    const filtersIdx = (features.USE_NARRATIVES && features.CATEGORIES_AS_FILTERS) ? 2 : (
+      features.USE_NARRATIVES || features.CATEGORIES_AS_FILTERS ? 1 : 0
+    )
     return (
       <div className='toolbar'>
         <div className='toolbar-header'onClick={this.props.methods.onTitle}><p>{title}</p></div>
         <div className='toolbar-tabs'>
-          {features.USE_NARRATIVES ? this.renderToolbarTab(0, narrativesLabel, 'timeline') : null}
-          {features.CATEGORIES_AS_FILTERS ? this.renderToolbarTab(1, categoriesLabel, 'widgets') : null}
-          {features.USE_FILTERS ? this.renderToolbarTab(features.CATEGORIES_AS_FILTERS ? 2 : 1, filtersLabel, 'filter_list') : null}
+          {features.USE_NARRATIVES ? this.renderToolbarTab(narrativesIdx, narrativesLabel, 'timeline') : null}
+          {features.CATEGORIES_AS_FILTERS ? this.renderToolbarTab(categoriesIdx, categoriesLabel, 'widgets') : null}
+          {features.USE_FILTERS ? this.renderToolbarTab(filtersIdx, filtersLabel, 'filter_list') : null}
         </div>
         <BottomActions
           info={{

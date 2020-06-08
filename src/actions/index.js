@@ -2,11 +2,11 @@
 import { urlFromEnv } from '../common/utilities'
 
 // TODO: relegate these URLs entirely to environment variables
-const EVENT_DATA_URL = urlFromEnv('EVENT_EXT')
-const CATEGORY_URL = urlFromEnv('CATEGORY_EXT')
+const EVENT_DATA_URL = urlFromEnv('EVENTS_EXT')
+const CATEGORY_URL = urlFromEnv('CATEGORIES_EXT')
 const FILTERS_URL = urlFromEnv('FILTERS_EXT')
 const SOURCES_URL = urlFromEnv('SOURCES_EXT')
-const NARRATIVE_URL = urlFromEnv('NARRATIVE_EXT')
+const NARRATIVE_URL = urlFromEnv('NARRATIVES_EXT')
 const SITES_URL = urlFromEnv('SITES_EXT')
 const SHAPES_URL = urlFromEnv('SHAPES_EXT')
 
