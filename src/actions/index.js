@@ -31,9 +31,12 @@ export function fetchDomain () {
       .then(response => response.json())
       .catch(() => handleError('events'))
 
-    const catPromise = fetch(CATEGORY_URL)
-      .then(response => response.json())
-      .catch(() => handleError(domainMsg('categories')))
+    let catPromise = Promise.resolve([])
+    if (features.USE_CATEGORIES) {
+      catPromise = fetch(CATEGORY_URL)
+        .then(response => response.json())
+        .catch(() => handleError(domainMsg('categories')))
+    }
 
     let narPromise = Promise.resolve([])
     if (features.USE_NARRATIVES) {

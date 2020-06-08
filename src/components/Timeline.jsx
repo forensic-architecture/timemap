@@ -51,6 +51,7 @@ class Timeline extends React.Component {
 
     if ((hash(nextProps.domain.categories) !== hash(this.props.domain.categories)) || hash(nextProps.dimensions) !== hash(this.props.dimensions)) {
       const { trackHeight, marginTop } = nextProps.dimensions
+      console.log(nextProps.domain.categories)
       this.setState({
         scaleY: this.makeScaleY(nextProps.domain.categories, trackHeight, marginTop)
       })
@@ -274,9 +275,13 @@ class Timeline extends React.Component {
   }
 
   getY (event) {
-    const { category, project } = event
     const { features, domain } = this.props
-    const { GRAPH_NONLOCATED } = features
+    const { USE_CATEGORIES, GRAPH_NONLOCATED } = features
+
+    if (!USE_CATEGORIES)
+      return this.state.dims.trackHeight / 2
+
+    const { category, project } = event
     if (GRAPH_NONLOCATED && GRAPH_NONLOCATED.categories.includes(category)) {
       return this.state.dims.marginTop + domain.projects[project].offset + sizes.eventDotR
     }
@@ -334,7 +339,7 @@ class Timeline extends React.Component {
               />
               <Categories
                 dims={dims}
-                getCategoryY={this.state.scaleY}
+                getCategoryY={category => this.getY({ category, project: null })}
                 onDragStart={() => { this.onDragStart() }}
                 onDrag={() => { this.onDrag() }}
                 onDragEnd={() => { this.onDragEnd() }}
