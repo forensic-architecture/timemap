@@ -21,7 +21,7 @@ function renderDot (event, styles, props) {
 function renderBar (event, styles, props) {
   const fillOpacity = props.features.GRAPH_NONLOCATED
     ? event.projectOffset >= 0 ? styles.opacity : 0.5
-    : 0.6
+    : calcOpacity(1)
 
   return <DatetimeBar
     onSelect={props.onSelect}
