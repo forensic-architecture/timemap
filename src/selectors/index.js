@@ -58,7 +58,9 @@ export const selectEvents = createSelector(
       const isActiveFilter = isMatchingFilter || activeFilters.length === 0
       const isActiveCategory = activeCategories.includes(event.category) || activeCategories.length === 0
       let isActiveTime = isTimeRangedIn(event, timeRange)
-      isActiveTime = features.GRAPH_NONLOCATED ? ((!event.latitude && !event.longitude) || isActiveTime) : isActiveTime
+      isActiveTime = features.GRAPH_NONLOCATED
+        ? ((!event.latitude && !event.longitude) || isActiveTime)
+        : isActiveTime
 
       if (isActiveTime && isActiveFilter && isActiveCategory) {
         acc[event.id] = { ...event }
