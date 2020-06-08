@@ -53,10 +53,13 @@ class TimelineCategories extends React.Component {
 
   render () {
     const { dims } = this.props
+    const categories = this.props.features.USE_CATEGORIES
+      ? this.props.categories.map((cat, idx) => this.renderCategory(cat, idx))
+      : this.renderCategory('Events', 0)
 
     return (
       <g class='yAxis'>
-        {this.props.categories.map((cat, idx) => this.renderCategory(cat, idx))}
+        {categories}
         <rect
           ref={this.grabRef}
           class='drag-grabber'

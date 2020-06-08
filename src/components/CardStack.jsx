@@ -73,6 +73,7 @@ class CardStack extends React.Component {
         onViewSource={this.props.onViewSource}
         onHighlight={this.props.onHighlight}
         onSelect={this.props.onSelect}
+        features={this.props.features}
       />)
     })
   }
@@ -176,7 +177,8 @@ function mapStateToProps (state) {
     sourceError: state.app.errors.source,
     language: state.app.language,
     isCardstack: state.app.flags.isCardstack,
-    isLoading: state.app.flags.isFetchingSources
+    isLoading: state.app.flags.isFetchingSources,
+    features: state.features
   }
 }
 

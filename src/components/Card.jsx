@@ -145,12 +145,12 @@ class Card extends React.Component {
   }
 
   renderCaret () {
-    return (
+    return this.props.features.USE_SOURCES ? (
       <CardCaret
         toggle={() => this.toggle()}
         isOpen={this.state.isOpen}
       />
-    )
+    ) : null
   }
 
   render () {
