@@ -51,7 +51,6 @@ class Timeline extends React.Component {
 
     if ((hash(nextProps.domain.categories) !== hash(this.props.domain.categories)) || hash(nextProps.dimensions) !== hash(this.props.dimensions)) {
       const { trackHeight, marginTop } = nextProps.dimensions
-      console.log(nextProps.domain.categories)
       this.setState({
         scaleY: this.makeScaleY(nextProps.domain.categories, trackHeight, marginTop)
       })
@@ -283,7 +282,7 @@ class Timeline extends React.Component {
 
     const { category, project } = event
     if (GRAPH_NONLOCATED && GRAPH_NONLOCATED.categories.includes(category)) {
-      return this.state.dims.marginTop + domain.projects[project].offset + sizes.eventDotR
+      return this.state.dims.marginTop + domain.projects[project].offset + this.props.ui.eventRadius
     }
     return this.state.scaleY(category)
   }
@@ -364,6 +363,7 @@ class Timeline extends React.Component {
                 transitionDuration={this.state.transitionDuration}
                 styles={this.props.ui.styles}
                 features={this.props.features}
+                eventRadius={this.props.ui.eventRadius}
               />
               <Events
                 events={this.props.domain.events}
@@ -385,6 +385,7 @@ class Timeline extends React.Component {
                 features={this.props.features}
                 setLoading={this.props.actions.setLoading}
                 setNotLoading={this.props.actions.setNotLoading}
+                eventRadius={this.props.ui.eventRadius}
               />
             </svg>
           </div>
@@ -412,7 +413,8 @@ function mapStateToProps (state) {
     },
     ui: {
       dom: state.ui.dom,
-      styles: state.ui.style.selectedEvents
+      styles: state.ui.style.selectedEvents,
+      eventRadius: state.ui.eventRadius
     },
     features: selectors.getFeatures(state)
   }

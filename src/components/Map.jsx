@@ -215,6 +215,7 @@ class Map extends React.Component {
         onSelect={this.props.methods.onSelect}
         onSelectNarrative={this.props.methods.onSelectNarrative}
         getCategoryColor={this.props.methods.getCategoryColor}
+        eventRadius={this.props.ui.eventRadius}
       />
     )
   }
@@ -286,7 +287,8 @@ function mapStateToProps (state) {
       dom: state.ui.dom,
       narratives: state.ui.style.narratives,
       mapSelectedEvents: state.ui.style.selectedEvents,
-      shapes: state.ui.style.shapes
+      shapes: state.ui.style.shapes,
+      eventRadius: state.ui.eventRadius
     },
     features: selectors.getFeatures(state)
   }

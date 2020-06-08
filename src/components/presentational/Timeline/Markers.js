@@ -3,6 +3,7 @@ import colors, { sizes } from '../../../common/global'
 
 const TimelineMarkers = ({
   styles,
+  eventRadius,
   getEventX,
   getEventY,
   transitionDuration,
@@ -27,7 +28,7 @@ const TimelineMarkers = ({
           '-moz-transition': 'none',
           'opacity': 0.9
         }}
-        r={sizes.eventDotR * 2}
+        r={eventRadius * 2}
       />
     }
     function renderBar () {
@@ -35,7 +36,7 @@ const TimelineMarkers = ({
         className='timeline-marker'
         x={0}
         y={0}
-        width={sizes.eventDotR / 3}
+        width={eventRadius / 3}
         height={dims.contentHeight - 55}
         stroke={styles ? styles.stroke : colors.primaryHighlight}
         stroke-opacity='1'
