@@ -42,6 +42,7 @@ export default class Notification extends React.Component {
   }
 
   render () {
+    if (!this.props.notifications) return null
     const notificationsToRender = this.props.notifications.filter(n => !('isRead' in n && n.isRead))
     if (notificationsToRender.length > 0) {
       return (
