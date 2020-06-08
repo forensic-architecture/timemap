@@ -1,5 +1,4 @@
 import React from 'react'
-import { sizes } from '../../../common/global'
 
 export default ({
   offset,
@@ -10,6 +9,7 @@ export default ({
   y,
   dims,
   colour,
+  eventRadius,
   onClick
 }) => {
   const length = getX(end) - getX(start)
@@ -21,6 +21,6 @@ export default ({
     y={dims.marginTop + offset}
     width={length}
     style={{ fill: colour, fillOpacity: 0.2 }}
-    height={2 * sizes.eventDotR}
+    height={2 * eventRadius}
   />
 }

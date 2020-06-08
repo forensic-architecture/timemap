@@ -21,6 +21,7 @@ export const getTimeRange = state => state.app.timeline.range
 export const getTimelineDimensions = state => state.app.timeline.dimensions
 export const selectNarrative = state => state.app.narrative
 export const getFeatures = state => state.features
+export const getEventRadius = state => state.ui.eventRadius
 
 export const selectSites = createSelector([getSites, getFeatures], (sites, features) => {
   if (features.USE_SITES) {
@@ -158,12 +159,12 @@ export const selectLocations = createSelector(
 )
 
 export const selectEventsWithProjects = createSelector(
-  [selectEvents, getFeatures],
-  (events, features) => {
+  [selectEvents, getFeatures, getEventRadius],
+  (events, features, eventRadius) => {
     if (!features.GRAPH_NONLOCATED) {
       return [events, []]
     }
-    const projSize = 2 * sizes.eventDotR
+    const projSize = 2 * eventRadius
     const projectIdx = features.GRAPH_NONLOCATED.projectIdx || 0
     const getProject = ev => ev.filters[projectIdx]
     const projects = {}

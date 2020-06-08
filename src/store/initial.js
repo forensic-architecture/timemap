@@ -127,7 +127,8 @@ const initial = {
       timeline: 'timeline',
       timeslider: 'timeslider',
       map: 'map'
-    }
+    },
+    eventRadius: 8
   },
 
   features: {

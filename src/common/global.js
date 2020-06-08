@@ -5,14 +5,9 @@ export const colors = {
   white: '#fff'
 }
 
-export const sizes = {
-  eventDotR: 8
-}
-
 export default {
   fallbackEventColor: colors.fa_red,
   darkBackground: colors.black,
   primaryHighlight: colors.yellow,
-  secondaryHighlight: colors.white,
-  sizes
+  secondaryHighlight: colors.white
 }

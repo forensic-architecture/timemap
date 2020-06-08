@@ -12,7 +12,8 @@ function MapEvents ({
   narrative,
   onSelect,
   svg,
-  locations
+  locations,
+  eventRadius
 }) {
   function getCoordinatesForPercent (radius, percent) {
     const x = radius * Math.cos(2 * Math.PI * percent)
@@ -55,7 +56,7 @@ function MapEvents ({
     return (
       <React.Fragment>
         {colorSlices.map((color, idx) => {
-          const r = 10
+          const r = eventRadius
 
           // Based on the number of events in each location,
           // create a slice per event filled with its category color
