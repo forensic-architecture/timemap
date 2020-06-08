@@ -14,8 +14,8 @@ export const getSites = state => state.domain.sites
 export const getSources = state => state.domain.sources
 export const getShapes = state => state.domain.shapes
 export const getNotifications = state => state.domain.notifications
-export const getTagTree = state => state.domain.tags
-export const getActiveTags = state => state.app.filters.tags
+export const getFilterTree = state => state.domain.filters
+export const getActiveFilters = state => state.app.filters.filters
 export const getActiveCategories = state => state.app.filters.categories
 export const getTimeRange = state => state.app.timeline.range
 export const getTimelineDimensions = state => state.app.timeline.dimensions
@@ -42,20 +42,24 @@ export const selectShapes = createSelector([getShapes, getFeatures], (shapes, fe
 /**
  * Of all available events, selects those that
  * 1. fall in time range
- * 2. exist in an active tag
+ * 2. exist in an active filter
  * 3. exist in an active category
  */
 export const selectEvents = createSelector(
-  [getEvents, getActiveTags, getActiveCategories, getTimeRange, getFeatures],
-  (events, activeTags, activeCategories, timeRange, features) => {
+  [getEvents, getActiveFilters, getActiveCategories, getTimeRange, getFeatures],
+  (events, activeFilters, activeCategories, timeRange, features) => {
     return events.reduce((acc, event) => {
-      const isMatchingTag = (event.tags && event.tags.map(tag => activeTags.includes(tag)).some(s => s)) || activeTags.length === 0
-      const isActiveTag = isMatchingTag || activeTags.length === 0
+      const isMatchingFilter = (event.filters &&
+        event.filters.map(filter =>
+          activeFilters.includes(filter))
+          .some(s => s)
+      ) || activeFilters.length === 0
+      const isActiveFilter = isMatchingFilter || activeFilters.length === 0
       const isActiveCategory = activeCategories.includes(event.category) || activeCategories.length === 0
       let isActiveTime = isTimeRangedIn(event, timeRange)
       isActiveTime = features.GRAPH_NONLOCATED ? ((!event.latitude && !event.longitude) || isActiveTime) : isActiveTime
 
-      if (isActiveTime && isActiveTag && isActiveCategory) {
+      if (isActiveTime && isActiveFilter && isActiveCategory) {
         acc[event.id] = { ...event }
       }
 
@@ -65,7 +69,7 @@ export const selectEvents = createSelector(
 
 /**
  * Of all available events, selects those that fall within the time range,
- * and if TAGS are being used, select them if their tags are enabled
+ * and if filters are being used, select them if their filters are enabled
  */
 export const selectNarratives = createSelector(
   [getEvents, getNarratives, getSources, getFeatures],
@@ -161,12 +165,12 @@ export const selectEventsWithProjects = createSelector(
     }
     const projSize = 2 * sizes.eventDotR
     const projectIdx = features.GRAPH_NONLOCATED.projectIdx || 0
-    const getProject = ev => ev.tags[projectIdx]
+    const getProject = ev => ev.filters[projectIdx]
     const projects = {}
 
     // get all projects
     events = events.reduce((acc, event) => {
-      const project = event.tags.length >= 1 && !event.latitude && !event.longitude ? getProject(event) : null
+      const project = event.filters.length >= 1 && !event.latitude && !event.longitude ? getProject(event) : null
 
       // add project if it doesn't exist
       if (project !== null) {

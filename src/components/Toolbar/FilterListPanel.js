@@ -10,10 +10,10 @@ function allAssociatedKeys (node) {
   return childKeys
 }
 
-function TagListPanel ({
-  tags,
-  activeTags,
-  onTagFilter,
+function FilterListPanel ({
+  filters,
+  activeFilters,
+  onSelectFilter,
   language
 }) {
   function createNodeComponent (node, depth) {
@@ -22,21 +22,21 @@ function TagListPanel ({
     return (
       <li
         key={node.key.replace(/ /g, '_')}
-        className={'tag-filter'}
+        className={'filter-filter'}
         style={{ marginLeft: `${depth * 20}px` }}
       >
         {/* <svg width='10' height='10'> */}
-        {/*   <g className='tag-inline'> */}
+        {/*   <g className='filter-inline'> */}
         {/*     <path d='M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z' transform='rotate(270)' /> */}
         {/*   </g> */}
         {/* </svg> */}
         <Checkbox
           label={node.key}
-          isActive={activeTags.includes(node.key)}
-          onClickCheckbox={() => onTagFilter(matchingKeys)}
+          isActive={activeFilters.includes(node.key)}
+          onClickCheckbox={() => onSelectFilter(matchingKeys)}
         />
         {children.length > 0
-          ? children.map(tag => createNodeComponent(tag, depth + 1))
+          ? children.map(filter => createNodeComponent(filter, depth + 1))
           : null}
       </li>
     )
@@ -45,18 +45,18 @@ function TagListPanel ({
   function renderTree (children) {
     return (
       <div>
-        {Object.values(children).map(tag => createNodeComponent(tag, 1))}
+        {Object.values(children).map(filter => createNodeComponent(filter, 1))}
       </div>
     )
   }
 
   return (
     <div className='react-innertabpanel'>
-      <h2>{copy[language].toolbar.tags}</h2>
-      <p>{copy[language].toolbar.explore_by_tag__description}</p>
-      {renderTree(tags.children)}
+      <h2>{copy[language].toolbar.filters}</h2>
+      <p>{copy[language].toolbar.explore_by_filter__description}</p>
+      {renderTree(filters.children)}
     </div>
   )
 }
 
-export default TagListPanel
+export default FilterListPanel

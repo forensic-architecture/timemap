@@ -4,7 +4,7 @@ import React from 'react'
 import CardTime from './presentational/Card/Time'
 import CardLocation from './presentational/Card/Location'
 import CardCaret from './presentational/Card/Caret'
-import CardTags from './presentational/Card/Tags'
+import CardFilters from './presentational/Card/Filters'
 import CardSummary from './presentational/Card/Summary'
 import CardSource from './presentational/Card/Source'
 import CardNarrative from './presentational/Card/Narrative'
@@ -38,13 +38,13 @@ class Card extends React.Component {
     )
   }
 
-  renderTags () {
-    if (!this.props.tags || (this.props.tags && this.props.tags.length === 0)) {
+  renderFilters () {
+    if (!this.props.filters || (this.props.filters && this.props.filters.length === 0)) {
       return null
     }
     return (
-      <CardTags
-        tags={this.props.tags || []}
+      <CardFilters
+        filters={this.props.filters || []}
         language={this.props.language}
       />
     )
@@ -137,7 +137,7 @@ class Card extends React.Component {
   renderExtra () {
     return (
       <div className='card-bottomhalf'>
-        {this.renderTags()}
+        {this.renderFilters()}
         {this.renderSources()}
         {this.renderNarrative()}
       </div>

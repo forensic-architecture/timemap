@@ -89,7 +89,7 @@ The combination of all these data types is called the `domain` of the applicatio
     "lat":"17.810358",
     "long":"-18.2251664",
     "source":"",
-    "tags": "",
+    "filters": "",
     "category": ""
   },
   {}
@@ -97,7 +97,7 @@ The combination of all these data types is called the `domain` of the applicatio
 
 ```
 
-Events can have zero, one or multiple tags (comma-separated in one single string), but MUST have one, and only one, category. Category properties are also a required endpoint.
+Events can have zero, one or multiple filters (comma-separated in one single string), but MUST have one, and only one, category. Category properties are also a required endpoint.
 
 2. Categories: events must be grouped in `categories`. All `events` must contain one (and only one) `category` for them to be displayed in the timeline and map. They are designed to aggregate incidents, for example, according to a population group, or obtained by a type of measure. Categories can be bundled in groups.
 

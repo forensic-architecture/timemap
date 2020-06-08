@@ -124,12 +124,12 @@ function toggleFilter (appState, action) {
     action.value = [action.value]
   }
 
-  let newTags = appState.filters[action.filter].slice(0)
+  let newFilters = appState.filters[action.filter].slice(0)
   action.value.forEach(vl => {
-    if (newTags.includes(vl)) {
-      newTags = newTags.filter(s => s !== vl)
+    if (newFilters.includes(vl)) {
+      newFilters = newFilters.filter(s => s !== vl)
     } else {
-      newTags.push(vl)
+      newFilters.push(vl)
     }
   })
 
@@ -137,7 +137,7 @@ function toggleFilter (appState, action) {
     ...appState,
     filters: {
       ...appState.filters,
-      [action.filter]: newTags
+      [action.filter]: newFilters
     }
   }
 }

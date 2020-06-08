@@ -3,7 +3,17 @@ import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
 import { calcOpacity } from '../../../common/utilities'
 
-function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation, selected, narrative, onSelect, svg, locations }) {
+function MapEvents ({
+  getCategoryColor,
+  categories,
+  projectPoint,
+  styleLocation,
+  selected,
+  narrative,
+  onSelect,
+  svg,
+  locations
+}) {
   function getCoordinatesForPercent (radius, percent) {
     const x = radius * Math.cos(2 * Math.PI * percent)
     const y = radius * Math.sin(2 * Math.PI * percent)
@@ -38,7 +48,7 @@ function MapEvents ({ getCategoryColor, categories, projectPoint, styleLocation,
       ...extraStyles
     })
 
-    const colorSlices = location.events.map(e => getCategoryColor(e.category))
+    const colorSlices = location.events.map(e => e.colour ? e.colour : getCategoryColor(e.category))
 
     let cumulativeAngleSweep = 0
 

@@ -205,6 +205,7 @@ class Map extends React.Component {
     return (
       <Events
         svg={this.svgRef.current}
+        events={this.props.domain.events}
         locations={this.props.domain.locations}
         styleLocation={this.styleLocation}
         categories={this.props.domain.categories}

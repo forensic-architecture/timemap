@@ -1,7 +1,7 @@
 /* global fetch */
 import React from 'react'
 import copy from '../../common/data/copy.json'
-import TagFilter from './TagFilter'
+import SelectFilter from './SelectFilter'
 
 export default class Search extends React.Component {
   constructor (props) {
@@ -21,7 +21,7 @@ export default class Search extends React.Component {
       .then(response => response.json())
       .then(json => {
         this.setState({
-          searchResults: json.tags
+          searchResults: json.filters
         })
       })
   }
@@ -32,16 +32,16 @@ export default class Search extends React.Component {
 
   renderSearchResults () {
     return (
-      this.state.searchResults.map(tag => {
+      this.state.searchResults.map(filter => {
         return (
-          <TagFilter
+          <SelectFilter
             isShowTree
-            tags={this.props.tags}
+            filters={this.props.filters}
             categories={this.props.categories}
-            tagFilters={this.props.tagFilters}
+            filterFilters={this.props.filterFilters}
             categoryFilters={this.props.categoryFilters}
             filter={this.props.filter}
-            tag={tag}
+            filter={filter}
             isCategory={this.props.isCategory}
           />
         )
