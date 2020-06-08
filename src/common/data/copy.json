@@ -19,9 +19,9 @@
     "toolbar": {
       "title": "TITLE",
       "categories": "Categories",
-      "tags": "Tags",
-      "explore_by_tag__title": "Explore by tag or category",
-      "explore_by_tag__description": "Selecting tags or categories, you'll see only those events that are tagged accordingly. If you select nothing, as well as everything, all data will be displayed.",
+      "filters": "Filters",
+      "explore_by_filter__title": "Explore by filter or category",
+      "explore_by_filter__description": "Selecting filters or categories, you'll see only those events that are tagged accordingly. If you select nothing, as well as everything, all data will be displayed.",
       "panels": {
         "mentions": {
           "title": "Personas",
@@ -80,7 +80,7 @@
     "legend": {
       "view2d": {
         "paragraphs": [
-          "Selecting a series of tags, you will be able to explore events on the map of Iguala and on the timeline.",
+          "Selecting a series of filters, you will be able to explore events on the map of Iguala and on the timeline.",
           "Each event is colored according the person that gave category of the event."
         ],
         "colors": [
@@ -114,17 +114,17 @@
           "overview": "Selecting the name of a person will show the events only according to a person’s category or category. The number in the parentheses show how many events are contained in each category, e.g. (34)."
         },
         "search": {
-          "title": "Directory of tags",
+          "title": "Directory of filters",
           "placeholder": "Search"
         }
       },
       "narratives_label": "Narratives",
       "narrative_summary": "Follow a path through the data, from one key event to the next.",
       "categories": "Categories",
-      "tags": "Filters",
-      "tags_label": "Filters",
-      "explore_by_tag__title": "Explore by filter",
-      "explore_by_tag__description": "Selecting a filter will show you only those events that are annotated with the filter. If you select nothing, as well as everything, all data will be displayed.",
+      "filters": "Filters",
+      "filters_label": "Filters",
+      "explore_by_filter__title": "Explore by filter",
+      "explore_by_filter__description": "Selecting a filter will show you only those events that are annotated with the filter. If you select nothing, as well as everything, all data will be displayed.",
       "explore_by_category__title": "Explore events by category",
       "explore_by_category__description": ""
 
@@ -158,8 +158,8 @@
       "location": "Localization",
       "incident_type": "Type of action",
       "description": "Summary",
-      "tags": "Tags",
-      "notags": "No known tags for this event.",
+      "filters": "Filters",
+      "nofilters": "No known filters for this event.",
       "sources": "Sources",
       "unknown_source": "The information for this source could not be retrieved.",
       "category": "Category",

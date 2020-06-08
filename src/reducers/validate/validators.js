@@ -25,7 +25,7 @@ const isLeaf = node => (Object.keys(node.children).length === 0)
 const isDuplicate = (node, set) => { return (set.has(node.key)) }
 
 /*
-* Traverse a tag tree and check its duplicates
+* Traverse a filter tree and check its duplicates
 */
 function validateTree (node, parent, set, duplicates) {
   if (!Array.isArray(node) || !node.length) {
@@ -36,7 +36,7 @@ function validateTree (node, parent, set, duplicates) {
     if (isDuplicate(node, set)) {
       duplicates.push({
         id: node.key,
-        error: makeError('Tags', node.key, 'tag was found more than once in hierarchy. Ignoring duplicate.')
+        error: makeError('Filters', node.key, 'filter was found more than once in hierarchy. Ignoring duplicate.')
       })
       delete parent.children[node.key]
     } else {
@@ -60,9 +60,13 @@ export function validateDomain (domain) {
     sites: [],
     narratives: [],
     sources: {},
-    tags: {},
+    filters: {},
     shapes: [],
-    notifications: domain.notifications
+    notifications: domain ? domain.notifications : null
+  }
+
+  if (domain === undefined) {
+    return sanitizedDomain
   }
 
   const discardedDomain = {
@@ -89,6 +93,12 @@ export function validateDomain (domain) {
 
   function validateArray (items, domainKey, schema) {
     items.forEach(item => {
+      // NB: backwards compatibility with 'tags' for 'filters'
+      if (domainKey === 'events') {
+        if (!item.filters && !!item.tags) {
+          item.filters = item.tags
+        }
+      }
       validateArrayItem(item, domainKey, schema)
     })
   }
@@ -138,20 +148,20 @@ export function validateDomain (domain) {
     }
   })
 
-  // Validate uniqueness of tags
-  const tagSet = new Set([])
-  const duplicateTags = []
-  validateTree(domain.tags, {}, tagSet, duplicateTags)
+  // Validate uniqueness of filters
+  const filterSet = new Set([])
+  const duplicateFilters = []
+  validateTree(domain.filters, {}, filterSet, duplicateFilters)
 
-  // Duplicated tags
-  if (duplicateTags.length > 0) {
+  // Duplicated filters
+  if (duplicateFilters.length > 0) {
     sanitizedDomain.notifications.push({
-      message: `Tags are required to be unique. Ignoring duplicates for now.`,
-      items: duplicateTags,
+      message: `Filters are required to be unique. Ignoring duplicates for now.`,
+      items: duplicateFilters,
       type: 'error'
     })
   }
-  sanitizedDomain.tags = domain.tags
+  sanitizedDomain.filters = domain.filters
 
   // append events with datetime and sort
   sanitizedDomain.events.forEach(event => {

@@ -6,7 +6,7 @@ import * as selectors from '../../selectors'
 
 import { Tabs, TabPanel } from 'react-tabs'
 import Search from './Search'
-import TagListPanel from './TagListPanel'
+import FilterListPanel from './FilterListPanel'
 import CategoriesListPanel from './CategoriesListPanel'
 import BottomActions from './BottomActions'
 import copy from '../../common/data/copy.json'
@@ -37,9 +37,9 @@ class Toolbar extends React.Component {
         <TabPanel>
           <Search
             language={this.props.language}
-            tags={this.props.tags}
+            filters={this.props.filters}
             categories={this.props.categories}
-            tagFilters={this.props.tagFilters}
+            filterFilters={this.props.filterFilters}
             categoryFilters={this.props.categoryFilters}
             filter={this.props.filter}
           />
@@ -73,7 +73,7 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarCategoriesPanel () {
-    if (this.props.features.CATEGORIES_AS_TAGS) {
+    if (this.props.features.CATEGORIES_AS_FILTERS) {
       return (
         <TabPanel>
           <CategoriesListPanel
@@ -90,10 +90,10 @@ class Toolbar extends React.Component {
   renderToolbarFilterPanel () {
     return (
       <TabPanel>
-        <TagListPanel
-          tags={this.props.tags}
-          activeTags={this.props.activeTags}
-          onTagFilter={this.props.methods.onTagFilter}
+        <FilterListPanel
+          filters={this.props.filters}
+          activeFilters={this.props.activeFilters}
+          onSelectFilter={this.props.methods.onSelectFilter}
           language={this.props.language}
         />
       </TabPanel>
@@ -120,7 +120,7 @@ class Toolbar extends React.Component {
         {this.renderClosePanel()}
         <Tabs selectedIndex={this.state._selected}>
           {features.USE_NARRATIVES ? this.renderToolbarNarrativePanel() : null}
-          {features.CATEGORIES_AS_TAGS ? this.renderToolbarCategoriesPanel() : null}
+          {features.CATEGORIES_AS_FILTERS ? this.renderToolbarCategoriesPanel() : null}
           {features.USE_FILTERS ? this.renderToolbarFilterPanel() : null}
         </Tabs>
       </div>
@@ -149,7 +149,7 @@ class Toolbar extends React.Component {
     let title = copy[this.props.language].toolbar.title
     if (process.env.display_title) title = process.env.display_title
     const narrativesLabel = copy[this.props.language].toolbar.narratives_label
-    const tagsLabel = copy[this.props.language].toolbar.tags_label
+    const filtersLabel = copy[this.props.language].toolbar.filters_label
     const categoriesLabel = 'Categories' // TODO:
 
     return (
@@ -157,8 +157,8 @@ class Toolbar extends React.Component {
         <div className='toolbar-header'onClick={this.props.methods.onTitle}><p>{title}</p></div>
         <div className='toolbar-tabs'>
           {features.USE_NARRATIVES ? this.renderToolbarTab(0, narrativesLabel, 'timeline') : null}
-          {features.CATEGORIES_AS_TAGS ? this.renderToolbarTab(1, categoriesLabel, 'widgets') : null}
-          {features.USE_FILTERS ? this.renderToolbarTab(2, tagsLabel, 'filter_list') : null}
+          {features.CATEGORIES_AS_FILTERS ? this.renderToolbarTab(1, categoriesLabel, 'widgets') : null}
+          {features.USE_FILTERS ? this.renderToolbarTab(features.CATEGORIES_AS_FILTERS ? 2 : 1, filtersLabel, 'filter_list') : null}
         </div>
         <BottomActions
           info={{
@@ -192,11 +192,11 @@ class Toolbar extends React.Component {
 
 function mapStateToProps (state) {
   return {
-    tags: selectors.getTagTree(state),
+    filters: selectors.getFilterTree(state),
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
     language: state.app.language,
-    activeTags: selectors.getActiveTags(state),
+    activeFilters: selectors.getActiveFilters(state),
     activeCategories: selectors.getActiveCategories(state),
     viewFilters: state.app.filters.views,
     narrative: state.app.narrative,

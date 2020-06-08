@@ -14,6 +14,7 @@ const eventSchema = Joi.object().keys({
   category_full: Joi.string().allow(''),
   narratives: Joi.array(),
   sources: Joi.array(),
+  filters: Joi.array().allow(''),
   tags: Joi.array().allow(''),
   comments: Joi.string().allow(''),
   time_display: Joi.string().allow(''),

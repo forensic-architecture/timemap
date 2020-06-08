@@ -4,7 +4,7 @@ import { urlFromEnv } from '../common/utilities'
 // TODO: relegate these URLs entirely to environment variables
 const EVENT_DATA_URL = urlFromEnv('EVENT_EXT')
 const CATEGORY_URL = urlFromEnv('CATEGORY_EXT')
-const TAGS_URL = urlFromEnv('TAGS_EXT')
+const FILTERS_URL = urlFromEnv('FILTERS_EXT')
 const SOURCES_URL = urlFromEnv('SOURCES_EXT')
 const NARRATIVE_URL = urlFromEnv('NARRATIVE_EXT')
 const SITES_URL = urlFromEnv('SITES_EXT')
@@ -49,14 +49,14 @@ export function fetchDomain () {
         .catch(() => handleError(domainMsg('sites')))
     }
 
-    let tagsPromise = Promise.resolve([])
+    let filtersPromise = Promise.resolve([])
     if (features.USE_FILTERS) {
-      if (!TAGS_URL) {
-        tagsPromise = Promise.resolve(handleError('USE_TAGS is true, but you have not provided a TAGS_EXT'))
+      if (!FILTERS_URL) {
+        filtersPromise = Promise.resolve(handleError('USE_FILTERS is true, but you have not provided a FILTERS_EXT'))
       } else {
-        tagsPromise = fetch(TAGS_URL)
+        filtersPromise = fetch(FILTERS_URL)
           .then(response => response.json())
-          .catch(() => handleError(domainMsg('tags')))
+          .catch(() => handleError(domainMsg('filters')))
       }
     }
 
@@ -83,7 +83,7 @@ export function fetchDomain () {
       catPromise,
       narPromise,
       sitesPromise,
-      tagsPromise,
+      filtersPromise,
       sourcesPromise,
       shapesPromise
     ])
@@ -93,7 +93,7 @@ export function fetchDomain () {
           categories: response[1],
           narratives: response[2],
           sites: response[3],
-          tags: response[4],
+          filters: response[4],
           sources: response[5],
           shapes: response[6],
           notifications

@@ -14,7 +14,7 @@ export default ({
         {categories.map(cat => {
           return (<li
             key={cat.category.replace(/ /g, '_')}
-            className={'tag-filter active'}
+            className={'filter-filter active'}
             style={{ marginLeft: '20px' }}
           >
             <Checkbox

@@ -2,7 +2,7 @@
 
 **NOTE: WIP. These settings are currently slightly out of date.**
 
-In order to make timemap interesting, you need to configure it to read events. When loaded in a browser, timemap queries HTTP endpoint, expecting from them well-defined JSON objects. There are certain endpoints, such as `events`, that are required, while others , such as `tags`, are optional; when provided, they enhance a timemap instance with additional features and capabilities related to the additional data.
+In order to make timemap interesting, you need to configure it to read events. When loaded in a browser, timemap queries HTTP endpoint, expecting from them well-defined JSON objects. There are certain endpoints, such as `events`, that are required, while others , such as `filters`, are optional; when provided, they enhance a timemap instance with additional features and capabilities related to the additional data.
 
 The URLs for these endpoints, as well as other configurable settings in your timemap instance, are read from the `config.js` that you created in step 3 of the setup above. The example contains sensible defaults. This section covers each option in more detail: 
 
@@ -14,11 +14,11 @@ The URLs for these endpoints, as well as other configurable settings in your tim
 | EVENT_DESC_ROOT | Endpoint for additional metadata for each individual event, concatenated to SERVER_ROOT | String | Yes |
 | CATEGORY_EXT | Endpoint for categories, concatenated with SERVER_ROOT | String | Yes |
 | NARRATIVE_EXT | Endpoint for narratives, concatenated with SERVER_ROOT | String | No |
-| TAG_TREE_EXT | Endpoint for tags, concatenated with SERVER_ROOT | String | Yes |
+| FILTER_TREE_EXT | Endpoint for filters, concatenated with SERVER_ROOT | String | Yes |
 | SITES_EXT | Endpoint for sites, concatenated with SERVER_ROOT | String | Yes |
 | MAP_ANCHOR | Geographic coordinates for original map anchor | Array of numbers | No |
 | MAPBOX_TOKEN | Access token for Mapbox satellite imagery | String | No |
-| features.USE_TAGS | Enable / Disable tags | boolean | No |
+| features.USE_FILTERS | Enable / Disable filters | boolean | No |
 | features.USE_SEARCH | Enable / Disable search | boolean | No |
 | features.USE_SITES | Enable / Disable sites | boolean | No |
 
@@ -47,7 +47,7 @@ a `config.js` file in timemap's root folder (explained in the next section).
     "lat":"17.810358",
     "long":"-18.2251664",
     "source":"",
-    "tags": "",
+    "filters": "",
     "category": ""
   }
 ]
@@ -69,35 +69,35 @@ a `config.js` file in timemap's root folder (explained in the next section).
 
 #### Optional endpoints
 
-3. **Tags**: `events` can be tagged by multiple `tags`. These will further characterize the event, and allow to select or deselect based on them. Tags are or can be distributed in a tree-like hierarchy, and each node on the tree can be a tag, including those who are not leafs.
+3. **Filters**: `events` can be filterged by multiple `filters`. These will further characterize the event, and allow to select or deselect based on them. Filters are or can be distributed in a tree-like hierarchy, and each node on the tree can be a filter, including those who are not leafs.
 
 ```json
 {
-   "key":"tags",
+   "key":"filters",
    "children": {
-      "tag0": {
-         "key": "tag0 ",
+      "filter0": {
+         "key": "filter0 ",
          "children": {
-            "tag00": {
-               "key": "tag00",
+            "filter00": {
+               "key": "filter00",
                "children": {
-                 "tag001": {
-                    "key": "tag001",
+                 "filter001": {
+                    "key": "filter001",
                     "children": {}
                  }
                }
             },
-            "tag01": {
-               "key": "tag01",
+            "filter01": {
+               "key": "filter01",
                "children": {}
             }
          }
       },
-      "tag1": {
-         "key": "tag1",
+      "filter1": {
+         "key": "filter1",
          "children": {
-            "tag10": {
-               "key": "tag10",
+            "filter10": {
+               "key": "filter10",
                "children": {}
             }
          }
@@ -106,7 +106,7 @@ a `config.js` file in timemap's root folder (explained in the next section).
 }
 ```
 
-4. **Sites**: sites are labels on the map, aiming to highlight particularly relevant locations that should not be a function of time or tags.
+4. **Sites**: sites are labels on the map, aiming to highlight particularly relevant locations that should not be a function of time or filters.
 
 ```json
 [
