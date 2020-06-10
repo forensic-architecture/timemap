@@ -45,7 +45,7 @@ function MapEvents ({
       fill: getCategoryColor(locCategory),
       stroke: colors.darkBackground,
       strokeWidth: 0,
-      fillOpacity: calcOpacity(location.events.length),
+      fillOpacity: narrative ? 1 : calcOpacity(location.events.length),
       ...extraStyles
     })
 

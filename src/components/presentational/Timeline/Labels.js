@@ -27,7 +27,7 @@ const TimelineLabels = ({ dims, timelabels }) => {
       <text
         class='timelabelF timeLabel'
         x={dims.width - dims.width_controls - 5}
-        y='15'
+        y='135'
         style={{ textAnchor: 'end' }}
       >
         {timelabels[1]}
