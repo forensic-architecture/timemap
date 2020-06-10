@@ -1,6 +1,8 @@
 import React from 'react'
 
 const TimelineHandles = ({ dims, onMoveTime }) => {
+  return null
+  // temporarilty disabled while we get functionality working again
   return (
     <g className='time-controls-inline'>
       <g
