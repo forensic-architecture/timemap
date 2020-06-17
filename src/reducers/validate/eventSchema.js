@@ -10,7 +10,7 @@ const eventSchema = Joi.object().keys({
   latitude: Joi.string().allow(''),
   longitude: Joi.string().allow(''),
   type: Joi.string().allow(''),
-  category: Joi.string().required(),
+  category: Joi.string().allow(''),
   category_full: Joi.string().allow(''),
   narratives: Joi.array(),
   sources: Joi.array(),

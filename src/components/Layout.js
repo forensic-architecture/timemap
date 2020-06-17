@@ -73,10 +73,12 @@ class Dashboard extends React.Component {
         ptr -= 1
       }
       // check events after
-      ptr = idx + 1
-      while (events[idx].datetime === events[ptr].datetime) {
-        matchedEvents.push(events[ptr])
-        ptr += 1
+      if (idx < events.length - 1) {
+        ptr = idx + 1
+        while (events[idx].datetime === events[ptr].datetime) {
+          matchedEvents.push(events[ptr])
+          ptr += 1
+        }
       }
     } else { // Map...
       const std = { ...selected }
