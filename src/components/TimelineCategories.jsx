@@ -28,9 +28,9 @@ class TimelineCategories extends React.Component {
     const { features, dims } = this.props
     const { category } = cat
     const strokeWidth = 1 // dims.trackHeight / (this.props.categories.length + 1)
-    if (features.GRAPH_NONLOCATED
-      && features.GRAPH_NONLOCATED.categories
-      && features.GRAPH_NONLOCATED.categories.includes(category)) {
+    if (features.GRAPH_NONLOCATED &&
+      features.GRAPH_NONLOCATED.categories &&
+      features.GRAPH_NONLOCATED.categories.includes(category)) {
       return null
     }
 

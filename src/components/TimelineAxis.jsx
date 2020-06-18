@@ -70,7 +70,7 @@ class TimelineAxis extends React.Component {
         />
         <g
           ref={this.xAxis1Ref}
-          transform={`translate(0, ${this.props.dims.trackHeight + PADDING - 2*(PADDING / 3)})`}
+          transform={`translate(0, ${this.props.dims.trackHeight + PADDING - 2 * (PADDING / 3)})`}
           clipPath={`url(#clip)`}
           className={`axis axisHourText`}
         />

@@ -10,7 +10,6 @@ export default ({
   extraRender
 }) => {
   const s = r * 2 / 3
-  const s2 = r * 4 / 3
   return (
     <polygon
       onClick={onSelect}
