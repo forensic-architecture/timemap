@@ -12,9 +12,9 @@
 
 ## Overview
 
-TimeMap is a standalone frontend application that allows to explore and monitor events in time and space. TimeMap uses [mapbox](https://www.mapbox.com/) satellite imagery as a backdrop by default, and uses Leaflet and d3 to visually map information.
+TimeMap is a standalone frontend application that allows to explore and monitor events in time and space. TimeMap uses OpenStreetMap satellite imagery as a backdrop by default, but can also be configured to use [mapbox](https://www.mapbox.com/). It uses Leaflet and d3 to visually map information.
 
-The application is backend agnostic. It does, however, have some requirements regarding the format of data to be ingested. TimeMap works well in tandem with [datasheet-server](https://github.com/breezykermo/datasheet-server), particularly for journalist, activists and general users who are used to working using spreadsheets and just want a shell to visualize events.
+The recommended way to run a backend for timemap is using [datasheet-server](https://github.com/forensic-architecture/datasheet-server). This allows you to work with a spreadsheet or Google Sheet as a dynamic database for for timemap.
 
 TimeMap has the following high-level features capabilites:
 
@@ -22,21 +22,14 @@ TimeMap has the following high-level features capabilites:
 * Visualize and filter these incidents over time, on an adjustable timeline that allows to zoom in and out.
 * Visualize types of incidents by tag and by category, which can be displayed using different styles.
 
-A fully-functioning live version can be found as a result of the Forensic Architecture investigation of the [Ayotzinapa case](https://www.plataforma-ayotzinapa.org).
+A fully-functioning live version can be found as a result of the Forensic Architecture investigation of the [Battle of Ilovaisk](https://ilovaisk.forensic-architecture.org).
 
 ## Get up and running
 
-### Requirements
+These easiest way to get up and running with timemap and datasheet-server is to
+[follow the tutorial here](https://forensic-architecture.org/investigation/timemap-for-cartographic-platforms).
 
-To run a TimeMap instance, you'll need:
-
-* Git, node, and npm/yarn.
-* A backend that serves data. We recommend using [datasheet-server](https://github.com/breezykermo/datasheet-server), which allows you to turn a Google Spreadsheet into an appropriate server. **To set up timemap with datasheet-server, follow [this tutorial on our website](https://engineering.forensic-architecture.org/timemap-and-datsheet-server)**.
-* (Optional) An account at Mapbox. timemap uses Mapbox to power the satellite imagery in the map's backdrop. If you don't specify a Mapbox token, timemap will default to using [OpenStreetMap](https://www.openstreetmap.org).
-
-### Getting started
-
-Note that these commands assume a Bash shell in Mac/Linux:
+### Instructions
 
 1. Pull this repository.
 
@@ -63,57 +56,11 @@ CONFIG="myotherconfig.js" yarn dev
 
 IMPORTANT: Although the application will run _just like that_, in order for TimeMap to be able to display interesting information, you'll have to make sure to have the capacity to serve data, as well as adjusting some configuration parameters. See next section.
 
-### Serving data
+#### Running without datasheet-server 
 
-In order to see anything interesting on a TimeMap instance, you will need to have a way to serve data to it. The easiest way is to create the appropriate routes through [datesheet-server](), another Forensic Architecture open source project that has been developed as a configurable proxy between a frontend application (such as a TimeMap instance) and a Google Spreadsheet. It is thought for users that do not want or know how to run their own server or backend application.
-
-However, you can also use TimeMap as a frontend for a different type of server, for instance pulling information from a relational database.
-
-#### Data requirements
-
-TimeMap is backend agnostic, but it requires a series of endpoints to provide data for it to visualize. The data is expected in JSON format. Some data elements are required and their format has some required fields. Other additional endpoints are optional, and if enabled, they simply add features to your taste.
+Technically, timemap is backend agnostic, but it requires a series of endpoints to provide data for it to visualize. The data is expected in JSON format. Some data elements are required and their format has some required fields. Other additional endpoints are optional, and if enabled, they simply add features to your taste.
 
 The combination of all these data types is called the `domain` of the application in the context of TimeMap.
-
-#### Required endpoints
-
-1. Events: incidents to be mapped in time and space are called `events`. They must include the following fields:
-
-```json
-[
-  {
-    "desc":"SOME DESCRIPTION TEXT",
-    "date":"8/23/2011",
-    "time":"18:30",
-    "location":"LOCATION_NAME",
-    "lat":"17.810358",
-    "long":"-18.2251664",
-    "source":"",
-    "filters": "",
-    "category": ""
-  },
-  {}
-]
-
-```
-
-Events can have zero, one or multiple filters (comma-separated in one single string), but MUST have one, and only one, category. Category properties are also a required endpoint.
-
-2. Categories: events must be grouped in `categories`. All `events` must contain one (and only one) `category` for them to be displayed in the timeline and map. They are designed to aggregate incidents, for example, according to a population group, or obtained by a type of measure. Categories can be bundled in groups.
-
-```json
-[
-  {
-    "category":"Category 00",
-    "category_label":"Category Label",
-    "group":"category_group00",
-    "group_label":"Events"
-  },
-  {}
-]
-```
-
-#### Optional endpoints
 
 ## Contribute
 
