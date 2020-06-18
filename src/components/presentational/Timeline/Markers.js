@@ -1,5 +1,5 @@
 import React from 'react'
-import colors, { sizes } from '../../../common/global'
+import colors from '../../../common/global'
 
 const TimelineMarkers = ({
   styles,

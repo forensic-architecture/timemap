@@ -41,7 +41,6 @@ export default class Search extends React.Component {
             filterFilters={this.props.filterFilters}
             categoryFilters={this.props.categoryFilters}
             filter={this.props.filter}
-            filter={filter}
             isCategory={this.props.isCategory}
           />
         )

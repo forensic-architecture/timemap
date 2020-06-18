@@ -139,7 +139,7 @@ class Map extends React.Component {
     const pane = this.map.getPanes().overlayPane
     const { width, height } = this.getClientDims()
 
-    return !!this.map ? (
+    return this.map ? (
       <Portal node={pane}>
         <svg
           ref={this.svgRef}

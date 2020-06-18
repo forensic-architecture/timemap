@@ -1,5 +1,3 @@
-import { timeFormat, timeParse } from 'd3'
-
 import moment from 'moment'
 
 let { DATE_FMT, TIME_FMT } = process.env

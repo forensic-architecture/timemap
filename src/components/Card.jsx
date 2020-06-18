@@ -81,7 +81,7 @@ class Card extends React.Component {
   }
 
   // NB: should be internaionalized.
-  renderTime() {
+  renderTime () {
     let timelabel = this.makeTimelabel(this.props.event.datetime)
 
     let precision = this.props.event.time_display

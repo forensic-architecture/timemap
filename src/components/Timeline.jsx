@@ -7,7 +7,6 @@ import { setLoading, setNotLoading } from '../actions'
 import hash from 'object-hash'
 
 import copy from '../common/data/copy.json'
-import { sizes } from '../common/global'
 import Header from './presentational/Timeline/Header'
 import Axis from './TimelineAxis.jsx'
 import Clip from './presentational/Timeline/Clip'
@@ -16,7 +15,6 @@ import ZoomControls from './presentational/Timeline/ZoomControls.js'
 import Markers from './presentational/Timeline/Markers.js'
 import Events from './presentational/Timeline/Events.js'
 import Categories from './TimelineCategories.jsx'
-const TIMELINE_AXIS = 0
 
 class Timeline extends React.Component {
   constructor (props) {
@@ -70,10 +68,11 @@ class Timeline extends React.Component {
   addEventListeners () {
     window.addEventListener('resize', () => { this.computeDims() })
     let element = document.querySelector('.timeline-wrapper')
-    if (element !== null)
+    if (element !== null) {
       element.addEventListener('transitionend', (event) => {
         this.computeDims()
       })
+    }
   }
 
   makeScaleX () {
@@ -277,8 +276,7 @@ class Timeline extends React.Component {
     const { features, domain } = this.props
     const { USE_CATEGORIES, GRAPH_NONLOCATED } = features
 
-    if (!USE_CATEGORIES)
-      return this.state.dims.trackHeight / 2
+    if (!USE_CATEGORIES) { return this.state.dims.trackHeight / 2 }
 
     const { category, project } = event
     if (GRAPH_NONLOCATED && GRAPH_NONLOCATED.categories.includes(category)) {
