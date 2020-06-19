@@ -174,10 +174,11 @@ class Map extends React.Component {
   }
 
   renderNarratives () {
+    const hasNarratives = this.props.domain.narratives.length > 0
     return (
       <Narratives
         svg={this.svgRef.current}
-        narratives={this.props.domain.narratives}
+        narratives={hasNarratives ? this.props.domain.narratives : [this.props.app.narrative]}
         projectPoint={this.projectPoint}
         narrative={this.props.app.narrative}
         styles={this.props.ui.narratives}
