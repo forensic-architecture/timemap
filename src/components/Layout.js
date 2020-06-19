@@ -1,3 +1,4 @@
+/* global alert */
 import React from 'react'
 
 import { bindActionCreators } from 'redux'
@@ -149,6 +150,7 @@ class Dashboard extends React.Component {
       id: name,
       label: name,
       description: '',
+      withLines: withSteps,
       steps: evs
     })
   }
@@ -223,7 +225,7 @@ class Dashboard extends React.Component {
           getCategoryColor={this.getCategoryColor}
         />
         <StateOptions
-          showing={!app.narrative && app.filters.filters.length > 0}
+          showing={features.FILTERS_AS_NARRATIVES && !app.narrative && app.filters.filters.length > 0}
           timelineDims={app.timeline.dimensions}
           onClickHandler={this.setNarrativeFromFilters}
         />
