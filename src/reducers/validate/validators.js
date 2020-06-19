@@ -164,7 +164,8 @@ export function validateDomain (domain) {
   sanitizedDomain.filters = domain.filters
 
   // append events with datetime and sort
-  sanitizedDomain.events.forEach(event => {
+  sanitizedDomain.events.forEach((event, idx) => {
+    event.id = idx
     event.datetime = calcDatetime(event.date, event.time)
   })
 
