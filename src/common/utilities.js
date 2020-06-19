@@ -103,7 +103,9 @@ export function injectSource (id) {
 
 export function urlFromEnv (ext) {
   if (process.env[ext]) {
-    return `${process.env.SERVER_ROOT}${process.env[ext]}`
+    if (!Array.isArray(process.env[ext])) { return [`${process.env.SERVER_ROOT}${process.env[ext]}`] } else {
+      return process.env[ext].map(suffix => `${process.env.SERVER_ROOT}${suffix}`)
+    }
   } else {
     return null
   }
