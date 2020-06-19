@@ -1,7 +1,7 @@
 import Joi from 'joi'
 
 const eventSchema = Joi.object().keys({
-  id: Joi.string().required(),
+  id: Joi.string().allow(''),
   description: Joi.string().allow('').required(),
   date: Joi.string().allow(''),
   time: Joi.string().allow(''),
