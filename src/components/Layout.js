@@ -70,7 +70,7 @@ class Dashboard extends React.Component {
       let ptr = idx - 1
 
       while (
-        ptr > 0 &&
+        ptr >= 0 &&
         (events[idx].datetime).getTime() === (events[ptr].datetime).getTime()
       ) {
         matchedEvents.push(events[ptr])
