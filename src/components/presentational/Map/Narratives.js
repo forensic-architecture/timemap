@@ -132,18 +132,30 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
     const arrows = []
 
     let lastMarked = null
+
     for (let idx = 0; idx < n.steps.length; idx += 1) {
       const step = n.steps[idx]
-      const _idx = step.narratives.indexOf(n.id)
-      const stepStyle = step.narrative___stepStyles[_idx]
-
-      if (stepStyle !== 'None') {
-        if (lastMarked) {
-          arrows.push(renderBetweenSteps(lastMarked, step, styles.stepStyles[stepStyle]))
-        }
-        lastMarked = step
+      if (lastMarked) {
+        arrows.push(renderBetweenSteps(lastMarked, step, {
+          strokeWidth: '1px',
+          stroke: step.colour
+        }))
       }
+      lastMarked = step
     }
+
+    // for (let idx = 0; idx < n.steps.length; idx += 1) {
+    //   const step = n.steps[idx]
+    //   const _idx = step.narratives.indexOf(n.id)
+    //   const stepStyle = step.narrative___stepStyles[_idx]
+    //
+    //   if (stepStyle !== 'None') {
+    //     if (lastMarked) {
+    //       arrows.push(renderBetweenSteps(lastMarked, step, styles.stepStyles[stepStyle]))
+    //     }
+    //     lastMarked = step
+    //   }
+    // }
 
     return arrows
   }
@@ -153,10 +165,11 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
 
     return (
       <g id={narrativeId} className='narrative'>
-        {(features.NARRATIVE_STEP_STYLES
-          ? renderBetweenMarked(n)
-          : renderFullNarrative(n)
-        )}
+        {renderBetweenMarked(n)}
+        {/* {(features.NARRATIVE_STEP_STYLES */}
+        {/*   ? renderBetweenMarked(n) */}
+        {/*   : renderFullNarrative(n) */}
+        {/* )} */}
       </g>
     )
   }

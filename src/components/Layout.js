@@ -13,6 +13,7 @@ import NarrativeControls from './presentational/Narrative/Controls.js'
 import InfoPopUp from './InfoPopup.jsx'
 import Timeline from './Timeline.jsx'
 import Notification from './Notification.jsx'
+import StateOptions from './StateOptions.jsx'
 import StaticPage from './StaticPage'
 import TemplateCover from './TemplateCover'
 
@@ -27,6 +28,7 @@ class Dashboard extends React.Component {
     this.handleViewSource = this.handleViewSource.bind(this)
     this.handleHighlight = this.handleHighlight.bind(this)
     this.setNarrative = this.setNarrative.bind(this)
+    this.setNarrativeFromFilters = this.setNarrativeFromFilters.bind(this)
     this.moveInNarrative = this.moveInNarrative.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.getCategoryColor = this.getCategoryColor.bind(this)
@@ -115,11 +117,40 @@ class Dashboard extends React.Component {
   setNarrative (narrative) {
     // only handleSelect if narrative is not null
     if (narrative) {
-      this.props.actions.clearFilter('filters')
-      this.props.actions.clearFilter('categories')
       this.handleSelect([ narrative.steps[0] ])
     }
     this.props.actions.updateNarrative(narrative)
+  }
+
+  setNarrativeFromFilters (withSteps) {
+    const { app, domain } = this.props
+    const activeFilters = app.filters.filters
+
+    if (activeFilters.length === 0) {
+      alert('No filters selected, cant narrativise')
+      return
+    }
+
+    const evs = domain.events.filter(ev => {
+      let hasOne = false
+      // add event if it has at least one matching filter
+      for (let i = 0; i < activeFilters.length; i++) {
+        if (ev.filters.includes(activeFilters[i])) {
+          hasOne = true
+          break
+        }
+      }
+      if (hasOne) return true
+      return false
+    })
+
+    const name = activeFilters.join('-')
+    this.setNarrative({
+      id: name,
+      label: name,
+      description: '',
+      steps: evs
+    })
   }
 
   moveInNarrative (amt) {
@@ -183,12 +214,18 @@ class Dashboard extends React.Component {
           }}
         />
         <CardStack
+          timelineDims={app.timeline.dimensions}
           onViewSource={this.handleViewSource}
           onSelect={this.handleSelect}
           onHighlight={this.handleHighlight}
           onToggleCardstack={() => actions.updateSelected([])}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={this.getCategoryColor}
+        />
+        <StateOptions
+          showing={!app.narrative && app.filters.filters.length > 0}
+          timelineDims={app.timeline.dimensions}
+          onClickHandler={this.setNarrativeFromFilters}
         />
         <NarrativeControls
           narrative={app.narrative ? {
