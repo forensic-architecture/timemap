@@ -93,6 +93,7 @@ class Toolbar extends React.Component {
         <FilterListPanel
           filters={this.props.filters}
           activeFilters={this.props.activeFilters}
+          filterFoldCount={this.props.filterFoldCount}
           onSelectFilter={this.props.methods.onSelectFilter}
           language={this.props.language}
         />
@@ -198,6 +199,7 @@ class Toolbar extends React.Component {
 function mapStateToProps (state) {
   return {
     filters: selectors.getFilterTree(state),
+    filterFoldCount: selectors.getFilterFoldCount(state),
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
     language: state.app.language,

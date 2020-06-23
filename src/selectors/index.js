@@ -14,6 +14,7 @@ export const getSources = state => state.domain.sources
 export const getShapes = state => state.domain.shapes
 export const getNotifications = state => state.domain.notifications
 export const getFilterTree = state => state.domain.filters
+export const getFilterFoldCount = state => state.domain.filterFoldCount
 export const getActiveFilters = state => state.app.filters.filters
 export const getActiveCategories = state => state.app.filters.categories
 export const getTimeRange = state => state.app.timeline.range

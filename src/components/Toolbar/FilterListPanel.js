@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Checkbox from '../presentational/Checkbox'
 import copy from '../../common/data/copy.json'
 
@@ -18,51 +18,120 @@ function childrenToToggle (node, activeFilters, parentOn) {
   return childKeys
 }
 
-function FilterListPanel ({
-  filters,
-  activeFilters,
-  onSelectFilter,
-  language
-}) {
-  function createNodeComponent (node, depth) {
-    const matchingKeys = childrenToToggle(node, activeFilters, activeFilters.includes(node.key))
-    const children = Object.values(node.children)
+class FilterDisplay extends React.Component {
+  constructor (props) {
+    super(props)
+    this.onClickTitle = this.onClickTitle.bind(this)
+  }
+
+  onClickTitle () {
+    this.forceUpdate()
+    this.props.onCheckboxTitle()
+  }
+
+  render () {
+    const { node, children, isFoldable, activeFilters, onCheckboxMark, style } = this.props
     return (
       <li
         key={node.key.replace(/ /g, '_')}
         className={'filter-filter'}
-        style={{ marginLeft: `${depth * 20}px` }}
+        style={style}
       >
-        {/* <svg width='10' height='10'> */}
-        {/*   <g className='filter-inline'> */}
-        {/*     <path d='M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z' transform='rotate(270)' /> */}
-        {/*   </g> */}
-        {/* </svg> */}
+        {isFoldable && <div className='caret right' />}
         <Checkbox
           label={node.key}
           isActive={activeFilters.includes(node.key)}
-          onClickCheckbox={() => onSelectFilter(matchingKeys)}
+          onClickTitle={this.onClickTitle}
+          onClickCheckbox={onCheckboxMark}
         />
-        {children.length > 0
-          ? children.map(filter => createNodeComponent(filter, depth + 1))
-          : null}
+        { children }
       </li>
     )
   }
+}
 
-  function renderTree (children) {
+function createNodeComponent (node, depth, isFoldable, isOpen, toggle, activeFilters, onSelectFilter) {
+  const matchingKeys = childrenToToggle(node, activeFilters, activeFilters.includes(node.key))
+  const children = Object.values(node.children)
+
+  return (
+    <FilterDisplay
+      node={node}
+      activeFilters={activeFilters}
+      isFoldable={isFoldable}
+      onCheckboxTitle={toggle}
+      onCheckboxMark={() => onSelectFilter(matchingKeys)}
+      style={{ marginLeft: `${depth * 20}px` }}
+    >
+      {(isFoldable && isOpen) && children.map(filter => createNodeComponent(filter, depth + 1))}
+    </FilterDisplay>
+  )
+}
+
+class RenderTree extends React.Component {
+  toggleOpen (atIdx) {
+    const me = this
+    return () => {
+      me.props.toggleOpen(atIdx)
+      me.forceUpdate()
+    }
+  }
+  render () {
+    const { children, activeFilters, onSelectFilter, isOpens } = this.props
+    console.log(activeFilters)
+    let filterFoldIdx = 0
+    const body = Object.values(children).map(filter => {
+      const isFoldable = Object.keys(filter.children).length > 0
+      const foldIdx = filterFoldIdx
+      if (isFoldable) { filterFoldIdx++ }
+      const isOpen = !isFoldable ? null : isOpens[foldIdx]
+
+      return createNodeComponent(filter, 1, isFoldable, isOpen, this.toggleOpen(foldIdx), activeFilters, onSelectFilter)
+    })
+
     return (
       <div>
-        {Object.values(children).map(filter => createNodeComponent(filter, 1))}
+        {Object.values(children).map(filter => {
+          const isFoldable = Object.keys(filter.children).length > 0
+          const foldIdx = filterFoldIdx
+          if (isFoldable) { filterFoldIdx++ }
+          const isOpen = !isFoldable ? null : isOpens[foldIdx]
+
+          return createNodeComponent(filter, 1, isFoldable, isOpen, this.toggleOpen(foldIdx), activeFilters, onSelectFilter)
+        })}
       </div>
     )
+  }
+}
+
+function FilterListPanel ({
+  filters,
+  activeFilters,
+  onSelectFilter,
+  filterFoldCount,
+  language
+}) {
+  // set up array of bools based on `filterFoldCount`, which was calculated
+  // during domain verification (see validate.js). This is necessary because
+  // React hooks must be instantiated at the top level.
+  const [isOpens, setOpens] = useState([...Array(filterFoldCount).keys()].map(t => !!t))
+  const toggleOpen = idx => {
+    const oldList = isOpens
+    oldList[idx] = !oldList[idx]
+    setOpens(oldList)
   }
 
   return (
     <div className='react-innertabpanel'>
       <h2>{copy[language].toolbar.filters}</h2>
       <p>{copy[language].toolbar.explore_by_filter__description}</p>
-      {renderTree(filters.children)}
+      <RenderTree
+        children={filters.children}
+        toggleOpen={toggleOpen}
+        activeFilters={activeFilters}
+        onSelectFilter={onSelectFilter}
+        isOpens={isOpens}
+      />
     </div>
   )
 }

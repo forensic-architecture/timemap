@@ -27,8 +27,8 @@ const isDuplicate = (node, set) => { return (set.has(node.key)) }
 /*
 * Traverse a filter tree and check its duplicates
 */
-function validateTree (node, parent, set, duplicates) {
-  if (!Array.isArray(node) || !node.length) {
+function validateTree (node, parent, set, duplicates, parentCount) {
+  if (!(typeof (node.children) === 'object')) {
     return
   }
   // If it's a leaf, check that it's not duplicate
@@ -43,9 +43,10 @@ function validateTree (node, parent, set, duplicates) {
       set.add(node.key)
     }
   } else {
+    parentCount[0] = parentCount[0] + 1
     // If it's not a leaf, simply keep going
     Object.values(node.children).forEach((childNode) => {
-      validateTree(childNode, node, set, duplicates)
+      validateTree(childNode, node, set, duplicates, parentCount)
     })
   }
 }
@@ -148,10 +149,13 @@ export function validateDomain (domain) {
     }
   })
 
-  // Validate uniqueness of filters
+  // Validate uniqueness of filters and count
   const filterSet = new Set([])
   const duplicateFilters = []
-  validateTree(domain.filters, {}, filterSet, duplicateFilters)
+  // in a list so that it can be modified.
+  // starts at -1 because the top layer can't be folded
+  const foldCount = [-1]
+  validateTree(domain.filters, {}, filterSet, duplicateFilters, foldCount)
 
   // Duplicated filters
   if (duplicateFilters.length > 0) {
@@ -162,6 +166,7 @@ export function validateDomain (domain) {
     })
   }
   sanitizedDomain.filters = domain.filters
+  sanitizedDomain.filterFoldCount = foldCount[0]
 
   // append events with datetime and sort
   sanitizedDomain.events.forEach((event, idx) => {

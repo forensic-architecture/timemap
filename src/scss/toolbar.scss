@@ -271,6 +271,23 @@
     line-height: 1.4em;
   };
 
+  .caret {
+    position: relative;
+    transform: translate(8px, 5px)rotate(45deg);
+    width: 8px;
+    height: 8px;
+    transition: 0.2s ease;
+    border-left: 2px solid $midwhite;
+    border-bottom: 2px solid $midwhite;
+    &.right {
+      transform: translate(8px, 5px) rotate(-135deg);
+      margin-left: -30px;
+      position: absolute;
+      margin-top: 6px;
+
+    }
+  }
+
   .panel-header {
     display: inline-block;
     width: 36px;
@@ -286,15 +303,15 @@
     padding: 8px 6px;
     cursor: pointer;
 
-    .caret {
-      position: relative;
-      transform: translate(8px, 5px)rotate(45deg);
-      width: 8px;
-      height: 8px;
-      transition: 0.2s ease;
-      border-left: 2px solid $midwhite;
-      border-bottom: 2px solid $midwhite;
-    }
+    // .caret {
+    //   position: relative;
+    //   transform: translate(8px, 5px)rotate(45deg);
+    //   width: 8px;
+    //   height: 8px;
+    //   transition: 0.2s ease;
+    //   border-left: 2px solid $midwhite;
+    //   border-bottom: 2px solid $midwhite;
+    // }
 
     &:hover {
       .caret {
