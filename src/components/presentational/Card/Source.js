@@ -70,7 +70,7 @@ const CardSource = ({ source, isLoading, onClickHandler }) => {
                 height={30}
               />
             ) : fallbackIcon}
-            <p>{source.id}</p>
+            <p>{source.title ? source.title : source.id}</p>
           </div>
         )}
     </div>

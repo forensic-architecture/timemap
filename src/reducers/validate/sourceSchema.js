@@ -8,7 +8,7 @@ const sourceSchema = Joi.object().keys({
   type: Joi.string().allow(''),
   affil_s: Joi.array().allow(''),
   url: Joi.string().allow(''),
-  desc: Joi.string().allow(''),
+  description: Joi.string().allow(''),
   parent: Joi.string().allow(''),
   author: Joi.string().allow(''),
   date: Joi.string().allow(''),

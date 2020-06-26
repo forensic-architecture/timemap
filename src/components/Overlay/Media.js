@@ -39,7 +39,7 @@ class SourceOverlay extends React.Component {
   }
 
   renderContent (source) {
-    const { url, title, paths, date, type, desc, poster } = source
+    const { url, title, paths, date, type, poster, description } = source
     const shortenedTitle = title.substring(0, 100)
     return (
       <React.Fragment>
@@ -67,8 +67,8 @@ class SourceOverlay extends React.Component {
           <Controls paths={paths} viewIdx={this.state.mediaIdx} onShiftHandler={this.onShiftGallery} />
 
           <div className='mo-meta-container'>
-            {desc ? <div className='mo-box-desc'>
-              <div className='md-container' dangerouslySetInnerHTML={{ __html: marked(desc) }} />
+            {description ? <div className='mo-box-desc'>
+              <div className='md-container' dangerouslySetInnerHTML={{ __html: marked(description) }} />
             </div> : null}
 
             {(type || date || url) ? (
