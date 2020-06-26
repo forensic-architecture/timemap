@@ -5,7 +5,7 @@ export default ({ showing, onClickHandler, timelineDims }) => {
     return null
   }
 
-  const [checked, setChecked] = useState(true)
+  const [checked, setChecked] = useState(false)
   const handleCheck = () => setChecked(!checked)
   const onNarrativise = () => onClickHandler(checked)
 

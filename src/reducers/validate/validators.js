@@ -156,12 +156,14 @@ export function validateDomain (domain) {
   sanitizedDomain.filters = domain.filters
 
   // append events with datetime and sort
-  sanitizedDomain.events.forEach((event, idx) => {
+  sanitizedDomain.events = sanitizedDomain.events.filter((event, idx) => {
     event.id = idx
     event.datetime = calcDatetime(event.date, event.time)
     if (!isValidDate(event.datetime)) {
-      discardedDomain['events'].push({ ...event, error: makeError('events', event.id, `Invalid date. This will break timemap! Please fix.`) })
+      discardedDomain['events'].push({ ...event, error: makeError('events', event.id, `Invalid date. It's been dropped, as otherwise timemap won't work as expected.`) })
+      return false
     }
+    return true
   })
 
   sanitizedDomain.events.sort((a, b) => a.datetime - b.datetime)
