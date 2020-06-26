@@ -170,11 +170,11 @@ class Dashboard extends React.Component {
     const { narrative } = this.props.app
     if (narrative === null) return
 
-    if (amt === 1) {
+    if (amt === 1 && current < narrative.steps.length - 1) {
       this.handleSelect([ narrative.steps[current + 1] ])
       this.props.actions.incrementNarrativeCurrent()
     }
-    if (amt === -1) {
+    if (amt === -1 && current > 0) {
       this.handleSelect([ narrative.steps[current - 1] ])
       this.props.actions.decrementNarrativeCurrent()
     }
