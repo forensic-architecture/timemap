@@ -45,6 +45,9 @@ class Dashboard extends React.Component {
           }
         })
     }
+    // NOTE: hack to get the timeline to always show. Not entirely sure why
+    // this is necessary.
+    window.dispatchEvent(new Event('resize'))
   }
 
   handleHighlight (highlighted) {
