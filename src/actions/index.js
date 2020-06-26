@@ -28,12 +28,12 @@ export function fetchDomain () {
     const features = getState().features
     dispatch(toggleFetchingDomain())
 
-    let configPromise = Promise.resolve([])
-    if (features.USE_REMOTE_CONFIG) {
-      configPromise = fetch(CONFIG_URL)
-        .then(response => response.json())
-        .catch(() => handleError("Couldn't find data at the config URL you specified."))
-    }
+    // let configPromise = Promise.resolve([])
+    // if (features.USE_REMOTE_CONFIG) {
+    //   configPromise = fetch(CONFIG_URL)
+    //     .then(response => response.json())
+    //     .catch(() => handleError("Couldn't find data at the config URL you specified."))
+    // }
 
     // NB: EVENT_DATA_URL is a list, and so results are aggregated
     const eventPromise = Promise.all(
