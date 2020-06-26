@@ -2,7 +2,7 @@
 import { urlFromEnv } from '../common/utilities'
 
 // TODO: relegate these URLs entirely to environment variables
-const CONFIG_URL = urlFromEnv('CONFIG_EXT')
+// const CONFIG_URL = urlFromEnv('CONFIG_EXT')
 const EVENT_DATA_URL = urlFromEnv('EVENTS_EXT')
 const CATEGORY_URL = urlFromEnv('CATEGORIES_EXT')
 const FILTERS_URL = urlFromEnv('FILTERS_EXT')
