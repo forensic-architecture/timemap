@@ -256,7 +256,10 @@ class Map extends React.Component {
     ) : null
 
     return (
-      <div className={classes}>
+      <div className={classes}
+        onKeyDown={this.props.onKeyDown}
+        tabIndex='0'
+      >
         <div id={this.props.ui.dom.map} />
         {innerMap}
       </div>

@@ -1,4 +1,4 @@
-/* global alert */
+/* global alert, Event */
 import React from 'react'
 
 import { bindActionCreators } from 'redux'
@@ -33,6 +33,8 @@ class Dashboard extends React.Component {
     this.moveInNarrative = this.moveInNarrative.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.getCategoryColor = this.getCategoryColor.bind(this)
+    this.findEventIdx = this.findEventIdx.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
   }
 
   componentDidMount () {
@@ -58,6 +60,17 @@ class Dashboard extends React.Component {
     this.props.actions.updateSource(source)
   }
 
+  findEventIdx (theEvent) {
+    const { events } = this.props.domain
+    return binarySearch(
+      events,
+      theEvent,
+      (theev, otherev) => {
+        return theev.datetime - otherev.datetime
+      }
+    )
+  }
+
   handleSelect (selected, axis) {
     const matchedEvents = []
     const TIMELINE_AXIS = 0
@@ -65,13 +78,7 @@ class Dashboard extends React.Component {
       matchedEvents.push(selected)
       // find in events
       const { events } = this.props.domain
-      const idx = binarySearch(
-        events,
-        selected,
-        (e1, e2) => {
-          return e1.datetime - e2.datetime
-        }
-      )
+      const idx = this.findEventIdx(selected)
       // check events before
       let ptr = idx - 1
 
@@ -161,6 +168,7 @@ class Dashboard extends React.Component {
   moveInNarrative (amt) {
     const { current } = this.props.app.narrativeState
     const { narrative } = this.props.app
+    if (narrative === null) return
 
     if (amt === 1) {
       this.handleSelect([ narrative.steps[current + 1] ])
@@ -172,6 +180,39 @@ class Dashboard extends React.Component {
     }
   }
 
+  onKeyDown (e) {
+    const { narrative, selected } = this.props.app
+    const { events } = this.props.domain
+    const prev = idx => {
+      if (narrative === null) {
+        this.handleSelect(events[idx - 1], 0)
+      } else {
+        this.moveInNarrative(-1)
+      }
+    }
+    const next = idx => {
+      if (narrative === null) {
+        this.handleSelect(events[idx + 1], 0)
+      } else {
+        this.moveInNarrative(1)
+      }
+    }
+    if (selected.length > 0) {
+      const ev = selected[selected.length - 1]
+      const idx = this.findEventIdx(ev)
+      switch (e.keyCode) {
+        case 37: // left arrow
+          if (idx <= 0) return
+          prev(idx)
+          break
+        case 39: // right arrow
+          if (idx < 0 || idx >= this.props.domain.length - 1) return
+          next(idx)
+          break
+        default:
+      }
+    }
+  }
   render () {
     const { actions, app, domain, ui, features } = this.props
 
@@ -195,7 +236,7 @@ class Dashboard extends React.Component {
     }
 
     return (
-      <div>
+      <div >
         <Toolbar
           isNarrative={!!app.narrative}
           methods={{
@@ -206,6 +247,7 @@ class Dashboard extends React.Component {
           }}
         />
         <Map
+          onKeyDown={this.onKeyDown}
           methods={{
             onSelect: ev => this.handleSelect(ev, 1),
             onSelectNarrative: this.setNarrative,
@@ -213,6 +255,7 @@ class Dashboard extends React.Component {
           }}
         />
         <Timeline
+          onKeyDown={this.onKeyDown}
           methods={{
             onSelect: ev => this.handleSelect(ev, 0),
             onUpdateTimerange: actions.updateTimeRange,

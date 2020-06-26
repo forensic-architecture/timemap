@@ -310,7 +310,7 @@ class Timeline extends React.Component {
     const { categories } = this.props.domain
 
     return (
-      <div className={classes} style={extraStyle}>
+      <div className={classes} style={extraStyle} onKeyDown={this.props.onKeyDown} tabIndex='1'>
         <Header
           title={copy[this.props.app.language].timeline.info}
           from={this.state.timerange[0]}
