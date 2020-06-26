@@ -161,7 +161,7 @@ class CardStack extends React.Component {
             className={`card-stack narrative-mode
             ${isCardstack ? '' : ' folded'}`
             }
-            style={{height}}
+            style={{ height }}
           >
             {this.renderNarrativeContent()}
           </div>
