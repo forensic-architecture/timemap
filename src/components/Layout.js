@@ -172,20 +172,21 @@ class Dashboard extends React.Component {
   render () {
     const { actions, app, domain, ui, features } = this.props
 
-    if (isMobile || window.innerWidth < 1000) {
+    if (isMobile || window.innerWidth < 600) {
+      const msg = 'This platform is not suitable for mobile. Please re-visit the site on a device with a larger screen.'
       return (
         <div>
-          {features.USE_COVER && (
+          {features.USE_COVER ? (
             <StaticPage showing={app.flags.isCover}>
               {/* enable USE_COVER in config.js features, and customise your header */}
               {/* pass 'actions.toggleCover' as a prop to your custom header */}
               <TemplateCover showAppHandler={() => {
                 /* eslint-disable no-undef */
-                alert('This platform is not suitable for mobile. Please re-visit the site on a device with a larger screen.')
+                alert(msg)
                 /* eslint-enable no-undef */
               }} />
             </StaticPage>
-          )}
+          ) : <div className='fixedTooSmallMessage'>{msg}</div>}
         </div>
       )
     }
