@@ -65,6 +65,7 @@ class Card extends React.Component {
       return <div>ERROR: something went wrong loading sources, TODO:</div>
     }
 
+
     const sourceLang = copy[this.props.language].cardstack.sources
     return (
       <div className='card-col'>

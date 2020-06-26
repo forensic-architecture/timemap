@@ -19,7 +19,7 @@ import StaticPage from './StaticPage'
 import TemplateCover from './TemplateCover'
 
 import colors from '../common/global'
-import { binarySearch } from '../common/utilities'
+import { binarySearch, insetSourceFrom } from '../common/utilities'
 import { isMobile } from 'react-device-detect'
 
 class Dashboard extends React.Component {
@@ -161,7 +161,7 @@ class Dashboard extends React.Component {
       label: name,
       description: '',
       withLines: withSteps,
-      steps: evs
+      steps: evs.map(insetSourceFrom(domain.sources))
     })
   }
 
