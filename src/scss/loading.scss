@@ -84,3 +84,10 @@ https://github.com/tobiasahlin/SpinKit/blob/master/LICENSE
     -webkit-transform: scale(1.0);
   }
 }
+
+.fixedTooSmallMessage {
+  position: absolute;
+  top: 0;
+  color: white;
+  padding: 10px;
+}
