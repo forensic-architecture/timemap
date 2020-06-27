@@ -21,6 +21,10 @@ function makeError (type, id, message) {
   }
 }
 
+function isValidDate (d) {
+  return d instanceof Date && !isNaN(d)
+}
+
 const isLeaf = node => (Object.keys(node.children).length === 0)
 const isDuplicate = (node, set) => { return (set.has(node.key)) }
 
@@ -136,18 +140,6 @@ export function validateDomain (domain) {
   })
   )
 
-  // Message the number of failed items in domain
-  Object.keys(discardedDomain).forEach(disc => {
-    const len = discardedDomain[disc].length
-    if (len) {
-      sanitizedDomain.notifications.push({
-        message: `${len} invalid ${disc} not displayed.`,
-        items: discardedDomain[disc],
-        type: 'error'
-      })
-    }
-  })
-
   // Validate uniqueness of filters
   const filterSet = new Set([])
   const duplicateFilters = []
@@ -164,12 +156,29 @@ export function validateDomain (domain) {
   sanitizedDomain.filters = domain.filters
 
   // append events with datetime and sort
-  sanitizedDomain.events.forEach((event, idx) => {
+  sanitizedDomain.events = sanitizedDomain.events.filter((event, idx) => {
     event.id = idx
     event.datetime = calcDatetime(event.date, event.time)
+    if (!isValidDate(event.datetime)) {
+      discardedDomain['events'].push({ ...event, error: makeError('events', event.id, `Invalid date. It's been dropped, as otherwise timemap won't work as expected.`) })
+      return false
+    }
+    return true
   })
 
   sanitizedDomain.events.sort((a, b) => a.datetime - b.datetime)
+
+  // Message the number of failed items in domain
+  Object.keys(discardedDomain).forEach(disc => {
+    const len = discardedDomain[disc].length
+    if (len) {
+      sanitizedDomain.notifications.push({
+        message: `${len} invalid ${disc} not displayed.`,
+        items: discardedDomain[disc],
+        type: 'error'
+      })
+    }
+  })
 
   return sanitizedDomain
 }

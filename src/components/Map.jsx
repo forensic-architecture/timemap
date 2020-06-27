@@ -174,10 +174,11 @@ class Map extends React.Component {
   }
 
   renderNarratives () {
+    const hasNarratives = this.props.domain.narratives.length > 0
     return (
       <Narratives
         svg={this.svgRef.current}
-        narratives={this.props.domain.narratives}
+        narratives={hasNarratives ? this.props.domain.narratives : [this.props.app.narrative]}
         projectPoint={this.projectPoint}
         narrative={this.props.app.narrative}
         styles={this.props.ui.narratives}
@@ -255,7 +256,10 @@ class Map extends React.Component {
     ) : null
 
     return (
-      <div className={classes}>
+      <div className={classes}
+        onKeyDown={this.props.onKeyDown}
+        tabIndex='0'
+      >
         <div id={this.props.ui.dom.map} />
         {innerMap}
       </div>

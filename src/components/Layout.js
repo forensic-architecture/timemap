@@ -1,3 +1,4 @@
+/* global alert, Event */
 import React from 'react'
 
 import { bindActionCreators } from 'redux'
@@ -13,11 +14,12 @@ import NarrativeControls from './presentational/Narrative/Controls.js'
 import InfoPopUp from './InfoPopup.jsx'
 import Timeline from './Timeline.jsx'
 import Notification from './Notification.jsx'
+import StateOptions from './StateOptions.jsx'
 import StaticPage from './StaticPage'
 import TemplateCover from './TemplateCover'
 
 import colors from '../common/global'
-import { binarySearch } from '../common/utilities'
+import { binarySearch, insetSourceFrom } from '../common/utilities'
 import { isMobile } from 'react-device-detect'
 
 class Dashboard extends React.Component {
@@ -27,9 +29,12 @@ class Dashboard extends React.Component {
     this.handleViewSource = this.handleViewSource.bind(this)
     this.handleHighlight = this.handleHighlight.bind(this)
     this.setNarrative = this.setNarrative.bind(this)
+    this.setNarrativeFromFilters = this.setNarrativeFromFilters.bind(this)
     this.moveInNarrative = this.moveInNarrative.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.getCategoryColor = this.getCategoryColor.bind(this)
+    this.findEventIdx = this.findEventIdx.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
   }
 
   componentDidMount () {
@@ -42,6 +47,9 @@ class Dashboard extends React.Component {
           }
         })
     }
+    // NOTE: hack to get the timeline to always show. Not entirely sure why
+    // this is necessary.
+    window.dispatchEvent(new Event('resize'))
   }
 
   handleHighlight (highlighted) {
@@ -52,6 +60,17 @@ class Dashboard extends React.Component {
     this.props.actions.updateSource(source)
   }
 
+  findEventIdx (theEvent) {
+    const { events } = this.props.domain
+    return binarySearch(
+      events,
+      theEvent,
+      (theev, otherev) => {
+        return theev.datetime - otherev.datetime
+      }
+    )
+  }
+
   handleSelect (selected, axis) {
     const matchedEvents = []
     const TIMELINE_AXIS = 0
@@ -59,13 +78,7 @@ class Dashboard extends React.Component {
       matchedEvents.push(selected)
       // find in events
       const { events } = this.props.domain
-      const idx = binarySearch(
-        events,
-        selected,
-        (e1, e2) => {
-          return e1.datetime - e2.datetime
-        }
-      )
+      const idx = this.findEventIdx(selected)
       // check events before
       let ptr = idx - 1
 
@@ -115,50 +128,115 @@ class Dashboard extends React.Component {
   setNarrative (narrative) {
     // only handleSelect if narrative is not null
     if (narrative) {
-      this.props.actions.clearFilter('filters')
-      this.props.actions.clearFilter('categories')
       this.handleSelect([ narrative.steps[0] ])
     }
     this.props.actions.updateNarrative(narrative)
   }
 
+  setNarrativeFromFilters (withSteps) {
+    const { app, domain } = this.props
+    const activeFilters = app.filters.filters
+
+    if (activeFilters.length === 0) {
+      alert('No filters selected, cant narrativise')
+      return
+    }
+
+    const evs = domain.events.filter(ev => {
+      let hasOne = false
+      // add event if it has at least one matching filter
+      for (let i = 0; i < activeFilters.length; i++) {
+        if (ev.filters.includes(activeFilters[i])) {
+          hasOne = true
+          break
+        }
+      }
+      if (hasOne) return true
+      return false
+    })
+
+    const name = activeFilters.join('-')
+    this.setNarrative({
+      id: name,
+      label: name,
+      description: '',
+      withLines: withSteps,
+      steps: evs.map(insetSourceFrom(domain.sources))
+    })
+  }
+
   moveInNarrative (amt) {
     const { current } = this.props.app.narrativeState
     const { narrative } = this.props.app
+    if (narrative === null) return
 
-    if (amt === 1) {
+    if (amt === 1 && current < narrative.steps.length - 1) {
       this.handleSelect([ narrative.steps[current + 1] ])
       this.props.actions.incrementNarrativeCurrent()
     }
-    if (amt === -1) {
+    if (amt === -1 && current > 0) {
       this.handleSelect([ narrative.steps[current - 1] ])
       this.props.actions.decrementNarrativeCurrent()
     }
   }
 
+  onKeyDown (e) {
+    const { narrative, selected } = this.props.app
+    const { events } = this.props.domain
+    const prev = idx => {
+      if (narrative === null) {
+        this.handleSelect(events[idx - 1], 0)
+      } else {
+        this.moveInNarrative(-1)
+      }
+    }
+    const next = idx => {
+      if (narrative === null) {
+        this.handleSelect(events[idx + 1], 0)
+      } else {
+        this.moveInNarrative(1)
+      }
+    }
+    if (selected.length > 0) {
+      const ev = selected[selected.length - 1]
+      const idx = this.findEventIdx(ev)
+      switch (e.keyCode) {
+        case 37: // left arrow
+          if (idx <= 0) return
+          prev(idx)
+          break
+        case 39: // right arrow
+          if (idx < 0 || idx >= this.props.domain.length - 1) return
+          next(idx)
+          break
+        default:
+      }
+    }
+  }
   render () {
     const { actions, app, domain, ui, features } = this.props
 
-    if (isMobile || window.innerWidth < 1000) {
+    if (isMobile || window.innerWidth < 600) {
+      const msg = 'This platform is not suitable for mobile. Please re-visit the site on a device with a larger screen.'
       return (
         <div>
-          {features.USE_COVER && (
+          {features.USE_COVER ? (
             <StaticPage showing={app.flags.isCover}>
               {/* enable USE_COVER in config.js features, and customise your header */}
               {/* pass 'actions.toggleCover' as a prop to your custom header */}
               <TemplateCover showAppHandler={() => {
                 /* eslint-disable no-undef */
-                alert('This platform is not suitable for mobile. Please re-visit the site on a device with a larger screen.')
+                alert(msg)
                 /* eslint-enable no-undef */
               }} />
             </StaticPage>
-          )}
+          ) : <div className='fixedTooSmallMessage'>{msg}</div>}
         </div>
       )
     }
 
     return (
-      <div>
+      <div >
         <Toolbar
           isNarrative={!!app.narrative}
           methods={{
@@ -169,6 +247,7 @@ class Dashboard extends React.Component {
           }}
         />
         <Map
+          onKeyDown={this.onKeyDown}
           methods={{
             onSelect: ev => this.handleSelect(ev, 1),
             onSelectNarrative: this.setNarrative,
@@ -176,6 +255,7 @@ class Dashboard extends React.Component {
           }}
         />
         <Timeline
+          onKeyDown={this.onKeyDown}
           methods={{
             onSelect: ev => this.handleSelect(ev, 0),
             onUpdateTimerange: actions.updateTimeRange,
@@ -183,12 +263,18 @@ class Dashboard extends React.Component {
           }}
         />
         <CardStack
+          timelineDims={app.timeline.dimensions}
           onViewSource={this.handleViewSource}
           onSelect={this.handleSelect}
           onHighlight={this.handleHighlight}
           onToggleCardstack={() => actions.updateSelected([])}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={this.getCategoryColor}
+        />
+        <StateOptions
+          showing={features.FILTERS_AS_NARRATIVES && !app.narrative && app.filters.filters.length > 0}
+          timelineDims={app.timeline.dimensions}
+          onClickHandler={this.setNarrativeFromFilters}
         />
         <NarrativeControls
           narrative={app.narrative ? {

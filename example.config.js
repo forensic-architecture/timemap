@@ -26,7 +26,9 @@ module.exports = {
     features: {
       USE_CATEGORIES: false,
       CATEGORIES_AS_FILTERS: false,
-      USE_FILTERS: false,
+      USE_FILTERS: true,
+      FILTERS_AS_NARRATIVES: false,
+      USE_NARRATIVES: false,
       USE_SOURCES: true,
       USE_COVER: false,
       USE_SEARCH: false,

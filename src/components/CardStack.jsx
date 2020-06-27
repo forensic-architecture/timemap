@@ -136,8 +136,10 @@ class CardStack extends React.Component {
   }
 
   render () {
-    const { isCardstack, selected, narrative } = this.props
+    const { isCardstack, selected, narrative, timelineDims } = this.props
 
+    // TODO: make '237px', which is the narrative header, less hard-coded
+    const height = `calc(100% - 237px - ${timelineDims.height}px)`
     if (selected.length > 0) {
       if (!narrative) {
         return (
@@ -159,6 +161,7 @@ class CardStack extends React.Component {
             className={`card-stack narrative-mode
             ${isCardstack ? '' : ' folded'}`
             }
+            style={{ height }}
           >
             {this.renderNarrativeContent()}
           </div>

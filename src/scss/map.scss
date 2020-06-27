@@ -144,10 +144,15 @@
   pointer-events: auto;
 }
 
+
 .eventLocationMarker {
   fill: none;
   stroke: $yellow;
   stroke-width: 2;
+}
+
+.leaflet-tile {
+  filter: brightness(110%) invert(100%) grayscale(800%)
 }
 
 /*
