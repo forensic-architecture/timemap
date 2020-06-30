@@ -7,7 +7,7 @@ import narrativeSchema from './narrativeSchema'
 import sourceSchema from './sourceSchema'
 import shapeSchema from './shapeSchema'
 
-import { calcDatetime, capitalize } from '../../common/utilities'
+import { calcDatetime, capitalize, isFilterLeaf, isFilterDuplicate } from '../../common/utilities'
 
 /*
 * Create an error notification object
@@ -24,9 +24,6 @@ function makeError (type, id, message) {
 function isValidDate (d) {
   return d instanceof Date && !isNaN(d)
 }
-
-const isLeaf = node => (Object.keys(node.children).length === 0)
-const isDuplicate = (node, set) => { return (set.has(node.key)) }
 
 /*
 * Traverse a filter tree and check its duplicates. Also recompose as
@@ -47,7 +44,7 @@ function validateFilterTree (node, parent, set, duplicates, hasFilterDescription
       parent.children = node.children
       delete parent.isDescription
     }
-    if (isLeaf(node)) {
+    if (isFilterLeaf(node)) {
       delete parent.isDescription
     }
   }
@@ -56,8 +53,8 @@ function validateFilterTree (node, parent, set, duplicates, hasFilterDescription
     return
   }
   // If it's a leaf, check that it's not duplicate
-  if (isLeaf(node)) {
-    if (isDuplicate(node, set)) {
+  if (isFilterLeaf(node)) {
+    if (isFilterDuplicate(node, set)) {
       duplicates.push({
         id: node.key,
         error: makeError('Filters', node.key, 'filter was found more than once in hierarchy. Ignoring duplicate.')
