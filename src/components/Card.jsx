@@ -25,7 +25,18 @@ class Card extends React.Component {
 
   makeTimelabel (datetime) {
     if (datetime === null) return null
-    return datetime.toLocaleDateString()
+    // see https://stackoverflow.com/questions/3552461/how-to-format-a-javascript-date
+    const dateTimeFormat = new Intl.DateTimeFormat(
+      'en',
+      { year: 'numeric', month: 'long', day: '2-digit' }
+    )
+    const [
+      { value: month },,
+      { value: day },,
+      { value: year }
+    ] = dateTimeFormat.formatToParts(datetime)
+
+    return `${day} ${month}, ${year}`
   }
 
   renderSummary () {
@@ -84,25 +95,24 @@ class Card extends React.Component {
   renderTime () {
     let timelabel = this.makeTimelabel(this.props.event.datetime)
 
-    let precision = this.props.event.time_display
-    if (precision === '_date_only') {
-      precision = ''
-      timelabel = timelabel.substring(0, 11)
-    } else if (precision === '_approximate_date_only') {
-      precision = ' (Approximate date)'
-      timelabel = timelabel.substring(0, 11)
-    } else if (precision === '_approximate_datetime') {
-      precision = ' (Approximate datetime)'
-    } else {
-      timelabel = timelabel.substring(0, 11)
-    }
+    // let precision = this.props.event.time_display
+    // if (precision === '_date_only') {
+    //   precision = ''
+    //   timelabel = timelabel.substring(0, 11)
+    // } else if (precision === '_approximate_date_only') {
+    //   precision = ' (Approximate date)'
+    //   timelabel = timelabel.substring(0, 11)
+    // } else if (precision === '_approximate_datetime') {
+    //   precision = ' (Approximate datetime)'
+    // } else {
+    //   timelabel = timelabel.substring(0, 11)
+    // }
 
     return (
       <CardTime
         makeTimelabel={timelabel}
         language={this.props.language}
         timelabel={timelabel}
-        precision={precision}
       />
     )
   }
