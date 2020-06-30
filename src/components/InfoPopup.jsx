@@ -84,7 +84,7 @@ export default ({ ui, app, methods }) => {
         </div>
         <br />
         <div>
-          <p>In narrative mode, arrows indicate physical movement between two events.</p>
+          <p>{copy[app.language].legend.default.arrows}</p>
         </div>
 
         {
