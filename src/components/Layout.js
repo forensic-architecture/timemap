@@ -213,10 +213,12 @@ class Dashboard extends React.Component {
       const idx = this.findEventIdx(ev)
       switch (e.keyCode) {
         case 37: // left arrow
+        case 38: // up arrow
           if (idx <= 0) return
           prev(idx)
           break
         case 39: // right arrow
+        case 40: // down arrow
           if (idx < 0 || idx >= this.props.domain.length - 1) return
           next(idx)
           break
