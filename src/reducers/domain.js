@@ -6,7 +6,7 @@ import { validateDomain } from './validate/validators.js'
 function updateDomain (domainState, action) {
   return {
     ...domainState,
-    ...validateDomain(action.domain)
+    ...validateDomain(action.payload.domain, action.payload.features)
   }
 }
 
