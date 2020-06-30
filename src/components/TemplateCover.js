@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { Player } from 'video-react'
 import marked from 'marked'
 import MediaOverlay from './Overlay/Media'
-import logo from '../assets/fa-logo.png'
+import falogo from '../assets/fa-logo.png'
+import bcatlogo from '../assets/bellingcat-logo.png'
 const MEDIA_HIDDEN = -2
 
 /**
@@ -115,11 +116,15 @@ class TemplateCover extends React.Component {
     }
 
     const { videos } = this.props.cover
+    const { showing } = this.props
     return (
       <div className='default-cover-container'>
-        <div className='cover-header'>
+        <div className={showing ? 'cover-header' : 'cover-header minimized'}>
           <a className='cover-logo-container' href='https://forensic-architecture.org'>
-            <img className='cover-logo' src={logo} />
+            <img className='cover-logo' src={falogo} />
+          </a>
+          <a className='cover-logo-container' href='https://bellingcat.com'>
+            <img className='cover-logo' src={bcatlogo} />
           </a>
         </div>
         <div className='cover-content'>
@@ -138,7 +143,7 @@ class TemplateCover extends React.Component {
               </div>
             ) : null
           }
-          <h1>{this.props.cover.title}</h1>
+          <h1 dangerouslySetInnerHTML={{ __html: marked(this.props.cover.title) }} />
           {
             this.props.cover.subtitle ? (
               <h3>{this.props.cover.subtitle}</h3>
@@ -157,7 +162,7 @@ class TemplateCover extends React.Component {
             }
             <div className='row'>
               <div className='cell yellow' onClick={this.props.showAppHandler}>
-                EXPLORE
+                {this.props.cover.exploreButton}
               </div>
             </div>
           </div>
