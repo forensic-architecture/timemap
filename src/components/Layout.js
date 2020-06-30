@@ -308,6 +308,11 @@ class Dashboard extends React.Component {
             }
           />
         ) : null}
+        <LoadingOverlay
+          isLoading={app.loading || app.flags.isFetchingDomain}
+          ui={app.flags.isFetchingDomain}
+          language={app.language}
+        />
         {features.USE_COVER && (
           <StaticPage showing={app.flags.isCover}>
             {/* enable USE_COVER in config.js features, and customise your header */}
@@ -315,11 +320,6 @@ class Dashboard extends React.Component {
             <TemplateCover showing={app.flags.isCover} showAppHandler={actions.toggleCover} />
           </StaticPage>
         )}
-        <LoadingOverlay
-          isLoading={app.loading || app.flags.isFetchingDomain}
-          ui={app.flags.isFetchingDomain}
-          language={app.language}
-        />
       </div>
     )
   }
