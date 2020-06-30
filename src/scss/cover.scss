@@ -18,12 +18,14 @@
   }
 }
 
-.cover-logo-container {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
+.cover-header {
   display: flex;
-  justify-content: center;
+  width: 100vw;
+}
+
+.cover-logo-container {
+  padding: 20px 0 0 20px;
+  display: flex;
 }
 
 .cover-logo {
@@ -117,16 +119,11 @@
     min-width: 100%;
     max-width: 100%;
     min-height: 100px;
-    &.thin {
-      // min-width: 250px;
-      // width: 250px;
-      // max-width: 400px;
-    }
     margin: auto;
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
-    margin-top: 20px;
+    margin-top: 60px;
     .row {
       display: flex;
       flex: 1;

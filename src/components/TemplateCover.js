@@ -117,9 +117,11 @@ class TemplateCover extends React.Component {
     const { videos } = this.props.cover
     return (
       <div className='default-cover-container'>
-        <a className='cover-logo-container' href='https://forensic-architecture.org'>
-          <img className='cover-logo' src={logo} />
-        </a>
+        <div className='cover-header'>
+          <a className='cover-logo-container' href='https://forensic-architecture.org'>
+            <img className='cover-logo' src={logo} />
+          </a>
+        </div>
         <div className='cover-content'>
           {
             this.props.cover.bgVideo ? (
@@ -137,7 +139,11 @@ class TemplateCover extends React.Component {
             ) : null
           }
           <h1>{this.props.cover.title}</h1>
-          <h3>{this.props.cover.subtitle}</h3>
+          {
+            this.props.cover.subtitle ? (
+              <h3>{this.props.cover.subtitle}</h3>
+            ) : null
+          }
           {
             this.props.cover.subsubtitle ? (
               <h5>{this.props.cover.subsubtitle}</h5>
