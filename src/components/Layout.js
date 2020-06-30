@@ -40,12 +40,10 @@ class Dashboard extends React.Component {
   componentDidMount () {
     if (!this.props.app.isMobile) {
       this.props.actions.fetchDomain()
-        .then(domain => this.props.actions.updateDomain(domain))
-        .then(({ domain }) => {
-          if (domain.categories.length >= 4) {
-            this.props.actions.updateDimensions({ marginTop: 0 })
-          }
-        })
+        .then(domain => this.props.actions.updateDomain({
+          domain,
+          features: this.props.features
+        }))
     }
     // NOTE: hack to get the timeline to always show. Not entirely sure why
     // this is necessary.
