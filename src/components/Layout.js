@@ -19,7 +19,7 @@ import StaticPage from './StaticPage'
 import TemplateCover from './TemplateCover'
 
 import colors from '../common/global'
-import { binarySearch, insetSourceFrom } from '../common/utilities'
+import { binarySearch, insetSourceFrom, findDescriptionInFilterTree } from '../common/utilities'
 import { isMobile } from 'react-device-detect'
 
 class Dashboard extends React.Component {
@@ -133,18 +133,30 @@ class Dashboard extends React.Component {
 
   setNarrativeFromFilters (withSteps) {
     const { app, domain } = this.props
-    const activeFilters = app.filters.filters
+    let activeFilters = app.filters.filters
 
     if (activeFilters.length === 0) {
       alert('No filters selected, cant narrativise')
       return
     }
 
+    if (this.props.features.USE_FILTER_DESCRIPTIONS) {
+      activeFilters = activeFilters.reduce((acc, vl) => {
+        acc.push({
+          name: vl,
+          description: findDescriptionInFilterTree(vl, domain.filters)
+        })
+        return acc
+      }, [])
+    } else {
+      activeFilters = activeFilters.map(f => ({ name: f }))
+    }
+
     const evs = domain.events.filter(ev => {
       let hasOne = false
       // add event if it has at least one matching filter
       for (let i = 0; i < activeFilters.length; i++) {
-        if (ev.filters.includes(activeFilters[i])) {
+        if (ev.filters.includes(activeFilters[i].name)) {
           hasOne = true
           break
         }
@@ -153,11 +165,12 @@ class Dashboard extends React.Component {
       return false
     })
 
-    const name = activeFilters.join('-')
+    const name = activeFilters.map(f => f.name).join('-')
+    const desc = activeFilters.map(f => f.description).join('\n\n')
     this.setNarrative({
       id: name,
       label: name,
-      description: '',
+      description: desc,
       withLines: withSteps,
       steps: evs.map(insetSourceFrom(domain.sources))
     })

@@ -6,7 +6,6 @@ NARRATIVE INFO
   top: 30px;
   left: auto;
   right: $card-right; // looks a bit better due to the 1px border on other elements.
-  height: $narrative-info-height;
   width: $card-width;
   box-sizing: border-box;
   max-height: calc(100% - 250px);
@@ -35,13 +34,14 @@ NARRATIVE INFO
   }
 
   .narrative-info-desc {
-    height: $narrative-info-desc-height;
+    max-height: $narrative-info-desc-height;
     overflow-y: auto;
     white-space: pre-line;
+    padding-bottom: 5px;
   }
 
   p {
-    padding: 0 15px;
+    padding: 0 15px 15px 15px;
   }
 
   h3, h6 {
