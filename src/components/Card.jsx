@@ -9,6 +9,7 @@ import CardFilters from './presentational/Card/Filters'
 import CardSummary from './presentational/Card/Summary'
 import CardSource from './presentational/Card/Source'
 import CardNarrative from './presentational/Card/Narrative'
+import { makeNiceDate } from '../common/utilities'
 
 class Card extends React.Component {
   constructor (props) {
@@ -25,19 +26,7 @@ class Card extends React.Component {
   }
 
   makeTimelabel (datetime) {
-    if (datetime === null) return null
-    // see https://stackoverflow.com/questions/3552461/how-to-format-a-javascript-date
-    const dateTimeFormat = new Intl.DateTimeFormat(
-      'en',
-      { year: 'numeric', month: 'long', day: '2-digit' }
-    )
-    const [
-      { value: month },,
-      { value: day },,
-      { value: year }
-    ] = dateTimeFormat.formatToParts(datetime)
-
-    return `${day} ${month}, ${year}`
+    return makeNiceDate(datetime)
   }
 
   renderSummary () {
