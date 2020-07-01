@@ -45,6 +45,7 @@ class TemplateCover extends React.Component {
     const { featureVideo } = this.props.cover
     const { featureLang } = this.state
     const { translations } = featureVideo
+    console.log(featureVideo)
     const source = featureLang === 0
       ? featureVideo
       : {
@@ -143,10 +144,10 @@ class TemplateCover extends React.Component {
               </div>
             ) : null
           }
-          <h1 dangerouslySetInnerHTML={{ __html: marked(this.props.cover.title) }} />
+          <h2 style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: marked(this.props.cover.title) }} />
           {
             this.props.cover.subtitle ? (
-              <h3>{this.props.cover.subtitle}</h3>
+              <h3 style={{ marginTop: 0 }}>{this.props.cover.subtitle}</h3>
             ) : null
           }
           {
