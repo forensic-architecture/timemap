@@ -1,6 +1,7 @@
 import copy from '../common/data/copy.json'
 import React from 'react'
 
+import CardCustomField from './presentational/Card/CustomField'
 import CardTime from './presentational/Card/Time'
 import CardLocation from './presentational/Card/Location'
 import CardCaret from './presentational/Card/Caret'
@@ -132,6 +133,16 @@ class Card extends React.Component {
     }
   }
 
+  renderCustomFields () {
+    return this.props.features.CUSTOM_EVENT_FIELDS
+      .map(field => {
+        const value = this.props.event[field.key]
+        return value ? (
+          <CardCustomField field={field} value={this.props.event[field.key]} />
+        ) : null
+      })
+  }
+
   renderMain () {
     return (
       <div className='card-container'>
@@ -140,6 +151,7 @@ class Card extends React.Component {
           {this.renderLocation()}
         </div>
         {this.renderSummary()}
+        {this.renderCustomFields()}
       </div>
     )
   }
