@@ -45,7 +45,6 @@ class TemplateCover extends React.Component {
     const { featureVideo } = this.props.cover
     const { featureLang } = this.state
     const { translations } = featureVideo
-    console.log(featureVideo)
     const source = featureLang === 0
       ? featureVideo
       : {
@@ -89,6 +88,16 @@ class TemplateCover extends React.Component {
     )
   }
 
+  renderButton (button, yellow) {
+    return (
+      <div className='row'>
+        <a className={`cell ${yellow ? 'yellow' : 'plain'}`} href={button.href}>
+          {button.title}
+        </a>
+      </div>
+    )
+  }
+
   renderMediaOverlay () {
     const video = this.getVideo(this.state.video, this.props.cover.headerVideos ? this.props.cover.headerVideos.length : 0)
     return (
@@ -116,7 +125,7 @@ class TemplateCover extends React.Component {
       )
     }
 
-    const { videos } = this.props.cover
+    const { videos, footerButton } = this.props.cover
     const { showing } = this.props
     return (
       <div className='default-cover-container'>
@@ -158,9 +167,8 @@ class TemplateCover extends React.Component {
 
           {this.props.cover.featureVideo ? this.renderFeature() : null}
           <div className='hero thin'>
-            {
-              this.props.cover.headerVideos ? this.renderHeaderVideos() : null
-            }
+            {this.props.cover.headerVideos ? this.renderHeaderVideos() : null}
+            {this.props.cover.headerButton ? this.renderButton(this.props.cover.headerButton) : null}
             <div className='row'>
               <div className='cell yellow' onClick={this.props.showAppHandler}>
                 {this.props.cover.exploreButton}
@@ -186,6 +194,13 @@ class TemplateCover extends React.Component {
                     {media.buttonTitle}<br />{media.buttonSubtitle}
                   </div>
                 )) }
+              </div>
+            </div>
+          ) : null}
+          {footerButton ? (
+            <div className='hero'>
+              <div className='row'>
+                {this.renderButton(footerButton)}
               </div>
             </div>
           ) : null}
