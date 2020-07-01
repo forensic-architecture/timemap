@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-import eventSchema from './eventSchema'
+import createEventSchema from './eventSchema'
 import categorySchema from './categorySchema'
 import siteSchema from './siteSchema'
 import narrativeSchema from './narrativeSchema'
@@ -141,6 +141,11 @@ export function validateDomain (domain, features) {
     })
   }
 
+  if (!Array.isArray(features.CUSTOM_EVENT_FIELDS)) {
+    features.CUSTOM_EVENT_FIELDS = []
+  }
+
+  const eventSchema = createEventSchema(features.CUSTOM_EVENT_FIELDS)
   validateArray(domain.events, 'events', eventSchema)
   validateArray(domain.categories, 'categories', categorySchema)
   validateArray(domain.sites, 'sites', siteSchema)
