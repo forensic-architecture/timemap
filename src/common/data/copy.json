@@ -94,6 +94,7 @@
       "default": {
         "header": "Navigating the Platform",
         "intro": [
+          "Open source research by [Bellingcat](https://bellingcat.com).<br/>Software and spatialisation by [Forensic Architecture](https://forensic-architecture.org).",
           "Each event represents an occurence that is distinct in time or space, or both. An event is represented by a coloured circle on both the map and the timeline.",
           "Select an event to reveal its content and sources. You can filter events by category or other specified filters in the top left toolbar."
         ],
