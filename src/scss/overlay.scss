@@ -316,7 +316,7 @@ $overlay-bg: rgba(239,239,239,0.9);
   padding: 20px;
   min-width: calc(100% - 40px);
   z-index: $final-level;
-  max-height: calc(100% - 200px);
+  max-height: 60vh;
 }
 
 .media-player {
