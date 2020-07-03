@@ -146,12 +146,15 @@
   .hero {
     min-width: 100%;
     max-width: 100%;
-    min-height: 250px;
+    min-height: 150px;
     margin: auto;
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
     margin-top: 60px;
+    @media only screen and (max-width: 1200px) {
+      min-height: 250px;
+    }
     .row {
       display: flex;
       flex: 1;
