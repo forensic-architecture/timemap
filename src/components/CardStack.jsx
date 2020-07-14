@@ -10,7 +10,7 @@ import copy from '../common/data/copy.json'
 class CardStack extends React.Component {
   constructor () {
     super()
-    this.onCardClick = this.onCardClick.bind(this)	  
+    this.onCardClick = this.onCardClick.bind(this)
     this.refs = {}
     this.refCardStack = React.createRef()
     this.refCardStackContent = React.createRef()
@@ -64,7 +64,7 @@ class CardStack extends React.Component {
       this.refs[idx] = thisRef
       return (<Card
         event={event}
-	idx={idx} 
+	      idx={idx}
         ref={thisRef}
         sourceError={this.props.sourceError}
         language={this.props.language}
@@ -78,13 +78,13 @@ class CardStack extends React.Component {
         onHighlight={this.props.onHighlight}
         onSelect={this.props.onSelect}
         features={this.props.features}
-        onClick={this.onCardClick} 
+        onClick={this.onCardClick}
       />)
     })
   }
 
   onCardClick (idx) {
-    this.props.actions.selectNarrativeEvent(idx) 
+    this.props.actions.selectNarrativeEvent(idx)
   }
 
   renderSelectedCards () {
@@ -135,7 +135,7 @@ class CardStack extends React.Component {
   renderNarrativeContent () {
     return (
       <div id='card-stack-content' className='card-stack-content'
-	      ref={this.refCardStackContent}
+        ref={this.refCardStackContent}
       >
         <ul>
           {this.renderNarrativeCards()}

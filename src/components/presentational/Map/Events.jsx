@@ -14,7 +14,7 @@ function MapEvents ({
   svg,
   locations,
   eventRadius,
-  onSelectNarrative 
+  onSelectNarrative
 }) {
   function getCoordinatesForPercent (radius, percent) {
     const x = radius * Math.cos(2 * Math.PI * percent)
@@ -112,7 +112,7 @@ function MapEvents ({
     // in narrative mode, only render events in narrative
     // TODO: move this to a selector
     // Gets around if block scope
-    var narrativeIdx = false;
+    var narrativeIdx = false
 
     if (narrative) {
       const { steps } = narrative
@@ -123,8 +123,8 @@ function MapEvents ({
         return null
       } else {
         // choose the first event at a given location
-        const locationEventId = eventsInNarrative[0].id;
-        const narrativeIdxObj = steps.find(s => s.id == locationEventId)
+        const locationEventId = eventsInNarrative[0].id
+        const narrativeIdxObj = steps.find(s => s.id === locationEventId)
         narrativeIdx = steps.indexOf(narrativeIdxObj)
       }
     }
@@ -136,7 +136,7 @@ function MapEvents ({
       </React.Fragment>
     )
 
-	  const isSelected = selected.reduce((acc, event) => {
+    const isSelected = selected.reduce((acc, event) => {
       return acc || (event.latitude === location.latitude && event.longitude === location.longitude)
     }, false)
 
@@ -144,7 +144,7 @@ function MapEvents ({
       <g
         className={`location-event ${narrative ? 'no-hover' : ''}`}
         transform={`translate(${x}, ${y})`}
-	      onClick={(!narrative) ? () => onSelect(location.events) : () => {onSelectNarrative(narrativeIdx); onSelect(location.events)}}
+        onClick={(!narrative) ? () => onSelect(location.events) : () => { onSelectNarrative(narrativeIdx); onSelect(location.events) }}
       >
         {renderLocationSlicesByCategory(location)}
         {extraRender ? extraRender() : null}

@@ -152,8 +152,8 @@ class Card extends React.Component {
       />
     ) : null
   }
-	
- render () {
+
+  render () {
     const { isSelected, idx } = this.props
 
     return (
@@ -161,7 +161,7 @@ class Card extends React.Component {
         className={`event-card ${isSelected ? 'selected' : ''}`}
         id={`event-card-${idx}`}
         ref={this.props.innerRef}
-	onClick={(e) => {this.props.onClick(idx);} } 
+	      onClick={(e) => { this.props.onClick(idx) }} 
       >
         {this.renderMain()}
         {this.state.isOpen ? this.renderExtra() : null}
