@@ -264,7 +264,7 @@ export const SELECT_NARRATIVE_EVENT = 'SELECT_NARRATIVE_EVENT'
 export function selectNarrativeEvent (idx) {
   return {
     type: SELECT_NARRATIVE_EVENT,
-    idx	  
+    idx
   }
 }
 

@@ -122,13 +122,13 @@ function decrementNarrativeCurrent (appState, action) {
 }
 
 function selectNarrativeEvent (appState, action) {
-  appState.narrativeState.current = action.idx 
+  appState.narrativeState.current = action.idx
 
   return {
     ...appState,
     narrativeState: {
-      current: appState.narrativeState.current	
-    }    
+      current: appState.narrativeState.current
+    }
   }
 }
 

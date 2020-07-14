@@ -207,7 +207,7 @@ class Map extends React.Component {
 
   onSelectNarrativeEvent (idx) {
     console.log(idx)
-    this.props.actions.selectNarrativeEvent(idx)	  
+    this.props.actions.selectNarrativeEvent(idx)
   }
 
   renderEvents () {
