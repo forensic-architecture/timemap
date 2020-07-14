@@ -130,6 +130,7 @@ function MapEvents ({
     const isSelected = selected.reduce((acc, event) => {
       return acc || (event.latitude === location.latitude && event.longitude === location.longitude)
     }, false)
+    
 
     return (
       <g
