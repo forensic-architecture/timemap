@@ -260,6 +260,14 @@ export function decrementNarrativeCurrent () {
   }
 }
 
+export const SELECT_NARRATIVE_EVENT = 'SELECT_NARRATIVE_EVENT'
+export function selectNarrativeEvent (idx) {
+  return {
+    type: SELECT_NARRATIVE_EVENT,
+    idx	  
+  }
+}
+
 export const UPDATE_SOURCE = 'UPDATE_SOURCE'
 export function updateSource (source) {
   return {

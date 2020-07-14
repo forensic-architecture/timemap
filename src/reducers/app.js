@@ -11,6 +11,7 @@ import {
   UPDATE_NARRATIVE,
   INCREMENT_NARRATIVE_CURRENT,
   DECREMENT_NARRATIVE_CURRENT,
+  SELECT_NARRATIVE_EVENT,
   UPDATE_SOURCE,
   TOGGLE_LANGUAGE,
   TOGGLE_SITES,
@@ -116,6 +117,17 @@ function decrementNarrativeCurrent (appState, action) {
     narrativeState: {
       current: appState.narrativeState.current
     }
+  }
+}
+
+function selectNarrativeEvent (appState, action) {
+  appState.narrativeState.current = action.idx 
+
+  return {
+    ...appState,
+    narrativeState: {
+      current: appState.narrativeState.current	
+    }    
   }
 }
 
@@ -248,6 +260,8 @@ function app (appState = initial.app, action) {
       return incrementNarrativeCurrent(appState, action)
     case DECREMENT_NARRATIVE_CURRENT:
       return decrementNarrativeCurrent(appState, action)
+    case SELECT_NARRATIVE_EVENT:
+      return selectNarrativeEvent(appState, action)
     case UPDATE_SOURCE:
       return updateSource(appState, action)
     /* toggles */
