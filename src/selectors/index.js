@@ -84,7 +84,6 @@ export const selectNarratives = createSelector(
 
     /* populate narratives dict with events */
     events.forEach(evt => {
-
       evt.narratives.forEach(narrative => {
         // initialise
         if (!narratives[narrative]) { narratives[narrative] = narrativeSkeleton(narrative) }
