@@ -64,7 +64,7 @@ class CardStack extends React.Component {
       this.refs[idx] = thisRef
       return (<Card
         event={event}
-	      idx={idx}
+        idx={idx}
         ref={thisRef}
         sourceError={this.props.sourceError}
         language={this.props.language}
