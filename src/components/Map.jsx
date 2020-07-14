@@ -2,8 +2,10 @@
 import React from 'react'
 import { Portal } from 'react-portal'
 
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
+import * as actions from '../actions'
 
 import hash from 'object-hash'
 import 'leaflet'
@@ -30,6 +32,7 @@ class Map extends React.Component {
       mapTransformY: 0
     }
     this.styleLocation = this.styleLocation.bind(this)
+    this.onSelectNarrativeEvent = this.onSelectNarrativeEvent.bind(this)
   }
 
   componentDidMount () {
@@ -202,6 +205,11 @@ class Map extends React.Component {
     return [null, null]
   }
 
+  onSelectNarrativeEvent (idx) {
+    console.log(idx)
+    this.props.actions.selectNarrativeEvent(idx)	  
+  }
+
   renderEvents () {
     return (
       <Events
@@ -214,7 +222,7 @@ class Map extends React.Component {
         selected={this.props.app.selected}
         narrative={this.props.app.narrative}
         onSelect={this.props.methods.onSelect}
-        onSelectNarrative={this.props.methods.onSelectNarrative}
+        onSelectNarrative={this.onSelectNarrativeEvent}
         getCategoryColor={this.props.methods.getCategoryColor}
         eventRadius={this.props.ui.eventRadius}
       />
@@ -298,4 +306,10 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps)(Map)
+function mapDispatchToProps (dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map)
