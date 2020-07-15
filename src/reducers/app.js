@@ -47,8 +47,8 @@ function updateNarrative (appState, action) {
   // Compute narrative time range and map bounds
   if (action.narrative) {
     // Forced to comment out min and max time changes, not sure why?
-    // minTime = appState.timeline.rangeLimits[0]
-    // maxTime = appState.timeline.rangeLimits[1]
+    minTime = appState.timeline.rangeLimits[0]
+    maxTime = appState.timeline.rangeLimits[1]
 
     // Find max and mins coordinates of narrative events
     action.narrative.steps.forEach(step => {
