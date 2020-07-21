@@ -72,6 +72,10 @@ const initial = {
         new Date(2001, 2, 23, 12),
         new Date(2021, 2, 23, 12)
       ],
+      rangeLimits: [
+        new Date(1, 1, 1, 1),
+        new Date()
+      ],
       zoomLevels: [
         { label: '20 years', duration: 10512000 },
         { label: '2 years', duration: 1051200 },
