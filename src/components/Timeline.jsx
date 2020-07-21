@@ -282,6 +282,8 @@ class Timeline extends React.Component {
     if (GRAPH_NONLOCATED && GRAPH_NONLOCATED.categories.includes(category)) {
       return this.state.dims.marginTop + domain.projects[project].offset + this.props.ui.eventRadius
     }
+    if (!this.state.scaleY) return 0
+
     return this.state.scaleY(category)
   }
 
