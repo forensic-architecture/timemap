@@ -246,24 +246,10 @@ export function updateNarrative (narrative) {
   }
 }
 
-export const INCREMENT_NARRATIVE_CURRENT = 'INCREMENT_NARRATIVE_CURRENT'
-export function incrementNarrativeCurrent () {
+export const SELECT_NARRATIVE_IDX = 'SELECT_NARRATIVE_IDX'
+export function selectNarrativeIdx (idx) {
   return {
-    type: INCREMENT_NARRATIVE_CURRENT
-  }
-}
-
-export const DECREMENT_NARRATIVE_CURRENT = 'DECREMENT_NARRATIVE_CURRENT'
-export function decrementNarrativeCurrent () {
-  return {
-    type: DECREMENT_NARRATIVE_CURRENT
-  }
-}
-
-export const SELECT_NARRATIVE_EVENT = 'SELECT_NARRATIVE_EVENT'
-export function selectNarrativeEvent (idx) {
-  return {
-    type: SELECT_NARRATIVE_EVENT,
+    type: SELECT_NARRATIVE_IDX,
     idx
   }
 }
