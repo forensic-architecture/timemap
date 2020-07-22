@@ -1,8 +1,6 @@
 import React from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
-import * as actions from '../actions'
 
 import Card from './Card.jsx'
 import copy from '../common/data/copy.json'
@@ -10,7 +8,6 @@ import copy from '../common/data/copy.json'
 class CardStack extends React.Component {
   constructor () {
     super()
-    this.onCardClick = this.onCardClick.bind(this)
     this.refs = {}
     this.refCardStack = React.createRef()
     this.refCardStackContent = React.createRef()
@@ -78,13 +75,9 @@ class CardStack extends React.Component {
         onHighlight={this.props.onHighlight}
         onSelect={this.props.onSelect}
         features={this.props.features}
-        onClick={this.onCardClick}
+        onClick={this.props.onSelectNarrativeEvent}
       />)
     })
-  }
-
-  onCardClick (idx) {
-    this.props.actions.selectNarrativeEvent(idx)
   }
 
   renderSelectedCards () {
@@ -194,10 +187,4 @@ function mapStateToProps (state) {
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    actions: bindActionCreators(actions, dispatch)
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CardStack)
+export default connect(mapStateToProps)(CardStack)

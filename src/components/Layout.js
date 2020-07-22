@@ -35,6 +35,7 @@ class Dashboard extends React.Component {
     this.getCategoryColor = this.getCategoryColor.bind(this)
     this.findEventIdx = this.findEventIdx.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
+    this.selectNarrativeEvent = this.selectNarrativeEvent.bind(this)
   }
 
   componentDidMount () {
@@ -178,16 +179,26 @@ class Dashboard extends React.Component {
 
   moveInNarrative (amt) {
     const { current } = this.props.app.narrativeState
+
+    if (amt === 1) {
+      const idx = current + 1
+      this.selectNarrativeEvent(idx)
+    }
+    if (amt === -1) {
+      const idx = current - 1
+      this.selectNarrativeEvent(idx)
+    }
+  }
+
+  selectNarrativeEvent (idx) {
     const { narrative } = this.props.app
     if (narrative === null) return
 
-    if (amt === 1 && current < narrative.steps.length - 1) {
-      this.handleSelect([ narrative.steps[current + 1] ])
-      this.props.actions.incrementNarrativeCurrent()
-    }
-    if (amt === -1 && current > 0) {
-      this.handleSelect([ narrative.steps[current - 1] ])
-      this.props.actions.decrementNarrativeCurrent()
+    if (idx < narrative.steps.length && idx >= 0) {
+      const step = narrative.steps[idx]
+
+      this.handleSelect([step])
+      this.props.actions.selectNarrativeIdx(idx)
     }
   }
 
@@ -264,7 +275,8 @@ class Dashboard extends React.Component {
           methods={{
             onSelect: ev => this.handleSelect(ev, 1),
             onSelectNarrative: this.setNarrative,
-            getCategoryColor: this.getCategoryColor
+            getCategoryColor: this.getCategoryColor,
+            onSelectNarrativeEvent: this.selectNarrativeEvent
           }}
         />
         <Timeline
@@ -283,6 +295,7 @@ class Dashboard extends React.Component {
           onToggleCardstack={() => actions.updateSelected([])}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={this.getCategoryColor}
+          onSelectNarrativeEvent={this.selectNarrativeEvent}
         />
         <StateOptions
           showing={features.FILTERS_AS_NARRATIVES && !app.narrative && app.filters.filters.length > 0}
