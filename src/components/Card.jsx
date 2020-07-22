@@ -1,6 +1,7 @@
 import copy from '../common/data/copy.json'
 import React from 'react'
 
+import CardCustomField from './presentational/Card/CustomField'
 import CardTime from './presentational/Card/Time'
 import CardLocation from './presentational/Card/Location'
 import CardCaret from './presentational/Card/Caret'
@@ -8,6 +9,7 @@ import CardFilters from './presentational/Card/Filters'
 import CardSummary from './presentational/Card/Summary'
 import CardSource from './presentational/Card/Source'
 import CardNarrative from './presentational/Card/Narrative'
+import { makeNiceDate } from '../common/utilities'
 
 class Card extends React.Component {
   constructor (props) {
@@ -24,8 +26,7 @@ class Card extends React.Component {
   }
 
   makeTimelabel (datetime) {
-    if (datetime === null) return null
-    return datetime.toLocaleDateString()
+    return makeNiceDate(datetime)
   }
 
   renderSummary () {
@@ -84,25 +85,24 @@ class Card extends React.Component {
   renderTime () {
     let timelabel = this.makeTimelabel(this.props.event.datetime)
 
-    let precision = this.props.event.time_display
-    if (precision === '_date_only') {
-      precision = ''
-      timelabel = timelabel.substring(0, 11)
-    } else if (precision === '_approximate_date_only') {
-      precision = ' (Approximate date)'
-      timelabel = timelabel.substring(0, 11)
-    } else if (precision === '_approximate_datetime') {
-      precision = ' (Approximate datetime)'
-    } else {
-      timelabel = timelabel.substring(0, 11)
-    }
+    // let precision = this.props.event.time_display
+    // if (precision === '_date_only') {
+    //   precision = ''
+    //   timelabel = timelabel.substring(0, 11)
+    // } else if (precision === '_approximate_date_only') {
+    //   precision = ' (Approximate date)'
+    //   timelabel = timelabel.substring(0, 11)
+    // } else if (precision === '_approximate_datetime') {
+    //   precision = ' (Approximate datetime)'
+    // } else {
+    //   timelabel = timelabel.substring(0, 11)
+    // }
 
     return (
       <CardTime
         makeTimelabel={timelabel}
         language={this.props.language}
         timelabel={timelabel}
-        precision={precision}
       />
     )
   }
@@ -122,6 +122,16 @@ class Card extends React.Component {
     }
   }
 
+  renderCustomFields () {
+    return this.props.features.CUSTOM_EVENT_FIELDS
+      .map(field => {
+        const value = this.props.event[field.key]
+        return value ? (
+          <CardCustomField field={field} value={this.props.event[field.key]} />
+        ) : null
+      })
+  }
+
   renderMain () {
     return (
       <div className='card-container'>
@@ -130,6 +140,7 @@ class Card extends React.Component {
           {this.renderLocation()}
         </div>
         {this.renderSummary()}
+        {this.renderCustomFields()}
       </div>
     )
   }

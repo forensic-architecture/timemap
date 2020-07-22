@@ -316,6 +316,7 @@ $overlay-bg: rgba(239,239,239,0.9);
   padding: 20px;
   min-width: calc(100% - 40px);
   z-index: $final-level;
+  max-height: 60vh;
 }
 
 .media-player {
@@ -332,15 +333,19 @@ $overlay-bg: rgba(239,239,239,0.9);
 }
 
 .source-image, .source-video {
-  padding: 0px;
+  padding: 1px;
   font-family: 'Lato', Helvetica, sans-serif;
   // max-width: calc(#{$panel-width} - 100px);
-  max-height: $panel-height;
+  max-height: 100%;
   margin: auto;
   width: auto;
   height: auto;
   max-width: 100%;
   object-fit: contain;
+  &:hover {
+    cursor: pointer;
+    background-color: $yellow;
+  }
 }
 
 .source-image-loader {

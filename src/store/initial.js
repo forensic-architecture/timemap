@@ -72,6 +72,10 @@ const initial = {
         new Date(2001, 2, 23, 12),
         new Date(2021, 2, 23, 12)
       ],
+      rangeLimits: [
+        new Date(1, 1, 1, 1),
+        new Date()
+      ],
       zoomLevels: [
         { label: '20 years', duration: 10512000 },
         { label: '2 years', duration: 1051200 },
@@ -91,8 +95,8 @@ const initial = {
     },
     cover: {
       title: 'project title',
-      subtitle: 'project subtitle',
-      description: 'A description of the project goes here.\n\nThis description may contain markdown.\n\n# This is a large title, for example.\n\n## Whereas this is a slightly smaller title.\n\nCheck out docs/custom-covers.md in the [Timemap GitHub repo](https://github.com/forensic-architecture/timemap) for more information around how to specify custom covers.'
+      description: 'A description of the project goes here.\n\nThis description may contain markdown.\n\n# This is a large title, for example.\n\n## Whereas this is a slightly smaller title.\n\nCheck out docs/custom-covers.md in the [Timemap GitHub repo](https://github.com/forensic-architecture/timemap) for more information around how to specify custom covers.',
+      exploreButton: 'EXPLORE'
     },
     loading: false
   },

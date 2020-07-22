@@ -1,13 +1,13 @@
 import Joi from 'joi'
 
-import eventSchema from './eventSchema'
+import createEventSchema from './eventSchema'
 import categorySchema from './categorySchema'
 import siteSchema from './siteSchema'
 import narrativeSchema from './narrativeSchema'
 import sourceSchema from './sourceSchema'
 import shapeSchema from './shapeSchema'
 
-import { calcDatetime, capitalize } from '../../common/utilities'
+import { calcDatetime, capitalize, isFilterLeaf, isFilterDuplicate } from '../../common/utilities'
 
 /*
 * Create an error notification object
@@ -25,19 +25,36 @@ function isValidDate (d) {
   return d instanceof Date && !isNaN(d)
 }
 
-const isLeaf = node => (Object.keys(node.children).length === 0)
-const isDuplicate = (node, set) => { return (set.has(node.key)) }
-
 /*
-* Traverse a filter tree and check its duplicates
+* Traverse a filter tree and check its duplicates. Also recompose as
+* description if `features.USE_FILTER_DESCRIPTIONS` is true.
 */
-function validateTree (node, parent, set, duplicates) {
-  if (!Array.isArray(node) || !node.length) {
+function validateFilterTree (node, parent, set, duplicates, hasFilterDescriptions) {
+  if (hasFilterDescriptions) {
+    if (node.key === '_root') {
+      node.isDescription = true // setting first set of nodes to values
+    } else if (!parent.isDescription) {
+      node.isDescription = true
+    } else {
+      node.isDescription = false
+    }
+
+    if (node.isDescription && node.key !== 'root') {
+      parent.description = node.key
+      parent.children = node.children
+      delete parent.isDescription
+    }
+    if (isFilterLeaf(node)) {
+      delete parent.isDescription
+    }
+  }
+
+  if (typeof (node) !== 'object' || typeof (node.children) !== 'object') {
     return
   }
   // If it's a leaf, check that it's not duplicate
-  if (isLeaf(node)) {
-    if (isDuplicate(node, set)) {
+  if (isFilterLeaf(node)) {
+    if (isFilterDuplicate(node, set)) {
       duplicates.push({
         id: node.key,
         error: makeError('Filters', node.key, 'filter was found more than once in hierarchy. Ignoring duplicate.')
@@ -49,7 +66,7 @@ function validateTree (node, parent, set, duplicates) {
   } else {
     // If it's not a leaf, simply keep going
     Object.values(node.children).forEach((childNode) => {
-      validateTree(childNode, node, set, duplicates)
+      validateFilterTree(childNode, node, set, duplicates, hasFilterDescriptions)
     })
   }
 }
@@ -57,7 +74,7 @@ function validateTree (node, parent, set, duplicates) {
 /*
 * Validate domain schema
 */
-export function validateDomain (domain) {
+export function validateDomain (domain, features) {
   const sanitizedDomain = {
     events: [],
     categories: [],
@@ -124,6 +141,11 @@ export function validateDomain (domain) {
     })
   }
 
+  if (!Array.isArray(features.CUSTOM_EVENT_FIELDS)) {
+    features.CUSTOM_EVENT_FIELDS = []
+  }
+
+  const eventSchema = createEventSchema(features.CUSTOM_EVENT_FIELDS)
   validateArray(domain.events, 'events', eventSchema)
   validateArray(domain.categories, 'categories', categorySchema)
   validateArray(domain.sites, 'sites', siteSchema)
@@ -143,7 +165,7 @@ export function validateDomain (domain) {
   // Validate uniqueness of filters
   const filterSet = new Set([])
   const duplicateFilters = []
-  validateTree(domain.filters, {}, filterSet, duplicateFilters)
+  validateFilterTree(domain.filters, {}, filterSet, duplicateFilters, features.USE_FILTER_DESCRIPTIONS)
 
   // Duplicated filters
   if (duplicateFilters.length > 0) {

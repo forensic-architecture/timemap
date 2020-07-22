@@ -4,7 +4,7 @@ $offwhite: #efefef;
 $lightwhite: #dfdfdf;
 $midwhite: #a0a0a0;
 $darkwhite: darken($midwhite, 15%);
-$yellow: #ffd800;
+$yellow: #eb443e; // #ffd800;
 $red: rgb(233, 0, 19);
 $green: rgb(61, 241, 79);
 $midgrey: rgb(44, 44, 44);
@@ -34,7 +34,7 @@ $xxxlarge: 32px;
 
 // z-index levels
 $final-level: 10000;
-$loading-overlay: 1000;
+$loading-overlay: 500;
 $overheader: 100;
 $header: 10;
 $map-overlay: 2;

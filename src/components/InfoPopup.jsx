@@ -1,11 +1,12 @@
 import React from 'react'
+import marked from 'marked'
 import copy from '../common/data/copy.json'
 
 export default ({ ui, app, methods }) => {
   function renderIntro () {
     var introCopy = copy[app.language].legend.default.intro
     if (process.env.store.text && process.env.store.text.introCopy) introCopy = process.env.store.text.introCopy
-    return introCopy.map(txt => <p>{txt}</p>)
+    return introCopy.map(txt => <p dangerouslySetInnerHTML={{ __html: marked(txt) }} />)
   }
 
   function renderHalfWithDot () {
@@ -84,7 +85,7 @@ export default ({ ui, app, methods }) => {
         </div>
         <br />
         <div>
-          <p>In narrative mode, arrows indicate physical movement between two events.</p>
+          <p>{copy[app.language].legend.default.arrows}</p>
         </div>
 
         {

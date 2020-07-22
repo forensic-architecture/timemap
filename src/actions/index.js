@@ -137,10 +137,10 @@ export function fetchError (message) {
 }
 
 export const UPDATE_DOMAIN = 'UPDATE_DOMAIN'
-export function updateDomain (domain) {
+export function updateDomain (payload) {
   return {
     type: UPDATE_DOMAIN,
-    domain
+    payload
   }
 }
 

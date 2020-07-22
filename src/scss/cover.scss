@@ -7,7 +7,7 @@
   width: 100%;
   opacity: 1;
   transition: top 0.4s ease;
-  z-index: $overheader + 1;
+  z-index: $loading-overlay + 1;
   overflow-y: auto;
   overflow-x: hidden;
   color: $offwhite;
@@ -18,18 +18,48 @@
   }
 }
 
-.cover-logo-container {
-  position: absolute;
+.cover-header {
+  position: fixed;
   bottom: 20px;
-  left: 20px;
+  left: 0;
   display: flex;
-  justify-content: center;
+  width: 100vw;
+
+  @media only screen and (max-width: 1200px) {
+    position: inherit;
+  }
+
+  .cover-logo-container {
+    padding: 20px 0 0 20px;
+    display: flex;
+    &.minimized {
+
+    }
+    .cover-logo {
+      transition: all 1s;
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  &.minimized {
+    top: 0;
+    max-width: $toolbar-width;
+    max-height: 30px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    .cover-logo-container {
+      padding: 5px;
+    }
+    .cover-logo {
+      width: 15px;
+      height: 15px;
+    }
+  }
 }
 
-.cover-logo {
-  width: 60px;
-  height: 60px;
-}
+
 
 
 .fullscreen-bg {
@@ -116,17 +146,15 @@
   .hero {
     min-width: 100%;
     max-width: 100%;
-    min-height: 100px;
-    &.thin {
-      // min-width: 250px;
-      // width: 250px;
-      // max-width: 400px;
-    }
+    min-height: 150px;
     margin: auto;
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
-    margin-top: 20px;
+    margin-top: 60px;
+    @media only screen and (max-width: 1200px) {
+      min-height: 250px;
+    }
     .row {
       display: flex;
       flex: 1;
@@ -158,9 +186,12 @@
           min-height: 10px;
           background-color: black;
           letter-spacing: 1px;
+          @media only screen and (max-width: 1200px) {
+            min-height: 100px;
+          }
         }
         &.yellow {
-          color: black;
+          color: black !important;
           background-color: $yellow;
         }
         &:hover {
@@ -168,26 +199,30 @@
           background-color: $darkwhite;
           color: white;
         }
+        @media only screen and (max-width: 1200px) {
+          min-height: 100px;
+        }
       }
     }
   }
-
   .cover-content {
     display: flex;
     flex-direction: column;
     max-width: 600px;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-bottom: 10em;
     h1, h2, h3, h4, h5 { text-align: center; }
     h1 { margin-bottom: -15px; margin-top: 30px; }
     h5 { margin-top: -15px; }
 
+
     // mobile styles, remove overlay buttons
-    @media only screen and (max-width: 992px) {
+    @media only screen and (max-width: 1200px) {
       font-size: 22pt !important;
-      .cell.plain, .cell.small { display: none; }
       max-width: 100vw;
-      padding: 0 40px;
+      padding: 0 40px 80px 40px;
+      margin-bottom: 0;
     }
 
     .verify-tabs {
@@ -216,9 +251,12 @@
         }
       }
     }
-
-
   }
+
+ _::-webkit-full-page-media, _:future, :root .cover-content {
+    max-width: auto;
+  }
+
 }
 
 .cover-footer {

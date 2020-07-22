@@ -94,12 +94,12 @@
       "default": {
         "header": "Navigating the Platform",
         "intro": [
-          "Each event represents an occurence that is distinct in either time, space, or both. An event is represented by a coloured circle on both the map and the timeline.",
-          "Select an event to reveal its content and sources. You can filter events by category or other specified filters in the top left toolbar.",
-          "Narratives compose events to reveal logical threads that emerge from them. Transition to narrative mode by selecting a narrative from the top left dashboard icon."
+          "Open source research by [Bellingcat](https://bellingcat.com).<br/>Software and spatialisation by [Forensic Architecture](https://forensic-architecture.org).",
+          "Each event represents an occurence that is distinct in time or space, or both. An event is represented by a coloured circle on both the map and the timeline.",
+          "Select an event to reveal its content and sources. You can filter events by category or other specified filters in the top left toolbar."
         ],
-        "notation": "Combinations of colours indicate multiple events in a single location.",
-        "arrows": "Arrows indicate physical movement between events."
+        "notation": "Combinations of colours within a circle indicate multiple events in a single location.",
+        "arrows": "Use the left/right arrows on the keboard to move back and forth between events in time."
       }
     },
     "toolbar": {

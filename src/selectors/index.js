@@ -84,17 +84,13 @@ export const selectNarratives = createSelector(
 
     /* populate narratives dict with events */
     events.forEach(evt => {
-      const isInNarrative = evt.narratives.length > 0
-
       evt.narratives.forEach(narrative => {
         // initialise
         if (!narratives[narrative]) { narratives[narrative] = narrativeSkeleton(narrative) }
 
         // add evt to steps
-        if (isInNarrative) {
-          // NB: insetSourceFrom is a 'curried' function to allow with maps
-          narratives[narrative].steps.push(insetSourceFrom(sources)(evt))
-        }
+        // NB: insetSourceFrom is a 'curried' function to allow with maps
+        narratives[narrative].steps.push(insetSourceFrom(sources)(evt))
       })
     })
 
@@ -141,7 +137,7 @@ export const selectLocations = createSelector(
   (events) => {
     const activeLocations = {}
     events.forEach(event => {
-      const location = event.location
+      const location = `${event.location}$_${event.latitude}_${event.longitude}`
 
       if (activeLocations[location]) {
         activeLocations[location].events.push(event)

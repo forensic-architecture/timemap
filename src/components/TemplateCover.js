@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { Player } from 'video-react'
 import marked from 'marked'
 import MediaOverlay from './Overlay/Media'
-import logo from '../assets/fa-logo.png'
+import falogo from '../assets/fa-logo.png'
+import bcatlogo from '../assets/bellingcat-logo.png'
 const MEDIA_HIDDEN = -2
 
 /**
@@ -87,6 +88,16 @@ class TemplateCover extends React.Component {
     )
   }
 
+  renderButton (button, yellow) {
+    return (
+      <div className='row'>
+        <a className={`cell ${yellow ? 'yellow' : 'plain'}`} href={button.href}>
+          {button.title}
+        </a>
+      </div>
+    )
+  }
+
   renderMediaOverlay () {
     const video = this.getVideo(this.state.video, this.props.cover.headerVideos ? this.props.cover.headerVideos.length : 0)
     return (
@@ -114,12 +125,18 @@ class TemplateCover extends React.Component {
       )
     }
 
-    const { videos } = this.props.cover
+    const { videos, footerButton } = this.props.cover
+    const { showing } = this.props
     return (
       <div className='default-cover-container'>
-        <a className='cover-logo-container' href='https://forensic-architecture.org'>
-          <img className='cover-logo' src={logo} />
-        </a>
+        <div className={showing ? 'cover-header' : 'cover-header minimized'}>
+          <a className='cover-logo-container' href='https://forensic-architecture.org'>
+            <img className='cover-logo' src={falogo} />
+          </a>
+          <a className='cover-logo-container' href='https://bellingcat.com'>
+            <img className='cover-logo' src={bcatlogo} />
+          </a>
+        </div>
         <div className='cover-content'>
           {
             this.props.cover.bgVideo ? (
@@ -136,8 +153,12 @@ class TemplateCover extends React.Component {
               </div>
             ) : null
           }
-          <h1>{this.props.cover.title}</h1>
-          <h3>{this.props.cover.subtitle}</h3>
+          <h2 style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: marked(this.props.cover.title) }} />
+          {
+            this.props.cover.subtitle ? (
+              <h3 style={{ marginTop: 0 }}>{this.props.cover.subtitle}</h3>
+            ) : null
+          }
           {
             this.props.cover.subsubtitle ? (
               <h5>{this.props.cover.subsubtitle}</h5>
@@ -146,12 +167,11 @@ class TemplateCover extends React.Component {
 
           {this.props.cover.featureVideo ? this.renderFeature() : null}
           <div className='hero thin'>
-            {
-              this.props.cover.headerVideos ? this.renderHeaderVideos() : null
-            }
+            {this.props.cover.headerVideos ? this.renderHeaderVideos() : null}
+            {this.props.cover.headerButton ? this.renderButton(this.props.cover.headerButton) : null}
             <div className='row'>
               <div className='cell yellow' onClick={this.props.showAppHandler}>
-                EXPLORE
+                {this.props.cover.exploreButton}
               </div>
             </div>
           </div>
@@ -174,6 +194,13 @@ class TemplateCover extends React.Component {
                     {media.buttonTitle}<br />{media.buttonSubtitle}
                   </div>
                 )) }
+              </div>
+            </div>
+          ) : null}
+          {footerButton ? (
+            <div className='hero'>
+              <div className='row'>
+                {this.renderButton(footerButton)}
               </div>
             </div>
           ) : null}
