@@ -172,7 +172,7 @@ class Card extends React.Component {
         className={`event-card ${isSelected ? 'selected' : ''}`}
         id={`event-card-${idx}`}
         ref={this.props.innerRef}
-        onClick={(e) => { this.props.onClick(idx) }}
+        onClick={this.props.onClick}
       >
         {this.renderMain()}
         {this.state.isOpen ? this.renderExtra() : null}

@@ -214,7 +214,7 @@ class Map extends React.Component {
         selected={this.props.app.selected}
         narrative={this.props.app.narrative}
         onSelect={this.props.methods.onSelect}
-        onSelectNarrative={this.props.methods.onSelectNarrativeEvent}
+        onSelectNarrative={this.props.methods.onSelectNarrativeStep}
         getCategoryColor={this.props.methods.getCategoryColor}
         eventRadius={this.props.ui.eventRadius}
       />
