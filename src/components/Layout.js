@@ -262,7 +262,7 @@ class Dashboard extends React.Component {
           methods={{
             onSelectNarrative: this.setNarrative,
             getCategoryColor: this.getCategoryColor,
-            onSelect: app.narrative ? this.selectNarrativeStep : (ev => this.handleSelect(ev, 1))
+            onSelect: app.narrative ? this.selectNarrativeStep : ev => this.handleSelect(ev, 1)
           }}
         />
         <Timeline
