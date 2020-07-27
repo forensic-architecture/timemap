@@ -125,6 +125,7 @@ class Dashboard extends React.Component {
 
   setNarrative (narrative) {
     // only handleSelect if narrative is not null
+    console.log(narrative)
     if (narrative) {
       this.handleSelect([ narrative.steps[0] ])
     }
@@ -259,10 +260,9 @@ class Dashboard extends React.Component {
         <Map
           onKeyDown={this.onKeyDown}
           methods={{
-            onSelect: ev => this.handleSelect(ev, 1),
             onSelectNarrative: this.setNarrative,
             getCategoryColor: this.getCategoryColor,
-            onSelectNarrativeStep: this.selectNarrativeStep
+            onSelect: (app.narrative ? this.selectNarrativeStep : (ev => this.handleSelect(ev, 1)))
           }}
         />
         <Timeline
@@ -276,12 +276,11 @@ class Dashboard extends React.Component {
         <CardStack
           timelineDims={app.timeline.dimensions}
           onViewSource={this.handleViewSource}
-          onSelect={this.handleSelect}
+          onSelect={app.narrative ? this.selectNarrativeStep : this.handleSelect}
           onHighlight={this.handleHighlight}
           onToggleCardstack={() => actions.updateSelected([])}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={this.getCategoryColor}
-          onSelectNarrativeStep={this.selectNarrativeStep}
         />
         <StateOptions
           showing={features.FILTERS_AS_NARRATIVES && !app.narrative && app.filters.filters.length > 0}
