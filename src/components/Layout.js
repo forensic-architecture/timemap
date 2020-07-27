@@ -125,7 +125,6 @@ class Dashboard extends React.Component {
 
   setNarrative (narrative) {
     // only handleSelect if narrative is not null
-    console.log(narrative)
     if (narrative) {
       this.handleSelect([ narrative.steps[0] ])
     }
