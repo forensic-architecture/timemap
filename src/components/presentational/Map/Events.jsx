@@ -111,7 +111,7 @@ function MapEvents ({
     // in narrative mode, only render events in narrative
     // TODO: move this to a selector
     // Gets around if block scope
-    var narrativeIdx = false
+    let narrativeIdx = -1
 
     if (narrative) {
       const { steps } = narrative
