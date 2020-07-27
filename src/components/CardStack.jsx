@@ -61,7 +61,6 @@ class CardStack extends React.Component {
       this.refs[idx] = thisRef
       return (<Card
         event={event}
-        idx={idx}
         ref={thisRef}
         sourceError={this.props.sourceError}
         language={this.props.language}
@@ -75,7 +74,7 @@ class CardStack extends React.Component {
         onHighlight={this.props.onHighlight}
         onSelect={this.props.onSelect}
         features={this.props.features}
-        onClick={this.props.onSelectNarrativeEvent}
+        onClick={() => this.props.onSelectNarrativeStep(idx)}
       />)
     })
   }

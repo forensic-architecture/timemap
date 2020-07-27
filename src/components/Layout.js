@@ -35,7 +35,7 @@ class Dashboard extends React.Component {
     this.getCategoryColor = this.getCategoryColor.bind(this)
     this.findEventIdx = this.findEventIdx.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
-    this.selectNarrativeEvent = this.selectNarrativeEvent.bind(this)
+    this.selectNarrativeStep = this.selectNarrativeStep.bind(this)
   }
 
   componentDidMount () {
@@ -182,15 +182,15 @@ class Dashboard extends React.Component {
 
     if (amt === 1) {
       const idx = current + 1
-      this.selectNarrativeEvent(idx)
+      this.selectNarrativeStep(idx)
     }
     if (amt === -1) {
       const idx = current - 1
-      this.selectNarrativeEvent(idx)
+      this.selectNarrativeStep(idx)
     }
   }
 
-  selectNarrativeEvent (idx) {
+  selectNarrativeStep (idx) {
     const { narrative } = this.props.app
     if (narrative === null) return
 
@@ -276,7 +276,7 @@ class Dashboard extends React.Component {
             onSelect: ev => this.handleSelect(ev, 1),
             onSelectNarrative: this.setNarrative,
             getCategoryColor: this.getCategoryColor,
-            onSelectNarrativeEvent: this.selectNarrativeEvent
+            onSelectNarrativeStep: this.selectNarrativeStep
           }}
         />
         <Timeline
@@ -295,7 +295,7 @@ class Dashboard extends React.Component {
           onToggleCardstack={() => actions.updateSelected([])}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={this.getCategoryColor}
-          onSelectNarrativeEvent={this.selectNarrativeEvent}
+          onSelectNarrativeStep={this.selectNarrativeStep}
         />
         <StateOptions
           showing={features.FILTERS_AS_NARRATIVES && !app.narrative && app.filters.filters.length > 0}
