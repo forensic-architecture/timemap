@@ -30,7 +30,6 @@ class Dashboard extends React.Component {
     this.handleHighlight = this.handleHighlight.bind(this)
     this.setNarrative = this.setNarrative.bind(this)
     this.setNarrativeFromFilters = this.setNarrativeFromFilters.bind(this)
-    this.moveInNarrative = this.moveInNarrative.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.getCategoryColor = this.getCategoryColor.bind(this)
     this.findEventIdx = this.findEventIdx.bind(this)
@@ -177,19 +176,6 @@ class Dashboard extends React.Component {
     })
   }
 
-  moveInNarrative (amt) {
-    const { current } = this.props.app.narrativeState
-
-    if (amt === 1) {
-      const idx = current + 1
-      this.selectNarrativeStep(idx)
-    }
-    if (amt === -1) {
-      const idx = current - 1
-      this.selectNarrativeStep(idx)
-    }
-  }
-
   selectNarrativeStep (idx) {
     const { narrative } = this.props.app
     if (narrative === null) return
@@ -209,14 +195,14 @@ class Dashboard extends React.Component {
       if (narrative === null) {
         this.handleSelect(events[idx - 1], 0)
       } else {
-        this.moveInNarrative(-1)
+        this.selectNarrativeStep(this.props.app.narrativeState.current - 1)
       }
     }
     const next = idx => {
       if (narrative === null) {
         this.handleSelect(events[idx + 1], 0)
       } else {
-        this.moveInNarrative(1)
+        this.selectNarrativeStep(this.props.app.narrativeState.current + 1)
       }
     }
     if (selected.length > 0) {
@@ -308,8 +294,8 @@ class Dashboard extends React.Component {
             current: app.narrativeState.current
           } : null}
           methods={{
-            onNext: () => this.moveInNarrative(1),
-            onPrev: () => this.moveInNarrative(-1),
+            onNext: () => this.selectNarrativeStep(this.props.app.narrativeState.current + 1),
+            onPrev: () => this.selectNarrativeStep(this.props.app.narrativeState.current - 1),
             onSelectNarrative: this.setNarrative
           }}
         />
