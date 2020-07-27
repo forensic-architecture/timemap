@@ -13,8 +13,7 @@ function MapEvents ({
   onSelect,
   svg,
   locations,
-  eventRadius,
-  onSelectNarrative
+  eventRadius
 }) {
   function getCoordinatesForPercent (radius, percent) {
     const x = radius * Math.cos(2 * Math.PI * percent)
@@ -144,7 +143,7 @@ function MapEvents ({
       <g
         className={`location-event ${narrative ? 'no-hover' : ''}`}
         transform={`translate(${x}, ${y})`}
-        onClick={(!narrative) ? () => onSelect(location.events) : () => { onSelectNarrative(narrativeIdx); onSelect(location.events) }}
+        onClick={(!narrative) ? () => onSelect(location.events) : () => { onSelect(narrativeIdx); onSelect(location.events) }}
       >
         {renderLocationSlicesByCategory(location)}
         {extraRender ? extraRender() : null}
