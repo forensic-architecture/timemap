@@ -13,17 +13,11 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
     "d3": "^5.7.0",
-    "es6-promise": "^4.1.1",
-    "esm": "^3.2.25",
     "joi": "^14.0.1",
-    "js-yaml": "^3.13.1",
     "leaflet": "^1.0.3",
     "marked": "^0.7.0",
     "moment": "^2.26.0",
-    "normalizr": "^3.2.3",
-    "npm-check-updates": "^3.1.20",
     "object-hash": "^1.3.0",
     "ramda": "^0.26.1",
     "react": "^16.13.1",
@@ -33,14 +27,10 @@
     "react-portal": "^4.2.0",
     "react-redux": "^5.0.4",
     "react-tabs": "3.0.0",
-    "react-zoom-pan-pinch": "^1.6.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
-    "uuid": "^3.1.0",
-    "video-react": "^0.13.1",
-    "video.js": "^5.19.2",
-    "whatwg-fetch": "^2.0.3"
+    "video-react": "^0.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
