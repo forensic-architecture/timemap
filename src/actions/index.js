@@ -247,7 +247,7 @@ export function updateNarrative (narrative) {
 }
 
 export const UPDATE_NARRATIVE_STEP_IDX = 'UPDATE_NARRATIVE_STEP_IDX'
-export function selectNarrativeIdx (idx) {
+export function updateNarrativeStepIdx (idx) {
   return {
     type: UPDATE_NARRATIVE_STEP_IDX,
     idx

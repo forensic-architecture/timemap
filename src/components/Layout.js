@@ -179,8 +179,6 @@ class Dashboard extends React.Component {
   selectNarrativeStep (idx) {
     // Try to find idx if event passed rather than number
     if (typeof idx !== 'number') {
-      console.log('run')
-      console.log(idx)
       let e = idx[0] || idx
 
       if (this.props.app.narrative) {
@@ -192,12 +190,9 @@ class Dashboard extends React.Component {
 
         if (narrativeIdx > -1) {
           idx = narrativeIdx
-          console.log(idx)
         }
       }
     }
-
-    console.log(idx)
 
     const { narrative } = this.props.app
     if (narrative === null) return
@@ -206,7 +201,7 @@ class Dashboard extends React.Component {
       const step = narrative.steps[idx]
 
       this.handleSelect([step])
-      this.props.actions.selectNarrativeIdx(idx)
+      this.props.actions.updateNarrativeStepIdx(idx)
     }
   }
 
