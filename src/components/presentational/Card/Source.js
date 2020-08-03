@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Img from 'react-image'
 import Spinner from '../Spinner'
 import { typeForPath } from '../../../common/utilities'
@@ -75,15 +74,6 @@ const CardSource = ({ source, isLoading, onClickHandler }) => {
         )}
     </div>
   )
-}
-
-CardSource.propTypes = {
-  source: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    type: PropTypes.string
-  }),
-  isLoading: PropTypes.bool,
-  onClickHandler: PropTypes.func.isRequired
 }
 
 export default CardSource
