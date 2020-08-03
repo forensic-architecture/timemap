@@ -98,12 +98,10 @@ function updateNarrative (appState, action) {
 }
 
 function updateNarrativeStepIdx (appState, action) {
-  appState.narrativeState.current = action.idx
-
   return {
     ...appState,
     narrativeState: {
-      current: appState.narrativeState.current
+      current: action.idx
     }
   }
 }
