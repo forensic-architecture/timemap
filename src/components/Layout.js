@@ -243,7 +243,7 @@ class Dashboard extends React.Component {
   }
 
   updateSearchQuery (e) {
-    let queryString = e.target.value;
+    let queryString = e.target.value
     this.props.actions.updateSearchQuery(queryString)
   }
   render () {
