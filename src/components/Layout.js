@@ -21,6 +21,7 @@ import TemplateCover from './TemplateCover'
 import colors from '../common/global'
 import { binarySearch, insetSourceFrom, findDescriptionInFilterTree } from '../common/utilities'
 import { isMobile } from 'react-device-detect'
+import Search from './Search.jsx'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -35,6 +36,11 @@ class Dashboard extends React.Component {
     this.getCategoryColor = this.getCategoryColor.bind(this)
     this.findEventIdx = this.findEventIdx.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
+<<<<<<< HEAD
+=======
+    this.selectNarrativeStep = this.selectNarrativeStep.bind(this)
+    this.updateSearchQuery = this.updateSearchQuery.bind(this)
+>>>>>>> 575b8f5... initial search bar feature added
   }
 
   componentDidMount () {
@@ -226,6 +232,11 @@ class Dashboard extends React.Component {
       }
     }
   }
+
+  updateSearchQuery (e) {
+    let queryString = e.target.value;
+    this.props.actions.updateSearchQuery(queryString)
+  }
   render () {
     const { actions, app, domain, ui, features } = this.props
 
@@ -311,6 +322,12 @@ class Dashboard extends React.Component {
           isNotification={app.flags.isNotification}
           notifications={domain.notifications}
           onToggle={actions.markNotificationsRead}
+        />
+        <Search
+          narrative={app.narrative}
+          queryString={app.searchQuery}
+          onQueryUpdate={this.updateSearchQuery}
+          events={domain.events}
         />
         {app.source ? (
           <MediaOverlay
