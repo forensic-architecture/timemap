@@ -60,14 +60,22 @@
 }
 
 .search-row {
-    color: white;
-    padding-left: 10px;
-    padding-right: 10px;
+    color: black;
+    padding-left: 15px;
+    padding-right: 15px;
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: grey;
-    border-bottom: 1px white solid;
-    border-top: 1px white solid;
+    background-color: #dfdfdf;
+    transition: background-color 0.4s;
+    border-bottom: 1px black solid;
+    border-top: 1px black solid;
+    font-size:  14px;
+    opacity: 0.9;
+    &:hover {
+        transition: background-color 0.4s;
+        background-color: white;
+        cursor: pointer;
+    }
 }
 
 .search-row > p {
@@ -92,6 +100,11 @@ div.location-date-container > div {
 
 div.location-date-container > div > p {
     display: inline;
-    line-height: 24px;
+    line-height: 17px;
     vertical-align: top;
+}
+
+div.location-date-container > div > i {
+    font-size: 12px;
+    margin-right: 5px;
 }

@@ -34,7 +34,7 @@ class Search extends React.Component {
       searchResults = []
     } else {
       searchResults = this.props.events.filter(event =>
-        event.description.toLowerCase().includes(queryString.toLowerCase()) || event.location.includes(queryString) || event.category.includes(queryString)
+        event.description.toLowerCase().includes(queryString.toLowerCase()) || event.location.toLowerCase().includes(queryString.toLowerCase()) || event.category.toLowerCase().includes(queryString.toLowerCase()) || event.date.includes(queryString) 
       )
     }
     this.setState({
@@ -55,7 +55,7 @@ class Search extends React.Component {
           </div>
           <div class='search-results'>
             {this.state.searchResults.map(result => {
-              return <SearchRow query={this.props.queryString} category={result.category} location={result.location} date={result.date} description={result.description} />
+              return <SearchRow onSearchRowClick={this.props.onSearchRowClick} eventObj={result} query={this.props.queryString} />
             })}
           </div>
         </div>
