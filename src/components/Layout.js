@@ -72,6 +72,7 @@ class Dashboard extends React.Component {
   }
 
   handleSelect (selected, axis) {
+    console.log(selected)
     const matchedEvents = []
     const TIMELINE_AXIS = 0
     if (axis === TIMELINE_AXIS) {
@@ -324,6 +325,7 @@ class Dashboard extends React.Component {
           queryString={app.searchQuery}
           onQueryUpdate={this.updateSearchQuery}
           events={domain.events}
+          onSearchRowClick={this.handleSelect}
         />
         {app.source ? (
           <MediaOverlay

@@ -1,6 +1,7 @@
 import React from 'react'
 
-const SearchRow = ({ description, category, location, date, query }) => {
+const SearchRow = ({ query, eventObj, onSearchRowClick }) => {
+  const { description, category, location, date } = eventObj
   function getHighlightedText (text, highlight) {
     // Split text on highlight term, include term itself into parts, ignore case
     const parts = text.split(new RegExp(`(${highlight})`, 'gi'))
@@ -18,15 +19,15 @@ const SearchRow = ({ description, category, location, date, query }) => {
   }
 
   return (
-    <div className='search-row'>
+    <div className='search-row' onClick={() => onSearchRowClick([eventObj])}>
       <div className='location-date-container'>
-        <div className='location-container'>
-          <i className='material-icons'>location_on</i>
-          <p>{getHighlightedText(location, query)}</p>
-        </div>
         <div className='date-container'>
           <i className='material-icons'>event</i>
           <p>{getHighlightedText(date, query)}</p>
+        </div>
+        <div className='location-container'>
+          <i className='material-icons'>location_on</i>
+          <p>{getHighlightedText(location, query)}</p>
         </div>
       </div>
       <p>{getShortDescription(description, query).map(match => {
