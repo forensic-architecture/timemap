@@ -34,7 +34,7 @@ class Search extends React.Component {
       searchResults = []
     } else {
       searchResults = this.props.events.filter(event =>
-        event.description.toLowerCase().includes(queryString.toLowerCase()) || event.location.toLowerCase().includes(queryString.toLowerCase()) || event.category.toLowerCase().includes(queryString.toLowerCase()) || event.date.includes(queryString) 
+        event.description.toLowerCase().includes(queryString.toLowerCase()) || event.location.toLowerCase().includes(queryString.toLowerCase()) || event.category.toLowerCase().includes(queryString.toLowerCase()) || event.date.includes(queryString)
       )
     }
     this.setState({
