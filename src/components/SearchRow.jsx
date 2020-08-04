@@ -1,7 +1,7 @@
 import React from 'react'
 
 const SearchRow = ({ query, eventObj, onSearchRowClick }) => {
-  const { description, category, location, date } = eventObj
+  const { description, location, date } = eventObj
   function getHighlightedText (text, highlight) {
     // Split text on highlight term, include term itself into parts, ignore case
     const parts = text.split(new RegExp(`(${highlight})`, 'gi'))
