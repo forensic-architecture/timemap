@@ -36,11 +36,7 @@ class Dashboard extends React.Component {
     this.getCategoryColor = this.getCategoryColor.bind(this)
     this.findEventIdx = this.findEventIdx.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
-<<<<<<< HEAD
-=======
-    this.selectNarrativeStep = this.selectNarrativeStep.bind(this)
     this.updateSearchQuery = this.updateSearchQuery.bind(this)
->>>>>>> 575b8f5... initial search bar feature added
   }
 
   componentDidMount () {
