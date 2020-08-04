@@ -5,10 +5,10 @@ import '../scss/search.scss'
 import SearchRow from './SearchRow.jsx'
 
 class Search extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
-      isFolded : true,
+      isFolded: true,
       searchResults: [],
       queryString: ''
     }
@@ -55,7 +55,7 @@ class Search extends React.Component {
           </div>
           <div class='search-results'>
             {this.state.searchResults.map(result => {
-                return <SearchRow query={this.props.queryString} category={result.category} location={result.location} date={result.date} description={result.description} />
+              return <SearchRow query={this.props.queryString} category={result.category} location={result.location} date={result.date} description={result.description} />
             })}
           </div>
         </div>
@@ -64,4 +64,4 @@ class Search extends React.Component {
   }
 }
 
-export default Search;
+export default Search

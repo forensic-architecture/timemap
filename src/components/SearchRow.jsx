@@ -1,9 +1,9 @@
 import React from 'react'
 
 const SearchRow = ({ description, category, location, date, query }) => {
-  function getHighlightedText(text, highlight) {
+  function getHighlightedText (text, highlight) {
     // Split text on highlight term, include term itself into parts, ignore case
-    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'))
     return <span>{ parts.map(part => part.toLowerCase() === highlight.toLowerCase() ? <span style={{ backgroundColor: 'yellow', color: 'black' }}>{part}</span> : part) }</span>
   }
 
