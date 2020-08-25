@@ -75,6 +75,7 @@ function validateFilterTree (node, parent, set, duplicates, hasFilterDescription
 * Validate domain schema
 */
 export function validateDomain (domain, features) {
+  console.info(domain)
   const sanitizedDomain = {
     events: [],
     categories: [],
