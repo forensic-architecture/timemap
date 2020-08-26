@@ -3,7 +3,7 @@ import Joi from 'joi'
 import createEventSchema from './eventSchema'
 import categorySchema from './categorySchema'
 import siteSchema from './siteSchema'
-import narrativeSchema from './narrativeSchema'
+import associationsSchema from './associationsSchema'
 import sourceSchema from './sourceSchema'
 import shapeSchema from './shapeSchema'
 
@@ -27,7 +27,7 @@ function isValidDate (d) {
 
 /*
 * Traverse a filter tree and check its duplicates. Also recompose as
-* description if `features.USE_FILTER_DESCRIPTIONS` is true.
+* description if `features.USE_ASSOCIATION_DESCRIPTIONS` is true.
 */
 function validateFilterTree (node, parent, set, duplicates, hasFilterDescriptions) {
   if (hasFilterDescriptions) {
@@ -75,14 +75,12 @@ function validateFilterTree (node, parent, set, duplicates, hasFilterDescription
 * Validate domain schema
 */
 export function validateDomain (domain, features) {
-  console.info(domain)
   const sanitizedDomain = {
     events: [],
     categories: [],
     sites: [],
-    narratives: [],
+    associations: [],
     sources: {},
-    filters: {},
     shapes: [],
     notifications: domain ? domain.notifications : null
   }
@@ -95,7 +93,7 @@ export function validateDomain (domain, features) {
     events: [],
     categories: [],
     sites: [],
-    narratives: [],
+    associations: [],
     sources: [],
     shapes: []
   }
@@ -150,7 +148,7 @@ export function validateDomain (domain, features) {
   validateArray(domain.events, 'events', eventSchema)
   validateArray(domain.categories, 'categories', categorySchema)
   validateArray(domain.sites, 'sites', siteSchema)
-  validateArray(domain.narratives, 'narratives', narrativeSchema)
+  validateArray(domain.associations, 'associations', associationsSchema)
   validateObject(domain.sources, 'sources', sourceSchema)
   validateObject(domain.shapes, 'shapes', shapeSchema)
 
@@ -163,20 +161,20 @@ export function validateDomain (domain, features) {
   })
   )
 
-  // Validate uniqueness of filters
-  const filterSet = new Set([])
-  const duplicateFilters = []
-  validateFilterTree(domain.filters, {}, filterSet, duplicateFilters, features.USE_FILTER_DESCRIPTIONS)
+  // Validate uniqueness of associations
+  const associationSet = new Set([])
+  const duplicateAssociations = []
+  validateFilterTree(domain.associations, {}, associationSet, duplicateAssociations, features.USE_ASSOCIATION_DESCRIPTIONS)
 
-  // Duplicated filters
-  if (duplicateFilters.length > 0) {
+  // Duplicated associations
+  if (duplicateAssociations.length > 0) {
     sanitizedDomain.notifications.push({
-      message: `Filters are required to be unique. Ignoring duplicates for now.`,
-      items: duplicateFilters,
+      message: `Associations are required to be unique. Ignoring duplicates for now.`,
+      items: duplicateAssociations,
       type: 'error'
     })
   }
-  sanitizedDomain.filters = domain.filters
+  sanitizedDomain.associations = domain.associations
 
   // append events with datetime and sort
   sanitizedDomain.events = sanitizedDomain.events.filter((event, idx) => {
