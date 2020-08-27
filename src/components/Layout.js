@@ -4,6 +4,7 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../actions'
+import * as selectors from '../selectors'
 
 import MediaOverlay from './Overlay/Media'
 import LoadingOverlay from './Overlay/Loading'
@@ -42,9 +43,9 @@ class Dashboard extends React.Component {
       this.props.actions.fetchDomain()
         .then(domain =>
           this.props.actions.updateDomain({
-          domain,
-          features: this.props.features
-        }))
+            domain,
+            features: this.props.features
+          }))
     }
     // NOTE: hack to get the timeline to always show. Not entirely sure why
     // this is necessary.
@@ -134,7 +135,7 @@ class Dashboard extends React.Component {
 
   setNarrativeFromFilters (withSteps) {
     const { app, domain } = this.props
-    let activeFilters = app.filters.filters
+    let activeFilters = app.associations.filters
 
     if (activeFilters.length === 0) {
       alert('No filters selected, cant narrativise')
@@ -182,8 +183,8 @@ class Dashboard extends React.Component {
     if (typeof idx !== 'number') {
       let e = idx[0] || idx
 
-      if (this.props.app.narrative) {
-        const { steps } = this.props.app.narrative
+      if (this.props.app.associations.narrative) {
+        const { steps } = this.props.app.associations.narrative
         // choose the first event at a given location
         const locationEventId = e.id
         const narrativeIdxObj = steps.find(s => s.id === locationEventId)
@@ -213,14 +214,14 @@ class Dashboard extends React.Component {
       if (narrative === null) {
         this.handleSelect(events[idx - 1], 0)
       } else {
-        this.selectNarrativeStep(this.props.app.narrativeState.current - 1)
+        this.selectNarrativeStep(this.props.narrativeIdx - 1)
       }
     }
     const next = idx => {
       if (narrative === null) {
         this.handleSelect(events[idx + 1], 0)
       } else {
-        this.selectNarrativeStep(this.props.app.narrativeState.current + 1)
+        this.selectNarrativeStep(this.props.narrativeIdx + 1)
       }
     }
     if (selected.length > 0) {
@@ -266,7 +267,7 @@ class Dashboard extends React.Component {
     return (
       <div >
         <Toolbar
-          isNarrative={!!app.narrative}
+          isNarrative={!!app.associations.narrative}
           methods={{
             onTitle: actions.toggleCover,
             onSelectFilter: filter => actions.toggleFilter('filters', filter),
@@ -279,13 +280,13 @@ class Dashboard extends React.Component {
           methods={{
             onSelectNarrative: this.setNarrative,
             getCategoryColor: this.getCategoryColor,
-            onSelect: app.narrative ? this.selectNarrativeStep : ev => this.handleSelect(ev, 1)
+            onSelect: app.associations.narrative ? this.selectNarrativeStep : ev => this.handleSelect(ev, 1)
           }}
         />
         <Timeline
           onKeyDown={this.onKeyDown}
           methods={{
-            onSelect: app.narrative ? this.selectNarrativeStep : ev => this.handleSelect(ev, 0),
+            onSelect: app.associations.narrative ? this.selectNarrativeStep : ev => this.handleSelect(ev, 0),
             onUpdateTimerange: actions.updateTimeRange,
             getCategoryColor: this.getCategoryColor
           }}
@@ -293,25 +294,25 @@ class Dashboard extends React.Component {
         <CardStack
           timelineDims={app.timeline.dimensions}
           onViewSource={this.handleViewSource}
-          onSelect={app.narrative ? this.selectNarrativeStep : this.handleSelect}
+          onSelect={app.associations.narrative ? this.selectNarrativeStep : this.handleSelect}
           onHighlight={this.handleHighlight}
           onToggleCardstack={() => actions.updateSelected([])}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={this.getCategoryColor}
         />
         <StateOptions
-          showing={features.FILTERS_AS_NARRATIVES && !app.narrative && app.filters.filters.length > 0}
+          showing={features.FILTERS_AS_NARRATIVES && !app.associations.narrative && app.associations.filters.length > 0}
           timelineDims={app.timeline.dimensions}
           onClickHandler={this.setNarrativeFromFilters}
         />
         <NarrativeControls
-          narrative={app.narrative ? {
-            ...app.narrative,
-            current: app.narrativeState.current
+          narrative={app.associations.narrative ? {
+            ...app.associations.narrative,
+            current: this.props.narrativeIdx
           } : null}
           methods={{
-            onNext: () => this.selectNarrativeStep(this.props.app.narrativeState.current + 1),
-            onPrev: () => this.selectNarrativeStep(this.props.app.narrativeState.current - 1),
+            onNext: () => this.selectNarrativeStep(this.props.narrativeIdx + 1),
+            onPrev: () => this.selectNarrativeStep(this.props.narrativeIdx - 1),
             onSelectNarrative: this.setNarrative
           }}
         />
@@ -360,6 +361,9 @@ function mapDispatchToProps (dispatch) {
 }
 
 export default connect(
-  state => state,
+  state => ({
+    ...state,
+    narrativeIdx: selectors.selectNarrativeIdx(state)
+  }),
   mapDispatchToProps
 )(Dashboard)

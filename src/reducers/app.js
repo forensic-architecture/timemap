@@ -85,14 +85,17 @@ function updateNarrative (appState, action) {
 
   return {
     ...appState,
-    narrative: action.narrative,
-    narrativeState: {
-      current: action.narrative ? 0 : null
-    },
-    filters: {
+    associations: {
       ...appState.filters,
-      timerange: [minTime, maxTime],
-      mapBounds: (action.narrative) ? [cornerBound0, cornerBound1] : null
+      narrative: action.narrative
+    },
+    map: {
+      ...appState.map,
+      bounds: (action.narrative) ? [cornerBound0, cornerBound1] : null
+    },
+    timeline: {
+      ...appState.timeline,
+      range: [minTime, maxTime]
     }
   }
 }

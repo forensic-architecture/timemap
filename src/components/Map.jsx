@@ -275,11 +275,11 @@ function mapStateToProps (state) {
       shapes: selectors.selectShapes(state)
     },
     app: {
-      views: state.app.filters.views,
+      views: state.app.associations.views,
       selected: selectors.selectSelected(state),
       highlighted: state.app.highlighted,
       map: state.app.map,
-      narrative: state.app.narrative,
+      narrative: state.app.associations.narrative,
       flags: {
         isShowingSites: state.app.flags.isShowingSites
       }

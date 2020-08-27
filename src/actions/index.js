@@ -60,7 +60,6 @@ export function fetchDomain () {
       }
     }
 
-
     let sourcesPromise = Promise.resolve([])
     if (features.USE_SOURCES) {
       if (!SOURCES_URL) {

@@ -121,7 +121,7 @@ class Toolbar extends React.Component {
         <Tabs selectedIndex={this.state._selected}>
           {features.USE_NARRATIVES ? this.renderToolbarNarrativePanel() : null}
           {features.CATEGORIES_AS_FILTERS ? this.renderToolbarCategoriesPanel() : null}
-          {features.USE_FILTERS ? this.renderToolbarFilterPanel() : null}
+          {features.USE_ASSOCIATIONS ? this.renderToolbarFilterPanel() : null}
         </Tabs>
       </div>
     )
@@ -163,7 +163,7 @@ class Toolbar extends React.Component {
         <div className='toolbar-tabs'>
           {features.USE_NARRATIVES ? this.renderToolbarTab(narrativesIdx, narrativesLabel, 'timeline') : null}
           {features.CATEGORIES_AS_FILTERS ? this.renderToolbarTab(categoriesIdx, categoriesLabel, 'widgets') : null}
-          {features.USE_FILTERS ? this.renderToolbarTab(filtersIdx, filtersLabel, 'filter_list') : null}
+          {features.USE_ASSOCIATIONS ? this.renderToolbarTab(filtersIdx, filtersLabel, 'filter_list') : null}
         </div>
         <BottomActions
           info={{
@@ -203,8 +203,8 @@ function mapStateToProps (state) {
     language: state.app.language,
     activeFilters: selectors.getActiveFilters(state),
     activeCategories: selectors.getActiveCategories(state),
-    viewFilters: state.app.filters.views,
-    narrative: state.app.narrative,
+    viewFilters: state.app.associations.views,
+    narrative: state.app.associations.narrative,
     sitesShowing: state.app.flags.isShowingSites,
     infoShowing: state.app.flags.isInfopopup,
     features: selectors.getFeatures(state)

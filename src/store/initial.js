@@ -34,12 +34,9 @@ const initial = {
     highlighted: null,
     selected: [],
     source: null,
-    narrative: null,
-    narrativeState: {
-      current: null
-    },
-    filters: {
+    associations: {
       filters: [],
+      narrative: null,
       categories: [],
       views: {
         events: true,

@@ -18,7 +18,7 @@ The URLs for these endpoints, as well as other configurable settings in your tim
 | SITES_EXT | Endpoint for sites, concatenated with SERVER_ROOT | String | Yes |
 | MAP_ANCHOR | Geographic coordinates for original map anchor | Array of numbers | No |
 | MAPBOX_TOKEN | Access token for Mapbox satellite imagery | String | No |
-| features.USE_FILTERS | Enable / Disable filters | boolean | No |
+| features.USE_ASSOCIATIONS | Enable / Disable filters | boolean | No |
 | features.USE_SEARCH | Enable / Disable search | boolean | No |
 | features.USE_SITES | Enable / Disable sites | boolean | No |
 

@@ -6,19 +6,18 @@ import { isTimeRangedIn } from './helpers'
 export const getEvents = state => state.domain.events
 export const getCategories = state => state.domain.categories
 export const getNarratives = state => state.domain.narratives
-export const getActiveNarrative = state => state.app.narrative
-export const getActiveStep = state => state.app.narrativeState.current
+export const getActiveNarrative = state => state.app.associations.narrative
 export const getSelected = state => state.app.selected
 export const getSites = state => state.domain.sites
 export const getSources = state => state.domain.sources
 export const getShapes = state => state.domain.shapes
 export const getNotifications = state => state.domain.notifications
 export const getFilterTree = state => state.domain.filters
-export const getActiveFilters = state => state.app.filters.filters
-export const getActiveCategories = state => state.app.filters.categories
+export const getActiveFilters = state => state.app.associations.filters
+export const getActiveCategories = state => state.app.associations.categories
 export const getTimeRange = state => state.app.timeline.range
 export const getTimelineDimensions = state => state.app.timeline.dimensions
-export const selectNarrative = state => state.app.narrative
+export const selectNarrative = state => state.app.associations.narrative
 export const getFeatures = state => state.features
 export const getEventRadius = state => state.ui.eventRadius
 
@@ -113,11 +112,30 @@ export const selectNarratives = createSelector(
     return narrativesMeta.map(n => narratives[n.id]).filter(d => d)
   })
 
+/** We iterate through narrative.steps and check the idx there against the selected array and we return the idx */
+export const selectNarrativeIdx = createSelector(
+  [getSelected, getActiveNarrative],
+  (selected, narrative) => {
+    // Only one event selected in narrative mode
+    if (narrative === null) return -1
+
+    const selectedEvent = selected[0]
+    let selectedIdx
+
+    narrative.steps.forEach((step, idx) => {
+      if (selectedEvent.id === step.id) {
+        selectedIdx = idx
+      }
+    })
+    return selectedIdx
+  }
+)
+
 /** Aggregate information about the narrative and the current step into
  *  a single object. If narrative is null, the whole object is null.
  */
 export const selectActiveNarrative = createSelector(
-  [getActiveNarrative, getActiveStep],
+  [getActiveNarrative, selectNarrativeIdx],
   (narrative, current) => narrative
     ? { ...narrative, current }
     : null
