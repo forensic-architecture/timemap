@@ -40,7 +40,8 @@ class Dashboard extends React.Component {
   componentDidMount () {
     if (!this.props.app.isMobile) {
       this.props.actions.fetchDomain()
-        .then(domain => this.props.actions.updateDomain({
+        .then(domain =>
+          this.props.actions.updateDomain({
           domain,
           features: this.props.features
         }))

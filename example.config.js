@@ -26,6 +26,7 @@ module.exports = {
       USE_CATEGORIES: true,
       CATEGORIES_AS_FILTERS: true,
       USE_ASSOCIATIONS: true,
+      USE_ASSOCIATION_DESCRIPTIONS: true,
       USE_SOURCES: true,
       USE_COVER: true,
       USE_SEARCH: false,

@@ -29,46 +29,62 @@ function isValidDate (d) {
 * Traverse a filter tree and check its duplicates. Also recompose as
 * description if `features.USE_ASSOCIATION_DESCRIPTIONS` is true.
 */
-function validateFilterTree (node, parent, set, duplicates, hasFilterDescriptions) {
-  if (hasFilterDescriptions) {
-    if (node.key === '_root') {
-      node.isDescription = true // setting first set of nodes to values
-    } else if (!parent.isDescription) {
-      node.isDescription = true
-    } else {
-      node.isDescription = false
-    }
+// function validateFilterTree (node, parent, set, duplicates, hasAssociationDescriptions) {
+//   if (hasAssociationDescriptions) {
+//     if (node.key === '_root') {
+//       node.isDescription = true // setting first set of nodes to values
+//     } else if (!parent.isDescription) {
+//       node.isDescription = true
+//     } else {
+//       node.isDescription = false
+//     }
 
-    if (node.isDescription && node.key !== 'root') {
-      parent.description = node.key
-      parent.children = node.children
-      delete parent.isDescription
-    }
-    if (isFilterLeaf(node)) {
-      delete parent.isDescription
-    }
-  }
+//     if (node.isDescription && node.key !== 'root') {
+//       parent.description = node.key
+//       parent.children = node.children
+//       delete parent.isDescription
+//     }
+//     if (isFilterLeaf(node)) {
+//       delete parent.isDescription
+//     }
+//   }
 
-  if (typeof (node) !== 'object' || typeof (node.children) !== 'object') {
-    return
-  }
-  // If it's a leaf, check that it's not duplicate
-  if (isFilterLeaf(node)) {
-    if (isFilterDuplicate(node, set)) {
+//   if (typeof (node) !== 'object' || typeof (node.children) !== 'object') {
+//     return
+//   }
+//   // If it's a leaf, check that it's not duplicate
+//   if (isFilterLeaf(node)) {
+//     if (isFilterDuplicate(node, set)) {
+//       duplicates.push({
+//         id: node.key,
+//         error: makeError('Filters', node.key, 'filter was found more than once in hierarchy. Ignoring duplicate.')
+//       })
+//       delete parent.children[node.key]
+//     } else {
+//       set.add(node.key)
+//     }
+//   } else {
+//     // If it's not a leaf, simply keep going
+//     Object.values(node.children).forEach((childNode) => {
+//       validateFilterTree(childNode, node, set, duplicates, hasAssociationDescriptions)
+//     })
+//   }
+// }
+
+function findDuplicateAssociations (associations) {
+  const seenSet = new Set([])
+  const duplicates = []
+  associations.forEach(item => {
+    if (seenSet.has(item.id)) {
       duplicates.push({
-        id: node.key,
-        error: makeError('Filters', node.key, 'filter was found more than once in hierarchy. Ignoring duplicate.')
+        id: item.id,
+        error: makeError('Association', item.id, 'association was found more than once. Ignoring duplicate.')
       })
-      delete parent.children[node.key]
     } else {
-      set.add(node.key)
+      seenSet.add(item.id)
     }
-  } else {
-    // If it's not a leaf, simply keep going
-    Object.values(node.children).forEach((childNode) => {
-      validateFilterTree(childNode, node, set, duplicates, hasFilterDescriptions)
-    })
-  }
+  })
+  return duplicates
 }
 
 /*
@@ -162,10 +178,10 @@ export function validateDomain (domain, features) {
   )
 
   // Validate uniqueness of associations
-  const associationSet = new Set([])
-  const duplicateAssociations = []
-  validateFilterTree(domain.associations, {}, associationSet, duplicateAssociations, features.USE_ASSOCIATION_DESCRIPTIONS)
-
+  // const associationSet = new Set([])
+  // const duplicateAssociations = []
+  // validateFilterTree(domain.associations, {}, associationSet, duplicateAssociations, features.USE_ASSOCIATION_DESCRIPTIONS)
+  const duplicateAssociations = findDuplicateAssociations(domain.associations)
   // Duplicated associations
   if (duplicateAssociations.length > 0) {
     sanitizedDomain.notifications.push({
