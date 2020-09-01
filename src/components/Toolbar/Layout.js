@@ -197,7 +197,7 @@ class Toolbar extends React.Component {
 
 function mapStateToProps (state) {
   return {
-    filters: selectors.getFilterTree(state),
+    filters: selectors.getFilters(state),
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
     language: state.app.language,

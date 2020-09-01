@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
 import { insetSourceFrom, dateMin, dateMax } from '../common/utilities'
 import { isTimeRangedIn } from './helpers'
+import { FILTER_MODE } from '../common/constants'
 
 // Input selectors
 export const getEvents = state => state.domain.events
@@ -11,8 +12,8 @@ export const getSelected = state => state.app.selected
 export const getSites = state => state.domain.sites
 export const getSources = state => state.domain.sources
 export const getShapes = state => state.domain.shapes
+export const getFilters = state => state.domain.associations.filter(item => item.mode === FILTER_MODE)
 export const getNotifications = state => state.domain.notifications
-export const getFilterTree = state => state.domain.filters
 export const getActiveFilters = state => state.app.associations.filters
 export const getActiveCategories = state => state.app.associations.categories
 export const getTimeRange = state => state.app.timeline.range

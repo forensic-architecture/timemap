@@ -114,7 +114,7 @@ function toggleFilter (appState, action) {
     action.value = [action.value]
   }
 
-  let newFilters = appState.filters[action.filter].slice(0)
+  let newFilters = appState.associations.filters.slice(0)
   action.value.forEach(vl => {
     if (newFilters.includes(vl)) {
       newFilters = newFilters.filter(s => s !== vl)
@@ -125,9 +125,9 @@ function toggleFilter (appState, action) {
 
   return {
     ...appState,
-    filters: {
-      ...appState.filters,
-      [action.filter]: newFilters
+    associations: {
+      ...appState.associations,
+      filters: newFilters,
     }
   }
 }
