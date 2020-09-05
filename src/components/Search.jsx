@@ -1,5 +1,9 @@
 import React from 'react'
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as actions from '../actions'
+
 import '../scss/search.scss'
 
 import SearchRow from './SearchRow.jsx'
@@ -7,19 +11,12 @@ import SearchRow from './SearchRow.jsx'
 class Search extends React.Component {
   constructor (props) {
     super(props)
+
     this.state = {
-      isFolded: true,
-      searchResults: [],
-      queryString: ''
+      isFolded: true
     }
     this.onButtonClick = this.onButtonClick.bind(this)
-    this.updateSearchQueryResults = this.updateSearchQueryResults.bind(this)
-  }
-
-  componentDidUpdate (prevProps, prevState) {
-    if (prevProps.queryString !== this.props.queryString) {
-      this.updateSearchQueryResults(this.props.queryString)
-    }
+    this.updateSearchQuery = this.updateSearchQuery.bind(this)
   }
 
   onButtonClick () {
@@ -28,21 +25,24 @@ class Search extends React.Component {
     })
   }
 
-  updateSearchQueryResults (queryString) {
-    let searchResults
-    if (queryString === '') {
-      searchResults = []
-    } else {
-      searchResults = this.props.events.filter(event =>
-        event.description.toLowerCase().includes(queryString.toLowerCase()) || event.location.toLowerCase().includes(queryString.toLowerCase()) || event.category.toLowerCase().includes(queryString.toLowerCase()) || event.date.includes(queryString)
-      )
-    }
-    this.setState({
-      searchResults: searchResults
-    })
+  updateSearchQuery (e) {
+    let queryString = e.target.value
+    this.props.actions.updateSearchQuery(queryString)
   }
 
   render () {
+    let searchResults
+
+    const searchAttributes = ['description', 'location', 'category', 'date']
+
+    if (!this.props.queryString) {
+      searchResults = []
+    } else {
+      searchResults = this.props.events.filter(event =>
+        searchAttributes.map(attribute => { event[attribute].toLowerCase().includes(this.props.queryString.toLowerCase()) })
+      )
+    }
+
     return (
       <div class={'search-outer-container' + (this.props.narrative ? ' narrative-mode ' : '')}>
         <div id='search-bar-icon-container' onClick={this.onButtonClick}>
@@ -50,11 +50,11 @@ class Search extends React.Component {
         </div>
         <div class={'search-bar-overlay' + (this.state.isFolded ? ' folded' : '')}>
           <div class='search-input-container'>
-            <input class='search-bar-input' value={this.props.queryString} onChange={this.props.onQueryUpdate} type='text' />
+            <input class='search-bar-input' onChange={this.updateSearchQuery} type='text' />
             <i id='close-search-overlay' className='material-icons' onClick={this.onButtonClick} >close</i>
           </div>
           <div class='search-results'>
-            {this.state.searchResults.map(result => {
+            {searchResults.map(result => {
               return <SearchRow onSearchRowClick={this.props.onSearchRowClick} eventObj={result} query={this.props.queryString} />
             })}
           </div>
@@ -64,4 +64,13 @@ class Search extends React.Component {
   }
 }
 
-export default Search
+function mapDispatchToProps (dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  }
+}
+
+export default connect(
+  state => state,
+  mapDispatchToProps
+)(Search)
