@@ -36,7 +36,6 @@ class Dashboard extends React.Component {
     this.getCategoryColor = this.getCategoryColor.bind(this)
     this.findEventIdx = this.findEventIdx.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
-    this.updateSearchQuery = this.updateSearchQuery.bind(this)
   }
 
   componentDidMount () {
@@ -72,7 +71,6 @@ class Dashboard extends React.Component {
   }
 
   handleSelect (selected, axis) {
-    console.log(selected)
     const matchedEvents = []
     const TIMELINE_AXIS = 0
     if (axis === TIMELINE_AXIS) {
@@ -230,10 +228,6 @@ class Dashboard extends React.Component {
     }
   }
 
-  updateSearchQuery (e) {
-    let queryString = e.target.value
-    this.props.actions.updateSearchQuery(queryString)
-  }
   render () {
     const { actions, app, domain, ui, features } = this.props
 
@@ -323,7 +317,6 @@ class Dashboard extends React.Component {
         <Search
           narrative={app.narrative}
           queryString={app.searchQuery}
-          onQueryUpdate={this.updateSearchQuery}
           events={domain.events}
           onSearchRowClick={this.handleSelect}
         />
