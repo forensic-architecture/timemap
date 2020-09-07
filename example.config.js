@@ -25,10 +25,10 @@ module.exports = {
     features: {
       USE_CATEGORIES: true,
       USE_NARRATIVES: true,
-      FILTERS_AS_NARRATIVES: false,
+      FILTERS_AS_NARRATIVES: true,
       CATEGORIES_AS_FILTERS: true,
       USE_ASSOCIATIONS: true,
-      USE_ASSOCIATION_DESCRIPTIONS: true,
+      USE_ASSOCIATION_DESCRIPTIONS: false,
       USE_SOURCES: true,
       USE_COVER: true,
       USE_SEARCH: false,
