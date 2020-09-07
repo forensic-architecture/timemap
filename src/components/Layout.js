@@ -20,7 +20,7 @@ import StaticPage from './StaticPage'
 import TemplateCover from './TemplateCover'
 
 import colors from '../common/global'
-import { binarySearch, insetSourceFrom, findDescriptionInFilterTree } from '../common/utilities'
+import { binarySearch, insetSourceFrom } from '../common/utilities'
 import { isMobile } from 'react-device-detect'
 
 class Dashboard extends React.Component {
@@ -143,7 +143,7 @@ class Dashboard extends React.Component {
       return
     }
 
-    if (this.props.features.USE_FILTER_DESCRIPTIONS) {
+    if (this.props.features.USE_ASSOCIATION_DESCRIPTIONS) {
       activeFilters = activeFilters.reduce((acc, vl) => {
         acc.push({
           name: vl,

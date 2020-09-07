@@ -25,6 +25,7 @@ module.exports = {
     features: {
       USE_CATEGORIES: true,
       USE_NARRATIVES: true,
+      FILTERS_AS_NARRATIVES: false,
       CATEGORIES_AS_FILTERS: true,
       USE_ASSOCIATIONS: true,
       USE_ASSOCIATION_DESCRIPTIONS: true,
