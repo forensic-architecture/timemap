@@ -82,11 +82,10 @@ function updateNarrative (appState, action) {
     minTime = minTime - Math.abs((maxTime - minTime) / 10)
     maxTime = maxTime + Math.abs((maxTime - minTime) / 10)
   }
-
   return {
     ...appState,
     associations: {
-      ...appState.filters,
+      ...appState.associations,
       narrative: action.narrative
     },
     map: {

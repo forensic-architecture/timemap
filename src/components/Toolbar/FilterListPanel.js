@@ -66,7 +66,6 @@ function FilterListPanel ({
 
   function renderTree (filters) {
     const aggregatedFilterPaths = aggregatePaths(filters)
-    console.info(aggregatedFilterPaths)
     return (
       <div>
         {Object.entries(aggregatedFilterPaths).map(filter => createNodeComponent(filter, 1))}

@@ -62,8 +62,8 @@ class Toolbar extends React.Component {
           return (
             <div className='panel-action action'>
               <button onClick={() => { this.goToNarrative(narr) }}>
-                <p>{narr.label}</p>
-                <p><small>{trimAndEllipse(narr.description, 120)}</small></p>
+                <p>{narr.id}</p>
+                <p><small>{trimAndEllipse(narr.desc, 120)}</small></p>
               </button>
             </div>
           )

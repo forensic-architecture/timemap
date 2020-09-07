@@ -119,8 +119,9 @@ class Dashboard extends React.Component {
     }
   }
 
+  // Broken for time being; need clarification on function
   getNarrativeLinks (event) {
-    const narrative = this.props.domain.narratives.find(nv => nv.id === event.narrative)
+    const narrative = this.props.narratives.find(nv => nv.id === event.narratives[0])
     if (narrative) return narrative.byId[event.id]
     return null
   }
@@ -196,7 +197,7 @@ class Dashboard extends React.Component {
       }
     }
 
-    const { narrative } = this.props.app
+    const { narrative } = this.props.app.associations
     if (narrative === null) return
 
     if (idx < narrative.steps.length && idx >= 0) {
@@ -363,7 +364,8 @@ function mapDispatchToProps (dispatch) {
 export default connect(
   state => ({
     ...state,
-    narrativeIdx: selectors.selectNarrativeIdx(state)
+    narrativeIdx: selectors.selectNarrativeIdx(state),
+    narratives: selectors.selectNarratives(state)
   }),
   mapDispatchToProps
 )(Dashboard)

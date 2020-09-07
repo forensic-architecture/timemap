@@ -1,12 +1,12 @@
 import { createSelector } from 'reselect'
 import { insetSourceFrom, dateMin, dateMax } from '../common/utilities'
 import { isTimeRangedIn } from './helpers'
-import { FILTER_MODE } from '../common/constants'
+import { FILTER_MODE, NARRATIVE_MODE } from '../common/constants'
 
 // Input selectors
 export const getEvents = state => state.domain.events
 export const getCategories = state => state.domain.categories
-export const getNarratives = state => state.domain.narratives
+export const getNarratives = state => state.domain.associations.filter(item => item.mode === NARRATIVE_MODE)
 export const getActiveNarrative = state => state.app.associations.narrative
 export const getSelected = state => state.app.selected
 export const getSites = state => state.domain.sites
@@ -87,27 +87,29 @@ export const selectNarratives = createSelector(
       evt.narratives.forEach(narrative => {
         // initialise
         if (!narratives[narrative]) { narratives[narrative] = narrativeSkeleton(narrative) }
-
         // add evt to steps
         // NB: insetSourceFrom is a 'curried' function to allow with maps
         narratives[narrative].steps.push(insetSourceFrom(sources)(evt))
       })
     })
-
     /* sort steps by time */
     Object.keys(narratives).forEach(key => {
       const steps = narratives[key].steps
 
       steps.sort((a, b) => a.datetime - b.datetime)
 
-      if (narrativesMeta.find(n => n.id === key)) {
+      const existingAssociatedNarrative = narrativesMeta.find(n => n.id === key)
+
+      if (existingAssociatedNarrative) {
         narratives[key] = {
-          ...narrativesMeta.find(n => n.id === key),
+          ...existingAssociatedNarrative,
           ...narratives[key]
         }
+      } else {
+        // Associations dont contain this narrative 
+        delete narratives[key]
       }
     })
-
     // Return narratives in original order
     // + filter those that are undefined
     return narrativesMeta.map(n => narratives[n.id]).filter(d => d)
