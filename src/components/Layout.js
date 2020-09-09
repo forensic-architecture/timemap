@@ -143,20 +143,21 @@ class Dashboard extends React.Component {
       return
     }
 
-    if (this.props.features.USE_ASSOCIATION_DESCRIPTIONS) {
-      activeFilters = activeFilters.reduce((acc, vl) => {
-        acc.push({
-          name: vl,
-          description: findDescriptionInFilterTree(vl, domain.filters)
-        })
-        return acc
-      }, [])
-    } else {
-      activeFilters = activeFilters.map(f => ({ name: f }))
-    }
+    // if (this.props.features.USE_ASSOCIATION_DESCRIPTIONS) {
+    //   activeFilters = activeFilters.reduce((acc, vl) => {
+    //     acc.push({
+    //       name: vl,
+    //       description: findDescriptionInFilterTree(vl, domain.filters)
+    //     })
+    //     return acc
+    //   }, [])
+    // } else {
+    //   activeFilters = activeFilters.map(f => ({ name: f }))
+    // }
+    activeFilters = activeFilters.map(f => ({ name: f }))
 
     const evs = domain.events.filter(ev => {
-      let hasOne = false
+      let hasOne = false 
       // add event if it has at least one matching filter
       for (let i = 0; i < activeFilters.length; i++) {
         if (ev.filters.includes(activeFilters[i].name)) {

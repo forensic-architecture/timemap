@@ -108,7 +108,7 @@ class Card extends React.Component {
   }
 
   renderNarrative () {
-    const links = this.props.getNarrativeLinks(this.props.event)
+    // const links = this.props.getNarrativeLinks(this.props.event)
 
     if (links !== null) {
       return (
@@ -148,9 +148,9 @@ class Card extends React.Component {
   renderExtra () {
     return (
       <div className='card-bottomhalf'>
-        {this.renderFilters()}
+        {/* {this.renderFilters()} */}
         {this.renderSources()}
-        {this.renderNarrative()}
+        {/* {this.renderNarrative()} */}
       </div>
     )
   }
