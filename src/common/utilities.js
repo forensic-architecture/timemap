@@ -199,19 +199,6 @@ export function binarySearch (ar, el, compareFn) {
   return -m - 1
 }
 
-// export const isFilterLeaf = node => (Object.keys(node.children).length === 0)
-// export const isFilterDuplicate = (node, set) => { return (set.has(node.key)) }
-
-// export function findDescriptionInFilterTree (key, node) {
-//   if (node.key === key) return node.description
-//   if (isFilterLeaf(node)) return false
-//   const descs = Object.keys(node.children)
-//     .map(c => findDescriptionInFilterTree(key, node.children[c]))
-//     .filter(v => !!v)
-//   if (descs.length !== 1) return false
-//   return descs[0]
-// }
-
 export function makeNiceDate (datetime) {
   if (datetime === null) return null
   // see https://stackoverflow.com/questions/3552461/how-to-format-a-javascript-date

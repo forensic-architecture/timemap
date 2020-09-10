@@ -119,9 +119,7 @@ class Card extends React.Component {
   renderExtra () {
     return (
       <div className='card-bottomhalf'>
-        {/* {this.renderFilters()} */}
         {this.renderSources()}
-        {/* {this.renderNarrative()} */}
       </div>
     )
   }

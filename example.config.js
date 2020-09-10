@@ -31,7 +31,7 @@ module.exports = {
       USE_SEARCH: false,
       USE_SITES: false,
       USE_SHAPES: false,
-      GRAPH_NONLOCATED: false,
+      GRAPH_NONLOHATED: false,
       HIGHLIGHT_GROUPS: false
     }
   }
