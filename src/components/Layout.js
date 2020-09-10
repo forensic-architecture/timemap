@@ -119,13 +119,6 @@ class Dashboard extends React.Component {
     }
   }
 
-  // Broken for time being; need clarification on function
-  getNarrativeLinks (event) {
-    const narrative = this.props.narratives.find(nv => nv.id === event.narratives[0])
-    if (narrative) return narrative.byId[event.id]
-    return null
-  }
-
   setNarrative (narrative) {
     // only handleSelect if narrative is not null
     if (narrative) {
@@ -143,17 +136,6 @@ class Dashboard extends React.Component {
       return
     }
 
-    // if (this.props.features.USE_ASSOCIATION_DESCRIPTIONS) {
-    //   activeFilters = activeFilters.reduce((acc, vl) => {
-    //     acc.push({
-    //       name: vl,
-    //       description: findDescriptionInFilterTree(vl, domain.filters)
-    //     })
-    //     return acc
-    //   }, [])
-    // } else {
-    //   activeFilters = activeFilters.map(f => ({ name: f }))
-    // }
     activeFilters = activeFilters.map(f => ({ name: f }))
 
     const evs = domain.events.filter(ev => {
@@ -299,7 +281,6 @@ class Dashboard extends React.Component {
           onSelect={app.associations.narrative ? this.selectNarrativeStep : this.handleSelect}
           onHighlight={this.handleHighlight}
           onToggleCardstack={() => actions.updateSelected([])}
-          getNarrativeLinks={event => this.getNarrativeLinks(event)}
           getCategoryColor={this.getCategoryColor}
         />
         <StateOptions
