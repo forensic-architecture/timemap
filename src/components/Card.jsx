@@ -5,10 +5,8 @@ import CardCustomField from './presentational/Card/CustomField'
 import CardTime from './presentational/Card/Time'
 import CardLocation from './presentational/Card/Location'
 import CardCaret from './presentational/Card/Caret'
-import CardFilters from './presentational/Card/Filters'
 import CardSummary from './presentational/Card/Summary'
 import CardSource from './presentational/Card/Source'
-import CardNarrative from './presentational/Card/Narrative'
 import { makeNiceDate } from '../common/utilities'
 
 class Card extends React.Component {
@@ -35,18 +33,6 @@ class Card extends React.Component {
         language={this.props.language}
         description={this.props.event.description}
         isOpen={this.state.isOpen}
-      />
-    )
-  }
-
-  renderFilters () {
-    if (!this.props.filters || (this.props.filters && this.props.filters.length === 0)) {
-      return null
-    }
-    return (
-      <CardFilters
-        filters={this.props.filters || []}
-        language={this.props.language}
       />
     )
   }
@@ -105,21 +91,6 @@ class Card extends React.Component {
         timelabel={timelabel}
       />
     )
-  }
-
-  renderNarrative () {
-    // const links = this.props.getNarrativeLinks(this.props.event)
-
-    if (links !== null) {
-      return (
-        <CardNarrative
-          select={(event) => this.props.onSelect([event])}
-          makeTimelabel={(timestamp) => this.makeTimelabel(timestamp)}
-          next={links.next}
-          prev={links.prev}
-        />
-      )
-    }
   }
 
   renderCustomFields () {

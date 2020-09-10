@@ -76,7 +76,7 @@ export const selectEvents = createSelector(
 export const selectNarratives = createSelector(
   [getEvents, getNarratives, getSources, getFeatures],
   (events, narrativesMeta, sources, features) => {
-    if (!features.USE_NARRATIVES) {
+    if (Array.isArray(narrativesMeta) && narrativesMeta.length === 0) {
       return []
     }
     const narratives = {}

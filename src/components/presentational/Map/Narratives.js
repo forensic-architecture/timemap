@@ -26,6 +26,8 @@ function MapNarratives ({
     return styles[styleName]
   }
 
+  const narrativesExist = narratives && narratives.length !== 0
+
   function hasNoLocation (step) {
     return (step.latitude === '' || step.longitude === '')
   }
@@ -141,7 +143,7 @@ function MapNarratives ({
 
     let lastMarked = null
 
-    if (features.FILTERS_AS_NARRATIVES) {
+    if (narrativesExist) {
       for (let idx = 0; idx < n.steps.length; idx += 1) {
         const step = n.steps[idx]
         if (lastMarked) {
@@ -174,7 +176,7 @@ function MapNarratives ({
   function renderNarrative (n) {
     const narrativeId = `narrative-${n.id.replace(/ /g, '_')}`
 
-    const body = features.FILTERS_AS_NARRATIVES
+    const body = narrativesExist
       ? renderBetweenMarked(n)
       : (features.NARRATIVE_STEP_STYLES
         ? renderBetweenMarked(n)

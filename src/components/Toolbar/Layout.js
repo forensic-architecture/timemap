@@ -113,13 +113,13 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarPanels () {
-    const { features } = this.props
+    const { features, narratives } = this.props
     let classes = (this.state._selected >= 0) ? 'toolbar-panels' : 'toolbar-panels folded'
     return (
       <div className={classes}>
         {this.renderClosePanel()}
         <Tabs selectedIndex={this.state._selected}>
-          {features.USE_NARRATIVES ? this.renderToolbarNarrativePanel() : null}
+          {narratives && narratives.length !== 0 ? this.renderToolbarNarrativePanel() : null}
           {features.CATEGORIES_AS_FILTERS ? this.renderToolbarCategoriesPanel() : null}
           {features.USE_ASSOCIATIONS ? this.renderToolbarFilterPanel() : null}
         </Tabs>
@@ -145,7 +145,8 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarTabs () {
-    const { features } = this.props
+    const { features, narratives } = this.props
+    const narrativesExist = narratives && narratives.length !== 0
     let title = copy[this.props.language].toolbar.title
     if (process.env.display_title) title = process.env.display_title
     const narrativesLabel = copy[this.props.language].toolbar.narratives_label
@@ -153,15 +154,15 @@ class Toolbar extends React.Component {
     const categoriesLabel = 'Categories' // TODO:
 
     const narrativesIdx = 0
-    const categoriesIdx = features.USE_NARRATIVES ? 1 : 0
-    const filtersIdx = (features.USE_NARRATIVES && features.CATEGORIES_AS_FILTERS) ? 2 : (
-      features.USE_NARRATIVES || features.CATEGORIES_AS_FILTERS ? 1 : 0
+    const categoriesIdx = narrativesExist ? 1 : 0
+    const filtersIdx = (narrativesExist && features.CATEGORIES_AS_FILTERS) ? 2 : (
+      narrativesExist || features.CATEGORIES_AS_FILTERS ? 1 : 0
     )
     return (
       <div className='toolbar'>
         <div className='toolbar-header'onClick={this.props.methods.onTitle}><p>{title}</p></div>
         <div className='toolbar-tabs'>
-          {features.USE_NARRATIVES ? this.renderToolbarTab(narrativesIdx, narrativesLabel, 'timeline') : null}
+          {narrativesExist ? this.renderToolbarTab(narrativesIdx, narrativesLabel, 'timeline') : null}
           {features.CATEGORIES_AS_FILTERS ? this.renderToolbarTab(categoriesIdx, categoriesLabel, 'widgets') : null}
           {features.USE_ASSOCIATIONS ? this.renderToolbarTab(filtersIdx, filtersLabel, 'filter_list') : null}
         </div>

@@ -303,7 +303,7 @@ class Dashboard extends React.Component {
           getCategoryColor={this.getCategoryColor}
         />
         <StateOptions
-          showing={features.FILTERS_AS_NARRATIVES && !app.associations.narrative && app.associations.filters.length > 0}
+          showing={this.props.narratives && this.props.narratives.length !== 0 && !app.associations.narrative && app.associations.filters.length > 0}
           timelineDims={app.timeline.dimensions}
           onClickHandler={this.setNarrativeFromFilters}
         />
