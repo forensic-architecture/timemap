@@ -49,9 +49,9 @@ export const selectEvents = createSelector(
   [getEvents, getActiveFilters, getActiveCategories, getTimeRange, getFeatures],
   (events, activeFilters, activeCategories, timeRange, features) => {
     return events.reduce((acc, event) => {
-      const isMatchingFilter = (event.filters &&
-        event.filters.map(filter =>
-          activeFilters.includes(filter))
+      const isMatchingFilter = (event.associations &&
+        event.associations.map(association =>
+          activeFilters.includes(association))
           .some(s => s)
       ) || activeFilters.length === 0
       const isActiveFilter = isMatchingFilter || activeFilters.length === 0
@@ -84,12 +84,16 @@ export const selectNarratives = createSelector(
 
     /* populate narratives dict with events */
     events.forEach(evt => {
-      evt.narratives.forEach(narrative => {
-        // initialise
-        if (!narratives[narrative]) { narratives[narrative] = narrativeSkeleton(narrative) }
-        // add evt to steps
-        // NB: insetSourceFrom is a 'curried' function to allow with maps
-        narratives[narrative].steps.push(insetSourceFrom(sources)(evt))
+      evt.associations.forEach(association => {
+        const foundNarrative = narrativesMeta.find(narr => narr.id === association)
+        if (!!foundNarrative) {
+          const { id: narrId } = foundNarrative
+          // initialise
+          if (!narratives[narrId]) { narratives[narrId] = narrativeSkeleton(narrId) }
+          // add evt to steps
+          // NB: insetSourceFrom is a 'curried' function to allow with maps
+          narratives[narrId].steps.push(insetSourceFrom(sources)(evt))
+        }
       })
     })
     /* sort steps by time */
@@ -100,14 +104,11 @@ export const selectNarratives = createSelector(
 
       const existingAssociatedNarrative = narrativesMeta.find(n => n.id === key)
 
-      if (existingAssociatedNarrative) {
+      if (!!existingAssociatedNarrative) {
         narratives[key] = {
           ...existingAssociatedNarrative,
           ...narratives[key]
         }
-      } else {
-        // Associations dont contain this narrative 
-        delete narratives[key]
       }
     })
     // Return narratives in original order

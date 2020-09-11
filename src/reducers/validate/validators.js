@@ -84,11 +84,11 @@ export function validateDomain (domain, features) {
   function validateArray (items, domainKey, schema) {
     items.forEach(item => {
       // NB: backwards compatibility with 'tags' for 'filters'
-      if (domainKey === 'events') {
-        if (!item.filters && !!item.tags) {
-          item.filters = item.tags
-        }
-      }
+      // if (domainKey === 'events') {
+      //   if (!item.filters && !!item.tags) {
+      //     item.filters = item.tags
+      //   }
+      // }
       validateArrayItem(item, domainKey, schema)
     })
   }

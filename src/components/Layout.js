@@ -142,7 +142,7 @@ class Dashboard extends React.Component {
       let hasOne = false 
       // add event if it has at least one matching filter
       for (let i = 0; i < activeFilters.length; i++) {
-        if (ev.filters.includes(activeFilters[i].name)) {
+        if (ev.associations.includes(activeFilters[i].name)) {
           hasOne = true
           break
         }

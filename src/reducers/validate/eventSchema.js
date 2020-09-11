@@ -24,10 +24,8 @@ function createEventSchema (custom) {
     category: Joi.string().allow(''),
     category_full: Joi.string().allow(''),
     associations: Joi.array(),
-    // narratives: Joi.array(),
     sources: Joi.array(),
-    // filters: Joi.array().allow(''),
-    tags: Joi.array().allow(''),
+    // tags: Joi.array().allow(''),
     comments: Joi.string().allow(''),
     time_display: Joi.string().allow(''),
     // nested
