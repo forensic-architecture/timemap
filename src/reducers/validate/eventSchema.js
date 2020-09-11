@@ -25,7 +25,6 @@ function createEventSchema (custom) {
     category_full: Joi.string().allow(''),
     associations: Joi.array(),
     sources: Joi.array(),
-    // tags: Joi.array().allow(''),
     comments: Joi.string().allow(''),
     time_display: Joi.string().allow(''),
     // nested
