@@ -7,7 +7,7 @@ import associationsSchema from './associationsSchema'
 import sourceSchema from './sourceSchema'
 import shapeSchema from './shapeSchema'
 
-import { calcDatetime, capitalize, isFilterLeaf, isFilterDuplicate } from '../../common/utilities'
+import { calcDatetime, capitalize } from '../../common/utilities'
 
 /*
 * Create an error notification object

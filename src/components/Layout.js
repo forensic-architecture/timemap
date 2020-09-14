@@ -139,7 +139,7 @@ class Dashboard extends React.Component {
     activeFilters = activeFilters.map(f => ({ name: f }))
 
     const evs = domain.events.filter(ev => {
-      let hasOne = false 
+      let hasOne = false
       // add event if it has at least one matching filter
       for (let i = 0; i < activeFilters.length; i++) {
         if (ev.associations.includes(activeFilters[i].name)) {

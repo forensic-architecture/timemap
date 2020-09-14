@@ -86,7 +86,7 @@ export const selectNarratives = createSelector(
     events.forEach(evt => {
       evt.associations.forEach(association => {
         const foundNarrative = narrativesMeta.find(narr => narr.id === association)
-        if (!!foundNarrative) {
+        if (foundNarrative) {
           const { id: narrId } = foundNarrative
           // initialise
           if (!narratives[narrId]) { narratives[narrId] = narrativeSkeleton(narrId) }
@@ -104,7 +104,7 @@ export const selectNarratives = createSelector(
 
       const existingAssociatedNarrative = narrativesMeta.find(n => n.id === key)
 
-      if (!!existingAssociatedNarrative) {
+      if (existingAssociatedNarrative) {
         narratives[key] = {
           ...existingAssociatedNarrative,
           ...narratives[key]

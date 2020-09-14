@@ -126,7 +126,7 @@ function toggleFilter (appState, action) {
     ...appState,
     associations: {
       ...appState.associations,
-      filters: newFilters,
+      filters: newFilters
     }
   }
 }
