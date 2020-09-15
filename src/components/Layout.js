@@ -104,7 +104,6 @@ class Dashboard extends React.Component {
       delete std.sources
       Object.values(std).forEach(ev => matchedEvents.push(ev))
     }
-
     this.props.actions.updateSelected(matchedEvents)
   }
 
@@ -120,8 +119,8 @@ class Dashboard extends React.Component {
   }
 
   setNarrative (narrative) {
-    // only handleSelect if narrative is not null
-    if (narrative) {
+    // only handleSelect if narrative is not null and has associated events
+    if (narrative && narrative.steps.length >= 1) {
       this.handleSelect([ narrative.steps[0] ])
     }
     this.props.actions.updateNarrative(narrative)
@@ -150,6 +149,11 @@ class Dashboard extends React.Component {
       if (hasOne) return true
       return false
     })
+    
+    if (evs.length === 0) {
+      alert('No associated events, cant narrativise')
+      return
+    }
 
     const name = activeFilters.map(f => f.name).join('-')
     const desc = activeFilters.map(f => f.description).join('\n\n')
@@ -247,7 +251,7 @@ class Dashboard extends React.Component {
         </div>
       )
     }
-
+    
     return (
       <div >
         <Toolbar
