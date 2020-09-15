@@ -149,7 +149,7 @@ class Dashboard extends React.Component {
       if (hasOne) return true
       return false
     })
-    
+
     if (evs.length === 0) {
       alert('No associated events, cant narrativise')
       return
@@ -251,7 +251,7 @@ class Dashboard extends React.Component {
         </div>
       )
     }
-    
+
     return (
       <div >
         <Toolbar
