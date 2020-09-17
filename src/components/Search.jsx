@@ -39,8 +39,9 @@ class Search extends React.Component {
       searchResults = []
     } else {
       searchResults = this.props.events.filter(event =>
-        searchAttributes.map(attribute => { event[attribute].toLowerCase().includes(this.props.queryString.toLowerCase()) })
+        searchAttributes.some(attribute => event[attribute].toLowerCase().includes(this.props.queryString.toLowerCase()))
       )
+      console.log(searchResults)
     }
 
     return (
