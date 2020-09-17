@@ -9,8 +9,7 @@ import {
   UPDATE_TIMERANGE,
   UPDATE_DIMENSIONS,
   UPDATE_NARRATIVE,
-  INCREMENT_NARRATIVE_CURRENT,
-  DECREMENT_NARRATIVE_CURRENT,
+  UPDATE_NARRATIVE_STEP_IDX,
   UPDATE_SOURCE,
   TOGGLE_LANGUAGE,
   TOGGLE_SITES,
@@ -99,24 +98,11 @@ function updateNarrative (appState, action) {
   }
 }
 
-function incrementNarrativeCurrent (appState, action) {
-  appState.narrativeState.current += 1
-
+function updateNarrativeStepIdx (appState, action) {
   return {
     ...appState,
     narrativeState: {
-      current: appState.narrativeState.current
-    }
-  }
-}
-
-function decrementNarrativeCurrent (appState, action) {
-  appState.narrativeState.current -= 1
-
-  return {
-    ...appState,
-    narrativeState: {
-      current: appState.narrativeState.current
+      current: action.idx
     }
   }
 }
@@ -253,10 +239,8 @@ function app (appState = initial.app, action) {
       return updateDimensions(appState, action)
     case UPDATE_NARRATIVE:
       return updateNarrative(appState, action)
-    case INCREMENT_NARRATIVE_CURRENT:
-      return incrementNarrativeCurrent(appState, action)
-    case DECREMENT_NARRATIVE_CURRENT:
-      return decrementNarrativeCurrent(appState, action)
+    case UPDATE_NARRATIVE_STEP_IDX:
+      return updateNarrativeStepIdx(appState, action)
     case UPDATE_SOURCE:
       return updateSource(appState, action)
     /* toggles */

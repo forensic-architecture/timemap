@@ -31,11 +31,11 @@ class Dashboard extends React.Component {
     this.handleHighlight = this.handleHighlight.bind(this)
     this.setNarrative = this.setNarrative.bind(this)
     this.setNarrativeFromFilters = this.setNarrativeFromFilters.bind(this)
-    this.moveInNarrative = this.moveInNarrative.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.getCategoryColor = this.getCategoryColor.bind(this)
     this.findEventIdx = this.findEventIdx.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
+    this.selectNarrativeStep = this.selectNarrativeStep.bind(this)
   }
 
   componentDidMount () {
@@ -177,18 +177,32 @@ class Dashboard extends React.Component {
     })
   }
 
-  moveInNarrative (amt) {
-    const { current } = this.props.app.narrativeState
+  selectNarrativeStep (idx) {
+    // Try to find idx if event passed rather than number
+    if (typeof idx !== 'number') {
+      let e = idx[0] || idx
+
+      if (this.props.app.narrative) {
+        const { steps } = this.props.app.narrative
+        // choose the first event at a given location
+        const locationEventId = e.id
+        const narrativeIdxObj = steps.find(s => s.id === locationEventId)
+        let narrativeIdx = steps.indexOf(narrativeIdxObj)
+
+        if (narrativeIdx > -1) {
+          idx = narrativeIdx
+        }
+      }
+    }
+
     const { narrative } = this.props.app
     if (narrative === null) return
 
-    if (amt === 1 && current < narrative.steps.length - 1) {
-      this.handleSelect([ narrative.steps[current + 1] ])
-      this.props.actions.incrementNarrativeCurrent()
-    }
-    if (amt === -1 && current > 0) {
-      this.handleSelect([ narrative.steps[current - 1] ])
-      this.props.actions.decrementNarrativeCurrent()
+    if (idx < narrative.steps.length && idx >= 0) {
+      const step = narrative.steps[idx]
+
+      this.handleSelect([step])
+      this.props.actions.updateNarrativeStepIdx(idx)
     }
   }
 
@@ -199,14 +213,14 @@ class Dashboard extends React.Component {
       if (narrative === null) {
         this.handleSelect(events[idx - 1], 0)
       } else {
-        this.moveInNarrative(-1)
+        this.selectNarrativeStep(this.props.app.narrativeState.current - 1)
       }
     }
     const next = idx => {
       if (narrative === null) {
         this.handleSelect(events[idx + 1], 0)
       } else {
-        this.moveInNarrative(1)
+        this.selectNarrativeStep(this.props.app.narrativeState.current + 1)
       }
     }
     if (selected.length > 0) {
@@ -264,15 +278,15 @@ class Dashboard extends React.Component {
         <Map
           onKeyDown={this.onKeyDown}
           methods={{
-            onSelect: ev => this.handleSelect(ev, 1),
             onSelectNarrative: this.setNarrative,
-            getCategoryColor: this.getCategoryColor
+            getCategoryColor: this.getCategoryColor,
+            onSelect: app.narrative ? this.selectNarrativeStep : ev => this.handleSelect(ev, 1)
           }}
         />
         <Timeline
           onKeyDown={this.onKeyDown}
           methods={{
-            onSelect: ev => this.handleSelect(ev, 0),
+            onSelect: app.narrative ? this.selectNarrativeStep : ev => this.handleSelect(ev, 0),
             onUpdateTimerange: actions.updateTimeRange,
             getCategoryColor: this.getCategoryColor
           }}
@@ -280,7 +294,7 @@ class Dashboard extends React.Component {
         <CardStack
           timelineDims={app.timeline.dimensions}
           onViewSource={this.handleViewSource}
-          onSelect={this.handleSelect}
+          onSelect={app.narrative ? this.selectNarrativeStep : this.handleSelect}
           onHighlight={this.handleHighlight}
           onToggleCardstack={() => actions.updateSelected([])}
           getNarrativeLinks={event => this.getNarrativeLinks(event)}
@@ -297,8 +311,8 @@ class Dashboard extends React.Component {
             current: app.narrativeState.current
           } : null}
           methods={{
-            onNext: () => this.moveInNarrative(1),
-            onPrev: () => this.moveInNarrative(-1),
+            onNext: () => this.selectNarrativeStep(this.props.app.narrativeState.current + 1),
+            onPrev: () => this.selectNarrativeStep(this.props.app.narrativeState.current - 1),
             onSelectNarrative: this.setNarrative
           }}
         />

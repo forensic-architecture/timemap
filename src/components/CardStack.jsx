@@ -72,7 +72,7 @@ class CardStack extends React.Component {
         getCategoryLabel={this.props.getCategoryLabel}
         onViewSource={this.props.onViewSource}
         onHighlight={this.props.onHighlight}
-        onSelect={this.props.onSelect}
+        onSelect={() => this.props.onSelect(idx)}
         features={this.props.features}
       />)
     })

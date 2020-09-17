@@ -135,7 +135,7 @@ function MapEvents ({
       <g
         className={`location-event ${narrative ? 'no-hover' : ''}`}
         transform={`translate(${x}, ${y})`}
-        onClick={(!narrative) ? () => onSelect(location.events) : null}
+        onClick={() => onSelect(location.events)}
       >
         {renderLocationSlicesByCategory(location)}
         {extraRender ? extraRender() : null}
