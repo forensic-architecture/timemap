@@ -198,6 +198,7 @@ class Dashboard extends React.Component {
   onKeyDown (e) {
     const { narrative, selected } = this.props.app
     const { events } = this.props.domain
+
     const prev = idx => {
       if (narrative === null) {
         this.handleSelect(events[idx - 1], 0)

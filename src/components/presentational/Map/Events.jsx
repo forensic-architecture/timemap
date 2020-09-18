@@ -1,6 +1,7 @@
 import React from 'react'
 import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
+import Tooltip from '../Tooltip'
 import { calcOpacity } from '../../../common/utilities'
 
 function MapEvents ({
