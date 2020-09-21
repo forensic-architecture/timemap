@@ -92,6 +92,7 @@ class Map extends React.Component {
     firstLayer.addTo(map)
 
     map.keyboard.disable()
+    map.zoomControl.remove()
 
     map.on('move zoomend viewreset moveend', () => this.alignLayers())
     map.on('zoomstart', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.add('hide') })

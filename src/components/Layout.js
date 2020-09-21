@@ -21,6 +21,7 @@ import TemplateCover from './TemplateCover'
 import colors from '../common/global'
 import { binarySearch, insetSourceFrom, findDescriptionInFilterTree } from '../common/utilities'
 import { isMobile } from 'react-device-detect'
+import Search from './Search.jsx'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -240,6 +241,7 @@ class Dashboard extends React.Component {
       }
     }
   }
+
   render () {
     const { actions, app, domain, ui, features } = this.props
 
@@ -325,6 +327,12 @@ class Dashboard extends React.Component {
           isNotification={app.flags.isNotification}
           notifications={domain.notifications}
           onToggle={actions.markNotificationsRead}
+        />
+        <Search
+          narrative={app.narrative}
+          queryString={app.searchQuery}
+          events={domain.events}
+          onSearchRowClick={this.handleSelect}
         />
         {app.source ? (
           <MediaOverlay
