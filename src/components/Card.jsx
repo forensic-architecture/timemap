@@ -13,7 +13,7 @@ class Card extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isOpen: false
+      isOpen: false,
     }
   }
 
@@ -135,17 +135,25 @@ class Card extends React.Component {
 
   render () {
     const { isSelected, idx } = this.props
-
-    return (
+    console.info(this.props)
+    return ( 
       <li
         className={`event-card ${isSelected ? 'selected' : ''}`}
         id={`event-card-${idx}`}
         ref={this.props.innerRef}
-        onClick={this.props.onSelect}
+        onClick={() => {
+          console.info('getting clicked')
+          if (!this.state.isOpen) {
+            const selectedEventFormat = idx > 0 ? [this.props.event] : this.props.event
+            this.props.onSelect(selectedEventFormat, idx)
+          } else {
+            console.info('NOT OPEN')
+          }
+        }}
       >
         {this.renderMain()}
         {this.state.isOpen ? this.renderExtra() : null}
-        {isSelected ? this.renderCaret() : null}
+        {this.renderCaret()}
       </li>
     )
   }

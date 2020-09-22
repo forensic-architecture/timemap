@@ -59,6 +59,7 @@ class CardStack extends React.Component {
     return events.map((event, idx) => {
       const thisRef = React.createRef()
       this.refs[idx] = thisRef
+
       return (<Card
         event={event}
         ref={thisRef}
@@ -71,7 +72,8 @@ class CardStack extends React.Component {
         getCategoryLabel={this.props.getCategoryLabel}
         onViewSource={this.props.onViewSource}
         onHighlight={this.props.onHighlight}
-        onSelect={() => this.props.onSelect(idx)}
+        onSelect={this.props.onSelect}
+        idx={idx}
         features={this.props.features}
       />)
     })
@@ -79,6 +81,7 @@ class CardStack extends React.Component {
 
   renderSelectedCards () {
     const { selected } = this.props
+
     if (selected.length > 0) {
       return this.renderCards(selected)
     }

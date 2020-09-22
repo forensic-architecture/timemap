@@ -29,7 +29,7 @@ const initial = {
    */
   app: {
     errors: {
-      source: null
+      source: false
     },
     highlighted: null,
     selected: [],

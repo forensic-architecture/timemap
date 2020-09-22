@@ -83,6 +83,7 @@ class Dashboard extends React.Component {
   }
 
   handleSelect (selected, axis) {
+    console.info(selected)
     const matchedEvents = []
     const TIMELINE_AXIS = 0
     if (axis === TIMELINE_AXIS) {
@@ -97,7 +98,9 @@ class Dashboard extends React.Component {
         ptr >= 0 &&
         (events[idx].datetime).getTime() === (events[ptr].datetime).getTime()
       ) {
-          matchedEvents.push(events[ptr])
+          if (events[ptr].id !== selected.id) {
+            matchedEvents.push(events[ptr])
+          }
           ptr -= 1
       }
       // check events after
@@ -107,15 +110,16 @@ class Dashboard extends React.Component {
         ptr < events.length &&
         (events[idx].datetime).getTime() === (events[ptr].datetime).getTime()
       ) {
+        if (events[ptr].id !== selected.id) {
           matchedEvents.push(events[ptr])
-          ptr += 1
+        }
+        ptr += 1
       }
-    } else { // Map...
+    } else { // Map..
       const std = { ...selected }
       delete std.sources
       Object.values(std).forEach(ev => matchedEvents.push(ev))
     }
-    console.info(matchedEvents)
     this.props.actions.updateSelected(matchedEvents)
   }
 
@@ -371,7 +375,8 @@ export default connect(
   state => ({
     ...state,
     narrativeIdx: selectors.selectNarrativeIdx(state),
-    narratives: selectors.selectNarratives(state)
+    narratives: selectors.selectNarratives(state),
+    selected: selectors.selectSelected(state)
   }),
   mapDispatchToProps
 )(Dashboard)

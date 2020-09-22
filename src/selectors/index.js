@@ -267,7 +267,6 @@ export const selectSelected = createSelector(
     if (selected.length === 0) {
       return []
     }
-
     return selected.map(insetSourceFrom(sources))
   }
 )

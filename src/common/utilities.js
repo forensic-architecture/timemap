@@ -74,9 +74,10 @@ export function insetSourceFrom (allSources) {
     if (!event.sources) {
       sources = []
     } else {
-      sources = event.sources.map(id => (
-        allSources.hasOwnProperty(id) ? allSources[id] : null
-      ))
+      sources = event.sources.map(src => {
+        const id = typeof src === 'object' ? src.id : src
+        return allSources.hasOwnProperty(id) ? allSources[id] : null
+      })
     }
     return {
       ...event,
