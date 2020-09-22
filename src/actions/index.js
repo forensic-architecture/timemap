@@ -318,6 +318,14 @@ export function toggleCover () {
   }
 }
 
+export const UPDATE_SEARCH_QUERY = 'UPDATE_SEARCH_QUERY'
+export function updateSearchQuery (searchQuery) {
+  return {
+    type: UPDATE_SEARCH_QUERY,
+    searchQuery
+  }
+}
+
 // ERRORS
 
 export const FETCH_SOURCE_ERROR = 'FETCH_SOURCE_ERROR'

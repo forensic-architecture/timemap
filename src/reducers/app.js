@@ -21,7 +21,8 @@ import {
   FETCH_ERROR,
   FETCH_SOURCE_ERROR,
   SET_LOADING,
-  SET_NOT_LOADING
+  SET_NOT_LOADING,
+  UPDATE_SEARCH_QUERY
 } from '../actions'
 
 function updateHighlighted (appState, action) {
@@ -217,6 +218,13 @@ function setNotLoading (appState) {
   }
 }
 
+function updateSearchQuery (appState, action) {
+  return {
+    ...appState,
+    searchQuery: action.searchQuery
+  }
+}
+
 function app (appState = initial.app, action) {
   switch (action.type) {
     case UPDATE_HIGHLIGHTED:
@@ -261,6 +269,8 @@ function app (appState = initial.app, action) {
       return setLoading(appState)
     case SET_NOT_LOADING:
       return setNotLoading(appState)
+    case UPDATE_SEARCH_QUERY:
+      return updateSearchQuery(appState, action)
     default:
       return appState
   }
