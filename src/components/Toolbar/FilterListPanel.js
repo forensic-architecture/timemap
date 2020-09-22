@@ -1,6 +1,7 @@
 import React from 'react'
 import Checkbox from '../presentational/Checkbox'
 import copy from '../../common/data/copy.json'
+import { merge } from 'lodash'
 
 /** recursively get an array of node keys to toggle */
 function childrenToToggle (filter, activeFilters, parentOn) {
@@ -19,21 +20,34 @@ function childrenToToggle (filter, activeFilters, parentOn) {
   return childKeys
 }
 
+// function aggregatePaths (filters) {
+//   let aggregated = {}
+
+//   filters.forEach(item => {
+//     let currentDepth = aggregated
+//     item.filter_paths.forEach(path => {
+//       if (!(path in aggregated)) {
+//         currentDepth[path] = {}
+//       }
+//       currentDepth = currentDepth[path]
+//     })
+//   })
+//   return aggregated
+// }
 function aggregatePaths (filters) {
-  const aggregated = {}
+  function insertPath (children = {}, [headOfPath, ...remainder]) {
+    console.info(children, headOfPath, remainder)
+    let childKey = Object.keys(children).find(key => key === headOfPath)
+    if (!childKey) children[headOfPath] = {}
+    if (remainder.length > 0) insertPath(children[headOfPath], remainder)
+    return children
+  }
 
-  filters.forEach(item => {
-    let currentDepth = aggregated
+  const allPaths = []
+  filters.forEach(filterItem => allPaths.push(filterItem.filter_paths))
 
-    item.filter_paths.forEach(path => {
-      if (!(path in aggregated)) {
-        currentDepth[path] = {}
-      }
-      currentDepth = currentDepth[path]
-    })
-  })
-
-  return aggregated
+  let aggregatedPaths = allPaths.reduce((children, path) => insertPath(children, path), {})
+  return aggregatedPaths
 }
 
 function FilterListPanel ({
@@ -66,6 +80,7 @@ function FilterListPanel ({
 
   function renderTree (filters) {
     const aggregatedFilterPaths = aggregatePaths(filters)
+
     return (
       <div>
         {Object.entries(aggregatedFilterPaths).map(filter => createNodeComponent(filter, 1))}
