@@ -136,7 +136,6 @@ class CardStack extends React.Component {
 
   render () {
     const { isCardstack, selected, narrative, timelineDims } = this.props
-
     // TODO: make '237px', which is the narrative header, less hard-coded
     const height = `calc(100% - 237px - ${timelineDims.height}px)`
     if (selected.length > 0) {

@@ -71,6 +71,16 @@ class Dashboard extends React.Component {
     )
   }
 
+  filterEventDuplicates (events) {
+    const seen = Set()
+    const filteredEvents = events.filter(evt => {
+      if (!(seen.has(evt.id))) {
+        seen.add(evt.id)
+        return evt
+      }
+    })
+  }
+
   handleSelect (selected, axis) {
     const matchedEvents = []
     const TIMELINE_AXIS = 0
@@ -86,8 +96,8 @@ class Dashboard extends React.Component {
         ptr >= 0 &&
         (events[idx].datetime).getTime() === (events[ptr].datetime).getTime()
       ) {
-        matchedEvents.push(events[ptr])
-        ptr -= 1
+          matchedEvents.push(events[ptr])
+          ptr -= 1
       }
       // check events after
       ptr = idx + 1
@@ -96,14 +106,15 @@ class Dashboard extends React.Component {
         ptr < events.length &&
         (events[idx].datetime).getTime() === (events[ptr].datetime).getTime()
       ) {
-        matchedEvents.push(events[ptr])
-        ptr += 1
+          matchedEvents.push(events[ptr])
+          ptr += 1
       }
     } else { // Map...
       const std = { ...selected }
       delete std.sources
       Object.values(std).forEach(ev => matchedEvents.push(ev))
     }
+    console.info(matchedEvents)
     this.props.actions.updateSelected(matchedEvents)
   }
 

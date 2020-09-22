@@ -20,23 +20,8 @@ function childrenToToggle (filter, activeFilters, parentOn) {
   return childKeys
 }
 
-// function aggregatePaths (filters) {
-//   let aggregated = {}
-
-//   filters.forEach(item => {
-//     let currentDepth = aggregated
-//     item.filter_paths.forEach(path => {
-//       if (!(path in aggregated)) {
-//         currentDepth[path] = {}
-//       }
-//       currentDepth = currentDepth[path]
-//     })
-//   })
-//   return aggregated
-// }
 function aggregatePaths (filters) {
   function insertPath (children = {}, [headOfPath, ...remainder]) {
-    console.info(children, headOfPath, remainder)
     let childKey = Object.keys(children).find(key => key === headOfPath)
     if (!childKey) children[headOfPath] = {}
     if (remainder.length > 0) insertPath(children[headOfPath], remainder)
