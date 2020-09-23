@@ -5,7 +5,6 @@ import * as actions from '../../actions'
 import * as selectors from '../../selectors'
 
 import { Tabs, TabPanel } from 'react-tabs'
-import Search from './Search'
 import FilterListPanel from './FilterListPanel'
 import CategoriesListPanel from './CategoriesListPanel'
 import BottomActions from './BottomActions'
@@ -29,23 +28,6 @@ class Toolbar extends React.Component {
         <div className='caret' />
       </div>
     )
-  }
-
-  renderSearch () {
-    if (this.props.features.USE_SEARCH) {
-      return (
-        <TabPanel>
-          <Search
-            language={this.props.language}
-            filters={this.props.filters}
-            categories={this.props.categories}
-            filterFilters={this.props.filterFilters}
-            categoryFilters={this.props.categoryFilters}
-            filter={this.props.filter}
-          />
-        </TabPanel>
-      )
-    }
   }
 
   goToNarrative (narrative) {
