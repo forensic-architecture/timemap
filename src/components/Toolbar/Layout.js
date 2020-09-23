@@ -62,8 +62,8 @@ class Toolbar extends React.Component {
           return (
             <div className='panel-action action'>
               <button onClick={() => { this.goToNarrative(narr) }}>
-                <p>{narr.label}</p>
-                <p><small>{trimAndEllipse(narr.description, 120)}</small></p>
+                <p>{narr.id}</p>
+                <p><small>{trimAndEllipse(narr.desc, 120)}</small></p>
               </button>
             </div>
           )
@@ -113,15 +113,15 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarPanels () {
-    const { features } = this.props
+    const { features, narratives } = this.props
     let classes = (this.state._selected >= 0) ? 'toolbar-panels' : 'toolbar-panels folded'
     return (
       <div className={classes}>
         {this.renderClosePanel()}
         <Tabs selectedIndex={this.state._selected}>
-          {features.USE_NARRATIVES ? this.renderToolbarNarrativePanel() : null}
+          {narratives && narratives.length !== 0 ? this.renderToolbarNarrativePanel() : null}
           {features.CATEGORIES_AS_FILTERS ? this.renderToolbarCategoriesPanel() : null}
-          {features.USE_FILTERS ? this.renderToolbarFilterPanel() : null}
+          {features.USE_ASSOCIATIONS ? this.renderToolbarFilterPanel() : null}
         </Tabs>
       </div>
     )
@@ -145,7 +145,8 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarTabs () {
-    const { features } = this.props
+    const { features, narratives } = this.props
+    const narrativesExist = narratives && narratives.length !== 0
     let title = copy[this.props.language].toolbar.title
     if (process.env.display_title) title = process.env.display_title
     const narrativesLabel = copy[this.props.language].toolbar.narratives_label
@@ -153,17 +154,17 @@ class Toolbar extends React.Component {
     const categoriesLabel = 'Categories' // TODO:
 
     const narrativesIdx = 0
-    const categoriesIdx = features.USE_NARRATIVES ? 1 : 0
-    const filtersIdx = (features.USE_NARRATIVES && features.CATEGORIES_AS_FILTERS) ? 2 : (
-      features.USE_NARRATIVES || features.CATEGORIES_AS_FILTERS ? 1 : 0
+    const categoriesIdx = narrativesExist ? 1 : 0
+    const filtersIdx = (narrativesExist && features.CATEGORIES_AS_FILTERS) ? 2 : (
+      narrativesExist || features.CATEGORIES_AS_FILTERS ? 1 : 0
     )
     return (
       <div className='toolbar'>
         <div className='toolbar-header'onClick={this.props.methods.onTitle}><p>{title}</p></div>
         <div className='toolbar-tabs'>
-          {features.USE_NARRATIVES ? this.renderToolbarTab(narrativesIdx, narrativesLabel, 'timeline') : null}
+          {narrativesExist ? this.renderToolbarTab(narrativesIdx, narrativesLabel, 'timeline') : null}
           {features.CATEGORIES_AS_FILTERS ? this.renderToolbarTab(categoriesIdx, categoriesLabel, 'widgets') : null}
-          {features.USE_FILTERS ? this.renderToolbarTab(filtersIdx, filtersLabel, 'filter_list') : null}
+          {features.USE_ASSOCIATIONS ? this.renderToolbarTab(filtersIdx, filtersLabel, 'filter_list') : null}
         </div>
         <BottomActions
           info={{
@@ -197,14 +198,14 @@ class Toolbar extends React.Component {
 
 function mapStateToProps (state) {
   return {
-    filters: selectors.getFilterTree(state),
+    filters: selectors.getFilters(state),
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
     language: state.app.language,
     activeFilters: selectors.getActiveFilters(state),
     activeCategories: selectors.getActiveCategories(state),
-    viewFilters: state.app.filters.views,
-    narrative: state.app.narrative,
+    viewFilters: state.app.associations.views,
+    narrative: state.app.associations.narrative,
     sitesShowing: state.app.flags.isShowingSites,
     infoShowing: state.app.flags.isInfopopup,
     features: selectors.getFeatures(state)

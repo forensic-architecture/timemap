@@ -59,6 +59,7 @@ class CardStack extends React.Component {
     return events.map((event, idx) => {
       const thisRef = React.createRef()
       this.refs[idx] = thisRef
+
       return (<Card
         event={event}
         ref={thisRef}
@@ -66,13 +67,13 @@ class CardStack extends React.Component {
         language={this.props.language}
         isLoading={this.props.isLoading}
         isSelected={selections[idx]}
-        getNarrativeLinks={this.props.getNarrativeLinks}
         getCategoryGroup={this.props.getCategoryGroup}
         getCategoryColor={this.props.getCategoryColor}
         getCategoryLabel={this.props.getCategoryLabel}
         onViewSource={this.props.onViewSource}
         onHighlight={this.props.onHighlight}
-        onSelect={() => this.props.onSelect(idx)}
+        onSelect={this.props.onSelect}
+        idx={idx}
         features={this.props.features}
       />)
     })
@@ -80,6 +81,7 @@ class CardStack extends React.Component {
 
   renderSelectedCards () {
     const { selected } = this.props
+
     if (selected.length > 0) {
       return this.renderCards(selected)
     }
@@ -137,7 +139,6 @@ class CardStack extends React.Component {
 
   render () {
     const { isCardstack, selected, narrative, timelineDims } = this.props
-
     // TODO: make '237px', which is the narrative header, less hard-coded
     const height = `calc(100% - 237px - ${timelineDims.height}px)`
     if (selected.length > 0) {

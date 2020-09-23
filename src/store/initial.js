@@ -6,17 +6,16 @@ const initial = {
    * The Domain or 'domain' of this state refers to the tree of data
    *  available for render and display.
    * Selections and filters in the 'app' subtree will operate the domain
-   *   in mapStateToProps of the Dashboard, and deterimne which items
+   *   in mapStateToProps of the Dashboard, and determine which items
    *   in the domain will get rendered by React
    */
   domain: {
     events: [],
-    narratives: [],
     locations: [],
     categories: [],
+    associations: [],
     sources: {},
     sites: [],
-    filters: {},
     notifications: []
   },
 
@@ -24,23 +23,20 @@ const initial = {
    * The 'app' subtree of this state determines the data and information to be
    *   displayed.
    * It may refer to those the user interacts with, by selecting,
-   *   fitlering and so on, which ultimately operate on the data to be displayed.
+   *   filtering and so on, which ultimately operate on the data to be displayed.
    * Additionally, some of the 'app' flags are determined by the config file
    *   or by the characteristics of the client, browser, etc.
    */
   app: {
     errors: {
-      source: null
+      source: false
     },
     highlighted: null,
     selected: [],
     source: null,
-    narrative: null,
-    narrativeState: {
-      current: null
-    },
-    filters: {
+    associations: {
       filters: [],
+      narrative: null,
       categories: [],
       views: {
         events: true,
@@ -137,12 +133,11 @@ const initial = {
 
   features: {
     USE_COVER: false,
-    USE_FILTERS: false,
+    USE_ASSOCIATIONS: false,
     USE_SEARCH: false,
     USE_SITES: false,
     USE_SOURCES: false,
     USE_SHAPES: false,
-    USE_NARRATIVES: false,
     GRAPH_NONLOCATED: false,
     HIGHLIGHT_GROUPS: false
   }

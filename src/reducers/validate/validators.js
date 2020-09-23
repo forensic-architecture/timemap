@@ -3,11 +3,11 @@ import Joi from 'joi'
 import createEventSchema from './eventSchema'
 import categorySchema from './categorySchema'
 import siteSchema from './siteSchema'
-import narrativeSchema from './narrativeSchema'
+import associationsSchema from './associationsSchema'
 import sourceSchema from './sourceSchema'
 import shapeSchema from './shapeSchema'
 
-import { calcDatetime, capitalize, isFilterLeaf, isFilterDuplicate } from '../../common/utilities'
+import { calcDatetime, capitalize } from '../../common/utilities'
 
 /*
 * Create an error notification object
@@ -25,50 +25,20 @@ function isValidDate (d) {
   return d instanceof Date && !isNaN(d)
 }
 
-/*
-* Traverse a filter tree and check its duplicates. Also recompose as
-* description if `features.USE_FILTER_DESCRIPTIONS` is true.
-*/
-function validateFilterTree (node, parent, set, duplicates, hasFilterDescriptions) {
-  if (hasFilterDescriptions) {
-    if (node.key === '_root') {
-      node.isDescription = true // setting first set of nodes to values
-    } else if (!parent.isDescription) {
-      node.isDescription = true
-    } else {
-      node.isDescription = false
-    }
-
-    if (node.isDescription && node.key !== 'root') {
-      parent.description = node.key
-      parent.children = node.children
-      delete parent.isDescription
-    }
-    if (isFilterLeaf(node)) {
-      delete parent.isDescription
-    }
-  }
-
-  if (typeof (node) !== 'object' || typeof (node.children) !== 'object') {
-    return
-  }
-  // If it's a leaf, check that it's not duplicate
-  if (isFilterLeaf(node)) {
-    if (isFilterDuplicate(node, set)) {
+function findDuplicateAssociations (associations) {
+  const seenSet = new Set([])
+  const duplicates = []
+  associations.forEach(item => {
+    if (seenSet.has(item.id)) {
       duplicates.push({
-        id: node.key,
-        error: makeError('Filters', node.key, 'filter was found more than once in hierarchy. Ignoring duplicate.')
+        id: item.id,
+        error: makeError('Association', item.id, 'association was found more than once. Ignoring duplicate.')
       })
-      delete parent.children[node.key]
     } else {
-      set.add(node.key)
+      seenSet.add(item.id)
     }
-  } else {
-    // If it's not a leaf, simply keep going
-    Object.values(node.children).forEach((childNode) => {
-      validateFilterTree(childNode, node, set, duplicates, hasFilterDescriptions)
-    })
-  }
+  })
+  return duplicates
 }
 
 /*
@@ -79,9 +49,8 @@ export function validateDomain (domain, features) {
     events: [],
     categories: [],
     sites: [],
-    narratives: [],
+    associations: [],
     sources: {},
-    filters: {},
     shapes: [],
     notifications: domain ? domain.notifications : null
   }
@@ -94,7 +63,7 @@ export function validateDomain (domain, features) {
     events: [],
     categories: [],
     sites: [],
-    narratives: [],
+    associations: [],
     sources: [],
     shapes: []
   }
@@ -114,12 +83,6 @@ export function validateDomain (domain, features) {
 
   function validateArray (items, domainKey, schema) {
     items.forEach(item => {
-      // NB: backwards compatibility with 'tags' for 'filters'
-      if (domainKey === 'events') {
-        if (!item.filters && !!item.tags) {
-          item.filters = item.tags
-        }
-      }
       validateArrayItem(item, domainKey, schema)
     })
   }
@@ -149,7 +112,7 @@ export function validateDomain (domain, features) {
   validateArray(domain.events, 'events', eventSchema)
   validateArray(domain.categories, 'categories', categorySchema)
   validateArray(domain.sites, 'sites', siteSchema)
-  validateArray(domain.narratives, 'narratives', narrativeSchema)
+  validateArray(domain.associations, 'associations', associationsSchema)
   validateObject(domain.sources, 'sources', sourceSchema)
   validateObject(domain.shapes, 'shapes', shapeSchema)
 
@@ -162,20 +125,16 @@ export function validateDomain (domain, features) {
   })
   )
 
-  // Validate uniqueness of filters
-  const filterSet = new Set([])
-  const duplicateFilters = []
-  validateFilterTree(domain.filters, {}, filterSet, duplicateFilters, features.USE_FILTER_DESCRIPTIONS)
-
-  // Duplicated filters
-  if (duplicateFilters.length > 0) {
+  const duplicateAssociations = findDuplicateAssociations(domain.associations)
+  // Duplicated associations
+  if (duplicateAssociations.length > 0) {
     sanitizedDomain.notifications.push({
-      message: `Filters are required to be unique. Ignoring duplicates for now.`,
-      items: duplicateFilters,
+      message: `Associations are required to be unique. Ignoring duplicates for now.`,
+      items: duplicateAssociations,
       type: 'error'
     })
   }
-  sanitizedDomain.filters = domain.filters
+  sanitizedDomain.associations = domain.associations
 
   // append events with datetime and sort
   sanitizedDomain.events = sanitizedDomain.events.filter((event, idx) => {

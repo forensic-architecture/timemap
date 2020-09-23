@@ -398,7 +398,7 @@ class Timeline extends React.Component {
 function mapStateToProps (state) {
   return {
     dimensions: selectors.selectDimensions(state),
-    isNarrative: !!state.app.narrative,
+    isNarrative: !!state.app.associations.narrative,
     domain: {
       events: selectors.selectStackedEvents(state),
       projects: selectors.selectProjects(state),
@@ -409,7 +409,7 @@ function mapStateToProps (state) {
       selected: state.app.selected,
       language: state.app.language,
       timeline: state.app.timeline,
-      narrative: state.app.narrative
+      narrative: state.app.associations.narrative
     },
     ui: {
       dom: state.ui.dom,

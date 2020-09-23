@@ -5,9 +5,8 @@ import { urlFromEnv } from '../common/utilities'
 // const CONFIG_URL = urlFromEnv('CONFIG_EXT')
 const EVENT_DATA_URL = urlFromEnv('EVENTS_EXT')
 const CATEGORY_URL = urlFromEnv('CATEGORIES_EXT')
-const FILTERS_URL = urlFromEnv('FILTERS_EXT')
+const ASSOCIATIONS_URL = urlFromEnv('ASSOCIATIONS_EXT')
 const SOURCES_URL = urlFromEnv('SOURCES_EXT')
-const NARRATIVE_URL = urlFromEnv('NARRATIVES_EXT')
 const SITES_URL = urlFromEnv('SITES_EXT')
 const SHAPES_URL = urlFromEnv('SHAPES_EXT')
 
@@ -50,28 +49,14 @@ export function fetchDomain () {
         .catch(() => handleError(domainMsg('categories')))
     }
 
-    let narPromise = Promise.resolve([])
-    if (features.USE_NARRATIVES) {
-      narPromise = fetch(NARRATIVE_URL)
-        .then(response => response.json())
-        .catch(() => handleError(domainMsg('narratives')))
-    }
-
-    let sitesPromise = Promise.resolve([])
-    if (features.USE_SITES) {
-      sitesPromise = fetch(SITES_URL)
-        .then(response => response.json())
-        .catch(() => handleError(domainMsg('sites')))
-    }
-
-    let filtersPromise = Promise.resolve([])
-    if (features.USE_FILTERS) {
-      if (!FILTERS_URL) {
-        filtersPromise = Promise.resolve(handleError('USE_FILTERS is true, but you have not provided a FILTERS_EXT'))
+    let associationsPromise = Promise.resolve([])
+    if (features.USE_ASSOCIATIONS) {
+      if (!ASSOCIATIONS_URL) {
+        associationsPromise = Promise.resolve(handleError('USE_ASSOCIATIONS is true, but you have not provided a ASSOCIATIONS_EXT'))
       } else {
-        filtersPromise = fetch(FILTERS_URL)
+        associationsPromise = fetch(ASSOCIATIONS_URL)
           .then(response => response.json())
-          .catch(() => handleError(domainMsg('filters')))
+          .catch(() => handleError(domainMsg('associations')))
       }
     }
 
@@ -86,6 +71,13 @@ export function fetchDomain () {
       }
     }
 
+    let sitesPromise = Promise.resolve([])
+    if (features.USE_SITES) {
+      sitesPromise = fetch(SITES_URL)
+        .then(response => response.json())
+        .catch(() => handleError(domainMsg('sites')))
+    }
+
     let shapesPromise = Promise.resolve([])
     if (features.USE_SHAPES) {
       shapesPromise = fetch(SHAPES_URL)
@@ -96,21 +88,19 @@ export function fetchDomain () {
     return Promise.all([
       eventPromise,
       catPromise,
-      narPromise,
-      sitesPromise,
-      filtersPromise,
+      associationsPromise,
       sourcesPromise,
+      sitesPromise,
       shapesPromise
     ])
       .then(response => {
         const result = {
           events: response[0],
           categories: response[1],
-          narratives: response[2],
-          sites: response[3],
-          filters: response[4],
-          sources: response[5],
-          shapes: response[6],
+          associations: response[2],
+          sources: response[3],
+          sites: response[4],
+          shapes: response[5],
           notifications
         }
         if (Object.values(result).some(resp => resp.hasOwnProperty('error'))) {

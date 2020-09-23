@@ -83,17 +83,19 @@ function updateNarrative (appState, action) {
     minTime = minTime - Math.abs((maxTime - minTime) / 10)
     maxTime = maxTime + Math.abs((maxTime - minTime) / 10)
   }
-
   return {
     ...appState,
-    narrative: action.narrative,
-    narrativeState: {
-      current: action.narrative ? 0 : null
+    associations: {
+      ...appState.associations,
+      narrative: action.narrative
     },
-    filters: {
-      ...appState.filters,
-      timerange: [minTime, maxTime],
-      mapBounds: (action.narrative) ? [cornerBound0, cornerBound1] : null
+    map: {
+      ...appState.map,
+      bounds: (action.narrative) ? [cornerBound0, cornerBound1] : null
+    },
+    timeline: {
+      ...appState.timeline,
+      range: [minTime, maxTime]
     }
   }
 }
@@ -112,7 +114,7 @@ function toggleFilter (appState, action) {
     action.value = [action.value]
   }
 
-  let newFilters = appState.filters[action.filter].slice(0)
+  let newFilters = appState.associations.filters.slice(0)
   action.value.forEach(vl => {
     if (newFilters.includes(vl)) {
       newFilters = newFilters.filter(s => s !== vl)
@@ -123,9 +125,9 @@ function toggleFilter (appState, action) {
 
   return {
     ...appState,
-    filters: {
-      ...appState.filters,
-      [action.filter]: newFilters
+    associations: {
+      ...appState.associations,
+      filters: newFilters
     }
   }
 }

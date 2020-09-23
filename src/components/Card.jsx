@@ -5,10 +5,8 @@ import CardCustomField from './presentational/Card/CustomField'
 import CardTime from './presentational/Card/Time'
 import CardLocation from './presentational/Card/Location'
 import CardCaret from './presentational/Card/Caret'
-import CardFilters from './presentational/Card/Filters'
 import CardSummary from './presentational/Card/Summary'
 import CardSource from './presentational/Card/Source'
-import CardNarrative from './presentational/Card/Narrative'
 import { makeNiceDate } from '../common/utilities'
 
 class Card extends React.Component {
@@ -29,24 +27,19 @@ class Card extends React.Component {
     return makeNiceDate(datetime)
   }
 
+  handleCardSelect (e) {
+    if (!e.target.className.includes('arrow-down')) {
+      const selectedEventFormat = this.props.idx > 0 ? [this.props.event] : this.props.event
+      this.props.onSelect(selectedEventFormat, this.props.idx)
+    }
+  }
+
   renderSummary () {
     return (
       <CardSummary
         language={this.props.language}
         description={this.props.event.description}
         isOpen={this.state.isOpen}
-      />
-    )
-  }
-
-  renderFilters () {
-    if (!this.props.filters || (this.props.filters && this.props.filters.length === 0)) {
-      return null
-    }
-    return (
-      <CardFilters
-        filters={this.props.filters || []}
-        language={this.props.language}
       />
     )
   }
@@ -107,21 +100,6 @@ class Card extends React.Component {
     )
   }
 
-  renderNarrative () {
-    const links = this.props.getNarrativeLinks(this.props.event)
-
-    if (links !== null) {
-      return (
-        <CardNarrative
-          select={(event) => this.props.onSelect([event])}
-          makeTimelabel={(timestamp) => this.makeTimelabel(timestamp)}
-          next={links.next}
-          prev={links.prev}
-        />
-      )
-    }
-  }
-
   renderCustomFields () {
     return this.props.features.CUSTOM_EVENT_FIELDS
       .map(field => {
@@ -148,9 +126,7 @@ class Card extends React.Component {
   renderExtra () {
     return (
       <div className='card-bottomhalf'>
-        {this.renderFilters()}
         {this.renderSources()}
-        {this.renderNarrative()}
       </div>
     )
   }
@@ -166,17 +142,16 @@ class Card extends React.Component {
 
   render () {
     const { isSelected, idx } = this.props
-
     return (
       <li
         className={`event-card ${isSelected ? 'selected' : ''}`}
         id={`event-card-${idx}`}
         ref={this.props.innerRef}
-        onClick={this.props.onSelect}
+        onClick={(e) => this.handleCardSelect(e)}
       >
         {this.renderMain()}
         {this.state.isOpen ? this.renderExtra() : null}
-        {isSelected ? this.renderCaret() : null}
+        {this.renderCaret()}
       </li>
     )
   }
