@@ -134,7 +134,6 @@ const initial = {
   features: {
     USE_COVER: false,
     USE_ASSOCIATIONS: false,
-    USE_SEARCH: false,
     USE_SITES: false,
     USE_SOURCES: false,
     USE_SHAPES: false,

@@ -26,7 +26,6 @@ module.exports = {
       USE_ASSOCIATIONS: true,
       USE_SOURCES: true,
       USE_COVER: true,
-      USE_SEARCH: false,
       USE_SITES: false,
       USE_SHAPES: false,
       GRAPH_NONLOCATED: false,
