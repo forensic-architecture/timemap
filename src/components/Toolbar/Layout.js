@@ -5,7 +5,6 @@ import * as actions from '../../actions'
 import * as selectors from '../../selectors'
 
 import { Tabs, TabPanel } from 'react-tabs'
-import Search from './Search'
 import FilterListPanel from './FilterListPanel'
 import CategoriesListPanel from './CategoriesListPanel'
 import BottomActions from './BottomActions'
