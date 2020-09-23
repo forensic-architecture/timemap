@@ -1,7 +1,6 @@
 import React from 'react'
 import Checkbox from '../presentational/Checkbox'
 import copy from '../../common/data/copy.json'
-import { merge } from 'lodash'
 
 /** recursively get an array of node keys to toggle */
 function childrenToToggle (filter, activeFilters, parentOn) {

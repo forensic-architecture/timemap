@@ -13,7 +13,7 @@ class Card extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isOpen: false,
+      isOpen: false
     }
   }
 
@@ -142,7 +142,7 @@ class Card extends React.Component {
 
   render () {
     const { isSelected, idx } = this.props
-    return ( 
+    return (
       <li
         className={`event-card ${isSelected ? 'selected' : ''}`}
         id={`event-card-${idx}`}
