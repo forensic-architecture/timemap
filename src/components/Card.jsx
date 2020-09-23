@@ -27,6 +27,13 @@ class Card extends React.Component {
     return makeNiceDate(datetime)
   }
 
+  handleCardSelect (e) {
+    if (!e.target.className.includes('arrow-down')) {
+      const selectedEventFormat = this.props.idx > 0 ? [this.props.event] : this.props.event
+      this.props.onSelect(selectedEventFormat, this.props.idx)
+    }
+  }
+
   renderSummary () {
     return (
       <CardSummary
@@ -135,21 +142,12 @@ class Card extends React.Component {
 
   render () {
     const { isSelected, idx } = this.props
-    console.info(this.props)
     return ( 
       <li
         className={`event-card ${isSelected ? 'selected' : ''}`}
         id={`event-card-${idx}`}
         ref={this.props.innerRef}
-        onClick={() => {
-          console.info('getting clicked')
-          if (!this.state.isOpen) {
-            const selectedEventFormat = idx > 0 ? [this.props.event] : this.props.event
-            this.props.onSelect(selectedEventFormat, idx)
-          } else {
-            console.info('NOT OPEN')
-          }
-        }}
+        onClick={(e) => this.handleCardSelect(e)}
       >
         {this.renderMain()}
         {this.state.isOpen ? this.renderExtra() : null}

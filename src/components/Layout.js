@@ -83,7 +83,6 @@ class Dashboard extends React.Component {
   }
 
   handleSelect (selected, axis) {
-    console.info(selected)
     const matchedEvents = []
     const TIMELINE_AXIS = 0
     if (axis === TIMELINE_AXIS) {
