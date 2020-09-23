@@ -31,23 +31,6 @@ class Toolbar extends React.Component {
     )
   }
 
-  renderSearch () {
-    if (this.props.features.USE_SEARCH) {
-      return (
-        <TabPanel>
-          <Search
-            language={this.props.language}
-            filters={this.props.filters}
-            categories={this.props.categories}
-            filterFilters={this.props.filterFilters}
-            categoryFilters={this.props.categoryFilters}
-            filter={this.props.filter}
-          />
-        </TabPanel>
-      )
-    }
-  }
-
   goToNarrative (narrative) {
     this.selectTab(-1) // set all unselected within this component
     this.props.methods.onSelectNarrative(narrative)
