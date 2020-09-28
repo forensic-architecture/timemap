@@ -30,6 +30,7 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
+    "supercluster": "^7.1.0",
     "video-react": "^0.13.1"
   },
   "devDependencies": {
