@@ -21,6 +21,11 @@ function MapEvents ({
     return [x, y]
   }
 
+  function handleEventSelect (e, location) {
+    const events = e.shiftKey ? selected.concat(location.events) : location.events
+    onSelect(events)
+  }
+
   function renderBorder () {
     return (
       <React.Fragment>
@@ -135,7 +140,7 @@ function MapEvents ({
       <g
         className={`location-event ${narrative ? 'no-hover' : ''}`}
         transform={`translate(${x}, ${y})`}
-        onClick={() => onSelect(location.events)}
+        onClick={(e) => handleEventSelect(e, location)}
       >
         {renderLocationSlicesByCategory(location)}
         {extraRender ? extraRender() : null}

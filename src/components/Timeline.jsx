@@ -57,12 +57,6 @@ class Timeline extends React.Component {
     if (nextProps.dimensions.trackHeight !== this.props.dimensions.trackHeight) {
       this.computeDims()
     }
-
-    if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
-      if (!!nextProps.app.selected && nextProps.app.selected.length > 0) {
-        this.onCenterTime(nextProps.app.selected[0].datetime)
-      }
-    }
   }
 
   addEventListeners () {
