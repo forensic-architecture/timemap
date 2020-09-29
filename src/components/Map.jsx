@@ -32,6 +32,7 @@ class Map extends React.Component {
     this.state = {
       mapTransformX: 0,
       mapTransformY: 0,
+      indexLoaded: false,
       clusters: []
     }
     this.styleLocation = this.styleLocation.bind(this)
@@ -131,18 +132,18 @@ class Map extends React.Component {
 
   update () {
     const [bbox, zoom] = this.getMapDetails()
-    this.setState({
-      clusters: this.index.getClusters(bbox, zoom)
-    })
+    if (this.index && this.state.indexLoaded) {
+      this.setState({
+        clusters: this.index.getClusters(bbox, zoom)
+      })
+    }
   }
 
   loadClusterData (locations) {
-    if (locations && locations.length !== 0) {
-      const geoJSON = locations.map(this.locationToGeoJSON)
-      if (this.index) {
-        this.index.load(geoJSON)
-        this.update()
-      }
+    if (locations && locations.length !== 0 && this.index) {
+      this.index.load(locations.map(this.locationToGeoJSON))
+      this.setState({indexLoaded: true})
+      this.update()
     }
   }
 
@@ -175,7 +176,8 @@ class Map extends React.Component {
     const feature = {
       type: 'Feature',
       properties: {
-        cluster: false
+        cluster: false,
+        id: location.label
       },
       geometry: {
         type: 'Point',
@@ -261,11 +263,13 @@ class Map extends React.Component {
   }
 
   renderEvents () {
+    const individualClusters = this.state.clusters.filter(cl => !cl.properties.cluster)
+    const filteredLocations = individualClusters.map(cl => this.props.domain.locations.find(location => location.label === cl.properties.id))
     return (
       <Events
         svg={this.svgRef.current}
         events={this.props.domain.events}
-        locations={this.props.domain.locations}
+        locations={filteredLocations}
         styleLocation={this.styleLocation}
         categories={this.props.domain.categories}
         projectPoint={this.projectPoint}
