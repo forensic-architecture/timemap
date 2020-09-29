@@ -19,6 +19,7 @@ import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
 // NB: important constants for map, TODO: make statics
 const supportedMapboxMap = ['streets', 'satellite']
 const defaultToken = 'your_token'
+const clusterId = 'clusters'
 
 class Map extends React.Component {
   constructor () {
@@ -30,7 +31,8 @@ class Map extends React.Component {
     this.index = null
     this.state = {
       mapTransformX: 0,
-      mapTransformY: 0
+      mapTransformY: 0,
+      clusters: []
     }
     this.styleLocation = this.styleLocation.bind(this)
   }
@@ -42,6 +44,9 @@ class Map extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    if (hash(nextProps.domain.locations) !== hash(this.props.domain.locations)) {
+      this.loadClusterData(nextProps.domain.locations)
+    }
     // Set appropriate zoom for narrative
     const { bounds } = nextProps.app.map
     if (hash(bounds) !== hash(this.props.app.map.bounds) &&
@@ -77,6 +82,13 @@ class Map extends React.Component {
         .setMaxZoom(mapConf.maxZoom)
         .setMaxBounds(mapConf.maxBounds)
 
+    // Initialize supercluster index
+    const index = new Supercluster({
+      radius: mapConf.clusterRadius,
+      maxZoom: mapConf.maxZoom,
+      minZoom: mapConf.minZoom
+    })
+
     let firstLayer
 
     if ((supportedMapboxMap.indexOf(this.props.ui.tiles) !== -1) && process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== defaultToken) {
@@ -96,53 +108,42 @@ class Map extends React.Component {
 
     map.keyboard.disable()
     map.zoomControl.remove()
-    map.on('moveend', () => this.updateClusters());
-    map.on('move zoomend viewreset moveend', () => this.alignLayers())
+
+    map.on('moveend', () => {
+      this.update()
+      this.alignLayers()
+    })
+    map.on('move zoomend viewreset', () => this.alignLayers())
     map.on('zoomstart', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.add('hide') })
     map.on('zoomend', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.remove('hide') })
     window.addEventListener('resize', () => { this.alignLayers() })
 
     this.map = map
-  }
-
-  // createClusterIcon(feature, latlng) {
-  //   if (!feature.properties.cluster) return L.marker(latlng);
-
-  //   const count = feature.properties.point_count;
-  //   const size =
-  //       count < 100 ? 'small' :
-  //       count < 1000 ? 'medium' : 'large';
-  //   const icon = L.divIcon({
-  //       html: `<div><span>${  feature.properties.point_count_abbreviated  }</span></div>`,
-  //       className: `marker-cluster marker-cluster-${  size}`,
-  //       iconSize: L.point(40, 40)
-  //   });
-  //   return L.marker(latlng, {icon});
-  // }
-
-  initializeSupercluster (locations) {
-    const { map: mapConf } = this.props.app
-    if (locations.length === 0) return
-    const geoJSON = locations.map(this.locationToGeoJSON)
-    // initialize supercluster
-    const index = new Supercluster({
-      radius: 40,
-      maxZoom: mapConf.maxZoom,
-      minZoom: mapConf.minZoom
-    }).load(geoJSON)
-    // Empty Layer Group that will receive the clusters data on the fly.
-    var markers = L.geoJSON(geoJSON, {}).addTo(this.map);
-    markers.id = 'clusters'
     this.index = index
   }
 
-  updateClusters () {
-    var bounds = this.map.getBounds();
-    var bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()];
-    var zoom = this.map.getZoom();
-    var clusters = this.index.getClusters(bbox, zoom);
-    // markers.clearLayers();
-    // markers.addData(clusters);
+  getMapDetails () {
+    const bounds = this.map.getBounds()
+    const bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()]
+    const zoom = this.map.getZoom()
+    return [bbox, zoom]
+  }
+
+  update () {
+    const [bbox, zoom] = this.getMapDetails()
+    this.setState({
+      clusters: this.index.getClusters(bbox, zoom)
+    })
+  }
+
+  loadClusterData (locations) {
+    if (locations && locations.length !== 0) {
+      const geoJSON = locations.map(this.locationToGeoJSON)
+      if (this.index) {
+        this.index.load(geoJSON)
+        this.update()
+      }
+    }
   }
 
   alignLayers () {
@@ -171,13 +172,14 @@ class Map extends React.Component {
   }
 
   locationToGeoJSON (location) {
-    const { x, y } = this.projectPoint([location.latitude, location.longitude])
     const feature = {
       type: 'Feature',
-      properties: {},
+      properties: {
+        cluster: false
+      },
       geometry: {
         type: 'Point',
-        coordinates: [x, y]
+        coordinates: [location.longitude, location.latitude]
       }
     }
     return feature
@@ -245,15 +247,6 @@ class Map extends React.Component {
     )
   }
 
-  renderClusters () {
-    if (this.index === null) return
-    var bounds = this.map.getBounds();
-    var bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()];
-    var zoom = this.map.getZoom();
-    var clusters = this.index.getClusters(bbox, zoom);
-    console.info(this.map)
-    console.info('CLUSTERS: ', clusters)
-  }
   /**
    * Determines additional styles on the <circle> for each location.
    * A location consists of an array of events (see selectors). The function
@@ -306,7 +299,6 @@ class Map extends React.Component {
 
   render () {
     const { isShowingSites } = this.props.app.flags
-    this.initializeSupercluster(this.props.domain.locations)
     const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'
     const innerMap = this.map ? (
       <React.Fragment>
@@ -316,7 +308,6 @@ class Map extends React.Component {
         {this.renderShapes()}
         {this.renderNarratives()}
         {this.renderEvents()}
-        {/* {this.renderClusters()} */}
         {this.renderSelected()}
       </React.Fragment>
     ) : null
