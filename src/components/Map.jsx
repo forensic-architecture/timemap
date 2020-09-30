@@ -12,6 +12,7 @@ import 'leaflet'
 import Sites from './presentational/Map/Sites.jsx'
 import Shapes from './presentational/Map/Shapes.jsx'
 import Events from './presentational/Map/Events.jsx'
+import Clusters from './presentational/Map/Clusters.jsx'
 import SelectedEvents from './presentational/Map/SelectedEvents.jsx'
 import Narratives from './presentational/Map/Narratives'
 import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
@@ -262,6 +263,10 @@ class Map extends React.Component {
     return [null, null]
   }
 
+  styleCluster (cluster) {
+    return [null, null]
+  }
+
   renderEvents () {
     const individualClusters = this.state.clusters.filter(cl => !cl.properties.cluster)
     const filteredLocations = individualClusters.map(cl => this.props.domain.locations.find(location => location.label === cl.properties.id))
@@ -278,6 +283,20 @@ class Map extends React.Component {
         onSelect={this.props.methods.onSelect}
         getCategoryColor={this.props.methods.getCategoryColor}
         eventRadius={this.props.ui.eventRadius}
+      />
+    )
+  }
+
+  renderClusters () {
+    const allClusters = this.state.clusters.filter(cl => cl.properties.cluster)
+    return (
+      <Clusters
+        svg={this.svgRef.current}
+        styleCluster={this.styleCluster}
+        projectPoint={this.projectPoint}
+        clusters={allClusters}
+        numClusters={allClusters.length}
+        // onSelect={() => {}}
       />
     )
   }
@@ -303,7 +322,7 @@ class Map extends React.Component {
 
   render () {
     const { isShowingSites } = this.props.app.flags
-    // console.info(this.state.clusters)
+    console.info(this.state.clusters)
     const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'
     const innerMap = this.map ? (
       <React.Fragment>
@@ -313,6 +332,7 @@ class Map extends React.Component {
         {this.renderShapes()}
         {this.renderNarratives()}
         {this.renderEvents()}
+        {this.renderClusters()}
         {this.renderSelected()}
       </React.Fragment>
     ) : null

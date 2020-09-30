@@ -1,18 +1,43 @@
 import React from 'react'
 import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
-import { calcOpacity } from '../../../common/utilities'
+import { calcOpacity, calcClusterSize } from '../../../common/utilities'
 
 function ClusterEvents ({
   projectPoint,
   styleCluster,
-  onSelect,
+  // onSelect,
   svg,
   clusters,
-  radius
+  numClusters,
 }) {
   function renderClusterBySize (cluster) {
+    const { point_count, cluster_id } = cluster.properties
 
+    const size = calcClusterSize(point_count, numClusters)
+
+    const width = `${size}px`
+    const height = `${size}px`
+
+    const styles = ({
+      fill: 'blue',
+      stroke: colors.darkBackground,
+      strokeWidth: 0,
+      fillOpacity: calcOpacity(point_count),
+      width,
+      height
+    })
+
+    return (
+      <React.Fragment>
+        <path
+          class='cluster-event-marker'
+          id={cluster_id}
+          d="M 8 0 A 8 8 0 1 1 8 -1.959434878635765e-15 L 0 0  L 8 0 Z"
+          style={styles}
+        />
+      </React.Fragment>
+    )
   }
 
 
@@ -47,7 +72,7 @@ function ClusterEvents ({
       <g
         className={'cluster-event'}
         transform={`translate(${x}, ${y})`}
-        onClick={this.props.onSelect}
+        // onClick={this.props.onSelect}
       >
         {renderClusterBySize(cluster)}
         {extraRender ? extraRender() : null}
@@ -57,7 +82,7 @@ function ClusterEvents ({
 
   return (
     <Portal node={svg}>
-      <g className='clusters'>
+      <g className='cluster-locations'>
         {clusters.map(renderCluster)}
       </g>
     </Portal>

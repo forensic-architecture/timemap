@@ -168,6 +168,10 @@ export function calcOpacity (num) {
   return base + (Math.min(0.5, 0.08 * (num - 1)))
 }
 
+export function calcClusterSize (pointCount, numClusters) {
+  return Math.min(50, 10 + (pointCount / numClusters) * 20)
+}
+
 export const dateMin = function () {
   return Array.prototype.slice.call(arguments).reduce(function (a, b) {
     return a < b ? a : b
