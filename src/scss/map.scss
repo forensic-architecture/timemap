@@ -175,6 +175,10 @@
   cursor: pointer;
 }
 
+.cluster-event {
+  cursor: pointer;
+}
+
 .location-event-marker {
   pointer-events: all !important;
   fill: $event_default;
@@ -182,6 +186,16 @@
 
   &.blue {
     fill: blue;
+  }
+}
+
+.cluster-event-marker {
+  pointer-events: all !important;
+  fill: $event_default;
+  stroke-width: 0;
+
+  &.red {
+    fill: red;
   }
 }
 
