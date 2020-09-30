@@ -191,8 +191,8 @@
 
 .cluster-event-marker {
   pointer-events: all !important;
-  fill: $event_default;
-  stroke-width: 0;
+  // fill: $event_default;
+  // stroke-width: 0;
 
   &.red {
     fill: red;

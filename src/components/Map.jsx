@@ -322,7 +322,6 @@ class Map extends React.Component {
 
   render () {
     const { isShowingSites } = this.props.app.flags
-    console.info(this.state.clusters)
     const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'
     const innerMap = this.map ? (
       <React.Fragment>

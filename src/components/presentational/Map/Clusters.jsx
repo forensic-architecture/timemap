@@ -12,30 +12,25 @@ function ClusterEvents ({
   numClusters,
 }) {
   function renderClusterBySize (cluster) {
-    const { point_count, cluster_id } = cluster.properties
-
-    const size = calcClusterSize(point_count, numClusters)
-
-    const width = `${size}px`
-    const height = `${size}px`
+    const { point_count: pointCount, cluster_id: clusterId } = cluster.properties
 
     const styles = ({
-      fill: 'blue',
+      fill: colors.fallbackEventColor,
       stroke: colors.darkBackground,
       strokeWidth: 0,
-      fillOpacity: calcOpacity(point_count),
-      width,
-      height
+      fillOpacity: calcOpacity(pointCount),
     })
 
     return (
       <React.Fragment>
-        <path
+        {<circle
           class='cluster-event-marker'
-          id={cluster_id}
-          d="M 8 0 A 8 8 0 1 1 8 -1.959434878635765e-15 L 0 0  L 8 0 Z"
+          id={clusterId}
+          cx='0'
+          cy='0'
+          r={calcClusterSize(pointCount, numClusters)}
           style={styles}
-        />
+        />}
       </React.Fragment>
     )
   }

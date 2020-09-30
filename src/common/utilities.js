@@ -169,7 +169,7 @@ export function calcOpacity (num) {
 }
 
 export function calcClusterSize (pointCount, numClusters) {
-  return Math.min(50, 10 + (pointCount / numClusters) * 20)
+  return Math.min(50, 10 + (pointCount / numClusters) * 10)
 }
 
 export const dateMin = function () {
