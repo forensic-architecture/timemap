@@ -27,6 +27,7 @@ class Map extends React.Component {
     super()
     this.projectPoint = this.projectPoint.bind(this)
     this.locationToGeoJSON = this.locationToGeoJSON.bind(this)
+    this.onClusterSelect = this.onClusterSelect.bind(this)
     this.svgRef = React.createRef()
     this.map = null
     this.index = null
@@ -188,6 +189,14 @@ class Map extends React.Component {
     return feature
   }
 
+  onClusterSelect (e) {
+    const { id } = e.target
+    const { longitude, latitude } = e.target.attributes
+    const { x, y } = this.projectPoint([latitude.value, longitude.value])
+    const expansionZoom = Math.max(this.index.getClusterExpansionZoom(parseInt(id)), this.index.options.minZoom)
+    this.map.flyTo([x, y], expansionZoom)
+  }
+
   getClientDims () {
     const boundingClient = document.querySelector(`#${this.props.ui.dom.map}`).getBoundingClientRect()
 
@@ -296,7 +305,7 @@ class Map extends React.Component {
         projectPoint={this.projectPoint}
         clusters={allClusters}
         numClusters={allClusters.length}
-        // onSelect={() => {}}
+        onSelect={this.onClusterSelect}
       />
     )
   }

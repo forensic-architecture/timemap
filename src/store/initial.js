@@ -49,11 +49,11 @@ const initial = {
     map: {
       anchor: [31.356397, 34.784818],
       startZoom: 11,
-      minZoom: 6,
+      minZoom: 2,
       maxZoom: 18,
       bounds: null,
       maxBounds: [[180, -180], [-180, 180]],
-      clusterRadius: 50,
+      clusterRadius: 20,
     },
     timeline: {
       dimensions: {

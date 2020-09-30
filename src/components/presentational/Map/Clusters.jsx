@@ -6,13 +6,15 @@ import { calcOpacity, calcClusterSize } from '../../../common/utilities'
 function ClusterEvents ({
   projectPoint,
   styleCluster,
-  // onSelect,
+  onSelect,
   svg,
   clusters,
   numClusters,
 }) {
   function renderClusterBySize (cluster) {
     const { point_count: pointCount, cluster_id: clusterId } = cluster.properties
+    const { coordinates } = cluster.geometry
+    const [longitude, latitude] = coordinates
 
     const styles = ({
       fill: colors.fallbackEventColor,
@@ -26,6 +28,8 @@ function ClusterEvents ({
         {<circle
           class='cluster-event-marker'
           id={clusterId}
+          longitude={longitude}
+          latitude={latitude}
           cx='0'
           cy='0'
           r={calcClusterSize(pointCount, numClusters)}
@@ -67,7 +71,7 @@ function ClusterEvents ({
       <g
         className={'cluster-event'}
         transform={`translate(${x}, ${y})`}
-        // onClick={this.props.onSelect}
+        onClick={(e) => onSelect(e)}
       >
         {renderClusterBySize(cluster)}
         {extraRender ? extraRender() : null}
