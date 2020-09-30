@@ -192,9 +192,8 @@ class Map extends React.Component {
   onClusterSelect (e) {
     const { id } = e.target
     const { longitude, latitude } = e.target.attributes
-    const { x, y } = this.projectPoint([latitude.value, longitude.value])
     const expansionZoom = Math.max(this.index.getClusterExpansionZoom(parseInt(id)), this.index.options.minZoom)
-    this.map.flyTo([x, y], expansionZoom)
+    this.map.flyTo(new L.LatLng(latitude.value, longitude.value), expansionZoom)
   }
 
   getClientDims () {
