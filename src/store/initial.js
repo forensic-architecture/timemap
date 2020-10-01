@@ -11,7 +11,7 @@ const initial = {
    */
   domain: {
     events: [],
-    locations: [],
+    // locations: [],
     categories: [],
     associations: [],
     sources: {},
@@ -49,7 +49,7 @@ const initial = {
     map: {
       anchor: [31.356397, 34.784818],
       startZoom: 11,
-      minZoom: 2,
+      minZoom: 0,
       maxZoom: 18,
       bounds: null,
       maxBounds: [[180, -180], [-180, 180]],

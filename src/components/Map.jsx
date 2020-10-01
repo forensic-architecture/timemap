@@ -26,7 +26,6 @@ class Map extends React.Component {
   constructor () {
     super()
     this.projectPoint = this.projectPoint.bind(this)
-    this.locationToGeoJSON = this.locationToGeoJSON.bind(this)
     this.onClusterSelect = this.onClusterSelect.bind(this)
     this.svgRef = React.createRef()
     this.map = null
@@ -92,6 +91,8 @@ class Map extends React.Component {
       minZoom: mapConf.minZoom
     })
 
+    this.index = index
+
     let firstLayer
 
     if ((supportedMapboxMap.indexOf(this.props.ui.tiles) !== -1) && process.env.MAPBOX_TOKEN && process.env.MAPBOX_TOKEN !== defaultToken) {
@@ -116,13 +117,13 @@ class Map extends React.Component {
       this.update()
       this.alignLayers()
     })
+    map.on('load', () => this.update())
     map.on('move zoomend viewreset', () => this.alignLayers())
     map.on('zoomstart', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.add('hide') })
     map.on('zoomend', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.remove('hide') })
     window.addEventListener('resize', () => { this.alignLayers() })
 
     this.map = map
-    this.index = index
   }
 
   getMapDetails () {
@@ -143,7 +144,26 @@ class Map extends React.Component {
 
   loadClusterData (locations) {
     if (locations && locations.length !== 0 && this.index) {
-      this.index.load(locations.map(this.locationToGeoJSON))
+      const convertedLocations = locations.reduce((acc, loc) => {
+        const { longitude, latitude } = loc
+        const validCoordinates = !!latitude && !!longitude
+        if (validCoordinates) {
+          const feature = {
+            type: 'Feature',
+            properties: {
+              cluster: false,
+              id: loc.label
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [longitude, latitude]
+            }
+          }
+          acc.push(feature)
+        }
+        return acc
+      }, [])
+      this.index.load(convertedLocations)
       this.setState({indexLoaded: true})
       this.update()
     }
@@ -172,21 +192,6 @@ class Map extends React.Component {
       x: this.map.latLngToLayerPoint(latLng).x + this.state.mapTransformX,
       y: this.map.latLngToLayerPoint(latLng).y + this.state.mapTransformY
     }
-  }
-
-  locationToGeoJSON (location) {
-    const feature = {
-      type: 'Feature',
-      properties: {
-        cluster: false,
-        id: location.label
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [location.longitude, location.latitude]
-      }
-    }
-    return feature
   }
 
   onClusterSelect (e) {

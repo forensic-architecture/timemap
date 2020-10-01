@@ -172,6 +172,14 @@ export function calcClusterSize (pointCount, numClusters) {
   return Math.min(50, 10 + (pointCount / numClusters) * 10)
 }
 
+export function isLatitude(lat) {
+  return !!lat && isFinite(lat) && Math.abs(lat) <= 90;
+}
+
+export function isLongitude(lng) {
+  return !!lng && isFinite(lng) && Math.abs(lng) <= 180;
+}
+
 export const dateMin = function () {
   return Array.prototype.slice.call(arguments).reduce(function (a, b) {
     return a < b ? a : b
