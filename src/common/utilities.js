@@ -180,6 +180,10 @@ export function isLongitude(lng) {
   return !!lng && isFinite(lng) && Math.abs(lng) <= 180;
 }
 
+export function mapClustersToLocations(clusters, locations) {
+  return clusters.map(cl => locations.find(location =>  location.label === cl.properties.id))
+}
+
 export const dateMin = function () {
   return Array.prototype.slice.call(arguments).reduce(function (a, b) {
     return a < b ? a : b

@@ -17,6 +17,8 @@ import SelectedEvents from './presentational/Map/SelectedEvents.jsx'
 import Narratives from './presentational/Map/Narratives'
 import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
 
+import { mapClustersToLocations } from '../common/utilities' 
+
 // NB: important constants for map, TODO: make statics
 const supportedMapboxMap = ['streets', 'satellite']
 const defaultToken = 'your_token'
@@ -197,8 +199,19 @@ class Map extends React.Component {
   onClusterSelect (e) {
     const { id } = e.target
     const { longitude, latitude } = e.target.attributes
+    
+    // const clusterLeaves = this.index.getLeaves(parseInt(id), Infinity, 0)
+    // const leavesToLocations = mapClustersToLocations(clusterLeaves, this.props.domain.locations)
+
+    // const locationEvents = leavesToLocations.reduce((acc, loc) => {
+    //   loc.events.forEach(evt => acc.push(evt))
+    //   return acc
+    // }, [])
+    
     const expansionZoom = Math.max(this.index.getClusterExpansionZoom(parseInt(id)), this.index.options.minZoom)
     this.map.flyTo(new L.LatLng(latitude.value, longitude.value), expansionZoom)
+
+    // this.props.methods.onSelect(locationEvents)
   }
 
   getClientDims () {
@@ -282,7 +295,7 @@ class Map extends React.Component {
 
   renderEvents () {
     const individualClusters = this.state.clusters.filter(cl => !cl.properties.cluster)
-    const filteredLocations = individualClusters.map(cl => this.props.domain.locations.find(location => location.label === cl.properties.id))
+    const filteredLocations = mapClustersToLocations(individualClusters, this.props.domain.locations)
     return (
       <Events
         svg={this.svgRef.current}

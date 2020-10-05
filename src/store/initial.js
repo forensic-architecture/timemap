@@ -50,7 +50,7 @@ const initial = {
       anchor: [31.356397, 34.784818],
       startZoom: 11,
       minZoom: 0,
-      maxZoom: 18,
+      maxZoom: 20,
       bounds: null,
       maxBounds: [[180, -180], [-180, 180]],
       clusterRadius: 20,
