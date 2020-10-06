@@ -11,7 +11,6 @@ const initial = {
    */
   domain: {
     events: [],
-    // locations: [],
     categories: [],
     associations: [],
     sources: {},
