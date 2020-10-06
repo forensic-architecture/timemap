@@ -110,7 +110,7 @@ const TimelineEvents = ({
       eventRadius,
       onSelect: () => onSelect(event),
       dims,
-      highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.filters[features.HIGHLIGHT_GROUPS.filterIndexIndicatingGroup]) : [],
+      highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.associations[features.HIGHLIGHT_GROUPS.filterIndexIndicatingGroup]) : [],
       features
     })
   }

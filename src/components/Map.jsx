@@ -199,19 +199,8 @@ class Map extends React.Component {
   onClusterSelect (e) {
     const { id } = e.target
     const { longitude, latitude } = e.target.attributes
-    
-    // const clusterLeaves = this.index.getLeaves(parseInt(id), Infinity, 0)
-    // const leavesToLocations = mapClustersToLocations(clusterLeaves, this.props.domain.locations)
-
-    // const locationEvents = leavesToLocations.reduce((acc, loc) => {
-    //   loc.events.forEach(evt => acc.push(evt))
-    //   return acc
-    // }, [])
-    
     const expansionZoom = Math.max(this.index.getClusterExpansionZoom(parseInt(id)), this.index.options.minZoom)
     this.map.flyTo(new L.LatLng(latitude.value, longitude.value), expansionZoom)
-
-    // this.props.methods.onSelect(locationEvents)
   }
 
   getClientDims () {
