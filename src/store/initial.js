@@ -53,7 +53,7 @@ const initial = {
       maxZoom: 20,
       bounds: null,
       maxBounds: [[180, -180], [-180, 180]],
-      clusterRadius: 30,
+      clusterRadius: 30
     },
     timeline: {
       dimensions: {

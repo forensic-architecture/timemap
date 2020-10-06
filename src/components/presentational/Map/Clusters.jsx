@@ -9,7 +9,7 @@ function ClusterEvents ({
   onSelect,
   svg,
   clusters,
-  numClusters,
+  numClusters
 }) {
   function renderClusterBySize (cluster) {
     const { point_count: pointCount, cluster_id: clusterId } = cluster.properties
@@ -20,7 +20,7 @@ function ClusterEvents ({
       fill: colors.fallbackEventColor,
       stroke: colors.darkBackground,
       strokeWidth: 0,
-      fillOpacity: calcOpacity(pointCount),
+      fillOpacity: calcOpacity(pointCount)
     })
 
     return (
@@ -38,7 +38,6 @@ function ClusterEvents ({
       </React.Fragment>
     )
   }
-
 
   function renderCluster (cluster) {
     /**

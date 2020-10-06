@@ -17,12 +17,11 @@ import SelectedEvents from './presentational/Map/SelectedEvents.jsx'
 import Narratives from './presentational/Map/Narratives'
 import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
 
-import { mapClustersToLocations } from '../common/utilities' 
+import { mapClustersToLocations } from '../common/utilities'
 
 // NB: important constants for map, TODO: make statics
 const supportedMapboxMap = ['streets', 'satellite']
 const defaultToken = 'your_token'
-const clusterId = 'clusters'
 
 class Map extends React.Component {
   constructor () {
@@ -166,7 +165,7 @@ class Map extends React.Component {
         return acc
       }, [])
       this.index.load(convertedLocations)
-      this.setState({indexLoaded: true})
+      this.setState({ indexLoaded: true })
       this.update()
     }
   }

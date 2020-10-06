@@ -259,7 +259,7 @@ class Dashboard extends React.Component {
     }
 
     return (
-        <div>
+      <div>
         <Toolbar
           isNarrative={!!app.associations.narrative}
           methods={{
@@ -364,7 +364,7 @@ export default connect(
     ...state,
     narrativeIdx: selectors.selectNarrativeIdx(state),
     narratives: selectors.selectNarratives(state),
-    selected: selectors.selectSelected(state),
+    selected: selectors.selectSelected(state)
   }),
   mapDispatchToProps
 )(Dashboard)

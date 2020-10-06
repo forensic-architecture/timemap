@@ -172,16 +172,16 @@ export function calcClusterSize (pointCount, numClusters) {
   return Math.min(50, 10 + (pointCount / numClusters) * 10)
 }
 
-export function isLatitude(lat) {
-  return !!lat && isFinite(lat) && Math.abs(lat) <= 90;
+export function isLatitude (lat) {
+  return !!lat && isFinite(lat) && Math.abs(lat) <= 90
 }
 
-export function isLongitude(lng) {
-  return !!lng && isFinite(lng) && Math.abs(lng) <= 180;
+export function isLongitude (lng) {
+  return !!lng && isFinite(lng) && Math.abs(lng) <= 180
 }
 
-export function mapClustersToLocations(clusters, locations) {
-  return clusters.map(cl => locations.find(location =>  location.label === cl.properties.id))
+export function mapClustersToLocations (clusters, locations) {
+  return clusters.map(cl => locations.find(location => location.label === cl.properties.id))
 }
 
 export const dateMin = function () {
