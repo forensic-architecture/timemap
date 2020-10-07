@@ -181,7 +181,11 @@ export function isLongitude (lng) {
 }
 
 export function mapClustersToLocations (clusters, locations) {
-  return clusters.map(cl => locations.find(location => location.label === cl.properties.id))
+  return clusters.reduce((acc, cl) => {
+    const foundLocation = locations.find(location => location.label === cl.properties.id)
+    if (foundLocation) acc.push(foundLocation)
+    return acc
+  }, [])
 }
 
 export const dateMin = function () {

@@ -144,7 +144,7 @@ class Map extends React.Component {
   }
 
   loadClusterData (locations) {
-    if (locations && locations.length !== 0 && this.index) {
+    if (locations && locations.length > 0 && this.index) {
       const convertedLocations = locations.reduce((acc, loc) => {
         const { longitude, latitude } = loc
         const validCoordinates = !!latitude && !!longitude
@@ -167,6 +167,8 @@ class Map extends React.Component {
       this.index.load(convertedLocations)
       this.setState({ indexLoaded: true })
       this.update()
+    } else {
+      this.setState({ clusters: [] })
     }
   }
 
