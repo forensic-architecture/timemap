@@ -26,11 +26,11 @@ class TimelineCategories extends React.Component {
 
   renderCategory (cat, idx) {
     const { features, dims } = this.props
-    const { category } = cat
+    const { id } = cat
     const strokeWidth = 1 // dims.trackHeight / (this.props.categories.length + 1)
     if (features.GRAPH_NONLOCATED &&
       features.GRAPH_NONLOCATED.categories &&
-      features.GRAPH_NONLOCATED.categories.includes(category)) {
+      features.GRAPH_NONLOCATED.categories.includes(id)) {
       return null
     }
 
@@ -40,26 +40,27 @@ class TimelineCategories extends React.Component {
           class='tick'
           style={{ strokeWidth }}
           opacity='0.5'
-          transform={`translate(0,${this.props.getCategoryY(category)})`}
+          transform={`translate(0,${this.props.getCategoryY(id)})`}
         >
           <line x1={dims.marginLeft} x2={dims.width - dims.width_controls} />
         </g>
-        <g class='tick' opacity='1' transform={`translate(0,${this.props.getCategoryY(category)})`}>
-          <text x={dims.marginLeft - 5} dy='0.32em'>{category}</text>
+        <g class='tick' opacity='1' transform={`translate(0,${this.props.getCategoryY(id)})`}>
+          <text x={dims.marginLeft - 5} dy='0.32em'>{id}</text>
         </g>
       </React.Fragment>
     )
   }
 
   render () {
-    const { dims } = this.props
-    const categories = this.props.features.USE_CATEGORIES
+    const { dims, categories } = this.props
+    const categoriesExist = categories && categories.length > 0 
+    const renderedCategories = categoriesExist
       ? this.props.categories.map((cat, idx) => this.renderCategory(cat, idx))
       : this.renderCategory('Events', 0)
 
     return (
       <g class='yAxis'>
-        {categories}
+        {renderedCategories}
         <rect
           ref={this.grabRef}
           class='drag-grabber'

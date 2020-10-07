@@ -87,7 +87,8 @@ class Timeline extends React.Component {
     const catsYpos = categories.map((g, i) => {
       return ((i + 1) * catHeight) - shiftUp + marginShift + manualAdjustment
     })
-    const catMap = categories.map(c => c.category)
+    const catMap = categories.map(c => c.id)
+
     return (cat) => {
       const idx = catMap.indexOf(cat)
       return catsYpos[idx]
@@ -273,11 +274,12 @@ class Timeline extends React.Component {
     if (!USE_CATEGORIES) { return this.state.dims.trackHeight / 2 }
 
     const { category, project } = event
+    
     if (GRAPH_NONLOCATED && GRAPH_NONLOCATED.categories.includes(category)) {
       return this.state.dims.marginTop + domain.projects[project].offset + this.props.ui.eventRadius
     }
     if (!this.state.scaleY) return 0
-
+    // console.info(event, this.state.scaleY(category))
     return this.state.scaleY(category)
   }
 

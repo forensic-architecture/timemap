@@ -97,6 +97,7 @@ const TimelineEvents = ({
     }
 
     const eventY = getY(event)
+
     let colour = event.colour ? event.colour : getCategoryColor(event.category)
     const styles = {
       fill: colour,

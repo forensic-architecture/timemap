@@ -12,7 +12,7 @@ const initial = {
   domain: {
     events: [],
     locations: [],
-    categories: [],
+    // categories: [],
     associations: [],
     sources: {},
     sites: [],
