@@ -113,13 +113,14 @@ function toggleFilter (appState, action) {
   if (!(action.value instanceof Array)) {
     action.value = [action.value]
   }
+  const { filter: associationType } = action
 
-  let newFilters = appState.associations.filters.slice(0)
+  let newAssociations = appState.associations[associationType].slice(0)
   action.value.forEach(vl => {
-    if (newFilters.includes(vl)) {
-      newFilters = newFilters.filter(s => s !== vl)
+    if (newAssociations.includes(vl)) {
+      newAssociations = newAssociations.filter(s => s !== vl)
     } else {
-      newFilters.push(vl)
+      newAssociations.push(vl)
     }
   })
 
@@ -127,7 +128,7 @@ function toggleFilter (appState, action) {
     ...appState,
     associations: {
       ...appState.associations,
-      filters: newFilters
+      [associationType]: newAssociations
     }
   }
 }

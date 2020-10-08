@@ -81,8 +81,8 @@ const TimelineEvents = ({
         return null
       }
     }
-
     const isDot = (!!event.location && !!event.longitude) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
+
     let renderShape = isDot ? renderDot : renderBar
     if (event.shape) {
       if (event.shape === 'bar') {

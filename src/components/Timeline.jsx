@@ -78,7 +78,7 @@ class Timeline extends React.Component {
   makeScaleY (categories, trackHeight, marginTop) {
     const { features } = this.props
     if (features.GRAPH_NONLOCATED && features.GRAPH_NONLOCATED.categories) {
-      categories = categories.filter(cat => !features.GRAPH_NONLOCATED.categories.includes(cat.category))
+      categories = categories.filter(cat => !features.GRAPH_NONLOCATED.categories.includes(cat.id))
     }
     const catHeight = trackHeight / (categories.length)
     const shiftUp = trackHeight / (categories.length) / 2
@@ -269,17 +269,28 @@ class Timeline extends React.Component {
 
   getY (event) {
     const { features, domain } = this.props
-    const { USE_CATEGORIES, GRAPH_NONLOCATED } = features
+    const { categories } = domain
 
-    if (!USE_CATEGORIES) { return this.state.dims.trackHeight / 2 }
+    const categoriesExist = categories && categories.length > 0
+
+    const { GRAPH_NONLOCATED } = features
+
+    if (!categoriesExist) { return this.state.dims.trackHeight / 2 }
+
+    // const eventCategories = event.associations.reduce((acc, a) => {
+    //   const foundCategory = categories.find(cat => cat.id === a)
+    //   if (foundCategory) acc.push(foundCategory)
+
+    //   return acc
+    // }, [])
 
     const { category, project } = event
-    
+
     if (GRAPH_NONLOCATED && GRAPH_NONLOCATED.categories.includes(category)) {
       return this.state.dims.marginTop + domain.projects[project].offset + this.props.ui.eventRadius
     }
     if (!this.state.scaleY) return 0
-    // console.info(event, this.state.scaleY(category))
+
     return this.state.scaleY(category)
   }
 
@@ -402,6 +413,7 @@ function mapStateToProps (state) {
       narratives: state.domain.narratives
     },
     app: {
+      activeCategories: selectors.getActiveCategories(state),
       selected: state.app.selected,
       language: state.app.language,
       timeline: state.app.timeline,

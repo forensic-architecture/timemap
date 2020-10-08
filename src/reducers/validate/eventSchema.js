@@ -23,7 +23,7 @@ function createEventSchema (custom) {
     type: Joi.string().allow(''),
     category: Joi.string().allow(''),
     category_full: Joi.string().allow(''),
-    associations: Joi.array(),
+    associations: Joi.array().required().default([]),
     sources: Joi.array(),
     comments: Joi.string().allow(''),
     time_display: Joi.string().allow(''),
