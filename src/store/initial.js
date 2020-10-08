@@ -48,8 +48,8 @@ const initial = {
     map: {
       anchor: [31.356397, 34.784818],
       startZoom: 11,
-      minZoom: 0,
-      maxZoom: 20,
+      minZoom: 2,
+      maxZoom: 16,
       bounds: null,
       maxBounds: [[180, -180], [-180, 180]],
       clusterRadius: 30
