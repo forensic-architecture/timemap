@@ -107,6 +107,7 @@ export function fetchDomain () {
           throw new Error('Some URLs returned negative. If you are in development, check the server is running')
         }
         dispatch(toggleFetchingDomain())
+        dispatch(setInitialCategories(result.associations))
         return result
       })
       .catch(err => {
@@ -209,6 +210,14 @@ export const SET_NOT_LOADING = 'SET_NOT_LOADING'
 export function setNotLoading () {
   return {
     type: SET_NOT_LOADING
+  }
+}
+
+export const SET_INITIAL_CATEGORIES = 'SET_INITIAL_CATEGORIES'
+export function setInitialCategories (values) {
+  return {
+    type: SET_INITIAL_CATEGORIES,
+    values
   }
 }
 

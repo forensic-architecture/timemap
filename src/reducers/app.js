@@ -1,4 +1,5 @@
 import initial from '../store/initial.js'
+import { ASSOCIATION_MODES } from '../common/constants'
 import { toggleFlagAC } from '../common/utilities'
 
 import {
@@ -22,6 +23,7 @@ import {
   FETCH_SOURCE_ERROR,
   SET_LOADING,
   SET_NOT_LOADING,
+  SET_INITIAL_CATEGORIES,
   UPDATE_SEARCH_QUERY
 } from '../actions'
 
@@ -219,6 +221,21 @@ function setNotLoading (appState) {
   }
 }
 
+function setInitialCategories (appState, action) {
+  const categories = action.values.reduce((acc, val) => {
+    if (val.mode === ASSOCIATION_MODES.CATEGORY) acc.push(val.id)
+    return acc
+  }, [])
+
+  return {
+    ...appState,
+    associations: {
+      ...appState.associations,
+      categories: categories
+    } 
+  }
+}
+
 function updateSearchQuery (appState, action) {
   return {
     ...appState,
@@ -270,6 +287,8 @@ function app (appState = initial.app, action) {
       return setLoading(appState)
     case SET_NOT_LOADING:
       return setNotLoading(appState)
+    case SET_INITIAL_CATEGORIES:
+      return setInitialCategories(appState, action)
     case UPDATE_SEARCH_QUERY:
       return updateSearchQuery(appState, action)
     default:
