@@ -342,7 +342,7 @@ class Timeline extends React.Component {
                 onDragStart={() => { this.onDragStart() }}
                 onDrag={() => { this.onDrag() }}
                 onDragEnd={() => { this.onDragEnd() }}
-                categories={this.props.domain.categories}
+                categories={this.props.app.activeCategories}
                 features={this.props.features}
               />
               <Handles
