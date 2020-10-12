@@ -277,13 +277,6 @@ class Timeline extends React.Component {
 
     if (!categoriesExist) { return this.state.dims.trackHeight / 2 }
 
-    // const eventCategories = event.associations.reduce((acc, a) => {
-    //   const foundCategory = categories.find(cat => cat.id === a)
-    //   if (foundCategory) acc.push(foundCategory)
-
-    //   return acc
-    // }, [])
-
     const { category, project } = event
 
     if (GRAPH_NONLOCATED && GRAPH_NONLOCATED.categories.includes(category)) {
@@ -375,6 +368,7 @@ class Timeline extends React.Component {
               <Events
                 events={this.props.domain.events}
                 projects={this.props.domain.projects}
+                categories={this.props.domain.categories}
                 styleDatetime={this.styleDatetime}
                 narrative={this.props.app.narrative}
                 getDatetimeX={this.getDatetimeX}
