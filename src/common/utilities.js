@@ -168,8 +168,12 @@ export function calcOpacity (num) {
   return base + (Math.min(0.5, 0.08 * (num - 1)))
 }
 
-export function calcClusterSize (pointCount, numClusters) {
-  return Math.min(50, 10 + (pointCount / numClusters) * 10)
+export function calcClusterOpacity (pointCount, totalPoints) {
+  return Math.min(0.8, 0.08 + (pointCount / totalPoints) * 50)
+}
+
+export function calcClusterSize (pointCount, totalPoints) {
+  return Math.min(50, 10 + (pointCount / totalPoints) * 75)
 }
 
 export function isLatitude (lat) {

@@ -78,7 +78,7 @@ class Map extends React.Component {
      * Creates a Leaflet map and a tilelayer for the map background
      */
     const { map: mapConf } = this.props.app
-    console.info(mapConf.maxBounds)
+
     const map =
       L.map(this.props.ui.dom.map)
         .setView(mapConf.anchor, mapConf.startZoom)
@@ -312,7 +312,6 @@ class Map extends React.Component {
         styleCluster={this.styleCluster}
         projectPoint={this.projectPoint}
         clusters={allClusters}
-        numClusters={allClusters.length}
         onSelect={this.onClusterSelect}
       />
     )

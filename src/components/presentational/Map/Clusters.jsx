@@ -1,26 +1,36 @@
 import React from 'react'
 import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
-import { calcOpacity, calcClusterSize } from '../../../common/utilities'
+import { calcClusterOpacity, calcClusterSize } from '../../../common/utilities'
 
 function ClusterEvents ({
   projectPoint,
   styleCluster,
   onSelect,
   svg,
-  clusters,
-  numClusters
+  clusters
 }) {
+  function calculateTotalPoints () {
+    return clusters.reduce((total, cl) => {
+      if (cl && cl.properties) {
+        total += cl.properties.point_count
+      }
+      return total
+    }, 0)
+  }
+
   function renderClusterBySize (cluster) {
     const { point_count: pointCount, cluster_id: clusterId } = cluster.properties
     const { coordinates } = cluster.geometry
     const [longitude, latitude] = coordinates
 
+    const totalPoints = calculateTotalPoints()
+
     const styles = ({
       fill: colors.fallbackEventColor,
       stroke: colors.darkBackground,
       strokeWidth: 0,
-      fillOpacity: calcOpacity(pointCount)
+      fillOpacity: calcClusterOpacity(pointCount, totalPoints)
     })
 
     return (
@@ -32,7 +42,7 @@ function ClusterEvents ({
           latitude={latitude}
           cx='0'
           cy='0'
-          r={calcClusterSize(pointCount, numClusters)}
+          r={calcClusterSize(pointCount, totalPoints)}
           style={styles}
         />}
       </React.Fragment>
