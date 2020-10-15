@@ -4,7 +4,7 @@ const DefsClusters = () => (
   <defs>
     <radialGradient id="clusterGradient">
       <stop offset="10%" stop-color="red"/>
-      <stop offset="100%" stop-color="black"/>
+      <stop offset="90%" stop-color="transparent"/>
     </radialGradient>
   </defs>
 )

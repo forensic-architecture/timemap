@@ -173,7 +173,7 @@ export function calcClusterOpacity (pointCount, totalPoints) {
 }
 
 export function calcClusterSize (pointCount, totalPoints) {
-  return Math.min(50, 10 + (pointCount / totalPoints) * 250)
+  return Math.min(50, 10 + (pointCount / totalPoints) * 150)
 }
 
 export function isLatitude (lat) {

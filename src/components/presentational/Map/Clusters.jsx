@@ -7,6 +7,7 @@ function ClusterEvents ({
   projectPoint,
   styleCluster,
   onSelect,
+  isRadial,
   svg,
   clusters
 }) {
@@ -27,7 +28,7 @@ function ClusterEvents ({
     const totalPoints = calculateTotalPoints()
 
     const styles = ({
-      fill: colors.fallbackEventColor,
+      fill: isRadial ? "url('#clusterGradient')" : colors.fallbackEventColor,
       stroke: colors.darkBackground,
       strokeWidth: 0,
       fillOpacity: calcClusterOpacity(pointCount, totalPoints),
@@ -44,7 +45,6 @@ function ClusterEvents ({
           cy='0'
           r={calcClusterSize(pointCount, totalPoints)}
           style={styles}
-          // fill="url('#clusterGradient')"
         />}
       </React.Fragment>
     )

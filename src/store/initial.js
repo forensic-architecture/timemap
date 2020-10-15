@@ -121,6 +121,9 @@ const initial = {
           strokeWidth: 3,
           opacity: 0.9
         }
+      },
+      clusters: {
+        radial: false
       }
     },
     dom: {

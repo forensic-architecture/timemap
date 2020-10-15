@@ -313,6 +313,7 @@ class Map extends React.Component {
         styleCluster={this.styleCluster}
         projectPoint={this.projectPoint}
         clusters={allClusters}
+        isRadial={this.props.ui.radial}
         onSelect={this.onClusterSelect}
       />
     )
@@ -352,7 +353,7 @@ class Map extends React.Component {
       <React.Fragment>
         {this.renderTiles()}
         {this.renderMarkers()}
-        {this.renderClusterGradients()}
+        {this.props.ui.radial ? this.renderClusterGradients(): null}
         {isShowingSites ? this.renderSites() : null}
         {this.renderShapes()}
         {this.renderNarratives()}
@@ -399,7 +400,8 @@ function mapStateToProps (state) {
       narratives: state.ui.style.narratives,
       mapSelectedEvents: state.ui.style.selectedEvents,
       shapes: state.ui.style.shapes,
-      eventRadius: state.ui.eventRadius
+      eventRadius: state.ui.eventRadius,
+      radial: state.ui.style.clusters.radial
     },
     features: selectors.getFeatures(state)
   }
