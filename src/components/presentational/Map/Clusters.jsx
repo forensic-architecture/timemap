@@ -27,10 +27,10 @@ function ClusterEvents ({
     const totalPoints = calculateTotalPoints()
 
     const styles = ({
-      fill: colors.fallbackEventColor,
-      stroke: colors.darkBackground,
-      strokeWidth: 0,
-      fillOpacity: calcClusterOpacity(pointCount, totalPoints)
+      // fill: colors.fallbackEventColor,
+      // stroke: colors.darkBackground,
+      // strokeWidth: 0,
+      fillOpacity: calcClusterOpacity(pointCount, totalPoints),
     })
 
     return (
@@ -44,6 +44,7 @@ function ClusterEvents ({
           cy='0'
           r={calcClusterSize(pointCount, totalPoints)}
           style={styles}
+          fill="url('#myGradient')"
         />}
       </React.Fragment>
     )

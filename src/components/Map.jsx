@@ -16,6 +16,7 @@ import Clusters from './presentational/Map/Clusters.jsx'
 import SelectedEvents from './presentational/Map/SelectedEvents.jsx'
 import Narratives from './presentational/Map/Narratives'
 import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
+import DefsClusters from './presentational/Map/DefsClusters.jsx'
 
 import { mapClustersToLocations } from '../common/utilities'
 
@@ -328,6 +329,14 @@ class Map extends React.Component {
     )
   }
 
+  renderClusterGradients () {
+    return (
+      <Portal node={this.svgRef.current}>
+        <DefsClusters />
+      </Portal>
+    )
+  }
+
   renderMarkers () {
     return (
       <Portal node={this.svgRef.current}>
@@ -343,6 +352,7 @@ class Map extends React.Component {
       <React.Fragment>
         {this.renderTiles()}
         {this.renderMarkers()}
+        {this.renderClusterGradients()}
         {isShowingSites ? this.renderSites() : null}
         {this.renderShapes()}
         {this.renderNarratives()}
