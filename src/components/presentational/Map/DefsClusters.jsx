@@ -2,10 +2,9 @@ import React from 'react'
 
 const DefsClusters = () => (
   <defs>
-    <radialGradient id="myGradient">
-      <stop offset="10%" stop-color="red" />
-      <stop offset="95%" stop-color="black" />
-      {/* <stop offset="95%" stop-color="red" /> */}
+    <radialGradient id="clusterGradient">
+      <stop offset="10%" stop-color="red"/>
+      <stop offset="100%" stop-color="black"/>
     </radialGradient>
   </defs>
 )
