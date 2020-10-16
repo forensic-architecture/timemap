@@ -148,7 +148,6 @@ const TimelineEvents = ({
     >
       {renderProjects()}
       {events.reduce(renderEvent, [])}
-      {/* {events.map(event => renderEvent(event))} */}
     </g>
   )
 }

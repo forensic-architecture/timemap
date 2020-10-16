@@ -41,13 +41,7 @@ export function fetchDomain () {
         .catch(() => handleError('events'))
       )
     ).then(results => results.flatMap(t => t))
-
-    // let catPromise = Promise.resolve([])
-    // if (features.USE_CATEGORIES) {
-    //   catPromise = fetch(CATEGORY_URL)
-    //     .then(response => response.json())
-    //     .catch(() => handleError(domainMsg('categories')))
-    // }
+  
 
     let associationsPromise = Promise.resolve([])
     if (features.USE_ASSOCIATIONS) {
@@ -87,7 +81,6 @@ export function fetchDomain () {
 
     return Promise.all([
       eventPromise,
-      // catPromise,
       associationsPromise,
       sourcesPromise,
       sitesPromise,
@@ -96,7 +89,6 @@ export function fetchDomain () {
       .then(response => {
         const result = {
           events: response[0],
-          // categories: response[1],
           associations: response[1],
           sources: response[2],
           sites: response[3],
