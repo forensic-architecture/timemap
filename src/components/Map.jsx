@@ -6,7 +6,6 @@ import Supercluster from 'supercluster'
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
 
-import hash from 'object-hash'
 import 'leaflet'
 
 import Sites from './presentational/Map/Sites.jsx'
@@ -16,9 +15,9 @@ import Clusters from './presentational/Map/Clusters.jsx'
 import SelectedEvents from './presentational/Map/SelectedEvents.jsx'
 import Narratives from './presentational/Map/Narratives'
 import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
-import DefsClusters from './presentational/Map/DefsClusters.jsx'
+import LoadingOverlay from '../components/Overlay/Loading'
 
-import { mapClustersToLocations } from '../common/utilities'
+import { mapClustersToLocations, isIdentical } from '../common/utilities'
 
 // NB: important constants for map, TODO: make statics
 const supportedMapboxMap = ['streets', 'satellite']
@@ -31,7 +30,7 @@ class Map extends React.Component {
     this.onClusterSelect = this.onClusterSelect.bind(this)
     this.svgRef = React.createRef()
     this.map = null
-    this.index = null
+    this.superclusterIndex = null
     this.state = {
       mapTransformX: 0,
       mapTransformY: 0,
@@ -48,16 +47,16 @@ class Map extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (hash(nextProps.domain.locations) !== hash(this.props.domain.locations)) {
+    if (!isIdentical(nextProps.domain.locations, this.props.domain.locations)) {
       this.loadClusterData(nextProps.domain.locations)
     }
     // Set appropriate zoom for narrative
     const { bounds } = nextProps.app.map
-    if (hash(bounds) !== hash(this.props.app.map.bounds) &&
+    if (!isIdentical(bounds, this.props.app.map.bounds) &&
       bounds !== null) {
       this.map.fitBounds(bounds)
     } else {
-      if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
+      if (!isIdentical(nextProps.app.selected, this.props.app.selected)) {
         // Fly to first  of events selected
         const eventPoint = (nextProps.app.selected.length > 0) ? nextProps.app.selected[0] : null
 
@@ -88,13 +87,11 @@ class Map extends React.Component {
         .setMaxBounds(mapConf.maxBounds)
 
     // Initialize supercluster index
-    const index = new Supercluster({
+    this.superclusterIndex = new Supercluster({
       radius: mapConf.clusterRadius,
       maxZoom: mapConf.maxZoom,
       minZoom: mapConf.minZoom
     })
-
-    this.index = index
 
     let firstLayer
 
@@ -138,15 +135,15 @@ class Map extends React.Component {
 
   update () {
     const [bbox, zoom] = this.getMapDetails()
-    if (this.index && this.state.indexLoaded) {
+    if (this.superclusterIndex && this.state.indexLoaded) {
       this.setState({
-        clusters: this.index.getClusters(bbox, zoom)
+        clusters: this.superclusterIndex.getClusters(bbox, zoom)
       })
     }
   }
 
   loadClusterData (locations) {
-    if (locations && locations.length > 0 && this.index) {
+    if (locations && locations.length > 0 && this.superclusterIndex) {
       const convertedLocations = locations.reduce((acc, loc) => {
         const { longitude, latitude } = loc
         const validCoordinates = !!latitude && !!longitude
@@ -166,7 +163,7 @@ class Map extends React.Component {
         }
         return acc
       }, [])
-      this.index.load(convertedLocations)
+      this.superclusterIndex.load(convertedLocations)
       this.setState({ indexLoaded: true })
       this.update()
     } else {
@@ -202,7 +199,7 @@ class Map extends React.Component {
   onClusterSelect (e) {
     const { id } = e.target
     const { longitude, latitude } = e.target.attributes
-    const expansionZoom = Math.max(this.index.getClusterExpansionZoom(parseInt(id)), this.index.options.minZoom)
+    const expansionZoom = Math.max(this.superclusterIndex.getClusterExpansionZoom(parseInt(id)), this.superclusterIndex.options.minZoom)
     this.map.flyTo(new L.LatLng(latitude.value, longitude.value), expansionZoom)
   }
 
@@ -330,14 +327,6 @@ class Map extends React.Component {
     )
   }
 
-  renderClusterGradients () {
-    return (
-      <Portal node={this.svgRef.current}>
-        <DefsClusters />
-      </Portal>
-    )
-  }
-
   renderMarkers () {
     return (
       <Portal node={this.svgRef.current}>
@@ -353,7 +342,6 @@ class Map extends React.Component {
       <React.Fragment>
         {this.renderTiles()}
         {this.renderMarkers()}
-        {this.props.ui.radial ? this.renderClusterGradients() : null}
         {isShowingSites ? this.renderSites() : null}
         {this.renderShapes()}
         {this.renderNarratives()}
@@ -391,7 +379,8 @@ function mapStateToProps (state) {
       map: state.app.map,
       narrative: state.app.associations.narrative,
       flags: {
-        isShowingSites: state.app.flags.isShowingSites
+        isShowingSites: state.app.flags.isShowingSites,
+        isFetchingDomain: state.app.flags.isFetchingDomain
       }
     },
     ui: {

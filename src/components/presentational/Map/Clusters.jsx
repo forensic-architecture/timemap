@@ -3,6 +3,15 @@ import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
 import { calcClusterOpacity, calcClusterSize } from '../../../common/utilities'
 
+const DefsClusters = () => (
+  <defs>
+    <radialGradient id='clusterGradient'>
+      <stop offset='10%' stop-color='red' />
+      <stop offset='90%' stop-color='transparent' />
+    </radialGradient>
+  </defs>
+)
+
 function ClusterEvents ({
   projectPoint,
   styleCluster,
@@ -27,12 +36,12 @@ function ClusterEvents ({
 
     const totalPoints = calculateTotalPoints()
 
-    const styles = ({
+    const styles = {
       fill: isRadial ? "url('#clusterGradient')" : colors.fallbackEventColor,
       stroke: colors.darkBackground,
       strokeWidth: 0,
       fillOpacity: calcClusterOpacity(pointCount, totalPoints)
-    })
+    }
 
     return (
       <React.Fragment>
@@ -92,6 +101,7 @@ function ClusterEvents ({
   return (
     <Portal node={svg}>
       <g className='cluster-locations'>
+        {isRadial ? <DefsClusters /> : null}
         {clusters.map(renderCluster)}
       </g>
     </Portal>
