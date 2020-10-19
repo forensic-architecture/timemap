@@ -1,7 +1,6 @@
 import moment from 'moment'
 import hash from 'object-hash'
 
-
 let { DATE_FMT, TIME_FMT } = process.env
 if (!DATE_FMT) DATE_FMT = 'MM/DD/YYYY'
 if (!TIME_FMT) TIME_FMT = 'HH:mm'
@@ -175,16 +174,16 @@ export function calcOpacity (num) {
 }
 
 export function calcClusterOpacity (pointCount, totalPoints) {
-  /* Clusters represent multiple events within a specific radius. The darker the cluster, 
+  /* Clusters represent multiple events within a specific radius. The darker the cluster,
   the larger the number of underlying events. We use a multiplication factor (50) here as well
   to ensure that the larger clusters have an appropriately darker shading. */
   return Math.min(0.85, 0.08 + (pointCount / totalPoints) * 50)
 }
 
 export function calcClusterSize (pointCount, totalPoints) {
-    /* The larger the cluster size, the higher the count of points that the cluster represents.
-    Just like with opacity, we use a multiplication factor to ensure that clusters with higher point
-    counts appear larger. */
+  /* The larger the cluster size, the higher the count of points that the cluster represents.
+  Just like with opacity, we use a multiplication factor to ensure that clusters with higher point
+  counts appear larger. */
   return Math.min(50, 10 + (pointCount / totalPoints) * 150)
 }
 

@@ -15,7 +15,6 @@ import Clusters from './presentational/Map/Clusters.jsx'
 import SelectedEvents from './presentational/Map/SelectedEvents.jsx'
 import Narratives from './presentational/Map/Narratives'
 import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
-import LoadingOverlay from '../components/Overlay/Loading'
 
 import { mapClustersToLocations, isIdentical } from '../common/utilities'
 
