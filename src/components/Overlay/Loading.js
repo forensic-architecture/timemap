@@ -4,7 +4,6 @@ import copy from '../../common/data/copy.json'
 const LoadingOverlay = ({ isLoading, language }) => {
   let classes = 'loading-overlay'
   classes += (!isLoading) ? ' hidden' : ''
-
   return (
     <div id='loading-overlay' className={classes}>
       <div className='loading-wrapper'>

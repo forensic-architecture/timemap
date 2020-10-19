@@ -15,6 +15,7 @@ import Clusters from './presentational/Map/Clusters.jsx'
 import SelectedEvents from './presentational/Map/SelectedEvents.jsx'
 import Narratives from './presentational/Map/Narratives'
 import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
+import LoadingOverlay from '../components/Overlay/Loading'
 
 import { mapClustersToLocations, isIdentical } from '../common/utilities'
 
@@ -335,7 +336,7 @@ class Map extends React.Component {
   }
 
   render () {
-    const { isShowingSites } = this.props.app.flags
+    const { isShowingSites, isFetchingDomain } = this.props.app.flags
     const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'
     const innerMap = this.map ? (
       <React.Fragment>
@@ -356,6 +357,11 @@ class Map extends React.Component {
         tabIndex='0'
       >
         <div id={this.props.ui.dom.map} />
+        <LoadingOverlay
+          isLoading={this.props.app.loading || isFetchingDomain}
+          ui={isFetchingDomain}
+          language={this.props.app.language}
+        />
         {innerMap}
       </div>
     )
@@ -376,6 +382,8 @@ function mapStateToProps (state) {
       selected: selectors.selectSelected(state),
       highlighted: state.app.highlighted,
       map: state.app.map,
+      language: state.app.language,
+      loading: state.app.loading,
       narrative: state.app.associations.narrative,
       flags: {
         isShowingSites: state.app.flags.isShowingSites,
