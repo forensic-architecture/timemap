@@ -98,10 +98,10 @@ const TimelineEvents = ({
     }
 
     const relatedCategories = getEventCategories(event, categories)
-    
+
     if (relatedCategories && relatedCategories.length > 0) {
       relatedCategories.forEach(cat => {
-        const eventY = getY({...event, category: cat.id})
+        const eventY = getY({ ...event, category: cat.id })
 
         let colour = event.colour ? event.colour : getCategoryColor(cat.id)
         const styles = {

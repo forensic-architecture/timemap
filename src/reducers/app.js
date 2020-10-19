@@ -232,7 +232,7 @@ function setInitialCategories (appState, action) {
     associations: {
       ...appState.associations,
       categories: categories
-    } 
+    }
   }
 }
 

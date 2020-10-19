@@ -41,7 +41,6 @@ export function fetchDomain () {
         .catch(() => handleError('events'))
       )
     ).then(results => results.flatMap(t => t))
-  
 
     let associationsPromise = Promise.resolve([])
     if (features.USE_ASSOCIATIONS) {

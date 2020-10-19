@@ -298,7 +298,7 @@ class Timeline extends React.Component {
    */
   styleDatetime (timestamp, category) {
     return [null, null]
-  }   
+  }
 
   render () {
     const { isNarrative, app } = this.props
