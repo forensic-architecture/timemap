@@ -31,7 +31,7 @@ function ClusterEvents ({
       fill: isRadial ? "url('#clusterGradient')" : colors.fallbackEventColor,
       stroke: colors.darkBackground,
       strokeWidth: 0,
-      fillOpacity: calcClusterOpacity(pointCount, totalPoints),
+      fillOpacity: calcClusterOpacity(pointCount, totalPoints)
     })
 
     return (

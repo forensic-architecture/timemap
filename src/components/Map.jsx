@@ -353,7 +353,7 @@ class Map extends React.Component {
       <React.Fragment>
         {this.renderTiles()}
         {this.renderMarkers()}
-        {this.props.ui.radial ? this.renderClusterGradients(): null}
+        {this.props.ui.radial ? this.renderClusterGradients() : null}
         {isShowingSites ? this.renderSites() : null}
         {this.renderShapes()}
         {this.renderNarratives()}
