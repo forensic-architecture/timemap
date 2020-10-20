@@ -1,18 +1,18 @@
 import { createSelector } from 'reselect'
 import { insetSourceFrom, dateMin, dateMax, isLatitude, isLongitude } from '../common/utilities'
 import { isTimeRangedIn } from './helpers'
-import { FILTER_MODE, NARRATIVE_MODE } from '../common/constants'
+import { ASSOCIATION_MODES } from '../common/constants'
 
 // Input selectors
 export const getEvents = state => state.domain.events
-export const getCategories = state => state.domain.categories
-export const getNarratives = state => state.domain.associations.filter(item => item.mode === NARRATIVE_MODE)
+export const getCategories = state => state.domain.associations.filter(item => item.mode === ASSOCIATION_MODES.CATEGORY)
+export const getNarratives = state => state.domain.associations.filter(item => item.mode === ASSOCIATION_MODES.NARRATIVE)
 export const getActiveNarrative = state => state.app.associations.narrative
 export const getSelected = state => state.app.selected
 export const getSites = state => state.domain.sites
 export const getSources = state => state.domain.sources
 export const getShapes = state => state.domain.shapes
-export const getFilters = state => state.domain.associations.filter(item => item.mode === FILTER_MODE)
+export const getFilters = state => state.domain.associations.filter(item => item.mode === ASSOCIATION_MODES.FILTER)
 export const getNotifications = state => state.domain.notifications
 export const getActiveFilters = state => state.app.associations.filters
 export const getActiveCategories = state => state.app.associations.categories
@@ -55,7 +55,11 @@ export const selectEvents = createSelector(
           .some(s => s)
       ) || activeFilters.length === 0
       const isActiveFilter = isMatchingFilter || activeFilters.length === 0
-      const isActiveCategory = activeCategories.includes(event.category) || activeCategories.length === 0
+      const isActiveCategory = (event.associations &&
+        event.associations.map(association =>
+          activeCategories.includes(association))
+          .some(s => s)
+      ) || activeCategories.length === 0
       let isActiveTime = isTimeRangedIn(event, timeRange)
       isActiveTime = features.GRAPH_NONLOCATED
         ? ((!event.latitude && !event.longitude) || isActiveTime)

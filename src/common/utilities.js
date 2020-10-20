@@ -63,6 +63,18 @@ export function trimAndEllipse (string, stringNum) {
   return string
 }
 
+export function getEventCategories (event, categories) {
+  const matchedCategories = []
+  if (event.associations && event.associations.length > 0) {
+    event.associations.reduce((acc, val) => {
+      const foundCategory = categories.find(cat => cat.id === val)
+      if (foundCategory) acc.push(foundCategory)
+      return acc
+    }, matchedCategories)
+  }
+  return matchedCategories
+}
+
 /**
  * Inset the full source represenation from 'allSources' into an event. The
  * function is 'curried' to allow easy use with maps. To use for a single

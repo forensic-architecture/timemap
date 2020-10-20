@@ -1,7 +1,6 @@
 import Joi from 'joi'
 
 import createEventSchema from './eventSchema'
-import categorySchema from './categorySchema'
 import siteSchema from './siteSchema'
 import associationsSchema from './associationsSchema'
 import sourceSchema from './sourceSchema'
@@ -47,7 +46,6 @@ function findDuplicateAssociations (associations) {
 export function validateDomain (domain, features) {
   const sanitizedDomain = {
     events: [],
-    categories: [],
     sites: [],
     associations: [],
     sources: {},
@@ -61,7 +59,6 @@ export function validateDomain (domain, features) {
 
   const discardedDomain = {
     events: [],
-    categories: [],
     sites: [],
     associations: [],
     sources: [],
@@ -110,7 +107,6 @@ export function validateDomain (domain, features) {
 
   const eventSchema = createEventSchema(features.CUSTOM_EVENT_FIELDS)
   validateArray(domain.events, 'events', eventSchema)
-  validateArray(domain.categories, 'categories', categorySchema)
   validateArray(domain.sites, 'sites', siteSchema)
   validateArray(domain.associations, 'associations', associationsSchema)
   validateObject(domain.sources, 'sources', sourceSchema)

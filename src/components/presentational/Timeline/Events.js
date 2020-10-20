@@ -4,7 +4,7 @@ import DatetimeBar from './DatetimeBar'
 import DatetimeSquare from './DatetimeSquare'
 import DatetimeStar from './DatetimeStar'
 import Project from './Project'
-import { calcOpacity } from '../../../common/utilities'
+import { calcOpacity, getEventCategories } from '../../../common/utilities'
 
 function renderDot (event, styles, props) {
   return <DatetimeDot
@@ -60,6 +60,7 @@ function renderStar (event, styles, props) {
 const TimelineEvents = ({
   events,
   projects,
+  categories,
   narrative,
   getDatetimeX,
   getY,
@@ -75,14 +76,14 @@ const TimelineEvents = ({
 }) => {
   const narIds = narrative ? narrative.steps.map(s => s.id) : []
 
-  function renderEvent (event) {
+  function renderEvent (aggregated, event) {
     if (narrative) {
       if (!(narIds.includes(event.id))) {
         return null
       }
     }
-
     const isDot = (!!event.location && !!event.longitude) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
+
     let renderShape = isDot ? renderDot : renderBar
     if (event.shape) {
       if (event.shape === 'bar') {
@@ -96,23 +97,33 @@ const TimelineEvents = ({
       }
     }
 
-    const eventY = getY(event)
-    let colour = event.colour ? event.colour : getCategoryColor(event.category)
-    const styles = {
-      fill: colour,
-      fillOpacity: eventY > 0 ? calcOpacity(1) : 0,
-      transition: `transform ${transitionDuration / 1000}s ease`
-    }
+    const relatedCategories = getEventCategories(event, categories)
 
-    return renderShape(event, styles, {
-      x: getDatetimeX(event.datetime),
-      y: eventY,
-      eventRadius,
-      onSelect: () => onSelect(event),
-      dims,
-      highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.associations[features.HIGHLIGHT_GROUPS.filterIndexIndicatingGroup]) : [],
-      features
-    })
+    if (relatedCategories && relatedCategories.length > 0) {
+      relatedCategories.forEach(cat => {
+        const eventY = getY({ ...event, category: cat.id })
+
+        let colour = event.colour ? event.colour : getCategoryColor(cat.id)
+        const styles = {
+          fill: colour,
+          fillOpacity: eventY > 0 ? calcOpacity(1) : 0,
+          transition: `transform ${transitionDuration / 1000}s ease`
+        }
+
+        aggregated.push(
+          renderShape(event, styles, {
+            x: getDatetimeX(event.datetime),
+            y: eventY,
+            eventRadius,
+            onSelect: () => onSelect(event),
+            dims,
+            highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.filters[features.HIGHLIGHT_GROUPS.filterIndexIndicatingGroup]) : [],
+            features
+          })
+        )
+      })
+    }
+    return aggregated
   }
 
   let renderProjects = () => null
@@ -136,7 +147,7 @@ const TimelineEvents = ({
       clipPath={'url(#clip)'}
     >
       {renderProjects()}
-      {events.map(event => renderEvent(event))}
+      {events.reduce(renderEvent, [])}
     </g>
   )
 }

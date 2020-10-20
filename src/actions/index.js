@@ -4,7 +4,7 @@ import { urlFromEnv } from '../common/utilities'
 // TODO: relegate these URLs entirely to environment variables
 // const CONFIG_URL = urlFromEnv('CONFIG_EXT')
 const EVENT_DATA_URL = urlFromEnv('EVENTS_EXT')
-const CATEGORY_URL = urlFromEnv('CATEGORIES_EXT')
+// const CATEGORY_URL = urlFromEnv('CATEGORIES_EXT')
 const ASSOCIATIONS_URL = urlFromEnv('ASSOCIATIONS_EXT')
 const SOURCES_URL = urlFromEnv('SOURCES_EXT')
 const SITES_URL = urlFromEnv('SITES_EXT')
@@ -41,13 +41,6 @@ export function fetchDomain () {
         .catch(() => handleError('events'))
       )
     ).then(results => results.flatMap(t => t))
-
-    let catPromise = Promise.resolve([])
-    if (features.USE_CATEGORIES) {
-      catPromise = fetch(CATEGORY_URL)
-        .then(response => response.json())
-        .catch(() => handleError(domainMsg('categories')))
-    }
 
     let associationsPromise = Promise.resolve([])
     if (features.USE_ASSOCIATIONS) {
@@ -87,7 +80,6 @@ export function fetchDomain () {
 
     return Promise.all([
       eventPromise,
-      catPromise,
       associationsPromise,
       sourcesPromise,
       sitesPromise,
@@ -96,17 +88,17 @@ export function fetchDomain () {
       .then(response => {
         const result = {
           events: response[0],
-          categories: response[1],
-          associations: response[2],
-          sources: response[3],
-          sites: response[4],
-          shapes: response[5],
+          associations: response[1],
+          sources: response[2],
+          sites: response[3],
+          shapes: response[4],
           notifications
         }
         if (Object.values(result).some(resp => resp.hasOwnProperty('error'))) {
           throw new Error('Some URLs returned negative. If you are in development, check the server is running')
         }
         dispatch(toggleFetchingDomain())
+        dispatch(setInitialCategories(result.associations))
         return result
       })
       .catch(err => {
@@ -209,6 +201,14 @@ export const SET_NOT_LOADING = 'SET_NOT_LOADING'
 export function setNotLoading () {
   return {
     type: SET_NOT_LOADING
+  }
+}
+
+export const SET_INITIAL_CATEGORIES = 'SET_INITIAL_CATEGORIES'
+export function setInitialCategories (values) {
+  return {
+    type: SET_INITIAL_CATEGORIES,
+    values
   }
 }
 
