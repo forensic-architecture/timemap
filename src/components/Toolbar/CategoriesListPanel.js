@@ -13,14 +13,14 @@ export default ({
       <div>
         {categories.map(cat => {
           return (<li
-            key={cat.category.replace(/ /g, '_')}
+            key={cat.id.replace(/ /g, '_')}
             className={'filter-filter active'}
             style={{ marginLeft: '20px' }}
           >
             <Checkbox
-              label={cat.category}
-              isActive={activeCategories.includes(cat.category)}
-              onClickCheckbox={() => onCategoryFilter(cat.category)}
+              label={cat.id}
+              isActive={activeCategories.includes(cat.id)}
+              onClickCheckbox={() => onCategoryFilter(cat.id)}
             />
           </li>)
         })}

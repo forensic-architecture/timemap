@@ -78,7 +78,7 @@ class Timeline extends React.Component {
   makeScaleY (categories, trackHeight, marginTop) {
     const { features } = this.props
     if (features.GRAPH_NONLOCATED && features.GRAPH_NONLOCATED.categories) {
-      categories = categories.filter(cat => !features.GRAPH_NONLOCATED.categories.includes(cat.category))
+      categories = categories.filter(cat => !features.GRAPH_NONLOCATED.categories.includes(cat.id))
     }
     const catHeight = trackHeight / (categories.length)
     const shiftUp = trackHeight / (categories.length) / 2
@@ -87,7 +87,8 @@ class Timeline extends React.Component {
     const catsYpos = categories.map((g, i) => {
       return ((i + 1) * catHeight) - shiftUp + marginShift + manualAdjustment
     })
-    const catMap = categories.map(c => c.category)
+    const catMap = categories.map(c => c.id)
+
     return (cat) => {
       const idx = catMap.indexOf(cat)
       return catsYpos[idx]
@@ -268,11 +269,16 @@ class Timeline extends React.Component {
 
   getY (event) {
     const { features, domain } = this.props
-    const { USE_CATEGORIES, GRAPH_NONLOCATED } = features
+    const { categories } = domain
 
-    if (!USE_CATEGORIES) { return this.state.dims.trackHeight / 2 }
+    const categoriesExist = categories && categories.length > 0
+
+    const { GRAPH_NONLOCATED } = features
+
+    if (!categoriesExist) { return this.state.dims.trackHeight / 2 }
 
     const { category, project } = event
+
     if (GRAPH_NONLOCATED && GRAPH_NONLOCATED.categories.includes(category)) {
       return this.state.dims.marginTop + domain.projects[project].offset + this.props.ui.eventRadius
     }
@@ -336,7 +342,7 @@ class Timeline extends React.Component {
                 onDragStart={() => { this.onDragStart() }}
                 onDrag={() => { this.onDrag() }}
                 onDragEnd={() => { this.onDragEnd() }}
-                categories={this.props.domain.categories}
+                categories={this.props.app.activeCategories}
                 features={this.props.features}
               />
               <Handles
@@ -362,6 +368,7 @@ class Timeline extends React.Component {
               <Events
                 events={this.props.domain.events}
                 projects={this.props.domain.projects}
+                categories={this.props.domain.categories}
                 styleDatetime={this.styleDatetime}
                 narrative={this.props.app.narrative}
                 getDatetimeX={this.getDatetimeX}
@@ -400,6 +407,7 @@ function mapStateToProps (state) {
       narratives: state.domain.narratives
     },
     app: {
+      activeCategories: selectors.getActiveCategories(state),
       selected: state.app.selected,
       language: state.app.language,
       timeline: state.app.timeline,
