@@ -17,7 +17,7 @@ import Narratives from './presentational/Map/Narratives'
 import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
 import LoadingOverlay from '../components/Overlay/Loading'
 
-import { mapClustersToLocations, isIdentical } from '../common/utilities'
+import { mapClustersToLocations, isIdentical, isLatitude, isLongitude } from '../common/utilities'
 
 // NB: important constants for map, TODO: make statics
 const supportedMapboxMap = ['streets', 'satellite']
@@ -28,6 +28,7 @@ class Map extends React.Component {
     super()
     this.projectPoint = this.projectPoint.bind(this)
     this.onClusterSelect = this.onClusterSelect.bind(this)
+    this.loadClusterData = this.loadClusterData.bind(this)
     this.svgRef = React.createRef()
     this.map = null
     this.superclusterIndex = null
@@ -73,24 +74,30 @@ class Map extends React.Component {
     }
   }
 
+  componentDidUpdate (prevState, prevProps) {
+    if (prevState.domain.locations.length > 0 && this.state.clusters.length === 0) {
+      this.loadClusterData(prevState.domain.locations)
+    }
+  }
+
   initializeMap () {
     /**
      * Creates a Leaflet map and a tilelayer for the map background
      */
-    const { map: mapConf } = this.props.app
+    const { map: mapConfig } = this.props.app
 
     const map =
       L.map(this.props.ui.dom.map)
-        .setView(mapConf.anchor, mapConf.startZoom)
-        .setMinZoom(mapConf.minZoom)
-        .setMaxZoom(mapConf.maxZoom)
-        .setMaxBounds(mapConf.maxBounds)
+        .setView(mapConfig.anchor, mapConfig.startZoom)
+        .setMinZoom(mapConfig.minZoom)
+        .setMaxZoom(mapConfig.maxZoom)
+        .setMaxBounds(mapConfig.maxBounds)
 
     // Initialize supercluster index
     this.superclusterIndex = new Supercluster({
-      radius: mapConf.clusterRadius,
-      maxZoom: mapConf.maxZoom,
-      minZoom: mapConf.minZoom
+      radius: mapConfig.clusterRadius,
+      maxZoom: mapConfig.maxZoom,
+      minZoom: mapConfig.minZoom
     })
 
     let firstLayer
@@ -114,10 +121,10 @@ class Map extends React.Component {
     map.zoomControl.remove()
 
     map.on('moveend', () => {
-      this.update()
+      this.updateClusters()
       this.alignLayers()
     })
-    map.on('load', () => this.update())
+
     map.on('move zoomend viewreset', () => this.alignLayers())
     map.on('zoomstart', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.add('hide') })
     map.on('zoomend', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.remove('hide') })
@@ -133,7 +140,7 @@ class Map extends React.Component {
     return [bbox, zoom]
   }
 
-  update () {
+  updateClusters () {
     const [bbox, zoom] = this.getMapDetails()
     if (this.superclusterIndex && this.state.indexLoaded) {
       this.setState({
@@ -146,7 +153,7 @@ class Map extends React.Component {
     if (locations && locations.length > 0 && this.superclusterIndex) {
       const convertedLocations = locations.reduce((acc, loc) => {
         const { longitude, latitude } = loc
-        const validCoordinates = !!latitude && !!longitude
+        const validCoordinates = isLatitude(latitude) && isLongitude(longitude)
         if (validCoordinates) {
           const feature = {
             type: 'Feature',
@@ -165,7 +172,7 @@ class Map extends React.Component {
       }, [])
       this.superclusterIndex.load(convertedLocations)
       this.setState({ indexLoaded: true })
-      this.update()
+      this.updateClusters()
     } else {
       this.setState({ clusters: [] })
     }
@@ -337,7 +344,7 @@ class Map extends React.Component {
 
   render () {
     const { isShowingSites, isFetchingDomain } = this.props.app.flags
-    const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'
+    const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'      
     const innerMap = this.map ? (
       <React.Fragment>
         {this.renderTiles()}
@@ -372,6 +379,7 @@ function mapStateToProps (state) {
   return {
     domain: {
       locations: selectors.selectLocations(state),
+      // clusters: selectors.selectClusters(state),
       narratives: selectors.selectNarratives(state),
       categories: selectors.getCategories(state),
       sites: selectors.selectSites(state),
