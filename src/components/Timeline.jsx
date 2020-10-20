@@ -14,6 +14,7 @@ import Handles from './presentational/Timeline/Handles.js'
 import ZoomControls from './presentational/Timeline/ZoomControls.js'
 import Markers from './presentational/Timeline/Markers.js'
 import Events from './presentational/Timeline/Events.js'
+import Calendar from './presentational/Timeline/Calendar.js'
 import Categories from './TimelineCategories.jsx'
 
 class Timeline extends React.Component {
@@ -343,11 +344,18 @@ class Timeline extends React.Component {
                 dims={dims}
                 onMoveTime={(dir) => { this.onMoveTime(dir) }}
               />
-              <ZoomControls
+              {/* <ZoomControls
                 extent={this.getTimeScaleExtent()}
                 zoomLevels={this.props.app.timeline.zoomLevels}
                 dims={dims}
                 onApplyZoom={this.onApplyZoom}
+              /> */}
+              <Calendar
+                onChange={() => console.info('CALLS CALENDAR')}
+                value={new Date()}
+                minDate={this.props.app.timeline.rangeLimits[0]}
+                maxDate={this.props.app.timeline.rangeLimits[1]}
+                activeStartDate={new Date()}
               />
               <Markers
                 dims={dims}
