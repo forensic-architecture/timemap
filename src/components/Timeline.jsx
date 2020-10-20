@@ -310,7 +310,6 @@ class Timeline extends React.Component {
     const extraStyle = { ...heightStyle, ...foldedStyle }
     const contentHeight = { height: dims.contentHeight }
     const { categories } = this.props.domain
-
     return (
       <div className={classes} style={extraStyle} onKeyDown={this.props.onKeyDown} tabIndex='1'>
         <Header

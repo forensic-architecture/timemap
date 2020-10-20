@@ -239,7 +239,6 @@ class Dashboard extends React.Component {
 
   render () {
     const { actions, app, domain, ui, features } = this.props
-
     if (isMobile || window.innerWidth < 600) {
       const msg = 'This platform is not suitable for mobile. Please re-visit the site on a device with a larger screen.'
       return (
@@ -260,7 +259,7 @@ class Dashboard extends React.Component {
     }
 
     return (
-      <div >
+      <div>
         <Toolbar
           isNarrative={!!app.associations.narrative}
           methods={{

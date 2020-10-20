@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { insetSourceFrom, dateMin, dateMax } from '../common/utilities'
+import { insetSourceFrom, dateMin, dateMax, isLatitude, isLongitude } from '../common/utilities'
 import { isTimeRangedIn } from './helpers'
 import { ASSOCIATION_MODES } from '../common/constants'
 
@@ -68,7 +68,6 @@ export const selectEvents = createSelector(
       if (isActiveTime && isActiveFilter && isActiveCategory) {
         acc[event.id] = { ...event }
       }
-
       return acc
     }, [])
   })
@@ -163,6 +162,9 @@ export const selectLocations = createSelector(
   (events) => {
     const activeLocations = {}
     events.forEach(event => {
+      const { latitude, longitude } = event
+      if (!isLatitude(latitude) || !isLongitude(longitude)) return
+
       const location = `${event.location}$_${event.latitude}_${event.longitude}`
 
       if (activeLocations[location]) {

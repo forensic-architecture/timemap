@@ -1,4 +1,5 @@
 import moment from 'moment'
+import hash from 'object-hash'
 
 let { DATE_FMT, TIME_FMT } = process.env
 if (!DATE_FMT) DATE_FMT = 'MM/DD/YYYY'
@@ -86,8 +87,7 @@ export function insetSourceFrom (allSources) {
     if (!event.sources) {
       sources = []
     } else {
-      sources = event.sources.map(src => {
-        const id = typeof src === 'object' ? src.id : src
+      sources = event.sources.map(id => {
         return allSources.hasOwnProperty(id) ? allSources[id] : null
       })
     }
@@ -171,6 +171,10 @@ export function selectTypeFromPathWithPoster (path, poster) {
   return { type: typeForPath(path), path, poster }
 }
 
+export function isIdentical (obj1, obj2) {
+  return hash(obj1) === hash(obj2)
+}
+
 export function calcOpacity (num) {
   /* Events have opacity 0.5 by default, and get added to according to how many
    * other events there are in the same render. The idea here is that the
@@ -178,6 +182,36 @@ export function calcOpacity (num) {
    * darker areas represent more events with proportion */
   const base = num >= 1 ? 0.6 : 0
   return base + (Math.min(0.5, 0.08 * (num - 1)))
+}
+
+export function calcClusterOpacity (pointCount, totalPoints) {
+  /* Clusters represent multiple events within a specific radius. The darker the cluster,
+  the larger the number of underlying events. We use a multiplication factor (50) here as well
+  to ensure that the larger clusters have an appropriately darker shading. */
+  return Math.min(0.85, 0.08 + (pointCount / totalPoints) * 50)
+}
+
+export function calcClusterSize (pointCount, totalPoints) {
+  /* The larger the cluster size, the higher the count of points that the cluster represents.
+  Just like with opacity, we use a multiplication factor to ensure that clusters with higher point
+  counts appear larger. */
+  return Math.min(50, 10 + (pointCount / totalPoints) * 150)
+}
+
+export function isLatitude (lat) {
+  return !!lat && isFinite(lat) && Math.abs(lat) <= 90
+}
+
+export function isLongitude (lng) {
+  return !!lng && isFinite(lng) && Math.abs(lng) <= 180
+}
+
+export function mapClustersToLocations (clusters, locations) {
+  return clusters.reduce((acc, cl) => {
+    const foundLocation = locations.find(location => location.label === cl.properties.id)
+    if (foundLocation) acc.push(foundLocation)
+    return acc
+  }, [])
 }
 
 export const dateMin = function () {

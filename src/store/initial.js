@@ -11,7 +11,7 @@ const initial = {
    */
   domain: {
     events: [],
-    locations: [],
+    categories: [],
     associations: [],
     sources: {},
     sites: [],
@@ -48,10 +48,11 @@ const initial = {
     map: {
       anchor: [31.356397, 34.784818],
       startZoom: 11,
-      minZoom: 6,
-      maxZoom: 18,
+      minZoom: 2,
+      maxZoom: 16,
       bounds: null,
-      maxBounds: [[180, -180], [-180, 180]]
+      maxBounds: [[180, -180], [-180, 180]],
+      clusterRadius: 30
     },
     timeline: {
       dimensions: {
@@ -120,6 +121,9 @@ const initial = {
           strokeWidth: 3,
           opacity: 0.9
         }
+      },
+      clusters: {
+        radial: false
       }
     },
     dom: {

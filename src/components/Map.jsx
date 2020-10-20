@@ -1,19 +1,23 @@
 /* global L */
 import React from 'react'
 import { Portal } from 'react-portal'
+import Supercluster from 'supercluster'
 
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
 
-import hash from 'object-hash'
 import 'leaflet'
 
 import Sites from './presentational/Map/Sites.jsx'
 import Shapes from './presentational/Map/Shapes.jsx'
 import Events from './presentational/Map/Events.jsx'
+import Clusters from './presentational/Map/Clusters.jsx'
 import SelectedEvents from './presentational/Map/SelectedEvents.jsx'
 import Narratives from './presentational/Map/Narratives'
 import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
+import LoadingOverlay from '../components/Overlay/Loading'
+
+import { mapClustersToLocations, isIdentical, isLatitude, isLongitude } from '../common/utilities'
 
 // NB: important constants for map, TODO: make statics
 const supportedMapboxMap = ['streets', 'satellite']
@@ -23,11 +27,16 @@ class Map extends React.Component {
   constructor () {
     super()
     this.projectPoint = this.projectPoint.bind(this)
+    this.onClusterSelect = this.onClusterSelect.bind(this)
+    this.loadClusterData = this.loadClusterData.bind(this)
     this.svgRef = React.createRef()
     this.map = null
+    this.superclusterIndex = null
     this.state = {
       mapTransformX: 0,
-      mapTransformY: 0
+      mapTransformY: 0,
+      indexLoaded: false,
+      clusters: []
     }
     this.styleLocation = this.styleLocation.bind(this)
   }
@@ -39,13 +48,16 @@ class Map extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    if (!isIdentical(nextProps.domain.locations, this.props.domain.locations)) {
+      this.loadClusterData(nextProps.domain.locations)
+    }
     // Set appropriate zoom for narrative
     const { bounds } = nextProps.app.map
-    if (hash(bounds) !== hash(this.props.app.map.bounds) &&
+    if (!isIdentical(bounds, this.props.app.map.bounds) &&
       bounds !== null) {
       this.map.fitBounds(bounds)
     } else {
-      if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
+      if (!isIdentical(nextProps.app.selected, this.props.app.selected)) {
         // Fly to first  of events selected
         const eventPoint = (nextProps.app.selected.length > 0) ? nextProps.app.selected[0] : null
 
@@ -62,17 +74,31 @@ class Map extends React.Component {
     }
   }
 
+  componentDidUpdate (prevState, prevProps) {
+    if (prevState.domain.locations.length > 0 && this.state.clusters.length === 0) {
+      this.loadClusterData(prevState.domain.locations)
+    }
+  }
+
   initializeMap () {
     /**
      * Creates a Leaflet map and a tilelayer for the map background
      */
-    const { map: mapConf } = this.props.app
+    const { map: mapConfig } = this.props.app
+
     const map =
       L.map(this.props.ui.dom.map)
-        .setView(mapConf.anchor, mapConf.startZoom)
-        .setMinZoom(mapConf.minZoom)
-        .setMaxZoom(mapConf.maxZoom)
-        .setMaxBounds(mapConf.maxBounds)
+        .setView(mapConfig.anchor, mapConfig.startZoom)
+        .setMinZoom(mapConfig.minZoom)
+        .setMaxZoom(mapConfig.maxZoom)
+        .setMaxBounds(mapConfig.maxBounds)
+
+    // Initialize supercluster index
+    this.superclusterIndex = new Supercluster({
+      radius: mapConfig.clusterRadius,
+      maxZoom: mapConfig.maxZoom,
+      minZoom: mapConfig.minZoom
+    })
 
     let firstLayer
 
@@ -94,12 +120,62 @@ class Map extends React.Component {
     map.keyboard.disable()
     map.zoomControl.remove()
 
-    map.on('move zoomend viewreset moveend', () => this.alignLayers())
+    map.on('moveend', () => {
+      this.updateClusters()
+      this.alignLayers()
+    })
+
+    map.on('move zoomend viewreset', () => this.alignLayers())
     map.on('zoomstart', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.add('hide') })
     map.on('zoomend', () => { if (this.svgRef.current !== null) this.svgRef.current.classList.remove('hide') })
     window.addEventListener('resize', () => { this.alignLayers() })
 
     this.map = map
+  }
+
+  getMapDetails () {
+    const bounds = this.map.getBounds()
+    const bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()]
+    const zoom = this.map.getZoom()
+    return [bbox, zoom]
+  }
+
+  updateClusters () {
+    const [bbox, zoom] = this.getMapDetails()
+    if (this.superclusterIndex && this.state.indexLoaded) {
+      this.setState({
+        clusters: this.superclusterIndex.getClusters(bbox, zoom)
+      })
+    }
+  }
+
+  loadClusterData (locations) {
+    if (locations && locations.length > 0 && this.superclusterIndex) {
+      const convertedLocations = locations.reduce((acc, loc) => {
+        const { longitude, latitude } = loc
+        const validCoordinates = isLatitude(latitude) && isLongitude(longitude)
+        if (validCoordinates) {
+          const feature = {
+            type: 'Feature',
+            properties: {
+              cluster: false,
+              id: loc.label
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [longitude, latitude]
+            }
+          }
+          acc.push(feature)
+        }
+        return acc
+      }, [])
+      this.superclusterIndex.load(convertedLocations)
+      this.setState({ indexLoaded: true })
+      this.updateClusters()
+    } else {
+      this.setState({ clusters: [] })
+    }
   }
 
   alignLayers () {
@@ -125,6 +201,13 @@ class Map extends React.Component {
       x: this.map.latLngToLayerPoint(latLng).x + this.state.mapTransformX,
       y: this.map.latLngToLayerPoint(latLng).y + this.state.mapTransformY
     }
+  }
+
+  onClusterSelect (e) {
+    const { id } = e.target
+    const { longitude, latitude } = e.target.attributes
+    const expansionZoom = Math.max(this.superclusterIndex.getClusterExpansionZoom(parseInt(id)), this.superclusterIndex.options.minZoom)
+    this.map.flyTo(new L.LatLng(latitude.value, longitude.value), expansionZoom)
   }
 
   getClientDims () {
@@ -202,12 +285,18 @@ class Map extends React.Component {
     return [null, null]
   }
 
+  styleCluster (cluster) {
+    return [null, null]
+  }
+
   renderEvents () {
+    const individualClusters = this.state.clusters.filter(cl => !cl.properties.cluster)
+    const filteredLocations = mapClustersToLocations(individualClusters, this.props.domain.locations)
     return (
       <Events
         svg={this.svgRef.current}
         events={this.props.domain.events}
-        locations={this.props.domain.locations}
+        locations={filteredLocations}
         styleLocation={this.styleLocation}
         categories={this.props.domain.categories}
         projectPoint={this.projectPoint}
@@ -216,6 +305,20 @@ class Map extends React.Component {
         onSelect={this.props.methods.onSelect}
         getCategoryColor={this.props.methods.getCategoryColor}
         eventRadius={this.props.ui.eventRadius}
+      />
+    )
+  }
+
+  renderClusters () {
+    const allClusters = this.state.clusters.filter(cl => cl.properties.cluster)
+    return (
+      <Clusters
+        svg={this.svgRef.current}
+        styleCluster={this.styleCluster}
+        projectPoint={this.projectPoint}
+        clusters={allClusters}
+        isRadial={this.props.ui.radial}
+        onSelect={this.onClusterSelect}
       />
     )
   }
@@ -240,7 +343,7 @@ class Map extends React.Component {
   }
 
   render () {
-    const { isShowingSites } = this.props.app.flags
+    const { isShowingSites, isFetchingDomain } = this.props.app.flags
     const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'
     const innerMap = this.map ? (
       <React.Fragment>
@@ -250,6 +353,7 @@ class Map extends React.Component {
         {this.renderShapes()}
         {this.renderNarratives()}
         {this.renderEvents()}
+        {this.renderClusters()}
         {this.renderSelected()}
       </React.Fragment>
     ) : null
@@ -260,6 +364,11 @@ class Map extends React.Component {
         tabIndex='0'
       >
         <div id={this.props.ui.dom.map} />
+        <LoadingOverlay
+          isLoading={this.props.app.loading || isFetchingDomain}
+          ui={isFetchingDomain}
+          language={this.props.app.language}
+        />
         {innerMap}
       </div>
     )
@@ -280,9 +389,12 @@ function mapStateToProps (state) {
       selected: selectors.selectSelected(state),
       highlighted: state.app.highlighted,
       map: state.app.map,
+      language: state.app.language,
+      loading: state.app.loading,
       narrative: state.app.associations.narrative,
       flags: {
-        isShowingSites: state.app.flags.isShowingSites
+        isShowingSites: state.app.flags.isShowingSites,
+        isFetchingDomain: state.app.flags.isFetchingDomain
       }
     },
     ui: {
@@ -291,7 +403,8 @@ function mapStateToProps (state) {
       narratives: state.ui.style.narratives,
       mapSelectedEvents: state.ui.style.selectedEvents,
       shapes: state.ui.style.shapes,
-      eventRadius: state.ui.eventRadius
+      eventRadius: state.ui.eventRadius,
+      radial: state.ui.style.clusters.radial
     },
     features: selectors.getFeatures(state)
   }
