@@ -344,7 +344,7 @@ class Map extends React.Component {
 
   render () {
     const { isShowingSites, isFetchingDomain } = this.props.app.flags
-    const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'      
+    const classes = this.props.app.narrative ? 'map-wrapper narrative-mode' : 'map-wrapper'
     const innerMap = this.map ? (
       <React.Fragment>
         {this.renderTiles()}
@@ -379,7 +379,6 @@ function mapStateToProps (state) {
   return {
     domain: {
       locations: selectors.selectLocations(state),
-      // clusters: selectors.selectClusters(state),
       narratives: selectors.selectNarratives(state),
       categories: selectors.getCategories(state),
       sites: selectors.selectSites(state),
