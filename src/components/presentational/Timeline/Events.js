@@ -76,7 +76,7 @@ const TimelineEvents = ({
 }) => {
   const narIds = narrative ? narrative.steps.map(s => s.id) : []
 
-  function renderEvent (aggregated, event) {
+  function renderEvent (event) {
     if (narrative) {
       if (!(narIds.includes(event.id))) {
         return null
@@ -97,33 +97,38 @@ const TimelineEvents = ({
       }
     }
 
-    const relatedCategories = getEventCategories(event, categories)
+    // if an event has multiple categories, it should be rendered on each of
+    // those timelines
+    const ysAndStyles = getEventCategories(event, categories).map(cat => {
+      const eventY = getY({ ...event, category: cat.id })
 
-    if (relatedCategories && relatedCategories.length > 0) {
-      relatedCategories.forEach(cat => {
-        const eventY = getY({ ...event, category: cat.id })
+      let colour = event.colour ? event.colour : getCategoryColor(cat.id)
+      const styles = {
+        fill: colour,
+        fillOpacity: eventY > 0 ? calcOpacity(1) : 0,
+        transition: `transform ${transitionDuration / 1000}s ease`
+      }
 
-        let colour = event.colour ? event.colour : getCategoryColor(cat.id)
-        const styles = {
-          fill: colour,
-          fillOpacity: eventY > 0 ? calcOpacity(1) : 0,
-          transition: `transform ${transitionDuration / 1000}s ease`
-        }
+      return (eventY, styles)
+    })
 
-        aggregated.push(
-          renderShape(event, styles, {
-            x: getDatetimeX(event.datetime),
-            y: eventY,
-            eventRadius,
-            onSelect: () => onSelect(event),
-            dims,
-            highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.filters[features.HIGHLIGHT_GROUPS.filterIndexIndicatingGroup]) : [],
-            features
-          })
-        )
+    function getRender (y, styles) {
+      return renderShape(event, styles, {
+        x: getDatetimeX(event.datetime),
+        y,
+        eventRadius,
+        onSelect: () => onSelect(event),
+        dims,
+        highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.filters[features.HIGHLIGHT_GROUPS.filterIndexIndicatingGroup]) : [],
+        features
       })
     }
-    return aggregated
+
+    if (ysAndStyles.length === 0) {
+      return getRender(getY(event), { fill: getCategoryColor(null) })
+    } else {
+      return ysAndStyles.map(tup => getRender(tup[0], tup[1]))
+    }
   }
 
   let renderProjects = () => null
@@ -147,7 +152,7 @@ const TimelineEvents = ({
       clipPath={'url(#clip)'}
     >
       {renderProjects()}
-      {events.reduce(renderEvent, [])}
+      {events.map(renderEvent)}
     </g>
   )
 }
