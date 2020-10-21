@@ -1,4 +1,4 @@
-/* global L */
+/* global L, Event */
 import React from 'react'
 import { Portal } from 'react-portal'
 import Supercluster from 'supercluster'
@@ -45,6 +45,7 @@ class Map extends React.Component {
     if (this.map === null) {
       this.initializeMap()
     }
+    window.dispatchEvent(new Event('resize'))
   }
 
   componentWillReceiveProps (nextProps) {
@@ -75,8 +76,11 @@ class Map extends React.Component {
   }
 
   componentDidUpdate (prevState, prevProps) {
-    if (prevState.domain.locations.length > 0 && this.state.clusters.length === 0) {
-      this.loadClusterData(prevState.domain.locations)
+    // HACK: this is required because of something to do with Leaflet and the
+    // React lifecycle not playing nice... if you don't put this conditional,
+    // then the map sometimes appear blank on first load.
+    if (this.props.domain.locations.length > 0 && this.state.clusters.length === 0) {
+      this.loadClusterData(this.props.domain.locations)
     }
   }
 
