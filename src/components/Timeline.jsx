@@ -268,14 +268,16 @@ class Timeline extends React.Component {
   }
 
   getY (event) {
+
     const { features, domain } = this.props
+    const { USE_CATEGORIES, GRAPH_NONLOCATED } = features
     const { categories } = domain
+    const categoriesExist = USE_CATEGORIES && categories && categories.length > 0
 
-    const categoriesExist = categories && categories.length > 0
 
-    const { GRAPH_NONLOCATED } = features
-
-    if (!categoriesExist) { return this.state.dims.trackHeight / 2 }
+    if (!categoriesExist) {
+      return this.state.dims.trackHeight / 2
+    }
 
     const { category, project } = event
 

@@ -21,13 +21,10 @@ module.exports = {
       // tiles: 'your-mapbox-account-name/x5678-map-id'
     },
     features: {
-      USE_CATEGORIES: true,
-      CATEGORIES_AS_FILTERS: true,
+      USE_CATEGORIES: false,
       USE_ASSOCIATIONS: true,
-      USE_SOURCES: true,
+      USE_SOURCES: false,
       USE_COVER: true,
-      USE_SITES: false,
-      USE_SHAPES: false,
       GRAPH_NONLOCATED: false,
       HIGHLIGHT_GROUPS: false
     }
