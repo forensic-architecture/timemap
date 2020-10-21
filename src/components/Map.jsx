@@ -75,15 +75,6 @@ class Map extends React.Component {
     }
   }
 
-  componentDidUpdate (prevState, prevProps) {
-    // HACK: this is required because of something to do with Leaflet and the
-    // React lifecycle not playing nice... if you don't put this conditional,
-    // then the map sometimes appear blank on first load.
-    if (this.props.domain.locations.length > 0 && this.state.clusters.length === 0) {
-      this.loadClusterData(this.props.domain.locations)
-    }
-  }
-
   initializeMap () {
     /**
      * Creates a Leaflet map and a tilelayer for the map background
@@ -175,8 +166,9 @@ class Map extends React.Component {
         return acc
       }, [])
       this.superclusterIndex.load(convertedLocations)
-      this.setState({ indexLoaded: true })
-      this.updateClusters()
+      this.setState({ indexLoaded: true }, () => {
+        this.updateClusters()
+      })
     } else {
       this.setState({ clusters: [] })
     }
