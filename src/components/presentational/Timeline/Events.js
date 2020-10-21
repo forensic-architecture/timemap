@@ -76,7 +76,7 @@ const TimelineEvents = ({
 }) => {
   const narIds = narrative ? narrative.steps.map(s => s.id) : []
 
-  function renderEvent (event) {
+  function renderEvent (acc, event) {
     if (narrative) {
       if (!(narIds.includes(event.id))) {
         return null
@@ -98,18 +98,19 @@ const TimelineEvents = ({
     }
 
     // if an event has multiple categories, it should be rendered on each of
-    // those timelines
-    const ysAndStyles = getEventCategories(event, categories).map(cat => {
-      const eventY = getY({ ...event, category: cat.id })
+    // those timelines: so we create as many event 'shadows' as there are
+    // categories
+    const evShadows = getEventCategories(event, categories).map(cat => {
+      const y = getY({ ...event, category: cat.id })
 
       let colour = event.colour ? event.colour : getCategoryColor(cat.id)
       const styles = {
         fill: colour,
-        fillOpacity: eventY > 0 ? calcOpacity(1) : 0,
+        fillOpacity: y > 0 ? calcOpacity(1) : 0,
         transition: `transform ${transitionDuration / 1000}s ease`
       }
 
-      return (eventY, styles)
+      return { y, styles }
     })
 
     function getRender (y, styles) {
@@ -124,11 +125,14 @@ const TimelineEvents = ({
       })
     }
 
-    if (ysAndStyles.length === 0) {
-      return getRender(getY(event), { fill: getCategoryColor(null) })
+    if (evShadows.length === 0) {
+      acc.push(getRender(getY(event), { fill: getCategoryColor(null) }))
     } else {
-      return ysAndStyles.map(tup => getRender(tup[0], tup[1]))
+      evShadows.forEach(evShadow => {
+        acc.push(getRender(evShadow.y, evShadow.styles))
+      })
     }
+    return acc
   }
 
   let renderProjects = () => null
@@ -152,7 +156,7 @@ const TimelineEvents = ({
       clipPath={'url(#clip)'}
     >
       {renderProjects()}
-      {events.map(renderEvent)}
+      {events.reduce(renderEvent, [])}
     </g>
   )
 }
