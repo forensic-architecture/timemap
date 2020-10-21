@@ -1,4 +1,4 @@
-/* global L */
+/* global L, Event */
 import React from 'react'
 import { Portal } from 'react-portal'
 import Supercluster from 'supercluster'
