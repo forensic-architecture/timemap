@@ -138,7 +138,6 @@ class Timeline extends React.Component {
    * @param {String} direction: 'forward' / 'backwards'
    */
   onMoveTime (direction) {
-    this.props.methods.onSelect()
     const extent = this.getTimeScaleExtent()
     const newCentralTime = d3.timeMinute.offset(this.state.scaleX.domain()[0], extent / 2)
 
