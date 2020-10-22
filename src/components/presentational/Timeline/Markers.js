@@ -35,8 +35,8 @@ const TimelineMarkers = ({
       return <rect
         className='timeline-marker'
         x={0}
-        y={0}
-        width={eventRadius / 2}
+        y={dims.marginTop}
+        width={eventRadius / 1.5}
         height={dims.contentHeight - 55}
         stroke={styles ? styles.stroke : colors.primaryHighlight}
         stroke-opacity='1'
