@@ -81,7 +81,7 @@ class Timeline extends React.Component {
       categories = categories.filter(cat => !features.GRAPH_NONLOCATED.categories.includes(cat.id))
     }
     const catHeight = trackHeight / (categories.length)
-    const shiftUp = trackHeight / (categories.length) / 2
+    const shiftUp = trackHeight / (categories.length) / 3
     const marginShift = marginTop === 0 ? 0 : marginTop
     const manualAdjustment = trackHeight <= 60 ? (trackHeight <= 30 ? -8 : -5) : 0
     const catsYpos = categories.map((g, i) => {
