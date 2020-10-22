@@ -30,7 +30,7 @@ function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHove
   const { cluster_id: clusterId } = cluster.properties
   const { coordinates } = cluster.geometry
   const [longitude, latitude] = coordinates
-  if (!isLatitude(latitude)|| !isLongitude(longitude)) return null
+  if (!isLatitude(latitude) || !isLongitude(longitude)) return null
   const { x, y } = projectPoint([latitude, longitude])
   const [hovered, setHovered] = useState(false)
 
