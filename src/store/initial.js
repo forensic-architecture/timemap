@@ -51,7 +51,7 @@ const initial = {
       minZoom: 2,
       maxZoom: 16,
       bounds: null,
-      maxBounds: [[180, -180], [-180, 180]],
+      maxBounds: [[180, -180], [-180, 180]]
     },
     cluster: {
       radius: 30,
