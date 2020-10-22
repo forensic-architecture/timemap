@@ -12,7 +12,7 @@ const DefsClusters = () => (
   </defs>
 )
 
-function Cluster({ cluster, size, projectPoint, totalPoints, styles, renderHover, onClick }) {
+function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHover, onClick }) {
   /**
   {
     geometry: {
@@ -32,16 +32,7 @@ function Cluster({ cluster, size, projectPoint, totalPoints, styles, renderHover
   const [longitude, latitude] = coordinates
   if (!latitude || !longitude) return null
   const { x, y } = projectPoint([latitude, longitude])
-
-  function renderClusterBySize (cluster) {
-    return (
-      <React.Fragment>
-        {}
-      </React.Fragment>
-    )
-  }
-
-  const [hovered, setHovered]= useState(false)
+  const [hovered, setHovered] = useState(false)
 
   return (
     <g
@@ -60,14 +51,13 @@ function Cluster({ cluster, size, projectPoint, totalPoints, styles, renderHover
         cy='0'
         r={size}
         style={{
-          ...styles,
+          ...styles
         }}
       />
       {hovered ? renderHover(cluster) : null}
 
     </g>
   )
-
 }
 
 function ClusterEvents ({
@@ -87,10 +77,10 @@ function ClusterEvents ({
   const styles = {
     fill: isRadial ? "url('#clusterGradient')" : colors.fallbackEventColor,
     stroke: colors.darkBackground,
-    strokeWidth: 0,
+    strokeWidth: 0
   }
 
-  function renderHover(txt) {
+  function renderHover (txt) {
     return <text text-anchor='middle' y='-3px' style={{ fontWeight: 'bold', fill: 'white' }}>{txt}</text>
   }
 

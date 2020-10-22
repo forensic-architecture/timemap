@@ -282,7 +282,7 @@ class Map extends React.Component {
 
   renderEvents () {
     const individualClusters = this.state.clusters.filter(cl => !cl.properties.cluster)
-    const filteredLocations = mapClustersToLocations(individualClusters, this.props.domain.locations)
+    // const filteredLocations = mapClustersToLocations(individualClusters, this.props.domain.locations)
     return (
       <Events
         svg={this.svgRef.current}
