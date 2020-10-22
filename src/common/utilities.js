@@ -63,6 +63,24 @@ export function trimAndEllipse (string, stringNum) {
   return string
 }
 
+export function getFilterParent (associations, filter) {
+  const existingFilter = associations.find(a => a.id === filter)
+  let parent = null
+  if (existingFilter && existingFilter.filter_paths.length > 1) {
+    const { filter_paths: fp } = existingFilter
+    parent = fp[fp.length - 2]
+  }
+  return parent
+}
+
+export function getFilterSiblings (allFilters, filterParent, filterKey) {
+  return allFilters.reduce((acc, val) => {
+    const valParent = getFilterParent(allFilters, val.id)
+    if (valParent === filterParent && val.id !== filterKey) acc.push(val.id)
+    return acc
+  }, [])
+}
+
 export function getEventCategories (event, categories) {
   const matchedCategories = []
   if (event.associations && event.associations.length > 0) {

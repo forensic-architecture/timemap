@@ -35,6 +35,7 @@ const initial = {
     selected: [],
     source: null,
     associations: {
+      coloredGroupings: [],
       filters: [],
       narrative: null,
       categories: [],

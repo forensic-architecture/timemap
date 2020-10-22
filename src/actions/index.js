@@ -4,7 +4,6 @@ import { urlFromEnv } from '../common/utilities'
 // TODO: relegate these URLs entirely to environment variables
 // const CONFIG_URL = urlFromEnv('CONFIG_EXT')
 const EVENT_DATA_URL = urlFromEnv('EVENTS_EXT')
-// const CATEGORY_URL = urlFromEnv('CATEGORIES_EXT')
 const ASSOCIATIONS_URL = urlFromEnv('ASSOCIATIONS_EXT')
 const SOURCES_URL = urlFromEnv('SOURCES_EXT')
 const SITES_URL = urlFromEnv('SITES_EXT')
@@ -181,11 +180,11 @@ export function clearFilter (filter) {
   }
 }
 
-export const TOGGLE_FILTER = 'TOGGLE_FILTER'
-export function toggleFilter (filter, value) {
+export const TOGGLE_ASSOCIATIONS = 'TOGGLE_ASSOCIATIONS'
+export function toggleAssociations (association, value) {
   return {
-    type: TOGGLE_FILTER,
-    filter,
+    type: TOGGLE_ASSOCIATIONS,
+    association,
     value
   }
 }
