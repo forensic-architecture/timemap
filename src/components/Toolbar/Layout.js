@@ -9,17 +9,67 @@ import FilterListPanel from './FilterListPanel'
 import CategoriesListPanel from './CategoriesListPanel'
 import BottomActions from './BottomActions'
 import copy from '../../common/data/copy.json'
-import { trimAndEllipse } from '../../common/utilities.js'
+import { trimAndEllipse, getImmediateFilterParent, getFilterSiblings } from '../../common/utilities.js'
 
 class Toolbar extends React.Component {
   constructor (props) {
     super(props)
+    this.onSelectFilter = this.onSelectFilter.bind(this)
     this.state = { _selected: -1 }
   }
 
   selectTab (selected) {
     const _selected = (this.state._selected === selected) ? -1 : selected
     this.setState({ _selected })
+  }
+
+  onSelectFilter (key, matchingKeys) {
+    const { filters, activeFilters, coloringSet } = this.props
+
+    const parent = getImmediateFilterParent(filters, key)
+    const isTurningOff = activeFilters.includes(key)
+    console.info(isTurningOff)
+    if (!isTurningOff) {
+      const flattenedColoringSet = coloringSet.flatMap(f => f)
+      const newColoringSet = matchingKeys.filter(k => flattenedColoringSet.indexOf(k) === -1)
+      this.props.actions.updateColoringSet([...coloringSet, newColoringSet])
+    } else {
+      console.info(coloringSet)
+      const newColoringSets = coloringSet.map(set => (
+        set.filter(s => {
+          console.info(s)
+          return !matchingKeys.includes(s)
+        })
+      ))
+      this.props.actions.updateColoringSet(newColoringSets.filter(item => item.length !== 0))
+    }
+
+    if (parent) {
+      const parentOn = activeFilters.includes(parent)
+      if (parentOn) {
+        const siblings = getFilterSiblings(filters, parent, key)
+        let siblingsOff = true
+        for (let sibling of siblings) {
+          if (activeFilters.includes(sibling)) {
+            siblingsOff = false
+            break
+          }
+        }
+    
+        if (siblingsOff && isTurningOff) {
+          matchingKeys.push(parent)
+        }
+      }
+    }
+    this.props.methods.onSelectFilter(matchingKeys)
+
+    // 1) Grab existing coloring set
+    // 2) Determine if toggling on filter or off
+    // 3) If toggle off => on
+          // Add to new coloring set
+          // Add all children who dont already exist in coloring set
+    //    If toggle on => off
+    //      Remove me and all my children from coloring set
   }
 
   renderClosePanel () {
@@ -75,7 +125,7 @@ class Toolbar extends React.Component {
         <FilterListPanel
           filters={this.props.filters}
           activeFilters={this.props.activeFilters}
-          onSelectFilter={this.props.methods.onSelectFilter}
+          onSelectFilter={this.onSelectFilter}
           language={this.props.language}
         />
       </TabPanel>
@@ -190,6 +240,7 @@ function mapStateToProps (state) {
     narrative: state.app.associations.narrative,
     sitesShowing: state.app.flags.isShowingSites,
     infoShowing: state.app.flags.isInfopopup,
+    coloringSet: state.app.associations.coloringSet,
     features: selectors.getFeatures(state)
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import Checkbox from '../presentational/Checkbox'
 import copy from '../../common/data/copy.json'
-import { getFilterParent, getFilterSiblings } from '../../common/utilities'
+import { getImmediateFilterParent, getFilterSiblings } from '../../common/utilities'
 
 /** recursively get an array of node keys to toggle */
 function childrenToToggle (filter, activeFilters, parentOn) {
@@ -35,9 +35,6 @@ function aggregatePaths (filters) {
   return aggregatedPaths
 }
 
-function onSelect (allFilters, activeFilters, filter) {
-}
-
 function FilterListPanel ({
   filters,
   activeFilters,
@@ -47,28 +44,6 @@ function FilterListPanel ({
   function createNodeComponent (filter, depth) {
     const [key, children] = filter
     const matchingKeys = childrenToToggle(filter, activeFilters, activeFilters.includes(key))
-    
-    // Checks for corner case where we want to turn parent off if last child is toggling off
-    function onSelect () {
-      const parent = getFilterParent(filters, key)
-  
-      const parentOn = activeFilters.includes(parent)
-      if (parentOn) {
-        const siblings = getFilterSiblings(filters, parent, key)
-        let siblingsOff = true
-        for (let sibling of siblings) {
-          if (activeFilters.includes(sibling)) {
-            siblingsOff = false
-            break
-          }
-        }
-    
-        if (siblingsOff && activeFilters.includes(key)) {
-          matchingKeys.push(parent)
-        }
-      }
-      return onSelectFilter(matchingKeys)
-    }
 
     return (
       <li
@@ -79,7 +54,7 @@ function FilterListPanel ({
         <Checkbox
           label={key}
           isActive={activeFilters.includes(key)}
-          onClickCheckbox={() => onSelect()}
+          onClickCheckbox={() => onSelectFilter(key, matchingKeys)}
         />
         {Object.keys(children).length > 0
           ? Object.entries(children).map(filter => createNodeComponent(filter, depth + 1))

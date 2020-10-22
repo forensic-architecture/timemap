@@ -63,19 +63,28 @@ export function trimAndEllipse (string, stringNum) {
   return string
 }
 
-export function getFilterParent (associations, filter) {
-  const existingFilter = associations.find(a => a.id === filter)
-  let parent = null
-  if (existingFilter && existingFilter.filter_paths.length > 1) {
-    const { filter_paths: fp } = existingFilter
-    parent = fp[fp.length - 2]
+export function getFilterParents (associations, filter) {
+  for (let a of associations) {
+    const { filter_paths: fp } = a
+    if (a.id === filter) {
+      return fp.slice(0, fp.length - 1)
+    }
+    const filterIndex = fp.indexOf(filter)
+    if (filterIndex === 0) return []
+    if (filterIndex > 0) return fp.slice(0, filterIndex)
   }
-  return parent
+  throw new Error('Attempted to get parents of nonexistent filter')
+}
+
+export function getImmediateFilterParent (associations, filter) {
+  const parents = getFilterParents(associations, filter)
+  if (parents.length === 0) return null
+  return parents[parents.length - 1]
 }
 
 export function getFilterSiblings (allFilters, filterParent, filterKey) {
   return allFilters.reduce((acc, val) => {
-    const valParent = getFilterParent(allFilters, val.id)
+    const valParent = getImmediateFilterParent(allFilters, val.id)
     if (valParent === filterParent && val.id !== filterKey) acc.push(val.id)
     return acc
   }, [])

@@ -181,11 +181,12 @@ export function clearFilter (filter) {
 }
 
 export const TOGGLE_ASSOCIATIONS = 'TOGGLE_ASSOCIATIONS'
-export function toggleAssociations (association, value) {
+export function toggleAssociations (association, value, shouldColor) {
   return {
     type: TOGGLE_ASSOCIATIONS,
     association,
-    value
+    value,
+    shouldColor
   }
 }
 
@@ -248,6 +249,14 @@ export function updateSource (source) {
   return {
     type: UPDATE_SOURCE,
     source
+  }
+}
+
+export const UPDATE_COLORING_SET = 'UPDATE_COLORING_SET'
+export function updateColoringSet (coloringSet) {
+  return {
+    type: UPDATE_COLORING_SET,
+    coloringSet
   }
 }
 

@@ -1,10 +1,11 @@
 import initial from '../store/initial.js'
-import { ASSOCIATION_MODES } from '../common/constants'
+import { ASSOCIATION_MODES } from '../common/constants' 
 import { toggleFlagAC } from '../common/utilities'
 
 import {
   UPDATE_HIGHLIGHTED,
   UPDATE_SELECTED,
+  UPDATE_COLORING_SET,
   CLEAR_FILTER,
   TOGGLE_ASSOCIATIONS,
   UPDATE_TIMERANGE,
@@ -37,6 +38,16 @@ function updateSelected (appState, action) {
   return Object.assign({}, appState, {
     selected: action.selected
   })
+}
+
+function updateColoringSet (appState, action) {
+  return {
+    ...appState,
+    associations: {
+      ...appState.associations,
+      coloringSet: action.coloringSet
+    }
+  }
 }
 
 function updateNarrative (appState, action) {
@@ -249,6 +260,8 @@ function app (appState = initial.app, action) {
       return updateHighlighted(appState, action)
     case UPDATE_SELECTED:
       return updateSelected(appState, action)
+    case UPDATE_COLORING_SET:
+      return updateColoringSet(appState, action)
     case CLEAR_FILTER:
       return clearFilter(appState, action)
     case TOGGLE_ASSOCIATIONS:
