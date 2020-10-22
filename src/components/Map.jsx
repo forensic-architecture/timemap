@@ -17,7 +17,7 @@ import Narratives from './presentational/Map/Narratives'
 import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
 import LoadingOverlay from '../components/Overlay/Loading'
 
-import { mapClustersToLocations, isIdentical, isLatitude, isLongitude } from '../common/utilities'
+import { isIdentical, isLatitude, isLongitude } from '../common/utilities'
 
 // NB: important constants for map, TODO: make statics
 const supportedMapboxMap = ['streets', 'satellite']
