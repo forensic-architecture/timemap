@@ -54,7 +54,7 @@ const TimelineMarkers = ({
     const isDot = (!!event.location && !!event.longitude) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
     const evShadows = getEventCategories(event, categories).map(cat => getEventY({ ...event, category: cat.id }))
 
-    evShadows.forEach(y => {
+    function renderMarkerForEvent (y) {
       switch (event.shape) {
         case 'circle':
         case 'diamond':
@@ -67,8 +67,13 @@ const TimelineMarkers = ({
         default:
           return isDot ? acc.push(renderCircle(y)) : acc.push(renderBar(y))
       }
-    })
+    }
 
+    if (evShadows.length > 0) {
+      evShadows.forEach(renderMarkerForEvent)
+    } else {
+      renderMarkerForEvent(getEventY(event))
+    }
     return acc
   }
 
