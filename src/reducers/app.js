@@ -1,5 +1,5 @@
 import initial from '../store/initial.js'
-import { ASSOCIATION_MODES } from '../common/constants' 
+import { ASSOCIATION_MODES } from '../common/constants'
 import { toggleFlagAC } from '../common/utilities'
 
 import {

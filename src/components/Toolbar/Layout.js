@@ -28,16 +28,13 @@ class Toolbar extends React.Component {
 
     const parent = getImmediateFilterParent(filters, key)
     const isTurningOff = activeFilters.includes(key)
-    console.info(isTurningOff)
     if (!isTurningOff) {
       const flattenedColoringSet = coloringSet.flatMap(f => f)
       const newColoringSet = matchingKeys.filter(k => flattenedColoringSet.indexOf(k) === -1)
       this.props.actions.updateColoringSet([...coloringSet, newColoringSet])
     } else {
-      console.info(coloringSet)
       const newColoringSets = coloringSet.map(set => (
         set.filter(s => {
-          console.info(s)
           return !matchingKeys.includes(s)
         })
       ))
@@ -55,21 +52,13 @@ class Toolbar extends React.Component {
             break
           }
         }
-    
+
         if (siblingsOff && isTurningOff) {
           matchingKeys.push(parent)
         }
       }
     }
     this.props.methods.onSelectFilter(matchingKeys)
-
-    // 1) Grab existing coloring set
-    // 2) Determine if toggling on filter or off
-    // 3) If toggle off => on
-          // Add to new coloring set
-          // Add all children who dont already exist in coloring set
-    //    If toggle on => off
-    //      Remove me and all my children from coloring set
   }
 
   renderClosePanel () {
