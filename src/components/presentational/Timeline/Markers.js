@@ -1,18 +1,20 @@
 import React from 'react'
 import colors from '../../../common/global'
+import { getEventCategories } from '../../../common/utilities'
 
 const TimelineMarkers = ({
   styles,
   eventRadius,
   getEventX,
   getEventY,
+  categories,
   transitionDuration,
   selected,
   dims,
   features
 }) => {
-  function renderMarker (event) {
-    function renderCircle () {
+  function renderMarker (acc, event) {
+    function renderCircle (y) {
       return <circle
         className='timeline-marker'
         cx={0}
@@ -23,10 +25,10 @@ const TimelineMarkers = ({
         stroke-linejoin='round'
         stroke-dasharray={styles ? styles['stroke-dasharray'] : '2,2'}
         style={{
-          'transform': `translate(${getEventX(event)}px, ${getEventY(event)}px)`,
+          'transform': `translate(${getEventX(event)}px, ${y}px)`,
           '-webkit-transition': `transform ${transitionDuration / 1000}s ease`,
           '-moz-transition': 'none',
-          'opacity': 0.9
+          'opacity': 1
         }}
         r={eventRadius * 2}
       />
@@ -48,27 +50,33 @@ const TimelineMarkers = ({
         }}
       />
     }
-    const isDot = (!!event.location && !!event.longitude) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
 
-    switch (event.shape) {
-      case 'circle':
-        return renderCircle()
-      case 'bar':
-        return renderBar()
-      case 'diamond':
-        return renderCircle()
-      case 'star':
-        return renderCircle()
-      default:
-        return isDot ? renderCircle() : renderBar()
-    }
+    const isDot = (!!event.location && !!event.longitude) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
+    const evShadows = getEventCategories(event, categories).map(cat => getEventY({ ...event, category: cat.id }))
+
+    evShadows.forEach(y => {
+      switch (event.shape) {
+        case 'circle':
+        case 'diamond':
+        case 'star':
+          acc.push(renderCircle(y))
+          break
+        case 'bar':
+          acc.push(renderBar(y))
+          break
+        default:
+          return isDot ? acc.push(renderCircle(y)) : acc.push(renderBar(y))
+      }
+    })
+
+    return acc
   }
 
   return (
     <g
       clipPath={'url(#clip)'}
     >
-      {selected.map(event => renderMarker(event))}
+      {selected.reduce(renderMarker, [])}
     </g>
   )
 }
