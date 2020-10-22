@@ -280,7 +280,7 @@ class Dashboard extends React.Component {
         <Timeline
           onKeyDown={this.onKeyDown}
           methods={{
-            onSelect: app.associations.narrative ? this.selectNarrativeStep : ev => this.handleSelect(ev, 0),
+            onSelect: app.associations.narrative ? this.selectNarrativeStep : () => this.handleSelect(ev, 0),
             onUpdateTimerange: actions.updateTimeRange,
             getCategoryColor: this.getCategoryColor
           }}
@@ -288,7 +288,7 @@ class Dashboard extends React.Component {
         <CardStack
           timelineDims={app.timeline.dimensions}
           onViewSource={this.handleViewSource}
-          onSelect={app.associations.narrative ? this.selectNarrativeStep : this.handleSelect}
+          onSelect={app.associations.narrative ? this.selectNarrativeStep : () => null}
           onHighlight={this.handleHighlight}
           onToggleCardstack={() => actions.updateSelected([])}
           getCategoryColor={this.getCategoryColor}
