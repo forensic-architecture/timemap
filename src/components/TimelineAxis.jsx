@@ -20,8 +20,8 @@ class TimelineAxis extends React.Component {
       sndFmt = ''
     // 1yr
     } else if (this.props.extent > 43200) {
-      sndFmt = '%Y'
-      fstFmt = '%d %b'
+      sndFmt = '%d %b'
+      fstFmt = ''
     } else {
       sndFmt = '%d %b'
       fstFmt = '%H:%M'

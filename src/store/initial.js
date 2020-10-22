@@ -27,6 +27,7 @@ const initial = {
    *   or by the characteristics of the client, browser, etc.
    */
   app: {
+    debug: true,
     errors: {
       source: false
     },

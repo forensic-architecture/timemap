@@ -89,11 +89,7 @@ class Map extends React.Component {
         .setMaxBounds(mapConfig.maxBounds)
 
     // Initialize supercluster index
-    this.superclusterIndex = new Supercluster({
-      radius: clusterConfig.radius,
-      maxZoom: clusterConfig.maxZoom,
-      minZoom: clusterConfig.minZoom
-    })
+    this.superclusterIndex = new Supercluster(clusterConfig)
 
     let firstLayer
 
@@ -116,6 +112,7 @@ class Map extends React.Component {
     map.zoomControl.remove()
 
     map.on('moveend', () => {
+      // console.log(map.getZoom())
       this.updateClusters()
       this.alignLayers()
     })
@@ -199,11 +196,9 @@ class Map extends React.Component {
     }
   }
 
-  onClusterSelect (e) {
-    const { id } = e.target
-    const { longitude, latitude } = e.target.attributes
+  onClusterSelect ({ id, latitude, longitude }) {
     const expansionZoom = Math.max(this.superclusterIndex.getClusterExpansionZoom(parseInt(id)), this.superclusterIndex.options.minZoom)
-    this.map.flyTo(new L.LatLng(latitude.value, longitude.value), expansionZoom)
+    this.map.flyTo(new L.LatLng(latitude, longitude), expansionZoom)
   }
 
   getClientDims () {

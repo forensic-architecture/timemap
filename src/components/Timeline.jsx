@@ -81,7 +81,7 @@ class Timeline extends React.Component {
       categories = categories.filter(cat => !features.GRAPH_NONLOCATED.categories.includes(cat.id))
     }
     const catHeight = trackHeight / (categories.length)
-    const shiftUp = trackHeight / (categories.length) / 2
+    const shiftUp = trackHeight / (categories.length) / 3
     const marginShift = marginTop === 0 ? 0 : marginTop
     const manualAdjustment = trackHeight <= 60 ? (trackHeight <= 30 ? -8 : -5) : 0
     const catsYpos = categories.map((g, i) => {
@@ -138,7 +138,6 @@ class Timeline extends React.Component {
    * @param {String} direction: 'forward' / 'backwards'
    */
   onMoveTime (direction) {
-    this.props.methods.onSelect()
     const extent = this.getTimeScaleExtent()
     const newCentralTime = d3.timeMinute.offset(this.state.scaleX.domain()[0], extent / 2)
 
@@ -277,9 +276,10 @@ class Timeline extends React.Component {
       return this.state.dims.trackHeight / 2
     }
 
-    const { category, project } = event
+    const { category } = event
 
     if (GRAPH_NONLOCATED && GRAPH_NONLOCATED.categories.includes(category)) {
+      const { project } = event
       return this.state.dims.marginTop + domain.projects[project].offset + this.props.ui.eventRadius
     }
     if (!this.state.scaleY) return 0
@@ -359,6 +359,7 @@ class Timeline extends React.Component {
                 selected={this.props.app.selected}
                 getEventX={ev => this.getDatetimeX(ev.datetime)}
                 getEventY={this.getY}
+                categories={this.props.domain.categories}
                 transitionDuration={this.state.transitionDuration}
                 styles={this.props.ui.styles}
                 features={this.props.features}

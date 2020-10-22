@@ -288,7 +288,7 @@ class Dashboard extends React.Component {
         <CardStack
           timelineDims={app.timeline.dimensions}
           onViewSource={this.handleViewSource}
-          onSelect={app.associations.narrative ? this.selectNarrativeStep : this.handleSelect}
+          onSelect={app.associations.narrative ? this.selectNarrativeStep : () => null}
           onHighlight={this.handleHighlight}
           onToggleCardstack={() => actions.updateSelected([])}
           getCategoryColor={this.getCategoryColor}
@@ -316,11 +316,11 @@ class Dashboard extends React.Component {
             onClose: actions.toggleInfoPopup
           }}
         />
-        <Notification
+        {app.debug ? <Notification
           isNotification={app.flags.isNotification}
           notifications={domain.notifications}
           onToggle={actions.markNotificationsRead}
-        />
+        /> : null}
         <Search
           narrative={app.narrative}
           queryString={app.searchQuery}
