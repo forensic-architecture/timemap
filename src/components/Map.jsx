@@ -89,11 +89,7 @@ class Map extends React.Component {
         .setMaxBounds(mapConfig.maxBounds)
 
     // Initialize supercluster index
-    this.superclusterIndex = new Supercluster({
-      radius: clusterConfig.radius,
-      maxZoom: clusterConfig.maxZoom,
-      minZoom: clusterConfig.minZoom
-    })
+    this.superclusterIndex = new Supercluster(clusterConfig)
 
     let firstLayer
 
@@ -116,6 +112,7 @@ class Map extends React.Component {
     map.zoomControl.remove()
 
     map.on('moveend', () => {
+      // console.log(map.getZoom())
       this.updateClusters()
       this.alignLayers()
     })
@@ -292,7 +289,7 @@ class Map extends React.Component {
       <Events
         svg={this.svgRef.current}
         events={this.props.domain.events}
-        locations={filteredLocations}
+        locations={this.props.domain.locations}
         styleLocation={this.styleLocation}
         categories={this.props.domain.categories}
         projectPoint={this.projectPoint}
@@ -315,6 +312,10 @@ class Map extends React.Component {
         clusters={allClusters}
         isRadial={this.props.ui.radial}
         onSelect={this.onClusterSelect}
+        renderHover={() => {
+          console.log('hovered')
+          return <div style={{ backgroundColor: 'blue', width: 20, height: 20, color: 'white' }}>Ciao</div>
+        }}
       />
     )
   }

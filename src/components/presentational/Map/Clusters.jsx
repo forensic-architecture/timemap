@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
 import { calcClusterOpacity, calcClusterSize } from '../../../common/utilities'
@@ -16,6 +16,7 @@ function ClusterEvents ({
   projectPoint,
   styleCluster,
   onSelect,
+  renderHover,
   isRadial,
   svg,
   clusters
@@ -86,14 +87,19 @@ function ClusterEvents ({
       </React.Fragment>
     )
 
+    const [hovered, setHovered]= useState(false)
+
     return (
       <g
         className={'cluster-event'}
         transform={`translate(${x}, ${y})`}
         onClick={(e) => onSelect(e)}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
         {renderClusterBySize(cluster)}
         {extraRender ? extraRender() : null}
+        {hovered ? renderHover() : null}
       </g>
     )
   }
