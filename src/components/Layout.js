@@ -316,11 +316,11 @@ class Dashboard extends React.Component {
             onClose: actions.toggleInfoPopup
           }}
         />
-        <Notification
+        {app.debug ? <Notification
           isNotification={app.flags.isNotification}
           notifications={domain.notifications}
           onToggle={actions.markNotificationsRead}
-        />
+        /> : null}
         <Search
           narrative={app.narrative}
           queryString={app.searchQuery}
