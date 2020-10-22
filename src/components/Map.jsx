@@ -79,7 +79,7 @@ class Map extends React.Component {
     /**
      * Creates a Leaflet map and a tilelayer for the map background
      */
-    const { map: mapConfig } = this.props.app
+    const { map: mapConfig, cluster: clusterConfig } = this.props.app
 
     const map =
       L.map(this.props.ui.dom.map)
@@ -90,9 +90,9 @@ class Map extends React.Component {
 
     // Initialize supercluster index
     this.superclusterIndex = new Supercluster({
-      radius: mapConfig.clusterRadius,
-      maxZoom: mapConfig.maxZoom,
-      minZoom: mapConfig.minZoom
+      radius: clusterConfig.radius,
+      maxZoom: clusterConfig.maxZoom,
+      minZoom: clusterConfig.minZoom
     })
 
     let firstLayer
@@ -385,6 +385,7 @@ function mapStateToProps (state) {
       selected: selectors.selectSelected(state),
       highlighted: state.app.highlighted,
       map: state.app.map,
+      cluster: state.app.cluster,
       language: state.app.language,
       loading: state.app.loading,
       narrative: state.app.associations.narrative,
