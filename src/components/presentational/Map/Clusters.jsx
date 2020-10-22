@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
-import { calcClusterOpacity, calcClusterSize } from '../../../common/utilities'
+import { calcClusterOpacity, calcClusterSize, isLatitude, isLongitude } from '../../../common/utilities'
 
 const DefsClusters = () => (
   <defs>
@@ -30,7 +30,7 @@ function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHove
   const { cluster_id: clusterId } = cluster.properties
   const { coordinates } = cluster.geometry
   const [longitude, latitude] = coordinates
-  if (!latitude || !longitude) return null
+  if (!isLatitude(latitude)|| !isLongitude(longitude)) return null
   const { x, y } = projectPoint([latitude, longitude])
   const [hovered, setHovered] = useState(false)
 
