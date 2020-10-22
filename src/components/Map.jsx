@@ -196,11 +196,9 @@ class Map extends React.Component {
     }
   }
 
-  onClusterSelect (e) {
-    const { id } = e.target
-    const { longitude, latitude } = e.target.attributes
+  onClusterSelect ({ id, latitude, longitude }) {
     const expansionZoom = Math.max(this.superclusterIndex.getClusterExpansionZoom(parseInt(id)), this.superclusterIndex.options.minZoom)
-    this.map.flyTo(new L.LatLng(latitude.value, longitude.value), expansionZoom)
+    this.map.flyTo(new L.LatLng(latitude, longitude), expansionZoom)
   }
 
   getClientDims () {
@@ -312,10 +310,6 @@ class Map extends React.Component {
         clusters={allClusters}
         isRadial={this.props.ui.radial}
         onSelect={this.onClusterSelect}
-        renderHover={() => {
-          console.log('hovered')
-          return <div style={{ backgroundColor: 'blue', width: 20, height: 20, color: 'white' }}>Ciao</div>
-        }}
       />
     )
   }
