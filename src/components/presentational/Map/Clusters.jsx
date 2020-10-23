@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
 import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
-import { calcClusterOpacity, calcClusterSize, isLatitude, isLongitude } from '../../../common/utilities'
+import {
+  calcClusterOpacity,
+  calcClusterSize,
+  isLatitude,
+  isLongitude,
+  calculateColorPercentages } from '../../../common/utilities'
 
 const DefsClusters = () => (
   <defs>
@@ -12,7 +17,7 @@ const DefsClusters = () => (
   </defs>
 )
 
-function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHover, onClick }) {
+function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHover, onClick, getClusterChildren, coloringSet }) {
   /**
   {
     geometry: {
@@ -28,6 +33,10 @@ function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHove
   }
   */
   const { cluster_id: clusterId } = cluster.properties
+
+  const individualChildren = getClusterChildren(clusterId)
+  const colorPercentages = calculateColorPercentages(individualChildren, coloringSet)
+
   const { coordinates } = cluster.geometry
   const [longitude, latitude] = coordinates
   if (!isLatitude(latitude) || !isLongitude(longitude)) return null
@@ -63,6 +72,8 @@ function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHove
 function ClusterEvents ({
   projectPoint,
   onSelect,
+  getClusterChildren,
+  coloringSet,
   isRadial,
   svg,
   clusters
@@ -93,6 +104,8 @@ function ClusterEvents ({
           const clusterSize = calcClusterSize(pointCount, totalPoints)
           return <Cluster
             onClick={onSelect}
+            getClusterChildren={getClusterChildren}
+            coloringSet={coloringSet}
             cluster={c}
             size={clusterSize}
             projectPoint={projectPoint}

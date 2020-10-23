@@ -1,7 +1,7 @@
 import React from 'react'
 import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
-import { calcOpacity } from '../../../common/utilities'
+import { calcOpacity, getCoordinatesForPercent } from '../../../common/utilities'
 
 function MapEvents ({
   getCategoryColor,
@@ -15,12 +15,6 @@ function MapEvents ({
   locations,
   eventRadius
 }) {
-  function getCoordinatesForPercent (radius, percent) {
-    const x = radius * Math.cos(2 * Math.PI * percent)
-    const y = radius * Math.sin(2 * Math.PI * percent)
-    return [x, y]
-  }
-
   function handleEventSelect (e, location) {
     const events = e.shiftKey ? selected.concat(location.events) : location.events
     onSelect(events)

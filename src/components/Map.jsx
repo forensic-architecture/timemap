@@ -29,6 +29,7 @@ class Map extends React.Component {
     this.projectPoint = this.projectPoint.bind(this)
     this.onClusterSelect = this.onClusterSelect.bind(this)
     this.loadClusterData = this.loadClusterData.bind(this)
+    this.getClusterChildren = this.getClusterChildren.bind(this)
     this.svgRef = React.createRef()
     this.map = null
     this.superclusterIndex = null
@@ -171,6 +172,19 @@ class Map extends React.Component {
     }
   }
 
+  getClusterChildren (clusterId) {
+    if (this.superclusterIndex) {
+      try {
+        const children = this.superclusterIndex.getLeaves(clusterId, Infinity, 0)
+        return mapClustersToLocations(children, this.props.domain.locations)
+      }
+      catch (err) {
+        return []
+      }
+    }
+    return []
+  }
+
   alignLayers () {
     const mapNode = document.querySelector('.leaflet-map-pane')
     if (mapNode === null) return { transformX: 0, transformY: 0 }
@@ -310,6 +324,8 @@ class Map extends React.Component {
         clusters={allClusters}
         isRadial={this.props.ui.radial}
         onSelect={this.onClusterSelect}
+        coloringSet={this.props.app.coloringSet}
+        getClusterChildren={this.getClusterChildren}
       />
     )
   }
@@ -384,6 +400,7 @@ function mapStateToProps (state) {
       language: state.app.language,
       loading: state.app.loading,
       narrative: state.app.associations.narrative,
+      coloringSet: state.app.associations.coloringSet,
       flags: {
         isShowingSites: state.app.flags.isShowingSites,
         isFetchingDomain: state.app.flags.isFetchingDomain

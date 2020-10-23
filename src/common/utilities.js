@@ -11,6 +11,12 @@ export function calcDatetime (date, time) {
   return dt.toDate()
 }
 
+export function getCoordinatesForPercent (radius, percent) {
+  const x = radius * Math.cos(2 * Math.PI * percent)
+  const y = radius * Math.sin(2 * Math.PI * percent)
+  return [x, y]
+}
+
 /**
   * Get URI params to start with predefined set of
   * https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
@@ -239,6 +245,39 @@ export function mapClustersToLocations (clusters, locations) {
     if (foundLocation) acc.push(foundLocation)
     return acc
   }, [])
+}
+
+/* Loops through set of locations => events => associations and maps it to the appropriate color set*/
+export function calculateColorPercentages (locations, coloringSet) {
+  if (coloringSet.length === 0) return []
+  const associationMap = {}
+
+  for (const [idx, value] of coloringSet.entries()) {
+    value.forEach(filter => associationMap[filter] = idx)
+  }
+
+  const associationCounts = new Array(coloringSet.length)
+  associationCounts.fill(0)
+  let totalAssociations = 0
+
+  locations.forEach(loc => {
+    const { events } = loc
+    events.forEach(evt => {
+      evt.associations.forEach(a => {
+        const idx = associationMap[a]
+
+        if (!idx && idx !== 0) return
+
+        associationCounts[idx] += 1
+        totalAssociations += 1
+      })
+    })
+  })
+
+  if (totalAssociations === 0) return []
+
+  return associationCounts.map(count => count / totalAssociations)
+
 }
 
 export const dateMin = function () {
