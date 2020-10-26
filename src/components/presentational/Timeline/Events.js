@@ -4,7 +4,7 @@ import DatetimeBar from './DatetimeBar'
 import DatetimeSquare from './DatetimeSquare'
 import DatetimeStar from './DatetimeStar'
 import Project from './Project'
-import { calcOpacity, getEventCategories } from '../../../common/utilities'
+import { calcOpacity, getEventCategories, isLatitude, isLongitude } from '../../../common/utilities'
 
 function renderDot (event, styles, props) {
   return <DatetimeDot
@@ -82,7 +82,7 @@ const TimelineEvents = ({
         return null
       }
     }
-    const isDot = (!!event.location && !!event.longitude) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
+    const isDot = (isLatitude(event.latitude) && isLongitude(event.longitude)) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
 
     let renderShape = isDot ? renderDot : renderBar
     if (event.shape) {
