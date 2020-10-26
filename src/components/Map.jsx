@@ -326,6 +326,7 @@ class Map extends React.Component {
         onSelect={this.onClusterSelect}
         coloringSet={this.props.app.coloringSet}
         getClusterChildren={this.getClusterChildren}
+        filterColors={this.props.ui.filterColors}
       />
     )
   }
@@ -413,7 +414,8 @@ function mapStateToProps (state) {
       mapSelectedEvents: state.ui.style.selectedEvents,
       shapes: state.ui.style.shapes,
       eventRadius: state.ui.eventRadius,
-      radial: state.ui.style.clusters.radial
+      radial: state.ui.style.clusters.radial,
+      filterColors: state.ui.coloring.colors
     },
     features: selectors.getFeatures(state)
   }

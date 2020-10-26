@@ -17,6 +17,15 @@ export function getCoordinatesForPercent (radius, percent) {
   return [x, y]
 }
 
+export function zipColorsToPercentages (colors, percentages) {
+  if (colors.length < percentages.length) throw new Error('You must declare an appropriate amount of filter colors')
+  
+  return percentages.reduce((map, percent, idx) => {
+    map[colors[idx]] = percent
+    return map
+  }, {})
+}
+
 /**
   * Get URI params to start with predefined set of
   * https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
@@ -249,7 +258,7 @@ export function mapClustersToLocations (clusters, locations) {
 
 /* Loops through set of locations => events => associations and maps it to the appropriate color set*/
 export function calculateColorPercentages (locations, coloringSet) {
-  if (coloringSet.length === 0) return []
+  if (coloringSet.length === 0) return [1]
   const associationMap = {}
 
   for (const [idx, value] of coloringSet.entries()) {
@@ -274,7 +283,7 @@ export function calculateColorPercentages (locations, coloringSet) {
     })
   })
 
-  if (totalAssociations === 0) return []
+  if (totalAssociations === 0) return [1]
 
   return associationCounts.map(count => count / totalAssociations)
 

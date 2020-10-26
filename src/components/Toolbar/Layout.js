@@ -24,14 +24,19 @@ class Toolbar extends React.Component {
   }
 
   onSelectFilter (key, matchingKeys) {
-    const { filters, activeFilters, coloringSet } = this.props
+    const { filters, activeFilters, coloringSet, maxNumOfColors } = this.props
 
     const parent = getImmediateFilterParent(filters, key)
     const isTurningOff = activeFilters.includes(key)
+
     if (!isTurningOff) {
       const flattenedColoringSet = coloringSet.flatMap(f => f)
       const newColoringSet = matchingKeys.filter(k => flattenedColoringSet.indexOf(k) === -1)
-      this.props.actions.updateColoringSet([...coloringSet, newColoringSet])
+      const updatedColoringSet = [...coloringSet, newColoringSet]
+
+      if (updatedColoringSet.length <= maxNumOfColors) {
+        this.props.actions.updateColoringSet(updatedColoringSet)
+      }
     } else {
       const newColoringSets = coloringSet.map(set => (
         set.filter(s => {
@@ -230,6 +235,7 @@ function mapStateToProps (state) {
     sitesShowing: state.app.flags.isShowingSites,
     infoShowing: state.app.flags.isInfopopup,
     coloringSet: state.app.associations.coloringSet,
+    maxNumOfColors: state.ui.coloring.maxNumOfColors,
     features: selectors.getFeatures(state)
   }
 }

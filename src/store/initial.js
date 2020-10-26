@@ -1,5 +1,5 @@
 import { mergeDeepLeft } from 'ramda'
-import global from '../common/global'
+import global, { colors } from '../common/global'
 
 const initial = {
   /*
@@ -131,6 +131,10 @@ const initial = {
       clusters: {
         radial: false
       }
+    },
+    coloring: {
+      maxNumOfColors: 4,
+      colors: Object.values(colors)
     },
     dom: {
       timeline: 'timeline',

@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
+import ColoredMarkers from './ColoredMarkers.jsx'
 import {
   calcClusterOpacity,
   calcClusterSize,
   isLatitude,
   isLongitude,
-  calculateColorPercentages } from '../../../common/utilities'
+  calculateColorPercentages,
+  zipColorsToPercentages } from '../../../common/utilities'
 
 const DefsClusters = () => (
   <defs>
@@ -17,7 +19,7 @@ const DefsClusters = () => (
   </defs>
 )
 
-function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHover, onClick, getClusterChildren, coloringSet }) {
+function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHover, onClick, getClusterChildren, coloringSet, filterColors }) {
   /**
   {
     geometry: {
@@ -51,20 +53,15 @@ function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHove
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <circle
-        class='cluster-event-marker'
-        id={clusterId}
-        longitude={longitude}
-        latitude={latitude}
-        cx='0'
-        cy='0'
-        r={size}
-        style={{
+      {hovered ? renderHover(cluster) : null}
+      <ColoredMarkers
+        radius={size}
+        colorPercentMap={zipColorsToPercentages(filterColors, colorPercentages)}
+        styles={{
           ...styles
         }}
+        className={'cluster-event-marker'}
       />
-      {hovered ? renderHover(cluster) : null}
-
     </g>
   )
 }
@@ -76,7 +73,8 @@ function ClusterEvents ({
   coloringSet,
   isRadial,
   svg,
-  clusters
+  clusters,
+  filterColors
 }) {
   const totalPoints = clusters.reduce((total, cl) => {
     if (cl && cl.properties) {
@@ -107,6 +105,7 @@ function ClusterEvents ({
             getClusterChildren={getClusterChildren}
             coloringSet={coloringSet}
             cluster={c}
+            filterColors={filterColors}
             size={clusterSize}
             projectPoint={projectPoint}
             totalPoints={totalPoints}
