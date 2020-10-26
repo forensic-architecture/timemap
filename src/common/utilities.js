@@ -18,7 +18,7 @@ export function getCoordinatesForPercent (radius, percent) {
 }
 
 export function zipColorsToPercentages (colors, percentages) {
-  if (colors.length < percentages.length) throw new Error('You must declare an appropriate amount of filter colors')
+  if (colors.length < percentages.length) throw new Error('You must declare an appropriate number of filter colors')
   
   return percentages.reduce((map, percent, idx) => {
     map[colors[idx]] = percent

@@ -310,6 +310,9 @@ class Map extends React.Component {
         onSelect={this.props.methods.onSelect}
         getCategoryColor={this.props.methods.getCategoryColor}
         eventRadius={this.props.ui.eventRadius}
+        coloringSet={this.props.app.coloringSet}
+        filterColors={this.props.ui.filterColors}
+        features={this.props.features}
       />
     )
   }
