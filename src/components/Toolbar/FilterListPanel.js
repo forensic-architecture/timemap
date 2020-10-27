@@ -4,6 +4,10 @@ import copy from '../../common/data/copy.json'
 import { getFilterIdxFromColorSet, getFilterParents } from '../../common/utilities'
 import { colors } from '../../common/global'
 
+function hasOnParent (filters, activeFilters, filterKey) {
+  return getFilterParents(filters, filterKey).some(r => activeFilters.indexOf(r) >= 0)
+}
+
 /** recursively get an array of node keys to toggle */
 function childrenToToggle (filter, activeFilters, parentOn) {
   const [key, children] = filter
@@ -12,7 +16,7 @@ function childrenToToggle (filter, activeFilters, parentOn) {
     return [key]
   }
   const childKeys = Object.entries(children)
-    .flatMap(filter => childrenToToggle(filter, activeFilters, isOn))
+    .flatMap(filter => childrenToToggle(filter, activeFilters, isOn || parentOn))
   // NB: if turning a parent off, don't toggle off children on.
   //     likewise if turning a parent on, don't toggle on children off
   if (!((!parentOn && isOn) || (parentOn && !isOn))) {
@@ -46,12 +50,6 @@ function FilterListPanel ({
 }) {
   function createNodeComponent (filter, depth) {
     const [key, children] = filter
-    if (key === 'Tear Gas') {
-      console.log(filters)
-      console.log(key)
-      console.log(activeFilters)
-      console.log(getFilterParents(filters, key).some(r => activeFilters.indexOf(r) >= 0))
-    }
     const anyParentInFilters = getFilterParents(filters, key).some(r => activeFilters.indexOf(r) >= 0)
     const anyParentOn = activeFilters.includes(key) || anyParentInFilters
     const matchingKeys = childrenToToggle(filter, activeFilters, anyParentOn)
@@ -73,7 +71,7 @@ function FilterListPanel ({
         <Checkbox
           label={key}
           isActive={activeFilters.includes(key)}
-          onClickCheckbox={() => onSelectFilter(key, matchingKeys)}
+          onClickCheckbox={() => { onSelectFilter(key, matchingKeys) }}
           backgroundColor={assignedColor}
         />
         {Object.keys(children).length > 0

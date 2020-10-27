@@ -1,6 +1,6 @@
 import React from 'react'
 import colors from '../../../common/global'
-import { getEventCategories } from '../../../common/utilities'
+import { getEventCategories, isLatitude, isLongitude } from '../../../common/utilities'
 
 const TimelineMarkers = ({
   styles,
@@ -51,7 +51,7 @@ const TimelineMarkers = ({
       />
     }
 
-    const isDot = (!!event.location && !!event.longitude) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
+    const isDot = (isLatitude(event.latitude) && isLongitude(event.longitude)) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
     const evShadows = getEventCategories(event, categories).map(cat => getEventY({ ...event, category: cat.id }))
 
     function renderMarkerForEvent (y) {

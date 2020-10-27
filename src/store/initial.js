@@ -35,10 +35,8 @@ const initial = {
     selected: [],
     source: null,
     associations: {
-      // coloringSet: [],
-      coloringSet: [['Physical Assault', 'Arrest/Detention', '"Less-Lethal" Round', 'Intimidation', 'Physical', 'All', 'Something' ]],
-      // filters: [],
-      filters: ['Physical Assault', 'Arrest/Detention', '"Less-Lethal" Round', 'Intimidation', 'Physical', 'All', 'Something' ],
+      coloringSet: [],
+      filters: [],
       narrative: null,
       categories: [],
       views: {

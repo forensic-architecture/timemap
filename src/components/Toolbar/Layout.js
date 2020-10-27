@@ -9,7 +9,7 @@ import FilterListPanel from './FilterListPanel'
 import CategoriesListPanel from './CategoriesListPanel'
 import BottomActions from './BottomActions'
 import copy from '../../common/data/copy.json'
-import { trimAndEllipse, getImmediateFilterParent, getFilterSiblings } from '../../common/utilities.js'
+import { trimAndEllipse, getImmediateFilterParent, getFilterSiblings, getFilterParents } from '../../common/utilities.js'
 
 class Toolbar extends React.Component {
   constructor (props) {
@@ -59,7 +59,8 @@ class Toolbar extends React.Component {
         }
 
         if (siblingsOff && isTurningOff) {
-          matchingKeys.push(parent)
+          const grandparentsOn = getFilterParents(filters, key).filter(filt => activeFilters.includes(filt))
+          matchingKeys = matchingKeys.concat(grandparentsOn)
         }
       }
     }

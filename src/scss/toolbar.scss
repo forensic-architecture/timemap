@@ -419,16 +419,7 @@
       overflow: hidden;
     }
 
-    &:hover {
-      span {
-        color: $offwhite;
-      }
-    }
-
     &.active {
-      span {
-        color: $offwhite;
-      }
       .checkbox {
         background: $offwhite;
       }
