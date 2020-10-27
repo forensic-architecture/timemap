@@ -2,18 +2,19 @@ import React from 'react'
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
 
-import Card from './Card.jsx'
+// import Card from './Card.jsx'
+import { Card } from '@forensic-architecture/design-system/react'
 import copy from '../common/data/copy.json'
 
 class CardStack extends React.Component {
-  constructor () {
+  constructor() {
     super()
     this.refs = {}
     this.refCardStack = React.createRef()
     this.refCardStackContent = React.createRef()
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     const isNarrative = !!this.props.narrative
 
     if (isNarrative) {
@@ -21,7 +22,7 @@ class CardStack extends React.Component {
     }
   }
 
-  scrollToCard () {
+  scrollToCard() {
     const duration = 500
     const element = this.refCardStack.current
     const cardScroll = this.refs[this.props.narrative.current].current.offsetTop
@@ -51,7 +52,7 @@ class CardStack extends React.Component {
     animateScroll()
   }
 
-  renderCards (events, selections) {
+  renderCards(events, selections) {
     // if no selections provided, select all
     if (!selections) { selections = events.map(e => true) }
     this.refs = []
@@ -79,7 +80,7 @@ class CardStack extends React.Component {
     })
   }
 
-  renderSelectedCards () {
+  renderSelectedCards() {
     const { selected } = this.props
 
     if (selected.length > 0) {
@@ -88,7 +89,7 @@ class CardStack extends React.Component {
     return null
   }
 
-  renderNarrativeCards () {
+  renderNarrativeCards() {
     const { narrative } = this.props
     const showing = narrative.steps
 
@@ -98,7 +99,7 @@ class CardStack extends React.Component {
     return this.renderCards(showing, selections)
   }
 
-  renderCardStackHeader () {
+  renderCardStackHeader() {
     const headerLang = copy[this.props.language].cardstack.header
 
     return (
@@ -115,7 +116,7 @@ class CardStack extends React.Component {
     )
   }
 
-  renderCardStackContent () {
+  renderCardStackContent() {
     return (
       <div id='card-stack-content' className='card-stack-content'>
         <ul>
@@ -125,7 +126,7 @@ class CardStack extends React.Component {
     )
   }
 
-  renderNarrativeContent () {
+  renderNarrativeContent() {
     return (
       <div id='card-stack-content' className='card-stack-content'
         ref={this.refCardStackContent}
@@ -137,7 +138,7 @@ class CardStack extends React.Component {
     )
   }
 
-  render () {
+  render() {
     const { isCardstack, selected, narrative, timelineDims } = this.props
     // TODO: make '237px', which is the narrative header, less hard-coded
     const height = `calc(100% - 237px - ${timelineDims.height}px)`
@@ -174,7 +175,7 @@ class CardStack extends React.Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     narrative: selectors.selectActiveNarrative(state),
     selected: selectors.selectSelected(state),
