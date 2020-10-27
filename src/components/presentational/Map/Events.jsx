@@ -45,7 +45,7 @@ function MapEvents ({
     let styles = ({
       stroke: colors.darkBackground,
       strokeWidth: 0,
-      fillOpacity: narrative ? 1 : calcOpacity(location.events.length),
+      fillOpacity: narrative ? 1 : calcOpacity(location.events.length)
     })
 
     return (
@@ -57,7 +57,7 @@ function MapEvents ({
         }}
         className={'location-event-marker'}
       />
-    ) 
+    )
   }
 
   function renderLocationSlicesByCategory (location) {
@@ -162,7 +162,7 @@ function MapEvents ({
         onClick={(e) => handleEventSelect(e, location)}
       >
         {features.COLOR_BY_ASSOCIATION ? renderLocationSlicesByAssociation(location) : null}
-        {features.COLOR_BY_CATEGORY ? renderLocationSlicesByCategory(location): null}
+        {features.COLOR_BY_CATEGORY ? renderLocationSlicesByCategory(location) : null}
         {extraRender ? extraRender() : null}
         {isSelected ? null : renderBorder()}
       </g>

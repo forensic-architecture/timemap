@@ -19,7 +19,7 @@ export function getCoordinatesForPercent (radius, percent) {
 
 export function zipColorsToPercentages (colors, percentages) {
   if (colors.length < percentages.length) throw new Error('You must declare an appropriate number of filter colors')
-  
+
   return percentages.reduce((map, percent, idx) => {
     map[colors[idx]] = percent
     return map
@@ -256,13 +256,17 @@ export function mapClustersToLocations (clusters, locations) {
   }, [])
 }
 
-/* Loops through set of locations => events => associations and maps it to the appropriate color set*/
+/*
+Loops through a set of either locations or events and maps the number of associations to the appropriate color set
+*/
 export function calculateColorPercentages (set, coloringSet) {
   if (coloringSet.length === 0) return [1]
   const associationMap = {}
 
   for (const [idx, value] of coloringSet.entries()) {
-    value.forEach(filter => associationMap[filter] = idx)
+    for (let filter of value) {
+      associationMap[filter] = idx
+    }
   }
 
   const associationCounts = new Array(coloringSet.length)
@@ -288,7 +292,6 @@ export function calculateColorPercentages (set, coloringSet) {
   if (totalAssociations === 0) return [1]
 
   return associationCounts.map(count => count / totalAssociations)
-
 }
 
 export function getFilterIdxFromColorSet (filter, coloringSet) {

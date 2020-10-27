@@ -1,5 +1,4 @@
 import React from 'react'
-import DatetimeDot from './DatetimeDot'
 import DatetimeBar from './DatetimeBar'
 import DatetimeSquare from './DatetimeSquare'
 import DatetimeStar from './DatetimeStar'

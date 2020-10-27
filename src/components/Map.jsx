@@ -177,8 +177,7 @@ class Map extends React.Component {
       try {
         const children = this.superclusterIndex.getLeaves(clusterId, Infinity, 0)
         return mapClustersToLocations(children, this.props.domain.locations)
-      }
-      catch (err) {
+      } catch (err) {
         return []
       }
     }
@@ -299,7 +298,7 @@ class Map extends React.Component {
     Uncomment below to filter out the locations already present in a cluster.
     Leaving these lines commented out renders all the locations on the map, regardless of whether or not they are clustered
     */
-    
+
     // const individualClusters = this.state.clusters.filter(cl => !cl.properties.cluster)
     // const filteredLocations = mapClustersToLocations(individualClusters, this.props.domain.locations)
     return (

@@ -1,7 +1,7 @@
 import React from 'react'
 import { getCoordinatesForPercent } from '../../../common/utilities'
 
-function ColoredMarkers ({ radius, colorPercentMap, styles, className}) {
+function ColoredMarkers ({ radius, colorPercentMap, styles, className }) {
   let cumulativeAngleSweep = 0
   const colors = Object.keys(colorPercentMap)
 
@@ -11,7 +11,7 @@ function ColoredMarkers ({ radius, colorPercentMap, styles, className}) {
         const colorPercent = colorPercentMap[color]
 
         const [startX, startY] = getCoordinatesForPercent(radius, cumulativeAngleSweep)
-  
+
         cumulativeAngleSweep += colorPercent
 
         const [endX, endY] = getCoordinatesForPercent(radius, cumulativeAngleSweep)
