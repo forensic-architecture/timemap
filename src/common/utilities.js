@@ -272,8 +272,7 @@ export function calcClusterOpacity (pointCount, totalPoints) {
   /* Clusters represent multiple events within a specific radius. The darker the cluster,
   the larger the number of underlying events. We use a multiplication factor (50) here as well
   to ensure that the larger clusters have an appropriately darker shading. */
-  const base = 0.5
-  return base + Math.min(0.95, 0.08 + (pointCount / totalPoints) * 50)
+  return Math.min(0.85, 0.08 + (pointCount / totalPoints) * 50)
 }
 
 export function calcClusterSize (pointCount, totalPoints) {
