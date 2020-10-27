@@ -9,7 +9,6 @@ import { calcOpacity, getEventCategories, zipColorsToPercentages, calculateColor
 
 function renderDot (event, styles, props) {
   const colorPercentages = calculateColorPercentages([event], props.coloringSet)
-
   return (
     <g
       className={'timeline-event'}
