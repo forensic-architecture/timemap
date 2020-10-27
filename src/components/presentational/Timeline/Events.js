@@ -4,7 +4,13 @@ import DatetimeSquare from './DatetimeSquare'
 import DatetimeStar from './DatetimeStar'
 import Project from './Project'
 import ColoredMarkers from '../Map/ColoredMarkers.jsx'
-import { calcOpacity, getEventCategories, zipColorsToPercentages, calculateColorPercentages } from '../../../common/utilities'
+import {
+  calcOpacity,
+  getEventCategories,
+  zipColorsToPercentages,
+  calculateColorPercentages,
+  isLatitude,
+  isLongitude } from '../../../common/utilities'
 
 function renderDot (event, styles, props) {
   const colorPercentages = calculateColorPercentages([event], props.coloringSet)
@@ -92,7 +98,7 @@ const TimelineEvents = ({
         return null
       }
     }
-    const isDot = (!!event.location && !!event.longitude) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
+    const isDot = (isLatitude(event.latitude) && isLongitude(event.longitude)) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
 
     let renderShape = isDot ? renderDot : renderBar
     if (event.shape) {
