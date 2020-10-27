@@ -116,10 +116,30 @@ export function getImmediateFilterParent (associations, filter) {
   return parents[parents.length - 1]
 }
 
+export function getMetaFilterSiblings (allFilters, filterParent, filterKey) {
+  // filterKey = "Chemical"
+  // filterParent = "All"
+  // reconstruct the filter tree from filter_paths
+  const idxParent = allFilters.map(f => {
+    return f.filter_paths.reduceRight((acc, path, idx) => {
+      if (path === filterParent) return f.filter_paths[idx + 1]
+      return acc
+    }, null)
+  })
+    .filter(metaFilter => !!metaFilter && metaFilter !== filterKey)
+  // find the right level to get siblings
+  return [ ...(new Set(idxParent)) ]
+}
 /**
  * Grabs a given filter's siblings: the set of associations that share the same immediate filter parent.
 */
 export function getFilterSiblings (allFilters, filterParent, filterKey) {
+  const isMetaFilter = !allFilters.map(filt => filt.id).includes(filterKey)
+
+  if (isMetaFilter) {
+    return getMetaFilterSiblings(allFilters, filterParent, filterKey)
+  }
+
   return allFilters.reduce((acc, val) => {
     const valParent = getImmediateFilterParent(allFilters, val.id)
     if (valParent === filterParent && val.id !== filterKey) acc.push(val.id)

@@ -63,6 +63,7 @@ class Toolbar extends React.Component {
         }
       }
     }
+
     this.props.methods.onSelectFilter(matchingKeys)
   }
 

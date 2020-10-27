@@ -1,7 +1,7 @@
 import React from 'react'
 import Checkbox from '../presentational/Checkbox'
 import copy from '../../common/data/copy.json'
-import { getFilterIdxFromColorSet } from '../../common/utilities'
+import { getFilterIdxFromColorSet, getFilterParents } from '../../common/utilities'
 import { colors } from '../../common/global'
 
 /** recursively get an array of node keys to toggle */
@@ -46,7 +46,15 @@ function FilterListPanel ({
 }) {
   function createNodeComponent (filter, depth) {
     const [key, children] = filter
-    const matchingKeys = childrenToToggle(filter, activeFilters, activeFilters.includes(key))
+    if (key === 'Tear Gas') {
+      console.log(filters)
+      console.log(key)
+      console.log(activeFilters)
+      console.log(getFilterParents(filters, key).some(r => activeFilters.indexOf(r) >= 0))
+    }
+    const anyParentInFilters = getFilterParents(filters, key).some(r => activeFilters.indexOf(r) >= 0)
+    const anyParentOn = activeFilters.includes(key) || anyParentInFilters
+    const matchingKeys = childrenToToggle(filter, activeFilters, anyParentOn)
     const idxFromColorSet = getFilterIdxFromColorSet(key, coloringSet)
 
     const assignedColor = idxFromColorSet !== -1 && activeFilters.includes(key) ? filterColors[idxFromColorSet] : colors.white
