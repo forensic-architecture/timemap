@@ -53,7 +53,6 @@ function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHove
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {hovered ? renderHover(cluster) : null}
       <ColoredMarkers
         radius={size}
         colorPercentMap={zipColorsToPercentages(filterColors, colorPercentages)}
@@ -62,6 +61,7 @@ function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHove
         }}
         className={'cluster-event-marker'}
       />
+      {hovered ? renderHover(cluster) : null}
     </g>
   )
 }
