@@ -11,6 +11,28 @@ export function calcDatetime (date, time) {
   return dt.toDate()
 }
 
+export function getCoordinatesForPercent (radius, percent) {
+  const x = radius * Math.cos(2 * Math.PI * percent)
+  const y = radius * Math.sin(2 * Math.PI * percent)
+  return [x, y]
+}
+
+/**
+ * This function takes the array of percentages: [0.5, 0.5, ...]
+ * and maps it by index to the set of colors ['#fff', '#000', ...]
+ * If there aren't enough colors in the set, it raises an error for the user
+ *
+ * Return value:
+ * ex. {'#fff': 0.5, '#000': 0.5, ...} */
+export function zipColorsToPercentages (colors, percentages) {
+  if (colors.length < percentages.length) throw new Error('You must declare an appropriate number of filter colors')
+
+  return percentages.reduce((map, percent, idx) => {
+    map[colors[idx]] = percent
+    return map
+  }, {})
+}
+
 /**
   * Get URI params to start with predefined set of
   * https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
@@ -61,6 +83,68 @@ export function trimAndEllipse (string, stringNum) {
     return string.substring(0, 120) + '...'
   }
   return string
+}
+
+/**
+ * From the set of associations, grab a given filter's set of parents,
+ * ie. all the elements in the path array before the idx where the filter is located.
+ * If we can't find the filter by the ID, we know its a meta filter, so we look
+ * through every association's given path attribute to find its location.
+ *
+ * Returns the list of parents: ex. ['Chemical', 'Tear Gas', ...]
+*/
+export function getFilterParents (associations, filter) {
+  for (let a of associations) {
+    const { filter_paths: fp } = a
+    if (a.id === filter) {
+      return fp.slice(0, fp.length - 1)
+    }
+    const filterIndex = fp.indexOf(filter)
+    if (filterIndex === 0) return []
+    if (filterIndex > 0) return fp.slice(0, filterIndex)
+  }
+  throw new Error('Attempted to get parents of nonexistent filter')
+}
+
+/**
+ * Grabs the second to last element in the paths array for a given existing filter.
+ * This is the filter's most immediate ancestor.
+*/
+export function getImmediateFilterParent (associations, filter) {
+  const parents = getFilterParents(associations, filter)
+  if (parents.length === 0) return null
+  return parents[parents.length - 1]
+}
+
+/**
+ * Grab a meta filter's siblings, by way of the the `filter_path` hierarcy.
+*/
+export function getMetaFilterSiblings (allFilters, filterParent, filterKey) {
+  const idxParent = allFilters.map(f => {
+    return f.filter_paths.reduceRight((acc, path, idx) => {
+      if (path === filterParent) return f.filter_paths[idx + 1]
+      return acc
+    }, null)
+  })
+    .filter(metaFilter => !!metaFilter && metaFilter !== filterKey)
+  return [ ...(new Set(idxParent)) ]
+}
+
+/**
+ * Grabs a given filter's siblings: the set of associations that share the same immediate filter parent.
+*/
+export function getFilterSiblings (allFilters, filterParent, filterKey) {
+  const isMetaFilter = !allFilters.map(filt => filt.id).includes(filterKey)
+
+  if (isMetaFilter) {
+    return getMetaFilterSiblings(allFilters, filterParent, filterKey)
+  }
+
+  return allFilters.reduce((acc, val) => {
+    const valParent = getImmediateFilterParent(allFilters, val.id)
+    if (valParent === filterParent && val.id !== filterKey) acc.push(val.id)
+    return acc
+  }, [])
 }
 
 export function getEventCategories (event, categories) {
@@ -180,7 +264,7 @@ export function calcOpacity (num) {
    * other events there are in the same render. The idea here is that the
    * overlaying of events builds up a 'heat map' of the event space, where
    * darker areas represent more events with proportion */
-  const base = num >= 1 ? 0.6 : 0
+  const base = num >= 1 ? 0.9 : 0
   return base + (Math.min(0.5, 0.08 * (num - 1)))
 }
 
@@ -188,14 +272,16 @@ export function calcClusterOpacity (pointCount, totalPoints) {
   /* Clusters represent multiple events within a specific radius. The darker the cluster,
   the larger the number of underlying events. We use a multiplication factor (50) here as well
   to ensure that the larger clusters have an appropriately darker shading. */
-  return Math.min(0.85, 0.08 + (pointCount / totalPoints) * 50)
+  const base = 0.5
+  return base + Math.min(0.95, 0.08 + (pointCount / totalPoints) * 50)
 }
 
 export function calcClusterSize (pointCount, totalPoints) {
   /* The larger the cluster size, the higher the count of points that the cluster represents.
   Just like with opacity, we use a multiplication factor to ensure that clusters with higher point
   counts appear larger. */
-  return Math.min(50, 10 + (pointCount / totalPoints) * 150)
+  const maxSize = totalPoints > 60 ? 40 : 20
+  return Math.min(maxSize, 10 + (pointCount / totalPoints) * 150)
 }
 
 export function isLatitude (lat) {
@@ -212,6 +298,59 @@ export function mapClustersToLocations (clusters, locations) {
     if (foundLocation) acc.push(foundLocation)
     return acc
   }, [])
+}
+
+/**
+ * Loops through a set of either locations or events
+ * and calculates the proportionate percentage of every given association in relation to the coloring set
+*/
+export function calculateColorPercentages (set, coloringSet) {
+  if (coloringSet.length === 0) return [1]
+  const associationMap = {}
+
+  for (const [idx, value] of coloringSet.entries()) {
+    for (let filter of value) {
+      associationMap[filter] = idx
+    }
+  }
+
+  const associationCounts = new Array(coloringSet.length)
+  associationCounts.fill(0)
+
+  let totalAssociations = 0
+
+  set.forEach(item => {
+    let innerSet = 'events' in item ? item.events : item
+
+    if (!Array.isArray(innerSet)) innerSet = [innerSet]
+
+    innerSet.forEach(val => {
+      val.associations.forEach(a => {
+        const idx = associationMap[a]
+        if (!idx && idx !== 0) return
+        associationCounts[idx] += 1
+        totalAssociations += 1
+      })
+    })
+  })
+
+  if (totalAssociations === 0) return [1]
+
+  return associationCounts.map(count => count / totalAssociations)
+}
+
+/**
+ * Gets the idx of a given filter in relation to its position in the coloring set
+ *
+ * Example coloringSet = [['Chemical', 'Tear Gas'], ['Procedural', 'Destruction of property']]
+ */
+export function getFilterIdxFromColorSet (filter, coloringSet) {
+  let filterIdx = -1
+  coloringSet.map((set, idx) => {
+    const foundIdx = set.indexOf(filter)
+    if (foundIdx !== -1) filterIdx = idx
+  })
+  return filterIdx
 }
 
 export const dateMin = function () {

@@ -80,12 +80,10 @@ class Timeline extends React.Component {
     if (features.GRAPH_NONLOCATED && features.GRAPH_NONLOCATED.categories) {
       categories = categories.filter(cat => !features.GRAPH_NONLOCATED.categories.includes(cat.id))
     }
-    const catHeight = trackHeight / (categories.length)
-    const shiftUp = trackHeight / (categories.length) / 3
-    const marginShift = marginTop === 0 ? 0 : marginTop
-    const manualAdjustment = trackHeight <= 60 ? (trackHeight <= 30 ? -8 : -5) : 0
+    const extraPadding = 0
+    const catHeight = categories.length > 2 ? trackHeight / categories.length : trackHeight / (categories.length + 1)
     const catsYpos = categories.map((g, i) => {
-      return ((i + 1) * catHeight) - shiftUp + marginShift + manualAdjustment
+      return ((i + 1) * catHeight) + marginTop + (extraPadding / 2)
     })
     const catMap = categories.map(c => c.id)
 
@@ -341,7 +339,7 @@ class Timeline extends React.Component {
                 onDragStart={() => { this.onDragStart() }}
                 onDrag={() => { this.onDrag() }}
                 onDragEnd={() => { this.onDragEnd() }}
-                categories={this.props.app.activeCategories}
+                categories={categories.map(c => c.id)}
                 features={this.props.features}
               />
               <Handles
@@ -359,7 +357,7 @@ class Timeline extends React.Component {
                 selected={this.props.app.selected}
                 getEventX={ev => this.getDatetimeX(ev.datetime)}
                 getEventY={this.getY}
-                categories={this.props.domain.categories}
+                categories={categories}
                 transitionDuration={this.state.transitionDuration}
                 styles={this.props.ui.styles}
                 features={this.props.features}
@@ -368,7 +366,7 @@ class Timeline extends React.Component {
               <Events
                 events={this.props.domain.events}
                 projects={this.props.domain.projects}
-                categories={this.props.domain.categories}
+                categories={categories}
                 styleDatetime={this.styleDatetime}
                 narrative={this.props.app.narrative}
                 getDatetimeX={this.getDatetimeX}
@@ -387,6 +385,8 @@ class Timeline extends React.Component {
                 setLoading={this.props.actions.setLoading}
                 setNotLoading={this.props.actions.setNotLoading}
                 eventRadius={this.props.ui.eventRadius}
+                filterColors={this.props.ui.filterColors}
+                coloringSet={this.props.app.coloringSet}
               />
             </svg>
           </div>
@@ -403,20 +403,25 @@ function mapStateToProps (state) {
     domain: {
       events: selectors.selectStackedEvents(state),
       projects: selectors.selectProjects(state),
-      categories: selectors.getCategories(state),
+      categories: (state => {
+        const allcats = selectors.getCategories(state)
+        const active = selectors.getActiveCategories(state)
+        return allcats.filter(c => active.includes(c.id))
+      })(state),
       narratives: state.domain.narratives
     },
     app: {
-      activeCategories: selectors.getActiveCategories(state),
       selected: state.app.selected,
       language: state.app.language,
       timeline: state.app.timeline,
-      narrative: state.app.associations.narrative
+      narrative: state.app.associations.narrative,
+      coloringSet: state.app.associations.coloringSet
     },
     ui: {
       dom: state.ui.dom,
       styles: state.ui.style.selectedEvents,
-      eventRadius: state.ui.eventRadius
+      eventRadius: state.ui.eventRadius,
+      filterColors: state.ui.coloring.colors
     },
     features: selectors.getFeatures(state)
   }

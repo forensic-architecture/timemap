@@ -264,8 +264,8 @@ class Dashboard extends React.Component {
           isNarrative={!!app.associations.narrative}
           methods={{
             onTitle: actions.toggleCover,
-            onSelectFilter: filter => actions.toggleFilter('filters', filter),
-            onCategoryFilter: category => actions.toggleFilter('categories', category),
+            onSelectFilter: filters => actions.toggleAssociations('filters', filters),
+            onCategoryFilter: categories => actions.toggleAssociations('categories', categories),
             onSelectNarrative: this.setNarrative
           }}
         />

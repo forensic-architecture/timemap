@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --content-base static --mode development",
+    "dev:wsl": "npm run dev -- --host 0.0.0.0",
     "build": "NODE_ENV=production webpack --mode production",
     "test": "ava --verbose",
     "test-watch": "ava --watch",

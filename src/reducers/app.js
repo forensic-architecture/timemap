@@ -5,8 +5,9 @@ import { toggleFlagAC } from '../common/utilities'
 import {
   UPDATE_HIGHLIGHTED,
   UPDATE_SELECTED,
+  UPDATE_COLORING_SET,
   CLEAR_FILTER,
-  TOGGLE_FILTER,
+  TOGGLE_ASSOCIATIONS,
   UPDATE_TIMERANGE,
   UPDATE_DIMENSIONS,
   UPDATE_NARRATIVE,
@@ -37,6 +38,16 @@ function updateSelected (appState, action) {
   return Object.assign({}, appState, {
     selected: action.selected
   })
+}
+
+function updateColoringSet (appState, action) {
+  return {
+    ...appState,
+    associations: {
+      ...appState.associations,
+      coloringSet: action.coloringSet
+    }
+  }
 }
 
 function updateNarrative (appState, action) {
@@ -111,11 +122,11 @@ function updateNarrativeStepIdx (appState, action) {
   }
 }
 
-function toggleFilter (appState, action) {
+function toggleAssociations (appState, action) {
   if (!(action.value instanceof Array)) {
     action.value = [action.value]
   }
-  const { filter: associationType } = action
+  const { association: associationType } = action
 
   let newAssociations = appState.associations[associationType].slice(0)
   action.value.forEach(vl => {
@@ -249,10 +260,12 @@ function app (appState = initial.app, action) {
       return updateHighlighted(appState, action)
     case UPDATE_SELECTED:
       return updateSelected(appState, action)
+    case UPDATE_COLORING_SET:
+      return updateColoringSet(appState, action)
     case CLEAR_FILTER:
       return clearFilter(appState, action)
-    case TOGGLE_FILTER:
-      return toggleFilter(appState, action)
+    case TOGGLE_ASSOCIATIONS:
+      return toggleAssociations(appState, action)
     case UPDATE_TIMERANGE:
       return updateTimeRange(appState, action)
     case UPDATE_DIMENSIONS:

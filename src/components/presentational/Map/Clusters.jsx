@@ -1,7 +1,14 @@
 import React, { useState } from 'react'
 import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
-import { calcClusterOpacity, calcClusterSize, isLatitude, isLongitude } from '../../../common/utilities'
+import ColoredMarkers from './ColoredMarkers.jsx'
+import {
+  calcClusterOpacity,
+  calcClusterSize,
+  isLatitude,
+  isLongitude,
+  calculateColorPercentages,
+  zipColorsToPercentages } from '../../../common/utilities'
 
 const DefsClusters = () => (
   <defs>
@@ -12,7 +19,7 @@ const DefsClusters = () => (
   </defs>
 )
 
-function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHover, onClick }) {
+function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHover, onClick, getClusterChildren, coloringSet, filterColors }) {
   /**
   {
     geometry: {
@@ -28,6 +35,10 @@ function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHove
   }
   */
   const { cluster_id: clusterId } = cluster.properties
+
+  const individualChildren = getClusterChildren(clusterId)
+  const colorPercentages = calculateColorPercentages(individualChildren, coloringSet)
+
   const { coordinates } = cluster.geometry
   const [longitude, latitude] = coordinates
   if (!isLatitude(latitude) || !isLongitude(longitude)) return null
@@ -42,20 +53,15 @@ function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHove
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <circle
-        class='cluster-event-marker'
-        id={clusterId}
-        longitude={longitude}
-        latitude={latitude}
-        cx='0'
-        cy='0'
-        r={size}
-        style={{
+      <ColoredMarkers
+        radius={size}
+        colorPercentMap={zipColorsToPercentages(filterColors, colorPercentages)}
+        styles={{
           ...styles
         }}
+        className={'cluster-event-marker'}
       />
       {hovered ? renderHover(cluster) : null}
-
     </g>
   )
 }
@@ -63,9 +69,12 @@ function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHove
 function ClusterEvents ({
   projectPoint,
   onSelect,
+  getClusterChildren,
+  coloringSet,
   isRadial,
   svg,
-  clusters
+  clusters,
+  filterColors
 }) {
   const totalPoints = clusters.reduce((total, cl) => {
     if (cl && cl.properties) {
@@ -80,8 +89,18 @@ function ClusterEvents ({
     strokeWidth: 0
   }
 
-  function renderHover (txt) {
-    return <text text-anchor='middle' y='-3px' style={{ fontWeight: 'bold', fill: 'white' }}>{txt}</text>
+  function renderHover (txt, circleSize) {
+    return <>
+      <text text-anchor='middle' y='3px' style={{ fontWeight: 'bold', fill: 'black', zIndex: 10000 }}>{txt}</text>
+      <circle
+        class='event-hover'
+        cx='0'
+        cy='0'
+        r={circleSize + 2}
+        stroke={colors.primaryHighlight}
+        fill-opacity='0.0'
+      />
+    </>
   }
 
   return (
@@ -93,7 +112,10 @@ function ClusterEvents ({
           const clusterSize = calcClusterSize(pointCount, totalPoints)
           return <Cluster
             onClick={onSelect}
+            getClusterChildren={getClusterChildren}
+            coloringSet={coloringSet}
             cluster={c}
+            filterColors={filterColors}
             size={clusterSize}
             projectPoint={projectPoint}
             totalPoints={totalPoints}
@@ -101,17 +123,7 @@ function ClusterEvents ({
               ...styles,
               fillOpacity: calcClusterOpacity(pointCount, totalPoints)
             }}
-            renderHover={clster => <>
-              <circle
-                class='event-hover'
-                cx='0'
-                cy='0'
-                r={clusterSize + 2}
-                stroke={colors.primaryHighlight}
-                fill-opacity='0.0'
-              />
-              {renderHover(pointCount)}
-            </>}
+            renderHover={() => renderHover(pointCount, clusterSize)}
           />
         })}
       </g>
