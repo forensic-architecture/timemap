@@ -17,6 +17,13 @@ export function getCoordinatesForPercent (radius, percent) {
   return [x, y]
 }
 
+/**
+ * This function takes the array of percentages: [0.5, 0.5, ...]
+ * and maps it by index to the set of colors ['#fff', '#000', ...]
+ * If there aren't enough colors in the set, it raises an error for the user
+ *
+ * Return value:
+ * ex. {'#fff': 0.5, '#000': 0.5, ...} */
 export function zipColorsToPercentages (colors, percentages) {
   if (colors.length < percentages.length) throw new Error('You must declare an appropriate number of filter colors')
 
@@ -78,6 +85,14 @@ export function trimAndEllipse (string, stringNum) {
   return string
 }
 
+/**
+ * From the set of associations, grab a given filter's set of parents,
+ * ie. all the elements in the path array before the idx where the filter is located.
+ * If we can't find the filter by the ID, we know its a meta filter, so we look
+ * through every association's given path attribute to find its location.
+ *
+ * Returns the list of parents: ex. ['Chemical', 'Tear Gas', ...]
+*/
 export function getFilterParents (associations, filter) {
   for (let a of associations) {
     const { filter_paths: fp } = a
@@ -91,12 +106,19 @@ export function getFilterParents (associations, filter) {
   throw new Error('Attempted to get parents of nonexistent filter')
 }
 
+/**
+ * Grabs the second to last element in the paths array for a given existing filter.
+ * This is the filter's most immediate ancestor.
+*/
 export function getImmediateFilterParent (associations, filter) {
   const parents = getFilterParents(associations, filter)
   if (parents.length === 0) return null
   return parents[parents.length - 1]
 }
 
+/**
+ * Grabs a given filter's siblings: the set of associations that share the same immediate filter parent.
+*/
 export function getFilterSiblings (allFilters, filterParent, filterKey) {
   return allFilters.reduce((acc, val) => {
     const valParent = getImmediateFilterParent(allFilters, val.id)
@@ -256,8 +278,9 @@ export function mapClustersToLocations (clusters, locations) {
   }, [])
 }
 
-/*
-Loops through a set of either locations or events and maps the number of associations to the appropriate color set
+/**
+ * Loops through a set of either locations or events
+ * and calculates the proportionate percentage of every given association in relation to the coloring set
 */
 export function calculateColorPercentages (set, coloringSet) {
   if (coloringSet.length === 0) return [1]
@@ -294,6 +317,11 @@ export function calculateColorPercentages (set, coloringSet) {
   return associationCounts.map(count => count / totalAssociations)
 }
 
+/**
+ * Gets the idx of a given filter in relation to its position in the coloring set
+ *
+ * Example coloringSet = [['Chemical', 'Tear Gas'], ['Procedural', 'Destruction of property']]
+ */
 export function getFilterIdxFromColorSet (filter, coloringSet) {
   let filterIdx = -1
   coloringSet.map((set, idx) => {
