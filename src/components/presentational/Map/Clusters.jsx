@@ -90,7 +90,7 @@ function ClusterEvents ({
   }
 
   function renderHover (txt, circleSize) {
-    return<>
+    return <>
       <text text-anchor='middle' y='3px' style={{ fontWeight: 'bold', fill: 'black', zIndex: 10000 }}>{txt}</text>
       <circle
         class='event-hover'
