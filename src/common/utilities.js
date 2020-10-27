@@ -289,6 +289,15 @@ export function calculateColorPercentages (locations, coloringSet) {
 
 }
 
+export function getFilterIdxFromColorSet (filter, coloringSet) {
+  let filterIdx = -1
+  coloringSet.map((set, idx) => {
+    const foundIdx = set.indexOf(filter)
+    if (foundIdx !== -1) filterIdx = idx
+  })
+  return filterIdx
+}
+
 export const dateMin = function () {
   return Array.prototype.slice.call(arguments).reduce(function (a, b) {
     return a < b ? a : b

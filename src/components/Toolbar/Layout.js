@@ -121,6 +121,8 @@ class Toolbar extends React.Component {
           activeFilters={this.props.activeFilters}
           onSelectFilter={this.onSelectFilter}
           language={this.props.language}
+          coloringSet={this.props.coloringSet}
+          filterColors={this.props.filterColors}
         />
       </TabPanel>
     )
@@ -236,6 +238,7 @@ function mapStateToProps (state) {
     infoShowing: state.app.flags.isInfopopup,
     coloringSet: state.app.associations.coloringSet,
     maxNumOfColors: state.ui.coloring.maxNumOfColors,
+    filterColors: state.ui.coloring.colors,
     features: selectors.getFeatures(state)
   }
 }

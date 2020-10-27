@@ -401,7 +401,6 @@
         display: inline-block;
         width: 12px;
         height: 12px;
-        border: 1px solid $offwhite;
         box-sizing: border-box;
         background: none;
         float: left;
@@ -416,23 +415,7 @@
       float: left;
       font-size: $normal;
       font-family: Helvetica, 'Georgia', 'serif';
-      color: $midwhite;
       overflow: hidden;
-    }
-
-    &:hover {
-      span {
-        color: $offwhite;
-      }
-    }
-
-    &.active {
-      span {
-        color: $offwhite;
-      }
-      .checkbox {
-        background: $offwhite;
-      }
     }
   }
 
