@@ -244,7 +244,7 @@ export function calcOpacity (num) {
    * other events there are in the same render. The idea here is that the
    * overlaying of events builds up a 'heat map' of the event space, where
    * darker areas represent more events with proportion */
-  const base = num >= 1 ? 0.6 : 0
+  const base = num >= 1 ? 0.9 : 0
   return base + (Math.min(0.5, 0.08 * (num - 1)))
 }
 
@@ -252,14 +252,15 @@ export function calcClusterOpacity (pointCount, totalPoints) {
   /* Clusters represent multiple events within a specific radius. The darker the cluster,
   the larger the number of underlying events. We use a multiplication factor (50) here as well
   to ensure that the larger clusters have an appropriately darker shading. */
-  return Math.min(0.95, 0.08 + (pointCount / totalPoints) * 50)
+  const base = 0.5
+  return base + Math.min(0.95, 0.08 + (pointCount / totalPoints) * 50)
 }
 
 export function calcClusterSize (pointCount, totalPoints) {
   /* The larger the cluster size, the higher the count of points that the cluster represents.
   Just like with opacity, we use a multiplication factor to ensure that clusters with higher point
   counts appear larger. */
-  const maxSize = totalPoints > 60 ? 30 : 20
+  const maxSize = totalPoints > 60 ? 40 : 20
   return Math.min(maxSize, 10 + (pointCount / totalPoints) * 150)
 }
 
