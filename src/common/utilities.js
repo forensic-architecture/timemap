@@ -257,7 +257,7 @@ export function mapClustersToLocations (clusters, locations) {
 }
 
 /* Loops through set of locations => events => associations and maps it to the appropriate color set*/
-export function calculateColorPercentages (locations, coloringSet) {
+export function calculateColorPercentages (set, coloringSet) {
   if (coloringSet.length === 0) return [1]
   const associationMap = {}
 
@@ -267,16 +267,18 @@ export function calculateColorPercentages (locations, coloringSet) {
 
   const associationCounts = new Array(coloringSet.length)
   associationCounts.fill(0)
+
   let totalAssociations = 0
 
-  locations.forEach(loc => {
-    const { events } = loc
-    events.forEach(evt => {
-      evt.associations.forEach(a => {
+  set.forEach(item => {
+    let innerSet = 'events' in item ? item.events : item
+
+    if (!Array.isArray(innerSet)) innerSet = [innerSet]
+
+    innerSet.forEach(val => {
+      val.associations.forEach(a => {
         const idx = associationMap[a]
-
         if (!idx && idx !== 0) return
-
         associationCounts[idx] += 1
         totalAssociations += 1
       })
