@@ -89,8 +89,18 @@ function ClusterEvents ({
     strokeWidth: 0
   }
 
-  function renderHover (txt) {
-    return <text text-anchor='middle' y='-3px' style={{ fontWeight: 'bold', fill: 'white' }}>{txt}</text>
+  function renderHover (txt, circleSize) {
+    return<>
+      <text text-anchor='middle' y='3px' style={{ fontWeight: 'bold', fill: 'black', zIndex: 10000 }}>{txt}</text>
+      <circle
+        class='event-hover'
+        cx='0'
+        cy='0'
+        r={circleSize + 2}
+        stroke={colors.primaryHighlight}
+        fill-opacity='0.0'
+      />
+    </>
   }
 
   return (
@@ -113,17 +123,7 @@ function ClusterEvents ({
               ...styles,
               fillOpacity: calcClusterOpacity(pointCount, totalPoints)
             }}
-            renderHover={clster => <>
-              <circle
-                class='event-hover'
-                cx='0'
-                cy='0'
-                r={clusterSize + 2}
-                stroke={colors.primaryHighlight}
-                fill-opacity='0.0'
-              />
-              {renderHover(pointCount)}
-            </>}
+            renderHover={() => renderHover(pointCount, clusterSize)}
           />
         })}
       </g>

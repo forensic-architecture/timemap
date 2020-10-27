@@ -299,14 +299,14 @@ class Map extends React.Component {
     Leaving these lines commented out renders all the locations on the map, regardless of whether or not they are clustered
     */
 
-    // const individualClusters = this.state.clusters.filter(cl => !cl.properties.cluster)
-    // const filteredLocations = mapClustersToLocations(individualClusters, this.props.domain.locations)
+    const individualClusters = this.state.clusters.filter(cl => !cl.properties.cluster)
+    const filteredLocations = mapClustersToLocations(individualClusters, this.props.domain.locations)
     return (
       <Events
         svg={this.svgRef.current}
         events={this.props.domain.events}
-        // locations={filteredLocations}
-        locations={this.props.domain.locations}
+        locations={filteredLocations}
+        // locations={this.props.domain.locations}
         styleLocation={this.styleLocation}
         categories={this.props.domain.categories}
         projectPoint={this.projectPoint}
