@@ -1,6 +1,8 @@
 import React from 'react'
 import * as d3 from 'd3'
 
+const TEXT_HEIGHT = 15
+
 class TimelineAxis extends React.Component {
   constructor () {
     super()
@@ -27,18 +29,19 @@ class TimelineAxis extends React.Component {
       fstFmt = '%H:%M'
     }
 
+    let { marginTop, contentHeight } = this.props.dims
     if (this.props.scaleX) {
       this.x0 =
         d3.axisBottom(this.props.scaleX)
           .ticks(10)
           .tickPadding(0)
-          .tickSize(this.props.dims.trackHeight)
+          .tickSize(contentHeight - TEXT_HEIGHT - marginTop)
           .tickFormat(d3.timeFormat(fstFmt))
 
       this.x1 =
         d3.axisBottom(this.props.scaleX)
           .ticks(10)
-          .tickPadding(this.props.dims.marginTop)
+          .tickPadding(marginTop)
           .tickSize(0)
           .tickFormat(d3.timeFormat(sndFmt))
 
@@ -59,18 +62,17 @@ class TimelineAxis extends React.Component {
   }
 
   render () {
-    const PADDING = 20
     return (
       <React.Fragment>
         <g
           ref={this.xAxis0Ref}
-          transform={`translate(0, ${PADDING})`}
+          transform={`translate(0, ${this.props.dims.marginTop})`}
           clipPath={`url(#clip)`}
           className={`axis xAxis`}
         />
         <g
           ref={this.xAxis1Ref}
-          transform={`translate(0, ${PADDING})`}
+          transform={`translate(0, ${this.props.dims.marginTop})`}
           clipPath={`url(#clip)`}
           className={`axis xAxis`}
         />
