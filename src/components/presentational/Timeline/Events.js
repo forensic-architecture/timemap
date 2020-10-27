@@ -1,21 +1,29 @@
 import React from 'react'
-import DatetimeDot from './DatetimeDot'
 import DatetimeBar from './DatetimeBar'
 import DatetimeSquare from './DatetimeSquare'
 import DatetimeStar from './DatetimeStar'
 import Project from './Project'
-import { calcOpacity, getEventCategories } from '../../../common/utilities'
+import ColoredMarkers from '../Map/ColoredMarkers.jsx'
+import { calcOpacity, getEventCategories, zipColorsToPercentages, calculateColorPercentages } from '../../../common/utilities'
 
 function renderDot (event, styles, props) {
-  return <DatetimeDot
-    onSelect={props.onSelect}
-    category={event.category}
-    events={[event]}
-    x={props.x}
-    y={props.y}
-    r={props.eventRadius}
-    styleProps={styles}
-  />
+  const colorPercentages = calculateColorPercentages([event], props.coloringSet)
+  return (
+    <g
+      className={'timeline-event'}
+      onClick={props.onSelect}
+      transform={`translate(${props.x}, ${props.y})`}
+    >
+      <ColoredMarkers
+        radius={props.eventRadius}
+        colorPercentMap={zipColorsToPercentages(props.filterColors, colorPercentages)}
+        styles={{
+          ...styles
+        }}
+        className={'event'}
+      />
+    </g>
+  )
 }
 
 function renderBar (event, styles, props) {
@@ -72,7 +80,9 @@ const TimelineEvents = ({
   features,
   setLoading,
   setNotLoading,
-  eventRadius
+  eventRadius,
+  filterColors,
+  coloringSet
 }) => {
   const narIds = narrative ? narrative.steps.map(s => s.id) : []
 
@@ -121,7 +131,9 @@ const TimelineEvents = ({
         onSelect: () => onSelect(event),
         dims,
         highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.filters[features.HIGHLIGHT_GROUPS.filterIndexIndicatingGroup]) : [],
-        features
+        features,
+        filterColors,
+        coloringSet
       })
     }
 

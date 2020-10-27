@@ -29,6 +29,7 @@ class Map extends React.Component {
     this.projectPoint = this.projectPoint.bind(this)
     this.onClusterSelect = this.onClusterSelect.bind(this)
     this.loadClusterData = this.loadClusterData.bind(this)
+    this.getClusterChildren = this.getClusterChildren.bind(this)
     this.svgRef = React.createRef()
     this.map = null
     this.superclusterIndex = null
@@ -171,6 +172,18 @@ class Map extends React.Component {
     }
   }
 
+  getClusterChildren (clusterId) {
+    if (this.superclusterIndex) {
+      try {
+        const children = this.superclusterIndex.getLeaves(clusterId, Infinity, 0)
+        return mapClustersToLocations(children, this.props.domain.locations)
+      } catch (err) {
+        return []
+      }
+    }
+    return []
+  }
+
   alignLayers () {
     const mapNode = document.querySelector('.leaflet-map-pane')
     if (mapNode === null) return { transformX: 0, transformY: 0 }
@@ -281,6 +294,11 @@ class Map extends React.Component {
   }
 
   renderEvents () {
+    /*
+    Uncomment below to filter out the locations already present in a cluster.
+    Leaving these lines commented out renders all the locations on the map, regardless of whether or not they are clustered
+    */
+
     const individualClusters = this.state.clusters.filter(cl => !cl.properties.cluster)
     const filteredLocations = mapClustersToLocations(individualClusters, this.props.domain.locations)
     return (
@@ -288,6 +306,7 @@ class Map extends React.Component {
         svg={this.svgRef.current}
         events={this.props.domain.events}
         locations={filteredLocations}
+        // locations={this.props.domain.locations}
         styleLocation={this.styleLocation}
         categories={this.props.domain.categories}
         projectPoint={this.projectPoint}
@@ -296,6 +315,9 @@ class Map extends React.Component {
         onSelect={this.props.methods.onSelect}
         getCategoryColor={this.props.methods.getCategoryColor}
         eventRadius={this.props.ui.eventRadius}
+        coloringSet={this.props.app.coloringSet}
+        filterColors={this.props.ui.filterColors}
+        features={this.props.features}
       />
     )
   }
@@ -310,6 +332,9 @@ class Map extends React.Component {
         clusters={allClusters}
         isRadial={this.props.ui.radial}
         onSelect={this.onClusterSelect}
+        coloringSet={this.props.app.coloringSet}
+        getClusterChildren={this.getClusterChildren}
+        filterColors={this.props.ui.filterColors}
       />
     )
   }
@@ -384,6 +409,7 @@ function mapStateToProps (state) {
       language: state.app.language,
       loading: state.app.loading,
       narrative: state.app.associations.narrative,
+      coloringSet: state.app.associations.coloringSet,
       flags: {
         isShowingSites: state.app.flags.isShowingSites,
         isFetchingDomain: state.app.flags.isFetchingDomain
@@ -396,7 +422,8 @@ function mapStateToProps (state) {
       mapSelectedEvents: state.ui.style.selectedEvents,
       shapes: state.ui.style.shapes,
       eventRadius: state.ui.eventRadius,
-      radial: state.ui.style.clusters.radial
+      radial: state.ui.style.clusters.radial,
+      filterColors: state.ui.coloring.colors
     },
     features: selectors.getFeatures(state)
   }

@@ -1,6 +1,8 @@
 import React from 'react'
 import Checkbox from '../presentational/Checkbox'
 import copy from '../../common/data/copy.json'
+import { getFilterIdxFromColorSet } from '../../common/utilities'
+import { colors } from '../../common/global'
 
 /** recursively get an array of node keys to toggle */
 function childrenToToggle (filter, activeFilters, parentOn) {
@@ -38,22 +40,33 @@ function FilterListPanel ({
   filters,
   activeFilters,
   onSelectFilter,
-  language
+  language,
+  coloringSet,
+  filterColors
 }) {
   function createNodeComponent (filter, depth) {
     const [key, children] = filter
     const matchingKeys = childrenToToggle(filter, activeFilters, activeFilters.includes(key))
+    const idxFromColorSet = getFilterIdxFromColorSet(key, coloringSet)
+
+    const assignedColor = idxFromColorSet !== -1 && activeFilters.includes(key) ? filterColors[idxFromColorSet] : colors.white
+
+    const styles = ({
+      color: assignedColor,
+      marginLeft: `${depth * 20}px`
+    })
 
     return (
       <li
         key={key.replace(/ /g, '_')}
         className={'filter-filter'}
-        style={{ marginLeft: `${depth * 20}px` }}
+        style={{ ...styles }}
       >
         <Checkbox
           label={key}
           isActive={activeFilters.includes(key)}
-          onClickCheckbox={() => onSelectFilter(matchingKeys)}
+          onClickCheckbox={() => onSelectFilter(key, matchingKeys)}
+          backgroundColor={assignedColor}
         />
         {Object.keys(children).length > 0
           ? Object.entries(children).map(filter => createNodeComponent(filter, depth + 1))

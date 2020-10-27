@@ -1,5 +1,5 @@
 import { mergeDeepLeft } from 'ramda'
-import global from '../common/global'
+import global, { colors } from '../common/global'
 
 const initial = {
   /*
@@ -35,6 +35,7 @@ const initial = {
     selected: [],
     source: null,
     associations: {
+      coloringSet: [],
       filters: [],
       narrative: null,
       categories: [],
@@ -63,8 +64,8 @@ const initial = {
       dimensions: {
         height: 250,
         width: 0,
-        marginLeft: 100,
-        marginTop: 15,
+        marginLeft: 70,
+        marginTop: 10, // the padding used for the day/month labels inside the timeline
         marginBottom: 60,
         contentHeight: 200,
         width_controls: 100
@@ -130,6 +131,10 @@ const initial = {
       clusters: {
         radial: false
       }
+    },
+    coloring: {
+      maxNumOfColors: 4,
+      colors: Object.values(colors)
     },
     dom: {
       timeline: 'timeline',

@@ -9,17 +9,61 @@ import FilterListPanel from './FilterListPanel'
 import CategoriesListPanel from './CategoriesListPanel'
 import BottomActions from './BottomActions'
 import copy from '../../common/data/copy.json'
-import { trimAndEllipse } from '../../common/utilities.js'
+import { trimAndEllipse, getImmediateFilterParent, getFilterSiblings } from '../../common/utilities.js'
 
 class Toolbar extends React.Component {
   constructor (props) {
     super(props)
+    this.onSelectFilter = this.onSelectFilter.bind(this)
     this.state = { _selected: -1 }
   }
 
   selectTab (selected) {
     const _selected = (this.state._selected === selected) ? -1 : selected
     this.setState({ _selected })
+  }
+
+  onSelectFilter (key, matchingKeys) {
+    const { filters, activeFilters, coloringSet, maxNumOfColors } = this.props
+
+    const parent = getImmediateFilterParent(filters, key)
+    const isTurningOff = activeFilters.includes(key)
+
+    if (!isTurningOff) {
+      const flattenedColoringSet = coloringSet.flatMap(f => f)
+      const newColoringSet = matchingKeys.filter(k => flattenedColoringSet.indexOf(k) === -1)
+      const updatedColoringSet = [...coloringSet, newColoringSet]
+
+      if (updatedColoringSet.length <= maxNumOfColors) {
+        this.props.actions.updateColoringSet(updatedColoringSet)
+      }
+    } else {
+      const newColoringSets = coloringSet.map(set => (
+        set.filter(s => {
+          return !matchingKeys.includes(s)
+        })
+      ))
+      this.props.actions.updateColoringSet(newColoringSets.filter(item => item.length !== 0))
+    }
+
+    if (parent) {
+      const parentOn = activeFilters.includes(parent)
+      if (parentOn) {
+        const siblings = getFilterSiblings(filters, parent, key)
+        let siblingsOff = true
+        for (let sibling of siblings) {
+          if (activeFilters.includes(sibling)) {
+            siblingsOff = false
+            break
+          }
+        }
+
+        if (siblingsOff && isTurningOff) {
+          matchingKeys.push(parent)
+        }
+      }
+    }
+    this.props.methods.onSelectFilter(matchingKeys)
   }
 
   renderClosePanel () {
@@ -75,8 +119,10 @@ class Toolbar extends React.Component {
         <FilterListPanel
           filters={this.props.filters}
           activeFilters={this.props.activeFilters}
-          onSelectFilter={this.props.methods.onSelectFilter}
+          onSelectFilter={this.onSelectFilter}
           language={this.props.language}
+          coloringSet={this.props.coloringSet}
+          filterColors={this.props.filterColors}
         />
       </TabPanel>
     )
@@ -190,6 +236,9 @@ function mapStateToProps (state) {
     narrative: state.app.associations.narrative,
     sitesShowing: state.app.flags.isShowingSites,
     infoShowing: state.app.flags.isInfopopup,
+    coloringSet: state.app.associations.coloringSet,
+    maxNumOfColors: state.ui.coloring.maxNumOfColors,
+    filterColors: state.ui.coloring.colors,
     features: selectors.getFeatures(state)
   }
 }
