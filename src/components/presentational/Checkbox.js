@@ -8,8 +8,8 @@ export default ({ label, isActive, onClickCheckbox, backgroundColor }) => {
 
   return (
     <div className={(isActive) ? 'item active' : 'item'}>
-      <span onClick={() => onClickCheckbox()}>{label}</span>
-      <button onClick={() => onClickCheckbox()}>
+      <span>{label}</span>
+      <button onClick={onClickCheckbox}>
         <div className='checkbox' style={styles} />
       </button>
     </div>
