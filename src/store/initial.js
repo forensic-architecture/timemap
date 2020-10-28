@@ -90,7 +90,6 @@ const initial = {
     flags: {
       isFetchingDomain: false,
       isFetchingSources: false,
-      isLoadingFilters: false,
       isCover: true,
       isCardstack: true,
       isInfopopup: false,

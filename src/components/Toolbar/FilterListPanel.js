@@ -25,8 +25,7 @@ function FilterListPanel ({
   onSelectFilter,
   language,
   coloringSet,
-  filterColors,
-  toggleIsLoadingFilters
+  filterColors
 }) {
   function createNodeComponent (filter, depth) {
     const [key, children] = filter
@@ -48,11 +47,7 @@ function FilterListPanel ({
         <Checkbox
           label={key}
           isActive={activeFilters.includes(key)}
-          onClickCheckbox={() => {
-            toggleIsLoadingFilters()
-            onSelectFilter(key, matchingKeys)
-            toggleIsLoadingFilters()
-          }}
+          onClickCheckbox={() => onSelectFilter(key, matchingKeys)}
           color={assignedColor}
         />
         {Object.keys(children).length > 0

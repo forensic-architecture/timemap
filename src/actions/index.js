@@ -334,13 +334,6 @@ export function updateSearchQuery (searchQuery) {
   }
 }
 
-export const TOGGLE_IS_LOADING_FILTERS = 'TOGGLE_IS_LOADING_FILTERS'
-export function toggleIsLoadingFilters () {
-  return {
-    type: TOGGLE_IS_LOADING_FILTERS
-  }
-}
-
 // ERRORS
 
 export const FETCH_SOURCE_ERROR = 'FETCH_SOURCE_ERROR'

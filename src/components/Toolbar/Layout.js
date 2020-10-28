@@ -20,7 +20,6 @@ class Toolbar extends React.Component {
   constructor (props) {
     super(props)
     this.onSelectFilter = this.onSelectFilter.bind(this)
-    this.handleIsLoading = this.handleIsLoading.bind(this)
     this.state = { _selected: -1, isLoadingFilters: false }
   }
 
@@ -29,11 +28,8 @@ class Toolbar extends React.Component {
     this.setState({ _selected })
   }
 
-  handleIsLoading () {
-    this.setState({ isLoadingFilters: !this.state.isLoadingFilters})
-  }
-
-  onSelectFilter (key, matchingKeys) {
+  async onSelectFilter (key, matchingKeys) {
+    // await this.setState({isLoadingFilters: true})
     const { filters, activeFilters, coloringSet, maxNumOfColors } = this.props
 
     const parent = getImmediateFilterParent(filters, key)
@@ -75,6 +71,7 @@ class Toolbar extends React.Component {
       }
     }
     this.props.methods.onSelectFilter(matchingKeys)
+    // await this.setState({ isLoadingFilters: false })
   }
 
   renderClosePanel () {
@@ -134,7 +131,6 @@ class Toolbar extends React.Component {
           language={this.props.language}
           coloringSet={this.props.coloringSet}
           filterColors={this.props.filterColors}
-          toggleIsLoadingFilters={() => this.handleIsLoading()}
         />
       </TabPanel>
     )
@@ -228,10 +224,10 @@ class Toolbar extends React.Component {
     const { isNarrative } = this.props
     return (
       <div id='toolbar-wrapper' className={`toolbar-wrapper ${(isNarrative) ? 'narrative-mode' : ''}`}>
-        <LoadingOverlay
+        {/* <LoadingOverlay
           isLoading={this.state.isLoadingFilters}
           language={this.props.language}
-        />
+        /> */}
         {this.renderToolbarTabs()}
         {this.renderToolbarPanels()}
       </div>
@@ -255,7 +251,6 @@ function mapStateToProps (state) {
     coloringSet: state.app.associations.coloringSet,
     maxNumOfColors: state.ui.coloring.maxNumOfColors,
     filterColors: state.ui.coloring.colors,
-    // isLoadingFilters: state.app.flags.isLoadingFilters,
     features: selectors.getFeatures(state)
   }
 }

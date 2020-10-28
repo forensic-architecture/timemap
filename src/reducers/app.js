@@ -25,8 +25,7 @@ import {
   SET_LOADING,
   SET_NOT_LOADING,
   SET_INITIAL_CATEGORIES,
-  UPDATE_SEARCH_QUERY,
-  TOGGLE_IS_LOADING_FILTERS
+  UPDATE_SEARCH_QUERY
 } from '../actions'
 
 function updateHighlighted (appState, action) {
@@ -208,7 +207,6 @@ const toggleFetchingSources = toggleFlagAC('isFetchingSources')
 const toggleInfoPopup = toggleFlagAC('isInfopopup')
 const toggleNotifications = toggleFlagAC('isNotification')
 const toggleCover = toggleFlagAC('isCover')
-const toggleIsLoadingFilters = toggleFlagAC('isLoadingFilters')
 
 function fetchSourceError (appState, action) {
   return {
@@ -306,8 +304,6 @@ function app (appState = initial.app, action) {
       return setInitialCategories(appState, action)
     case UPDATE_SEARCH_QUERY:
       return updateSearchQuery(appState, action)
-    case TOGGLE_IS_LOADING_FILTERS:
-      return toggleIsLoadingFilters(appState)
     default:
       return appState
   }
