@@ -64,6 +64,8 @@ class CardStack extends React.Component {
       return (<Card
         event={event}
         ref={thisRef}
+        renderOrder={this.props.cardUI.order}
+        renderExtra={this.props.cardUI.extra}
         sourceError={this.props.sourceError}
         language={this.props.language}
         isLoading={this.props.isLoading}
@@ -183,6 +185,7 @@ function mapStateToProps(state) {
     language: state.app.language,
     isCardstack: state.app.flags.isCardstack,
     isLoading: state.app.flags.isFetchingSources,
+    cardUI: state.ui.card,
     features: state.features
   }
 }
