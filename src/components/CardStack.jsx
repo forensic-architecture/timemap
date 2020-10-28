@@ -114,9 +114,9 @@ class CardStack extends React.Component {
           ],
           [
             {
-              kind: "links",
+              kind: event.hide_source === "FALSE" ? "links" : "markdown",
               title: "Sources",
-              value: event.links.map((href, idx) => ({ text: `Source ${idx + 1}`, href }))
+              value: event.hide_source === "FALSE" ? event.links.map((href, idx) => ({ text: `Source ${idx + 1}`, href })) : "Source hidden to protect the privacy and dignity of civilians. Read more [here](https://staging.forensic-architecture.org/wp-content/uploads/2020/09/2020.14.09-FA-Bcat-Mission-Statement.pdf)."
             },
           ]
           // [{ kind: "text", title: "Category", value: "Press attack" }],
