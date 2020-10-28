@@ -6,6 +6,7 @@ import * as selectors from '../../selectors'
 
 import { Tabs, TabPanel } from 'react-tabs'
 import FilterListPanel from './FilterListPanel'
+import LoadingOverlay from '../Overlay/Loading'
 import CategoriesListPanel from './CategoriesListPanel'
 import BottomActions from './BottomActions'
 import copy from '../../common/data/copy.json'
@@ -19,7 +20,8 @@ class Toolbar extends React.Component {
   constructor (props) {
     super(props)
     this.onSelectFilter = this.onSelectFilter.bind(this)
-    this.state = { _selected: -1 }
+    this.handleIsLoading = this.handleIsLoading.bind(this)
+    this.state = { _selected: -1, isLoadingFilters: false }
   }
 
   selectTab (selected) {
@@ -27,8 +29,11 @@ class Toolbar extends React.Component {
     this.setState({ _selected })
   }
 
+  handleIsLoading () {
+    this.setState({ isLoadingFilters: !this.state.isLoadingFilters})
+  }
+
   onSelectFilter (key, matchingKeys) {
-    this.props.actions.toggleIsLoadingFilters()
     const { filters, activeFilters, coloringSet, maxNumOfColors } = this.props
 
     const parent = getImmediateFilterParent(filters, key)
@@ -70,7 +75,6 @@ class Toolbar extends React.Component {
       }
     }
     this.props.methods.onSelectFilter(matchingKeys)
-    this.props.actions.toggleIsLoadingFilters()
   }
 
   renderClosePanel () {
@@ -130,7 +134,7 @@ class Toolbar extends React.Component {
           language={this.props.language}
           coloringSet={this.props.coloringSet}
           filterColors={this.props.filterColors}
-          isLoadingFilters={this.props.flags.isLoadingFilters}
+          toggleIsLoadingFilters={() => this.handleIsLoading()}
         />
       </TabPanel>
     )
@@ -222,9 +226,12 @@ class Toolbar extends React.Component {
 
   render () {
     const { isNarrative } = this.props
-
     return (
       <div id='toolbar-wrapper' className={`toolbar-wrapper ${(isNarrative) ? 'narrative-mode' : ''}`}>
+        <LoadingOverlay
+          isLoading={this.state.isLoadingFilters}
+          language={this.props.language}
+        />
         {this.renderToolbarTabs()}
         {this.renderToolbarPanels()}
       </div>
@@ -248,7 +255,7 @@ function mapStateToProps (state) {
     coloringSet: state.app.associations.coloringSet,
     maxNumOfColors: state.ui.coloring.maxNumOfColors,
     filterColors: state.ui.coloring.colors,
-    flags: state.app.flags,
+    // isLoadingFilters: state.app.flags.isLoadingFilters,
     features: selectors.getFeatures(state)
   }
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Checkbox from '../presentational/Checkbox'
 import copy from '../../common/data/copy.json'
 import { getFilterIdxFromColorSet } from '../../common/utilities'
@@ -26,7 +26,7 @@ function FilterListPanel ({
   language,
   coloringSet,
   filterColors,
-  isLoadingFilters
+  toggleIsLoadingFilters
 }) {
   function createNodeComponent (filter, depth) {
     const [key, children] = filter
@@ -48,7 +48,11 @@ function FilterListPanel ({
         <Checkbox
           label={key}
           isActive={activeFilters.includes(key)}
-          onClickCheckbox={() => onSelectFilter(key, matchingKeys)}
+          onClickCheckbox={() => {
+            toggleIsLoadingFilters()
+            onSelectFilter(key, matchingKeys)
+            toggleIsLoadingFilters()
+          }}
           color={assignedColor}
         />
         {Object.keys(children).length > 0
@@ -59,11 +63,12 @@ function FilterListPanel ({
   }
 
   function renderTree (filters) {
-    return (
+    const treeNodes = (
       <div>
         {Object.entries(filters).map(filter => createNodeComponent(filter, 1))}
       </div>
     )
+    return treeNodes
   }
 
   return (
