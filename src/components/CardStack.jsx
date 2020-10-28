@@ -80,9 +80,17 @@ class CardStack extends React.Component {
             {
               kind: "button",
               title: "Type of Violation",
-              value: event.associations.map(association => ({
+              value: event.associations.slice(0, -1).map(association => ({
                 text: association,
                 color: getFilterIdxFromColorSet(association, this.props.coloringSet) >= 0 ? this.props.colors[getFilterIdxFromColorSet(association, this.props.coloringSet)] : null,
+              })),
+            },
+            {
+              kind: "button",
+              title: "Against",
+              value: event.associations.slice(-1).map(category => ({
+                text: category,
+                color: null,
               })),
             },
           ],
