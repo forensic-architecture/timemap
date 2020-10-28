@@ -13,7 +13,8 @@ import Toolbar from './Toolbar/Layout'
 import CardStack from './CardStack.jsx'
 // import {CardStack} from '@forensic-architecture/design-system'
 import NarrativeControls from './presentational/Narrative/Controls.js'
-import InfoPopUp from './InfoPopup.jsx'
+import InfoPopup from './InfoPopup.jsx'
+import Popup from './presentational/Popup'
 import Timeline from './Timeline.jsx'
 import Notification from './Notification.jsx'
 import StateOptions from './StateOptions.jsx'
@@ -239,7 +240,7 @@ class Dashboard extends React.Component {
   }
 
   render () {
-    const { actions, app, domain, ui, features } = this.props
+    const { actions, app, domain, features } = this.props
     if (isMobile || window.innerWidth < 600) {
       const msg = 'This platform is not suitable for mobile. Please re-visit the site on a device with a larger screen.'
       return (
@@ -257,6 +258,13 @@ class Dashboard extends React.Component {
           ) : <div className='fixedTooSmallMessage'>{msg}</div>}
         </div>
       )
+    }
+
+    const popupStyles = {
+      fontSize: 24,
+      height: `calc(100vh - ${app.timeline.dimensions.height}px)`,
+      width: '40vw',
+      bottom: app.timeline.dimensions.height
     }
 
     return (
@@ -310,12 +318,19 @@ class Dashboard extends React.Component {
             onSelectNarrative: this.setNarrative
           }}
         />
-        <InfoPopUp
-          ui={ui}
-          app={app}
-          methods={{
-            onClose: actions.toggleInfoPopup
-          }}
+        <InfoPopup
+          language={app.language}
+          styles={popupStyles}
+          isOpen={app.flags.isInfopopup}
+          onClose={actions.toggleInfoPopup}
+        />
+        <Popup
+          title={process.env.display_title}
+          theme='dark'
+          isOpen={app.flags.isIntropopup}
+          onClose={actions.toggleIntroPopup}
+          content={app.intro}
+          styles={popupStyles}
         />
         {app.debug ? <Notification
           isNotification={app.flags.isNotification}

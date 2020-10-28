@@ -176,7 +176,9 @@ class TemplateCover extends React.Component {
             </div>
           </div>
 
-          <div className='md-container' dangerouslySetInnerHTML={{ __html: marked(this.props.cover.description) }} />
+          {Array.isArray(this.props.cover.description)
+            ? this.props.cover.description.map(e => <div className='md-container' dangerouslySetInnerHTML={{ __html: marked(e) }} />)
+            : <div className='md-container' dangerouslySetInnerHTML={{ __html: marked(this.props.cover.description) }} />}
 
           {videos ? (
             <div className='hero'>

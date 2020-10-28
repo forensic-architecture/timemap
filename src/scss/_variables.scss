@@ -1,6 +1,7 @@
 $event_default: red;
 
 $offwhite: #efefef;
+$offwhite-transparent: rgba(239,239,239, 0.9);
 $lightwhite: #dfdfdf;
 $midwhite: #a0a0a0;
 $darkwhite: darken($midwhite, 15%);
@@ -10,6 +11,7 @@ $green: rgb(61, 241, 79);
 $midgrey: rgb(44, 44, 44);
 $darkgrey: #232323;
 $black: #000000;
+$black-transparent: rgba(0,0,0,0.7);
 
 // Category colors
 $default:   red;
