@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { timeFormat, timeParse } from 'd3'
 import * as selectors from '../selectors'
+import { calculateColorPercentages, getFilterIdxFromColorSet } from '../common/utilities'
 
 // import Card from './Card.jsx'
 import { Card } from '@forensic-architecture/design-system/react'
@@ -81,8 +82,7 @@ class CardStack extends React.Component {
               title: "Type of Violation",
               value: event.associations.map(association => ({
                 text: association,
-                color: null,
-                onClick: () => console.log('hello')
+                color: getFilterIdxFromColorSet(association, this.props.coloringSet) >= 0 ? this.props.colors[getFilterIdxFromColorSet(association, this.props.coloringSet)] : null,
               })),
             },
           ],
@@ -232,6 +232,8 @@ function mapStateToProps(state) {
     isCardstack: state.app.flags.isCardstack,
     isLoading: state.app.flags.isFetchingSources,
     cardUI: state.ui.card,
+    colors: state.ui.coloring.colors,
+    coloringSet: state.app.associations.coloringSet,
     features: state.features
   }
 }
