@@ -6,9 +6,6 @@ function joiFromCustom (custom) {
     if (field.kind === 'text' || field.kind === 'link') {
       output[field.key] = Joi.string().allow('')
     }
-    if (field.kind === 'list') {
-      output[field.key] = Joi.array().allow('')
-    }
   })
   return output
 }
