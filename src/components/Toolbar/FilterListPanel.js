@@ -1,23 +1,19 @@
 import React from 'react'
 import Checkbox from '../presentational/Checkbox'
 import copy from '../../common/data/copy.json'
-import { getFilterIdxFromColorSet, getFilterParents } from '../../common/utilities'
-
-function hasOnParent (filters, activeFilters, filterKey) {
-  return getFilterParents(filters, filterKey).some(r => activeFilters.indexOf(r) >= 0)
-}
+import { getFilterIdxFromColorSet } from '../../common/utilities'
 
 /** recursively get an array of node keys to toggle */
-function childrenToToggle (filter, activeFilters, parentOn) {
+function getFiltersToToggle (filter, activeFilters) {
   const [key, children] = filter
-  const isOn = activeFilters.includes(key)
-  if (children === {}) {
-    return [key]
-  }
 
+  // base case: no children to recurse through
+  if (children === {}) return [key]
+
+  const turningOff = activeFilters.includes(key)
   let childKeys = Object.entries(children)
-    .flatMap(filter => childrenToToggle(filter, activeFilters, parentOn))
-    .filter(child => activeFilters.includes(child) === isOn)
+    .flatMap(filter => getFiltersToToggle(filter, activeFilters))
+    .filter(child => activeFilters.includes(child) === turningOff)
 
   childKeys.push(key)
   return childKeys
@@ -48,10 +44,7 @@ function FilterListPanel ({
 }) {
   function createNodeComponent (filter, depth) {
     const [key, children] = filter
-    const parentsActive = getFilterParents(filters, key).map(p => activeFilters.includes(p))
-
-    const anyParentActive = parentsActive.some(t => t)
-    const matchingKeys = childrenToToggle(filter, activeFilters, anyParentActive)
+    const matchingKeys = getFiltersToToggle(filter, activeFilters)
     const idxFromColorSet = getFilterIdxFromColorSet(key, coloringSet)
     const assignedColor = idxFromColorSet !== -1 && activeFilters.includes(key) ? filterColors[idxFromColorSet] : ''
 
@@ -69,8 +62,8 @@ function FilterListPanel ({
         <Checkbox
           label={key}
           isActive={activeFilters.includes(key)}
-          onClickCheckbox={() => { onSelectFilter(key, matchingKeys) }}
-          backgroundColor={assignedColor}
+          onClickCheckbox={() => onSelectFilter(key, matchingKeys)}
+          color={assignedColor}
         />
         {Object.keys(children).length > 0
           ? Object.entries(children).map(filter => createNodeComponent(filter, depth + 1))
