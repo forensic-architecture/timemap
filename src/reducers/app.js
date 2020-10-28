@@ -18,6 +18,7 @@ import {
   TOGGLE_FETCHING_DOMAIN,
   TOGGLE_FETCHING_SOURCES,
   TOGGLE_INFOPOPUP,
+  TOGGLE_INTROPOPUP,
   TOGGLE_NOTIFICATIONS,
   TOGGLE_COVER,
   FETCH_ERROR,
@@ -205,6 +206,7 @@ const toggleSites = toggleFlagAC('isShowingSites')
 const toggleFetchingDomain = toggleFlagAC('isFetchingDomain')
 const toggleFetchingSources = toggleFlagAC('isFetchingSources')
 const toggleInfoPopup = toggleFlagAC('isInfopopup')
+const toggleIntroPopup = toggleFlagAC('isIntropopup')
 const toggleNotifications = toggleFlagAC('isNotification')
 const toggleCover = toggleFlagAC('isCover')
 
@@ -287,6 +289,8 @@ function app (appState = initial.app, action) {
       return toggleFetchingSources(appState)
     case TOGGLE_INFOPOPUP:
       return toggleInfoPopup(appState)
+    case TOGGLE_INTROPOPUP:
+      return toggleIntroPopup(appState)
     case TOGGLE_NOTIFICATIONS:
       return toggleNotifications(appState)
     case TOGGLE_COVER:

@@ -93,6 +93,7 @@ const initial = {
       isCover: true,
       isCardstack: true,
       isInfopopup: false,
+      isIntropopup: false,
       isShowingSites: true
     },
     cover: {
@@ -169,5 +170,7 @@ if (process.env.store) {
 // NB: config.js dates get implicitly converted to strings in mergeDeepLeft
 appStore.app.timeline.range[0] = new Date(appStore.app.timeline.range[0])
 appStore.app.timeline.range[1] = new Date(appStore.app.timeline.range[1])
+
+appStore.app.flags.isIntropopup = !!appStore.app.intro
 
 export default appStore

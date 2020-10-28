@@ -94,9 +94,11 @@
       "default": {
         "header": "Navigating the Platform",
         "intro": [
-          "Open source research by [Bellingcat](https://bellingcat.com).<br/>Software and spatialisation by [Forensic Architecture](https://forensic-architecture.org).",
-          "Each event represents an occurence that is distinct in time or space, or both. An event is represented by a coloured circle on both the map and the timeline.",
-          "Select an event to reveal its content and sources. You can filter events by category or other specified filters in the top left toolbar."
+          "Each small **dot** represents a **datapoint**, or incident. Click on a dot to see details. Hover over a larger ‘**cluster**’ dot to see how many events it represents.",
+          "Zoom in either with a mouse-scroll or by clicking a ‘cluster’ dot.",
+          "Use **filters** and **categories** to segment the data. Selecting certain filters and categories will show only the datapoints that relate to them. If no filters or categories are selected, all the datapoints are displayed.",
+          "Selecting more than one filter will introduce colour-coded datapoints, which allow you to compare types of incident across time and space. This feature works up to a maximum of six filters.",
+          "Use the left and right arrows to move back and forward through time. Use the handles on the right to select a date range."
         ],
         "notation": "Combinations of colours within a circle indicate multiple events in a single location.",
         "arrows": "Use the left/right arrows on the keboard to move back and forth between events in time."
