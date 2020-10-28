@@ -951,6 +951,13 @@
   dependencies:
     arrify "^1.0.1"
 
+"@forensic-architecture/design-system@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@forensic-architecture/design-system/-/design-system-0.5.0.tgz#2a49ef9a7faa89126f979bbdd81c39916660fae9"
+  integrity sha512-ox2sDQ0ia+j6L5ugIrtbFcF8Bh3jLjAOfaMRUMjM4aA4ZzaF03EHx8wrBvlx1xLtLLWpHj0TJ7Ee1JiZZZtlTg==
+  dependencies:
+    marked "^1.1.1"
+
 "@types/glob@^7.1.1":
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-7.1.3.tgz#e6ba80f36b7daad2c685acd9266382e68985c183"
@@ -5342,6 +5349,11 @@ marked@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.7.0.tgz#b64201f051d271b1edc10a04d1ae9b74bb8e5c0e"
   integrity sha512-c+yYdCZJQrsRjTPhUx7VKkApw9bwDkNbHUKo1ovgcfDjb2kc8rLuRbIFyXL5WOEUwzSSKo3IXpph2K6DqB/KZg==
+
+marked@^1.1.1:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-1.2.2.tgz#5d77ffb789c4cb0ae828bfe76250f7140b123f70"
+  integrity sha512-5jjKHVl/FPo0Z6ocP3zYhKiJLzkwJAw4CZoLjv57FkvbUuwOX4LIBBGGcXjAY6ATcd1q9B8UTj5T9Umauj0QYQ==
 
 matcher@^1.1.1:
   version "1.1.1"
