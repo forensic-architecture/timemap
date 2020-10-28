@@ -1,25 +1,30 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { timeFormat, timeParse } from 'd3'
+import {
+  // timeFormat
+  timeParse
+} from 'd3'
 import * as selectors from '../selectors'
-import { calculateColorPercentages, getFilterIdxFromColorSet } from '../common/utilities'
+import {
+  // calculateColorPercentages,
+  getFilterIdxFromColorSet
+} from '../common/utilities'
 
 // import Card from './Card.jsx'
 import { Card } from '@forensic-architecture/design-system/react'
 import copy from '../common/data/copy.json'
 
-const formatTime = timeFormat("%d %B %Y");
-const parseTimeUS = timeParse("%-m/%-d/%Y");
+const parseTimeUS = timeParse('%-m/%-d/%Y')
 
 class CardStack extends React.Component {
-  constructor() {
+  constructor () {
     super()
     this.refs = {}
     this.refCardStack = React.createRef()
     this.refCardStackContent = React.createRef()
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     const isNarrative = !!this.props.narrative
 
     if (isNarrative) {
@@ -27,7 +32,7 @@ class CardStack extends React.Component {
     }
   }
 
-  scrollToCard() {
+  scrollToCard () {
     const duration = 500
     const element = this.refCardStack.current
     const cardScroll = this.refs[this.props.narrative.current].current.offsetTop
@@ -57,7 +62,7 @@ class CardStack extends React.Component {
     animateScroll()
   }
 
-  renderCards(events, selections) {
+  renderCards (events, selections) {
     // if no selections provided, select all
     if (!selections) { selections = events.map(e => true) }
     this.refs = []
@@ -71,53 +76,53 @@ class CardStack extends React.Component {
         ref={thisRef}
         // sourceError={this.props.sourceError}
         content={[
-          [{ kind: "tag", align: "end", value: `Incident #${event.incident_id}` }],
+          [{ kind: 'tag', align: 'end', value: `Incident #${event.incident_id}` }],
           [
-            { kind: "date", title: "Incident Date", value: parseTimeUS(event.date) },
-            { kind: "text", title: "Location", value: event.location },
+            { kind: 'date', title: 'Incident Date', value: parseTimeUS(event.date) },
+            { kind: 'text', title: 'Location', value: event.location }
           ],
           [
             {
-              kind: "button",
-              title: "Type of Violation",
+              kind: 'button',
+              title: 'Type of Violation',
               value: event.associations.slice(0, -1).map(association => ({
                 text: association,
-                color: getFilterIdxFromColorSet(association, this.props.coloringSet) >= 0 ? this.props.colors[getFilterIdxFromColorSet(association, this.props.coloringSet)] : null,
-              })),
+                color: getFilterIdxFromColorSet(association, this.props.coloringSet) >= 0 ? this.props.colors[getFilterIdxFromColorSet(association, this.props.coloringSet)] : null
+              }))
             },
             {
-              kind: "button",
-              title: "Against",
+              kind: 'button',
+              title: 'Against',
               value: event.associations.slice(-1).map(category => ({
                 text: category,
-                color: null,
-              })),
-            },
+                color: null
+              }))
+            }
           ],
           [
             {
-              kind: "text",
-              title: "Summary",
-              value: event.description,
-            },
+              kind: 'text',
+              title: 'Summary',
+              value: event.description
+            }
           ],
           [
             {
-              kind: "list",
-              title: "Law Enforcement Agencies",
-              value: event.le_agencys,
-            },
+              kind: 'list',
+              title: 'Law Enforcement Agencies',
+              value: event.le_agencys
+            }
           ],
           [
-            { kind: "text", title: "Name of reporter(s)", value: event.journalist_name },
-            { kind: "text", title: "Network", value: event.news_organisation },
+            { kind: 'text', title: 'Name of reporter(s)', value: event.journalist_name },
+            { kind: 'text', title: 'Network', value: event.news_organisation }
           ],
           [
             {
-              kind: event.hide_source === "FALSE" ? "links" : "markdown",
-              title: "Sources",
-              value: event.hide_source === "FALSE" ? event.links.map((href, idx) => ({ text: `Source ${idx + 1}`, href })) : "Source hidden to protect the privacy and dignity of civilians. Read more [here](https://staging.forensic-architecture.org/wp-content/uploads/2020/09/2020.14.09-FA-Bcat-Mission-Statement.pdf)."
-            },
+              kind: event.hide_source === 'FALSE' ? 'links' : 'markdown',
+              title: 'Sources',
+              value: event.hide_source === 'FALSE' ? event.links.map((href, idx) => ({ text: `Source ${idx + 1}`, href })) : 'Source hidden to protect the privacy and dignity of civilians. Read more [here](https://staging.forensic-architecture.org/wp-content/uploads/2020/09/2020.14.09-FA-Bcat-Mission-Statement.pdf).'
+            }
           ]
           // [{ kind: "text", title: "Category", value: "Press attack" }],
         ]}
@@ -136,7 +141,7 @@ class CardStack extends React.Component {
     })
   }
 
-  renderSelectedCards() {
+  renderSelectedCards () {
     const { selected } = this.props
 
     if (selected.length > 0) {
@@ -145,7 +150,7 @@ class CardStack extends React.Component {
     return null
   }
 
-  renderNarrativeCards() {
+  renderNarrativeCards () {
     const { narrative } = this.props
     const showing = narrative.steps
 
@@ -155,7 +160,7 @@ class CardStack extends React.Component {
     return this.renderCards(showing, selections)
   }
 
-  renderCardStackHeader() {
+  renderCardStackHeader () {
     const headerLang = copy[this.props.language].cardstack.header
 
     return (
@@ -172,7 +177,7 @@ class CardStack extends React.Component {
     )
   }
 
-  renderCardStackContent() {
+  renderCardStackContent () {
     return (
       <div id='card-stack-content' className='card-stack-content'>
         <ul>
@@ -182,7 +187,7 @@ class CardStack extends React.Component {
     )
   }
 
-  renderNarrativeContent() {
+  renderNarrativeContent () {
     return (
       <div id='card-stack-content' className='card-stack-content'
         ref={this.refCardStackContent}
@@ -194,7 +199,7 @@ class CardStack extends React.Component {
     )
   }
 
-  render() {
+  render () {
     const { isCardstack, selected, narrative, timelineDims } = this.props
     // TODO: make '237px', which is the narrative header, less hard-coded
     const height = `calc(100% - 237px - ${timelineDims.height}px)`
@@ -231,7 +236,7 @@ class CardStack extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     narrative: selectors.selectActiveNarrative(state),
     selected: selectors.selectSelected(state),
