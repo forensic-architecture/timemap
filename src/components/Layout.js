@@ -1,5 +1,5 @@
 /* global alert, Event */
-import React, { useState } from 'react'
+import React from 'react'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -240,7 +240,7 @@ class Dashboard extends React.Component {
   }
 
   render () {
-    const { actions, app, domain, ui, features } = this.props
+    const { actions, app, domain, features } = this.props
     if (isMobile || window.innerWidth < 600) {
       const msg = 'This platform is not suitable for mobile. Please re-visit the site on a device with a larger screen.'
       return (
