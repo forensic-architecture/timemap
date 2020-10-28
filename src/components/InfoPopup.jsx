@@ -53,8 +53,6 @@ export default ({ ui, app, methods }) => {
       <svg x='-10px' y='0px' width='100px' height='30px' viewBox='0 40 100 30' enableBackground='new 0 0 100 70'>
         <polyline fill='none' stroke={strokeFill} strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' stroke-miterlimit='10' points='
           8.376,63.723 47.287,63.723 60,46 80,46 ' />
-        {/* <line stroke={strokeFill} strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' x1='33.723' y1='59.663' x2='39.069' y2='63.723' /> */}
-        {/* <line stroke={strokeFill} strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' x1='33.723' y1='67.782' x2='39.069' y2='63.723' /> */}
         <line stroke={strokeFill} strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' x1='78.849' y1='41.94' x2='84.195' y2='46' />
         <line stroke={strokeFill} strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' x1='78.849' y1='50.06' x2='84.195' y2='46' />
       </svg>

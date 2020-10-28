@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
 
-import Card from './Card.jsx'
+// import Card from './Card.jsx'
+import { Card } from '@forensic-architecture/design-system/react'
 import copy from '../common/data/copy.json'
 
 class CardStack extends React.Component {
@@ -63,6 +64,8 @@ class CardStack extends React.Component {
       return (<Card
         event={event}
         ref={thisRef}
+        renderOrder={this.props.cardUI.order}
+        renderExtra={this.props.cardUI.extra}
         sourceError={this.props.sourceError}
         language={this.props.language}
         isLoading={this.props.isLoading}
@@ -182,6 +185,7 @@ function mapStateToProps (state) {
     language: state.app.language,
     isCardstack: state.app.flags.isCardstack,
     isLoading: state.app.flags.isFetchingSources,
+    cardUI: state.ui.card,
     features: state.features
   }
 }

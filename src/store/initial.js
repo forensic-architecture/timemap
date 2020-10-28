@@ -132,6 +132,10 @@ const initial = {
         radial: false
       }
     },
+    card: {
+      order: [[`renderTime`, `renderLocation`], [`renderSummary`], [`renderCustomFields`]],
+      extra: [[`renderSources`]]
+    },
     coloring: {
       maxNumOfColors: 4,
       colors: Object.values(colors)
