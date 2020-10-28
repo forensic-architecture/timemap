@@ -1,9 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {
-  // timeFormat
-  timeParse
-} from 'd3'
 import * as selectors from '../selectors'
 import {
   // calculateColorPercentages,
@@ -13,8 +9,6 @@ import {
 // import Card from './Card.jsx'
 import { Card } from '@forensic-architecture/design-system/react'
 import copy from '../common/data/copy.json'
-
-const parseTimeUS = timeParse('%-m/%-d/%Y')
 
 class CardStack extends React.Component {
   constructor () {
@@ -71,16 +65,44 @@ class CardStack extends React.Component {
       const thisRef = React.createRef()
       this.refs[idx] = thisRef
 
+      let precision
+      switch (event.location_precision) {
+        case `Generalised`:
+          precision = `No location data`
+          break
+        case `Estimated`:
+          precision = `Precise location estimated`
+          break
+        case `Self-reported`:
+          precision = `Location reported by witness`
+          break
+        case `Confirmed`:
+        default:
+          precision = null
+          break
+      }
+
       return (<Card
         // event={event}
         ref={thisRef}
         // sourceError={this.props.sourceError}
         content={[
           [{ kind: 'tag', align: 'end', value: `Incident #${event.incident_id}` }],
+          [{ kind: 'line' }],
           [
-            { kind: 'date', title: 'Incident Date', value: parseTimeUS(event.date) },
-            { kind: 'text', title: 'Location', value: event.location }
+            { kind: 'date', title: 'Incident Date', value: event.datetime },
+            { kind: 'text', title: 'Location', hoverValue: precision, value: event.location }
           ],
+          [{ kind: 'line-break', times: 0.4 }],
+          [
+            {
+              kind: 'text',
+              title: 'Summary',
+              value: event.description,
+              scaleFont: 1.1
+            }
+          ],
+          [{ kind: 'line-break', times: 0.4 }],
           [
             {
               kind: 'button',
@@ -99,13 +121,7 @@ class CardStack extends React.Component {
               }))
             }
           ],
-          [
-            {
-              kind: 'text',
-              title: 'Summary',
-              value: event.description
-            }
-          ],
+          [{ kind: 'line-break', times: 0.2 }],
           [
             {
               kind: 'list',
@@ -119,9 +135,9 @@ class CardStack extends React.Component {
           ],
           [
             {
-              kind: event.hide_source === 'FALSE' ? 'links' : 'markdown',
+              kind: event.hide_source === 'FALSE' ? 'button' : 'markdown',
               title: 'Sources',
-              value: event.hide_source === 'FALSE' ? event.links.map((href, idx) => ({ text: `Source ${idx + 1}`, href })) : 'Source hidden to protect the privacy and dignity of civilians. Read more [here](https://staging.forensic-architecture.org/wp-content/uploads/2020/09/2020.14.09-FA-Bcat-Mission-Statement.pdf).'
+              value: event.hide_source === 'FALSE' ? event.links.map((href, idx) => ({ text: `Source ${idx + 1}`, href, color: null, onClick: () => window.open(href, '_blank') })) : 'Source hidden to protect the privacy and dignity of civilians. Read more [here](https://staging.forensic-architecture.org/wp-content/uploads/2020/09/2020.14.09-FA-Bcat-Mission-Statement.pdf).'
             }
           ]
           // [{ kind: "text", title: "Category", value: "Press attack" }],
