@@ -1,27 +1,21 @@
 import React from 'react'
 import Checkbox from '../presentational/Checkbox'
 import copy from '../../common/data/copy.json'
-import { getFilterIdxFromColorSet, getFilterParents } from '../../common/utilities'
-import { colors } from '../../common/global'
-
-function hasOnParent (filters, activeFilters, filterKey) {
-  return getFilterParents(filters, filterKey).some(r => activeFilters.indexOf(r) >= 0)
-}
+import { getFilterIdxFromColorSet } from '../../common/utilities'
 
 /** recursively get an array of node keys to toggle */
-function childrenToToggle (filter, activeFilters, parentOn) {
+function getFiltersToToggle (filter, activeFilters) {
   const [key, children] = filter
-  const isOn = activeFilters.includes(key)
-  if (children === {}) {
-    return [key]
-  }
-  const childKeys = Object.entries(children)
-    .flatMap(filter => childrenToToggle(filter, activeFilters, isOn || parentOn))
-  // NB: if turning a parent off, don't toggle off children on.
-  //     likewise if turning a parent on, don't toggle on children off
-  if (!((!parentOn && isOn) || (parentOn && !isOn))) {
-    childKeys.push(key)
-  }
+
+  // base case: no children to recurse through
+  if (children === {}) return [key]
+
+  const turningOff = activeFilters.includes(key)
+  let childKeys = Object.entries(children)
+    .flatMap(filter => getFiltersToToggle(filter, activeFilters))
+    .filter(child => activeFilters.includes(child) === turningOff)
+
+  childKeys.push(key)
   return childKeys
 }
 
@@ -50,12 +44,9 @@ function FilterListPanel ({
 }) {
   function createNodeComponent (filter, depth) {
     const [key, children] = filter
-    const anyParentOn = activeFilters.includes(key) || hasOnParent(filters, activeFilters, key)
-    const matchingKeys = childrenToToggle(filter, activeFilters, anyParentOn)
-
+    const matchingKeys = getFiltersToToggle(filter, activeFilters)
     const idxFromColorSet = getFilterIdxFromColorSet(key, coloringSet)
-
-    const assignedColor = idxFromColorSet !== -1 && activeFilters.includes(key) ? filterColors[idxFromColorSet] : colors.white
+    const assignedColor = idxFromColorSet !== -1 && activeFilters.includes(key) ? filterColors[idxFromColorSet] : ''
 
     const styles = ({
       color: assignedColor,
@@ -71,8 +62,8 @@ function FilterListPanel ({
         <Checkbox
           label={key}
           isActive={activeFilters.includes(key)}
-          onClickCheckbox={() => { onSelectFilter(key, matchingKeys) }}
-          backgroundColor={assignedColor}
+          onClickCheckbox={() => onSelectFilter(key, matchingKeys)}
+          color={assignedColor}
         />
         {Object.keys(children).length > 0
           ? Object.entries(children).map(filter => createNodeComponent(filter, depth + 1))
