@@ -260,6 +260,13 @@ class Dashboard extends React.Component {
       )
     }
 
+    const popupStyles = {
+      fontSize: 24,
+      height: `calc(100vh - ${app.timeline.dimensions.height}px)`,
+      width: '40vw',
+      bottom: app.timeline.dimensions.height
+    }
+
     return (
       <div>
         <Toolbar
@@ -313,7 +320,7 @@ class Dashboard extends React.Component {
         />
         <InfoPopup
           language={app.language}
-          dims={app.timeline.dimensions}
+          styles={popupStyles}
           isOpen={app.flags.isInfopopup}
           onClose={actions.toggleInfoPopup}
         />
@@ -323,12 +330,7 @@ class Dashboard extends React.Component {
           isOpen={app.flags.isIntropopup}
           onClose={actions.toggleIntroPopup}
           content={app.intro}
-          styles={{
-            fontSize: 24,
-            height: `calc(100vh - ${app.timeline.dimensions.height}px)`,
-            width: '40vw',
-            bottom: app.timeline.dimensions.height
-          }}
+          styles={popupStyles}
         />
         {app.debug ? <Notification
           isNotification={app.flags.isNotification}
