@@ -9,7 +9,11 @@ import FilterListPanel from './FilterListPanel'
 import CategoriesListPanel from './CategoriesListPanel'
 import BottomActions from './BottomActions'
 import copy from '../../common/data/copy.json'
-import { trimAndEllipse, getImmediateFilterParent, getFilterSiblings, getFilterParents } from '../../common/utilities.js'
+import {
+  trimAndEllipse,
+  getImmediateFilterParent,
+  getFilterSiblings,
+  getFilterParents } from '../../common/utilities.js'
 
 class Toolbar extends React.Component {
   constructor (props) {
@@ -24,6 +28,7 @@ class Toolbar extends React.Component {
   }
 
   onSelectFilter (key, matchingKeys) {
+    this.props.actions.toggleIsLoadingFilters()
     const { filters, activeFilters, coloringSet, maxNumOfColors } = this.props
 
     const parent = getImmediateFilterParent(filters, key)
@@ -65,6 +70,7 @@ class Toolbar extends React.Component {
       }
     }
     this.props.methods.onSelectFilter(matchingKeys)
+    this.props.actions.toggleIsLoadingFilters()
   }
 
   renderClosePanel () {
@@ -118,12 +124,13 @@ class Toolbar extends React.Component {
     return (
       <TabPanel>
         <FilterListPanel
-          filters={this.props.filters}
+          filters={this.props.filterPaths}
           activeFilters={this.props.activeFilters}
           onSelectFilter={this.onSelectFilter}
           language={this.props.language}
           coloringSet={this.props.coloringSet}
           filterColors={this.props.filterColors}
+          isLoadingFilters={this.props.flags.isLoadingFilters}
         />
       </TabPanel>
     )
@@ -228,6 +235,7 @@ class Toolbar extends React.Component {
 function mapStateToProps (state) {
   return {
     filters: selectors.getFilters(state),
+    filterPaths: selectors.selectFilterPaths(state),
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
     language: state.app.language,
@@ -240,6 +248,7 @@ function mapStateToProps (state) {
     coloringSet: state.app.associations.coloringSet,
     maxNumOfColors: state.ui.coloring.maxNumOfColors,
     filterColors: state.ui.coloring.colors,
+    flags: state.app.flags,
     features: selectors.getFeatures(state)
   }
 }

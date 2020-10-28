@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { insetSourceFrom, dateMin, dateMax, isLatitude, isLongitude } from '../common/utilities'
+import { insetSourceFrom, dateMin, dateMax, isLatitude, isLongitude, aggregatePaths } from '../common/utilities'
 import { isTimeRangedIn } from './helpers'
 import { ASSOCIATION_MODES } from '../common/constants'
 
@@ -71,6 +71,13 @@ export const selectEvents = createSelector(
       return acc
     }, [])
   })
+
+export const selectFilterPaths = createSelector(
+  [getFilters],
+  (filters) => {
+    return aggregatePaths(filters)
+  }
+)
 
 /**
  * Of all available events, selects those that fall within the time range,

@@ -299,6 +299,19 @@ export function mapClustersToLocations (clusters, locations) {
   }, [])
 }
 
+export function aggregatePaths (filters) {
+  function insertPath (children = {}, [headOfPath, ...remainder]) {
+    let childKey = Object.keys(children).find(key => key === headOfPath)
+    if (!childKey) children[headOfPath] = {}
+    if (remainder.length > 0) insertPath(children[headOfPath], remainder)
+    return children
+  }
+  const allPaths = []
+  filters.forEach(filterItem => allPaths.push(filterItem.filter_paths))
+  let aggregatedPaths = allPaths.reduce((children, path) => insertPath(children, path), {})
+  return aggregatedPaths
+}
+
 /**
  * Loops through a set of either locations or events
  * and calculates the proportionate percentage of every given association in relation to the coloring set

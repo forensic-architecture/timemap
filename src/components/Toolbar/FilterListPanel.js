@@ -19,28 +19,14 @@ function getFiltersToToggle (filter, activeFilters) {
   return childKeys
 }
 
-function aggregatePaths (filters) {
-  function insertPath (children = {}, [headOfPath, ...remainder]) {
-    let childKey = Object.keys(children).find(key => key === headOfPath)
-    if (!childKey) children[headOfPath] = {}
-    if (remainder.length > 0) insertPath(children[headOfPath], remainder)
-    return children
-  }
-
-  const allPaths = []
-  filters.forEach(filterItem => allPaths.push(filterItem.filter_paths))
-
-  let aggregatedPaths = allPaths.reduce((children, path) => insertPath(children, path), {})
-  return aggregatedPaths
-}
-
 function FilterListPanel ({
   filters,
   activeFilters,
   onSelectFilter,
   language,
   coloringSet,
-  filterColors
+  filterColors,
+  isLoadingFilters
 }) {
   function createNodeComponent (filter, depth) {
     const [key, children] = filter
@@ -73,11 +59,9 @@ function FilterListPanel ({
   }
 
   function renderTree (filters) {
-    const aggregatedFilterPaths = aggregatePaths(filters)
-
     return (
       <div>
-        {Object.entries(aggregatedFilterPaths).map(filter => createNodeComponent(filter, 1))}
+        {Object.entries(filters).map(filter => createNodeComponent(filter, 1))}
       </div>
     )
   }
