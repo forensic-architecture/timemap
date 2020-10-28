@@ -70,6 +70,7 @@ class CardStack extends React.Component {
         ref={thisRef}
         // sourceError={this.props.sourceError}
         content={[
+          [{ kind: "tag", align: "end", value: `Incident #${event.incident_id}` }],
           [
             { kind: "date", title: "Incident Date", value: parseTimeUS(event.date) },
             { kind: "text", title: "Location", value: event.location },
@@ -103,6 +104,13 @@ class CardStack extends React.Component {
             { kind: "text", title: "Name of reporter(s)", value: event.journalist_name },
             { kind: "text", title: "Network", value: event.news_organisation },
           ],
+          [
+            {
+              kind: "links",
+              title: "Sources",
+              value: event.links.map((href, idx) => ({ text: `Source ${idx + 1}`, href }))
+            },
+          ]
           // [{ kind: "text", title: "Category", value: "Press attack" }],
         ]}
         language={this.props.language}
