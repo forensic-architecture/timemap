@@ -1,5 +1,5 @@
 /* global alert, Event */
-import React from 'react'
+import React, { useState } from 'react'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -13,7 +13,8 @@ import Toolbar from './Toolbar/Layout'
 import CardStack from './CardStack.jsx'
 // import {CardStack} from '@forensic-architecture/design-system'
 import NarrativeControls from './presentational/Narrative/Controls.js'
-import InfoPopUp from './InfoPopup.jsx'
+import InfoPopup from './InfoPopup.jsx'
+import Popup from './presentational/Popup'
 import Timeline from './Timeline.jsx'
 import Notification from './Notification.jsx'
 import StateOptions from './StateOptions.jsx'
@@ -310,11 +311,23 @@ class Dashboard extends React.Component {
             onSelectNarrative: this.setNarrative
           }}
         />
-        <InfoPopUp
-          ui={ui}
-          app={app}
-          methods={{
-            onClose: actions.toggleInfoPopup
+        <InfoPopup
+          language={app.language}
+          dims={app.timeline.dimensions}
+          isOpen={app.flags.isInfopopup}
+          onClose={actions.toggleInfoPopup}
+        />
+        <Popup
+          title={process.env.display_title}
+          theme='dark'
+          isOpen={app.flags.isIntropopup}
+          onClose={actions.toggleIntroPopup}
+          content={app.intro}
+          styles={{
+            fontSize: 24,
+            height: `calc(100vh - ${app.timeline.dimensions.height}px)`,
+            width: '40vw',
+            bottom: app.timeline.dimensions.height
           }}
         />
         {app.debug ? <Notification

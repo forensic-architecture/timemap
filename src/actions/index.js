@@ -305,6 +305,13 @@ export function toggleInfoPopup () {
   }
 }
 
+export const TOGGLE_INTROPOPUP = 'TOGGLE_INTROPOPUP'
+export function toggleIntroPopup () {
+  return {
+    type: TOGGLE_INTROPOPUP
+  }
+}
+
 export const TOGGLE_NOTIFICATIONS = 'TOGGLE_NOTIFICATIONS'
 export function toggleNotifications () {
   return {
