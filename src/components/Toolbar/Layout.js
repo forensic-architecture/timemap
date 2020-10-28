@@ -31,7 +31,6 @@ class Toolbar extends React.Component {
 
     if (!isTurningOff) {
       const flattenedColoringSet = coloringSet.flatMap(f => f)
-      console.info('TURNING ON: ', key, matchingKeys, activeFilters)
       const newColoringSet = matchingKeys.filter(k => flattenedColoringSet.indexOf(k) === -1)
 
       const updatedColoringSet = [...coloringSet, newColoringSet]
@@ -40,7 +39,6 @@ class Toolbar extends React.Component {
         this.props.actions.updateColoringSet(updatedColoringSet)
       }
     } else {
-      console.info('TURNING OFF: ', key, matchingKeys, activeFilters)
       const newColoringSets = coloringSet.map(set => (
         set.filter(s => {
           return !matchingKeys.includes(s)

@@ -2,7 +2,6 @@ import React from 'react'
 import Checkbox from '../presentational/Checkbox'
 import copy from '../../common/data/copy.json'
 import { getFilterIdxFromColorSet, getFilterParents } from '../../common/utilities'
-import { colors } from '../../common/global'
 
 function hasOnParent (filters, activeFilters, filterKey) {
   return getFilterParents(filters, filterKey).some(r => activeFilters.indexOf(r) >= 0)
@@ -12,28 +11,15 @@ function hasOnParent (filters, activeFilters, filterKey) {
 function childrenToToggle (filter, activeFilters, parentOn) {
   const [key, children] = filter
   const isOn = activeFilters.includes(key)
-  // if (key === 'Chemical') {
-  //   console.info(activeFilters)
-  //   console.info('IS ON: ', isOn, 'PARENT ON: ', parentOn)
-  // }
   if (children === {}) {
     return [key]
   }
+
   let childKeys = Object.entries(children)
-    .flatMap(filter => childrenToToggle(filter, activeFilters, isOn || parentOn))
-  // NB: if turning a parent off, don't toggle off children on.
-  //     likewise if turning a parent on, don't toggle on children off
-  // if (!((!parentOn && isOn) || (parentOn && !isOn))) {
-  //   childKeys.push(key)
-  // }
+    .flatMap(filter => childrenToToggle(filter, activeFilters, parentOn))
+    .filter(child => activeFilters.includes(child) === isOn)
+
   childKeys.push(key)
-  // if (parentOn && isOn) {
-  //   childKeys = childKeys.filter(k => k !== key)
-  // }
-  // childKeys.push(key)
-  // if ((!parentOn && isOn) || (parentOn && !isOn)) {
-  //   childKeys = childKeys.filter(k => k !== key)
-  // }
   return childKeys
 }
 
@@ -62,15 +48,11 @@ function FilterListPanel ({
 }) {
   function createNodeComponent (filter, depth) {
     const [key, children] = filter
-    const anyParentInFilters = getFilterParents(filters, key).some(r => activeFilters.indexOf(r) >= 0)
+    const parentsActive = getFilterParents(filters, key).map(p => activeFilters.includes(p))
 
-    const anyParentOn = activeFilters.includes(key) || anyParentInFilters
-    // if (key === 'Chemical') {
-    //   console.info('ANY PARENT IN FILTERS: ', anyParentInFilters, 'ANY PARENT ON: ', anyParentOn)
-    // }
-    const matchingKeys = childrenToToggle(filter, activeFilters, anyParentOn)
+    const anyParentActive = parentsActive.some(t => t)
+    const matchingKeys = childrenToToggle(filter, activeFilters, anyParentActive)
     const idxFromColorSet = getFilterIdxFromColorSet(key, coloringSet)
-    // console.info(activeFilters)
     const assignedColor = idxFromColorSet !== -1 && activeFilters.includes(key) ? filterColors[idxFromColorSet] : ''
 
     const styles = ({
