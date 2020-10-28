@@ -321,12 +321,12 @@ class Dashboard extends React.Component {
           notifications={domain.notifications}
           onToggle={actions.markNotificationsRead}
         /> : null}
-        <Search
+        {features.USE_SEARCH && (<Search
           narrative={app.narrative}
           queryString={app.searchQuery}
           events={domain.events}
           onSearchRowClick={this.handleSelect}
-        />
+        />)}
         {app.source ? (
           <MediaOverlay
             source={app.source}

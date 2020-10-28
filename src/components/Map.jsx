@@ -113,7 +113,6 @@ class Map extends React.Component {
     map.zoomControl.remove()
 
     map.on('moveend', () => {
-      // console.log(map.getZoom())
       this.updateClusters()
       this.alignLayers()
     })
@@ -211,7 +210,9 @@ class Map extends React.Component {
 
   onClusterSelect ({ id, latitude, longitude }) {
     const expansionZoom = Math.max(this.superclusterIndex.getClusterExpansionZoom(parseInt(id)), this.superclusterIndex.options.minZoom)
-    this.map.flyTo(new L.LatLng(latitude, longitude), expansionZoom)
+    const zoomLevelsToSkip = 2
+    const zoomToFly = Math.max(expansionZoom + zoomLevelsToSkip, this.props.app.cluster.maxZoom)
+    this.map.flyTo(new L.LatLng(latitude, longitude), zoomToFly)
   }
 
   getClientDims () {

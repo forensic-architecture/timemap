@@ -31,13 +31,16 @@ class Toolbar extends React.Component {
 
     if (!isTurningOff) {
       const flattenedColoringSet = coloringSet.flatMap(f => f)
+      console.info('TURNING ON: ', key, matchingKeys, activeFilters)
       const newColoringSet = matchingKeys.filter(k => flattenedColoringSet.indexOf(k) === -1)
+
       const updatedColoringSet = [...coloringSet, newColoringSet]
 
       if (updatedColoringSet.length <= maxNumOfColors) {
         this.props.actions.updateColoringSet(updatedColoringSet)
       }
     } else {
+      console.info('TURNING OFF: ', key, matchingKeys, activeFilters)
       const newColoringSets = coloringSet.map(set => (
         set.filter(s => {
           return !matchingKeys.includes(s)
@@ -46,9 +49,8 @@ class Toolbar extends React.Component {
       this.props.actions.updateColoringSet(newColoringSets.filter(item => item.length !== 0))
     }
 
-    if (parent) {
-      const parentOn = activeFilters.includes(parent)
-      if (parentOn) {
+    if (isTurningOff) {
+      if (parent && activeFilters.includes(parent)) {
         const siblings = getFilterSiblings(filters, parent, key)
         let siblingsOff = true
         for (let sibling of siblings) {
@@ -58,13 +60,12 @@ class Toolbar extends React.Component {
           }
         }
 
-        if (siblingsOff && isTurningOff) {
+        if (siblingsOff) {
           const grandparentsOn = getFilterParents(filters, key).filter(filt => activeFilters.includes(filt))
           matchingKeys = matchingKeys.concat(grandparentsOn)
         }
       }
     }
-
     this.props.methods.onSelectFilter(matchingKeys)
   }
 
