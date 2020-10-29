@@ -52,6 +52,14 @@
     }
   }
 
+  &.mobile {
+    border: none;
+    padding: 5vmin;
+    .side-menu-burg {
+      display: none;
+    }
+  }
+
 
   .legend {
     display: flex;
