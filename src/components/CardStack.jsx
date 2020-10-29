@@ -1,6 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as selectors from '../selectors'
+import {
+  // calculateColorPercentages,
+  getFilterIdxFromColorSet
+} from '../common/utilities'
 
 // import Card from './Card.jsx'
 import { Card } from '@forensic-architecture/design-system/react'
@@ -61,23 +65,94 @@ class CardStack extends React.Component {
       const thisRef = React.createRef()
       this.refs[idx] = thisRef
 
+      let precision
+      switch (event.location_precision) {
+        case `Generalised`:
+          precision = `No location data`
+          break
+        case `Estimated`:
+          precision = `Precise location estimated`
+          break
+        case `Self-reported`:
+          precision = `Location reported by witness`
+          break
+        case `Confirmed`:
+        default:
+          precision = null
+          break
+      }
+
       return (<Card
-        event={event}
+        // event={event}
         ref={thisRef}
-        renderOrder={this.props.cardUI.order}
-        renderExtra={this.props.cardUI.extra}
-        sourceError={this.props.sourceError}
+        // sourceError={this.props.sourceError}
+        content={[
+          [{ kind: 'tag', align: 'end', value: `Incident #${event.incident_id}` }],
+          [{ kind: 'line' }],
+          [
+            { kind: 'date', title: 'Incident Date', value: event.datetime },
+            { kind: 'text', title: 'Location', hoverValue: precision, value: event.location }
+          ],
+          [{ kind: 'line-break', times: 0.4 }],
+          [
+            {
+              kind: 'text',
+              title: 'Summary',
+              value: event.description,
+              scaleFont: 1.1
+            }
+          ],
+          [{ kind: 'line-break', times: 0.4 }],
+          [
+            {
+              kind: 'button',
+              title: 'Type of Violation',
+              value: event.associations.slice(0, -1).map(association => ({
+                text: association,
+                color: getFilterIdxFromColorSet(association, this.props.coloringSet) >= 0 ? this.props.colors[getFilterIdxFromColorSet(association, this.props.coloringSet)] : null
+              }))
+            },
+            {
+              kind: 'button',
+              title: 'Against',
+              value: event.associations.slice(-1).map(category => ({
+                text: category,
+                color: null
+              }))
+            }
+          ],
+          [{ kind: 'line-break', times: 0.2 }],
+          [
+            {
+              kind: 'list',
+              title: 'Law Enforcement Agencies',
+              value: event.le_agencys
+            }
+          ],
+          [
+            { kind: 'text', title: 'Name of reporter(s)', value: event.journalist_name },
+            { kind: 'text', title: 'Network', value: event.news_organisation }
+          ],
+          [
+            {
+              kind: event.hide_source === 'FALSE' ? 'button' : 'markdown',
+              title: 'Sources',
+              value: event.hide_source === 'FALSE' ? event.links.map((href, idx) => ({ text: `Source ${idx + 1}`, href, color: null, onClick: () => window.open(href, '_blank') })) : 'Source hidden to protect the privacy and dignity of civilians. Read more [here](https://staging.forensic-architecture.org/wp-content/uploads/2020/09/2020.14.09-FA-Bcat-Mission-Statement.pdf).'
+            }
+          ]
+          // [{ kind: "text", title: "Category", value: "Press attack" }],
+        ]}
         language={this.props.language}
         isLoading={this.props.isLoading}
         isSelected={selections[idx]}
-        getCategoryGroup={this.props.getCategoryGroup}
-        getCategoryColor={this.props.getCategoryColor}
-        getCategoryLabel={this.props.getCategoryLabel}
-        onViewSource={this.props.onViewSource}
-        onHighlight={this.props.onHighlight}
-        onSelect={this.props.onSelect}
-        idx={idx}
-        features={this.props.features}
+      // getNarrativeLinks={this.props.getNarrativeLinks}
+      // getCategoryGroup={this.props.getCategoryGroup}
+      // getCategoryColor={this.props.getCategoryColor}
+      // getCategoryLabel={this.props.getCategoryLabel}
+      // onViewSource={this.props.onViewSource}
+      // onHighlight={this.props.onHighlight}
+      // onSelect={this.props.onSelect}
+      // features={this.props.features}
       />)
     })
   }
@@ -186,6 +261,8 @@ function mapStateToProps (state) {
     isCardstack: state.app.flags.isCardstack,
     isLoading: state.app.flags.isFetchingSources,
     cardUI: state.ui.card,
+    colors: state.ui.coloring.colors,
+    coloringSet: state.app.associations.coloringSet,
     features: state.features
   }
 }
