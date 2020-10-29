@@ -46,7 +46,6 @@
     top: 0;
     max-width: $toolbar-width;
     max-height: 30px;
-    display: none;
     justify-content: center;
     align-items: center;
     .cover-logo-container {
@@ -224,7 +223,7 @@
       ul {
         list-style: none;
       }
-  
+
       li::before {
         content: "* ";
       }
