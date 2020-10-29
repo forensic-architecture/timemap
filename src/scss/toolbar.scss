@@ -38,7 +38,6 @@
       transition: 0.2s ease;
       border-bottom: 2px solid $midwhite;
       text-transform: uppercase;
-      font-family: Helvetica, serif;
       cursor: pointer;
 
       p {
@@ -82,7 +81,6 @@
         margin-top: 10px;
         display: block;
         outline: none;
-        font-family: 'Lato';
         font-size: $xsmall;
         cursor: pointer;
         transition: 0.2s ease;
@@ -250,7 +248,6 @@
   box-sizing: border-box;
   padding: 30px 10px 10px 30px;
   font-size: $normal;
-  font-family: 'Lato', Helvetica, sans-serif;
   background: $black;
   color: $offwhite;
   position: fixed;
@@ -259,7 +256,6 @@
   box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3), 10px 15px 12px rgba(0, 0, 0, 0.22);
 
   h2 {
-    font-family: Helvetica, 'Georgia', 'serif';
     font-size: $large;
     text-transform: none;
     letter-spacing: normal;
@@ -267,7 +263,6 @@
 
   p {
     font-size: $normal;
-    font-family: Helvetica, 'Georgia', 'serif';
     line-height: 1.4em;
   };
 
@@ -365,7 +360,6 @@
     margin: 20px 0;
     padding: 5px 10px;
     font-size: 18px;
-    font-family: 'Lato', sans-serif;
     letter-spacing: 0.1em;
     transition: 0.2s ease;
     border-color: $midwhite;
@@ -382,7 +376,6 @@
     height: 36px;
     line-height: 36px;
     background: none;
-    font-family: 'Lato', Helvetica, sans-serif;
     font-size: $large;
 
     button {
@@ -416,7 +409,6 @@
       float: left;
       color: $offwhite;
       font-size: $normal;
-      font-family: Helvetica, 'Georgia', 'serif';
       overflow: hidden;
     }
 
@@ -461,7 +453,6 @@
       color: $offwhite;
       cursor: pointer;
       outline: none;
-      font-family: 'Lato', Helvetica, sans-serif;
       text-transform: uppercase;
       margin-bottom: 10px;
       transition: 0.2s ease;

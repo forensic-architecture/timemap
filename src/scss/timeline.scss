@@ -158,7 +158,6 @@
         }
 
         text {
-          font-family: 'Lato', Helvetica, sans-serif;
           fill: $midwhite;
           text-transform: capitalize;
         }
@@ -179,7 +178,6 @@
 
         .tick text {
           font-size: 10px;
-          font-family: 'Lato';
           text-anchor: end;
         }
       }

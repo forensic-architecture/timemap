@@ -170,7 +170,6 @@
   }
 
   .timestamp {
-    font-family: 'Lato', Helvetica, sans-serif;
     margin-top: 0;
 
     .estimated-timestamp {
@@ -194,10 +193,6 @@
       text-align: right;
       flex: 1;
     }
-  }
-
-  .location {
-    font-family: 'Lato', Helvetica, sans-serif;
   }
 
   .summary {

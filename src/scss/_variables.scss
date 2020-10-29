@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'GT-Zirkon';
+  src: url(../assets/fonts/GT-Zirkon-Regular.woff);
+}
+
 $event_default: red;
 
 $offwhite: #efefef;
@@ -24,6 +29,7 @@ $other:     yellow;
 .alpha { background: $alpha; }
 .beta { background: $beta; }
 
+$mainfont: 'GT-Zirkon', 'Lato', Helvetica, sans-serif;
 
 // Font sizes
 $xsmall: 10px;//0.7em;
