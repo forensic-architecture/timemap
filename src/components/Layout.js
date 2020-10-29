@@ -262,10 +262,11 @@ class Dashboard extends React.Component {
 
     const dateHeight = 80
     const popupStyles = {
-      height: `calc(100vh - ${app.timeline.dimensions.height}px - ${dateHeight}px)`,
+      height: `fit-content`,
       width: '60vw',
       maxWidth: 600,
-      bottom: app.timeline.dimensions.height + dateHeight,
+      maxHeight: window.innerHeight > 768? `calc(100vh - ${app.timeline.dimensions.height}px - ${dateHeight}px)` : `100vh`,
+      top: 0,
       overflowY: 'scroll'
     }
 
