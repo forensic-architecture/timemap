@@ -40,6 +40,18 @@
     color: white;
   }
 
+  iframe {
+    flex: 1;
+    width: 100%;
+    min-height: 400px;
+  }
+
+  @media (max-height: 1000px) {
+    iframe {
+      min-height: 230px;
+    }
+  }
+
 
   .legend {
     display: flex;
@@ -49,6 +61,7 @@
   .legend-header {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     h2 {
       display: flex;
       font-size: 12pt;

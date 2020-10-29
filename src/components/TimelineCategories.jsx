@@ -66,7 +66,7 @@ class TimelineCategories extends React.Component {
           x={dims.marginLeft}
           y={dims.marginTop}
           width={dims.width - dims.marginLeft - dims.width_controls}
-          height='100%'
+          height={dims.contentHeight}
         />
       </g>
     )
