@@ -359,7 +359,6 @@ class Map extends React.Component {
         coloringSet={this.props.app.coloringSet}
         getClusterChildren={this.getClusterChildren}
         filterColors={this.props.ui.filterColors}
-        selected={this.props.app.selected}
       />
     )
   }

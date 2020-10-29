@@ -20,7 +20,7 @@ const DefsClusters = () => (
   </defs>
 )
 
-function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHover, onClick, getClusterChildren, coloringSet, filterColors, selected }) {
+function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHover, onClick, getClusterChildren, coloringSet, filterColors }) {
   /**
   {
     geometry: {
@@ -35,21 +35,6 @@ function Cluster ({ cluster, size, projectPoint, totalPoints, styles, renderHove
     type: "Feature"
   }
   */
-  function renderBorder (size) {
-    return (
-      <React.Fragment>
-        {<circle
-          class='event-hover'
-          cx='0'
-          cy='0'
-          r={size}
-          stroke={colors.primaryHighlight}
-          fill-opacity='0.0'
-        />}
-      </React.Fragment>
-    )
-  }
-
   const { cluster_id: clusterId } = cluster.properties
 
   const individualChildren = getClusterChildren(clusterId)
@@ -129,7 +114,6 @@ function ClusterEvents ({
             cluster={c}
             filterColors={filterColors}
             size={clusterSize}
-            selected={selected}
             projectPoint={projectPoint}
             totalPoints={totalPoints}
             styles={{
