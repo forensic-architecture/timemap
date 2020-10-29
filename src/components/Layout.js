@@ -260,11 +260,13 @@ class Dashboard extends React.Component {
       )
     }
 
+    const dateHeight = 80
     const popupStyles = {
-      fontSize: 18,
-      height: `calc(100vh - ${app.timeline.dimensions.height}px)`,
-      width: '40vw',
-      bottom: app.timeline.dimensions.height
+      height: `calc(100vh - ${app.timeline.dimensions.height}px - ${dateHeight}px)`,
+      width: '60vw',
+      maxWidth: 600,
+      bottom: app.timeline.dimensions.height + dateHeight,
+      overflowY: 'scroll'
     }
 
     return (
@@ -325,7 +327,7 @@ class Dashboard extends React.Component {
           onClose={actions.toggleInfoPopup}
         />
         <Popup
-          title={process.env.display_title}
+          title='Introduction to the platform'
           theme='dark'
           isOpen={app.flags.isIntropopup}
           onClose={actions.toggleIntroPopup}

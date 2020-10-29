@@ -98,7 +98,7 @@
           "Zoom in either with a mouse-scroll or by clicking a ‘cluster’ dot.",
           "Use **filters** and **categories** to segment the data. Selecting certain filters and categories will show only the datapoints that relate to them. If no filters or categories are selected, all the datapoints are displayed.",
           "Selecting more than one filter will introduce colour-coded datapoints, which allow you to compare types of incident across time and space. This feature works up to a maximum of six filters.",
-          "Use the left and right arrows to move back and forward through time. Use the handles on the right to select a date range."
+          "Use the left and right arrows to move back and forward through time. You can also click and drag anywhere on the timeline. Use the handles on the right to select a date range."
         ],
         "notation": "Combinations of colours within a circle indicate multiple events in a single location.",
         "arrows": "Use the left/right arrows on the keboard to move back and forth between events in time."
