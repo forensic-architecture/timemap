@@ -265,7 +265,7 @@ class Dashboard extends React.Component {
       height: `fit-content`,
       width: '60vw',
       maxWidth: 600,
-      maxHeight: window.innerHeight > 768? `calc(100vh - ${app.timeline.dimensions.height}px - ${dateHeight}px)` : `100vh`,
+      maxHeight: window.innerHeight > 768 ? `calc(100vh - ${app.timeline.dimensions.height}px - ${dateHeight}px)` : `100vh`,
       top: 0,
       overflowY: 'scroll'
     }
