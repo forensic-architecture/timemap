@@ -14,7 +14,7 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "@forensic-architecture/design-system": "0.6.0",
+    "@forensic-architecture/design-system": "0.6.1",
     "d3": "^5.7.0",
     "joi": "^14.0.1",
     "leaflet": "^1.0.3",
