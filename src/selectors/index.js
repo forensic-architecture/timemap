@@ -173,6 +173,7 @@ export const selectLocations = createSelector(
         activeLocations[location] = {
           label: location,
           events: [event],
+          id: event.id,
           latitude: event.latitude,
           longitude: event.longitude
         }

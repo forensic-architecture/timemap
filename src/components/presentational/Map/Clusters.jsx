@@ -8,7 +8,8 @@ import {
   isLatitude,
   isLongitude,
   calculateColorPercentages,
-  zipColorsToPercentages } from '../../../common/utilities'
+  zipColorsToPercentages,
+  calculateTotalClusterPoints } from '../../../common/utilities'
 
 const DefsClusters = () => (
   <defs>
@@ -74,14 +75,10 @@ function ClusterEvents ({
   isRadial,
   svg,
   clusters,
-  filterColors
+  filterColors,
+  selected
 }) {
-  const totalPoints = clusters.reduce((total, cl) => {
-    if (cl && cl.properties) {
-      total += cl.properties.point_count
-    }
-    return total
-  }, 0)
+  const totalPoints = calculateTotalClusterPoints(clusters)
 
   const styles = {
     fill: isRadial ? "url('#clusterGradient')" : colors.fallbackEventColor,

@@ -3,10 +3,10 @@ import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
 
 class MapSelectedEvents extends React.Component {
-  renderMarker (event) {
-    const { x, y } = this.props.projectPoint([event.latitude, event.longitude])
+  renderMarker (marker) {
+    const { x, y } = this.props.projectPoint([marker.latitude, marker.longitude])
     const styles = this.props.styles
-    const r = styles ? styles.r : 24
+    const r = marker.radius ? marker.radius + 5 : 24
     return (
       <g
         className='location-marker'
