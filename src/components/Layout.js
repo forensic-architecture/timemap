@@ -261,7 +261,7 @@ class Dashboard extends React.Component {
     }
 
     const popupStyles = {
-      fontSize: 20,
+      fontSize: 18,
       height: `calc(100vh - ${app.timeline.dimensions.height}px)`,
       width: '40vw',
       bottom: app.timeline.dimensions.height
