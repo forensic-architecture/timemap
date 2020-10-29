@@ -17,7 +17,7 @@ import Narratives from './presentational/Map/Narratives'
 import DefsMarkers from './presentational/Map/DefsMarkers.jsx'
 import LoadingOverlay from '../components/Overlay/Loading'
 
-import { mapClustersToLocations, isIdentical, isLatitude, isLongitude } from '../common/utilities'
+import { mapClustersToLocations, isIdentical, isLatitude, isLongitude, calculateTotalClusterPoints, calcClusterSize } from '../common/utilities'
 
 // NB: important constants for map, TODO: make statics
 const supportedMapboxMap = ['streets', 'satellite']
@@ -193,7 +193,8 @@ class Map extends React.Component {
           const children = this.getClusterChildren(cl.properties.cluster_id)
           if (children && children.length > 0) {
             children.forEach(child => {
-              if (selectedIds.includes(child.id)) {
+              const clusterPresent = acc.findIndex(item => item.id === cl.id) >= 0
+              if (selectedIds.includes(child.id) && !clusterPresent) {
                 acc.push(cl)
               }
             })
@@ -365,11 +366,34 @@ class Map extends React.Component {
 
   renderSelected () {
     const selectedClusters = this.getSelectedClusters()
-    console.info(selectedClusters)
+    const totalMarkers = []
+
+    this.props.app.selected.forEach(s => {
+      const { latitude, longitude } = s
+      totalMarkers.push({
+        latitude,
+        longitude,
+        radius: this.props.ui.eventRadius
+      })
+    })
+
+    const totalClusterPoints = calculateTotalClusterPoints(this.state.clusters)
+
+    selectedClusters.forEach(cl => {
+      if (cl.properties.cluster) {
+        const { coordinates } = cl.geometry
+        totalMarkers.push({
+          latitude: String(coordinates[1]),
+          longitude: String(coordinates[0]),
+          radius: calcClusterSize(cl.properties.point_count, totalClusterPoints)
+        })
+      }
+    })
+
     return (
       <SelectedEvents
         svg={this.svgRef.current}
-        selected={this.props.app.selected}
+        selected={totalMarkers}
         projectPoint={this.projectPoint}
         styles={this.props.ui.mapSelectedEvents}
       />
