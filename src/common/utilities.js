@@ -406,5 +406,5 @@ export function makeNiceDate (datetime) {
     { value: year }
   ] = dateTimeFormat.formatToParts(datetime)
 
-  return `${day} ${month}, ${year}`
+  return `${day} ${month} ${year}`
 }
