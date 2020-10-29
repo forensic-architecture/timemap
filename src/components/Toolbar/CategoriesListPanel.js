@@ -1,4 +1,5 @@
 import React from 'react'
+import marked from 'marked'
 import Checkbox from '../presentational/Checkbox'
 import copy from '../../common/data/copy.json'
 
@@ -31,7 +32,7 @@ export default ({
   return (
     <div className='react-innertabpanel'>
       <h2>{copy[language].toolbar.categories}</h2>
-      <p>{copy[language].toolbar.explore_by_category__description}</p>
+      <p dangerouslySetInnerHTML={{ __html: marked(copy[language].toolbar.explore_by_category__description) }} />
       {renderCategoryTree()}
     </div>
   )

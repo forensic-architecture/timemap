@@ -43,17 +43,18 @@
   }
 
   &.minimized {
-    top: 0;
+    bottom: 150px;
     max-width: $toolbar-width;
     max-height: 30px;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     .cover-logo-container {
       padding: 5px;
     }
     .cover-logo {
-      width: 15px;
-      height: 15px;
+      width: 60px;
+      height: 60px;
     }
   }
 }

@@ -239,13 +239,48 @@ class Dashboard extends React.Component {
     }
   }
 
+  renderIntroPopup (isMobile, styles) {
+    const { app, actions } = this.props
+
+    const extraContent = isMobile ? <div style={{ position: 'relative', bottom: 0 }}>
+      <h3 style={{ color: 'var(--error-red)' }}>This platform is not suitable for mobile.<br /><br />Please re-visit the site on a device with a larger screen.</h3>
+    </div> : null
+
+    return <Popup
+      title='Introduction to the platform'
+      theme='dark'
+      isOpen={app.flags.isIntropopup}
+      onClose={actions.toggleIntroPopup}
+      content={app.intro}
+      styles={styles}
+      isMobile={isMobile}
+    >
+      {extraContent}
+    </Popup>
+  }
+
   render () {
     const { actions, app, domain, features } = this.props
-    if (isMobile || window.innerWidth < 600) {
+    const dateHeight = 80
+    const padding = 2
+    const checkMobile = (isMobile || window.innerWidth < 600)
+
+    const popupStyles = {
+      height: checkMobile ? '100vh' : 'fit-content',
+      display: checkMobile ? 'block' : 'table',
+      width: checkMobile ? '100vw' : window.innerWidth > 768 ? '60vw' : `calc(100vw - var(--toolbar-width))`,
+      maxWidth: checkMobile ? '100vw' : 600,
+      maxHeight: checkMobile ? '100vh' : window.innerHeight > 768 ? `calc(100vh - ${app.timeline.dimensions.height}px - ${dateHeight}px)` : `100vh`,
+      left: checkMobile ? padding : 'inherit',
+      top: 0,
+      overflowY: 'scroll'
+    }
+
+    if (checkMobile) {
       const msg = 'This platform is not suitable for mobile. Please re-visit the site on a device with a larger screen.'
       return (
         <div>
-          {features.USE_COVER ? (
+          {(features.USE_COVER && !app.intro) && (
             <StaticPage showing={app.flags.isCover}>
               {/* enable USE_COVER in config.js features, and customise your header */}
               {/* pass 'actions.toggleCover' as a prop to your custom header */}
@@ -255,19 +290,15 @@ class Dashboard extends React.Component {
                 /* eslint-enable no-undef */
               }} />
             </StaticPage>
-          ) : <div className='fixedTooSmallMessage'>{msg}</div>}
+          )}
+          {app.intro && <>
+            {this.renderIntroPopup(true, popupStyles)}
+          </>}
+          {!app.intro && !features.USE_COVER && (
+            <div className='fixedTooSmallMessage'>{msg}</div>
+          )}
         </div>
       )
-    }
-
-    const dateHeight = 80
-    const popupStyles = {
-      height: `fit-content`,
-      width: window.innerWidth > 768 ? '60vw' : `calc(100vw - var(--toolbar-width))`,
-      maxWidth: 600,
-      maxHeight: window.innerHeight > 768 ? `calc(100vh - ${app.timeline.dimensions.height}px - ${dateHeight}px)` : `100vh`,
-      top: 0,
-      overflowY: 'scroll'
     }
 
     return (
@@ -327,14 +358,7 @@ class Dashboard extends React.Component {
           isOpen={app.flags.isInfopopup}
           onClose={actions.toggleInfoPopup}
         />
-        <Popup
-          title='Introduction to the platform'
-          theme='dark'
-          isOpen={app.flags.isIntropopup}
-          onClose={actions.toggleIntroPopup}
-          content={app.intro}
-          styles={popupStyles}
-        />
+        {this.renderIntroPopup(false)}
         {app.debug ? <Notification
           isNotification={app.flags.isNotification}
           notifications={domain.notifications}

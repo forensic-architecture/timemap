@@ -15,7 +15,7 @@ body {
 }
 
 h1 {
-  font-family: 'Lato', Helvetica, serif;
+  font-family: $mainfont;
 }
 
 h2 {
@@ -44,7 +44,7 @@ h2 {
     box-sizing: border-box;
     padding: 0 5px;
     outline: none;
-    font-family: 'Lato', sans-serif;
+    font-family: $mainfont;
 
     &:focus {
       border: 3px solid $yellow;
@@ -74,7 +74,7 @@ h2 {
 }
 
 .page {
-  font-family: 'Lato', Helvetica sans-serif;
+  font-family: $mainfont;
   box-sizing: border-box;
   height: 100%;
   width: 100%;

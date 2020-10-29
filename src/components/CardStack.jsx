@@ -109,7 +109,8 @@ class CardStack extends React.Component {
               title: 'Type of Violation',
               value: event.associations.slice(0, -1).map(association => ({
                 text: association,
-                color: getFilterIdxFromColorSet(association, this.props.coloringSet) >= 0 ? this.props.colors[getFilterIdxFromColorSet(association, this.props.coloringSet)] : null
+                color: getFilterIdxFromColorSet(association, this.props.coloringSet) >= 0 ? this.props.colors[getFilterIdxFromColorSet(association, this.props.coloringSet)] : null,
+                normalCursor: true
               }))
             },
             {
@@ -117,7 +118,8 @@ class CardStack extends React.Component {
               title: 'Against',
               value: event.associations.slice(-1).map(category => ({
                 text: category,
-                color: null
+                color: null,
+                normalCursor: true
               }))
             }
           ],

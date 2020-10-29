@@ -1,6 +1,7 @@
 import { mergeDeepLeft } from 'ramda'
 import global, { colors } from '../common/global'
 
+const isSmallLaptop = window.innerHeight < 800
 const initial = {
   /*
    * The Domain or 'domain' of this state refers to the tree of data
@@ -62,12 +63,12 @@ const initial = {
     },
     timeline: {
       dimensions: {
-        height: 250,
+        height: isSmallLaptop ? 170 : 250,
         width: 0,
         marginLeft: 70,
-        marginTop: 10, // the padding used for the day/month labels inside the timeline
+        marginTop: isSmallLaptop ? 5 : 10, // the padding used for the day/month labels inside the timeline
         marginBottom: 60,
-        contentHeight: 200,
+        contentHeight: isSmallLaptop ? 160 : 200,
         width_controls: 100
       },
       range: [

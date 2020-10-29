@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'GT-Zirkon';
+  src: url(../assets/fonts/timemapfont.woff); // a Lato woff by default
+}
+
 $event_default: red;
 
 $offwhite: #efefef;
@@ -24,6 +29,7 @@ $other:     yellow;
 .alpha { background: $alpha; }
 .beta { background: $beta; }
 
+$mainfont: 'GT-Zirkon', 'Lato', Helvetica, sans-serif;
 
 // Font sizes
 $xsmall: 10px;//0.7em;
@@ -54,7 +60,7 @@ $card-width: 386px;
 $card-right: 9px;
 $narrative-info-height: 205px;
 $narrative-info-desc-height: 153px;
-$timeline-height: 170px;
+$timeline-height: 250px;
 $toolbar-width: 110px;
 
 $panel-width: 1000px;
@@ -68,4 +74,5 @@ $header-inset: 10px;
 // CSS variables (for React access)
 :root {
   --toolbar-width: 110px;
+  --error-red: #eb443e;
 }

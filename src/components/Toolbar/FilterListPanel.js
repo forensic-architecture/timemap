@@ -1,5 +1,6 @@
 import React from 'react'
 import Checkbox from '../presentational/Checkbox'
+import marked from 'marked'
 import copy from '../../common/data/copy.json'
 import { getFilterIdxFromColorSet } from '../../common/utilities'
 
@@ -85,7 +86,7 @@ function FilterListPanel ({
   return (
     <div className='react-innertabpanel'>
       <h2>{copy[language].toolbar.filters}</h2>
-      <p>{copy[language].toolbar.explore_by_filter__description}</p>
+      <p dangerouslySetInnerHTML={{ __html: marked(copy[language].toolbar.explore_by_filter__description) }} />
       {renderTree(filters)}
     </div>
   )
