@@ -183,6 +183,28 @@ class Map extends React.Component {
     return []
   }
 
+  getSelectedClusters () {
+    const { selected } = this.props.app
+    const selectedIds = selected.map(sl => sl.id)
+
+    if (this.state.clusters && this.state.clusters.length > 0) {
+      return this.state.clusters.reduce((acc, cl) => {
+        if (cl.properties.cluster) {
+          const children = this.getClusterChildren(cl.properties.cluster_id)
+          if (children && children.length > 0) {
+            children.forEach(child => {
+              if (selectedIds.includes(child.id)) {
+                acc.push(cl)
+              }
+            })
+          }
+        }
+        return acc
+      }, [])
+    }
+    return []
+  }
+
   alignLayers () {
     const mapNode = document.querySelector('.leaflet-map-pane')
     if (mapNode === null) return { transformX: 0, transformY: 0 }
@@ -336,11 +358,14 @@ class Map extends React.Component {
         coloringSet={this.props.app.coloringSet}
         getClusterChildren={this.getClusterChildren}
         filterColors={this.props.ui.filterColors}
+        selected={this.props.app.selected}
       />
     )
   }
 
   renderSelected () {
+    const selectedClusters = this.getSelectedClusters()
+    console.info(selectedClusters)
     return (
       <SelectedEvents
         svg={this.svgRef.current}
