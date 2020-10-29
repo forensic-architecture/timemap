@@ -283,6 +283,15 @@ export function calcClusterSize (pointCount, totalPoints) {
   return Math.min(maxSize, 10 + (pointCount / totalPoints) * 150)
 }
 
+export function calculateTotalClusterPoints (clusters) {
+  return clusters.reduce((total, cl) => {
+    if (cl && cl.properties && cl.properties.cluster) {
+      total += cl.properties.point_count
+    }
+    return total
+  }, 0)
+}
+
 export function isLatitude (lat) {
   return !!lat && isFinite(lat) && Math.abs(lat) <= 90
 }

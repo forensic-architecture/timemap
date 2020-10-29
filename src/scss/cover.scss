@@ -145,8 +145,7 @@
 
   .hero {
     min-width: 100%;
-    max-width: 100%;
-    min-height: 150px;
+    min-height: 80px;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -216,6 +215,20 @@
     h1 { margin-bottom: -15px; margin-top: 30px; }
     h5 { margin-top: -15px; }
 
+
+    .md-container {
+      width: 100%;
+      overflow-wrap: break-word;
+      // white-space: pre-line;
+
+      ul {
+        list-style: none;
+      }
+  
+      li::before {
+        content: "* ";
+      }
+    }
 
     // mobile styles, remove overlay buttons
     @media only screen and (max-width: 1200px) {
