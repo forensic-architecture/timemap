@@ -126,10 +126,9 @@
       "filters": "Filters",
       "filters_label": "Filters",
       "explore_by_filter__title": "Explore by filter",
-      "explore_by_filter__description": "Selecting a filter will show you only those events that are annotated with the filter. If you select nothing, as well as everything, all data will be displayed.",
+      "explore_by_filter__description": "‘Filters’ refer to the types of incident. Select multiple filters to introduce colour-coding, up to a maximum of six filters. If no filters are selected, all datapoints are displayed.",
       "explore_by_category__title": "Explore events by category",
-      "explore_by_category__description": ""
-
+      "explore_by_category__description": "‘Categories’ refer to the victims of a given incident. If no categories are selected, all datapoints are displayed."
     },
     "timeline": {
       "zooms": [
