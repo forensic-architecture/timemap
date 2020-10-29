@@ -263,7 +263,7 @@ class Dashboard extends React.Component {
     const dateHeight = 80
     const popupStyles = {
       height: `fit-content`,
-      width: '60vw',
+      width: window.innerWidth > 768 ? '60vw' : `calc(100vw - var(--toolbar-width))`,
       maxWidth: 600,
       maxHeight: window.innerHeight > 768 ? `calc(100vh - ${app.timeline.dimensions.height}px - ${dateHeight}px)` : `100vh`,
       top: 0,

@@ -64,3 +64,8 @@ $vimeo-height: $panel-height / 2;
 $banner-height: 100px;
 $padding: 20px;
 $header-inset: 10px;
+
+// CSS variables (for React access)
+:root {
+  --toolbar-width: 110px;
+}
