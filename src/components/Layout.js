@@ -23,7 +23,7 @@ import TemplateCover from './TemplateCover'
 
 import colors from '../common/global'
 import { binarySearch, insetSourceFrom } from '../common/utilities'
-import { isMobile } from 'react-device-detect'
+import { isMobileOnly } from 'react-device-detect'
 import Search from './Search.jsx'
 
 class Dashboard extends React.Component {
@@ -263,7 +263,7 @@ class Dashboard extends React.Component {
     const { actions, app, domain, features } = this.props
     const dateHeight = 80
     const padding = 2
-    const checkMobile = (isMobile || window.innerWidth < 600)
+    const checkMobile = (isMobileOnly || window.innerWidth < 600)
 
     const popupStyles = {
       height: checkMobile ? '100vh' : 'fit-content',
@@ -271,7 +271,7 @@ class Dashboard extends React.Component {
       width: checkMobile ? '100vw' : window.innerWidth > 768 ? '60vw' : `calc(100vw - var(--toolbar-width))`,
       maxWidth: checkMobile ? '100vw' : 600,
       maxHeight: checkMobile ? '100vh' : window.innerHeight > 768 ? `calc(100vh - ${app.timeline.dimensions.height}px - ${dateHeight}px)` : `100vh`,
-      left: checkMobile ? padding : 'inherit',
+      left: checkMobile ? padding : 'var(--toolbar-width)',
       top: 0,
       overflowY: 'scroll'
     }
@@ -358,7 +358,7 @@ class Dashboard extends React.Component {
           isOpen={app.flags.isInfopopup}
           onClose={actions.toggleInfoPopup}
         />
-        {this.renderIntroPopup(false)}
+        {this.renderIntroPopup(false, popupStyles)}
         {app.debug ? <Notification
           isNotification={app.flags.isNotification}
           notifications={domain.notifications}
