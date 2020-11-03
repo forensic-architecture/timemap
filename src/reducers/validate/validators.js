@@ -71,7 +71,8 @@ export function validateDomain(domain, features) {
 
   function validateArrayItem(item, domainKey, schema) {
     const result = schema.validate(item);
-    if (result.error !== null) {
+
+    if (result.error !== null && result.error !== undefined) {
       const id = item.id || '-';
       const domainStr = capitalize(domainKey);
       const error = makeError(domainStr, id, result.error);
