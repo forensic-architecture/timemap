@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from 'joi';
 
 const siteSchema = Joi.object().keys({
   id: Joi.string().required(),
@@ -6,7 +6,7 @@ const siteSchema = Joi.object().keys({
   site: Joi.string().required(),
   latitude: Joi.string().required(),
   longitude: Joi.string().required(),
-  enabled: Joi.string().allow('')
-})
+  enabled: Joi.string().allow(''),
+});
 
-export default siteSchema
+export default siteSchema;

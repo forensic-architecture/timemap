@@ -1,7 +1,8 @@
-import { mergeDeepLeft } from 'ramda'
-import global, { colors } from '../common/global'
+import { mergeDeepLeft } from 'ramda';
+import global, { colors } from '../common/global';
+import { keyFromEnv } from '../common/utilities';
 
-const isSmallLaptop = window.innerHeight < 800
+const isSmallLaptop = window.innerHeight < 800;
 const initial = {
   /*
    * The Domain or 'domain' of this state refers to the tree of data
@@ -16,7 +17,7 @@ const initial = {
     associations: [],
     sources: {},
     sites: [],
-    notifications: []
+    notifications: [],
   },
 
   /*
@@ -30,7 +31,7 @@ const initial = {
   app: {
     debug: true,
     errors: {
-      source: false
+      source: false,
     },
     highlighted: null,
     selected: [],
@@ -43,10 +44,10 @@ const initial = {
       views: {
         events: true,
         routes: false,
-        sites: true
-      }
+        sites: true,
+      },
     },
-    isMobile: (/Mobi/.test(navigator.userAgent)),
+    isMobile: /Mobi/.test(navigator.userAgent),
     language: 'en-US',
     map: {
       anchor: [31.356397, 34.784818],
@@ -54,12 +55,15 @@ const initial = {
       minZoom: 2,
       maxZoom: 16,
       bounds: null,
-      maxBounds: [[180, -180], [-180, 180]]
+      maxBounds: [
+        [180, -180],
+        [-180, 180],
+      ],
     },
     cluster: {
       radius: 30,
       minZoom: 2,
-      maxZoom: 16
+      maxZoom: 16,
     },
     timeline: {
       dimensions: {
@@ -69,24 +73,18 @@ const initial = {
         marginTop: isSmallLaptop ? 5 : 10, // the padding used for the day/month labels inside the timeline
         marginBottom: 60,
         contentHeight: isSmallLaptop ? 160 : 200,
-        width_controls: 100
+        width_controls: 100,
       },
-      range: [
-        new Date(2001, 2, 23, 12),
-        new Date(2021, 2, 23, 12)
-      ],
-      rangeLimits: [
-        new Date(1, 1, 1, 1),
-        new Date()
-      ],
+      range: [new Date(2001, 2, 23, 12), new Date(2021, 2, 23, 12)],
+      rangeLimits: [new Date(1, 1, 1, 1), new Date()],
       zoomLevels: [
         { label: '20 years', duration: 10512000 },
         { label: '2 years', duration: 1051200 },
         { label: '3 months', duration: 129600 },
         { label: '3 days', duration: 4320 },
         { label: '12 hours', duration: 720 },
-        { label: '1 hour', duration: 60 }
-      ]
+        { label: '1 hour', duration: 60 },
+      ],
     },
     flags: {
       isFetchingDomain: false,
@@ -95,14 +93,15 @@ const initial = {
       isCardstack: true,
       isInfopopup: false,
       isIntropopup: false,
-      isShowingSites: true
+      isShowingSites: true,
     },
     cover: {
       title: 'project title',
-      description: 'A description of the project goes here.\n\nThis description may contain markdown.\n\n# This is a large title, for example.\n\n## Whereas this is a slightly smaller title.\n\nCheck out docs/custom-covers.md in the [Timemap GitHub repo](https://github.com/forensic-architecture/timemap) for more information around how to specify custom covers.',
-      exploreButton: 'EXPLORE'
+      description:
+        'A description of the project goes here.\n\nThis description may contain markdown.\n\n# This is a large title, for example.\n\n## Whereas this is a slightly smaller title.\n\nCheck out docs/custom-covers.md in the [Timemap GitHub repo](https://github.com/forensic-architecture/timemap) for more information around how to specify custom covers.',
+      exploreButton: 'EXPLORE',
     },
-    loading: false
+    loading: false,
   },
 
   /*
@@ -114,40 +113,44 @@ const initial = {
     tiles: 'openstreetmap', // ['openstreetmap', 'streets', 'satellite']
     style: {
       categories: {
-        default: global.fallbackEventColor
+        default: global.fallbackEventColor,
       },
       narratives: {
         default: {
           opacity: 0.9,
           stroke: global.fallbackEventColor,
-          strokeWidth: 3
-        }
+          strokeWidth: 3,
+        },
       },
       shapes: {
         default: {
           stroke: 'blue',
           strokeWidth: 3,
-          opacity: 0.9
-        }
+          opacity: 0.9,
+        },
       },
       clusters: {
-        radial: false
-      }
+        radial: false,
+      },
     },
     card: {
-      order: [[`renderTime`, `renderLocation`], [`renderSummary`], [`renderCustomFields`]],
-      extra: [[`renderSources`]]
+      order: [
+        [`renderTime`, `renderLocation`],
+        [`renderSummary`],
+        [`renderCustomFields`],
+      ],
+      extra: [[`renderSources`]],
     },
     coloring: {
       maxNumOfColors: 4,
-      colors: Object.values(colors)
+      colors: Object.values(colors),
     },
     dom: {
       timeline: 'timeline',
       timeslider: 'timeslider',
-      map: 'map'
+      map: 'map',
     },
-    eventRadius: 8
+    eventRadius: 8,
   },
 
   features: {
@@ -157,21 +160,21 @@ const initial = {
     USE_SOURCES: false,
     USE_SHAPES: false,
     GRAPH_NONLOCATED: false,
-    HIGHLIGHT_GROUPS: false
-  }
-}
+    HIGHLIGHT_GROUPS: false,
+  },
+};
 
-let appStore
-if (process.env.store) {
-  appStore = mergeDeepLeft(process.env.store, initial)
+let appStore;
+if (keyFromEnv('store')) {
+  appStore = mergeDeepLeft(keyFromEnv('store'), initial);
 } else {
-  appStore = initial
+  appStore = initial;
 }
 
 // NB: config.js dates get implicitly converted to strings in mergeDeepLeft
-appStore.app.timeline.range[0] = new Date(appStore.app.timeline.range[0])
-appStore.app.timeline.range[1] = new Date(appStore.app.timeline.range[1])
+appStore.app.timeline.range[0] = new Date(appStore.app.timeline.range[0]);
+appStore.app.timeline.range[1] = new Date(appStore.app.timeline.range[1]);
 
-appStore.app.flags.isIntropopup = !!appStore.app.intro
+appStore.app.flags.isIntropopup = !!appStore.app.intro;
 
-export default appStore
+export default appStore;

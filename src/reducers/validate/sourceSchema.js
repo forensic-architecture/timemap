@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from 'joi';
 
 const sourceSchema = Joi.object().keys({
   id: Joi.string().required(),
@@ -12,7 +12,7 @@ const sourceSchema = Joi.object().keys({
   parent: Joi.string().allow(''),
   author: Joi.string().allow(''),
   date: Joi.string().allow(''),
-  notes: Joi.string().allow('')
-})
+  notes: Joi.string().allow(''),
+});
 
-export default sourceSchema
+export default sourceSchema;
