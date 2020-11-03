@@ -1,7 +1,6 @@
 import React from 'react';
 
 const MapDefsMarkers = () => (
-  <svg xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker
       id="arrow"
@@ -26,7 +25,6 @@ const MapDefsMarkers = () => (
       <path d="M0,3v-3l6,3l-6,3z" style={{ fill: 'black', fillOpacity: 0.2 }} />
     </marker>
   </defs>
-  </svg>
 );
 
 export default MapDefsMarkers;

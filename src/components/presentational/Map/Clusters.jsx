@@ -125,7 +125,6 @@ function ClusterEvents({
 
   return (
     <Portal node={svg}>
-      <svg>
       <g className="cluster-locations">
         {isRadial ? <DefsClusters /> : null}
         {clusters.map((c) => {
@@ -150,7 +149,6 @@ function ClusterEvents({
           );
         })}
       </g>
-      </svg>
     </Portal>
   );
 }

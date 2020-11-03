@@ -12,8 +12,8 @@ import Axis from './TimelineAxis.jsx';
 import Clip from './presentational/Timeline/Clip';
 import Handles from './presentational/Timeline/Handles.js';
 import ZoomControls from './presentational/Timeline/ZoomControls.js';
-import Markers from './presentational/Timeline/Markers.js';
-import Events from './presentational/Timeline/Events.js';
+import Markers from './presentational/Timeline/Markers.jsx';
+import Events from './presentational/Timeline/Events.jsx';
 import Categories from './TimelineCategories.jsx';
 
 class Timeline extends React.Component {
@@ -39,7 +39,7 @@ class Timeline extends React.Component {
     this.addEventListeners();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (hash(nextProps) !== hash(this.props)) {
       this.setState({
         timerange: nextProps.app.timeline.range,
@@ -233,9 +233,14 @@ class Timeline extends React.Component {
       }
     }
 
-    this.setState({ timerange: [newDomain0, newDomainF] }, () => {
-      this.props.methods.onUpdateTimerange(this.state.timerange);
-    });
+    this.setState(
+      {
+        timerange: [newDomain0, newDomainF],
+      },
+      () => {
+        this.props.methods.onUpdateTimerange(this.state.timerange);
+      },
+    );
   }
 
   toggleTransition(isTransition) {

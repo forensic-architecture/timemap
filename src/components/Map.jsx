@@ -57,7 +57,7 @@ class Map extends React.Component {
     window.dispatchEvent(new Event('resize'));
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!isIdentical(nextProps.domain.locations, this.props.domain.locations)) {
       this.loadClusterData(nextProps.domain.locations);
     }

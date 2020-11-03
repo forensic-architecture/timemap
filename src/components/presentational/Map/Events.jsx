@@ -175,7 +175,6 @@ function MapEvents({
     }, false);
 
     return (
-      <svg>
       <g
         className={`location-event ${narrative ? 'no-hover' : ''}`}
         transform={`translate(${x}, ${y})`}
@@ -190,15 +189,12 @@ function MapEvents({
         {extraRender ? extraRender() : null}
         {isSelected ? null : renderBorder()}
       </g>
-      </svg>
     );
   }
 
   return (
     <Portal node={svg}>
-      <svg>
       <g className="event-locations">{locations.map(renderLocation)}</g>
-      </svg>
     </Portal>
   );
 }
