@@ -3,16 +3,22 @@ module.exports = {
     public: '/',
     src: '/_dist_',
   },
-  plugins: ['@snowpack/plugin-babel', '@snowpack/plugin-react-refresh', '@snowpack/plugin-dotenv', '@snowpack/plugin-sass'],
+  plugins: [
+    // '@snowpack/plugin-babel',
+    '@snowpack/plugin-react-refresh',
+    '@snowpack/plugin-dotenv',
+    '@snowpack/plugin-sass',
+  ],
   install: [
     // "@forensic-architecture/design-system/react"
   ],
-  exclude: ["webpack.config.js"],
+  exclude: ['webpack.config.js'],
   installOptions: {
-    polyfillNode: true
+    polyfillNode: true,
   },
   devOptions: {
-    open: 'none'
+    open: 'none',
+    bundle: process.env.NODE_ENV === 'production',
   },
   buildOptions: {
     /* ... */
@@ -20,6 +26,5 @@ module.exports = {
   proxy: {
     /* ... */
   },
-  alias: {
-  },
+  alias: {},
 };
