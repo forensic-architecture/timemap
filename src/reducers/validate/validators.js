@@ -9,9 +9,9 @@ import shapeSchema from './shapeSchema'
 import { calcDatetime, capitalize } from '../../common/utilities'
 
 /*
-* Create an error notification object
-* Types: ['error', 'warning', 'good', 'neural']
-*/
+ * Create an error notification object
+ * Types: ['error', 'warning', 'good', 'neural']
+ */
 function makeError (type, id, message) {
   return {
     type: 'error',
@@ -27,11 +27,15 @@ function isValidDate (d) {
 function findDuplicateAssociations (associations) {
   const seenSet = new Set([])
   const duplicates = []
-  associations.forEach(item => {
+  associations.forEach((item) => {
     if (seenSet.has(item.id)) {
       duplicates.push({
         id: item.id,
-        error: makeError('Association', item.id, 'association was found more than once. Ignoring duplicate.')
+        error: makeError(
+          'Association',
+          item.id,
+          'association was found more than once. Ignoring duplicate.'
+        )
       })
     } else {
       seenSet.add(item.id)
@@ -41,8 +45,8 @@ function findDuplicateAssociations (associations) {
 }
 
 /*
-* Validate domain schema
-*/
+ * Validate domain schema
+ */
 export function validateDomain (domain, features) {
   const sanitizedDomain = {
     events: [],
@@ -79,13 +83,13 @@ export function validateDomain (domain, features) {
   }
 
   function validateArray (items, domainKey, schema) {
-    items.forEach(item => {
+    items.forEach((item) => {
       validateArrayItem(item, domainKey, schema)
     })
   }
 
   function validateObject (obj, domainKey, itemSchema) {
-    Object.keys(obj).forEach(key => {
+    Object.keys(obj).forEach((key) => {
       const vl = obj[key]
       const result = Joi.validate(vl, itemSchema)
       if (result.error !== null) {
@@ -113,13 +117,10 @@ export function validateDomain (domain, features) {
   validateObject(domain.shapes, 'shapes', shapeSchema)
 
   // NB: [lat, lon] array is best format for projecting into map
-  sanitizedDomain.shapes = sanitizedDomain.shapes.map(shape => ({
+  sanitizedDomain.shapes = sanitizedDomain.shapes.map((shape) => ({
     name: shape.name,
-    points: shape.items.map(coords => (
-      coords.replace(/\s/g, '').split(',')
-    ))
-  })
-  )
+    points: shape.items.map((coords) => coords.replace(/\s/g, '').split(','))
+  }))
 
   const duplicateAssociations = findDuplicateAssociations(domain.associations)
   // Duplicated associations
@@ -137,7 +138,14 @@ export function validateDomain (domain, features) {
     event.id = idx
     event.datetime = calcDatetime(event.date, event.time)
     if (!isValidDate(event.datetime)) {
-      discardedDomain['events'].push({ ...event, error: makeError('events', event.id, `Invalid date. It's been dropped, as otherwise timemap won't work as expected.`) })
+      discardedDomain['events'].push({
+        ...event,
+        error: makeError(
+          'events',
+          event.id,
+          `Invalid date. It's been dropped, as otherwise timemap won't work as expected.`
+        )
+      })
       return false
     }
     return true
@@ -146,7 +154,7 @@ export function validateDomain (domain, features) {
   sanitizedDomain.events.sort((a, b) => a.datetime - b.datetime)
 
   // Message the number of failed items in domain
-  Object.keys(discardedDomain).forEach(disc => {
+  Object.keys(discardedDomain).forEach((disc) => {
     const len = discardedDomain[disc].length
     if (len) {
       sanitizedDomain.notifications.push({

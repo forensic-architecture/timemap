@@ -1,5 +1,6 @@
 import { mergeDeepLeft } from 'ramda'
 import global, { colors } from '../common/global'
+import generateCardLayout from '../common/card'
 
 const isSmallLaptop = window.innerHeight < 800
 const initial = {
@@ -46,7 +47,7 @@ const initial = {
         sites: true
       }
     },
-    isMobile: (/Mobi/.test(navigator.userAgent)),
+    isMobile: /Mobi/.test(navigator.userAgent),
     language: 'en-US',
     map: {
       anchor: [31.356397, 34.784818],
@@ -54,7 +55,10 @@ const initial = {
       minZoom: 2,
       maxZoom: 16,
       bounds: null,
-      maxBounds: [[180, -180], [-180, 180]]
+      maxBounds: [
+        [180, -180],
+        [-180, 180]
+      ]
     },
     cluster: {
       radius: 30,
@@ -71,14 +75,8 @@ const initial = {
         contentHeight: isSmallLaptop ? 160 : 200,
         width_controls: 100
       },
-      range: [
-        new Date(2001, 2, 23, 12),
-        new Date(2021, 2, 23, 12)
-      ],
-      rangeLimits: [
-        new Date(1, 1, 1, 1),
-        new Date()
-      ],
+      range: [new Date(2001, 2, 23, 12), new Date(2021, 2, 23, 12)],
+      rangeLimits: [new Date(1, 1, 1, 1), new Date()],
       zoomLevels: [
         { label: '20 years', duration: 10512000 },
         { label: '2 years', duration: 1051200 },
@@ -99,7 +97,8 @@ const initial = {
     },
     cover: {
       title: 'project title',
-      description: 'A description of the project goes here.\n\nThis description may contain markdown.\n\n# This is a large title, for example.\n\n## Whereas this is a slightly smaller title.\n\nCheck out docs/custom-covers.md in the [Timemap GitHub repo](https://github.com/forensic-architecture/timemap) for more information around how to specify custom covers.',
+      description:
+        'A description of the project goes here.\n\nThis description may contain markdown.\n\n# This is a large title, for example.\n\n## Whereas this is a slightly smaller title.\n\nCheck out docs/custom-covers.md in the [Timemap GitHub repo](https://github.com/forensic-architecture/timemap) for more information around how to specify custom covers.',
       exploreButton: 'EXPLORE'
     },
     loading: false
@@ -135,8 +134,7 @@ const initial = {
       }
     },
     card: {
-      order: [[`renderTime`, `renderLocation`], [`renderSummary`], [`renderCustomFields`]],
-      extra: [[`renderSources`]]
+      layout: ({ event }) => generateCardLayout['basic']({ event })
     },
     coloring: {
       maxNumOfColors: 4,
