@@ -10,21 +10,17 @@ module.exports = {
   SHAPES_EXT: '',
   DATE_FMT: 'MM/DD/YYYY',
   TIME_FMT: 'hh:mm',
-  // MAPBOX_TOKEN: 'pk.YOUR_MAPBOX_TOKEN',
   store: {
     app: {
       map: {
         anchor: [31.356397, 34.784818]
       }
     },
-    ui: {
-      // tiles: 'your-mapbox-account-name/x5678-map-id'
-    },
     features: {
       USE_CATEGORIES: false,
       USE_ASSOCIATIONS: true,
       USE_SOURCES: false,
-      USE_COVER: true,
+      USE_COVER: false,
       GRAPH_NONLOCATED: false,
       HIGHLIGHT_GROUPS: false
     }
