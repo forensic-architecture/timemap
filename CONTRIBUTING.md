@@ -1,8 +1,7 @@
-# Contributing to TimeMap
+# Contributing to timemap 
 
-Hi there! Thank you already, for taking the time to try and contribute and
-improve timemap. This document is the place to start on your journey. Read it
-thoroughly!
+Hi there! Thank you already, for taking the time to contribute and improve
+timemap. This document is right place to start. Read it thoroughly!
 
 ## What do I need to know to help?
 ### Javascript / React / Redux
@@ -21,15 +20,21 @@ does, and so they're helpful to know.
 ## Do I need to be an experienced JS developer? 
 Contributing can of course be about contributing code, but it can also take
 many other forms. A great amount of work that remains to be done to make
-timemap a usable community tool doesn't involve writing a line of code. The
-following are all very welcome contributions:
+timemap a usable community tool doesn't involve writing any code. The following
+are all very welcome contributions:
 
-- Updating or correcting documentation
+- Writing, updating or correcting documentation
 - Fixing an open issue
 - Requesting a feature
 - Reporting a bug
 
-If you're new to this project, you could check the issues that are tagged ["good first issue"](https://github.com/forensic-architecture/timemap/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22). These are generally those that are considered easy ways in.
+If you're new to this project, you could check the issues that are tagged
+["good first issue"](https://github.com/forensic-architecture/timemap/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
+
+These are a range of the issues that have come up in conversation for which we
+would welcome community contributions. These are, however, by no means
+exhaustive! If you see a gap or have an idea, please open up an issue to
+discuss it with timemap's maintainers.
 
 ## How do I make a contribution? 
 
