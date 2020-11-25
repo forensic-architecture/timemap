@@ -20,6 +20,7 @@ export default ({ media, viewIdx, translations, switchLanguage, langIdx }) => {
               src={path}
               loader={<div className='source-image-loader'><Spinner /></div>}
               unloader={<NoSource failedUrls={[ path ]} />}
+              onClick={() => window.open(path, '_blank')}
             />
           </div>
         )

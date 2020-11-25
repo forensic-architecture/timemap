@@ -10,13 +10,23 @@ const defaultStyles = {
   stroke: 'none'
 }
 
-function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives, projectPoint, features }) {
+function MapNarratives ({
+  styles,
+  onSelectNarrative,
+  svg,
+  narrative,
+  narratives,
+  projectPoint,
+  features
+}) {
   function getNarrativeStyle (narrativeId) {
     const styleName = (narrativeId && narrativeId in styles)
       ? narrativeId
       : 'default'
     return styles[styleName]
   }
+
+  const narrativesExist = narratives && narratives.length !== 0
 
   function hasNoLocation (step) {
     return (step.latitude === '' || step.longitude === '')
@@ -132,16 +142,31 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
     const arrows = []
 
     let lastMarked = null
-    for (let idx = 0; idx < n.steps.length; idx += 1) {
-      const step = n.steps[idx]
-      const _idx = step.narratives.indexOf(n.id)
-      const stepStyle = step.narrative___stepStyles[_idx]
 
-      if (stepStyle !== 'None') {
+    if (narrativesExist) {
+      for (let idx = 0; idx < n.steps.length; idx += 1) {
+        const step = n.steps[idx]
         if (lastMarked) {
-          arrows.push(renderBetweenSteps(lastMarked, step, styles.stepStyles[stepStyle]))
+          arrows.push(renderBetweenSteps(
+            lastMarked,
+            step,
+            n.withLines ? { strokeWidth: '1px', stroke: step.colour } : {})
+          )
         }
         lastMarked = step
+      }
+    } else {
+      for (let idx = 0; idx < n.steps.length; idx += 1) {
+        const step = n.steps[idx]
+        const _idx = step.narratives.indexOf(n.id)
+        const stepStyle = step.narrative___stepStyles[_idx]
+
+        if (stepStyle !== 'None') {
+          if (lastMarked) {
+            arrows.push(renderBetweenSteps(lastMarked, step, styles.stepStyles[stepStyle]))
+          }
+          lastMarked = step
+        }
       }
     }
 
@@ -151,12 +176,15 @@ function MapNarratives ({ styles, onSelectNarrative, svg, narrative, narratives,
   function renderNarrative (n) {
     const narrativeId = `narrative-${n.id.replace(/ /g, '_')}`
 
+    const body = narrativesExist
+      ? renderBetweenMarked(n)
+      : (features.NARRATIVE_STEP_STYLES
+        ? renderBetweenMarked(n)
+        : renderFullNarrative(n))
+
     return (
       <g id={narrativeId} className='narrative'>
-        {(features.NARRATIVE_STEP_STYLES
-          ? renderBetweenMarked(n)
-          : renderFullNarrative(n)
-        )}
+        {body}
       </g>
     )
   }

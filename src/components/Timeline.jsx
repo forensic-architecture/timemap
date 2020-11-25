@@ -57,12 +57,6 @@ class Timeline extends React.Component {
     if (nextProps.dimensions.trackHeight !== this.props.dimensions.trackHeight) {
       this.computeDims()
     }
-
-    if (hash(nextProps.app.selected) !== hash(this.props.app.selected)) {
-      if (!!nextProps.app.selected && nextProps.app.selected.length > 0) {
-        this.onCenterTime(nextProps.app.selected[0].datetime)
-      }
-    }
   }
 
   addEventListeners () {
@@ -84,16 +78,15 @@ class Timeline extends React.Component {
   makeScaleY (categories, trackHeight, marginTop) {
     const { features } = this.props
     if (features.GRAPH_NONLOCATED && features.GRAPH_NONLOCATED.categories) {
-      categories = categories.filter(cat => !features.GRAPH_NONLOCATED.categories.includes(cat.category))
+      categories = categories.filter(cat => !features.GRAPH_NONLOCATED.categories.includes(cat.id))
     }
-    const catHeight = trackHeight / (categories.length)
-    const shiftUp = trackHeight / (categories.length) / 2
-    const marginShift = marginTop === 0 ? 0 : marginTop
-    const manualAdjustment = trackHeight <= 60 ? (trackHeight <= 30 ? -8 : -5) : 0
+    const extraPadding = 0
+    const catHeight = categories.length > 2 ? trackHeight / categories.length : trackHeight / (categories.length + 1)
     const catsYpos = categories.map((g, i) => {
-      return ((i + 1) * catHeight) - shiftUp + marginShift + manualAdjustment
+      return ((i + 1) * catHeight) + marginTop + (extraPadding / 2)
     })
-    const catMap = categories.map(c => c.category)
+    const catMap = categories.map(c => c.id)
+
     return (cat) => {
       const idx = catMap.indexOf(cat)
       return catsYpos[idx]
@@ -143,7 +136,6 @@ class Timeline extends React.Component {
    * @param {String} direction: 'forward' / 'backwards'
    */
   onMoveTime (direction) {
-    this.props.methods.onSelect()
     const extent = this.getTimeScaleExtent()
     const newCentralTime = d3.timeMinute.offset(this.state.scaleX.domain()[0], extent / 2)
 
@@ -275,13 +267,21 @@ class Timeline extends React.Component {
   getY (event) {
     const { features, domain } = this.props
     const { USE_CATEGORIES, GRAPH_NONLOCATED } = features
+    const { categories } = domain
+    const categoriesExist = USE_CATEGORIES && categories && categories.length > 0
 
-    if (!USE_CATEGORIES) { return this.state.dims.trackHeight / 2 }
+    if (!categoriesExist) {
+      return this.state.dims.trackHeight / 2
+    }
 
-    const { category, project } = event
+    const { category } = event
+
     if (GRAPH_NONLOCATED && GRAPH_NONLOCATED.categories.includes(category)) {
+      const { project } = event
       return this.state.dims.marginTop + domain.projects[project].offset + this.props.ui.eventRadius
     }
+    if (!this.state.scaleY) return 0
+
     return this.state.scaleY(category)
   }
 
@@ -308,9 +308,8 @@ class Timeline extends React.Component {
     const extraStyle = { ...heightStyle, ...foldedStyle }
     const contentHeight = { height: dims.contentHeight }
     const { categories } = this.props.domain
-
     return (
-      <div className={classes} style={extraStyle}>
+      <div className={classes} style={extraStyle} onKeyDown={this.props.onKeyDown} tabIndex='1'>
         <Header
           title={copy[this.props.app.language].timeline.info}
           from={this.state.timerange[0]}
@@ -340,7 +339,7 @@ class Timeline extends React.Component {
                 onDragStart={() => { this.onDragStart() }}
                 onDrag={() => { this.onDrag() }}
                 onDragEnd={() => { this.onDragEnd() }}
-                categories={this.props.domain.categories}
+                categories={categories.map(c => c.id)}
                 features={this.props.features}
               />
               <Handles
@@ -358,6 +357,7 @@ class Timeline extends React.Component {
                 selected={this.props.app.selected}
                 getEventX={ev => this.getDatetimeX(ev.datetime)}
                 getEventY={this.getY}
+                categories={categories}
                 transitionDuration={this.state.transitionDuration}
                 styles={this.props.ui.styles}
                 features={this.props.features}
@@ -366,6 +366,7 @@ class Timeline extends React.Component {
               <Events
                 events={this.props.domain.events}
                 projects={this.props.domain.projects}
+                categories={categories}
                 styleDatetime={this.styleDatetime}
                 narrative={this.props.app.narrative}
                 getDatetimeX={this.getDatetimeX}
@@ -384,6 +385,8 @@ class Timeline extends React.Component {
                 setLoading={this.props.actions.setLoading}
                 setNotLoading={this.props.actions.setNotLoading}
                 eventRadius={this.props.ui.eventRadius}
+                filterColors={this.props.ui.filterColors}
+                coloringSet={this.props.app.coloringSet}
               />
             </svg>
           </div>
@@ -396,23 +399,29 @@ class Timeline extends React.Component {
 function mapStateToProps (state) {
   return {
     dimensions: selectors.selectDimensions(state),
-    isNarrative: !!state.app.narrative,
+    isNarrative: !!state.app.associations.narrative,
     domain: {
       events: selectors.selectStackedEvents(state),
       projects: selectors.selectProjects(state),
-      categories: selectors.getCategories(state),
+      categories: (state => {
+        const allcats = selectors.getCategories(state)
+        const active = selectors.getActiveCategories(state)
+        return allcats.filter(c => active.includes(c.id))
+      })(state),
       narratives: state.domain.narratives
     },
     app: {
       selected: state.app.selected,
       language: state.app.language,
       timeline: state.app.timeline,
-      narrative: state.app.narrative
+      narrative: state.app.associations.narrative,
+      coloringSet: state.app.associations.coloringSet
     },
     ui: {
       dom: state.ui.dom,
       styles: state.ui.style.selectedEvents,
-      eventRadius: state.ui.eventRadius
+      eventRadius: state.ui.eventRadius,
+      filterColors: state.ui.coloring.colors
     },
     features: selectors.getFeatures(state)
   }

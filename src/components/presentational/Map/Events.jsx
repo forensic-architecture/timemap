@@ -1,7 +1,8 @@
 import React from 'react'
 import { Portal } from 'react-portal'
 import colors from '../../../common/global.js'
-import { calcOpacity } from '../../../common/utilities'
+import ColoredMarkers from './ColoredMarkers.jsx'
+import { calcOpacity, getCoordinatesForPercent, calculateColorPercentages, zipColorsToPercentages } from '../../../common/utilities'
 
 function MapEvents ({
   getCategoryColor,
@@ -13,12 +14,14 @@ function MapEvents ({
   onSelect,
   svg,
   locations,
-  eventRadius
+  eventRadius,
+  coloringSet,
+  filterColors,
+  features
 }) {
-  function getCoordinatesForPercent (radius, percent) {
-    const x = radius * Math.cos(2 * Math.PI * percent)
-    const y = radius * Math.sin(2 * Math.PI * percent)
-    return [x, y]
+  function handleEventSelect (e, location) {
+    const events = e.shiftKey ? selected.concat(location.events) : location.events
+    onSelect(events)
   }
 
   function renderBorder () {
@@ -33,6 +36,27 @@ function MapEvents ({
           fill-opacity='0.0'
         />}
       </React.Fragment>
+    )
+  }
+
+  function renderLocationSlicesByAssociation (location) {
+    const colorPercentages = calculateColorPercentages([location], coloringSet)
+
+    let styles = ({
+      stroke: colors.darkBackground,
+      strokeWidth: 0,
+      fillOpacity: narrative ? 1 : calcOpacity(location.events.length)
+    })
+
+    return (
+      <ColoredMarkers
+        radius={eventRadius}
+        colorPercentMap={zipColorsToPercentages(filterColors, colorPercentages)}
+        styles={{
+          ...styles
+        }}
+        className={'location-event-marker'}
+      />
     )
   }
 
@@ -135,9 +159,10 @@ function MapEvents ({
       <g
         className={`location-event ${narrative ? 'no-hover' : ''}`}
         transform={`translate(${x}, ${y})`}
-        onClick={(!narrative) ? () => onSelect(location.events) : null}
+        onClick={(e) => handleEventSelect(e, location)}
       >
-        {renderLocationSlicesByCategory(location)}
+        {features.COLOR_BY_ASSOCIATION ? renderLocationSlicesByAssociation(location) : null}
+        {features.COLOR_BY_CATEGORY ? renderLocationSlicesByCategory(location) : null}
         {extraRender ? extraRender() : null}
         {isSelected ? null : renderBorder()}
       </g>

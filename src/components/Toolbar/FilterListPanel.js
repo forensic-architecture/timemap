@@ -1,51 +1,84 @@
 import React from 'react'
 import Checkbox from '../presentational/Checkbox'
+import marked from 'marked'
 import copy from '../../common/data/copy.json'
+import { getFilterIdxFromColorSet } from '../../common/utilities'
 
-/** recursively get an array of node keys */
-function allAssociatedKeys (node) {
-  if (!node.children) return [node.key]
-  const childKeys = Object.values(node.children).flatMap(n => allAssociatedKeys(n))
-  childKeys.push(node.key)
+/** recursively get an array of node keys to toggle */
+function getFiltersToToggle (filter, activeFilters) {
+  const [key, children] = filter
+
+  // base case: no children to recurse through
+  if (children === {}) return [key]
+
+  const turningOff = activeFilters.includes(key)
+  let childKeys = Object.entries(children)
+    .flatMap(filter => getFiltersToToggle(filter, activeFilters))
+    .filter(child => activeFilters.includes(child) === turningOff)
+
+  childKeys.push(key)
   return childKeys
+}
+
+function aggregatePaths (filters) {
+  function insertPath (children = {}, [headOfPath, ...remainder]) {
+    let childKey = Object.keys(children).find(key => key === headOfPath)
+    if (!childKey) children[headOfPath] = {}
+    if (remainder.length > 0) insertPath(children[headOfPath], remainder)
+    return children
+  }
+
+  const allPaths = []
+  filters.forEach(filterItem => allPaths.push(filterItem.filter_paths))
+
+  let aggregatedPaths = allPaths.reduce((children, path) => insertPath(children, path), {})
+  return aggregatedPaths
 }
 
 function FilterListPanel ({
   filters,
   activeFilters,
   onSelectFilter,
-  language
+  language,
+  coloringSet,
+  filterColors
 }) {
-  function createNodeComponent (node, depth) {
-    const matchingKeys = allAssociatedKeys(node)
-    const children = Object.values(node.children)
+  function createNodeComponent (filter, depth) {
+    const [key, children] = filter
+    const matchingKeys = getFiltersToToggle(filter, activeFilters)
+    const idxFromColorSet = getFilterIdxFromColorSet(key, coloringSet)
+    const assignedColor = idxFromColorSet !== -1 && activeFilters.includes(key) ? filterColors[idxFromColorSet] : ''
+
+    const styles = ({
+      color: assignedColor,
+      marginLeft: `${depth * 20}px`
+    })
+
     return (
       <li
-        key={node.key.replace(/ /g, '_')}
+        key={key.replace(/ /g, '_')}
         className={'filter-filter'}
-        style={{ marginLeft: `${depth * 20}px` }}
+        style={{ ...styles }}
       >
-        {/* <svg width='10' height='10'> */}
-        {/*   <g className='filter-inline'> */}
-        {/*     <path d='M0,-7.847549217020565L6.796176979388489,3.9237746085102825L-6.796176979388489,3.9237746085102825Z' transform='rotate(270)' /> */}
-        {/*   </g> */}
-        {/* </svg> */}
         <Checkbox
-          label={node.key}
-          isActive={activeFilters.includes(node.key)}
-          onClickCheckbox={() => onSelectFilter(matchingKeys)}
+          label={key}
+          isActive={activeFilters.includes(key)}
+          onClickCheckbox={() => onSelectFilter(key, matchingKeys)}
+          color={assignedColor}
         />
-        {children.length > 0
-          ? children.map(filter => createNodeComponent(filter, depth + 1))
+        {Object.keys(children).length > 0
+          ? Object.entries(children).map(filter => createNodeComponent(filter, depth + 1))
           : null}
       </li>
     )
   }
 
-  function renderTree (children) {
+  function renderTree (filters) {
+    const aggregatedFilterPaths = aggregatePaths(filters)
+
     return (
       <div>
-        {Object.values(children).map(filter => createNodeComponent(filter, 1))}
+        {Object.entries(aggregatedFilterPaths).map(filter => createNodeComponent(filter, 1))}
       </div>
     )
   }
@@ -53,8 +86,8 @@ function FilterListPanel ({
   return (
     <div className='react-innertabpanel'>
       <h2>{copy[language].toolbar.filters}</h2>
-      <p>{copy[language].toolbar.explore_by_filter__description}</p>
-      {renderTree(filters.children)}
+      <p dangerouslySetInnerHTML={{ __html: marked(copy[language].toolbar.explore_by_filter__description) }} />
+      {renderTree(filters)}
     </div>
   )
 }

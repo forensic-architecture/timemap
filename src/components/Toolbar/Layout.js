@@ -5,16 +5,16 @@ import * as actions from '../../actions'
 import * as selectors from '../../selectors'
 
 import { Tabs, TabPanel } from 'react-tabs'
-import Search from './Search'
 import FilterListPanel from './FilterListPanel'
 import CategoriesListPanel from './CategoriesListPanel'
 import BottomActions from './BottomActions'
 import copy from '../../common/data/copy.json'
-import { trimAndEllipse } from '../../common/utilities.js'
+import { trimAndEllipse, getImmediateFilterParent, getFilterSiblings, getFilterParents } from '../../common/utilities.js'
 
 class Toolbar extends React.Component {
   constructor (props) {
     super(props)
+    this.onSelectFilter = this.onSelectFilter.bind(this)
     this.state = { _selected: -1 }
   }
 
@@ -23,29 +23,56 @@ class Toolbar extends React.Component {
     this.setState({ _selected })
   }
 
+  onSelectFilter (key, matchingKeys) {
+    const { filters, activeFilters, coloringSet, maxNumOfColors } = this.props
+
+    const parent = getImmediateFilterParent(filters, key)
+    const isTurningOff = activeFilters.includes(key)
+
+    if (!isTurningOff) {
+      const flattenedColoringSet = coloringSet.flatMap(f => f)
+      const newColoringSet = matchingKeys.filter(k => flattenedColoringSet.indexOf(k) === -1)
+
+      const updatedColoringSet = [...coloringSet, newColoringSet]
+
+      if (updatedColoringSet.length <= maxNumOfColors) {
+        this.props.actions.updateColoringSet(updatedColoringSet)
+      }
+    } else {
+      const newColoringSets = coloringSet.map(set => (
+        set.filter(s => {
+          return !matchingKeys.includes(s)
+        })
+      ))
+      this.props.actions.updateColoringSet(newColoringSets.filter(item => item.length !== 0))
+    }
+
+    if (isTurningOff) {
+      if (parent && activeFilters.includes(parent)) {
+        const siblings = getFilterSiblings(filters, parent, key)
+        let siblingsOff = true
+        for (let sibling of siblings) {
+          if (activeFilters.includes(sibling)) {
+            siblingsOff = false
+            break
+          }
+        }
+
+        if (siblingsOff) {
+          const grandparentsOn = getFilterParents(filters, key).filter(filt => activeFilters.includes(filt))
+          matchingKeys = matchingKeys.concat(grandparentsOn)
+        }
+      }
+    }
+    this.props.methods.onSelectFilter(matchingKeys)
+  }
+
   renderClosePanel () {
     return (
       <div className='panel-header' onClick={() => this.selectTab(-1)}>
         <div className='caret' />
       </div>
     )
-  }
-
-  renderSearch () {
-    if (this.props.features.USE_SEARCH) {
-      return (
-        <TabPanel>
-          <Search
-            language={this.props.language}
-            filters={this.props.filters}
-            categories={this.props.categories}
-            filterFilters={this.props.filterFilters}
-            categoryFilters={this.props.categoryFilters}
-            filter={this.props.filter}
-          />
-        </TabPanel>
-      )
-    }
   }
 
   goToNarrative (narrative) {
@@ -62,8 +89,8 @@ class Toolbar extends React.Component {
           return (
             <div className='panel-action action'>
               <button onClick={() => { this.goToNarrative(narr) }}>
-                <p>{narr.label}</p>
-                <p><small>{trimAndEllipse(narr.description, 120)}</small></p>
+                <p>{narr.id}</p>
+                <p><small>{trimAndEllipse(narr.desc, 120)}</small></p>
               </button>
             </div>
           )
@@ -93,8 +120,10 @@ class Toolbar extends React.Component {
         <FilterListPanel
           filters={this.props.filters}
           activeFilters={this.props.activeFilters}
-          onSelectFilter={this.props.methods.onSelectFilter}
+          onSelectFilter={this.onSelectFilter}
           language={this.props.language}
+          coloringSet={this.props.coloringSet}
+          filterColors={this.props.filterColors}
         />
       </TabPanel>
     )
@@ -113,15 +142,15 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarPanels () {
-    const { features } = this.props
+    const { features, narratives } = this.props
     let classes = (this.state._selected >= 0) ? 'toolbar-panels' : 'toolbar-panels folded'
     return (
       <div className={classes}>
         {this.renderClosePanel()}
         <Tabs selectedIndex={this.state._selected}>
-          {features.USE_NARRATIVES ? this.renderToolbarNarrativePanel() : null}
+          {narratives && narratives.length !== 0 ? this.renderToolbarNarrativePanel() : null}
           {features.CATEGORIES_AS_FILTERS ? this.renderToolbarCategoriesPanel() : null}
-          {features.USE_FILTERS ? this.renderToolbarFilterPanel() : null}
+          {features.USE_ASSOCIATIONS ? this.renderToolbarFilterPanel() : null}
         </Tabs>
       </div>
     )
@@ -145,7 +174,8 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarTabs () {
-    const { features } = this.props
+    const { features, narratives } = this.props
+    const narrativesExist = narratives && narratives.length !== 0
     let title = copy[this.props.language].toolbar.title
     if (process.env.display_title) title = process.env.display_title
     const narrativesLabel = copy[this.props.language].toolbar.narratives_label
@@ -153,17 +183,17 @@ class Toolbar extends React.Component {
     const categoriesLabel = 'Categories' // TODO:
 
     const narrativesIdx = 0
-    const categoriesIdx = features.USE_NARRATIVES ? 1 : 0
-    const filtersIdx = (features.USE_NARRATIVES && features.CATEGORIES_AS_FILTERS) ? 2 : (
-      features.USE_NARRATIVES || features.CATEGORIES_AS_FILTERS ? 1 : 0
+    const categoriesIdx = narrativesExist ? 1 : 0
+    const filtersIdx = (narrativesExist && features.CATEGORIES_AS_FILTERS) ? 2 : (
+      narrativesExist || features.CATEGORIES_AS_FILTERS ? 1 : 0
     )
     return (
       <div className='toolbar'>
         <div className='toolbar-header'onClick={this.props.methods.onTitle}><p>{title}</p></div>
         <div className='toolbar-tabs'>
-          {features.USE_NARRATIVES ? this.renderToolbarTab(narrativesIdx, narrativesLabel, 'timeline') : null}
+          {narrativesExist ? this.renderToolbarTab(narrativesIdx, narrativesLabel, 'timeline') : null}
           {features.CATEGORIES_AS_FILTERS ? this.renderToolbarTab(categoriesIdx, categoriesLabel, 'widgets') : null}
-          {features.USE_FILTERS ? this.renderToolbarTab(filtersIdx, filtersLabel, 'filter_list') : null}
+          {features.USE_ASSOCIATIONS ? this.renderToolbarTab(filtersIdx, filtersLabel, 'filter_list') : null}
         </div>
         <BottomActions
           info={{
@@ -197,16 +227,19 @@ class Toolbar extends React.Component {
 
 function mapStateToProps (state) {
   return {
-    filters: selectors.getFilterTree(state),
+    filters: selectors.getFilters(state),
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
     language: state.app.language,
     activeFilters: selectors.getActiveFilters(state),
     activeCategories: selectors.getActiveCategories(state),
-    viewFilters: state.app.filters.views,
-    narrative: state.app.narrative,
+    viewFilters: state.app.associations.views,
+    narrative: state.app.associations.narrative,
     sitesShowing: state.app.flags.isShowingSites,
     infoShowing: state.app.flags.isInfopopup,
+    coloringSet: state.app.associations.coloringSet,
+    maxNumOfColors: state.ui.coloring.maxNumOfColors,
+    filterColors: state.ui.coloring.colors,
     features: selectors.getFeatures(state)
   }
 }

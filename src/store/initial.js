@@ -1,22 +1,22 @@
 import { mergeDeepLeft } from 'ramda'
-import global from '../common/global'
+import global, { colors } from '../common/global'
+import generateCardLayout from '../common/card'
 
+const isSmallLaptop = window.innerHeight < 800
 const initial = {
   /*
    * The Domain or 'domain' of this state refers to the tree of data
    *  available for render and display.
    * Selections and filters in the 'app' subtree will operate the domain
-   *   in mapStateToProps of the Dashboard, and deterimne which items
+   *   in mapStateToProps of the Dashboard, and determine which items
    *   in the domain will get rendered by React
    */
   domain: {
     events: [],
-    narratives: [],
-    locations: [],
     categories: [],
+    associations: [],
     sources: {},
     sites: [],
-    filters: {},
     notifications: []
   },
 
@@ -24,23 +24,22 @@ const initial = {
    * The 'app' subtree of this state determines the data and information to be
    *   displayed.
    * It may refer to those the user interacts with, by selecting,
-   *   fitlering and so on, which ultimately operate on the data to be displayed.
+   *   filtering and so on, which ultimately operate on the data to be displayed.
    * Additionally, some of the 'app' flags are determined by the config file
    *   or by the characteristics of the client, browser, etc.
    */
   app: {
+    debug: true,
     errors: {
-      source: null
+      source: false
     },
     highlighted: null,
     selected: [],
     source: null,
-    narrative: null,
-    narrativeState: {
-      current: null
-    },
-    filters: {
+    associations: {
+      coloringSet: [],
       filters: [],
+      narrative: null,
       categories: [],
       views: {
         events: true,
@@ -48,30 +47,36 @@ const initial = {
         sites: true
       }
     },
-    isMobile: (/Mobi/.test(navigator.userAgent)),
+    isMobile: /Mobi/.test(navigator.userAgent),
     language: 'en-US',
     map: {
       anchor: [31.356397, 34.784818],
       startZoom: 11,
-      minZoom: 6,
-      maxZoom: 18,
+      minZoom: 2,
+      maxZoom: 16,
       bounds: null,
-      maxBounds: [[180, -180], [-180, 180]]
+      maxBounds: [
+        [180, -180],
+        [-180, 180]
+      ]
+    },
+    cluster: {
+      radius: 30,
+      minZoom: 2,
+      maxZoom: 16
     },
     timeline: {
       dimensions: {
-        height: 250,
+        height: isSmallLaptop ? 170 : 250,
         width: 0,
-        marginLeft: 100,
-        marginTop: 15,
+        marginLeft: 70,
+        marginTop: isSmallLaptop ? 5 : 10, // the padding used for the day/month labels inside the timeline
         marginBottom: 60,
-        contentHeight: 200,
+        contentHeight: isSmallLaptop ? 160 : 200,
         width_controls: 100
       },
-      range: [
-        new Date(2001, 2, 23, 12),
-        new Date(2021, 2, 23, 12)
-      ],
+      range: [new Date(2001, 2, 23, 12), new Date(2021, 2, 23, 12)],
+      rangeLimits: [new Date(1, 1, 1, 1), new Date()],
       zoomLevels: [
         { label: '20 years', duration: 10512000 },
         { label: '2 years', duration: 1051200 },
@@ -87,12 +92,14 @@ const initial = {
       isCover: true,
       isCardstack: true,
       isInfopopup: false,
+      isIntropopup: false,
       isShowingSites: true
     },
     cover: {
       title: 'project title',
-      subtitle: 'project subtitle',
-      description: 'A description of the project goes here.\n\nThis description may contain markdown.\n\n# This is a large title, for example.\n\n## Whereas this is a slightly smaller title.\n\nCheck out docs/custom-covers.md in the [Timemap GitHub repo](https://github.com/forensic-architecture/timemap) for more information around how to specify custom covers.'
+      description:
+        'A description of the project goes here.\n\nThis description may contain markdown.\n\n# This is a large title, for example.\n\n## Whereas this is a slightly smaller title.\n\nCheck out docs/custom-covers.md in the [Timemap GitHub repo](https://github.com/forensic-architecture/timemap) for more information around how to specify custom covers.',
+      exploreButton: 'EXPLORE'
     },
     loading: false
   },
@@ -121,7 +128,17 @@ const initial = {
           strokeWidth: 3,
           opacity: 0.9
         }
+      },
+      clusters: {
+        radial: false
       }
+    },
+    card: {
+      layout: ({ event }) => generateCardLayout['basic']({ event })
+    },
+    coloring: {
+      maxNumOfColors: 4,
+      colors: Object.values(colors)
     },
     dom: {
       timeline: 'timeline',
@@ -133,12 +150,10 @@ const initial = {
 
   features: {
     USE_COVER: false,
-    USE_FILTERS: false,
-    USE_SEARCH: false,
+    USE_ASSOCIATIONS: false,
     USE_SITES: false,
     USE_SOURCES: false,
     USE_SHAPES: false,
-    USE_NARRATIVES: false,
     GRAPH_NONLOCATED: false,
     HIGHLIGHT_GROUPS: false
   }
@@ -154,5 +169,7 @@ if (process.env.store) {
 // NB: config.js dates get implicitly converted to strings in mergeDeepLeft
 appStore.app.timeline.range[0] = new Date(appStore.app.timeline.range[0])
 appStore.app.timeline.range[1] = new Date(appStore.app.timeline.range[1])
+
+appStore.app.flags.isIntropopup = !!appStore.app.intro
 
 export default appStore

@@ -1,21 +1,35 @@
 import React from 'react'
-import DatetimeDot from './DatetimeDot'
 import DatetimeBar from './DatetimeBar'
 import DatetimeSquare from './DatetimeSquare'
 import DatetimeStar from './DatetimeStar'
 import Project from './Project'
-import { calcOpacity } from '../../../common/utilities'
+import ColoredMarkers from '../Map/ColoredMarkers.jsx'
+import {
+  calcOpacity,
+  getEventCategories,
+  zipColorsToPercentages,
+  calculateColorPercentages,
+  isLatitude,
+  isLongitude } from '../../../common/utilities'
 
 function renderDot (event, styles, props) {
-  return <DatetimeDot
-    onSelect={props.onSelect}
-    category={event.category}
-    events={[event]}
-    x={props.x}
-    y={props.y}
-    r={props.eventRadius}
-    styleProps={styles}
-  />
+  const colorPercentages = calculateColorPercentages([event], props.coloringSet)
+  return (
+    <g
+      className={'timeline-event'}
+      onClick={props.onSelect}
+      transform={`translate(${props.x}, ${props.y})`}
+    >
+      <ColoredMarkers
+        radius={props.eventRadius}
+        colorPercentMap={zipColorsToPercentages(props.filterColors, colorPercentages)}
+        styles={{
+          ...styles
+        }}
+        className={'event'}
+      />
+    </g>
+  )
 }
 
 function renderBar (event, styles, props) {
@@ -60,6 +74,7 @@ function renderStar (event, styles, props) {
 const TimelineEvents = ({
   events,
   projects,
+  categories,
   narrative,
   getDatetimeX,
   getY,
@@ -71,18 +86,20 @@ const TimelineEvents = ({
   features,
   setLoading,
   setNotLoading,
-  eventRadius
+  eventRadius,
+  filterColors,
+  coloringSet
 }) => {
   const narIds = narrative ? narrative.steps.map(s => s.id) : []
 
-  function renderEvent (event) {
+  function renderEvent (acc, event) {
     if (narrative) {
       if (!(narIds.includes(event.id))) {
         return null
       }
     }
+    const isDot = (isLatitude(event.latitude) && isLongitude(event.longitude)) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
 
-    const isDot = (!!event.location && !!event.longitude) || (features.GRAPH_NONLOCATED && event.projectOffset !== -1)
     let renderShape = isDot ? renderDot : renderBar
     if (event.shape) {
       if (event.shape === 'bar') {
@@ -96,23 +113,44 @@ const TimelineEvents = ({
       }
     }
 
-    const eventY = getY(event)
-    let colour = event.colour ? event.colour : getCategoryColor(event.category)
-    const styles = {
-      fill: colour,
-      fillOpacity: eventY > 0 ? calcOpacity(1) : 0,
-      transition: `transform ${transitionDuration / 1000}s ease`
+    // if an event has multiple categories, it should be rendered on each of
+    // those timelines: so we create as many event 'shadows' as there are
+    // categories
+    const evShadows = getEventCategories(event, categories).map(cat => {
+      const y = getY({ ...event, category: cat.id })
+
+      let colour = event.colour ? event.colour : getCategoryColor(cat.id)
+      const styles = {
+        fill: colour,
+        fillOpacity: y > 0 ? calcOpacity(1) : 0,
+        transition: `transform ${transitionDuration / 1000}s ease`
+      }
+
+      return { y, styles }
+    })
+
+    function getRender (y, styles) {
+      return renderShape(event, styles, {
+        x: getDatetimeX(event.datetime),
+        y,
+        eventRadius,
+        onSelect: () => onSelect(event),
+        dims,
+        highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.filters[features.HIGHLIGHT_GROUPS.filterIndexIndicatingGroup]) : [],
+        features,
+        filterColors,
+        coloringSet
+      })
     }
 
-    return renderShape(event, styles, {
-      x: getDatetimeX(event.datetime),
-      y: eventY,
-      eventRadius,
-      onSelect: () => onSelect(event),
-      dims,
-      highlights: features.HIGHLIGHT_GROUPS ? getHighlights(event.filters[features.HIGHLIGHT_GROUPS.filterIndexIndicatingGroup]) : [],
-      features
-    })
+    if (evShadows.length === 0) {
+      acc.push(getRender(getY(event), { fill: getCategoryColor(null) }))
+    } else {
+      evShadows.forEach(evShadow => {
+        acc.push(getRender(evShadow.y, evShadow.styles))
+      })
+    }
+    return acc
   }
 
   let renderProjects = () => null
@@ -136,7 +174,7 @@ const TimelineEvents = ({
       clipPath={'url(#clip)'}
     >
       {renderProjects()}
-      {events.map(event => renderEvent(event))}
+      {events.reduce(renderEvent, [])}
     </g>
   )
 }

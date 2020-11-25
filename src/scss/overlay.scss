@@ -168,7 +168,6 @@ $overlay-bg: rgba(239,239,239,0.9);
   box-sizing: border-box;
   width: 100%;
   max-height: calc(#{$panel-height} - 100px);
-  font-family: "Lato", Helvetica, sans-serif;
 
   .media-content {
     display: flex;
@@ -219,7 +218,6 @@ $overlay-bg: rgba(239,239,239,0.9);
     max-width: $panel-width;
     padding: $padding 0;
     border-top: 1px solid rgb(189,189,189);
-    font-family: "Lato", Helvetica, sans-serif;
     font-size: $normal;
 
     h4 {
@@ -291,7 +289,6 @@ $overlay-bg: rgba(239,239,239,0.9);
   box-sizing: border-box;
   padding: 0 calc(50% - 400px);
   overflow-y: scroll;
-  font-family: Helvetica, Georgia, serif;
   line-height: 1.5em;
   min-width: 100%;
   margin-bottom: 120px;
@@ -316,6 +313,7 @@ $overlay-bg: rgba(239,239,239,0.9);
   padding: 20px;
   min-width: calc(100% - 40px);
   z-index: $final-level;
+  max-height: 60vh;
 }
 
 .media-player {
@@ -326,21 +324,20 @@ $overlay-bg: rgba(239,239,239,0.9);
   height: 100%;
   min-height: 100%;
   display: block;
-  // align-self: center;
-  // display: flex;
-  // flex-direction: column;
 }
 
 .source-image, .source-video {
-  padding: 0px;
-  font-family: 'Lato', Helvetica, sans-serif;
-  // max-width: calc(#{$panel-width} - 100px);
-  max-height: $panel-height;
+  padding: 1px;
+  max-height: 100%;
   margin: auto;
   width: auto;
   height: auto;
   max-width: 100%;
   object-fit: contain;
+  &:hover {
+    cursor: pointer;
+    background-color: $yellow;
+  }
 }
 
 .source-image-loader {

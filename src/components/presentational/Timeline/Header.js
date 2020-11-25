@@ -1,8 +1,9 @@
 import React from 'react'
+import { makeNiceDate } from '../../../common/utilities'
 
 const TimelineHeader = ({ title, from, to, onClick, hideInfo }) => {
-  const d0 = from && from.toLocaleDateString()
-  const d1 = to && to.toLocaleDateString()
+  const d0 = from && makeNiceDate(from)
+  const d1 = to && makeNiceDate(to)
   return (
     <div className='timeline-header'>
       <div className='timeline-toggle' onClick={() => onClick()}>

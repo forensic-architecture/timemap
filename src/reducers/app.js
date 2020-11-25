@@ -1,28 +1,32 @@
 import initial from '../store/initial.js'
+import { ASSOCIATION_MODES } from '../common/constants'
 import { toggleFlagAC } from '../common/utilities'
 
 import {
   UPDATE_HIGHLIGHTED,
   UPDATE_SELECTED,
+  UPDATE_COLORING_SET,
   CLEAR_FILTER,
-  TOGGLE_FILTER,
+  TOGGLE_ASSOCIATIONS,
   UPDATE_TIMERANGE,
   UPDATE_DIMENSIONS,
   UPDATE_NARRATIVE,
-  INCREMENT_NARRATIVE_CURRENT,
-  DECREMENT_NARRATIVE_CURRENT,
+  UPDATE_NARRATIVE_STEP_IDX,
   UPDATE_SOURCE,
   TOGGLE_LANGUAGE,
   TOGGLE_SITES,
   TOGGLE_FETCHING_DOMAIN,
   TOGGLE_FETCHING_SOURCES,
   TOGGLE_INFOPOPUP,
+  TOGGLE_INTROPOPUP,
   TOGGLE_NOTIFICATIONS,
   TOGGLE_COVER,
   FETCH_ERROR,
   FETCH_SOURCE_ERROR,
   SET_LOADING,
-  SET_NOT_LOADING
+  SET_NOT_LOADING,
+  SET_INITIAL_CATEGORIES,
+  UPDATE_SEARCH_QUERY
 } from '../actions'
 
 function updateHighlighted (appState, action) {
@@ -37,6 +41,16 @@ function updateSelected (appState, action) {
   })
 }
 
+function updateColoringSet (appState, action) {
+  return {
+    ...appState,
+    associations: {
+      ...appState.associations,
+      coloringSet: action.coloringSet
+    }
+  }
+}
+
 function updateNarrative (appState, action) {
   let minTime = appState.timeline.range[0]
   let maxTime = appState.timeline.range[1]
@@ -46,6 +60,7 @@ function updateNarrative (appState, action) {
 
   // Compute narrative time range and map bounds
   if (action.narrative) {
+    // Forced to comment out min and max time changes, not sure why?
     minTime = appState.timeline.rangeLimits[0]
     maxTime = appState.timeline.rangeLimits[1]
 
@@ -82,62 +97,52 @@ function updateNarrative (appState, action) {
     minTime = minTime - Math.abs((maxTime - minTime) / 10)
     maxTime = maxTime + Math.abs((maxTime - minTime) / 10)
   }
-
   return {
     ...appState,
-    narrative: action.narrative,
-    narrativeState: {
-      current: action.narrative ? 0 : null
+    associations: {
+      ...appState.associations,
+      narrative: action.narrative
     },
-    filters: {
-      ...appState.filters,
-      timerange: [minTime, maxTime],
-      mapBounds: (action.narrative) ? [cornerBound0, cornerBound1] : null
+    map: {
+      ...appState.map,
+      bounds: (action.narrative) ? [cornerBound0, cornerBound1] : null
+    },
+    timeline: {
+      ...appState.timeline,
+      range: [minTime, maxTime]
     }
   }
 }
 
-function incrementNarrativeCurrent (appState, action) {
-  appState.narrativeState.current += 1
-
+function updateNarrativeStepIdx (appState, action) {
   return {
     ...appState,
     narrativeState: {
-      current: appState.narrativeState.current
+      current: action.idx
     }
   }
 }
 
-function decrementNarrativeCurrent (appState, action) {
-  appState.narrativeState.current -= 1
-
-  return {
-    ...appState,
-    narrativeState: {
-      current: appState.narrativeState.current
-    }
-  }
-}
-
-function toggleFilter (appState, action) {
+function toggleAssociations (appState, action) {
   if (!(action.value instanceof Array)) {
     action.value = [action.value]
   }
+  const { association: associationType } = action
 
-  let newFilters = appState.filters[action.filter].slice(0)
+  let newAssociations = appState.associations[associationType].slice(0)
   action.value.forEach(vl => {
-    if (newFilters.includes(vl)) {
-      newFilters = newFilters.filter(s => s !== vl)
+    if (newAssociations.includes(vl)) {
+      newAssociations = newAssociations.filter(s => s !== vl)
     } else {
-      newFilters.push(vl)
+      newAssociations.push(vl)
     }
   })
 
   return {
     ...appState,
-    filters: {
-      ...appState.filters,
-      [action.filter]: newFilters
+    associations: {
+      ...appState.associations,
+      [associationType]: newAssociations
     }
   }
 }
@@ -201,6 +206,7 @@ const toggleSites = toggleFlagAC('isShowingSites')
 const toggleFetchingDomain = toggleFlagAC('isFetchingDomain')
 const toggleFetchingSources = toggleFlagAC('isFetchingSources')
 const toggleInfoPopup = toggleFlagAC('isInfopopup')
+const toggleIntroPopup = toggleFlagAC('isIntropopup')
 const toggleNotifications = toggleFlagAC('isNotification')
 const toggleCover = toggleFlagAC('isCover')
 
@@ -228,26 +234,48 @@ function setNotLoading (appState) {
   }
 }
 
+function setInitialCategories (appState, action) {
+  const categories = action.values.reduce((acc, val) => {
+    if (val.mode === ASSOCIATION_MODES.CATEGORY) acc.push(val.id)
+    return acc
+  }, [])
+
+  return {
+    ...appState,
+    associations: {
+      ...appState.associations,
+      categories: categories
+    }
+  }
+}
+
+function updateSearchQuery (appState, action) {
+  return {
+    ...appState,
+    searchQuery: action.searchQuery
+  }
+}
+
 function app (appState = initial.app, action) {
   switch (action.type) {
     case UPDATE_HIGHLIGHTED:
       return updateHighlighted(appState, action)
     case UPDATE_SELECTED:
       return updateSelected(appState, action)
+    case UPDATE_COLORING_SET:
+      return updateColoringSet(appState, action)
     case CLEAR_FILTER:
       return clearFilter(appState, action)
-    case TOGGLE_FILTER:
-      return toggleFilter(appState, action)
+    case TOGGLE_ASSOCIATIONS:
+      return toggleAssociations(appState, action)
     case UPDATE_TIMERANGE:
       return updateTimeRange(appState, action)
     case UPDATE_DIMENSIONS:
       return updateDimensions(appState, action)
     case UPDATE_NARRATIVE:
       return updateNarrative(appState, action)
-    case INCREMENT_NARRATIVE_CURRENT:
-      return incrementNarrativeCurrent(appState, action)
-    case DECREMENT_NARRATIVE_CURRENT:
-      return decrementNarrativeCurrent(appState, action)
+    case UPDATE_NARRATIVE_STEP_IDX:
+      return updateNarrativeStepIdx(appState, action)
     case UPDATE_SOURCE:
       return updateSource(appState, action)
     /* toggles */
@@ -261,6 +289,8 @@ function app (appState = initial.app, action) {
       return toggleFetchingSources(appState)
     case TOGGLE_INFOPOPUP:
       return toggleInfoPopup(appState)
+    case TOGGLE_INTROPOPUP:
+      return toggleIntroPopup(appState)
     case TOGGLE_NOTIFICATIONS:
       return toggleNotifications(appState)
     case TOGGLE_COVER:
@@ -274,6 +304,10 @@ function app (appState = initial.app, action) {
       return setLoading(appState)
     case SET_NOT_LOADING:
       return setNotLoading(appState)
+    case SET_INITIAL_CATEGORIES:
+      return setInitialCategories(appState, action)
+    case UPDATE_SEARCH_QUERY:
+      return updateSearchQuery(appState, action)
     default:
       return appState
   }

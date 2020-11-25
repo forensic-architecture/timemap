@@ -2,11 +2,10 @@
 import { urlFromEnv } from '../common/utilities'
 
 // TODO: relegate these URLs entirely to environment variables
+// const CONFIG_URL = urlFromEnv('CONFIG_EXT')
 const EVENT_DATA_URL = urlFromEnv('EVENTS_EXT')
-const CATEGORY_URL = urlFromEnv('CATEGORIES_EXT')
-const FILTERS_URL = urlFromEnv('FILTERS_EXT')
+const ASSOCIATIONS_URL = urlFromEnv('ASSOCIATIONS_EXT')
 const SOURCES_URL = urlFromEnv('SOURCES_EXT')
-const NARRATIVE_URL = urlFromEnv('NARRATIVES_EXT')
 const SITES_URL = urlFromEnv('SITES_EXT')
 const SHAPES_URL = urlFromEnv('SHAPES_EXT')
 
@@ -27,39 +26,29 @@ export function fetchDomain () {
     const features = getState().features
     dispatch(toggleFetchingDomain())
 
-    const eventPromise = fetch(EVENT_DATA_URL)
-      .then(response => response.json())
-      .catch(() => handleError('events'))
+    // let configPromise = Promise.resolve([])
+    // if (features.USE_REMOTE_CONFIG) {
+    //   configPromise = fetch(CONFIG_URL)
+    //     .then(response => response.json())
+    //     .catch(() => handleError("Couldn't find data at the config URL you specified."))
+    // }
 
-    let catPromise = Promise.resolve([])
-    if (features.USE_CATEGORIES) {
-      catPromise = fetch(CATEGORY_URL)
+    // NB: EVENT_DATA_URL is a list, and so results are aggregated
+    const eventPromise = Promise.all(
+      EVENT_DATA_URL.map(url => fetch(url)
         .then(response => response.json())
-        .catch(() => handleError(domainMsg('categories')))
-    }
+        .catch(() => handleError('events'))
+      )
+    ).then(results => results.flatMap(t => t))
 
-    let narPromise = Promise.resolve([])
-    if (features.USE_NARRATIVES) {
-      narPromise = fetch(NARRATIVE_URL)
-        .then(response => response.json())
-        .catch(() => handleError(domainMsg('narratives')))
-    }
-
-    let sitesPromise = Promise.resolve([])
-    if (features.USE_SITES) {
-      sitesPromise = fetch(SITES_URL)
-        .then(response => response.json())
-        .catch(() => handleError(domainMsg('sites')))
-    }
-
-    let filtersPromise = Promise.resolve([])
-    if (features.USE_FILTERS) {
-      if (!FILTERS_URL) {
-        filtersPromise = Promise.resolve(handleError('USE_FILTERS is true, but you have not provided a FILTERS_EXT'))
+    let associationsPromise = Promise.resolve([])
+    if (features.USE_ASSOCIATIONS) {
+      if (!ASSOCIATIONS_URL) {
+        associationsPromise = Promise.resolve(handleError('USE_ASSOCIATIONS is true, but you have not provided a ASSOCIATIONS_EXT'))
       } else {
-        filtersPromise = fetch(FILTERS_URL)
+        associationsPromise = fetch(ASSOCIATIONS_URL)
           .then(response => response.json())
-          .catch(() => handleError(domainMsg('filters')))
+          .catch(() => handleError(domainMsg('associations')))
       }
     }
 
@@ -74,6 +63,13 @@ export function fetchDomain () {
       }
     }
 
+    let sitesPromise = Promise.resolve([])
+    if (features.USE_SITES) {
+      sitesPromise = fetch(SITES_URL)
+        .then(response => response.json())
+        .catch(() => handleError(domainMsg('sites')))
+    }
+
     let shapesPromise = Promise.resolve([])
     if (features.USE_SHAPES) {
       shapesPromise = fetch(SHAPES_URL)
@@ -83,28 +79,25 @@ export function fetchDomain () {
 
     return Promise.all([
       eventPromise,
-      catPromise,
-      narPromise,
-      sitesPromise,
-      filtersPromise,
+      associationsPromise,
       sourcesPromise,
+      sitesPromise,
       shapesPromise
     ])
       .then(response => {
         const result = {
           events: response[0],
-          categories: response[1],
-          narratives: response[2],
+          associations: response[1],
+          sources: response[2],
           sites: response[3],
-          filters: response[4],
-          sources: response[5],
-          shapes: response[6],
+          shapes: response[4],
           notifications
         }
         if (Object.values(result).some(resp => resp.hasOwnProperty('error'))) {
           throw new Error('Some URLs returned negative. If you are in development, check the server is running')
         }
         dispatch(toggleFetchingDomain())
+        dispatch(setInitialCategories(result.associations))
         return result
       })
       .catch(err => {
@@ -125,10 +118,10 @@ export function fetchError (message) {
 }
 
 export const UPDATE_DOMAIN = 'UPDATE_DOMAIN'
-export function updateDomain (domain) {
+export function updateDomain (payload) {
   return {
     type: UPDATE_DOMAIN,
-    domain
+    payload
   }
 }
 
@@ -187,12 +180,13 @@ export function clearFilter (filter) {
   }
 }
 
-export const TOGGLE_FILTER = 'TOGGLE_FILTER'
-export function toggleFilter (filter, value) {
+export const TOGGLE_ASSOCIATIONS = 'TOGGLE_ASSOCIATIONS'
+export function toggleAssociations (association, value, shouldColor) {
   return {
-    type: TOGGLE_FILTER,
-    filter,
-    value
+    type: TOGGLE_ASSOCIATIONS,
+    association,
+    value,
+    shouldColor
   }
 }
 
@@ -207,6 +201,14 @@ export const SET_NOT_LOADING = 'SET_NOT_LOADING'
 export function setNotLoading () {
   return {
     type: SET_NOT_LOADING
+  }
+}
+
+export const SET_INITIAL_CATEGORIES = 'SET_INITIAL_CATEGORIES'
+export function setInitialCategories (values) {
+  return {
+    type: SET_INITIAL_CATEGORIES,
+    values
   }
 }
 
@@ -234,17 +236,11 @@ export function updateNarrative (narrative) {
   }
 }
 
-export const INCREMENT_NARRATIVE_CURRENT = 'INCREMENT_NARRATIVE_CURRENT'
-export function incrementNarrativeCurrent () {
+export const UPDATE_NARRATIVE_STEP_IDX = 'UPDATE_NARRATIVE_STEP_IDX'
+export function updateNarrativeStepIdx (idx) {
   return {
-    type: INCREMENT_NARRATIVE_CURRENT
-  }
-}
-
-export const DECREMENT_NARRATIVE_CURRENT = 'DECREMENT_NARRATIVE_CURRENT'
-export function decrementNarrativeCurrent () {
-  return {
-    type: DECREMENT_NARRATIVE_CURRENT
+    type: UPDATE_NARRATIVE_STEP_IDX,
+    idx
   }
 }
 
@@ -253,6 +249,14 @@ export function updateSource (source) {
   return {
     type: UPDATE_SOURCE,
     source
+  }
+}
+
+export const UPDATE_COLORING_SET = 'UPDATE_COLORING_SET'
+export function updateColoringSet (coloringSet) {
+  return {
+    type: UPDATE_COLORING_SET,
+    coloringSet
   }
 }
 
@@ -301,6 +305,13 @@ export function toggleInfoPopup () {
   }
 }
 
+export const TOGGLE_INTROPOPUP = 'TOGGLE_INTROPOPUP'
+export function toggleIntroPopup () {
+  return {
+    type: TOGGLE_INTROPOPUP
+  }
+}
+
 export const TOGGLE_NOTIFICATIONS = 'TOGGLE_NOTIFICATIONS'
 export function toggleNotifications () {
   return {
@@ -319,6 +330,14 @@ export const TOGGLE_COVER = 'TOGGLE_COVER'
 export function toggleCover () {
   return {
     type: TOGGLE_COVER
+  }
+}
+
+export const UPDATE_SEARCH_QUERY = 'UPDATE_SEARCH_QUERY'
+export function updateSearchQuery (searchQuery) {
+  return {
+    type: UPDATE_SEARCH_QUERY,
+    searchQuery
   }
 }
 

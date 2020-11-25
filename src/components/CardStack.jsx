@@ -1,8 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import * as selectors from '../selectors'
 
-import Card from './Card.jsx'
+import * as selectors from '../selectors'
+import { getFilterIdxFromColorSet } from '../common/utilities'
+// import Card from './Card.jsx'
+import { Card } from '@forensic-architecture/design-system/react'
 import copy from '../common/data/copy.json'
 
 class CardStack extends React.Component {
@@ -24,7 +26,8 @@ class CardStack extends React.Component {
   scrollToCard () {
     const duration = 500
     const element = this.refCardStack.current
-    const cardScroll = this.refs[this.props.narrative.current].current.offsetTop
+    const cardScroll = this.refs[this.props.narrative.current].current
+      .offsetTop
 
     let start = element.scrollTop
     let change = cardScroll - start
@@ -37,9 +40,9 @@ class CardStack extends React.Component {
     // d = duration
     Math.easeInOutQuad = function (t, b, c, d) {
       t /= d / 2
-      if (t < 1) return c / 2 * t * t + b
+      if (t < 1) return (c / 2) * t * t + b
       t -= 1
-      return -c / 2 * (t * (t - 2) - 1) + b
+      return (-c / 2) * (t * (t - 2) - 1) + b
     }
 
     const animateScroll = function () {
@@ -53,33 +56,35 @@ class CardStack extends React.Component {
 
   renderCards (events, selections) {
     // if no selections provided, select all
-    if (!selections) { selections = events.map(e => true) }
+    if (!selections) {
+      selections = events.map((e) => true)
+    }
     this.refs = []
 
     return events.map((event, idx) => {
       const thisRef = React.createRef()
       this.refs[idx] = thisRef
-      return (<Card
-        event={event}
-        ref={thisRef}
-        sourceError={this.props.sourceError}
-        language={this.props.language}
-        isLoading={this.props.isLoading}
-        isSelected={selections[idx]}
-        getNarrativeLinks={this.props.getNarrativeLinks}
-        getCategoryGroup={this.props.getCategoryGroup}
-        getCategoryColor={this.props.getCategoryColor}
-        getCategoryLabel={this.props.getCategoryLabel}
-        onViewSource={this.props.onViewSource}
-        onHighlight={this.props.onHighlight}
-        onSelect={this.props.onSelect}
-        features={this.props.features}
-      />)
+
+      return (
+        <Card
+          ref={thisRef}
+          content={this.props.cardUI.layout({
+            event,
+            colors: this.props.colors,
+            coloringSet: this.props.coloringSet,
+            getFilterIdxFromColorSet
+          })}
+          language={this.props.language}
+          isLoading={this.props.isLoading}
+          isSelected={selections[idx]}
+        />
+      )
     })
   }
 
   renderSelectedCards () {
     const { selected } = this.props
+
     if (selected.length > 0) {
       return this.renderCards(selected)
     }
@@ -90,8 +95,7 @@ class CardStack extends React.Component {
     const { narrative } = this.props
     const showing = narrative.steps
 
-    const selections = showing
-      .map((_, idx) => (idx === narrative.current))
+    const selections = showing.map((_, idx) => idx === narrative.current)
 
     return this.renderCards(showing, selections)
   }
@@ -105,7 +109,9 @@ class CardStack extends React.Component {
         className='card-stack-header'
         onClick={() => this.props.onToggleCardstack()}
       >
-        <button className='side-menu-burg is-active'><span /></button>
+        <button className='side-menu-burg is-active'>
+          <span />
+        </button>
         <p className='header-copy top'>
           {`${this.props.selected.length} ${headerLang}`}
         </p>
@@ -116,36 +122,34 @@ class CardStack extends React.Component {
   renderCardStackContent () {
     return (
       <div id='card-stack-content' className='card-stack-content'>
-        <ul>
-          {this.renderSelectedCards()}
-        </ul>
+        <ul>{this.renderSelectedCards()}</ul>
       </div>
     )
   }
 
   renderNarrativeContent () {
     return (
-      <div id='card-stack-content' className='card-stack-content'
+      <div
+        id='card-stack-content'
+        className='card-stack-content'
         ref={this.refCardStackContent}
       >
-        <ul>
-          {this.renderNarrativeCards()}
-        </ul>
+        <ul>{this.renderNarrativeCards()}</ul>
       </div>
     )
   }
 
   render () {
-    const { isCardstack, selected, narrative } = this.props
-
+    const { isCardstack, selected, narrative, timelineDims } = this.props
+    // TODO: make '237px', which is the narrative header, less hard-coded
+    const height = `calc(100% - 237px - ${timelineDims.height}px)`
     if (selected.length > 0) {
       if (!narrative) {
         return (
           <div
             id='card-stack'
             className={`card-stack
-            ${isCardstack ? '' : ' folded'}`
-            }
+            ${isCardstack ? '' : ' folded'}`}
           >
             {this.renderCardStackHeader()}
             {this.renderCardStackContent()}
@@ -157,8 +161,8 @@ class CardStack extends React.Component {
             id='card-stack'
             ref={this.refCardStack}
             className={`card-stack narrative-mode
-            ${isCardstack ? '' : ' folded'}`
-            }
+            ${isCardstack ? '' : ' folded'}`}
+            style={{ height }}
           >
             {this.renderNarrativeContent()}
           </div>
@@ -178,6 +182,9 @@ function mapStateToProps (state) {
     language: state.app.language,
     isCardstack: state.app.flags.isCardstack,
     isLoading: state.app.flags.isFetchingSources,
+    cardUI: state.ui.card,
+    colors: state.ui.coloring.colors,
+    coloringSet: state.app.associations.coloringSet,
     features: state.features
   }
 }

@@ -6,14 +6,12 @@ NARRATIVE INFO
   top: 30px;
   left: auto;
   right: $card-right; // looks a bit better due to the 1px border on other elements.
-  height: $narrative-info-height;
   width: $card-width;
   box-sizing: border-box;
   max-height: calc(100% - 250px);
   box-shadow: 0 19px 38px rgba($black, 0.3), 0 15px 12px rgba($black, 0.22);
   background: $black;
   color: $offwhite;
-  font-family: Helvetica, 'Georgia', serif;
 
   .narrative-info-header {
     display: flex;
@@ -35,13 +33,14 @@ NARRATIVE INFO
   }
 
   .narrative-info-desc {
-    height: $narrative-info-desc-height;
+    max-height: $narrative-info-desc-height;
     overflow-y: auto;
     white-space: pre-line;
+    padding-bottom: 5px;
   }
 
   p {
-    padding: 0 15px;
+    padding: 0 15px 15px 15px;
   }
 
   h3, h6 {
@@ -50,7 +49,6 @@ NARRATIVE INFO
 
   h3 {
     font-size: $large;
-    font-family: Helvetica, 'Georgia', serif;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     font-weight: 100;
@@ -64,7 +62,6 @@ NARRATIVE INFO
   }
 
   p {
-    font-family: 'Lato', 'Helvetica', sans-serif;
     font-size: $normal;
     line-height: 1.4em;
   }
@@ -76,7 +73,6 @@ NARRATIVE INFO
       height: 40px;
       box-sizing: border-box;
       line-height: 40px;
-      font-family: 'Lato', 'Helvetica', sans-serif;
       text-align: center;
       display: inline-block;
 

@@ -16,6 +16,7 @@
   &:hover {
     background: $lightwhite;
     transition: background-color 0.4s;
+    cursor: pointer;
   }
 
   h4 {
@@ -169,7 +170,6 @@
   }
 
   .timestamp {
-    font-family: 'Lato', Helvetica, sans-serif;
     margin-top: 0;
 
     .estimated-timestamp {
@@ -193,10 +193,6 @@
       text-align: right;
       flex: 1;
     }
-  }
-
-  .location {
-    font-family: 'Lato', Helvetica, sans-serif;
   }
 
   .summary {

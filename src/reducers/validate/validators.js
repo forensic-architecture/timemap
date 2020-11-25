@@ -1,18 +1,17 @@
 import Joi from 'joi'
 
-import eventSchema from './eventSchema'
-import categorySchema from './categorySchema'
+import createEventSchema from './eventSchema'
 import siteSchema from './siteSchema'
-import narrativeSchema from './narrativeSchema'
+import associationsSchema from './associationsSchema'
 import sourceSchema from './sourceSchema'
 import shapeSchema from './shapeSchema'
 
 import { calcDatetime, capitalize } from '../../common/utilities'
 
 /*
-* Create an error notification object
-* Types: ['error', 'warning', 'good', 'neural']
-*/
+ * Create an error notification object
+ * Types: ['error', 'warning', 'good', 'neural']
+ */
 function makeError (type, id, message) {
   return {
     type: 'error',
@@ -21,46 +20,39 @@ function makeError (type, id, message) {
   }
 }
 
-const isLeaf = node => (Object.keys(node.children).length === 0)
-const isDuplicate = (node, set) => { return (set.has(node.key)) }
+function isValidDate (d) {
+  return d instanceof Date && !isNaN(d)
+}
 
-/*
-* Traverse a filter tree and check its duplicates
-*/
-function validateTree (node, parent, set, duplicates) {
-  if (!Array.isArray(node) || !node.length) {
-    return
-  }
-  // If it's a leaf, check that it's not duplicate
-  if (isLeaf(node)) {
-    if (isDuplicate(node, set)) {
+function findDuplicateAssociations (associations) {
+  const seenSet = new Set([])
+  const duplicates = []
+  associations.forEach((item) => {
+    if (seenSet.has(item.id)) {
       duplicates.push({
-        id: node.key,
-        error: makeError('Filters', node.key, 'filter was found more than once in hierarchy. Ignoring duplicate.')
+        id: item.id,
+        error: makeError(
+          'Association',
+          item.id,
+          'association was found more than once. Ignoring duplicate.'
+        )
       })
-      delete parent.children[node.key]
     } else {
-      set.add(node.key)
+      seenSet.add(item.id)
     }
-  } else {
-    // If it's not a leaf, simply keep going
-    Object.values(node.children).forEach((childNode) => {
-      validateTree(childNode, node, set, duplicates)
-    })
-  }
+  })
+  return duplicates
 }
 
 /*
-* Validate domain schema
-*/
-export function validateDomain (domain) {
+ * Validate domain schema
+ */
+export function validateDomain (domain, features) {
   const sanitizedDomain = {
     events: [],
-    categories: [],
     sites: [],
-    narratives: [],
+    associations: [],
     sources: {},
-    filters: {},
     shapes: [],
     notifications: domain ? domain.notifications : null
   }
@@ -71,9 +63,8 @@ export function validateDomain (domain) {
 
   const discardedDomain = {
     events: [],
-    categories: [],
     sites: [],
-    narratives: [],
+    associations: [],
     sources: [],
     shapes: []
   }
@@ -92,19 +83,13 @@ export function validateDomain (domain) {
   }
 
   function validateArray (items, domainKey, schema) {
-    items.forEach(item => {
-      // NB: backwards compatibility with 'tags' for 'filters'
-      if (domainKey === 'events') {
-        if (!item.filters && !!item.tags) {
-          item.filters = item.tags
-        }
-      }
+    items.forEach((item) => {
       validateArrayItem(item, domainKey, schema)
     })
   }
 
   function validateObject (obj, domainKey, itemSchema) {
-    Object.keys(obj).forEach(key => {
+    Object.keys(obj).forEach((key) => {
       const vl = obj[key]
       const result = Joi.validate(vl, itemSchema)
       if (result.error !== null) {
@@ -120,24 +105,56 @@ export function validateDomain (domain) {
     })
   }
 
+  if (!Array.isArray(features.CUSTOM_EVENT_FIELDS)) {
+    features.CUSTOM_EVENT_FIELDS = []
+  }
+
+  const eventSchema = createEventSchema(features.CUSTOM_EVENT_FIELDS)
   validateArray(domain.events, 'events', eventSchema)
-  validateArray(domain.categories, 'categories', categorySchema)
   validateArray(domain.sites, 'sites', siteSchema)
-  validateArray(domain.narratives, 'narratives', narrativeSchema)
+  validateArray(domain.associations, 'associations', associationsSchema)
   validateObject(domain.sources, 'sources', sourceSchema)
   validateObject(domain.shapes, 'shapes', shapeSchema)
 
   // NB: [lat, lon] array is best format for projecting into map
-  sanitizedDomain.shapes = sanitizedDomain.shapes.map(shape => ({
+  sanitizedDomain.shapes = sanitizedDomain.shapes.map((shape) => ({
     name: shape.name,
-    points: shape.items.map(coords => (
-      coords.replace(/\s/g, '').split(',')
-    ))
+    points: shape.items.map((coords) => coords.replace(/\s/g, '').split(','))
+  }))
+
+  const duplicateAssociations = findDuplicateAssociations(domain.associations)
+  // Duplicated associations
+  if (duplicateAssociations.length > 0) {
+    sanitizedDomain.notifications.push({
+      message: `Associations are required to be unique. Ignoring duplicates for now.`,
+      items: duplicateAssociations,
+      type: 'error'
+    })
+  }
+  sanitizedDomain.associations = domain.associations
+
+  // append events with datetime and sort
+  sanitizedDomain.events = sanitizedDomain.events.filter((event, idx) => {
+    event.id = idx
+    event.datetime = calcDatetime(event.date, event.time)
+    if (!isValidDate(event.datetime)) {
+      discardedDomain['events'].push({
+        ...event,
+        error: makeError(
+          'events',
+          event.id,
+          `Invalid date. It's been dropped, as otherwise timemap won't work as expected.`
+        )
+      })
+      return false
+    }
+    return true
   })
-  )
+
+  sanitizedDomain.events.sort((a, b) => a.datetime - b.datetime)
 
   // Message the number of failed items in domain
-  Object.keys(discardedDomain).forEach(disc => {
+  Object.keys(discardedDomain).forEach((disc) => {
     const len = discardedDomain[disc].length
     if (len) {
       sanitizedDomain.notifications.push({
@@ -147,28 +164,6 @@ export function validateDomain (domain) {
       })
     }
   })
-
-  // Validate uniqueness of filters
-  const filterSet = new Set([])
-  const duplicateFilters = []
-  validateTree(domain.filters, {}, filterSet, duplicateFilters)
-
-  // Duplicated filters
-  if (duplicateFilters.length > 0) {
-    sanitizedDomain.notifications.push({
-      message: `Filters are required to be unique. Ignoring duplicates for now.`,
-      items: duplicateFilters,
-      type: 'error'
-    })
-  }
-  sanitizedDomain.filters = domain.filters
-
-  // append events with datetime and sort
-  sanitizedDomain.events.forEach(event => {
-    event.datetime = calcDatetime(event.date, event.time)
-  })
-
-  sanitizedDomain.events.sort((a, b) => a.datetime - b.datetime)
 
   return sanitizedDomain
 }

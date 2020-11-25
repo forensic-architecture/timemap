@@ -1,5 +1,4 @@
 .loading-overlay {
-  font-family: 'Lato', Helvetica, sans-serif;
   font-weight: 300;
   width: 100%;
   height: 100%;
@@ -83,4 +82,11 @@ https://github.com/tobiasahlin/SpinKit/blob/master/LICENSE
     transform: scale(1.0);
     -webkit-transform: scale(1.0);
   }
+}
+
+.fixedTooSmallMessage {
+  position: absolute;
+  top: 0;
+  color: white;
+  padding: 10px;
 }
