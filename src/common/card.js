@@ -1,5 +1,6 @@
 import copy from './data/copy.json'
-const language = process.env.store.app.language || 'en-US'
+import { language } from './utilities'
+
 const cardStack = copy[language].cardstack
 
 // Sensible defaults for generating a basic card layout

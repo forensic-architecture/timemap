@@ -1,10 +1,11 @@
 import moment from 'moment'
 import hash from 'object-hash'
 
-const language = process.env.store.app.language || 'en-US'
 let { DATE_FMT, TIME_FMT } = process.env
 if (!DATE_FMT) DATE_FMT = 'MM/DD/YYYY'
 if (!TIME_FMT) TIME_FMT = 'HH:mm'
+
+export const language = process.env.store.app.language || 'en-US'
 
 export function calcDatetime (date, time) {
   if (!time) time = '00:00'
