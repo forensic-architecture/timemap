@@ -413,12 +413,12 @@ export function makeNiceDate (datetime) {
  * Sets the default locale for d3 to format dates in each available language.
  * @param {Object} d3 - An instance of D3
  */
-export function setD3Locale(d3) {
+export function setD3Locale (d3) {
   const languages = {
     'es-MX': require('./data/es-MX.json')
   }
 
   if (process.env.store.app.language !== 'es-US' && languages[process.env.store.app.language]) {
-    d3.timeFormatDefaultLocale(languages[process.env.store.app.language]);
+    d3.timeFormatDefaultLocale(languages[process.env.store.app.language])
   }
 }

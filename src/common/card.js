@@ -1,5 +1,5 @@
-import copy from './data/copy.json';
-const {date_title, location_title, summary_title} = copy[process.env.store.app.language].cardstack;
+import copy from './data/copy.json'
+const cardStack = copy[process.env.store.app.language].cardstack
 
 // Sensible defaults for generating a basic card layout
 // based on the example Timemap datasheet.
@@ -9,12 +9,12 @@ const basic = ({ event }) => {
     [
       {
         kind: 'date',
-        title: date_title || 'Incident Dates',
+        title: cardStack['date_title'] || 'Incident Dates',
         value: event.datetime || event.date || ``
       },
       {
         kind: 'text',
-        title: location_title || 'Location',
+        title: cardStack['location_title'] || 'Location',
         value: event.location || `—`
       }
     ],
@@ -22,7 +22,7 @@ const basic = ({ event }) => {
     [
       {
         kind: 'text',
-        title: summary_title || 'Summary',
+        title: cardStack['summary_title'] || 'Summary',
         value: event.description || ``,
         scaleFont: 1.1
       }

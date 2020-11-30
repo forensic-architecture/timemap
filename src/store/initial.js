@@ -1,9 +1,9 @@
 import { mergeDeepLeft } from 'ramda'
 import global, { colors } from '../common/global'
 import generateCardLayout from '../common/card'
-import copy from '../common/data/copy.json';
+import copy from '../common/data/copy.json'
 
-const language = process.env.store.app.language;
+const language = process.env.store.app.language
 const isSmallLaptop = window.innerHeight < 800
 const initial = {
   /*
