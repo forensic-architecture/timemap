@@ -1,5 +1,6 @@
 import copy from './data/copy.json'
-const cardStack = copy[process.env.store.app.language].cardstack
+const language = process.env.store.app.language || 'en-US'
+const cardStack = copy[language].cardstack
 
 // Sensible defaults for generating a basic card layout
 // based on the example Timemap datasheet.

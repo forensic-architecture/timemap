@@ -1,6 +1,7 @@
 import moment from 'moment'
 import hash from 'object-hash'
 
+const language = process.env.store.app.language || 'en-US'
 let { DATE_FMT, TIME_FMT } = process.env
 if (!DATE_FMT) DATE_FMT = 'MM/DD/YYYY'
 if (!TIME_FMT) TIME_FMT = 'HH:mm'
@@ -397,7 +398,7 @@ export function makeNiceDate (datetime) {
   if (datetime === null) return null
   // see https://stackoverflow.com/questions/3552461/how-to-format-a-javascript-date
   const dateTimeFormat = new Intl.DateTimeFormat(
-    process.env.store.app.language,
+    language,
     { year: 'numeric', month: 'long', day: '2-digit' }
   )
   const [
@@ -418,7 +419,7 @@ export function setD3Locale (d3) {
     'es-MX': require('./data/es-MX.json')
   }
 
-  if (process.env.store.app.language !== 'es-US' && languages[process.env.store.app.language]) {
-    d3.timeFormatDefaultLocale(languages[process.env.store.app.language])
+  if (language !== 'es-US' && languages[language]) {
+    d3.timeFormatDefaultLocale(languages[language])
   }
 }
