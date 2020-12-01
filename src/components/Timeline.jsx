@@ -341,6 +341,7 @@ class Timeline extends React.Component {
                 onDragEnd={() => { this.onDragEnd() }}
                 categories={categories.map(c => c.id)}
                 features={this.props.features}
+                fallbackLabel={copy[this.props.app.language].timeline.default_categories_label}
               />
               <Handles
                 dims={dims}

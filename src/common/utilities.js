@@ -5,6 +5,8 @@ let { DATE_FMT, TIME_FMT } = process.env
 if (!DATE_FMT) DATE_FMT = 'MM/DD/YYYY'
 if (!TIME_FMT) TIME_FMT = 'HH:mm'
 
+export const language = process.env.store.app.language || 'en-US'
+
 export function calcDatetime (date, time) {
   if (!time) time = '00:00'
   const dt = moment(`${date} ${time}`, `${DATE_FMT} ${TIME_FMT}`)
@@ -397,7 +399,7 @@ export function makeNiceDate (datetime) {
   if (datetime === null) return null
   // see https://stackoverflow.com/questions/3552461/how-to-format-a-javascript-date
   const dateTimeFormat = new Intl.DateTimeFormat(
-    'en',
+    language,
     { year: 'numeric', month: 'long', day: '2-digit' }
   )
   const [
@@ -406,5 +408,19 @@ export function makeNiceDate (datetime) {
     { value: year }
   ] = dateTimeFormat.formatToParts(datetime)
 
-  return `${day} ${month} ${year}`
+  return `${day} ${month}, ${year}`
+}
+
+/**
+ * Sets the default locale for d3 to format dates in each available language.
+ * @param {Object} d3 - An instance of D3
+ */
+export function setD3Locale (d3) {
+  const languages = {
+    'es-MX': require('./data/es-MX.json')
+  }
+
+  if (language !== 'es-US' && languages[language]) {
+    d3.timeFormatDefaultLocale(languages[language])
+  }
 }

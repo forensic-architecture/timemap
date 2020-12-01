@@ -8,20 +8,31 @@
           "Cada evento estará coloreado según la persona que dio el testimonio del evento."
         ],
         "colors": [
-          { "class": "category_group00", "label": "Category Group 00" },
-          { "class": "category_group01", "label": "Category Group 01" },
-          { "class": "category_group02", "label": "Category Group 02" },
-          { "class": "category_group03", "label": "Category Group 03" },
-          { "class": "other", "label": "Other categories" }
+          { "class": "category_group00", "label": "Categoría Grupo 00" },
+          { "class": "category_group01", "label": "Categoría Grupo 01" },
+          { "class": "category_group02", "label": "Categoría Grupo 02" },
+          { "class": "category_group03", "label": "Categoría Grupo 03" },
+          { "class": "other", "label": "Otras categorías" }
         ]
+      },
+      "default": {
+        "header": "Ayudas para explorar la plataforma",
+        "intro": [
+          "Cada **punto** representa un **evento en los datos** (o cada incidente). Al hacer clic en cada punto se ven los detalles del evento. Pero si le da clic en un **grupo** de puntos, verá cuantos eventos hay en ese grupo.",
+          "Puede acercarse en el mapa *(zoom)* haciendo *scroll* con el ratón o haciendo clic en un grupo de puntos.",
+          "Puede usar **filtros** para segmentar los datos. En el mapa sólo vemos los puntos relacionados con cada filtro seleccionado. Cuando no hay filtros seleccionados, vemos todos los puntos de la base de datos en el mapa.",
+          "Al seleccionar más de un filtro se introducen diferentes colores para diferenciarlos. Esto permite comparar los tipos de incidentes tanto en el mapa, como en la línea de tiempo. Esto sirve con un máximo de 6 filtros-colores.",
+          "Con el teclado puede usar las flechas de la derecha e izquierda para moverse entre eventos. También puede hacer clic y arrastrar la línea de tiempo hacia los lados para modificar el rango de tiempo."
+        ],
+        "notation": "Cuando un circulo combina colores significa que hay varios eventos en esa misma ubicación.",
+        "arrows": "Usar las flechas izquierda/derecha en el teclado para moverse entre eventos cronológicamente."
       }
     },
     "toolbar": {
-      "title": "TITLE",
-      "categories": "Categories",
-      "filters": "Filters",
-      "explore_by_filter__title": "Explore by filter or category",
-      "explore_by_filter__description": "Selecting filters or categories, you'll see only those events that are tagged accordingly. If you select nothing, as well as everything, all data will be displayed.",
+      "title": "Título",
+      "filters": "Filtros",
+      "explore_by_filter__title": "Explorar por filtros",
+      "explore_by_filter__description": "Al seleccionar filtros, puede ver los eventos que tienen esa categoria. Para ver todos los eventos puede quitar todas las selecciones (o seleccionarlos todos).",
       "panels": {
         "mentions": {
           "title": "Personas",
@@ -38,32 +49,35 @@
       }
     },
     "timeline": {
-      "zooms": [
-        "3 años",
-        "3 meses",
-        "3 días",
-        "12 horas",
-        "2 horas",
-        "30 min",
-        "10 min"
+      "zoomLevels": [
+        { "label": "20 años", "duration": 10512000 },
+        { "label": "2 años", "duration": 1051200 },
+        { "label": "3 meses", "duration": 129600 },
+        { "label": "3 días", "duration": 4320 },
+        { "label": "12 horas", "duration": 720 },
+        { "label": "1 hora", "duration": 60 }
       ],
       "labels_title": "Testimonios",
       "labels": [
-        "Testimony Group 00",
-        "Testimony Group 01",
-        "Testimony Group 02",
-        "Testimony Group 03",
-        "Other categories"
+        "Testimonio Grupo 00",
+        "Testimonio Grupo 01",
+        "Testimonio Grupo 02",
+        "Testimonio Grupo 03",
+        "Otras categorias"
       ],
-      "info": "Viendo eventos ocurridos entre"
+      "info": "Eventos ocurridos entre",
+      "default_categories_label": "Eventos"
     },
     "cardstack": {
+      "date_title": "Fecha incidente",
+      "location_title": "Ubicación",
+      "summary_title": "Resumen",
       "header": "eventos seleccionados",
-      "unknown_location": "Localización desconocida",
+      "unknown_location": "Ubicación desconocida",
       "unknown_time": "Día y hora desconocida",
       "timestamp": "Día y hora",
       "estimated": "aproximado",
-      "location": "Localización",
+      "location": "Ubicación",
       "incident_type": "Tipo de acción",
       "description": "Hechos",
       "people": "Personas en el evento",
@@ -131,15 +145,6 @@
       "explore_by_category__description": "‘Categories’ refer to the victims of a given incident.<br><br>If no categories are selected, all datapoints are displayed."
     },
     "timeline": {
-      "zooms": [
-        "3 years",
-        "3 months",
-        "3 days",
-        "12 hours",
-        "2 hours",
-        "30 min",
-        "10 min"
-      ],
       "labels_title": "Testimonies",
       "labels": [
         "Testimony Group 00",
@@ -148,7 +153,8 @@
         "Testimony Group 03",
         "Other"
       ],
-      "info": "Seeing events that occurred between"
+      "info": "Seeing events that occurred between",
+      "default_categories_label": "Events"
     },
     "cardstack": {
       "header": "selected events",

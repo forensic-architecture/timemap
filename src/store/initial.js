@@ -1,6 +1,8 @@
 import { mergeDeepLeft } from 'ramda'
 import global, { colors } from '../common/global'
 import generateCardLayout from '../common/card'
+import copy from '../common/data/copy.json'
+import { language } from '../common/utilities'
 
 const isSmallLaptop = window.innerHeight < 800
 const initial = {
@@ -77,7 +79,7 @@ const initial = {
       },
       range: [new Date(2001, 2, 23, 12), new Date(2021, 2, 23, 12)],
       rangeLimits: [new Date(1, 1, 1, 1), new Date()],
-      zoomLevels: [
+      zoomLevels: copy[language].timeline.zoomLevels || [
         { label: '20 years', duration: 10512000 },
         { label: '2 years', duration: 1051200 },
         { label: '3 months', duration: 129600 },
