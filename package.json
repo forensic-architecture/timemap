@@ -5,6 +5,8 @@
   "homepage": "",
   "private": true,
   "scripts": {
+    "react-scripts:start": "react-scripts start",
+    "react-scripts:build": "react-scripts build",
     "dev": "webpack-dev-server --content-base static --mode development",
     "dev:wsl": "npm run dev -- --host 0.0.0.0",
     "build": "NODE_ENV=production webpack --mode production",
@@ -28,19 +30,17 @@
     "react-image": "^1.5.1",
     "react-portal": "^4.2.0",
     "react-redux": "^5.0.4",
+    "react-scripts": "^4.0.1",
     "react-tabs": "3.0.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
     "supercluster": "^7.1.0",
-    "video-react": "^0.13.1"
+    "video-react": "^0.13.1",
+    "webpack": "^4.20.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/preset-react": "^7.0.0",
     "ava": "1.0.0-beta.8",
-    "babel-loader": "^8.0.4",
     "css-loader": "^1.0.0",
     "file-loader": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
@@ -48,16 +48,23 @@
     "mocha": "^5.2.0",
     "node-sass": "4.13.1",
     "redux-devtools": "^3.4.0",
-    "sass-loader": "^7.1.0",
-    "standard": "^12.0.1",
-    "style-loader": "^0.23.1",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.11"
+    "standard": "^12.0.1"
   },
   "ava": {
     "files": [
       "test/**/*.js"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }
