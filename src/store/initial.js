@@ -1,6 +1,6 @@
 import { mergeDeepLeft } from "ramda";
+
 import global, { colors } from "../common/global";
-import generateCardLayout from "../common/card";
 import copy from "../common/data/copy.json";
 import { language } from "../common/utilities";
 
@@ -136,7 +136,9 @@ const initial = {
       },
     },
     card: {
-      layout: ({ event }) => generateCardLayout.basic({ event }),
+      layout: {
+        template: "basic",
+      },
     },
     coloring: {
       maxNumOfColors: 4,

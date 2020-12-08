@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@babel/core": "7.12.3",
-    "@forensic-architecture/design-system": "0.6.1",
+    "@forensic-architecture/design-system": "0.6.2",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
     "@svgr/webpack": "5.4.0",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
