@@ -10,6 +10,7 @@ delete require.cache[require.resolve("./paths")];
 /** env variables from config.js */
 const CONFIG = process.env.CONFIG || "config.js";
 const envConfig = require("../" + CONFIG);
+
 const userConfig = {};
 const userFeatures = {};
 for (const k in envConfig) {
