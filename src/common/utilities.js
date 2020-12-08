@@ -28,8 +28,9 @@ export function getCoordinatesForPercent(radius, percent) {
  * Return value:
  * ex. {'#fff': 0.5, '#000': 0.5, ...} */
 export function zipColorsToPercentages(colors, percentages) {
-  if (colors.length < percentages.length)
+  if (colors.length < percentages.length) {
     throw new Error("You must declare an appropriate number of filter colors");
+  }
 
   return percentages.reduce((map, percent, idx) => {
     map[colors[idx]] = percent;
@@ -45,7 +46,7 @@ export function zipColorsToPercentages(colors, percentages) {
  */
 export function getParameterByName(name, url) {
   if (!url) url = window.location.href;
-  name = name.replace(/[[\]]/g, `\\$&`);
+  name = name.replace(/[[\]]/g, "\\$&");
 
   const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
   const results = regex.exec(url);
@@ -101,7 +102,7 @@ export function trimAndEllipse(string, stringNum) {
  * Returns the list of parents: ex. ['Chemical', 'Tear Gas', ...]
  */
 export function getFilterParents(associations, filter) {
-  for (let a of associations) {
+  for (const a of associations) {
     const { filter_paths: fp } = a;
     if (a.id === filter) {
       return fp.slice(0, fp.length - 1);
@@ -340,7 +341,7 @@ export function calculateColorPercentages(set, coloringSet) {
   const associationMap = {};
 
   for (const [idx, value] of coloringSet.entries()) {
-    for (let filter of value) {
+    for (const filter of value) {
       associationMap[filter] = idx;
     }
   }
@@ -400,11 +401,11 @@ export const dateMax = function () {
  * https://stackoverflow.com/questions/22697936/binary-search-in-javascript
  * **/
 export function binarySearch(ar, el, compareFn) {
-  var m = 0;
-  var n = ar.length - 1;
+  let m = 0;
+  let n = ar.length - 1;
   while (m <= n) {
-    var k = (n + m) >> 1;
-    var cmp = compareFn(el, ar[k]);
+    const k = (n + m) >> 1;
+    const cmp = compareFn(el, ar[k]);
     if (cmp > 0) {
       m = k + 1;
     } else if (cmp < 0) {

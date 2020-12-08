@@ -1,11 +1,11 @@
 import test from 'ava'
-var childProcess = require('child_process')
-var http = require('http')
+const childProcess = require('child_process')
+const http = require('http')
 
 const SERVER_LAUNCH_WAIT_TIME = 10 * 1000
 
-var serverProc = null
-var serverExited = false
+let serverProc = null
+let serverExited = false
 
 test.before.cb(t => {
   console.log('launching server...')
@@ -30,7 +30,7 @@ test('should launch', t => {
   t.false(serverExited)
 })
 
-var urls = [
+const urls = [
   '/',
   'js/index.bundle.js'
 ]
@@ -43,7 +43,7 @@ urls.forEach(function (url) {
       path: '/',
       agent: false
     }, function (res) {
-      var resultData = ''
+      let resultData = ''
 
       if (res.statusCode !== 200) {
         t.fail('Server response was not 200.')

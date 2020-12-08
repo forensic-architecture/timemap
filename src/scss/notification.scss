@@ -1,4 +1,4 @@
-@import 'burger';
+@import "burger";
 
 .notification-wrapper {
   top: 60px;
@@ -13,7 +13,8 @@
 .notification {
   width: 100%;
   min-height: 40px;
-  box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3), 10px 15px 12px rgba(0, 0, 0, 0.22);
+  box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3),
+    10px 15px 12px rgba(0, 0, 0, 0.22);
   color: $darkgrey;
   background: $offwhite;
   border-radius: 5px;
@@ -46,10 +47,18 @@
   .message {
     display: inline-block;
 
-    &.error { color: red; }
-    &.warning { color: orange; }
-    &.good { color: green; }
-    &.neutral { color: $darkgrey; }
+    &.error {
+      color: red;
+    }
+    &.warning {
+      color: orange;
+    }
+    &.good {
+      color: green;
+    }
+    &.neutral {
+      color: $darkgrey;
+    }
   }
 
   .details {

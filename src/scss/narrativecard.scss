@@ -43,7 +43,8 @@ NARRATIVE INFO
     padding: 0 15px 15px 15px;
   }
 
-  h3, h6 {
+  h3,
+  h6 {
     text-align: center;
   }
 
@@ -100,7 +101,7 @@ NARRATIVE INFO
   position: fixed;
   bottom: $timeline-height;
   right: auto;
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.8);
   z-index: $header;
 
   &.left {
@@ -135,7 +136,6 @@ NARRATIVE INFO
   right: $card-right;
   top: 5px;
   width: $card-width - 12px; // subtracting the extra width added by padding
-;
   // width: 15px;
   background-color: black;
   height: 20px;
@@ -158,11 +158,12 @@ NARRATIVE INFO
 
   // disable whitening of crosshair on hover
   button {
-    span, span:before, span:after {
+    span,
+    span:before,
+    span:after {
       background: $midwhite !important;
     }
   }
-
 
   &:hover {
     cursor: pointer;

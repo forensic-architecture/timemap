@@ -1,10 +1,15 @@
-import React from 'react'
-import { Portal } from 'react-portal'
-import colors from '../../../common/global.js'
-import ColoredMarkers from './ColoredMarkers.jsx'
-import { calcOpacity, getCoordinatesForPercent, calculateColorPercentages, zipColorsToPercentages } from '../../../common/utilities'
+import React from "react";
+import { Portal } from "react-portal";
+import colors from "../../../common/global.js";
+import ColoredMarkers from "./ColoredMarkers.jsx";
+import {
+  calcOpacity,
+  getCoordinatesForPercent,
+  calculateColorPercentages,
+  zipColorsToPercentages,
+} from "../../../common/utilities";
 
-function MapEvents ({
+function MapEvents({
   getCategoryColor,
   categories,
   projectPoint,
@@ -17,110 +22,120 @@ function MapEvents ({
   eventRadius,
   coloringSet,
   filterColors,
-  features
+  features,
 }) {
-  function handleEventSelect (e, location) {
-    const events = e.shiftKey ? selected.concat(location.events) : location.events
-    onSelect(events)
+  function handleEventSelect(e, location) {
+    const events = e.shiftKey
+      ? selected.concat(location.events)
+      : location.events;
+    onSelect(events);
   }
 
-  function renderBorder () {
+  function renderBorder() {
     return (
-      <React.Fragment>
-        {<circle
-          class='event-hover'
-          cx='0'
-          cy='0'
-          r='10'
+      <>
+        <circle
+          class="event-hover"
+          cx="0"
+          cy="0"
+          r="10"
           stroke={colors.primaryHighlight}
-          fill-opacity='0.0'
-        />}
-      </React.Fragment>
-    )
+          fill-opacity="0.0"
+        />
+      </>
+    );
   }
 
-  function renderLocationSlicesByAssociation (location) {
-    const colorPercentages = calculateColorPercentages([location], coloringSet)
+  function renderLocationSlicesByAssociation(location) {
+    const colorPercentages = calculateColorPercentages([location], coloringSet);
 
-    let styles = ({
+    const styles = {
       stroke: colors.darkBackground,
       strokeWidth: 0,
-      fillOpacity: narrative ? 1 : calcOpacity(location.events.length)
-    })
+      fillOpacity: narrative ? 1 : calcOpacity(location.events.length),
+    };
 
     return (
       <ColoredMarkers
         radius={eventRadius}
         colorPercentMap={zipColorsToPercentages(filterColors, colorPercentages)}
         styles={{
-          ...styles
+          ...styles,
         }}
-        className={'location-event-marker'}
+        className="location-event-marker"
       />
-    )
+    );
   }
 
-  function renderLocationSlicesByCategory (location) {
-    const locCategory = location.events.length > 0 ? location.events[0].category : 'default'
-    const customStyles = styleLocation ? styleLocation(location) : null
-    const extraStyles = customStyles[0]
+  function renderLocationSlicesByCategory(location) {
+    const locCategory =
+      location.events.length > 0 ? location.events[0].category : "default";
+    const customStyles = styleLocation ? styleLocation(location) : null;
+    const extraStyles = customStyles[0];
 
-    let styles = ({
+    const styles = {
       fill: getCategoryColor(locCategory),
       stroke: colors.darkBackground,
       strokeWidth: 0,
       fillOpacity: narrative ? 1 : calcOpacity(location.events.length),
-      ...extraStyles
-    })
+      ...extraStyles,
+    };
 
-    const colorSlices = location.events.map(e => e.colour ? e.colour : getCategoryColor(e.category))
+    const colorSlices = location.events.map((e) =>
+      e.colour ? e.colour : getCategoryColor(e.category)
+    );
 
-    let cumulativeAngleSweep = 0
+    let cumulativeAngleSweep = 0;
 
     return (
-      <React.Fragment>
+      <>
         {colorSlices.map((color, idx) => {
-          const r = eventRadius
+          const r = eventRadius;
 
           // Based on the number of events in each location,
           // create a slice per event filled with its category color
-          const [startX, startY] = getCoordinatesForPercent(r, cumulativeAngleSweep)
+          const [startX, startY] = getCoordinatesForPercent(
+            r,
+            cumulativeAngleSweep
+          );
 
-          cumulativeAngleSweep = (idx + 1) / colorSlices.length
+          cumulativeAngleSweep = (idx + 1) / colorSlices.length;
 
-          const [endX, endY] = getCoordinatesForPercent(r, cumulativeAngleSweep)
+          const [endX, endY] = getCoordinatesForPercent(
+            r,
+            cumulativeAngleSweep
+          );
 
           // if the slices are less than 2, take the long arc
-          const largeArcFlag = (colorSlices.length === 1) ? 1 : 0
+          const largeArcFlag = colorSlices.length === 1 ? 1 : 0;
 
           // create an array and join it just for code readability
           const arc = [
             `M ${startX} ${startY}`, // Move
             `A ${r} ${r} 0 ${largeArcFlag} 1 ${endX} ${endY}`, // Arc
-            `L 0 0 `, // Line
-            `L ${startX} ${startY} Z` // Line
-          ].join(' ')
+            "L 0 0 ", // Line
+            `L ${startX} ${startY} Z`, // Line
+          ].join(" ");
 
-          const extraStyles = ({
+          const extraStyles = {
             ...styles,
-            fill: color
-          })
+            fill: color,
+          };
 
           return (
             <path
-              class='location-event-marker'
+              class="location-event-marker"
               id={`arc_${idx}`}
               d={arc}
               style={extraStyles}
             />
-          )
+          );
         })}
-
-      </React.Fragment>
-    )
+      </>
+    );
   }
 
-  function renderLocation (location) {
+  function renderLocation(location) {
     /**
     {
       events: [...],
@@ -129,53 +144,55 @@ function MapEvents ({
       longitude: '32.2'
     }
     */
-    if (!location.latitude || !location.longitude) return null
-    const { x, y } = projectPoint([location.latitude, location.longitude])
+    if (!location.latitude || !location.longitude) return null;
+    const { x, y } = projectPoint([location.latitude, location.longitude]);
 
     // in narrative mode, only render events in narrative
     // TODO: move this to a selector
     if (narrative) {
-      const { steps } = narrative
-      const onlyIfInNarrative = e => steps.map(s => s.id).includes(e.id)
-      const eventsInNarrative = location.events.filter(onlyIfInNarrative)
+      const { steps } = narrative;
+      const onlyIfInNarrative = (e) => steps.map((s) => s.id).includes(e.id);
+      const eventsInNarrative = location.events.filter(onlyIfInNarrative);
 
       if (eventsInNarrative.length <= 0) {
-        return null
+        return null;
       }
     }
 
-    const customStyles = styleLocation ? styleLocation(location) : null
-    const extraRender = () => (
-      <React.Fragment>
-        {customStyles[1]}
-      </React.Fragment>
-    )
+    const customStyles = styleLocation ? styleLocation(location) : null;
+    const extraRender = () => <>{customStyles[1]}</>;
 
     const isSelected = selected.reduce((acc, event) => {
-      return acc || (event.latitude === location.latitude && event.longitude === location.longitude)
-    }, false)
+      return (
+        acc ||
+        (event.latitude === location.latitude &&
+          event.longitude === location.longitude)
+      );
+    }, false);
 
     return (
       <g
-        className={`location-event ${narrative ? 'no-hover' : ''}`}
+        className={`location-event ${narrative ? "no-hover" : ""}`}
         transform={`translate(${x}, ${y})`}
         onClick={(e) => handleEventSelect(e, location)}
       >
-        {features.COLOR_BY_ASSOCIATION ? renderLocationSlicesByAssociation(location) : null}
-        {features.COLOR_BY_CATEGORY ? renderLocationSlicesByCategory(location) : null}
+        {features.COLOR_BY_ASSOCIATION
+          ? renderLocationSlicesByAssociation(location)
+          : null}
+        {features.COLOR_BY_CATEGORY
+          ? renderLocationSlicesByCategory(location)
+          : null}
         {extraRender ? extraRender() : null}
         {isSelected ? null : renderBorder()}
       </g>
-    )
+    );
   }
 
   return (
     <Portal node={svg}>
-      <g className='event-locations'>
-        {locations.map(renderLocation)}
-      </g>
+      <g className="event-locations">{locations.map(renderLocation)}</g>
     </Portal>
-  )
+  );
 }
 
-export default MapEvents
+export default MapEvents;

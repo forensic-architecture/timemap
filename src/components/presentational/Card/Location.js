@@ -1,28 +1,28 @@
-import React from 'react'
+import React from "react";
 
-import copy from '../../../common/data/copy.json'
+import copy from "../../../common/data/copy.json";
 
 const CardLocation = ({ language, location, isPrecise }) => {
-  if (location !== '') {
+  if (location !== "") {
     return (
-      <div className='card-cell location'>
+      <div className="card-cell location">
         <p>
-          <i className='material-icons left'>location_on</i>
-          {`${location}${(isPrecise) ? '' : ' (Approximated)'}`}
+          <i className="material-icons left">location_on</i>
+          {`${location}${isPrecise ? "" : " (Approximated)"}`}
         </p>
       </div>
-    )
+    );
   } else {
-    const unknown = copy[language].cardstack.unknown_location
+    const unknown = copy[language].cardstack.unknown_location;
     return (
-      <div className='card-cell location'>
+      <div className="card-cell location">
         <p>
-          <i className='material-icons left'>location_on</i>
+          <i className="material-icons left">location_on</i>
           {unknown}
         </p>
       </div>
-    )
+    );
   }
-}
+};
 
-export default CardLocation
+export default CardLocation;

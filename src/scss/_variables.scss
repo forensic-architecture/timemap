@@ -1,12 +1,12 @@
 @font-face {
-  font-family: 'GT-Zirkon';
+  font-family: "GT-Zirkon";
   src: url(../assets/fonts/timemapfont.woff); // a Lato woff by default
 }
 
 $event_default: red;
 
 $offwhite: #efefef;
-$offwhite-transparent: rgba(239,239,239, 0.9);
+$offwhite-transparent: rgba(239, 239, 239, 0.9);
 $lightwhite: #dfdfdf;
 $midwhite: #a0a0a0;
 $darkwhite: darken($midwhite, 15%);
@@ -16,28 +16,36 @@ $green: rgb(61, 241, 79);
 $midgrey: rgb(44, 44, 44);
 $darkgrey: #232323;
 $black: #000000;
-$black-transparent: rgba(0,0,0,0.7);
+$black-transparent: rgba(0, 0, 0, 0.7);
 
 // Category colors
-$default:   red;
-$alpha:     #00ff00;
-$beta:      #ff00ff;
-$other:     yellow;
+$default: red;
+$alpha: #00ff00;
+$beta: #ff00ff;
+$other: yellow;
 
-.default { background: $default; }
-.other { background: $other; }
-.alpha { background: $alpha; }
-.beta { background: $beta; }
+.default {
+  background: $default;
+}
+.other {
+  background: $other;
+}
+.alpha {
+  background: $alpha;
+}
+.beta {
+  background: $beta;
+}
 
-$mainfont: 'GT-Zirkon', 'Lato', Helvetica, sans-serif;
+$mainfont: "GT-Zirkon", "Lato", Helvetica, sans-serif;
 
 // Font sizes
-$xsmall: 10px;//0.7em;
-$small: 11px;//0.9em;
-$normal: 12px;//1em;
-$large: 14px;//1.1em;
-$xlarge: 16px;//1.2em;
-$xxlarge: 20px;//1.4em;
+$xsmall: 10px; //0.7em;
+$small: 11px; //0.9em;
+$normal: 12px; //1em;
+$large: 14px; //1.1em;
+$xlarge: 16px; //1.2em;
+$xxlarge: 20px; //1.4em;
 $xxxlarge: 32px;
 
 // z-index levels
@@ -50,7 +58,6 @@ $map: 1;
 $scene: 1;
 $hidden: -1;
 $timeline: 3;
-
 
 // platform-specific sizes
 $infopopup-width: 400px;

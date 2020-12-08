@@ -3,7 +3,7 @@
   width: 100%;
   height: 100%;
   position: absolute;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0, 0, 0, 0.9);
   transition: 0.4s ease;
   z-index: $loading-overlay;
   opacity: 1;
@@ -26,7 +26,7 @@
   }
 
   &.hidden {
-    transition: opacity 0.4s ease, z-index .1s 0.4s;
+    transition: opacity 0.4s ease, z-index 0.1s 0.4s;
     opacity: 0;
     z-index: $hidden;
   }
@@ -49,7 +49,8 @@ https://github.com/tobiasahlin/SpinKit/blob/master/LICENSE
   }
 }
 
-.double-bounce, .double-bounce-overlay {
+.double-bounce,
+.double-bounce-overlay {
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -59,28 +60,35 @@ https://github.com/tobiasahlin/SpinKit/blob/master/LICENSE
   top: 0;
   left: 0;
 
-  -webkit-animation: sk-bounce 3.0s infinite ease-in-out;
-  animation: sk-bounce 3.0s infinite ease-in-out;
+  -webkit-animation: sk-bounce 3s infinite ease-in-out;
+  animation: sk-bounce 3s infinite ease-in-out;
 }
 
 .double-bounce-overlay {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
   background-color: black;
 }
 
 @-webkit-keyframes sk-bounce {
-  0%, 100% { -webkit-transform: scale(0.3) }
-  50% { -webkit-transform: scale(1.0) }
+  0%,
+  100% {
+    -webkit-transform: scale(0.3);
+  }
+  50% {
+    -webkit-transform: scale(1);
+  }
 }
 
 @keyframes sk-bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(0.3);
     -webkit-transform: scale(0.3);
-  } 50% {
-    transform: scale(1.0);
-    -webkit-transform: scale(1.0);
+  }
+  50% {
+    transform: scale(1);
+    -webkit-transform: scale(1);
   }
 }
 

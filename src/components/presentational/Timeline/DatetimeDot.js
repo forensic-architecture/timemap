@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export default ({
   category,
@@ -8,17 +8,17 @@ export default ({
   r,
   onSelect,
   styleProps,
-  extraRender
+  extraRender,
 }) => {
-  if (!y) return null
+  if (!y) return null;
   return (
     <circle
       onClick={onSelect}
-      className='event'
+      className="event"
       cx={x}
       cy={y}
       style={styleProps}
       r={r}
     />
-  )
-}
+  );
+};

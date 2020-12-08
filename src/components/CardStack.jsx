@@ -29,8 +29,8 @@ class CardStack extends React.Component {
     const cardScroll = this.refs[this.props.narrative.current].current
       .offsetTop;
 
-    let start = element.scrollTop;
-    let change = cardScroll - start;
+    const start = element.scrollTop;
+    const change = cardScroll - start;
     let currentTime = 0;
     const increment = 20;
 

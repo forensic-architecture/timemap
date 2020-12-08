@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export default ({ isDisabled, direction, onClickHandler }) => {
   return (
@@ -6,11 +6,9 @@ export default ({ isDisabled, direction, onClickHandler }) => {
       className={`narrative-adjust ${direction}`}
       onClick={!isDisabled ? onClickHandler : null}
     >
-      <i
-        className={`material-icons ${isDisabled ? 'disabled' : ''}`}
-      >
+      <i className={`material-icons ${isDisabled ? "disabled" : ""}`}>
         {`chevron_${direction}`}
       </i>
     </div>
-  )
-}
+  );
+};

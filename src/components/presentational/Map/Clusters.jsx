@@ -63,7 +63,7 @@ function Cluster({
 
   return (
     <g
-      className={"cluster-event"}
+      className="cluster-event"
       transform={`translate(${x}, ${y})`}
       onClick={(e) => onClick({ id: clusterId, latitude, longitude })}
       onMouseEnter={() => setHovered(true)}
@@ -75,7 +75,7 @@ function Cluster({
         styles={{
           ...styles,
         }}
-        className={"cluster-event-marker"}
+        className="cluster-event-marker"
       />
       {hovered ? renderHover(cluster) : null}
     </g>

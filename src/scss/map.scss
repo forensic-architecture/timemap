@@ -1,9 +1,15 @@
-@import 'popup';
+@import "popup";
 
 @-webkit-keyframes pulsate {
-  0% { opacity: 0.1; }
-  50% { opacity: 0.25; }
-  100% { opacity: 0.1; }
+  0% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 0.1;
+  }
 }
 
 .map-wrapper {
@@ -41,27 +47,29 @@
   }
 
   .site-label {
-    background: rgba($black,0.6);
+    background: rgba($black, 0.6);
     color: #fff;
     padding: 5px;
     font-weight: 500;
     font-size: 11px;
-    border: rgba($black,0.6);
+    border: rgba($black, 0.6);
     letter-spacing: 0.05em;
 
     &::before {
-      border-top-color: rgba($black,0.6);
+      border-top-color: rgba($black, 0.6);
     }
   }
 
-  .sites-layer, .shapes-layer {
+  .sites-layer,
+  .shapes-layer {
     position: fixed;
     top: 0px;
     left: 110px;
   }
 
   &.narrative-mode {
-    .sites-layer, .shapes-layer {
+    .sites-layer,
+    .shapes-layer {
       position: fixed;
       top: 0px;
       left: 0px;
@@ -143,7 +151,6 @@
   pointer-events: auto;
 }
 
-
 .eventLocationMarker {
   fill: none;
   stroke: $yellow;
@@ -211,7 +218,10 @@
 
 // no hover styles for events when in narrative mode
 .narrative-mode {
-  .event-hover:hover { opacity: 0; }
-  .no-hover { cursor: inherit; }
+  .event-hover:hover {
+    opacity: 0;
+  }
+  .no-hover {
+    cursor: inherit;
+  }
 }
-

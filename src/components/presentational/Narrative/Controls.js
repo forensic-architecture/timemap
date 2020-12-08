@@ -1,32 +1,32 @@
-import React from 'react'
-import Card from './Card'
-import Adjust from './Adjust'
-import Close from './Close'
+import React from "react";
+import Card from "./Card";
+import Adjust from "./Adjust";
+import Close from "./Close";
 
 export default ({ narrative, methods }) => {
-  if (!narrative) return null
+  if (!narrative) return null;
 
-  const { current, steps } = narrative
-  const prevExists = current !== 0
-  const nextExists = current < steps.length - 1
+  const { current, steps } = narrative;
+  const prevExists = current !== 0;
+  const nextExists = current < steps.length - 1;
 
   return (
-    <React.Fragment>
+    <>
       <Card narrative={narrative} />
       <Adjust
         isDisabled={!prevExists}
-        direction='left'
+        direction="left"
         onClickHandler={methods.onPrev}
       />
       <Adjust
         isDisabled={!nextExists}
-        direction='right'
+        direction="right"
         onClickHandler={methods.onNext}
       />
       <Close
         onClickHandler={() => methods.onSelectNarrative(null)}
-        closeMsg='-- exit from narrative --'
+        closeMsg="-- exit from narrative --"
       />
-    </React.Fragment>
-  )
-}
+    </>
+  );
+};
