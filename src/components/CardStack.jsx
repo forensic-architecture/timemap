@@ -1,6 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Card, generateCardLayout } from "@forensic-architecture/design-system";
+import {
+  Card,
+  generateCardLayout,
+} from "@forensic-architecture/design-system/dist/react";
 
 import * as selectors from "../selectors";
 import { getFilterIdxFromColorSet } from "../common/utilities";
