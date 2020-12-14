@@ -12,13 +12,8 @@ const CONFIG = process.env.CONFIG || "config.js";
 const envConfig = require("../" + CONFIG);
 
 const userConfig = {};
-const userFeatures = {};
 for (const k in envConfig) {
   userConfig[k] = JSON.stringify(envConfig[k]);
-}
-
-for (const k in envConfig["features"]) {
-  userFeatures[k] = JSON.stringify(envConfig["features"][k]);
 }
 
 const NODE_ENV = process.env.NODE_ENV;
@@ -115,7 +110,6 @@ function getClientEnvironment(publicUrl) {
       },
       {
         ...userConfig,
-        features: userFeatures,
       }
     ),
   };

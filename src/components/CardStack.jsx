@@ -1,11 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { generateCardLayout } from "@forensic-architecture/design-system/react";
+import { Card, generateCardLayout } from "@forensic-architecture/design-system";
 
 import * as selectors from "../selectors";
 import { getFilterIdxFromColorSet } from "../common/utilities";
 // import Card from './Card.jsx'
-import { Card } from "@forensic-architecture/design-system/react";
 import copy from "../common/data/copy.json";
 
 class CardStack extends React.Component {

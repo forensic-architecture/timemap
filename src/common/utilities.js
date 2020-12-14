@@ -5,7 +5,6 @@ let { DATE_FMT, TIME_FMT } = process.env;
 if (!DATE_FMT) DATE_FMT = "MM/DD/YYYY";
 if (!TIME_FMT) TIME_FMT = "HH:mm";
 
-console.log(process.env);
 export const language = process.env.store.app.language || "en-US";
 
 export function calcDatetime(date, time) {

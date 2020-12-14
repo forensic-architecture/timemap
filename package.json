@@ -5,11 +5,11 @@
   "homepage": "",
   "private": true,
   "scripts": {
-    "react-scripts:start": "node scripts/start.js",
-    "react-scripts:build": "NODE_ENV=production node scripts/build.js",
-    "react-scripts:eject": "node scripts/eject.js",
-    "dev:wsl": "npm run dev -- --host 0.0.0.0",
-    "test": "ava --verbose",
+    "dev": "node scripts/start.js",
+    "build": "NODE_ENV=production node scripts/build.js",
+    "dev:wsl": "HOST=0.0.0.0 npm run dev",
+    "test": "node scripts/test.js --silent",
+    "test:ava": "NODE_ENV=production ava --verbose",
     "test-watch": "ava --watch",
     "lint:fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
   },
@@ -18,6 +18,8 @@
     "@forensic-architecture/design-system": "0.6.2",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
     "@svgr/webpack": "5.4.0",
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "babel-eslint": "^10.1.0",
@@ -142,13 +144,16 @@
     "setupFiles": [
       "react-app-polyfill/jsdom"
     ],
-    "setupFilesAfterEnv": [],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js",
+      "<rootDir>/config/jest/setEnvVars.js"
+    ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
       "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
     ],
     "testEnvironment": "jsdom",
-    "testRunner": "/Users/zac/Developer/Forensic Architecture/timemap/node_modules/jest-circus/runner.js",
+    "testRunner": "<rootDir>/node_modules/jest-circus/runner.js",
     "transform": {
       "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
