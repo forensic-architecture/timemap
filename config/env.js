@@ -7,7 +7,11 @@ const paths = require("./paths");
 // Make sure that including paths.js after env.js will read .env variables.
 delete require.cache[require.resolve("./paths")];
 
-/** env variables from config.js */
+// START - injecting env variables from config.js
+// This section is responsible for require-ing the provided
+// command-line argument configuration file and serializing it.
+// It will later be available inside our app under process.env,
+// through webpack.definePlugin
 const CONFIG = process.env.CONFIG || "config.js";
 const envConfig = require("../" + CONFIG);
 
@@ -15,6 +19,7 @@ const userConfig = {};
 for (const k in envConfig) {
   userConfig[k] = JSON.stringify(envConfig[k]);
 }
+// END - injecting env variables from config.js
 
 const NODE_ENV = process.env.NODE_ENV;
 if (!NODE_ENV) {
