@@ -1,5 +1,5 @@
-@import 'burger';
-@import 'tabs';
+@import "burger";
+@import "tabs";
 
 .toolbar-wrapper {
   position: fixed;
@@ -107,22 +107,28 @@
           border: 1px solid $offwhite;
           color: $offwhite;
 
-          svg path { stroke: $offwhite; }
-          svg polyline { stroke: $offwhite; }
-          svg polygon { fill: $offwhite; }
+          svg path {
+            stroke: $offwhite;
+          }
+          svg polyline {
+            stroke: $offwhite;
+          }
+          svg polygon {
+            fill: $offwhite;
+          }
         }
 
         svg {
-
           &.reset {
             margin-left: -4px;
             margin-top: -1px;
             -webkit-transform: scale(0.9);
-            -moz-transform: translate(-2px,1px)scale(0.9);
+            -moz-transform: translate(-2px, 1px) scale(0.9);
             transform: scale(0.9);
           }
 
-          path, polyline {
+          path,
+          polyline {
             fill: none;
             stroke: $midwhite;
             stroke-width: 2px;
@@ -137,10 +143,14 @@
             -webkit-transform: scale(0.9);
             transform: scale(1.2);
 
-            path { stroke-width: 2px; }
+            path {
+              stroke-width: 2px;
+            }
             rect {
               fill: $midwhite;
-              &.no-fill { fill: $darkgrey; }
+              &.no-fill {
+                fill: $darkgrey;
+              }
             }
             line {
               stroke-width: 1px;
@@ -162,9 +172,15 @@
           border: 1px solid $offwhite;
           color: $offwhite;
 
-          svg path { stroke: $offwhite; }
-          svg polyline { stroke: $offwhite; }
-          svg polygon { fill: $offwhite; }
+          svg path {
+            stroke: $offwhite;
+          }
+          svg polyline {
+            stroke: $offwhite;
+          }
+          svg polygon {
+            fill: $offwhite;
+          }
         }
       }
     }
@@ -187,8 +203,11 @@
 
     svg {
       transform: scale(0.7);
-      path, circle, polygon,
-      polyline, line {
+      path,
+      circle,
+      polygon,
+      polyline,
+      line {
         stroke-width: 2px;
         transition: 0.2s ease;
         stroke: $midwhite;
@@ -223,8 +242,11 @@
       color: $offwhite;
 
       svg {
-        path, circle, polygon,
-        polyline, line {
+        path,
+        circle,
+        polygon,
+        polyline,
+        line {
           transition: 0.2s ease;
           stroke: $offwhite;
         }
@@ -253,7 +275,8 @@
   position: fixed;
   transition: 0.2s ease;
   left: $toolbar-width;
-  box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3), 10px 15px 12px rgba(0, 0, 0, 0.22);
+  box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3),
+    10px 15px 12px rgba(0, 0, 0, 0.22);
 
   h2 {
     font-size: $large;
@@ -264,7 +287,7 @@
   p {
     font-size: $normal;
     line-height: 1.4em;
-  };
+  }
 
   .panel-header {
     display: inline-block;
@@ -283,7 +306,7 @@
 
     .caret {
       position: relative;
-      transform: translate(8px, 5px)rotate(45deg);
+      transform: translate(8px, 5px) rotate(45deg);
       width: 8px;
       height: 8px;
       transition: 0.2s ease;
@@ -344,7 +367,7 @@
       visibility: hidden;
 
       .caret {
-        transform: translate(8px, 5px)rotate(225deg);
+        transform: translate(8px, 5px) rotate(225deg);
       }
     }
   }
@@ -432,7 +455,7 @@
     transform: rotate(0deg);
 
     &:after {
-      content: '▾';
+      content: "▾";
     }
 
     &.folded {

@@ -1,18 +1,10 @@
-import React from 'react'
+import React from "react";
 
-export default ({
-  x,
-  y,
-  r,
-  transform,
-  onSelect,
-  styleProps,
-  extraRender
-}) => {
+export default ({ x, y, r, transform, onSelect, styleProps, extraRender }) => {
   return (
     <rect
       onClick={onSelect}
-      className='event'
+      className="event"
       x={x}
       y={y - r}
       style={styleProps}
@@ -20,5 +12,5 @@ export default ({
       height={r}
       transform={`rotate(45, ${x}, ${y})`}
     />
-  )
-}
+  );
+};

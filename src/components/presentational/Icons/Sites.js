@@ -1,21 +1,16 @@
-import React from 'react'
+import React from "react";
 
 const SitesIcon = ({ isActive, isDisabled, onClickHandler }) => {
-  let classes = (isActive) ? 'action-button enabled' : 'action-button'
+  let classes = isActive ? "action-button enabled" : "action-button";
   if (isDisabled) {
-    classes = 'action-button disabled'
+    classes = "action-button disabled";
   }
 
   return (
-    <button
-      className={classes}
-      onClick={onClickHandler}
-    >
-      <i class='material-icons'>
-        location_on
-      </i>
+    <button className={classes} onClick={onClickHandler}>
+      <i class="material-icons">location_on</i>
     </button>
-  )
-}
+  );
+};
 
-export default SitesIcon
+export default SitesIcon;

@@ -1,11 +1,18 @@
 .idea/
 build/
 node_modules/
+
 *config.js
 dev.config.js
+!config/webpack*.config.js
+!config/getHttpsConfig.js
+
+
 tags
 tags.lock
 tags.temp
+
+.eslintcache
 
 src/\.DS_Store
 src/assets/fonts

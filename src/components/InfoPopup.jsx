@@ -1,6 +1,6 @@
-import React from 'react'
-import Popup from './presentational/Popup'
-import copy from '../common/data/copy.json'
+import React from "react";
+import Popup from "./presentational/Popup";
+import copy from "../common/data/copy.json";
 
 export default ({ isOpen, onClose, language, styles }) => (
   <Popup
@@ -10,4 +10,4 @@ export default ({ isOpen, onClose, language, styles }) => (
     isOpen={isOpen}
     styles={styles}
   />
-)
+);

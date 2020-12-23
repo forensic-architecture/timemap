@@ -1,8 +1,8 @@
-import Joi from 'joi'
+import Joi from "joi";
 
 const shapeSchema = Joi.object().keys({
   name: Joi.string().required(),
-  items: Joi.array().required()
-})
+  items: Joi.array().required(),
+});
 
-export default shapeSchema
+export default shapeSchema;

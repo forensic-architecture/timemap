@@ -42,7 +42,8 @@
     margin-right: 5px;
   }
 
-  .card-row, .card-col {
+  .card-row,
+  .card-col {
     display: flex;
     flex-direction: row;
     margin: 5px 0 10px 0;
@@ -50,7 +51,7 @@
 
     .card-cell {
       flex: 1;
-   }
+    }
 
     h4 {
       min-width: 80px;
@@ -115,7 +116,6 @@
     }
   }
 
-
   .card-bottomhalf {
     transition: 0.4s ease;
     height: auto;
@@ -125,7 +125,6 @@
       height: 0;
       overflow: hidden;
     }
-
   }
 
   .card-toggle p {

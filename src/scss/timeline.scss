@@ -15,8 +15,8 @@
     transition: bottom 0.2s ease;
 
     .timeline-header .timeline-toggle p .arrow-down {
-      transform: translate(0, 5px)rotate(-135deg);
-      -webkit-transform: translate(0, 5px)rotate(-135deg);
+      transform: translate(0, 5px) rotate(-135deg);
+      -webkit-transform: translate(0, 5px) rotate(-135deg);
     }
   }
 
@@ -197,7 +197,7 @@
 
       .event {
         cursor: pointer;
-        opacity: .7;
+        opacity: 0.7;
 
         &.mouseover {
           opacity: 1;
@@ -209,7 +209,7 @@
       }
 
       .coevent {
-        opacity: .7;
+        opacity: 0.7;
         cursor: pointer;
       }
 
@@ -220,7 +220,7 @@
         fill: $midwhite;
 
         &:hover path,
-        &:hover path, {
+        &:hover path {
           transition: 0.2s ease;
           fill: $offwhite;
         }
@@ -240,7 +240,9 @@
         stroke-width: 1;
       }
 
-      .time-controls-inline circle { stroke: none; }
+      .time-controls-inline circle {
+        stroke: none;
+      }
 
       .time-controls g,
       .time-controls-inline {

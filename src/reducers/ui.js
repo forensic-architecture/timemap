@@ -1,9 +1,9 @@
-import initial from '../store/initial.js'
+import initial from "../store/initial.js";
 
-import {} from '../actions'
+import {} from "../actions";
 
-function ui (uiState = initial.ui, action) {
-  return uiState
+function ui(uiState = initial.ui, action) {
+  return uiState;
 }
 
-export default ui
+export default ui;

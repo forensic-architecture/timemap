@@ -1,8 +1,9 @@
-@import 'burger';
+@import "burger";
 
 .infopopup {
   width: $infopopup-width;
-  box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3), 10px 15px 12px rgba(0, 0, 0, 0.22);
+  box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3),
+    10px 15px 12px rgba(0, 0, 0, 0.22);
   color: $darkgrey;
   position: absolute;
   background: $offwhite-transparent;
@@ -36,7 +37,7 @@
 
   &.dark {
     // background: $black-transparent;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
     color: white;
   }
 
@@ -59,7 +60,6 @@
       display: none;
     }
   }
-
 
   .legend {
     display: flex;

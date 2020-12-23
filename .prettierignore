@@ -1,0 +1,4 @@
+# Ignore Create React App-related scaffolding
+config/
+scripts/
+test/server_process.js

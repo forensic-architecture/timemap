@@ -16,7 +16,7 @@
   height: 100%;
   -webkit-filter: contrast(70%) brightness(70%) grayscale(30%); /* Webkit */
   filter: gray; /* IE6-9 */
-  filter: contrast(70%) brightness(70%) grayscale(30%) /* W3C */
+  filter: contrast(70%) brightness(70%) grayscale(30%); /* W3C */
 }
 
 @media (min-aspect-ratio: 16/9) {
@@ -35,7 +35,8 @@
 
 @media (max-width: 767px) {
   .fullscreen-bg {
-    background: url('/static/archive/img/city.jpg') center center / cover no-repeat;
+    background: url("/static/archive/img/city.jpg") center center / cover
+      no-repeat;
   }
 
   .fullscreen-bg__video {
