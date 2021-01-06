@@ -2,7 +2,7 @@
   "name": "guerrero",
   "version": "0.1.0",
   "description": "",
-  "homepage": "",
+  "homepage": ".",
   "private": true,
   "scripts": {
     "dev": "node scripts/start.js",
