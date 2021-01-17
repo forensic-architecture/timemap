@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({
+const DatetimeBar = ({
   highlights,
   events,
   x,
@@ -41,3 +41,5 @@ export default ({
     </>
   );
 };
+
+export default DatetimeBar;

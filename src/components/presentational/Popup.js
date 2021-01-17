@@ -3,7 +3,7 @@ import marked from "marked";
 
 const fontSize = window.innerWidth > 1000 ? 14 : 18;
 
-export default ({
+const Popup = ({
   content = [],
   styles = {},
   isOpen = true,
@@ -36,3 +36,5 @@ export default ({
     </div>
   </div>
 );
+
+export default Popup;

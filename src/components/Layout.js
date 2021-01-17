@@ -1,4 +1,3 @@
-/* global alert, Event */
 import React from "react";
 
 import { bindActionCreators } from "redux";
@@ -11,7 +10,6 @@ import LoadingOverlay from "./Overlay/Loading";
 import Map from "./Map.jsx";
 import Toolbar from "./Toolbar/Layout";
 import CardStack from "./CardStack.jsx";
-// import {CardStack} from '@forensic-architecture/design-system'
 import NarrativeControls from "./presentational/Narrative/Controls.js";
 import InfoPopup from "./InfoPopup.jsx";
 import Popup from "./presentational/Popup";

@@ -380,6 +380,7 @@ export function getFilterIdxFromColorSet(filter, coloringSet) {
   coloringSet.map((set, idx) => {
     const foundIdx = set.indexOf(filter);
     if (foundIdx !== -1) filterIdx = idx;
+    return null;
   });
   return filterIdx;
 }

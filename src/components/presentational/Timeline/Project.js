@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({
+const Project = ({
   offset,
   id,
   start,
@@ -26,3 +26,5 @@ export default ({
     />
   );
 };
+
+export default Project;

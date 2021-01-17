@@ -1,4 +1,3 @@
-/* global fetch, alert */
 import { urlFromEnv } from "../common/utilities";
 
 // TODO: relegate these URLs entirely to environment variables

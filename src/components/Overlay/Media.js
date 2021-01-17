@@ -108,7 +108,7 @@ class SourceOverlay extends React.Component {
                   {url ? (
                     <span>
                       <i className="material-icons left">link</i>
-                      <a href={url} target="_blank">
+                      <a href={url} target="_blank" rel="noreferrer">
                         Link to original URL
                       </a>
                     </span>

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({ onClickHandler, closeMsg }) => {
+const Close = ({ onClickHandler, closeMsg }) => {
   return (
     <div className="narrative-close" onClick={onClickHandler}>
       <button className="side-menu-burg is-active">
@@ -10,3 +10,5 @@ export default ({ onClickHandler, closeMsg }) => {
     </div>
   );
 };
+
+export default Close;
