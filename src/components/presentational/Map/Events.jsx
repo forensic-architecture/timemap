@@ -171,26 +171,30 @@ function MapEvents({
     }, false);
 
     return (
-      <g
-        className={`location-event ${narrative ? "no-hover" : ""}`}
-        transform={`translate(${x}, ${y})`}
-        onClick={(e) => handleEventSelect(e, location)}
-      >
-        {features.COLOR_BY_ASSOCIATION
-          ? renderLocationSlicesByAssociation(location)
-          : null}
-        {features.COLOR_BY_CATEGORY
-          ? renderLocationSlicesByCategory(location)
-          : null}
-        {extraRender ? extraRender() : null}
-        {isSelected ? null : renderBorder()}
-      </g>
+      <svg>
+        <g
+          className={`location-event ${narrative ? "no-hover" : ""}`}
+          transform={`translate(${x}, ${y})`}
+          onClick={(e) => handleEventSelect(e, location)}
+        >
+          {features.COLOR_BY_ASSOCIATION
+            ? renderLocationSlicesByAssociation(location)
+            : null}
+          {features.COLOR_BY_CATEGORY
+            ? renderLocationSlicesByCategory(location)
+            : null}
+          {extraRender ? extraRender() : null}
+          {isSelected ? null : renderBorder()}
+        </g>
+      </svg>
     );
   }
 
   return (
     <Portal node={svg}>
-      <g className="event-locations">{locations.map(renderLocation)}</g>
+      <svg>
+        <g className="event-locations">{locations.map(renderLocation)}</g>
+      </svg>
     </Portal>
   );
 }

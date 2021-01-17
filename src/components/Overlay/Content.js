@@ -5,7 +5,7 @@ import Md from "./Md";
 import Spinner from "../presentational/Spinner";
 import NoSource from "../presentational/NoSource";
 
-export default ({ media, viewIdx, translations, switchLanguage, langIdx }) => {
+const Content = ({ media, viewIdx, translations, switchLanguage, langIdx }) => {
   const el = document.querySelector(".source-media-gallery");
   const shiftW = el ? el.getBoundingClientRect().width : 0;
 
@@ -71,7 +71,7 @@ export default ({ media, viewIdx, translations, switchLanguage, langIdx }) => {
           </div>
         );
       case "Document":
-        return <iframe className="source-document" src={path} />;
+        return <iframe title={path} className="source-document" src={path} />;
       default:
         return (
           <NoSource
@@ -92,3 +92,5 @@ export default ({ media, viewIdx, translations, switchLanguage, langIdx }) => {
     </div>
   );
 };
+
+export default Content;

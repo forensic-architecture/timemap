@@ -1,6 +1,14 @@
 import React from "react";
 
-export default ({ x, y, r, transform, onSelect, styleProps, extraRender }) => {
+const DatetimeStar = ({
+  x,
+  y,
+  r,
+  transform,
+  onSelect,
+  styleProps,
+  extraRender,
+}) => {
   const s = (r * 2) / 3;
   return (
     <polygon
@@ -15,3 +23,5 @@ export default ({ x, y, r, transform, onSelect, styleProps, extraRender }) => {
     />
   );
 };
+
+export default DatetimeStar;

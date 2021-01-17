@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({ label, isActive, onClickCheckbox, color }) => {
+const Checkbox = ({ label, isActive, onClickCheckbox, color }) => {
   const styles = {
     background: isActive ? color : "none",
     border: `1px solid ${color}`,
@@ -15,3 +15,5 @@ export default ({ label, isActive, onClickCheckbox, color }) => {
     </div>
   );
 };
+
+export default Checkbox;

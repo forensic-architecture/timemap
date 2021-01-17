@@ -11,7 +11,7 @@
     "test": "node scripts/test.js --silent",
     "test:ava": "NODE_ENV=production ava --verbose",
     "test-watch": "ava --watch",
-    "lint": "echo 'This is a placeholder for Travis'",
+    "lint": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "lint:fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
   },
   "dependencies": {

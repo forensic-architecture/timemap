@@ -3,7 +3,7 @@ import marked from "marked";
 
 const fontSize = window.innerWidth > 1000 ? 14 : 18;
 
-export default ({
+const Popup = ({
   content = [],
   styles = {},
   isOpen = true,
@@ -29,10 +29,12 @@ export default ({
         </button>
         <h2>{title}</h2>
       </div>
-      {content.map((t) => (
-        <div dangerouslySetInnerHTML={{ __html: marked(t) }} />
+      {content.map((t, idx) => (
+        <div key={idx} dangerouslySetInnerHTML={{ __html: marked(t) }} />
       ))}
       {children}
     </div>
   </div>
 );
+
+export default Popup;

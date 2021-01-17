@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({ isDisabled, direction, onClickHandler }) => {
+const Adjust = ({ isDisabled, direction, onClickHandler }) => {
   return (
     <div
       className={`narrative-adjust ${direction}`}
@@ -12,3 +12,5 @@ export default ({ isDisabled, direction, onClickHandler }) => {
     </div>
   );
 };
+
+export default Adjust;

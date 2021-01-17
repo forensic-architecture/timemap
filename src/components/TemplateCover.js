@@ -158,10 +158,14 @@ class TemplateCover extends React.Component {
             className="cover-logo-container"
             href="https://forensic-architecture.org"
           >
-            <img className="cover-logo" src={falogo} />
+            <img
+              className="cover-logo"
+              src={falogo}
+              alt="Forensic Architecture logo"
+            />
           </a>
           <a className="cover-logo-container" href="https://bellingcat.com">
-            <img className="cover-logo" src={bcatlogo} />
+            <img className="cover-logo" src={bcatlogo} alt="Bellingcat logo" />
           </a>
         </div>
         <div className="cover-content">

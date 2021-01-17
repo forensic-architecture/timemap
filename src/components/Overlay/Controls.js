@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({ viewIdx, paths, onShiftHandler }) => {
+const OverlayControls = ({ viewIdx, paths, onShiftHandler }) => {
   const backArrow =
     viewIdx !== 0 ? (
       <div className="back" onClick={() => onShiftHandler(-1)}>
@@ -28,3 +28,5 @@ export default ({ viewIdx, paths, onShiftHandler }) => {
   }
   return <div className="media-gallery-controls" />;
 };
+
+export default OverlayControls;

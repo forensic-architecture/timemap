@@ -38,7 +38,7 @@ class TimelineCategories extends React.Component {
     return (
       <>
         <g
-          class="tick"
+          className="tick"
           style={{ strokeWidth }}
           opacity="0.5"
           transform={`translate(0,${this.props.getCategoryY(cat)})`}
@@ -46,7 +46,7 @@ class TimelineCategories extends React.Component {
           <line x1={dims.marginLeft} x2={dims.width - dims.width_controls} />
         </g>
         <g
-          class="tick"
+          className="tick"
           opacity="1"
           transform={`translate(0,${this.props.getCategoryY(cat)})`}
         >
@@ -66,11 +66,11 @@ class TimelineCategories extends React.Component {
       : this.renderCategory(fallbackLabel, 0);
 
     return (
-      <g class="yAxis">
+      <g className="yAxis">
         {renderedCategories}
         <rect
           ref={this.grabRef}
-          class="drag-grabber"
+          className="drag-grabber"
           x={dims.marginLeft}
           y={dims.marginTop}
           width={dims.width - dims.marginLeft - dims.width_controls}

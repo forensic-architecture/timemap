@@ -5,9 +5,11 @@ export const colors = {
   white: "#fff",
 };
 
-export default {
+const exports = {
   fallbackEventColor: colors.fa_red,
   darkBackground: colors.black,
   primaryHighlight: colors.fa_red,
   secondaryHighlight: colors.white,
 };
+
+export default exports;

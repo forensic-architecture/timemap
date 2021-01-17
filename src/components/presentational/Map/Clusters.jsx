@@ -62,23 +62,28 @@ function Cluster({
   if (!isLatitude(latitude) || !isLongitude(longitude)) return null;
 
   return (
-    <g
-      className="cluster-event"
-      transform={`translate(${x}, ${y})`}
-      onClick={(e) => onClick({ id: clusterId, latitude, longitude })}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <ColoredMarkers
-        radius={size}
-        colorPercentMap={zipColorsToPercentages(filterColors, colorPercentages)}
-        styles={{
-          ...styles,
-        }}
-        className="cluster-event-marker"
-      />
-      {hovered ? renderHover(cluster) : null}
-    </g>
+    <svg>
+      <g
+        className="cluster-event"
+        transform={`translate(${x}, ${y})`}
+        onClick={(e) => onClick({ id: clusterId, latitude, longitude })}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        <ColoredMarkers
+          radius={size}
+          colorPercentMap={zipColorsToPercentages(
+            filterColors,
+            colorPercentages
+          )}
+          styles={{
+            ...styles,
+          }}
+          className="cluster-event-marker"
+        />
+        {hovered ? renderHover(cluster) : null}
+      </g>
+    </svg>
   );
 }
 
@@ -125,30 +130,32 @@ function ClusterEvents({
 
   return (
     <Portal node={svg}>
-      <g className="cluster-locations">
-        {isRadial ? <DefsClusters /> : null}
-        {clusters.map((c) => {
-          const pointCount = c.properties.point_count;
-          const clusterSize = calcClusterSize(pointCount, totalPoints);
-          return (
-            <Cluster
-              onClick={onSelect}
-              getClusterChildren={getClusterChildren}
-              coloringSet={coloringSet}
-              cluster={c}
-              filterColors={filterColors}
-              size={clusterSize}
-              projectPoint={projectPoint}
-              totalPoints={totalPoints}
-              styles={{
-                ...styles,
-                fillOpacity: calcClusterOpacity(pointCount, totalPoints),
-              }}
-              renderHover={() => renderHover(pointCount, clusterSize)}
-            />
-          );
-        })}
-      </g>
+      <svg>
+        <g className="cluster-locations">
+          {isRadial ? <DefsClusters /> : null}
+          {clusters.map((c) => {
+            const pointCount = c.properties.point_count;
+            const clusterSize = calcClusterSize(pointCount, totalPoints);
+            return (
+              <Cluster
+                onClick={onSelect}
+                getClusterChildren={getClusterChildren}
+                coloringSet={coloringSet}
+                cluster={c}
+                filterColors={filterColors}
+                size={clusterSize}
+                projectPoint={projectPoint}
+                totalPoints={totalPoints}
+                styles={{
+                  ...styles,
+                  fillOpacity: calcClusterOpacity(pointCount, totalPoints),
+                }}
+                renderHover={() => renderHover(pointCount, clusterSize)}
+              />
+            );
+          })}
+        </g>
+      </svg>
     </Portal>
   );
 }

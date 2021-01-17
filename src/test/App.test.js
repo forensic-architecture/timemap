@@ -12,5 +12,5 @@ it("renders an option to view categories", () => {
       <App />
     </Provider>
   );
-  expect(screen.getByText("Categories")).toBeInTheDocument();
+  expect(screen.getByText("Filters")).toBeInTheDocument();
 });

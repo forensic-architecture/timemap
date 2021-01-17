@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-export default ({ showing, onClickHandler, timelineDims }) => {
-  if (!showing) {
-    return null;
-  }
-
+const StateOptions = ({ showing, onClickHandler, timelineDims }) => {
   const [checked, setChecked] = useState(false);
   const handleCheck = () => setChecked(!checked);
   const onNarrativise = () => onClickHandler(checked);
+
+  if (!showing) {
+    return null;
+  }
 
   return (
     <div className="stateoptions-panel" style={{ bottom: timelineDims.height }}>
@@ -26,3 +26,5 @@ export default ({ showing, onClickHandler, timelineDims }) => {
     </div>
   );
 };
+
+export default StateOptions;

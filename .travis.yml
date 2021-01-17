@@ -5,11 +5,10 @@ cache:
   directories:
     - node_modules
 before_script:
-  - npm install -g yarn
   - cp example.config.js config.js
 install:
-  - yarn
+  - npm install
 script:
-  - yarn lint
-  - yarn build
-  - yarn test
+  - npm run lint
+  - npm run build
+  - npm run test

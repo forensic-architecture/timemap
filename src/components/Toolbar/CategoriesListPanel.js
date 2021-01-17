@@ -3,7 +3,7 @@ import marked from "marked";
 import Checkbox from "../presentational/Checkbox";
 import copy from "../../common/data/copy.json";
 
-export default ({
+const CategoriesListPanel = ({
   categories,
   activeCategories,
   onCategoryFilter,
@@ -45,3 +45,5 @@ export default ({
     </div>
   );
 };
+
+export default CategoriesListPanel;

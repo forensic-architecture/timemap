@@ -3,7 +3,7 @@ import Card from "./Card";
 import Adjust from "./Adjust";
 import Close from "./Close";
 
-export default ({ narrative, methods }) => {
+const NarrativeControls = ({ narrative, methods }) => {
   if (!narrative) return null;
 
   const { current, steps } = narrative;
@@ -30,3 +30,5 @@ export default ({ narrative, methods }) => {
     </>
   );
 };
+
+export default NarrativeControls;

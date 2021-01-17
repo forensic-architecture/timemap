@@ -1,6 +1,14 @@
 import React from "react";
 
-export default ({ x, y, r, transform, onSelect, styleProps, extraRender }) => {
+const DatetimeSquare = ({
+  x,
+  y,
+  r,
+  transform,
+  onSelect,
+  styleProps,
+  extraRender,
+}) => {
   return (
     <rect
       onClick={onSelect}
@@ -14,3 +22,5 @@ export default ({ x, y, r, transform, onSelect, styleProps, extraRender }) => {
     />
   );
 };
+
+export default DatetimeSquare;
