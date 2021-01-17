@@ -28,6 +28,7 @@ const TimelineZoomControls = ({ extent, zoomLevels, dims, onApplyZoom }) => {
         x="60"
         y={idx * 15 + 20}
         onClick={() => onApplyZoom(zoom)}
+        key={idx}
       >
         {zoom.label}
       </text>

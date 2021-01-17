@@ -29,8 +29,8 @@ export default ({
         </button>
         <h2>{title}</h2>
       </div>
-      {content.map((t) => (
-        <div dangerouslySetInnerHTML={{ __html: marked(t) }} />
+      {content.map((t, idx) => (
+        <div key={idx} dangerouslySetInnerHTML={{ __html: marked(t) }} />
       ))}
       {children}
     </div>

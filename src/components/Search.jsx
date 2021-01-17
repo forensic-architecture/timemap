@@ -49,7 +49,7 @@ class Search extends React.Component {
 
     return (
       <div
-        class={
+        className={
           "search-outer-container" +
           (this.props.narrative ? " narrative-mode " : "")
         }
@@ -58,11 +58,13 @@ class Search extends React.Component {
           <i className="material-icons">search</i>
         </div>
         <div
-          class={"search-bar-overlay" + (this.state.isFolded ? " folded" : "")}
+          className={
+            "search-bar-overlay" + (this.state.isFolded ? " folded" : "")
+          }
         >
-          <div class="search-input-container">
+          <div className="search-input-container">
             <input
-              class="search-bar-input"
+              className="search-bar-input"
               onChange={this.updateSearchQuery}
               type="text"
             />
@@ -74,7 +76,7 @@ class Search extends React.Component {
               close
             </i>
           </div>
-          <div class="search-results">
+          <div className="search-results">
             {searchResults.map((result) => {
               return (
                 <SearchRow

@@ -8,7 +8,7 @@ const CoverIcon = ({ isActive, isDisabled, onClickHandler }) => {
 
   return (
     <button className={classes} onClick={onClickHandler}>
-      <i class="material-icons">info</i>
+      <i className="material-icons">info</i>
     </button>
   );
 };

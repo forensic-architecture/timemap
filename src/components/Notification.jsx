@@ -16,11 +16,11 @@ export default class Notification extends React.Component {
     if (!items) return "";
     return (
       <div>
-        {items.map((item) => {
+        {items.map((item, idx) => {
           if (item.error) {
-            return <p>{item.error.message}</p>;
+            return <p key={idx}>{item.error.message}</p>;
           }
-          return "";
+          return null;
         })}
       </div>
     );
@@ -47,11 +47,12 @@ export default class Notification extends React.Component {
     if (notificationsToRender.length > 0) {
       return (
         <div className="notification-wrapper">
-          {this.props.notifications.map((notification) => {
+          {this.props.notifications.map((notification, idx) => {
             return (
               <div
                 className="notification"
                 onClick={() => this.toggleDetails()}
+                key={idx}
               >
                 <button
                   onClick={this.props.onToggle}
