@@ -7,7 +7,7 @@ import * as selectors from "../selectors";
 
 import MediaOverlay from "./Overlay/Media";
 import LoadingOverlay from "./Overlay/Loading";
-import Map from "./Map.jsx";
+import Space from "./Space.jsx";
 import Toolbar from "./Toolbar/Layout";
 import CardStack from "./CardStack.jsx";
 import NarrativeControls from "./presentational/Narrative/Controls.js";
@@ -329,7 +329,8 @@ class Dashboard extends React.Component {
             onSelectNarrative: this.setNarrative,
           }}
         />
-        <Map
+        <Space
+          kind={"map" in app ? "map" : "space3d"}
           onKeyDown={this.onKeyDown}
           methods={{
             onSelectNarrative: this.setNarrative,
