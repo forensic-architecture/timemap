@@ -6,8 +6,8 @@ import * as actions from "../actions";
 import * as selectors from "../selectors";
 
 import Toolbar from "./Toolbar";
-import InfoPopup from "./InfoPopup.jsx";
-import Notification from "./Notification.jsx";
+import InfoPopup from "./InfoPopup";
+import Notification from "./Notification";
 import TemplateCover from "./TemplateCover";
 
 import Popup from "./atoms/Popup";
@@ -15,8 +15,8 @@ import StaticPage from "./atoms/StaticPage";
 import MediaOverlay from "./atoms/Media";
 import LoadingOverlay from "./atoms/Loading";
 
-import Timeline from "./time/Timeline.jsx";
-import Space from "./space/Space.jsx";
+import Timeline from "./time/Timeline";
+import Space from "./space/Space";
 import Search from "./controls/Search";
 import CardStack from "./controls/CardStack";
 import NarrativeControls from "./controls/NarrativeControls.js";

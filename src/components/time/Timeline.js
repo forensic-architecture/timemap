@@ -9,13 +9,13 @@ import * as selectors from "../../selectors";
 import copy from "../../common/data/copy.json";
 
 import Header from "./atoms/Header";
-import Axis from "./Axis.jsx";
+import Axis from "./Axis";
 import Clip from "./atoms/Clip";
 import Handles from "./atoms/Handles.js";
 import ZoomControls from "./atoms/ZoomControls.js";
 import Markers from "./atoms/Markers.js";
 import Events from "./atoms/Events.js";
-import Categories from "./Categories.jsx";
+import Categories from "./Categories";
 
 class Timeline extends React.Component {
   constructor(props) {

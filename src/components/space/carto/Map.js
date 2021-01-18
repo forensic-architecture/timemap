@@ -7,13 +7,13 @@ import Supercluster from "supercluster";
 import { connect } from "react-redux";
 import * as selectors from "../../../selectors";
 
-import Sites from "./atoms/Sites.jsx";
-import Shapes from "./atoms/Shapes.jsx";
-import Events from "./atoms/Events.jsx";
-import Clusters from "./atoms/Clusters.jsx";
-import SelectedEvents from "./atoms/SelectedEvents.jsx";
+import Sites from "./atoms/Sites";
+import Shapes from "./atoms/Shapes";
+import Events from "./atoms/Events";
+import Clusters from "./atoms/Clusters";
+import SelectedEvents from "./atoms/SelectedEvents";
 import Narratives from "./atoms/Narratives";
-import DefsMarkers from "./atoms/DefsMarkers.jsx";
+import DefsMarkers from "./atoms/DefsMarkers";
 import LoadingOverlay from "../../atoms/Loading";
 
 import {
