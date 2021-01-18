@@ -2,11 +2,9 @@ import React from "react";
 
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import * as actions from "../actions";
+import * as actions from "../../actions";
 
-import "../scss/search.scss";
-
-import SearchRow from "./SearchRow.jsx";
+import SearchRow from "./atoms/SearchRow.jsx";
 
 class Search extends React.Component {
   constructor(props) {

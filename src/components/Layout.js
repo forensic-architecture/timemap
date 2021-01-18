@@ -5,24 +5,25 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 
-import MediaOverlay from "./Overlay/Media";
-import LoadingOverlay from "./Overlay/Loading";
-import Space from "./Space.jsx";
-import Toolbar from "./Toolbar/Layout";
-import CardStack from "./CardStack.jsx";
-import NarrativeControls from "./presentational/Narrative/Controls.js";
+import Toolbar from "./Toolbar";
 import InfoPopup from "./InfoPopup.jsx";
-import Popup from "./presentational/Popup";
-import Timeline from "./Timeline.jsx";
 import Notification from "./Notification.jsx";
-import StateOptions from "./StateOptions.jsx";
-import StaticPage from "./StaticPage";
 import TemplateCover from "./TemplateCover";
+
+import Popup from "./atoms/Popup";
+import StaticPage from "./atoms/StaticPage";
+import MediaOverlay from "./atoms/Media";
+import LoadingOverlay from "./atoms/Loading";
+
+import Timeline from "./time/Timeline.jsx";
+import Space from "./space/Space.jsx";
+import Search from "./controls/Search";
+import CardStack from "./controls/CardStack";
+import NarrativeControls from "./controls/NarrativeControls.js";
 
 import colors from "../common/global";
 import { binarySearch, insetSourceFrom } from "../common/utilities";
 import { isMobileOnly } from "react-device-detect";
-import Search from "./Search.jsx";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -359,16 +360,6 @@ class Dashboard extends React.Component {
           onHighlight={this.handleHighlight}
           onToggleCardstack={() => actions.updateSelected([])}
           getCategoryColor={this.getCategoryColor}
-        />
-        <StateOptions
-          showing={
-            this.props.narratives &&
-            this.props.narratives.length !== 0 &&
-            !app.associations.narrative &&
-            app.associations.filters.length > 0
-          }
-          timelineDims={app.timeline.dimensions}
-          onClickHandler={this.setNarrativeFromFilters}
         />
         <NarrativeControls
           narrative={

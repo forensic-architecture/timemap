@@ -3,7 +3,7 @@ import DatetimeBar from "./DatetimeBar";
 import DatetimeSquare from "./DatetimeSquare";
 import DatetimeStar from "./DatetimeStar";
 import Project from "./Project";
-import ColoredMarkers from "../Map/ColoredMarkers.jsx";
+import ColoredMarkers from "../../atoms/ColoredMarkers";
 import {
   calcOpacity,
   getEventCategories,

@@ -1,7 +1,7 @@
 import React from "react";
-import Card from "./Card";
-import Adjust from "./Adjust";
-import Close from "./Close";
+import Card from "./atoms/NarrativeCard";
+import Adjust from "./atoms/NarrativeAdjust";
+import Close from "./atoms/NarrativeClose";
 
 const NarrativeControls = ({ narrative, methods }) => {
   if (!narrative) return null;

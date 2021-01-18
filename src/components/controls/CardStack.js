@@ -5,10 +5,9 @@ import {
   generateCardLayout,
 } from "@forensic-architecture/design-system/dist/react";
 
-import * as selectors from "../selectors";
-import { getFilterIdxFromColorSet } from "../common/utilities";
-// import Card from './Card.jsx'
-import copy from "../common/data/copy.json";
+import * as selectors from "../../selectors";
+import { getFilterIdxFromColorSet } from "../../common/utilities";
+import copy from "../../common/data/copy.json";
 
 class CardStack extends React.Component {
   constructor() {

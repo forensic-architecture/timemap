@@ -1,20 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as actions from "../../actions";
-import * as selectors from "../../selectors";
+import * as actions from "../actions";
+import * as selectors from "../selectors";
 
 import { Tabs, TabPanel } from "react-tabs";
-import FilterListPanel from "./FilterListPanel";
-import CategoriesListPanel from "./CategoriesListPanel";
-import BottomActions from "./BottomActions";
-import copy from "../../common/data/copy.json";
+import FilterListPanel from "./controls/FilterListPanel";
+import CategoriesListPanel from "./controls/CategoriesListPanel";
+import BottomActions from "./controls/BottomActions";
+import copy from "../common/data/copy.json";
 import {
   trimAndEllipse,
   getImmediateFilterParent,
   getFilterSiblings,
   getFilterParents,
-} from "../../common/utilities.js";
+} from "../common/utilities.js";
 
 class Toolbar extends React.Component {
   constructor(props) {
