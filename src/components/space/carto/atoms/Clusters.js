@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Portal } from "react-portal";
-import colors from "../../../common/global.js";
-import ColoredMarkers from "./ColoredMarkers.jsx";
+import colors from "../../../../common/global";
+import ColoredMarkers from "../../../atoms/ColoredMarkers";
 import {
   calcClusterOpacity,
   calcClusterSize,
@@ -10,7 +10,7 @@ import {
   calculateColorPercentages,
   zipColorsToPercentages,
   calculateTotalClusterPoints,
-} from "../../../common/utilities";
+} from "../../../../common/utilities";
 
 const DefsClusters = () => (
   <defs>

@@ -5,6 +5,19 @@ import copy from "../common/data/copy.json";
 import { language } from "../common/utilities";
 
 const isSmallLaptop = window.innerHeight < 800;
+const mapIniital = {
+  anchor: [31.356397, 34.784818],
+  startZoom: 11,
+  minZoom: 2,
+  maxZoom: 16,
+  bounds: null,
+  maxBounds: [
+    [180, -180],
+    [-180, 180],
+  ],
+};
+const space3dInitial = {};
+
 const initial = {
   /*
    * The Domain or 'domain' of this state refers to the tree of data
@@ -51,17 +64,6 @@ const initial = {
     },
     isMobile: /Mobi/.test(navigator.userAgent),
     language: "en-US",
-    map: {
-      anchor: [31.356397, 34.784818],
-      startZoom: 11,
-      minZoom: 2,
-      maxZoom: 16,
-      bounds: null,
-      maxBounds: [
-        [180, -180],
-        [-180, 180],
-      ],
-    },
     cluster: {
       radius: 30,
       minZoom: 2,
@@ -173,7 +175,14 @@ if (process.env.store) {
 // NB: config.js dates get implicitly converted to strings in mergeDeepLeft
 appStore.app.timeline.range[0] = new Date(appStore.app.timeline.range[0]);
 appStore.app.timeline.range[1] = new Date(appStore.app.timeline.range[1]);
-
 appStore.app.flags.isIntropopup = !!appStore.app.intro;
+
+if ("map" in appStore.app) {
+  appStore.app.map = mergeDeepLeft(appStore.app.map, mapIniital);
+}
+
+if ("space3d" in appStore.app) {
+  appStore.app.space3d = mergeDeepLeft(appStore.app.space3d, space3dInitial);
+}
 
 export default appStore;

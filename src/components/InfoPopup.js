@@ -1,5 +1,5 @@
 import React from "react";
-import Popup from "./presentational/Popup";
+import Popup from "./atoms/Popup";
 import copy from "../common/data/copy.json";
 
 const Infopopup = ({ isOpen, onClose, language, styles }) => (

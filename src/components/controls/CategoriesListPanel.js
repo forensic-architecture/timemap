@@ -1,6 +1,6 @@
 import React from "react";
 import marked from "marked";
-import Checkbox from "../presentational/Checkbox";
+import Checkbox from "../atoms/Checkbox";
 import copy from "../../common/data/copy.json";
 
 const CategoriesListPanel = ({

@@ -2,19 +2,20 @@ import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import * as d3 from "d3";
-import * as selectors from "../selectors";
-import { setLoading, setNotLoading } from "../actions";
 import hash from "object-hash";
 
-import copy from "../common/data/copy.json";
-import Header from "./presentational/Timeline/Header";
-import Axis from "./TimelineAxis.jsx";
-import Clip from "./presentational/Timeline/Clip";
-import Handles from "./presentational/Timeline/Handles.js";
-import ZoomControls from "./presentational/Timeline/ZoomControls.js";
-import Markers from "./presentational/Timeline/Markers.js";
-import Events from "./presentational/Timeline/Events.js";
-import Categories from "./TimelineCategories.jsx";
+import { setLoading, setNotLoading } from "../../actions";
+import * as selectors from "../../selectors";
+import copy from "../../common/data/copy.json";
+
+import Header from "./atoms/Header";
+import Axis from "./Axis";
+import Clip from "./atoms/Clip";
+import Handles from "./atoms/Handles.js";
+import ZoomControls from "./atoms/ZoomControls.js";
+import Markers from "./atoms/Markers.js";
+import Events from "./atoms/Events.js";
+import Categories from "./Categories";
 
 class Timeline extends React.Component {
   constructor(props) {

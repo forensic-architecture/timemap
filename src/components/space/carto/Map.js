@@ -1,21 +1,20 @@
 /* global L */
+import "leaflet";
 import React from "react";
 import { Portal } from "react-portal";
 import Supercluster from "supercluster";
 
 import { connect } from "react-redux";
-import * as selectors from "../selectors";
+import * as selectors from "../../../selectors";
 
-import "leaflet";
-
-import Sites from "./presentational/Map/Sites.jsx";
-import Shapes from "./presentational/Map/Shapes.jsx";
-import Events from "./presentational/Map/Events.jsx";
-import Clusters from "./presentational/Map/Clusters.jsx";
-import SelectedEvents from "./presentational/Map/SelectedEvents.jsx";
-import Narratives from "./presentational/Map/Narratives";
-import DefsMarkers from "./presentational/Map/DefsMarkers.jsx";
-import LoadingOverlay from "../components/Overlay/Loading";
+import Sites from "./atoms/Sites";
+import Shapes from "./atoms/Shapes";
+import Events from "./atoms/Events";
+import Clusters from "./atoms/Clusters";
+import SelectedEvents from "./atoms/SelectedEvents";
+import Narratives from "./atoms/Narratives";
+import DefsMarkers from "./atoms/DefsMarkers";
+import LoadingOverlay from "../../atoms/Loading";
 
 import {
   mapClustersToLocations,
@@ -24,7 +23,7 @@ import {
   isLongitude,
   calculateTotalClusterPoints,
   calcClusterSize,
-} from "../common/utilities";
+} from "../../../common/utilities";
 
 // NB: important constants for map, TODO: make statics
 const supportedMapboxMap = ["streets", "satellite"];

@@ -1,6 +1,6 @@
 import React from "react";
 import * as d3 from "d3";
-import { setD3Locale } from "../common/utilities";
+import { setD3Locale } from "../../common/utilities";
 
 const TEXT_HEIGHT = 15;
 setD3Locale(d3);

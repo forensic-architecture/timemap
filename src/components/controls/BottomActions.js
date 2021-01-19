@@ -1,8 +1,8 @@
 import React from "react";
 
-import SitesIcon from "../presentational/Icons/Sites";
-import CoverIcon from "../presentational/Icons/Cover";
-import InfoIcon from "../presentational/Icons/Info";
+import SitesIcon from "../atoms/SitesIcon";
+import CoverIcon from "../atoms/CoverIcon";
+import InfoIcon from "../atoms/InfoIcon";
 
 function BottomActions(props) {
   function renderToggles() {

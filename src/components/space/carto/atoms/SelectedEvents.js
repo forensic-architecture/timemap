@@ -1,6 +1,6 @@
 import React from "react";
 import { Portal } from "react-portal";
-import colors from "../../../common/global.js";
+import colors from "../../../../common/global";
 
 class MapSelectedEvents extends React.Component {
   renderMarker(marker) {

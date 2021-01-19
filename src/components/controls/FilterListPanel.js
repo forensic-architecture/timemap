@@ -1,5 +1,5 @@
 import React from "react";
-import Checkbox from "../presentational/Checkbox";
+import Checkbox from "../atoms/Checkbox";
 import marked from "marked";
 import copy from "../../common/data/copy.json";
 import { getFilterIdxFromColorSet } from "../../common/utilities";

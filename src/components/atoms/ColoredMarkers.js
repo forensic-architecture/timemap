@@ -1,5 +1,5 @@
 import React from "react";
-import { getCoordinatesForPercent } from "../../../common/utilities";
+import { getCoordinatesForPercent } from "../../common/utilities";
 
 function ColoredMarkers({ radius, colorPercentMap, styles, className }) {
   let cumulativeAngleSweep = 0;
