@@ -19,4 +19,5 @@ jobs:
         env:
           CI: true
       - run: npm run lint
+        env:
           CI: true
