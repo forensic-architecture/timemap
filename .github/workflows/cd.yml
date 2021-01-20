@@ -1,0 +1,19 @@
+name: CD
+on:
+  push:
+    branches: [ develop ]
+#  pull_request:
+#    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger CD build
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.CI_DISPATCH_TOKEN }}
+          repository: forensic-architecture/configs
+          event-type: remote-build
+          client-payload: '{"runtime_args": "timemap", "branch": "${GITHUB_REF##*/}"}'
+
