@@ -181,7 +181,7 @@ if ("map" in appStore.app) {
   appStore.app.map = mergeDeepLeft(appStore.app.map, mapIniital);
 }
 
-if ("3d" in appStore.app) {
+if ("space3d" in appStore.app) {
   appStore.app.space3d = mergeDeepLeft(appStore.app.space3d, space3dInitial);
 }
 

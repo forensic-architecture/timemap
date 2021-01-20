@@ -4,7 +4,7 @@ import Map3d from "./3d/Map";
 
 const Space = (props) => {
   switch (props.kind) {
-    case "3d":
+    case "space3d":
       return <Map3d {...props} />;
     default:
       return <MapCarto {...props} />;
