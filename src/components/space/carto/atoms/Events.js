@@ -4,7 +4,6 @@ import colors from "../../../../common/global";
 import ColoredMarkers from "../../../atoms/ColoredMarkers";
 import {
   calcOpacity,
-  getCoordinatesForPercent,
   calculateColorPercentages,
   zipColorsToPercentages,
 } from "../../../../common/utilities";
@@ -67,74 +66,6 @@ function MapEvents({
     );
   }
 
-  function renderLocationSlicesByCategory(location) {
-    const locCategory =
-      location.events.length > 0 ? location.events[0].category : "default";
-    const customStyles = styleLocation ? styleLocation(location) : null;
-    const extraStyles = customStyles[0];
-
-    const styles = {
-      fill: getCategoryColor(locCategory),
-      stroke: colors.darkBackground,
-      strokeWidth: 0,
-      fillOpacity: narrative ? 1 : calcOpacity(location.events.length),
-      ...extraStyles,
-    };
-
-    const colorSlices = location.events.map((e) =>
-      e.colour ? e.colour : getCategoryColor(e.category)
-    );
-
-    let cumulativeAngleSweep = 0;
-
-    return (
-      <>
-        {colorSlices.map((color, idx) => {
-          const r = eventRadius;
-
-          // Based on the number of events in each location,
-          // create a slice per event filled with its category color
-          const [startX, startY] = getCoordinatesForPercent(
-            r,
-            cumulativeAngleSweep
-          );
-
-          cumulativeAngleSweep = (idx + 1) / colorSlices.length;
-
-          const [endX, endY] = getCoordinatesForPercent(
-            r,
-            cumulativeAngleSweep
-          );
-
-          // if the slices are less than 2, take the long arc
-          const largeArcFlag = colorSlices.length === 1 ? 1 : 0;
-
-          // create an array and join it just for code readability
-          const arc = [
-            `M ${startX} ${startY}`, // Move
-            `A ${r} ${r} 0 ${largeArcFlag} 1 ${endX} ${endY}`, // Arc
-            "L 0 0 ", // Line
-            `L ${startX} ${startY} Z`, // Line
-          ].join(" ");
-
-          const extraStyles = {
-            ...styles,
-            fill: color,
-          };
-
-          return (
-            <path
-              class="location-event-marker"
-              id={`arc_${idx}`}
-              d={arc}
-              style={extraStyles}
-            />
-          );
-        })}
-      </>
-    );
-  }
-
   function renderLocation(location) {
     /**
     {
@@ -179,9 +110,6 @@ function MapEvents({
         >
           {features.COLOR_BY_ASSOCIATION
             ? renderLocationSlicesByAssociation(location)
-            : null}
-          {features.COLOR_BY_CATEGORY
-            ? renderLocationSlicesByCategory(location)
             : null}
           {extraRender ? extraRender() : null}
           {isSelected ? null : renderBorder()}
