@@ -6,6 +6,7 @@ const EVENT_DATA_URL = urlFromEnv("EVENTS_EXT");
 const ASSOCIATIONS_URL = urlFromEnv("ASSOCIATIONS_EXT");
 const SOURCES_URL = urlFromEnv("SOURCES_EXT");
 const SITES_URL = urlFromEnv("SITES_EXT");
+const EDITORIALS_URL = urlFromEnv("EDITORIALS_EXT");
 const SHAPES_URL = urlFromEnv("SHAPES_EXT");
 
 const domainMsg = (domainType) =>
@@ -57,6 +58,21 @@ export function fetchDomain() {
       }
     }
 
+    let editorialsPromise = Promise.resolve([]);
+    if (features.USE_EDITORIALS) {
+      if (!EDITORIALS_URL) {
+        editorialsPromise = Promise.resolve(
+          handleError(
+            "USE_EDITORIALS is true, but you have not provided a EDITORIALS_EXT"
+          )
+        );
+      } else {
+        editorialsPromise = fetch(EDITORIALS_URL)
+          .then((response) => response.json())
+          .catch(() => handleError(domainMsg("editorials")));
+      }
+    }
+
     let sourcesPromise = Promise.resolve([]);
     if (features.USE_SOURCES) {
       if (!SOURCES_URL) {
@@ -89,6 +105,7 @@ export function fetchDomain() {
     return Promise.all([
       eventPromise,
       associationsPromise,
+      editorialsPromise,
       sourcesPromise,
       sitesPromise,
       shapesPromise,
@@ -97,9 +114,10 @@ export function fetchDomain() {
         const result = {
           events: response[0],
           associations: response[1],
-          sources: response[2],
-          sites: response[3],
-          shapes: response[4],
+          editorials: response[2],
+          sources: response[3],
+          sites: response[4],
+          shapes: response[5],
           notifications,
         };
         if (

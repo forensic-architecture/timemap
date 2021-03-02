@@ -5,6 +5,7 @@ import siteSchema from "./siteSchema";
 import associationsSchema from "./associationsSchema";
 import sourceSchema from "./sourceSchema";
 import shapeSchema from "./shapeSchema";
+import editorialsSchema from "./editorialsSchema";
 
 import { calcDatetime, capitalize } from "../../common/utilities";
 
@@ -51,6 +52,7 @@ export function validateDomain(domain, features) {
   const sanitizedDomain = {
     events: [],
     sites: [],
+    editorials: [],
     associations: [],
     sources: {},
     shapes: [],
@@ -64,6 +66,7 @@ export function validateDomain(domain, features) {
   const discardedDomain = {
     events: [],
     sites: [],
+    editorials: [],
     associations: [],
     sources: [],
     shapes: [],
@@ -112,6 +115,7 @@ export function validateDomain(domain, features) {
   const eventSchema = createEventSchema(features.CUSTOM_EVENT_FIELDS);
   validateArray(domain.events, "events", eventSchema);
   validateArray(domain.sites, "sites", siteSchema);
+  validateArray(domain.editorials, "editorials", editorialsSchema);
   validateArray(domain.associations, "associations", associationsSchema);
   validateObject(domain.sources, "sources", sourceSchema);
   validateObject(domain.shapes, "shapes", shapeSchema);

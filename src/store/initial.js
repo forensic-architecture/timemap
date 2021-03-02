@@ -30,6 +30,7 @@ const initial = {
     events: [],
     categories: [],
     associations: [],
+    editorials: [],
     sources: {},
     sites: [],
     notifications: [],
