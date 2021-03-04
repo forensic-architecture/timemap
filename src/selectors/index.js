@@ -22,6 +22,8 @@ export const getNarratives = (state) =>
 export const getActiveNarrative = (state) => state.app.associations.narrative;
 export const getSelected = (state) => state.app.selected;
 export const getSites = (state) => state.domain.sites;
+export const getEditorials = (state) => state.domain.editorials;
+export const getSelectedEditorial = (state) => state.app.selectedEditorial;
 export const getSources = (state) => state.domain.sources;
 export const getShapes = (state) => state.domain.shapes;
 export const getFilters = (state) =>

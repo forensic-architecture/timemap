@@ -136,13 +136,15 @@
       },
       "narratives_label": "Narratives",
       "narrative_summary": "Follow a path through the data, from one key event to the next.",
-      "categories": "Categories",
-      "filters": "Filters",
       "filters_label": "Filters",
       "explore_by_filter__title": "Explore by filter",
       "explore_by_filter__description": "'Filters' refer to the types of incident. Select multiple filters to introduce colour-coding, up to a maximum of four filters.<br><br>If no filters are selected, all datapoints are displayed.",
+      "categories_label": "Categories",
       "explore_by_category__title": "Explore events by category",
-      "explore_by_category__description": "‘Categories’ refer to the victims of a given incident.<br><br>If no categories are selected, all datapoints are displayed."
+      "explore_by_category__description": "‘Categories’ refer to the victims of a given incident.<br><br>If no categories are selected, all datapoints are displayed.",
+      "editorials_label": "Editorials",
+      "explore_by_editorial__title": "Explore curated narratives",
+      "explore_by_editorial__description": "'Editorials' are curated stories that highlight a specific thread or narrative in the context of the larger platform."
     },
     "timeline": {
       "labels_title": "Testimonies",

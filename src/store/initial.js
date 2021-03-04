@@ -51,6 +51,7 @@ const initial = {
     },
     highlighted: null,
     selected: [],
+    selectedEditorial: null,
     source: null,
     associations: {
       coloringSet: [],

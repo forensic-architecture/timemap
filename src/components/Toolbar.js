@@ -7,6 +7,7 @@ import * as selectors from "../selectors";
 import { Tabs, TabPanel } from "react-tabs";
 import FilterListPanel from "./controls/FilterListPanel";
 import CategoriesListPanel from "./controls/CategoriesListPanel";
+import EditorialsListPanel from "./controls/EditorialsListPanel";
 import BottomActions from "./controls/BottomActions";
 import copy from "../common/data/copy.json";
 import {
@@ -78,6 +79,12 @@ class Toolbar extends React.Component {
     this.props.methods.onSelectFilter(matchingKeys);
   }
 
+  onSelectEditorial(id) {
+    // 1) Grab set of editorials and select appropriate one
+    // 2) Parse set of event ids
+    // 3) Set camera angle and zoom level (ie. trigger visual changes)
+  }
+
   renderClosePanel() {
     return (
       <div className="panel-header" onClick={() => this.selectTab(-1)}>
@@ -117,18 +124,16 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarCategoriesPanel() {
-    if (this.props.features.CATEGORIES_AS_FILTERS) {
-      return (
-        <TabPanel>
-          <CategoriesListPanel
-            categories={this.props.categories}
-            activeCategories={this.props.activeCategories}
-            onCategoryFilter={this.props.methods.onCategoryFilter}
-            language={this.props.language}
-          />
-        </TabPanel>
-      );
-    }
+    return (
+      <TabPanel>
+        <CategoriesListPanel
+          categories={this.props.categories}
+          activeCategories={this.props.activeCategories}
+          onCategoryFilter={this.props.methods.onCategoryFilter}
+          language={this.props.language}
+        />
+      </TabPanel>
+    );
   }
 
   renderToolbarFilterPanel() {
@@ -141,6 +146,19 @@ class Toolbar extends React.Component {
           language={this.props.language}
           coloringSet={this.props.coloringSet}
           filterColors={this.props.filterColors}
+        />
+      </TabPanel>
+    );
+  }
+
+  renderToolbarEditorialPanel() {
+    return (
+      <TabPanel>
+        <EditorialsListPanel
+          editorials={this.props.editorials}
+          selectedEditorial={this.props.selectedEditorial}
+          onSelectEditorial={this.onSelectEditorial}
+          language={this.props.language}
         />
       </TabPanel>
     );
@@ -178,6 +196,7 @@ class Toolbar extends React.Component {
             ? this.renderToolbarCategoriesPanel()
             : null}
           {features.USE_ASSOCIATIONS ? this.renderToolbarFilterPanel() : null}
+          {features.USE_EDITORIALS ? this.renderToolbarEditorialPanel() : null}
         </Tabs>
       </div>
     );
@@ -210,9 +229,11 @@ class Toolbar extends React.Component {
     const narrativesExist = narratives && narratives.length !== 0;
     let title = copy[this.props.language].toolbar.title;
     if (process.env.display_title) title = process.env.display_title;
+
     const narrativesLabel = copy[this.props.language].toolbar.narratives_label;
     const filtersLabel = copy[this.props.language].toolbar.filters_label;
-    const categoriesLabel = "Categories"; // TODO:
+    const editorialsLabel = copy[this.props.language].toolbar.editorials_label;
+    const categoriesLabel = copy[this.props.language].toolbar.categories_label;
 
     const narrativesIdx = 0;
     const categoriesIdx = narrativesExist ? 1 : 0;
@@ -222,6 +243,7 @@ class Toolbar extends React.Component {
         : narrativesExist || features.CATEGORIES_AS_FILTERS
         ? 1
         : 0;
+
     return (
       <div className="toolbar">
         <div className="toolbar-header" onClick={this.props.methods.onTitle}>
@@ -236,6 +258,9 @@ class Toolbar extends React.Component {
             : null}
           {features.USE_ASSOCIATIONS
             ? this.renderToolbarTab(filtersIdx, filtersLabel, "filter_list")
+            : null}
+          {features.USE_EDITORIALS
+            ? this.renderToolbarTab(-1, editorialsLabel, "menu_book")
             : null}
         </div>
         <BottomActions
@@ -276,6 +301,8 @@ function mapStateToProps(state) {
     filters: selectors.getFilters(state),
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
+    editorials: selectors.getEditorials(state),
+    selectedEditorial: selectors.getSelectedEditorial(state),
     language: state.app.language,
     activeFilters: selectors.getActiveFilters(state),
     activeCategories: selectors.getActiveCategories(state),
