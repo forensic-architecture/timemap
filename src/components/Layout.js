@@ -70,6 +70,7 @@ class Dashboard extends React.Component {
   }
 
   handleSelect(selected, axis) {
+    console.log(selected);
     const matchedEvents = [];
     const TIMELINE_AXIS = 0;
     if (axis === TIMELINE_AXIS) {
@@ -339,6 +340,7 @@ class Dashboard extends React.Component {
             onSelect: app.associations.narrative
               ? this.selectNarrativeStep
               : (ev) => this.handleSelect(ev, 1),
+            onMeshSelect: actions.updateSelected,
           }}
         />
         <Timeline
