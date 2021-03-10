@@ -1,9 +1,7 @@
-import React, { useRef, useState } from "react";
-import { useGLTF } from "@react-three/drei/useGLTF";
+import React, { useRef } from "react";
+import { useGLTF } from "@react-three/drei/core/useGLTF";
 import * as THREE from "three";
-import ResponsiveText from "./ResponsiveText";
 import { Html } from "@react-three/drei";
-import { prop } from "ramda";
 
 export default function Model(props) {
   const createMaterial = (color, opacity) => {
@@ -34,11 +32,22 @@ export default function Model(props) {
 
   let eventLocation = null;
   const selected = props.selected;
+  const mask = props.mask;
+
+  const highlighted_events = selected.filter(
+    (event, index) => mask[index] === true
+  );
 
   const events_in_location = {};
   meshes.map((meshName) => {
     events_in_location[meshName] = [];
   });
+
+  const highlighted_events_in_location = {};
+  meshes.map((meshName) => {
+    highlighted_events_in_location[meshName] = [];
+  });
+
   selected.map((selectedEvent) => {
     const locationName = selectedEvent.location.split("-")[0].trim();
     // console.log(locationName, events_in_location[locationName]);
@@ -48,12 +57,19 @@ export default function Model(props) {
     }
   });
 
+  highlighted_events.map((selectedEvent) => {
+    const locationName = selectedEvent.location.split("-")[0].trim();
+    // console.log(locationName, events_in_location[locationName]);
+    // breaks on location 000 and off site
+    if (highlighted_events_in_location[locationName]) {
+      highlighted_events_in_location[locationName].push(selectedEvent);
+    }
+  });
+
   if (selected.length > 0) {
     const firstSelected = selected[0];
     eventLocation = firstSelected.location.split("-")[0].trim();
   }
-
-  const not_selected_material = createMaterial("white", 1);
 
   const getMaterial = (eventLocation, meshName) => {
     const white_material = createMaterial("white", 1);
@@ -74,10 +90,14 @@ export default function Model(props) {
     }
   };
 
+  // console.log(highlighted_events_in_location);
   const InteractiveMesh = (props) => {
-    const [highlighted, setHighlight] = useState(false);
+    // const [highlighted, setHighlight] = useState(false);
     const meshName = props.name.meshName; // doens't make sense! should be props.name?
     const events = events_in_location[meshName];
+    const highlighted_events = highlighted_events_in_location[meshName];
+    const highlighted = highlighted_events_in_location[meshName].length > 0;
+
     return (
       <group>
         <mesh
@@ -87,14 +107,6 @@ export default function Model(props) {
           material={highlighted ? highlightedMaterial : interactive_material}
           geometry={nodes[meshName].geometry}
           rotation={nodes[meshName].rotation}
-          onPointerOver={(e) => {
-            setHighlight(true);
-            // console.log("mesh hover", meshName);
-          }}
-          onPointerOut={(e) => {
-            setHighlight(false);
-            // console.log("mesh hover", meshName);
-          }}
           onClick={() => {
             console.log("mesh seleced", meshName);
             console.log(events_in_location[meshName]);
@@ -103,39 +115,55 @@ export default function Model(props) {
             // console.log(props.selected);
           }}
         />
-        {/* {highlighted ? (
-          events.map((event) => {
-            return (
-              <InteractiveMeshLabel
-                name={{ meshName }}
-                highlighted={highlighted}
-                content={"- " + event.description}
-                width={"500px"}
-              />
-            );
-          })
-        ) : (
-          <InteractiveMeshLabel
-            name={{ meshName }}
-            highlighted={highlighted}
-            content={events_in_location[meshName].length}
-            width={"auto"}
-          />
-        )} */}
         <InteractiveMeshLabel
           name={{ meshName }}
           highlighted={highlighted}
-          content={events}
+          content={highlighted ? highlighted_events : events}
           width={"500px"}
         />
       </group>
     );
+
+    // return (
+    //   <group>
+    //     <mesh
+    //       castShadow
+    //       receiveShadow
+    //       // material={getMaterial(eventLocation, meshName)}
+    //       material={highlighted ? highlightedMaterial : interactive_material}
+    //       geometry={nodes[meshName].geometry}
+    //       rotation={nodes[meshName].rotation}
+    //       onPointerOver={(e) => {
+    //         setHighlight(true);
+    //         // console.log("mesh hover", meshName);
+    //       }}
+    //       onPointerOut={(e) => {
+    //         setHighlight(false);
+    //         // console.log("mesh hover", meshName);
+    //       }}
+    //       onClick={() => {
+    //         console.log("mesh seleced", meshName);
+    //         console.log(events_in_location[meshName]);
+
+    //         props.onMeshSelect(events_in_location[meshName]);
+    //         // console.log(props.selected);
+    //       }}
+    //     />
+    //     <InteractiveMeshLabel
+    //       name={{ meshName }}
+    //       highlighted={highlighted}
+    //       content={events}
+    //       width={"500px"}
+    //     />
+    //   </group>
+    // );
   };
 
+  const getHighlightTag = (event) => {
+    return event.associations + " : " + event.type + "--" + event.description;
+  };
   const InteractiveMeshLabel = (props) => {
-    const meshName = props.name.meshName;
     const highlighted = props.highlighted;
-    const width = props.width;
     const events = props.content;
     const style = {
       background: "white",
@@ -152,28 +180,23 @@ export default function Model(props) {
           {events.map((event) => {
             return (
               <div style={style}>
-                <p style={{ color: "black" }}>{event.description}</p>
+                <p style={{ color: "black" }}>{getHighlightTag(event)}</p>
               </div>
             );
           })}
         </div>
       </Html>
-    ) : (
-      <Html>
-        <div style={style}>
-          <p style={{ color: "black" }}>{events.length}</p>
-        </div>
-      </Html>
-    );
+    ) : null;
   };
 
-  const myMeshes = meshes.map((meshName) => {
+  const myMeshes = meshes.map((meshName, index) => {
     const selected_mesh = events_in_location[meshName].length > 0;
 
     return selected_mesh ? (
       <group position={nodes[meshName].position}>
         <InteractiveMesh
           name={{ meshName }}
+          idx={{ index }}
           onMeshSelect={props.onMeshSelect}
         />
 
@@ -198,31 +221,5 @@ export default function Model(props) {
     );
   });
 
-  function addTag(locationName) {
-    if (locationName !== null && locationName !== "Off site") {
-      console.log(locationName);
-      return (
-        // <ResponsiveText
-        //   content={"testrrrrrrrrr"}
-        //   position={nodes[locationName].position}
-        //   lookAt={[10, 0, 0]}
-        // />
-        <Html></Html>
-      );
-    } else {
-      return null;
-    }
-  }
-
-  return (
-    <group>
-      {/* <mesh
-        visible={true}
-        material={materials[nodes.Mesh000.material.name]}
-        geometry={nodes.Mesh000.geometry}
-      /> */}
-
-      {myMeshes}
-    </group>
-  );
+  return <group>{myMeshes}</group>;
 }

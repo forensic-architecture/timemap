@@ -6,10 +6,20 @@ import * as selectors from "../../../selectors";
 
 import Controls from "./atoms/Controls";
 import Tower from "./atoms/Tower_areas";
+import Scrollers from "./atoms/Scrollers";
 import Events from "./atoms/Events";
 import Grid from "./atoms/Grid";
 
 class Map3d extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      mask: [],
+    };
+  }
+  myCallback = (maskFromChild) => {
+    this.setState({ mask: maskFromChild });
+  };
   renderEvents3D = () => {
     return (
       <Events
@@ -37,9 +47,6 @@ class Map3d extends Component {
   render() {
     // console.log("resr", this.props.app.selected);
     const classes = "map-wrapper"; // make this the way it was
-
-    // console.log(this.props.domain.locations);
-    // console.log(this.props.methods.onSelect);
 
     const inner3D = (
       <Canvas
@@ -98,6 +105,7 @@ class Map3d extends Component {
           <Tower
             selected={this.props.app.selected}
             onMeshSelect={this.props.methods.onMeshSelect}
+            mask={this.state.mask}
           />
           {/* </Rig> */}
         </Suspense>
@@ -105,7 +113,42 @@ class Map3d extends Component {
     );
 
     // update to match map!
-    return <div className={classes}>{inner3D}</div>;
+
+    const allWrapperStyle = {
+      position: "relative",
+      overflow: "scroll",
+      height: "100vh",
+      width: "100vw",
+    };
+
+    const threeDStyle = {
+      height: "100vh",
+      width: "100vw",
+      position: "fixed",
+    };
+
+    const narrativeWrapperStyle = {
+      fontSize: 30,
+      color: "yellow",
+      position: "absolute",
+      overflow: "scroll",
+      marginLeft: "150px",
+    };
+
+    const narrativeElementStyle = {
+      height: "120vh",
+      width: "100vw",
+    };
+    // className={classes}
+    return (
+      <div style={allWrapperStyle}>
+        <div style={threeDStyle}>{inner3D}</div>
+        <Scrollers
+          events={this.props.app.selected}
+          callbackFromParent={this.myCallback}
+        />
+      </div>
+    );
   }
 }
 
