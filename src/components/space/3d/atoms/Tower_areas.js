@@ -28,7 +28,7 @@ export default function Model(props) {
   let highlightedMaterial = createMaterial(fa_red, 0.9);
 
   const group = useRef();
-  const { nodes, materials } = useGLTF("/Grenfell Tower Selection Areas.glb");
+  const { nodes, materials } = useGLTF("/Tower_Areas.glb");
   // console.log(nodes["L01"]);
   const meshes = Object.keys(nodes).filter((key) => nodes[key].type === "Mesh");
 

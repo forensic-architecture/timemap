@@ -6,11 +6,8 @@ import * as selectors from "../../../selectors";
 
 import Controls from "./atoms/Controls";
 import Tower from "./atoms/Tower_areas";
-import Site from "./atoms/Site_text_comp";
-// import Context from './atoms/CONTEXT';
 import Events from "./atoms/Events";
 import Grid from "./atoms/Grid";
-import Model from "./atoms/CameraControl";
 
 class Map3d extends Component {
   renderEvents3D = () => {
@@ -97,7 +94,6 @@ class Map3d extends Component {
         {/* <Controls selected={this.props.app.selected} /> */}
         <Suspense fallback={null}>
           {/* <Rig> */}
-          {/* <Model selected={this.props.app.selected} /> */}
           {/* {this.renderEvents3D()} */}
           <Tower
             selected={this.props.app.selected}
