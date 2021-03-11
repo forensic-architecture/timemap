@@ -27,8 +27,37 @@ export default function Model(props) {
 
   const group = useRef();
   const { nodes, materials } = useGLTF("/Tower_Areas.glb");
-  // console.log(nodes["L01"]);
   const meshes = Object.keys(nodes).filter((key) => nodes[key].type === "Mesh");
+
+  const mapLocationsToMeshes = (fullLocationName) => {
+    // fullLocationName example :
+    // locationName as it comes from ds-s
+    // meshName as it comes in the model
+    const locationName = fullLocationName.split("-")[0].trim();
+    const secondaryLocationName = fullLocationName.split("-")[1].trim();
+    if (locationName === "Off site") {
+      return "Off_site";
+    }
+    if (locationName === "000") {
+      // console.log(secondaryLocationName);
+      if (secondaryLocationName === "W Elevation") {
+        return "00W";
+      }
+
+      if (secondaryLocationName === "E Elevation") {
+        return "00E";
+      }
+
+      if (secondaryLocationName === "N Elevation") {
+        return "00N";
+      }
+
+      // includes Entrance, General, FD, S Elevation
+      return "00S";
+    }
+
+    return locationName;
+  };
 
   let eventLocation = null;
   const selected = props.selected;
@@ -49,7 +78,7 @@ export default function Model(props) {
   });
 
   selected.map((selectedEvent) => {
-    const locationName = selectedEvent.location.split("-")[0].trim();
+    const locationName = mapLocationsToMeshes(selectedEvent.location);
     // console.log(locationName, events_in_location[locationName]);
     // breaks on location 000 and off site
     if (events_in_location[locationName]) {
@@ -58,7 +87,7 @@ export default function Model(props) {
   });
 
   highlighted_events.map((selectedEvent) => {
-    const locationName = selectedEvent.location.split("-")[0].trim();
+    const locationName = mapLocationsToMeshes(selectedEvent.location);
     // console.log(locationName, events_in_location[locationName]);
     // breaks on location 000 and off site
     if (highlighted_events_in_location[locationName]) {
@@ -68,13 +97,13 @@ export default function Model(props) {
 
   if (selected.length > 0) {
     const firstSelected = selected[0];
-    eventLocation = firstSelected.location.split("-")[0].trim();
+    eventLocation = mapLocationsToMeshes(firstSelected.location);
   }
 
   const getMaterial = (eventLocation, meshName) => {
     const white_material = createMaterial("white", 1);
     white_material.transparent = true;
-    if (eventLocation === "Off site" || eventLocation === null) {
+    if (eventLocation === null) {
       white_material.opacity = 1;
       return white_material;
     } else {
@@ -160,17 +189,30 @@ export default function Model(props) {
   };
 
   const getHighlightTag = (event) => {
-    return event.associations + " : " + event.type + "--" + event.description;
+    let tag = event.associations + " : " + event.type;
+    if (event.type === "Present") {
+      tag = event.associations + " is " + event.type;
+    }
+    if (event.type === "Non-actor") {
+      tag = event.associations;
+      console.log(event);
+    }
+    if (event.type === "Arrival" || event.type === "Departure") {
+      tag = event.type + " of " + event.associations;
+    }
+    return tag;
   };
   const InteractiveMeshLabel = (props) => {
     const highlighted = props.highlighted;
     const events = props.content;
     const style = {
+      // display: "inline-block",
       background: "white",
       paddingLeft: "3px",
       paddingRight: "3px",
       borderRadius: "5px",
-      width: highlighted ? "300px" : "auto",
+
+      width: highlighted ? "250px" : "auto",
       margin: "1px",
     };
 
@@ -181,6 +223,9 @@ export default function Model(props) {
             return (
               <div style={style}>
                 <p style={{ color: "black" }}>{getHighlightTag(event)}</p>
+                <p style={{ color: "black", fontSize: "12px" }}>
+                  {event.description}
+                </p>
               </div>
             );
           })}
@@ -193,7 +238,7 @@ export default function Model(props) {
     const selected_mesh = events_in_location[meshName].length > 0;
 
     return selected_mesh ? (
-      <group position={nodes[meshName].position}>
+      <group position={nodes[meshName].position} scale={nodes[meshName].scale}>
         <InteractiveMesh
           name={{ meshName }}
           idx={{ index }}
@@ -217,6 +262,7 @@ export default function Model(props) {
         geometry={nodes[meshName].geometry}
         position={nodes[meshName].position}
         rotation={nodes[meshName].rotation}
+        scale={nodes[meshName].scale}
       />
     );
   });

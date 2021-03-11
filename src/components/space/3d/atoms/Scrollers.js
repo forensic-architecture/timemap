@@ -72,7 +72,8 @@ export default function Scrollers(props) {
               <div style={narrativeElementStyle}>
                 {(events_highlights_mask[index] = inView)}
                 <h1 ref={ref}>
-                  {inView ? event.location + text : event.location + text}
+                  {/* {inView ? event.location + text : event.location + text} */}
+                  {""}
                 </h1>
               </div>
             )}
