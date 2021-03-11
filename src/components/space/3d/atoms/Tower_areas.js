@@ -1,9 +1,7 @@
 import React, { useRef, useState } from "react";
-import { useGLTF } from "@react-three/drei/useGLTF";
+import { useGLTF } from "@react-three/drei/core/useGLTF";
 import * as THREE from "three";
-import ResponsiveText from "./ResponsiveText";
 import { Html } from "@react-three/drei";
-import { prop } from "ramda";
 
 export default function Model(props) {
   const createMaterial = (color, opacity) => {
@@ -29,8 +27,37 @@ export default function Model(props) {
 
   const group = useRef();
   const { nodes, materials } = useGLTF("/Tower_Areas.glb");
-  // console.log(nodes["L01"]);
   const meshes = Object.keys(nodes).filter((key) => nodes[key].type === "Mesh");
+
+  const mapLocationsToMeshes = (fullLocationName) => {
+    // fullLocationName example :
+    // locationName as it comes from ds-s
+    // meshName as it comes in the model
+    const locationName = fullLocationName.split("-")[0].trim();
+    const secondaryLocationName = fullLocationName.split("-")[1].trim();
+    if (locationName === "Off site") {
+      return "Off_site";
+    }
+    if (locationName === "000") {
+      // console.log(secondaryLocationName);
+      if (secondaryLocationName === "W Elevation") {
+        return "00W";
+      }
+
+      if (secondaryLocationName === "E Elevation") {
+        return "00E";
+      }
+
+      if (secondaryLocationName === "N Elevation") {
+        return "00N";
+      }
+
+      // includes Entrance, General, FD, S Elevation
+      return "00S";
+    }
+
+    return locationName;
+  };
 
   let eventLocation = null;
   const selected = props.selected;
@@ -40,7 +67,7 @@ export default function Model(props) {
     events_in_location[meshName] = [];
   });
   selected.map((selectedEvent) => {
-    const locationName = selectedEvent.location.split("-")[0].trim();
+    const locationName = mapLocationsToMeshes(selectedEvent.location);
     // console.log(locationName, events_in_location[locationName]);
     // breaks on location 000 and off site
     if (events_in_location[locationName]) {
@@ -50,15 +77,13 @@ export default function Model(props) {
 
   if (selected.length > 0) {
     const firstSelected = selected[0];
-    eventLocation = firstSelected.location.split("-")[0].trim();
+    eventLocation = mapLocationsToMeshes(firstSelected.location);
   }
-
-  const not_selected_material = createMaterial("white", 1);
 
   const getMaterial = (eventLocation, meshName) => {
     const white_material = createMaterial("white", 1);
     white_material.transparent = true;
-    if (eventLocation === "Off site" || eventLocation === null) {
+    if (eventLocation === null) {
       white_material.opacity = 1;
       return white_material;
     } else {
@@ -132,6 +157,20 @@ export default function Model(props) {
     );
   };
 
+  const getHighlightTag = (event) => {
+    let tag = event.associations + " : " + event.type;
+    if (event.type === "Present") {
+      tag = event.associations + " is " + event.type;
+    }
+    if (event.type === "Non-actor") {
+      tag = event.associations;
+      console.log(event);
+    }
+    if (event.type === "Arrival" || event.type === "Departure") {
+      tag = event.type + " of " + event.associations;
+    }
+    return tag;
+  };
   const InteractiveMeshLabel = (props) => {
     const meshName = props.name.meshName;
     const highlighted = props.highlighted;
@@ -142,7 +181,7 @@ export default function Model(props) {
       paddingLeft: "3px",
       paddingRight: "3px",
       borderRadius: "5px",
-      width: highlighted ? "300px" : "auto",
+      width: highlighted ? "250px" : "auto",
       margin: "1px",
     };
 
@@ -152,7 +191,7 @@ export default function Model(props) {
           {events.map((event) => {
             return (
               <div style={style}>
-                <p style={{ color: "black" }}>{event.description}</p>
+                <p style={{ color: "black" }}>{getHighlightTag(event)}</p>
               </div>
             );
           })}
@@ -171,7 +210,7 @@ export default function Model(props) {
     const selected_mesh = events_in_location[meshName].length > 0;
 
     return selected_mesh ? (
-      <group position={nodes[meshName].position}>
+      <group position={nodes[meshName].position} scale={nodes[meshName].scale}>
         <InteractiveMesh
           name={{ meshName }}
           onMeshSelect={props.onMeshSelect}
@@ -194,35 +233,10 @@ export default function Model(props) {
         geometry={nodes[meshName].geometry}
         position={nodes[meshName].position}
         rotation={nodes[meshName].rotation}
+        scale={nodes[meshName].scale}
       />
     );
   });
 
-  function addTag(locationName) {
-    if (locationName !== null && locationName !== "Off site") {
-      console.log(locationName);
-      return (
-        // <ResponsiveText
-        //   content={"testrrrrrrrrr"}
-        //   position={nodes[locationName].position}
-        //   lookAt={[10, 0, 0]}
-        // />
-        <Html></Html>
-      );
-    } else {
-      return null;
-    }
-  }
-
-  return (
-    <group>
-      {/* <mesh
-        visible={true}
-        material={materials[nodes.Mesh000.material.name]}
-        geometry={nodes.Mesh000.geometry}
-      /> */}
-
-      {myMeshes}
-    </group>
-  );
+  return <group>{myMeshes}</group>;
 }
