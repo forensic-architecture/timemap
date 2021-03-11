@@ -185,16 +185,57 @@ export default function Model(props) {
       margin: "1px",
     };
 
+    const getGroupedTags = (events) => {
+      // create a dictionary by event types
+      const event_types_dict = {};
+      events.map((event) => {
+        const event_type = event.type;
+        if (Object.keys(event_types_dict).includes(event_type)) {
+          event_types_dict[event_type].push(event);
+        } else {
+          event_types_dict[event_type] = [];
+          event_types_dict[event_type].push(event);
+        }
+      });
+      function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+      }
+
+      const tags = [];
+      Object.keys(event_types_dict).map((eventTypeKey) => {
+        const eventsList = event_types_dict[eventTypeKey];
+        const names = eventsList.map((event) => event.associations[0]);
+        const unique_names = names.filter(onlyUnique); // we shouldn't need to do that! clear dups beforehand
+        let tag = eventTypeKey.toUpperCase() + " ::: " + unique_names;
+        // if (eventTypeKey === "Present") {
+        //   let desc = " IS PRESENT";
+        //   names.length > 1 ? (desc = " ARE PRESENT") : (desc = " IS PRESENT");
+        //   tag = names + desc;
+        // }
+
+        tags.push(tag);
+      });
+      return tags;
+    };
+
     return highlighted ? (
       <Html>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          {events.map((event) => {
+          {getGroupedTags(events).map((event) => {
+            return (
+              <div style={style}>
+                <p style={{ color: "black" }}>{event}</p>
+              </div>
+            );
+          })}
+
+          {/* {events.map((event) => {
             return (
               <div style={style}>
                 <p style={{ color: "black" }}>{getHighlightTag(event)}</p>
               </div>
             );
-          })}
+          })} */}
         </div>
       </Html>
     ) : (
