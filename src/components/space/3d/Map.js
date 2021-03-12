@@ -34,12 +34,44 @@ class Map3d extends Component {
     return [0, 10, 0];
   }
 
+  getEventsByActor(actorName) {
+    // "Behailu Kebede", "Elsa Afeworki", "Alison Moses", "Fatima Alves", "Miguel Alves"
+    const events = this.props.domain.events;
+    const events_by_actor = events.filter(
+      (e) => e.associations[0] === actorName
+    );
+    console.log(
+      "resr",
+      events_by_actor.map((e) => e.datetime)
+    );
+    return events_by_actor;
+  }
+
+  getEventsByActorsList(actorsList) {
+    // "Behailu Kebede", "Elsa Afeworki", "Alison Moses", "Fatima Alves", "Miguel Alves"
+    const events = this.props.domain.events;
+    const events_by_actor = events.filter((e) =>
+      actorsList.includes(e.associations[0])
+    );
+    // console.log(
+    //   "resr",
+    //   events_by_actor.map((e) => e.datetime)
+    // );
+    return events_by_actor;
+  }
+
   render() {
-    // console.log("resr", this.props.app.selected);
     const classes = "map-wrapper"; // make this the way it was
 
     // console.log(this.props.domain.locations);
-    // console.log(this.props.methods.onSelect);
+    const selectedActors = this.getEventsByActorsList([
+      "Behailu Kebede",
+      "Elsa Afeworki",
+      "Alison Moses",
+      "Fatima Alves",
+      "Miguel Alves",
+    ]);
+    // console.log(selectedActors);
 
     const inner3D = (
       <Canvas
@@ -57,7 +89,7 @@ class Map3d extends Component {
           // camera.lookAt(0, 600, 0);
           console.log(camera.bottom);
           camera.setViewOffset(800, 200, 0, -30, 800, 200);
-          console.log(camera.view);
+          // console.log(camera.view);
           // camera.position.x = 20;
           // camera.position.y = 90;
           // camera.position.z = 20;
@@ -91,12 +123,13 @@ class Map3d extends Component {
         />
         {/* <pointLight position={[-50, 500, -60]} intensity={1} color="white" /> */}
         <Grid />
-        {/* <Controls selected={this.props.app.selected} /> */}
+        <Controls selected={this.props.app.selected} />
         <Suspense fallback={null}>
           {/* <Rig> */}
           {/* {this.renderEvents3D()} */}
           <Tower
-            selected={this.props.app.selected}
+            // selected={this.props.app.selected}
+            selected={selectedActors}
             onMeshSelect={this.props.methods.onMeshSelect}
           />
           {/* </Rig> */}
@@ -112,6 +145,7 @@ class Map3d extends Component {
 function mapStateToProps(state) {
   return {
     domain: {
+      events: selectors.selectStackedEvents(state),
       locations: selectors.selectLocations(state),
       narratives: selectors.selectNarratives(state),
       categories: selectors.getCategories(state),

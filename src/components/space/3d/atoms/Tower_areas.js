@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import { useGLTF } from "@react-three/drei/core/useGLTF";
 import * as THREE from "three";
-import { Html } from "@react-three/drei";
+import { Html, Line } from "@react-three/drei";
+import { F } from "ramda";
 
 export default function Model(props) {
   const createMaterial = (color, opacity) => {
@@ -62,6 +63,143 @@ export default function Model(props) {
   let eventLocation = null;
   const selected = props.selected;
 
+  const getEventsByActorDict = (eventsList) => {
+    const eventsByActor = {};
+    eventsList.map((e) => {
+      const actorName = e.associations[0];
+      if (Object.keys(eventsByActor).includes(actorName)) {
+        eventsByActor[actorName].push(e);
+      } else {
+        eventsByActor[actorName] = [];
+        eventsByActor[actorName].push(e);
+      }
+    });
+
+    return eventsByActor;
+  };
+
+  const locationsByFloors = {
+    0: {
+      access: ["LBO", "LF0"],
+      lobby: "LB0",
+      spaces: ["L0E", "CRO", "LB0", "LF0", "S0E", "00S", "00E"],
+    },
+    4: {
+      access: ["LF4", "S04"],
+      lobby: "L04",
+      spaces: ["011", "012", "013", "014", "015", "016", "L04", "LF4", "S04"],
+    },
+    13: {
+      access: ["LF13", "S31"], // S31 needs to be fixed!!
+      lobby: "L13",
+      spaces: ["101", "102", "103", "104", "105", "106", "L13", "LF13", "S31"],
+    },
+  };
+
+  const floorByLocaiton = () => {
+    const locations = {};
+    const floors = Object.keys(locationsByFloors);
+    floors.map((floorNum) => {
+      const spaces = locationsByFloors[floorNum].spaces;
+      spaces.map((space) => {
+        locations[space] = floorNum;
+      });
+    });
+    return locations;
+  };
+
+  const isLobby = (meshName) => {
+    const meshFloor = floorByLocaiton()[meshName];
+    // console.log(meshName, meshFloor, locationsByFloors[meshFloor]);
+    const floorLobby = locationsByFloors[meshFloor].lobby;
+
+    return meshName === floorLobby;
+  };
+
+  const getLobby = (meshName) => {
+    const meshFloor = floorByLocaiton()[meshName];
+    const floorLobby = locationsByFloors[meshFloor].lobby;
+    return floorLobby;
+  };
+
+  const getMeshPosition = (meshName) => {
+    return nodes[meshName].position;
+  };
+
+  const getActorPath = (eventsList) => {
+    // takes a list of events for one actor
+    // for every event we want to find its mesh in the 3d
+    // then find the position of that mesh
+
+    const realPathNames = [];
+    for (let i = 0; i < eventsList.length - 1; i++) {
+      const event1 = eventsList[i];
+      const event2 = eventsList[i + 1];
+      const meshName1 = mapLocationsToMeshes(event1.location);
+      const meshName2 = mapLocationsToMeshes(event2.location);
+
+      // console.log(meshName1)
+
+      isLobby(meshName1)
+        ? realPathNames.push(meshName1)
+        : realPathNames.push(meshName1) &&
+          realPathNames.push(getLobby(meshName1));
+
+      isLobby(meshName2)
+        ? realPathNames.push(meshName2)
+        : realPathNames.push(getLobby(meshName2)) &&
+          realPathNames.push(meshName2);
+    }
+
+    const realPathPoints = realPathNames.map((meshName) =>
+      getMeshPosition(meshName)
+    );
+
+    console.log(realPathNames);
+    const directPathPoints = [];
+    eventsList.map((e) => {
+      const meshName = mapLocationsToMeshes(e.location);
+      const position = nodes[meshName].position;
+
+      directPathPoints.push(position);
+    });
+
+    // console.log(nodes["L01"].geometry.boundingBox);
+    // return a list of [x, y, z] positions
+    const randomeList = [
+      [Math.random() * 10, 0, 0],
+      [0, Math.random() * 10, 0],
+      [0, Math.random() * 40, 10],
+    ];
+    return realPathPoints; // directPathPoints; realPathPoints
+  };
+
+  const colorByActor = {
+    "Behailu Kebede": "red",
+    "Elsa Afeworki": "blue",
+    "Fatima Alves": "brown",
+    "Alison Moses": "green",
+    "Miguel Alves": "orange",
+  };
+
+  const draw3dPath = (pointsList, color) => {
+    // takes a point list with the format of [x, y, z]
+    const wiggle = Math.random();
+    console.log(wiggle);
+    const movedPoints = pointsList.map((point) => [
+      point.x + wiggle,
+      point.y,
+      point.z + wiggle,
+    ]);
+
+    console.log(pointsList);
+    console.log(movedPoints);
+    // returns react-three-fiber <Line/>
+    return (
+      <Line points={movedPoints} color={color} lineWidth={1} dashed={false} />
+    );
+  };
+
   const events_in_location = {};
   meshes.map((meshName) => {
     events_in_location[meshName] = [];
@@ -69,7 +207,6 @@ export default function Model(props) {
   selected.map((selectedEvent) => {
     const locationName = mapLocationsToMeshes(selectedEvent.location);
     // console.log(locationName, events_in_location[locationName]);
-    // breaks on location 000 and off site
     if (events_in_location[locationName]) {
       events_in_location[locationName].push(selectedEvent);
     }
@@ -158,16 +295,32 @@ export default function Model(props) {
   };
 
   const getHighlightTag = (event) => {
-    let tag = event.associations + " : " + event.type;
+    const time = new Date(event.datetime).toLocaleTimeString("en-US");
+    let tag = time + " :: " + event.associations + " : " + event.type;
+
     if (event.type === "Present") {
-      tag = event.associations + " is " + event.type;
+      tag =
+        time +
+        " :: " +
+        event.associations +
+        " is " +
+        event.type +
+        " at " +
+        event.location;
     }
     if (event.type === "Non-actor") {
-      tag = event.associations;
+      tag = time + " :: " + event.associations;
       console.log(event);
     }
     if (event.type === "Arrival" || event.type === "Departure") {
-      tag = event.type + " of " + event.associations;
+      tag =
+        time +
+        " :: " +
+        event.type +
+        " of " +
+        event.associations +
+        " at " +
+        event.location;
     }
     return tag;
   };
@@ -221,21 +374,24 @@ export default function Model(props) {
     return highlighted ? (
       <Html>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          {getGroupedTags(events).map((event) => {
+          {/* {getGroupedTags(events).map((event) => {
             return (
               <div style={style}>
                 <p style={{ color: "black" }}>{event}</p>
               </div>
             );
-          })}
+          })} */}
 
-          {/* {events.map((event) => {
+          {events.map((event) => {
             return (
               <div style={style}>
                 <p style={{ color: "black" }}>{getHighlightTag(event)}</p>
+                <p style={{ color: "black", fontSize: "12px" }}>
+                  {event.description}
+                </p>
               </div>
             );
-          })} */}
+          })}
         </div>
       </Html>
     ) : (
@@ -279,5 +435,17 @@ export default function Model(props) {
     );
   });
 
-  return <group>{myMeshes}</group>;
+  const actorsDict = getEventsByActorDict(selected);
+  const actorsNames = Object.keys(actorsDict);
+  const myLines = actorsNames.map((name, i) => {
+    const pointsByActor = getActorPath(actorsDict[name]);
+    return draw3dPath(pointsByActor, colorByActor[name]);
+  });
+
+  return (
+    <group>
+      {myMeshes}
+      {myLines}
+    </group>
+  );
 }
