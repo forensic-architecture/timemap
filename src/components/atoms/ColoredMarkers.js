@@ -39,7 +39,8 @@ function ColoredMarkers({ radius, colorPercentMap, styles, className }) {
 
         return (
           <path
-            class={className}
+            key={`arc_${idx}`}
+            className={className}
             id={`arc_${idx}`}
             d={arc}
             style={extraStyles}

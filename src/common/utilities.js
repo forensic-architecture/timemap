@@ -159,7 +159,7 @@ export function getEventCategories(event, categories) {
   const matchedCategories = [];
   if (event.associations && event.associations.length > 0) {
     event.associations.reduce((acc, val) => {
-      const foundCategory = categories.find((cat) => cat.id === val);
+      const foundCategory = categories.find((cat) => cat.title === val);
       if (foundCategory) acc.push(foundCategory);
       return acc;
     }, matchedCategories);
