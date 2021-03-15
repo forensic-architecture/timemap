@@ -8,6 +8,19 @@ const EditorialsListPanel = ({
   onSelectEditorial,
   language,
 }) => {
+  function renderEditorialList() {
+    return (
+      <div>
+        {editorials.map((ed) => {
+          return (
+            <li key={ed.title.replace(/ /g, "_")}>
+              <a href={`/story/id=${ed.id}`}>{ed.title}</a>
+            </li>
+          );
+        })}
+      </div>
+    );
+  }
   return (
     <div className="react-innertabpanel">
       <h2>{copy[language].toolbar.editorials}</h2>
@@ -18,6 +31,7 @@ const EditorialsListPanel = ({
           ),
         }}
       />
+      {renderEditorialList()}
     </div>
   );
 };

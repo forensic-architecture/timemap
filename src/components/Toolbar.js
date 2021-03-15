@@ -83,6 +83,7 @@ class Toolbar extends React.Component {
     // 1) Grab set of editorials and select appropriate one
     // 2) Parse set of event ids
     // 3) Set camera angle and zoom level (ie. trigger visual changes)
+    console.info(id);
   }
 
   renderClosePanel() {
@@ -157,7 +158,8 @@ class Toolbar extends React.Component {
         <EditorialsListPanel
           editorials={this.props.editorials}
           selectedEditorial={this.props.selectedEditorial}
-          onSelectEditorial={this.onSelectEditorial}
+          // onSelectEditorial={this.onSelectEditorial}
+          onSelectEditorial={() => console.info("clicked editorials tab")}
           language={this.props.language}
         />
       </TabPanel>
@@ -243,6 +245,7 @@ class Toolbar extends React.Component {
         : narrativesExist || features.CATEGORIES_AS_FILTERS
         ? 1
         : 0;
+    const editorialsIdx = filtersIdx + 1;
 
     return (
       <div className="toolbar">
@@ -260,7 +263,7 @@ class Toolbar extends React.Component {
             ? this.renderToolbarTab(filtersIdx, filtersLabel, "filter_list")
             : null}
           {features.USE_EDITORIALS
-            ? this.renderToolbarTab(-1, editorialsLabel, "menu_book")
+            ? this.renderToolbarTab(editorialsIdx, editorialsLabel, "menu_book")
             : null}
         </div>
         <BottomActions
