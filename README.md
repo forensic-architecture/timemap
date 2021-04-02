@@ -14,9 +14,9 @@
 
 TimeMap is a standalone frontend application that allows to explore and monitor events in time and space. TimeMap uses OpenStreetMap satellite imagery as a backdrop by default, but can also be configured to use [mapbox](https://www.mapbox.com/). It uses Leaflet and d3 to visually map information.
 
-The recommended way to run a backend for timemap is using [datasheet-server](https://github.com/forensic-architecture/datasheet-server). This allows you to work with a spreadsheet or Google Sheet as a dynamic database for for timemap.
+The recommended way to run a backend for timemap is using [datasheet-server](https://github.com/forensic-architecture/datasheet-server). This allows you to work with a spreadsheet or Google Sheet as a dynamic database for TimeMap.
 
-TimeMap has the following high-level features capabilites:
+TimeMap has the following high-level features capabilities:
 
 * Visualize incidents of particular events on a map.
 * Visualize and filter these incidents over time, on an adjustable timeline that allows to zoom in and out.
