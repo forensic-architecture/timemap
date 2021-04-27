@@ -7,7 +7,7 @@ class App extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path="/explore" component={Layout} />
+        <Route exact path="/" component={Layout} />
         {/* <Route path="/story" component={EditorialLayout}*/}
       </Switch>
     );
