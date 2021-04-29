@@ -137,6 +137,10 @@ export function validateDomain(domain, features) {
   // append events with datetime and sort
   sanitizedDomain.events = sanitizedDomain.events.filter((event, idx) => {
     event.id = idx;
+    // if lat, long come in with commas, replace with decimal format
+    event.latitude = event.latitude.replace(",", ".");
+    event.longitude = event.longitude.replace(",", ".");
+
     event.datetime = calcDatetime(event.date, event.time);
     if (!isValidDate(event.datetime)) {
       discardedDomain.events.push({
