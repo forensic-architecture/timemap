@@ -7,7 +7,6 @@ import { getFilterIdxFromColorSet } from "../../common/utilities";
 /** recursively get an array of node keys to toggle */
 function getFiltersToToggle(filter, activeFilters) {
   const [key, children] = filter;
-
   // base case: no children to recurse through
   if (children === {}) return [key];
 
@@ -21,18 +20,28 @@ function getFiltersToToggle(filter, activeFilters) {
 }
 
 function aggregatePaths(filters) {
-  function insertPath(children = {}, [headOfPath, ...remainder]) {
-    const childKey = Object.keys(children).find((key) => key === headOfPath);
-    if (!childKey) children[headOfPath] = {};
-    if (remainder.length > 0) insertPath(children[headOfPath], remainder);
+  function insertPath(
+    children = {},
+    [headOfPath, ...remainder],
+    accumulatedPath
+  ) {
+    const childKey = Object.keys(children).find((path) => {
+      const splitPath = path.split("/");
+      const pathLeaf = splitPath[splitPath.length - 1];
+      return pathLeaf === headOfPath;
+    });
+    accumulatedPath.push(headOfPath);
+    const accumulatedPlusHead = accumulatedPath.join("/");
+    if (!childKey) children[accumulatedPlusHead] = {};
+    if (remainder.length > 0)
+      insertPath(children[accumulatedPlusHead], remainder, accumulatedPath);
     return children;
   }
 
   const allPaths = [];
   filters.forEach((filterItem) => allPaths.push(filterItem.filter_paths));
-
   const aggregatedPaths = allPaths.reduce(
-    (children, path) => insertPath(children, path),
+    (children, path) => insertPath(children, path, []),
     {}
   );
   return aggregatedPaths;
