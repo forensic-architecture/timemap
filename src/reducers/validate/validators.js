@@ -24,26 +24,6 @@ function isValidDate(d) {
   return d instanceof Date && !isNaN(d);
 }
 
-function findDuplicateAssociations(associations) {
-  const seenSet = new Set([]);
-  const duplicates = [];
-  associations.forEach((item) => {
-    if (seenSet.has(item.id)) {
-      duplicates.push({
-        id: item.id,
-        error: makeError(
-          "Association",
-          item.id,
-          "association was found more than once. Ignoring duplicate."
-        ),
-      });
-    } else {
-      seenSet.add(item.id);
-    }
-  });
-  return duplicates;
-}
-
 /*
  * Validate domain schema
  */
@@ -122,16 +102,6 @@ export function validateDomain(domain, features) {
     points: shape.items.map((coords) => coords.replace(/\s/g, "").split(",")),
   }));
 
-  const duplicateAssociations = findDuplicateAssociations(domain.associations);
-  // Duplicated associations
-  if (duplicateAssociations.length > 0) {
-    sanitizedDomain.notifications.push({
-      message:
-        "Associations are required to be unique. Ignoring duplicates for now.",
-      items: duplicateAssociations,
-      type: "error",
-    });
-  }
   sanitizedDomain.associations = domain.associations;
 
   // append events with datetime and sort
