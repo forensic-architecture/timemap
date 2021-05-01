@@ -65,7 +65,7 @@ const TimelineMarkers = ({
       (isLatitude(event.latitude) && isLongitude(event.longitude)) ||
       (features.GRAPH_NONLOCATED && event.projectOffset !== -1);
     const evShadows = getEventCategories(event, categories).map((cat) =>
-      getEventY({ ...event, category: cat.id })
+      getEventY({ ...event, category: cat.title })
     );
 
     function renderMarkerForEvent(y) {
