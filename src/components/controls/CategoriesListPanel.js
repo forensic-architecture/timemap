@@ -15,14 +15,14 @@ const CategoriesListPanel = ({
         {categories.map((cat) => {
           return (
             <li
-              key={cat.id.replace(/ /g, "_")}
+              key={cat.title.replace(/ /g, "_")}
               className="filter-filter active"
               style={{ marginLeft: "20px" }}
             >
               <Checkbox
-                label={cat.id}
-                isActive={activeCategories.includes(cat.id)}
-                onClickCheckbox={() => onCategoryFilter(cat.id)}
+                label={cat.title}
+                isActive={activeCategories.includes(cat.title)}
+                onClickCheckbox={() => onCategoryFilter(cat.title)}
               />
             </li>
           );
