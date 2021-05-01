@@ -314,7 +314,7 @@ class Timeline extends React.Component {
     }
 
     const { category } = event;
-    console.info(event);
+
     if (GRAPH_NONLOCATED && GRAPH_NONLOCATED.categories.includes(category)) {
       const { project } = event;
       return (

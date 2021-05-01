@@ -34,7 +34,7 @@ class TimelineCategories extends React.Component {
     ) {
       return null;
     }
-    console.info(this.props.getCategoryY(cat));
+
     return (
       <>
         <g
