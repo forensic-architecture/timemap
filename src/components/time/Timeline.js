@@ -304,6 +304,7 @@ class Timeline extends React.Component {
   getY(event) {
     const { features, domain } = this.props;
     const { USE_CATEGORIES, GRAPH_NONLOCATED } = features;
+    // Categories represent active categories here
     const { categories } = domain;
 
     const categoriesExist =
