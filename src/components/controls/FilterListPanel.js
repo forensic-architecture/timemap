@@ -2,7 +2,7 @@ import React from "react";
 import Checkbox from "../atoms/Checkbox";
 import marked from "marked";
 import copy from "../../common/data/copy.json";
-import { getFilterIdxFromColorSet } from "../../common/utilities";
+import { getFilterIdxFromColorSet, getPathLeaf } from "../../common/utilities";
 
 /** recursively get an array of node keys to toggle */
 function getFiltersToToggle(filter, activeFilters) {
@@ -26,8 +26,7 @@ function aggregatePaths(filters) {
     accumulatedPath
   ) {
     const childKey = Object.keys(children).find((path) => {
-      const splitPath = path.split("/");
-      const pathLeaf = splitPath[splitPath.length - 1];
+      const pathLeaf = getPathLeaf(path);
       return pathLeaf === headOfPath;
     });
     accumulatedPath.push(headOfPath);
@@ -57,6 +56,7 @@ function FilterListPanel({
 }) {
   function createNodeComponent(filter, depth) {
     const [key, children] = filter;
+    const pathLeaf = getPathLeaf(key);
     const matchingKeys = getFiltersToToggle(filter, activeFilters);
     const idxFromColorSet = getFilterIdxFromColorSet(key, coloringSet);
     const assignedColor =
@@ -71,12 +71,12 @@ function FilterListPanel({
 
     return (
       <li
-        key={key.replace(/ /g, "_")}
+        key={pathLeaf.replace(/ /g, "_")}
         className="filter-filter"
         style={{ ...styles }}
       >
         <Checkbox
-          label={key}
+          label={pathLeaf}
           isActive={activeFilters.includes(key)}
           onClickCheckbox={() => onSelectFilter(key, matchingKeys)}
           color={assignedColor}

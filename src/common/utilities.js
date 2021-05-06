@@ -7,6 +7,11 @@ if (!TIME_FMT) TIME_FMT = "HH:mm";
 
 export const language = process.env.store.app.language || "en-US";
 
+export function getPathLeaf(path) {
+  const splitPath = path.split("/");
+  return splitPath[splitPath.length - 1];
+}
+
 export function calcDatetime(date, time) {
   if (!time) time = "00:00";
   const dt = moment(`${date} ${time}`, `${DATE_FMT} ${TIME_FMT}`);
