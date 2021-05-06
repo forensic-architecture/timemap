@@ -26,6 +26,7 @@ import {
 } from "../../../common/utilities";
 
 // NB: important constants for map, TODO: make statics
+// Note: Base map is OpenStreetMaps by default; can choose another base map
 const supportedMapboxMap = ["streets", "satellite"];
 const defaultToken = "your_token";
 

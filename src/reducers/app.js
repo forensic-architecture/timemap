@@ -243,7 +243,7 @@ function setNotLoading(appState) {
 
 function setInitialCategories(appState, action) {
   const categories = action.values.reduce((acc, val) => {
-    if (val.mode === ASSOCIATION_MODES.CATEGORY) acc.push(val.id);
+    if (val.mode === ASSOCIATION_MODES.CATEGORY) acc.push(val.title);
     return acc;
   }, []);
 

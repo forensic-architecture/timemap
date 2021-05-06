@@ -62,7 +62,7 @@ class TimelineCategories extends React.Component {
     const { dims, categories, fallbackLabel } = this.props;
     const categoriesExist = categories && categories.length > 0;
     const renderedCategories = categoriesExist
-      ? this.props.categories.map((cat, idx) => this.renderCategory(cat, idx))
+      ? categories.map((cat, idx) => this.renderCategory(cat, idx))
       : this.renderCategory(fallbackLabel, 0);
 
     return (

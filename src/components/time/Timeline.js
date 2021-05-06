@@ -96,7 +96,7 @@ class Timeline extends React.Component {
     const { features } = this.props;
     if (features.GRAPH_NONLOCATED && features.GRAPH_NONLOCATED.categories) {
       categories = categories.filter(
-        (cat) => !features.GRAPH_NONLOCATED.categories.includes(cat.id)
+        (cat) => !features.GRAPH_NONLOCATED.categories.includes(cat.title)
       );
     }
     const extraPadding = 0;
@@ -107,7 +107,7 @@ class Timeline extends React.Component {
     const catsYpos = categories.map((g, i) => {
       return (i + 1) * catHeight + marginTop + extraPadding / 2;
     });
-    const catMap = categories.map((c) => c.id);
+    const catMap = categories.map((c) => c.title);
 
     return (cat) => {
       const idx = catMap.indexOf(cat);
@@ -304,7 +304,9 @@ class Timeline extends React.Component {
   getY(event) {
     const { features, domain } = this.props;
     const { USE_CATEGORIES, GRAPH_NONLOCATED } = features;
+    // Categories represent active categories here
     const { categories } = domain;
+
     const categoriesExist =
       USE_CATEGORIES && categories && categories.length > 0;
 
@@ -394,7 +396,7 @@ class Timeline extends React.Component {
                 onDragEnd={() => {
                   this.onDragEnd();
                 }}
-                categories={categories.map((c) => c.id)}
+                categories={categories.map((c) => c.title)}
                 features={this.props.features}
                 fallbackLabel={
                   copy[this.props.app.language].timeline
@@ -467,7 +469,7 @@ function mapStateToProps(state) {
       categories: ((state) => {
         const allcats = selectors.getCategories(state);
         const active = selectors.getActiveCategories(state);
-        return allcats.filter((c) => active.includes(c.id));
+        return allcats.filter((c) => active.includes(c.title));
       })(state),
       narratives: state.domain.narratives,
     },
