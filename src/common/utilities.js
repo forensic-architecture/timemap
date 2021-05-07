@@ -1,6 +1,8 @@
 import moment from "moment";
 import hash from "object-hash";
 
+import { ASSOCIATION_MODES } from "./constants";
+
 let { DATE_FMT, TIME_FMT } = process.env;
 if (!DATE_FMT) DATE_FMT = "MM/DD/YYYY";
 if (!TIME_FMT) TIME_FMT = "HH:mm";
@@ -204,6 +206,12 @@ export function getEventCategories(event, categories) {
   return matchedCategories;
 }
 
+export function createFilterPathString(filter) {
+  return filter.mode === ASSOCIATION_MODES.FILTER
+    ? filter.filter_paths.join("/")
+    : "";
+}
+
 /**
  * Inset the full source represenation from 'allSources' into an event. The
  * function is 'curried' to allow easy use with maps. To use for a single
@@ -394,7 +402,7 @@ export function calculateColorPercentages(set, coloringSet) {
 
     innerSet.forEach((val) => {
       val.associations.forEach((a) => {
-        const idx = associationMap[a];
+        const idx = associationMap[createFilterPathString(a)];
         if (!idx && idx !== 0) return;
         associationCounts[idx] += 1;
         totalAssociations += 1;

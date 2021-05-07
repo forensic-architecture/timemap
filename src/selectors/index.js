@@ -5,6 +5,7 @@ import {
   dateMax,
   isLatitude,
   isLongitude,
+  createFilterPathString,
 } from "../common/utilities";
 import { isTimeRangedIn } from "./helpers";
 import { ASSOCIATION_MODES } from "../common/constants";
@@ -76,14 +77,18 @@ export const selectEvents = createSelector(
       const isMatchingFilter =
         (event.associations &&
           event.associations
-            .map((association) => activeFilters.includes(association))
+            .filter((a) => a.mode === ASSOCIATION_MODES.FILTER)
+            .map((association) =>
+              activeFilters.includes(createFilterPathString(association))
+            )
             .some((s) => s)) ||
         activeFilters.length === 0;
       const isActiveFilter = isMatchingFilter || activeFilters.length === 0;
       const isActiveCategory =
         (event.associations &&
           event.associations
-            .map((association) => activeCategories.includes(association))
+            .filter((a) => a.mode === ASSOCIATION_MODES.CATEGORY)
+            .map((association) => activeCategories.includes(association.title))
             .some((s) => s)) ||
         activeCategories.length === 0;
       let isActiveTime = isTimeRangedIn(event, timeRange);
