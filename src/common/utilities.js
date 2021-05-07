@@ -97,6 +97,33 @@ export function trimAndEllipse(string, stringNum) {
   return string;
 }
 
+export function aggregateFilterPaths(filters) {
+  function insertPath(
+    children = {},
+    [headOfPath, ...remainder],
+    accumulatedPath
+  ) {
+    const childKey = Object.keys(children).find((path) => {
+      const pathLeaf = getPathLeaf(path);
+      return pathLeaf === headOfPath;
+    });
+    accumulatedPath.push(headOfPath);
+    const accumulatedPlusHead = accumulatedPath.join("/");
+    if (!childKey) children[accumulatedPlusHead] = {};
+    if (remainder.length > 0)
+      insertPath(children[accumulatedPlusHead], remainder, accumulatedPath);
+    return children;
+  }
+
+  const allPaths = [];
+  filters.forEach((filterItem) => allPaths.push(filterItem.filter_paths));
+  const aggregatedPaths = allPaths.reduce(
+    (children, path) => insertPath(children, path, []),
+    {}
+  );
+  return aggregatedPaths;
+}
+
 /**
  * From the set of associations, grab a given filter's set of parents,
  * ie. all the elements in the path array before the idx where the filter is located.
@@ -105,59 +132,64 @@ export function trimAndEllipse(string, stringNum) {
  *
  * Returns the list of parents: ex. ['Chemical', 'Tear Gas', ...]
  */
-export function getFilterParents(associations, filter) {
-  for (const a of associations) {
-    const { filter_paths: fp } = a;
-    if (a.id === filter) {
-      return fp.slice(0, fp.length - 1);
-    }
-    const filterIndex = fp.indexOf(filter);
-    if (filterIndex === 0) return [];
-    if (filterIndex > 0) return fp.slice(0, filterIndex);
-  }
-  throw new Error("Attempted to get parents of nonexistent filter");
+export function getFilterAncestors(filter) {
+  const splitFilter = filter.split("/");
+  const ancestors = [];
+  splitFilter.forEach((f, index) => {
+    const accumulatedPath = splitFilter.slice(0, index + 1).join("/");
+    ancestors.push(accumulatedPath);
+  });
+  // // The last element here will be the leaf node aka the filter passed in
+  ancestors.pop();
+  return ancestors;
 }
 
 /**
  * Grabs the second to last element in the paths array for a given existing filter.
  * This is the filter's most immediate ancestor.
  */
-export function getImmediateFilterParent(associations, filter) {
-  const parents = getFilterParents(associations, filter);
-  if (parents.length === 0) return null;
-  return parents[parents.length - 1];
-}
-
-/**
- * Grab a meta filter's siblings, by way of the the `filter_path` hierarcy.
- */
-export function getMetaFilterSiblings(allFilters, filterParent, filterKey) {
-  const idxParent = allFilters
-    .map((f) => {
-      return f.filter_paths.reduceRight((acc, path, idx) => {
-        if (path === filterParent) return f.filter_paths[idx + 1];
-        return acc;
-      }, null);
-    })
-    .filter((metaFilter) => !!metaFilter && metaFilter !== filterKey);
-  return [...new Set(idxParent)];
+export function getImmediateFilterParent(filter) {
+  const ancestors = getFilterAncestors(filter);
+  return ancestors[ancestors.length - 1];
 }
 
 /**
  * Grabs a given filter's siblings: the set of associations that share the same immediate filter parent.
  */
 export function getFilterSiblings(allFilters, filterParent, filterKey) {
-  const isMetaFilter = !allFilters.map((filt) => filt.id).includes(filterKey);
-
-  if (isMetaFilter) {
-    return getMetaFilterSiblings(allFilters, filterParent, filterKey);
+  function findSiblings(filterPathObj, ancestors) {
+    if (ancestors.length === 0 || filterPathObj === {}) return {};
+    const nextAncestor = ancestors.shift();
+    if (Object.keys(filterPathObj).includes(nextAncestor)) {
+      const nextObjToSearch = filterPathObj[nextAncestor];
+      if (ancestors.length === 0) {
+        return nextObjToSearch;
+      } else {
+        return findSiblings(nextObjToSearch, ancestors);
+      }
+    }
   }
+  const aggregatedFilters = aggregateFilterPaths(allFilters);
+  const ancestors = getFilterAncestors(filterKey);
+  const siblings = findSiblings(aggregatedFilters, ancestors);
+  return Object.keys(siblings).filter((sib) => sib !== filterKey);
+}
 
-  return allFilters.reduce((acc, val) => {
-    const valParent = getImmediateFilterParent(allFilters, val.id);
-    if (valParent === filterParent && val.id !== filterKey) acc.push(val.id);
-    return acc;
-  }, []);
+export function addToColoringSet(coloringSet, filters) {
+  const flattenedColoringSet = coloringSet.flatMap((f) => f);
+  const newColoringSet = filters.filter(
+    (k) => flattenedColoringSet.indexOf(k) === -1
+  );
+  return [...coloringSet, newColoringSet];
+}
+
+export function removeFromColoringSet(coloringSet, filters) {
+  const newColoringSets = coloringSet.map((set) =>
+    set.filter((s) => {
+      return !filters.includes(s);
+    })
+  );
+  return newColoringSets.filter((item) => item.length !== 0);
 }
 
 export function getEventCategories(event, categories) {
