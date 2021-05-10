@@ -194,16 +194,15 @@ export function removeFromColoringSet(coloringSet, filters) {
   return newColoringSets.filter((item) => item.length !== 0);
 }
 
-export function getEventCategories(event, categories) {
-  const matchedCategories = [];
-  if (event.associations && event.associations.length > 0) {
-    event.associations.reduce((acc, val) => {
-      const foundCategory = categories.find((cat) => cat.title === val);
-      if (foundCategory) acc.push(foundCategory);
-      return acc;
-    }, matchedCategories);
-  }
-  return matchedCategories;
+export function getEventCategories(event, activeCategories) {
+  const eventCats = event.associations.filter(
+    (a) => a.mode === ASSOCIATION_MODES.CATEGORY
+  );
+  return eventCats.reduce((acc, val) => {
+    const activeCatTitle = activeCategories.find((cat) => cat === val.title);
+    if (activeCatTitle) acc.push(activeCatTitle);
+    return acc;
+  }, []);
 }
 
 export function createFilterPathString(filter) {

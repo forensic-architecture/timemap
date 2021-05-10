@@ -49,14 +49,13 @@ class Timeline extends React.Component {
     }
 
     if (
-      hash(nextProps.domain.categories) !==
-        hash(this.props.domain.categories) ||
+      hash(nextProps.activeCategories) !== hash(this.props.activeCategories) ||
       hash(nextProps.dimensions) !== hash(this.props.dimensions)
     ) {
       const { trackHeight, marginTop } = nextProps.dimensions;
       this.setState({
         scaleY: this.makeScaleY(
-          nextProps.domain.categories,
+          nextProps.activeCategories,
           trackHeight,
           marginTop
         ),
@@ -99,6 +98,7 @@ class Timeline extends React.Component {
         (cat) => !features.GRAPH_NONLOCATED.categories.includes(cat.title)
       );
     }
+
     const extraPadding = 0;
     const catHeight =
       categories.length > 2
@@ -107,10 +107,10 @@ class Timeline extends React.Component {
     const catsYpos = categories.map((g, i) => {
       return (i + 1) * catHeight + marginTop + extraPadding / 2;
     });
-    const catMap = categories.map((c) => c.title);
+    // const catMap = categories.map((c) => c.title);
 
     return (cat) => {
-      const idx = catMap.indexOf(cat);
+      const idx = categories.indexOf(cat);
       return catsYpos[idx];
     };
   }
@@ -302,13 +302,11 @@ class Timeline extends React.Component {
   }
 
   getY(event) {
-    const { features, domain } = this.props;
+    const { features, domain, activeCategories } = this.props;
     const { USE_CATEGORIES, GRAPH_NONLOCATED } = features;
-    // Categories represent active categories here
-    const { categories } = domain;
 
     const categoriesExist =
-      USE_CATEGORIES && categories && categories.length > 0;
+      USE_CATEGORIES && activeCategories && activeCategories.length > 0;
 
     if (!categoriesExist) {
       return this.state.dims.trackHeight / 2;
@@ -351,7 +349,8 @@ class Timeline extends React.Component {
     const heightStyle = { height: dims.height };
     const extraStyle = { ...heightStyle, ...foldedStyle };
     const contentHeight = { height: dims.contentHeight };
-    const { categories } = this.props.domain;
+    const { activeCategories: categories } = this.props;
+
     return (
       <div
         className={classes}
@@ -396,7 +395,7 @@ class Timeline extends React.Component {
                 onDragEnd={() => {
                   this.onDragEnd();
                 }}
-                categories={categories.map((c) => c.title)}
+                categories={categories}
                 features={this.props.features}
                 fallbackLabel={
                   copy[this.props.app.language].timeline
@@ -463,14 +462,10 @@ function mapStateToProps(state) {
   return {
     dimensions: selectors.selectDimensions(state),
     isNarrative: !!state.app.associations.narrative,
+    activeCategories: selectors.getActiveCategories(state),
     domain: {
       events: selectors.selectStackedEvents(state),
       projects: selectors.selectProjects(state),
-      categories: ((state) => {
-        const allcats = selectors.getCategories(state);
-        const active = selectors.getActiveCategories(state);
-        return allcats.filter((c) => active.includes(c.title));
-      })(state),
       narratives: state.domain.narratives,
     },
     app: {
