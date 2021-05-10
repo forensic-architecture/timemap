@@ -110,19 +110,19 @@ function ClusterEvents({
     return (
       <>
         <text
-          text-anchor="middle"
+          textAnchor="middle"
           y="3px"
           style={{ fontWeight: "bold", fill: "black", zIndex: 10000 }}
         >
           {txt}
         </text>
         <circle
-          class="event-hover"
+          className="event-hover"
           cx="0"
           cy="0"
           r={circleSize + 2}
           stroke={colors.primaryHighlight}
-          fill-opacity="0.0"
+          fillOpacity="0.0"
         />
       </>
     );
