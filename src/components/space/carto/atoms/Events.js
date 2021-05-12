@@ -35,12 +35,12 @@ function MapEvents({
     return (
       <>
         <circle
-          class="event-hover"
+          className="event-hover"
           cx="0"
           cy="0"
           r="10"
           stroke={colors.primaryHighlight}
-          fill-opacity="0.0"
+          fillOpacity="0.0"
         />
       </>
     );

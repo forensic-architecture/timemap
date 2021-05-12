@@ -13,7 +13,9 @@ import {
   trimAndEllipse,
   getImmediateFilterParent,
   getFilterSiblings,
-  getFilterParents,
+  getFilterAncestors,
+  addToColoringSet,
+  removeFromColoringSet,
 } from "../common/utilities.js";
 
 class Toolbar extends React.Component {
@@ -31,32 +33,15 @@ class Toolbar extends React.Component {
   onSelectFilter(key, matchingKeys) {
     const { filters, activeFilters, coloringSet, maxNumOfColors } = this.props;
 
-    const parent = getImmediateFilterParent(filters, key);
+    const parent = getImmediateFilterParent(key);
     const isTurningOff = activeFilters.includes(key);
 
     if (!isTurningOff) {
-      const flattenedColoringSet = coloringSet.flatMap((f) => f);
-      const newColoringSet = matchingKeys.filter(
-        (k) => flattenedColoringSet.indexOf(k) === -1
-      );
-
-      const updatedColoringSet = [...coloringSet, newColoringSet];
-
+      const updatedColoringSet = addToColoringSet(coloringSet, matchingKeys);
       if (updatedColoringSet.length <= maxNumOfColors) {
         this.props.actions.updateColoringSet(updatedColoringSet);
       }
     } else {
-      const newColoringSets = coloringSet.map((set) =>
-        set.filter((s) => {
-          return !matchingKeys.includes(s);
-        })
-      );
-      this.props.actions.updateColoringSet(
-        newColoringSets.filter((item) => item.length !== 0)
-      );
-    }
-
-    if (isTurningOff) {
       if (parent && activeFilters.includes(parent)) {
         const siblings = getFilterSiblings(filters, parent, key);
         let siblingsOff = true;
@@ -68,12 +53,18 @@ class Toolbar extends React.Component {
         }
 
         if (siblingsOff) {
-          const grandparentsOn = getFilterParents(filters, key).filter((filt) =>
+          const grandparentsOn = getFilterAncestors(key).filter((filt) =>
             activeFilters.includes(filt)
           );
           matchingKeys = matchingKeys.concat(grandparentsOn);
         }
       }
+
+      const updatedColoringSet = removeFromColoringSet(
+        coloringSet,
+        matchingKeys
+      );
+      this.props.actions.updateColoringSet(updatedColoringSet);
     }
     this.props.methods.onSelectFilter(matchingKeys);
   }

@@ -137,6 +137,14 @@ export function validateDomain(domain, features) {
   // append events with datetime and sort
   sanitizedDomain.events = sanitizedDomain.events.filter((event, idx) => {
     event.id = idx;
+    // event.associations comes in as a [association.ids...]; convert to actual association objects
+    event.associations = event.associations.reduce((acc, id) => {
+      const foundAssociation = sanitizedDomain.associations.find(
+        (elem) => elem.id === id
+      );
+      if (foundAssociation) acc.push(foundAssociation);
+      return acc;
+    }, []);
     // if lat, long come in with commas, replace with decimal format
     event.latitude = event.latitude.replace(",", ".");
     event.longitude = event.longitude.replace(",", ".");

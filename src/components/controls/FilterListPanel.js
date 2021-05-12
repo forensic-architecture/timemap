@@ -2,12 +2,15 @@ import React from "react";
 import Checkbox from "../atoms/Checkbox";
 import marked from "marked";
 import copy from "../../common/data/copy.json";
-import { getFilterIdxFromColorSet } from "../../common/utilities";
+import {
+  aggregateFilterPaths,
+  getFilterIdxFromColorSet,
+  getPathLeaf,
+} from "../../common/utilities";
 
 /** recursively get an array of node keys to toggle */
 function getFiltersToToggle(filter, activeFilters) {
   const [key, children] = filter;
-
   // base case: no children to recurse through
   if (children === {}) return [key];
 
@@ -20,24 +23,6 @@ function getFiltersToToggle(filter, activeFilters) {
   return childKeys;
 }
 
-function aggregatePaths(filters) {
-  function insertPath(children = {}, [headOfPath, ...remainder]) {
-    const childKey = Object.keys(children).find((key) => key === headOfPath);
-    if (!childKey) children[headOfPath] = {};
-    if (remainder.length > 0) insertPath(children[headOfPath], remainder);
-    return children;
-  }
-
-  const allPaths = [];
-  filters.forEach((filterItem) => allPaths.push(filterItem.filter_paths));
-
-  const aggregatedPaths = allPaths.reduce(
-    (children, path) => insertPath(children, path),
-    {}
-  );
-  return aggregatedPaths;
-}
-
 function FilterListPanel({
   filters,
   activeFilters,
@@ -48,6 +33,7 @@ function FilterListPanel({
 }) {
   function createNodeComponent(filter, depth) {
     const [key, children] = filter;
+    const pathLeaf = getPathLeaf(key);
     const matchingKeys = getFiltersToToggle(filter, activeFilters);
     const idxFromColorSet = getFilterIdxFromColorSet(key, coloringSet);
     const assignedColor =
@@ -62,12 +48,12 @@ function FilterListPanel({
 
     return (
       <li
-        key={key.replace(/ /g, "_")}
+        key={pathLeaf.replace(/ /g, "_")}
         className="filter-filter"
         style={{ ...styles }}
       >
         <Checkbox
-          label={key}
+          label={pathLeaf}
           isActive={activeFilters.includes(key)}
           onClickCheckbox={() => onSelectFilter(key, matchingKeys)}
           color={assignedColor}
@@ -82,7 +68,7 @@ function FilterListPanel({
   }
 
   function renderTree(filters) {
-    const aggregatedFilterPaths = aggregatePaths(filters);
+    const aggregatedFilterPaths = aggregateFilterPaths(filters);
 
     return (
       <div>
