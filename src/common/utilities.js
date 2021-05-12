@@ -345,8 +345,8 @@ export function calcClusterSize(pointCount, totalPoints) {
   Just like with opacity, we use a multiplication factor to ensure that clusters with higher point
   counts appear larger. */
   //TO-DO: Convert maxSize into a config var
-  const maxSize = totalPoints > 60 ? 60 : 40;
-  return Math.min(maxSize, 10 + (pointCount / totalPoints) * 150);
+  const maxSize = totalPoints > 60 ? 60 : 35;
+  return Math.min(maxSize, 10 + (pointCount / totalPoints) * 100);
 }
 
 export function calculateTotalClusterPoints(clusters) {
