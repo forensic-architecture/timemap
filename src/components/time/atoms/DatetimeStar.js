@@ -20,7 +20,7 @@ const DatetimeStar = ({
       points={`${x + s},${y - s} ${x - r},${y} ${x + r},${y} ${x - s},${
         y - s
       } ${x},${y + s}`}
-      transform={`rotate(180, ${x}, ${y})`}
+      transform={transform}
     />
   );
 };

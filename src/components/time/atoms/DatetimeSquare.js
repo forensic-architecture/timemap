@@ -14,11 +14,11 @@ const DatetimeSquare = ({
       onClick={onSelect}
       className="event"
       x={x}
-      y={y - r}
+      y={y}
       style={styleProps}
       width={r}
       height={r}
-      transform={`rotate(45, ${x}, ${y})`}
+      transform={transform}
     />
   );
 };
