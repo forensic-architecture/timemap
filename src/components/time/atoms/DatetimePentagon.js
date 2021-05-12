@@ -1,14 +1,6 @@
 import React from "react";
 
-const DatetimeStar = ({
-  x,
-  y,
-  r,
-  transform,
-  onSelect,
-  styleProps,
-  extraRender,
-}) => {
+const DatetimePentagon = ({ x, y, r, transform, onSelect, styleProps }) => {
   const s = (r * 2) / 3;
   return (
     <polygon
@@ -17,12 +9,12 @@ const DatetimeStar = ({
       x={x}
       y={y - r}
       style={styleProps}
-      points={`${x + s},${y - s} ${x - r},${y} ${x + r},${y} ${x - s},${
+      points={`${x},${y + s} ${x + s},${y} ${x + s},${y - s} ${x - s},${
         y - s
-      } ${x},${y + s}`}
+      } ${x - s},${y}`}
       transform={`rotate(180, ${x}, ${y})`}
     />
   );
 };
 
-export default DatetimeStar;
+export default DatetimePentagon;

@@ -2,6 +2,8 @@ import React from "react";
 import DatetimeBar from "./DatetimeBar";
 import DatetimeSquare from "./DatetimeSquare";
 import DatetimeStar from "./DatetimeStar";
+import DatetimeTriangle from "./DatetimeTriangle";
+import DatetimePentagon from "./DatetimePentagon";
 import Project from "./Project";
 import ColoredMarkers from "../../atoms/ColoredMarkers";
 import {
@@ -73,6 +75,30 @@ function renderDiamond(event, styles, props) {
   );
 }
 
+function renderTriangle(event, styles, props) {
+  return (
+    <DatetimeTriangle
+      onSelect={props.onSelect}
+      x={props.x}
+      y={props.y}
+      r={1.5 * props.eventRadius}
+      styleProps={styles}
+    />
+  );
+}
+
+function renderPentagon(event, styles, props) {
+  return (
+    <DatetimePentagon
+      onSelect={props.onSelect}
+      x={props.x}
+      y={props.y}
+      r={1.5 * props.eventRadius}
+      styleProps={styles}
+    />
+  );
+}
+
 function renderStar(event, styles, props) {
   return (
     <DatetimeStar
@@ -125,6 +151,10 @@ const TimelineEvents = ({
         renderShape = renderDiamond;
       } else if (event.shape === "star") {
         renderShape = renderStar;
+      } else if (event.shape === "triangle") {
+        renderShape = renderTriangle;
+      } else if (event.shape === "pentagon") {
+        renderShape = renderPentagon;
       } else {
         renderShape = renderDot;
       }
@@ -137,6 +167,7 @@ const TimelineEvents = ({
       const y = getY({ ...event, category: cat });
 
       const colour = event.colour ? event.colour : getCategoryColor(cat.title);
+
       const styles = {
         fill: colour,
         fillOpacity: y > 0 ? calcOpacity(1) : 0,
