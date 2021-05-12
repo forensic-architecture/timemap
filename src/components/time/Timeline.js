@@ -107,7 +107,6 @@ class Timeline extends React.Component {
     const catsYpos = categories.map((g, i) => {
       return (i + 1) * catHeight + marginTop + extraPadding / 2;
     });
-    // const catMap = categories.map((c) => c.title);
 
     return (cat) => {
       const idx = categories.indexOf(cat);
