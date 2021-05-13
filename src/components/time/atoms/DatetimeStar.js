@@ -17,9 +17,10 @@ const DatetimeStar = ({
       x={x}
       y={y - r}
       style={styleProps}
-      points={`${x},${y + s} ${x - s},${y - s} ${x + s},${y} ${x - s},${y} ${
-        x + s
-      },${y - s}`}
+      points={`${x + s},${y - s} ${x - r},${y} ${x + r},${y} ${x - s},${
+        y - s
+      } ${x},${y + s}`}
+      transform={transform}
     />
   );
 };
