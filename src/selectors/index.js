@@ -8,7 +8,7 @@ import {
   createFilterPathString,
 } from "../common/utilities";
 import { isTimeRangedIn } from "./helpers";
-import { ASSOCIATION_MODES } from "../common/constants";
+import { ASSOCIATION_MODES, TIMELINE_ONLY } from "../common/constants";
 
 // Input selectors
 export const getEvents = (state) => state.domain.events;
@@ -95,9 +95,13 @@ export const selectEvents = createSelector(
       isActiveTime = features.GRAPH_NONLOCATED
         ? (!event.latitude && !event.longitude) || isActiveTime
         : isActiveTime;
-
-      if (isActiveTime && isActiveFilter && isActiveCategory) {
-        acc[event.id] = { ...event };
+      // if (isActiveTime && isActiveFilter && isActiveCategory) {
+      //   acc[event.id] = { ...event };
+      // }
+      if (isActiveTime && isActiveCategory) {
+        if (event.type === TIMELINE_ONLY || isActiveFilter) {
+          acc[event.id] = { ...event };
+        }
       }
       return acc;
     }, []);

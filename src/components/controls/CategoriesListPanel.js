@@ -1,13 +1,14 @@
 import React from "react";
 import marked from "marked";
 import Checkbox from "../atoms/Checkbox";
-import copy from "../../common/data/copy.json";
 
 const CategoriesListPanel = ({
   categories,
   activeCategories,
   onCategoryFilter,
   language,
+  title,
+  description,
 }) => {
   function renderCategoryTree() {
     return (
@@ -33,12 +34,10 @@ const CategoriesListPanel = ({
 
   return (
     <div className="react-innertabpanel">
-      <h2>{copy[language].toolbar.categories}</h2>
+      <h2>{title}</h2>
       <p
         dangerouslySetInnerHTML={{
-          __html: marked(
-            copy[language].toolbar.explore_by_category__description
-          ),
+          __html: marked(description),
         }}
       />
       {renderCategoryTree()}
