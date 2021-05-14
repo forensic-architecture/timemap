@@ -95,9 +95,6 @@ export const selectEvents = createSelector(
       isActiveTime = features.GRAPH_NONLOCATED
         ? (!event.latitude && !event.longitude) || isActiveTime
         : isActiveTime;
-      // if (isActiveTime && isActiveFilter && isActiveCategory) {
-      //   acc[event.id] = { ...event };
-      // }
       if (isActiveTime && isActiveCategory) {
         if (event.type === TIMELINE_ONLY || isActiveFilter) {
           acc[event.id] = { ...event };
