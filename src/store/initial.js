@@ -3,6 +3,7 @@ import { mergeDeepLeft } from "ramda";
 import global, { colors } from "../common/global";
 import copy from "../common/data/copy.json";
 import { language } from "../common/utilities";
+import { DEFAULT_TAB_ICONS } from "../common/constants";
 
 const isSmallLaptop = window.innerHeight < 800;
 const mapIniital = {
@@ -104,6 +105,28 @@ const initial = {
       description:
         "A description of the project goes here.\n\nThis description may contain markdown.\n\n# This is a large title, for example.\n\n## Whereas this is a slightly smaller title.\n\nCheck out docs/custom-covers.md in the [Timemap GitHub repo](https://github.com/forensic-architecture/timemap) for more information around how to specify custom covers.",
       exploreButton: "EXPLORE",
+    },
+    toolbar: {
+      panels: {
+        categories: {
+          icon: DEFAULT_TAB_ICONS.CATEGORY,
+          label: copy[language].toolbar.categories_label,
+          title: copy[language].toolbar.explore_by_category__title,
+          description: copy[language].toolbar.explore_by_category__description,
+        },
+        filters: {
+          icon: DEFAULT_TAB_ICONS.FILTER,
+          label: copy[language].toolbar.filters_label,
+          title: copy[language].toolbar.explore_by_filter__title,
+          description: copy[language].toolbar.explore_by_filter__description,
+        },
+        narratives: {
+          icon: DEFAULT_TAB_ICONS.NARRATIVE,
+          label: copy[language].toolbar.narratives_label,
+          title: copy[language].toolbar.explore_by_narrative__title,
+          description: copy[language].toolbar.explore_by_narrative__description,
+        },
+      },
     },
     loading: false,
   },

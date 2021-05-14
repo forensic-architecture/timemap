@@ -1,7 +1,6 @@
 import React from "react";
 import Checkbox from "../atoms/Checkbox";
 import marked from "marked";
-import copy from "../../common/data/copy.json";
 import {
   aggregateFilterPaths,
   getFilterIdxFromColorSet,
@@ -30,6 +29,8 @@ function FilterListPanel({
   language,
   coloringSet,
   filterColors,
+  title,
+  description,
 }) {
   function createNodeComponent(filter, depth) {
     const [key, children] = filter;
@@ -81,10 +82,10 @@ function FilterListPanel({
 
   return (
     <div className="react-innertabpanel">
-      <h2>{copy[language].toolbar.filters}</h2>
+      <h2>{title}</h2>
       <p
         dangerouslySetInnerHTML={{
-          __html: marked(copy[language].toolbar.explore_by_filter__description),
+          __html: marked(description),
         }}
       />
       {renderTree(filters)}
