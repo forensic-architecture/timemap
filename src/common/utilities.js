@@ -130,7 +130,6 @@ export function aggregateFilterPaths(filters) {
     (children, path) => insertPath(children, path, []),
     {}
   );
-  console.info(aggregatedPaths);
   return aggregatedPaths;
 }
 
