@@ -99,6 +99,13 @@ export function trimAndEllipse(string, stringNum) {
   return string;
 }
 
+/**
+ * Takes the complete set of filters, and according to their paths places them at the correct node
+ *
+ * Returns a nested object where:
+ * Key: filter_path_0/filter_path_1/filter_path_2...
+ * Value: {...nested children}
+ */
 export function aggregateFilterPaths(filters) {
   function insertPath(
     children = {},
@@ -123,6 +130,7 @@ export function aggregateFilterPaths(filters) {
     (children, path) => insertPath(children, path, []),
     {}
   );
+  console.info(aggregatedPaths);
   return aggregatedPaths;
 }
 
@@ -177,6 +185,9 @@ export function getFilterSiblings(allFilters, filterParent, filterKey) {
   return Object.keys(siblings).filter((sib) => sib !== filterKey);
 }
 
+/**
+ * Looks at the current coloring set (ie. a map between sets of filters and colors) and configures where to add next set
+ */
 export function addToColoringSet(coloringSet, filters) {
   const flattenedColoringSet = coloringSet.flatMap((f) => f);
   const newColoringSet = filters.filter(
@@ -185,6 +196,9 @@ export function addToColoringSet(coloringSet, filters) {
   return [...coloringSet, newColoringSet];
 }
 
+/**
+ * Looks at the current coloring set (ie. a map between sets of filters and colors) and configures new sets based off of existing filters
+ */
 export function removeFromColoringSet(coloringSet, filters) {
   const newColoringSets = coloringSet.map((set) =>
     set.filter((s) => {
@@ -205,6 +219,9 @@ export function getEventCategories(event, activeCategories) {
   }, []);
 }
 
+/**
+ * Takes a filter's path and concatenates it like so: Parent 1/Parent 2/Child
+ */
 export function createFilterPathString(filter) {
   return filter.mode === ASSOCIATION_MODES.FILTER
     ? filter.filter_paths.join("/")
