@@ -120,6 +120,12 @@ const initial = {
           title: copy[language].toolbar.explore_by_filter__title,
           description: copy[language].toolbar.explore_by_filter__description,
         },
+        narratives: {
+          icon: DEFAULT_TAB_ICONS.NARRATIVE,
+          label: copy[language].toolbar.narratives_label,
+          title: copy[language].toolbar.explore_by_narrative__title,
+          description: copy[language].toolbar.explore_by_narrative__description,
+        },
       },
     },
     loading: false,

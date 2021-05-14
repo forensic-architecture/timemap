@@ -84,10 +84,18 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarNarrativePanel() {
+    const { panels } = this.props.toolbarCopy;
+    const panelTitle = panels.narratives.label
+      ? panels.narratives.label
+      : copy[this.props.language].toolbar.narratives;
+    const panelDescription = panels.narratives.description
+      ? panels.narratives.description
+      : copy[this.props.language].toolbar.explore_by_narrative__description;
+
     return (
       <TabPanel>
-        <h2>{copy[this.props.language].toolbar.narrative_panel_title}</h2>
-        <p>{copy[this.props.language].toolbar.narrative_summary}</p>
+        <h2>{panelTitle}</h2>
+        <p>{panelDescription}</p>
         {this.props.narratives.map((narr) => {
           return (
             <div className="panel-action action">
@@ -134,6 +142,14 @@ class Toolbar extends React.Component {
   }
 
   renderToolbarFilterPanel() {
+    const { panels } = this.props.toolbarCopy;
+    const panelTitle = panels.filters.label
+      ? panels.filters.label
+      : copy[this.props.language].toolbar.filters;
+    const panelDescription = panels.filters.description
+      ? panels.filters.description
+      : copy[this.props.language].toolbar.explore_by_filter__description;
+
     return (
       <TabPanel>
         <FilterListPanel
@@ -143,6 +159,8 @@ class Toolbar extends React.Component {
           language={this.props.language}
           coloringSet={this.props.coloringSet}
           filterColors={this.props.filterColors}
+          title={panelTitle}
+          description={panelDescription}
         />
       </TabPanel>
     );
