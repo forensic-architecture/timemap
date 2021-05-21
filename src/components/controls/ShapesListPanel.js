@@ -1,16 +1,18 @@
 import React from "react";
 import marked from "marked";
 import PanelTree from "./atoms/PanelTree";
+import { mapStyleByShape } from "../../common/utilities";
 
-const CategoriesListPanel = ({
-  categories,
-  activeCategories,
-  onCategoryFilter,
+const ShapesListPanel = ({
+  shapes,
+  activeShapes,
+  onShapeFilter,
   language,
   title,
   description,
   checkboxColor,
 }) => {
+  const styledShapes = mapStyleByShape(shapes, activeShapes);
   return (
     <div className="react-innertabpanel">
       <h2>{title}</h2>
@@ -20,13 +22,13 @@ const CategoriesListPanel = ({
         }}
       />
       <PanelTree
-        data={categories}
-        activeValues={activeCategories}
-        onSelect={onCategoryFilter}
+        data={styledShapes}
+        activeValues={activeShapes}
+        onSelect={onShapeFilter}
         defaultCheckboxColor={checkboxColor}
       />
     </div>
   );
 };
 
-export default CategoriesListPanel;
+export default ShapesListPanel;

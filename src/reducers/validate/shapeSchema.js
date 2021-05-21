@@ -1,8 +1,10 @@
 import Joi from "joi";
 
 const shapeSchema = Joi.object().keys({
-  name: Joi.string().required(),
-  items: Joi.array().required(),
+  id: Joi.string().allow(""),
+  title: Joi.string().allow(""),
+  shape: Joi.string().allow(""),
+  colour: Joi.string().allow(""),
 });
 
 export default shapeSchema;

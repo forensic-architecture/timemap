@@ -33,6 +33,8 @@ const initial = {
     associations: [],
     sources: {},
     sites: [],
+    shapes: [],
+    regions: [],
     notifications: [],
   },
 
@@ -63,6 +65,7 @@ const initial = {
         sites: true,
       },
     },
+    shapes: [],
     isMobile: /Mobi/.test(navigator.userAgent),
     language: "en-US",
     cluster: {
@@ -126,6 +129,12 @@ const initial = {
           title: copy[language].toolbar.explore_by_narrative__title,
           description: copy[language].toolbar.explore_by_narrative__description,
         },
+        shapes: {
+          icon: DEFAULT_TAB_ICONS.SHAPE,
+          label: copy[language].toolbar.shapes_label,
+          title: copy[language].toolbar.explore_by_shape__title,
+          description: copy[language].toolbar.explore_by_shape__description,
+        },
       },
     },
     loading: false,
@@ -141,6 +150,7 @@ const initial = {
     style: {
       categories: {
         default: global.fallbackEventColor,
+        checkboxColor: colors.white,
       },
       narratives: {
         default: {
@@ -149,7 +159,7 @@ const initial = {
           strokeWidth: 3,
         },
       },
-      shapes: {
+      regions: {
         default: {
           stroke: "blue",
           strokeWidth: 3,
@@ -158,6 +168,9 @@ const initial = {
       },
       clusters: {
         radial: false,
+      },
+      shapes: {
+        checkboxColor: colors.white,
       },
     },
     card: {
@@ -182,7 +195,7 @@ const initial = {
     USE_ASSOCIATIONS: false,
     USE_SITES: false,
     USE_SOURCES: false,
-    USE_SHAPES: false,
+    USE_REGIONS: false,
     GRAPH_NONLOCATED: false,
     HIGHLIGHT_GROUPS: false,
   },

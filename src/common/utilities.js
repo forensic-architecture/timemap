@@ -1,7 +1,7 @@
 import moment from "moment";
 import hash from "object-hash";
 
-import { ASSOCIATION_MODES } from "./constants";
+import { ASSOCIATION_MODES, POLYGON_CLIP_PATH } from "./constants";
 
 let { DATE_FMT, TIME_FMT } = process.env;
 if (!DATE_FMT) DATE_FMT = "MM/DD/YYYY";
@@ -148,7 +148,7 @@ export function getFilterAncestors(filter) {
     const accumulatedPath = splitFilter.slice(0, index + 1).join("/");
     ancestors.push(accumulatedPath);
   });
-  // // The last element here will be the leaf node aka the filter passed in
+  // The last element here will be the leaf node aka the filter passed in
   ancestors.pop();
   return ancestors;
 }
@@ -509,4 +509,18 @@ export function setD3Locale(d3) {
   if (language !== "es-US" && languages[language]) {
     d3.timeFormatDefaultLocale(languages[language]);
   }
+}
+
+export function mapStyleByShape(shapes, activeShapes) {
+  const styledShapes = shapes.map((s) => {
+    const { colour, shape, title } = s;
+    const style = {
+      background: activeShapes.includes(title) ? colour : "none",
+      border: `1px solid ${colour}`,
+      clipPath: POLYGON_CLIP_PATH[shape],
+    };
+    s.styles = style;
+    return s;
+  });
+  return styledShapes;
 }

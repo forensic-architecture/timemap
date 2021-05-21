@@ -6,6 +6,7 @@ const EVENT_DATA_URL = urlFromEnv("EVENTS_EXT");
 const ASSOCIATIONS_URL = urlFromEnv("ASSOCIATIONS_EXT");
 const SOURCES_URL = urlFromEnv("SOURCES_EXT");
 const SITES_URL = urlFromEnv("SITES_EXT");
+const REGIONS_URL = urlFromEnv("REGIONS_EXT");
 const SHAPES_URL = urlFromEnv("SHAPES_EXT");
 
 const domainMsg = (domainType) =>
@@ -79,6 +80,13 @@ export function fetchDomain() {
         .catch(() => handleError(domainMsg("sites")));
     }
 
+    let regionsPromise = Promise.resolve([]);
+    if (features.USE_REGIONS) {
+      regionsPromise = fetch(REGIONS_URL)
+        .then((response) => response.json())
+        .catch(() => handleError(domainMsg("regions")));
+    }
+
     let shapesPromise = Promise.resolve([]);
     if (features.USE_SHAPES) {
       shapesPromise = fetch(SHAPES_URL)
@@ -91,6 +99,7 @@ export function fetchDomain() {
       associationsPromise,
       sourcesPromise,
       sitesPromise,
+      regionsPromise,
       shapesPromise,
     ])
       .then((response) => {
@@ -99,7 +108,8 @@ export function fetchDomain() {
           associations: response[1],
           sources: response[2],
           sites: response[3],
-          shapes: response[4],
+          regions: response[4],
+          shapes: response[5],
           notifications,
         };
         if (
@@ -202,6 +212,14 @@ export function toggleAssociations(association, value, shouldColor) {
     association,
     value,
     shouldColor,
+  };
+}
+
+export const TOGGLE_SHAPES = "TOGGLE_SHAPES";
+export function toggleShapes(shape) {
+  return {
+    type: TOGGLE_SHAPES,
+    shape,
   };
 }
 

@@ -5,6 +5,7 @@ import {
   isLatitude,
   isLongitude,
 } from "../../../common/utilities";
+import { AVAILABLE_SHAPES } from "../../../common/constants";
 
 const TimelineMarkers = ({
   styles,
@@ -72,11 +73,11 @@ const TimelineMarkers = ({
     function renderMarkerForEvent(y) {
       switch (event.shape) {
         case "circle":
-        case "diamond":
-        case "star":
+        case AVAILABLE_SHAPES.DIAMOND:
+        case AVAILABLE_SHAPES.STAR:
           acc.push(renderCircle(y));
           break;
-        case "bar":
+        case AVAILABLE_SHAPES.BAR:
           acc.push(renderBar(y));
           break;
         default:
