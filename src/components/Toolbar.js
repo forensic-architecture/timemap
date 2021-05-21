@@ -121,7 +121,6 @@ class Toolbar extends React.Component {
             language={this.props.language}
             title={panels.categories.label}
             description={panels.categories.description}
-            checkboxColor={this.props.categoriesCheckboxColor}
           />
         </TabPanel>
       );
@@ -159,7 +158,6 @@ class Toolbar extends React.Component {
             language={this.props.language}
             title={panels.shapes.label}
             description={panels.shapes.description}
-            checkboxColor={this.props.shapesCheckboxColor}
           />
         </TabPanel>
       );
@@ -327,8 +325,6 @@ function mapStateToProps(state) {
     maxNumOfColors: state.ui.coloring.maxNumOfColors,
     filterColors: state.ui.coloring.colors,
     eventRadius: state.ui.eventRadius,
-    categoriesCheckboxColor: state.ui.style.categories.checkboxColor,
-    shapesCheckboxColor: state.ui.style.shapes.checkboxColor,
     features: selectors.getFeatures(state),
   };
 }

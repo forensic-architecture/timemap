@@ -9,7 +9,6 @@ const CategoriesListPanel = ({
   language,
   title,
   description,
-  checkboxColor,
 }) => {
   return (
     <div className="react-innertabpanel">
@@ -23,7 +22,6 @@ const CategoriesListPanel = ({
         data={categories}
         activeValues={activeCategories}
         onSelect={onCategoryFilter}
-        defaultCheckboxColor={checkboxColor}
       />
     </div>
   );

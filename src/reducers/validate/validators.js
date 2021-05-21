@@ -156,6 +156,7 @@ export function validateDomain(domain, features) {
 
   // append events with datetime and sort
   sanitizedDomain.events = sanitizedDomain.events.filter((event, idx) => {
+    let errorMsg = "";
     event.id = idx;
     // event.associations comes in as a [association.ids...]; convert to actual association objects
     event.associations = event.associations.reduce((acc, id) => {
@@ -165,19 +166,31 @@ export function validateDomain(domain, features) {
       if (foundAssociation) acc.push(foundAssociation);
       return acc;
     }, []);
+
+    if (event.shape) {
+      const relatedShapeObj = sanitizedDomain.shapes.find(
+        (elem) => elem.id === event.shape
+      );
+      if (!relatedShapeObj)
+        errorMsg =
+          "Failed to find related shape. Please verify shape type for event.";
+      else {
+        event.shape = relatedShapeObj;
+      }
+    }
     // if lat, long come in with commas, replace with decimal format
     event.latitude = event.latitude.replace(",", ".");
     event.longitude = event.longitude.replace(",", ".");
 
     event.datetime = calcDatetime(event.date, event.time);
-    if (!isValidDate(event.datetime)) {
+    if (!isValidDate(event.datetime))
+      errorMsg =
+        "Invalid date. It's been dropped, as otherwise timemap won't work as expected.";
+
+    if (errorMsg) {
       discardedDomain.events.push({
         ...event,
-        error: makeError(
-          "events",
-          event.id,
-          "Invalid date. It's been dropped, as otherwise timemap won't work as expected."
-        ),
+        error: makeError("events", event.id, errorMsg),
       });
       return false;
     }

@@ -1,18 +1,11 @@
 import React from "react";
 import Checkbox from "../../atoms/Checkbox";
 
-const PanelTree = ({ data, activeValues, onSelect, defaultCheckboxColor }) => {
+const PanelTree = ({ data, activeValues, onSelect }) => {
   return (
     <div>
       {data.map((val) => {
         const isActive = activeValues.includes(val.title);
-        const baseStyles = {
-          checkboxStyles: {
-            background: isActive ? defaultCheckboxColor : "none",
-            border: `1px solid ${defaultCheckboxColor}`,
-          },
-          containerStyles: {},
-        };
         return (
           <li
             key={val.title.replace(/ /g, "_")}
@@ -23,7 +16,7 @@ const PanelTree = ({ data, activeValues, onSelect, defaultCheckboxColor }) => {
               label={val.title}
               isActive={isActive}
               onClickCheckbox={() => onSelect(val.title)}
-              styleProps={val.styles ? val.styles : baseStyles}
+              styleProps={val.styles}
             />
           </li>
         );

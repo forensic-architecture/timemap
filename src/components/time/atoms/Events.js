@@ -157,19 +157,21 @@ const TimelineEvents = ({
       (isLatitude(event.latitude) && isLongitude(event.longitude)) ||
       (features.GRAPH_NONLOCATED && event.projectOffset !== -1);
 
+    const { shape: eventShape } = event;
+
     let renderShape = isDot ? renderDot : renderBar;
-    if (event.shape) {
-      if (event.shape === AVAILABLE_SHAPES.BAR) {
+    if (eventShape.shape) {
+      if (eventShape.shape === AVAILABLE_SHAPES.BAR) {
         renderShape = renderBar;
-      } else if (event.shape === AVAILABLE_SHAPES.DIAMOND) {
+      } else if (eventShape.shape === AVAILABLE_SHAPES.DIAMOND) {
         renderShape = renderDiamond;
-      } else if (event.shape === AVAILABLE_SHAPES.STAR) {
+      } else if (eventShape.shape === AVAILABLE_SHAPES.STAR) {
         renderShape = renderStar;
-      } else if (event.shape === AVAILABLE_SHAPES.TRIANGLE) {
+      } else if (eventShape.shape === AVAILABLE_SHAPES.TRIANGLE) {
         renderShape = renderTriangle;
-      } else if (event.shape === AVAILABLE_SHAPES.PENTAGON) {
+      } else if (eventShape.shape === AVAILABLE_SHAPES.PENTAGON) {
         renderShape = renderPentagon;
-      } else if (event.shape === AVAILABLE_SHAPES.SQUARE) {
+      } else if (eventShape.shape === AVAILABLE_SHAPES.SQUARE) {
         renderShape = renderSquare;
       } else {
         renderShape = renderDot;

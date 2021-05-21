@@ -150,7 +150,6 @@ const initial = {
     style: {
       categories: {
         default: global.fallbackEventColor,
-        checkboxColor: colors.white,
       },
       narratives: {
         default: {
@@ -168,9 +167,6 @@ const initial = {
       },
       clusters: {
         radial: false,
-      },
-      shapes: {
-        checkboxColor: colors.white,
       },
     },
     card: {

@@ -75,6 +75,7 @@ export const selectRegions = createSelector(
 export const selectEvents = createSelector(
   [getEvents, getActiveFilters, getActiveCategories, getTimeRange, getFeatures],
   (events, activeFilters, activeCategories, timeRange, features) => {
+    console.info("SELECTED EVENTS SELECTOR");
     return events.reduce((acc, event) => {
       const isMatchingFilter =
         (event.associations &&

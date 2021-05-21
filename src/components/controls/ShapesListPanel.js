@@ -10,7 +10,6 @@ const ShapesListPanel = ({
   language,
   title,
   description,
-  checkboxColor,
 }) => {
   const styledShapes = mapStyleByShape(shapes, activeShapes);
   return (
@@ -25,7 +24,6 @@ const ShapesListPanel = ({
         data={styledShapes}
         activeValues={activeShapes}
         onSelect={onShapeFilter}
-        defaultCheckboxColor={checkboxColor}
       />
     </div>
   );
