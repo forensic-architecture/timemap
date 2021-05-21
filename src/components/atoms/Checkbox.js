@@ -5,8 +5,8 @@ const Checkbox = ({ label, isActive, onClickCheckbox, color, styleProps }) => {
     <div className={isActive ? "item active" : "item"}>
       <span style={{ color: color }}>{label}</span>
       <button onClick={onClickCheckbox}>
-        <div className="border">
-          <div className="checkbox" style={styleProps} />
+        <div className="border" style={styleProps.containerStyles}>
+          <div className="checkbox" style={styleProps.checkboxStyles} />
         </div>
       </button>
     </div>

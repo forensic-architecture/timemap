@@ -7,8 +7,11 @@ const PanelTree = ({ data, activeValues, onSelect, defaultCheckboxColor }) => {
       {data.map((val) => {
         const isActive = activeValues.includes(val.title);
         const baseStyles = {
-          background: isActive ? defaultCheckboxColor : "none",
-          border: `1px solid ${defaultCheckboxColor}`,
+          checkboxStyles: {
+            background: isActive ? defaultCheckboxColor : "none",
+            border: `1px solid ${defaultCheckboxColor}`,
+          },
+          containerStyles: {},
         };
         return (
           <li

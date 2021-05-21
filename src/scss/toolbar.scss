@@ -413,14 +413,26 @@
       text-align: left;
       float: left;
 
-      .checkbox {
-        display: inline-block;
-        width: 12px;
-        height: 12px;
-        border: 1px solid $offwhite;
-        box-sizing: border-box;
+      .border {
+        width: 16px;
+        height: 16px;
         background: none;
-        float: left;
+        box-sizing: border-box;
+        position: relative;
+
+        .checkbox {
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          border: 1px solid $offwhite;
+          box-sizing: border-box;
+          background: none;
+          float: left;
+          position: absolute;
+          top: 2px;
+          left: 2px;
+          background: none;
+        }
       }
     }
 

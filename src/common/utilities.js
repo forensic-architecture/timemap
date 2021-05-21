@@ -515,9 +515,15 @@ export function mapStyleByShape(shapes, activeShapes) {
   const styledShapes = shapes.map((s) => {
     const { colour, shape, title } = s;
     const style = {
-      background: activeShapes.includes(title) ? colour : "none",
-      border: `1px solid ${colour}`,
-      clipPath: POLYGON_CLIP_PATH[shape],
+      checkboxStyles: {
+        background: activeShapes.includes(title) ? colour : "black",
+        border: "none",
+        clipPath: POLYGON_CLIP_PATH[shape],
+      },
+      containerStyles: {
+        background: colour,
+        clipPath: POLYGON_CLIP_PATH[shape],
+      },
     };
     s.styles = style;
     return s;
