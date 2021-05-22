@@ -1,6 +1,7 @@
 import React from "react";
 import marked from "marked";
 import PanelTree from "./atoms/PanelTree";
+import { ASSOCIATION_MODES } from "../../common/constants";
 
 const CategoriesListPanel = ({
   categories,
@@ -22,6 +23,7 @@ const CategoriesListPanel = ({
         data={categories}
         activeValues={activeCategories}
         onSelect={onCategoryFilter}
+        type={ASSOCIATION_MODES.CATEGORY}
       />
     </div>
   );

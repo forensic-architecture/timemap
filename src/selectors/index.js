@@ -73,9 +73,22 @@ export const selectRegions = createSelector(
  * 3. exist in an active category
  */
 export const selectEvents = createSelector(
-  [getEvents, getActiveFilters, getActiveCategories, getTimeRange, getFeatures],
-  (events, activeFilters, activeCategories, timeRange, features) => {
-    console.info("SELECTED EVENTS SELECTOR");
+  [
+    getEvents,
+    getActiveFilters,
+    getActiveCategories,
+    getActiveShapes,
+    getTimeRange,
+    getFeatures,
+  ],
+  (
+    events,
+    activeFilters,
+    activeCategories,
+    activeShapes,
+    timeRange,
+    features
+  ) => {
     return events.reduce((acc, event) => {
       const isMatchingFilter =
         (event.associations &&
@@ -98,8 +111,14 @@ export const selectEvents = createSelector(
       isActiveTime = features.GRAPH_NONLOCATED
         ? (!event.latitude && !event.longitude) || isActiveTime
         : isActiveTime;
-      if (isActiveTime && isActiveCategory) {
-        if (event.type === SHAPE || isActiveFilter) {
+      const isActiveShape =
+        event.shape && activeShapes.includes(event.shape.id);
+      if (event.type === SHAPE) {
+        if (isActiveShape && isActiveCategory && isActiveTime) {
+          acc[event.id] = { ...event };
+        }
+      } else {
+        if (isActiveFilter && isActiveCategory && isActiveTime) {
           acc[event.id] = { ...event };
         }
       }

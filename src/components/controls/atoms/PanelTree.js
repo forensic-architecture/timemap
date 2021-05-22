@@ -1,11 +1,13 @@
 import React from "react";
 import Checkbox from "../../atoms/Checkbox";
+import { ASSOCIATION_MODES } from "../../../common/constants";
 
-const PanelTree = ({ data, activeValues, onSelect }) => {
+const PanelTree = ({ data, activeValues, onSelect, type }) => {
+  // If the parent panel is of type 'CATEGORY': filter on title. If panel is 'SHAPE': filter on id
+  const onSelectionType = type === ASSOCIATION_MODES.CATEGORY ? "title" : "id";
   return (
     <div>
       {data.map((val) => {
-        const isActive = activeValues.includes(val.title);
         return (
           <li
             key={val.title.replace(/ /g, "_")}
@@ -14,8 +16,8 @@ const PanelTree = ({ data, activeValues, onSelect }) => {
           >
             <Checkbox
               label={val.title}
-              isActive={isActive}
-              onClickCheckbox={() => onSelect(val.title)}
+              isActive={activeValues.includes(val[onSelectionType])}
+              onClickCheckbox={() => onSelect(val[onSelectionType])}
               styleProps={val.styles}
             />
           </li>

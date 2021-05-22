@@ -121,6 +121,7 @@ export function fetchDomain() {
         }
         dispatch(toggleFetchingDomain());
         dispatch(setInitialCategories(result.associations));
+        dispatch(setInitialShapes(result.shapes));
         return result;
       })
       .catch((err) => {
@@ -241,6 +242,14 @@ export const SET_INITIAL_CATEGORIES = "SET_INITIAL_CATEGORIES";
 export function setInitialCategories(values) {
   return {
     type: SET_INITIAL_CATEGORIES,
+    values,
+  };
+}
+
+export const SET_INITIAL_SHAPES = "SET_INITIAL_SHAPES";
+export function setInitialShapes(values) {
+  return {
+    type: SET_INITIAL_SHAPES,
     values,
   };
 }

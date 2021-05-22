@@ -513,10 +513,10 @@ export function setD3Locale(d3) {
 
 export function mapStyleByShape(shapes, activeShapes) {
   const styledShapes = shapes.map((s) => {
-    const { colour, shape, title } = s;
+    const { colour, shape, id } = s;
     const style = {
       checkboxStyles: {
-        background: activeShapes.includes(title) ? colour : "black",
+        background: activeShapes.includes(id) ? colour : "black",
         border: "none",
         clipPath: POLYGON_CLIP_PATH[shape],
       },
