@@ -7,6 +7,7 @@ import * as selectors from "../selectors";
 import { Tabs, TabPanel } from "react-tabs";
 import FilterListPanel from "./controls/FilterListPanel";
 import CategoriesListPanel from "./controls/CategoriesListPanel";
+import ShapesListPanel from "./controls/ShapesListPanel";
 import BottomActions from "./controls/BottomActions";
 import copy from "../common/data/copy.json";
 import {
@@ -17,7 +18,6 @@ import {
   addToColoringSet,
   removeFromColoringSet,
 } from "../common/utilities.js";
-import { DEFAULT_TAB_ICONS } from "../common/constants";
 
 class Toolbar extends React.Component {
   constructor(props) {
@@ -85,17 +85,10 @@ class Toolbar extends React.Component {
 
   renderToolbarNarrativePanel() {
     const { panels } = this.props.toolbarCopy;
-    const panelTitle = panels.narratives.label
-      ? panels.narratives.label
-      : copy[this.props.language].toolbar.narratives;
-    const panelDescription = panels.narratives.description
-      ? panels.narratives.description
-      : copy[this.props.language].toolbar.explore_by_narrative__description;
-
     return (
       <TabPanel>
-        <h2>{panelTitle}</h2>
-        <p>{panelDescription}</p>
+        <h2>{panels.narratives.label}</h2>
+        <p>{panels.narratives.description}</p>
         {this.props.narratives.map((narr) => {
           return (
             <div className="panel-action action">
@@ -118,13 +111,6 @@ class Toolbar extends React.Component {
 
   renderToolbarCategoriesPanel() {
     const { panels } = this.props.toolbarCopy;
-    const panelTitle = panels.categories.label
-      ? panels.categories.label
-      : copy[this.props.language].toolbar.categories;
-    const panelDescription = panels.categories.description
-      ? panels.categories.description
-      : copy[this.props.language].toolbar.explore_by_category__description;
-
     if (this.props.features.USE_CATEGORIES) {
       return (
         <TabPanel>
@@ -133,8 +119,8 @@ class Toolbar extends React.Component {
             activeCategories={this.props.activeCategories}
             onCategoryFilter={this.props.methods.onCategoryFilter}
             language={this.props.language}
-            title={panelTitle}
-            description={panelDescription}
+            title={panels.categories.label}
+            description={panels.categories.description}
           />
         </TabPanel>
       );
@@ -143,13 +129,6 @@ class Toolbar extends React.Component {
 
   renderToolbarFilterPanel() {
     const { panels } = this.props.toolbarCopy;
-    const panelTitle = panels.filters.label
-      ? panels.filters.label
-      : copy[this.props.language].toolbar.filters;
-    const panelDescription = panels.filters.description
-      ? panels.filters.description
-      : copy[this.props.language].toolbar.explore_by_filter__description;
-
     return (
       <TabPanel>
         <FilterListPanel
@@ -159,11 +138,30 @@ class Toolbar extends React.Component {
           language={this.props.language}
           coloringSet={this.props.coloringSet}
           filterColors={this.props.filterColors}
-          title={panelTitle}
-          description={panelDescription}
+          title={panels.filters.label}
+          description={panels.filters.description}
         />
       </TabPanel>
     );
+  }
+
+  renderToolbarShapePanel() {
+    const { panels } = this.props.toolbarCopy;
+
+    if (this.props.features.USE_SHAPES) {
+      return (
+        <TabPanel>
+          <ShapesListPanel
+            shapes={this.props.shapes}
+            activeShapes={this.props.activeShapes}
+            onShapeFilter={this.props.methods.onShapeFilter}
+            language={this.props.language}
+            title={panels.shapes.label}
+            description={panels.shapes.description}
+          />
+        </TabPanel>
+      );
+    }
   }
 
   renderToolbarTab(_selected, label, iconKey) {
@@ -196,6 +194,7 @@ class Toolbar extends React.Component {
             : null}
           {features.USE_CATEGORIES ? this.renderToolbarCategoriesPanel() : null}
           {features.USE_ASSOCIATIONS ? this.renderToolbarFilterPanel() : null}
+          {features.USE_SHAPES ? this.renderToolbarShapePanel() : null}
         </Tabs>
       </div>
     );
@@ -228,31 +227,17 @@ class Toolbar extends React.Component {
     const narrativesExist = narratives && narratives.length !== 0;
     let title = copy[this.props.language].toolbar.title;
     if (process.env.display_title) title = process.env.display_title;
-
     const { panels } = toolbarCopy;
-    const narrativesLabel = copy[this.props.language].toolbar.narratives_label;
-    const filtersLabel = panels.filters.label
-      ? panels.filters.label
-      : copy[this.props.language].toolbar.filters_label;
-    const categoriesLabel = panels.categories.label
-      ? panels.categories.label
-      : copy[this.props.language].toolbar.categories_label;
-
-    const filterIcon = panels.filters.icon
-      ? panels.filters.icon
-      : DEFAULT_TAB_ICONS.FILTER;
-    const categoriesIcon = panels.categories.icon
-      ? panels.categories.icon
-      : DEFAULT_TAB_ICONS.CATEGORY;
 
     const narrativesIdx = 0;
     const categoriesIdx = narrativesExist ? 1 : 0;
     const filtersIdx =
-      narrativesExist && features.CATEGORIES_AS_FILTERS
+      narrativesExist && features.USE_CATEGORIES
         ? 2
-        : narrativesExist || features.CATEGORIES_AS_FILTERS
+        : narrativesExist || features.USE_CATEGORIES
         ? 1
         : 0;
+    const shapesIdx = filtersIdx + 1;
     return (
       <div className="toolbar">
         <div className="toolbar-header" onClick={this.props.methods.onTitle}>
@@ -260,17 +245,32 @@ class Toolbar extends React.Component {
         </div>
         <div className="toolbar-tabs">
           {narrativesExist
-            ? this.renderToolbarTab(narrativesIdx, narrativesLabel, "timeline")
+            ? this.renderToolbarTab(
+                narrativesIdx,
+                panels.narratives.label,
+                panels.narratives.icon
+              )
             : null}
-          {features.CATEGORIES_AS_FILTERS
+          {features.USE_CATEGORIES
             ? this.renderToolbarTab(
                 categoriesIdx,
-                categoriesLabel,
-                categoriesIcon
+                panels.categories.label,
+                panels.categories.icon
               )
             : null}
           {features.USE_ASSOCIATIONS
-            ? this.renderToolbarTab(filtersIdx, filtersLabel, filterIcon)
+            ? this.renderToolbarTab(
+                filtersIdx,
+                panels.filters.label,
+                panels.filters.icon
+              )
+            : null}
+          {features.USE_SHAPES
+            ? this.renderToolbarTab(
+                shapesIdx,
+                panels.shapes.label,
+                panels.shapes.icon
+              )
             : null}
         </div>
         <BottomActions
@@ -311,10 +311,12 @@ function mapStateToProps(state) {
     filters: selectors.getFilters(state),
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
+    shapes: selectors.getShapes(state),
     language: state.app.language,
     toolbarCopy: state.app.toolbar,
     activeFilters: selectors.getActiveFilters(state),
     activeCategories: selectors.getActiveCategories(state),
+    activeShapes: selectors.getActiveShapes(state),
     viewFilters: state.app.associations.views,
     narrative: state.app.associations.narrative,
     sitesShowing: state.app.flags.isShowingSites,
@@ -322,6 +324,7 @@ function mapStateToProps(state) {
     coloringSet: state.app.associations.coloringSet,
     maxNumOfColors: state.ui.coloring.maxNumOfColors,
     filterColors: state.ui.coloring.colors,
+    eventRadius: state.ui.eventRadius,
     features: selectors.getFeatures(state),
   };
 }

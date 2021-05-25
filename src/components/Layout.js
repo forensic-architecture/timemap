@@ -327,6 +327,7 @@ class Dashboard extends React.Component {
               actions.toggleAssociations("filters", filters),
             onCategoryFilter: (categories) =>
               actions.toggleAssociations("categories", categories),
+            onShapeFilter: actions.toggleShapes,
             onSelectNarrative: this.setNarrative,
           }}
         />

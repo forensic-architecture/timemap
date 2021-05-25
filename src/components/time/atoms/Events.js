@@ -14,6 +14,7 @@ import {
   isLatitude,
   isLongitude,
 } from "../../../common/utilities";
+import { AVAILABLE_SHAPES } from "../../../common/constants";
 
 function renderDot(event, styles, props) {
   const colorPercentages = calculateColorPercentages(
@@ -156,19 +157,21 @@ const TimelineEvents = ({
       (isLatitude(event.latitude) && isLongitude(event.longitude)) ||
       (features.GRAPH_NONLOCATED && event.projectOffset !== -1);
 
+    const { shape: eventShape } = event;
+
     let renderShape = isDot ? renderDot : renderBar;
-    if (event.shape) {
-      if (event.shape === "bar") {
+    if (eventShape.shape) {
+      if (eventShape.shape === AVAILABLE_SHAPES.BAR) {
         renderShape = renderBar;
-      } else if (event.shape === "diamond") {
+      } else if (eventShape.shape === AVAILABLE_SHAPES.DIAMOND) {
         renderShape = renderDiamond;
-      } else if (event.shape === "star") {
+      } else if (eventShape.shape === AVAILABLE_SHAPES.STAR) {
         renderShape = renderStar;
-      } else if (event.shape === "triangle") {
+      } else if (eventShape.shape === AVAILABLE_SHAPES.TRIANGLE) {
         renderShape = renderTriangle;
-      } else if (event.shape === "pentagon") {
+      } else if (eventShape.shape === AVAILABLE_SHAPES.PENTAGON) {
         renderShape = renderPentagon;
-      } else if (event.shape === "square") {
+      } else if (eventShape.shape === AVAILABLE_SHAPES.SQUARE) {
         renderShape = renderSquare;
       } else {
         renderShape = renderDot;

@@ -1,6 +1,7 @@
 import React from "react";
 import marked from "marked";
-import Checkbox from "../atoms/Checkbox";
+import PanelTree from "./atoms/PanelTree";
+import { ASSOCIATION_MODES } from "../../common/constants";
 
 const CategoriesListPanel = ({
   categories,
@@ -10,28 +11,6 @@ const CategoriesListPanel = ({
   title,
   description,
 }) => {
-  function renderCategoryTree() {
-    return (
-      <div>
-        {categories.map((cat) => {
-          return (
-            <li
-              key={cat.title.replace(/ /g, "_")}
-              className="filter-filter active"
-              style={{ marginLeft: "20px" }}
-            >
-              <Checkbox
-                label={cat.title}
-                isActive={activeCategories.includes(cat.title)}
-                onClickCheckbox={() => onCategoryFilter(cat.title)}
-              />
-            </li>
-          );
-        })}
-      </div>
-    );
-  }
-
   return (
     <div className="react-innertabpanel">
       <h2>{title}</h2>
@@ -40,7 +19,12 @@ const CategoriesListPanel = ({
           __html: marked(description),
         }}
       />
-      {renderCategoryTree()}
+      <PanelTree
+        data={categories}
+        activeValues={activeCategories}
+        onSelect={onCategoryFilter}
+        type={ASSOCIATION_MODES.CATEGORY}
+      />
     </div>
   );
 };

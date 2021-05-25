@@ -7,7 +7,7 @@ const DatetimeTriangle = ({ x, y, r, transform, onSelect, styleProps }) => {
       onClick={onSelect}
       className="event"
       x={x}
-      y={y - r}
+      y={y}
       style={styleProps}
       points={`${x},${y + s} ${x + s},${y - s} ${x - s},${y - s}`}
       transform={`rotate(180, ${x}, ${y})`}

@@ -8,7 +8,7 @@ import {
   createFilterPathString,
 } from "../common/utilities";
 import { isTimeRangedIn } from "./helpers";
-import { ASSOCIATION_MODES, TIMELINE_ONLY } from "../common/constants";
+import { ASSOCIATION_MODES, SHAPE } from "../common/constants";
 
 // Input selectors
 export const getEvents = (state) => state.domain.events;
@@ -24,6 +24,7 @@ export const getActiveNarrative = (state) => state.app.associations.narrative;
 export const getSelected = (state) => state.app.selected;
 export const getSites = (state) => state.domain.sites;
 export const getSources = (state) => state.domain.sources;
+export const getRegions = (state) => state.domain.regions;
 export const getShapes = (state) => state.domain.shapes;
 export const getFilters = (state) =>
   state.domain.associations.filter(
@@ -32,6 +33,7 @@ export const getFilters = (state) =>
 export const getNotifications = (state) => state.domain.notifications;
 export const getActiveFilters = (state) => state.app.associations.filters;
 export const getActiveCategories = (state) => state.app.associations.categories;
+export const getActiveShapes = (state) => state.app.shapes;
 export const getTimeRange = (state) => state.app.timeline.range;
 export const getTimelineDimensions = (state) => state.app.timeline.dimensions;
 export const selectNarrative = (state) => state.app.associations.narrative;
@@ -56,10 +58,10 @@ export const selectSources = createSelector(
   }
 );
 
-export const selectShapes = createSelector(
-  [getShapes, getFeatures],
-  (shapes, features) => {
-    if (features.USE_SHAPES) return shapes;
+export const selectRegions = createSelector(
+  [getRegions, getFeatures],
+  (regions, features) => {
+    if (features.USE_REGIONS) return regions;
     return [];
   }
 );
@@ -71,8 +73,22 @@ export const selectShapes = createSelector(
  * 3. exist in an active category
  */
 export const selectEvents = createSelector(
-  [getEvents, getActiveFilters, getActiveCategories, getTimeRange, getFeatures],
-  (events, activeFilters, activeCategories, timeRange, features) => {
+  [
+    getEvents,
+    getActiveFilters,
+    getActiveCategories,
+    getActiveShapes,
+    getTimeRange,
+    getFeatures,
+  ],
+  (
+    events,
+    activeFilters,
+    activeCategories,
+    activeShapes,
+    timeRange,
+    features
+  ) => {
     return events.reduce((acc, event) => {
       const isMatchingFilter =
         (event.associations &&
@@ -95,8 +111,14 @@ export const selectEvents = createSelector(
       isActiveTime = features.GRAPH_NONLOCATED
         ? (!event.latitude && !event.longitude) || isActiveTime
         : isActiveTime;
-      if (isActiveTime && isActiveCategory) {
-        if (event.type === TIMELINE_ONLY || isActiveFilter) {
+      const isActiveShape =
+        event.shape && activeShapes.includes(event.shape.id);
+      if (event.type === SHAPE) {
+        if (isActiveShape && isActiveCategory && isActiveTime) {
+          acc[event.id] = { ...event };
+        }
+      } else {
+        if (isActiveFilter && isActiveCategory && isActiveTime) {
           acc[event.id] = { ...event };
         }
       }

@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import * as selectors from "../../../selectors";
 
 import Sites from "./atoms/Sites";
-import Shapes from "./atoms/Shapes";
+import Regions from "./atoms/Regions";
 import Events from "./atoms/Events";
 import Clusters from "./atoms/Clusters";
 import SelectedEvents from "./atoms/SelectedEvents";
@@ -324,13 +324,13 @@ class Map extends React.Component {
     );
   }
 
-  renderShapes() {
+  renderRegions() {
     return (
-      <Shapes
+      <Regions
         svg={this.svgRef.current}
-        shapes={this.props.domain.shapes}
+        regions={this.props.domain.regions}
         projectPoint={this.projectPoint}
-        styles={this.props.ui.shapes}
+        styles={this.props.ui.regions}
       />
     );
   }
@@ -481,7 +481,7 @@ class Map extends React.Component {
         {this.renderTiles()}
         {this.renderMarkers()}
         {isShowingSites ? this.renderSites() : null}
-        {this.renderShapes()}
+        {this.renderRegions()}
         {this.renderNarratives()}
         {this.renderEvents()}
         {this.renderClusters()}
@@ -510,7 +510,7 @@ function mapStateToProps(state) {
       narratives: selectors.selectNarratives(state),
       categories: selectors.getCategories(state),
       sites: selectors.selectSites(state),
-      shapes: selectors.selectShapes(state),
+      regions: selectors.selectRegions(state),
     },
     app: {
       views: state.app.associations.views,
@@ -532,7 +532,7 @@ function mapStateToProps(state) {
       dom: state.ui.dom,
       narratives: state.ui.style.narratives,
       mapSelectedEvents: state.ui.style.selectedEvents,
-      shapes: state.ui.style.shapes,
+      regions: state.ui.style.regions,
       eventRadius: state.ui.eventRadius,
       radial: state.ui.style.clusters.radial,
       filterColors: state.ui.coloring.colors,

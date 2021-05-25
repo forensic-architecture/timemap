@@ -15,7 +15,7 @@ const DatetimeStar = ({
       onClick={onSelect}
       className="event"
       x={x}
-      y={y - r}
+      y={y}
       style={styleProps}
       points={`${x + s},${y - s} ${x - r},${y} ${x + r},${y} ${x - s},${
         y - s

@@ -4,6 +4,7 @@ import createEventSchema from "./eventSchema";
 import siteSchema from "./siteSchema";
 import associationsSchema from "./associationsSchema";
 import sourceSchema from "./sourceSchema";
+import regionSchema from "./regionSchema";
 import shapeSchema from "./shapeSchema";
 
 import { calcDatetime, capitalize } from "../../common/utilities";
@@ -53,6 +54,7 @@ export function validateDomain(domain, features) {
     sites: [],
     associations: [],
     sources: {},
+    regions: [],
     shapes: [],
     notifications: domain ? domain.notifications : null,
   };
@@ -66,6 +68,7 @@ export function validateDomain(domain, features) {
     sites: [],
     associations: [],
     sources: [],
+    regions: [],
     shapes: [],
   };
 
@@ -114,13 +117,30 @@ export function validateDomain(domain, features) {
   validateArray(domain.sites, "sites", siteSchema);
   validateArray(domain.associations, "associations", associationsSchema);
   validateObject(domain.sources, "sources", sourceSchema);
-  validateObject(domain.shapes, "shapes", shapeSchema);
+  validateArray(domain.regions, "regions", regionSchema);
+  validateArray(domain.shapes, "shapes", shapeSchema);
 
   // NB: [lat, lon] array is best format for projecting into map
-  sanitizedDomain.shapes = sanitizedDomain.shapes.map((shape) => ({
-    name: shape.name,
-    points: shape.items.map((coords) => coords.replace(/\s/g, "").split(",")),
+  sanitizedDomain.regions = sanitizedDomain.regions.map((region) => ({
+    name: region.name,
+    points: region.items.map((coords) => coords.replace(/\s/g, "").split(",")),
   }));
+
+  sanitizedDomain.shapes = sanitizedDomain.shapes.reduce((acc, val) => {
+    if (!val.shape) {
+      discardedDomain.shapes.push({
+        ...val,
+        error: makeError(
+          "events",
+          val.id,
+          "Invalid event shape. Please specify a shape for this type of event."
+        ),
+      });
+    } else {
+      acc.push(val);
+    }
+    return acc;
+  }, []);
 
   const duplicateAssociations = findDuplicateAssociations(domain.associations);
   // Duplicated associations
@@ -136,6 +156,7 @@ export function validateDomain(domain, features) {
 
   // append events with datetime and sort
   sanitizedDomain.events = sanitizedDomain.events.filter((event, idx) => {
+    let errorMsg = "";
     event.id = idx;
     // event.associations comes in as a [association.ids...]; convert to actual association objects
     event.associations = event.associations.reduce((acc, id) => {
@@ -145,19 +166,31 @@ export function validateDomain(domain, features) {
       if (foundAssociation) acc.push(foundAssociation);
       return acc;
     }, []);
+
+    if (event.shape) {
+      const relatedShapeObj = sanitizedDomain.shapes.find(
+        (elem) => elem.id === event.shape
+      );
+      if (!relatedShapeObj)
+        errorMsg =
+          "Failed to find related shape. Please verify shape type for event.";
+      else {
+        event.shape = relatedShapeObj;
+      }
+    }
     // if lat, long come in with commas, replace with decimal format
     event.latitude = event.latitude.replace(",", ".");
     event.longitude = event.longitude.replace(",", ".");
 
     event.datetime = calcDatetime(event.date, event.time);
-    if (!isValidDate(event.datetime)) {
+    if (!isValidDate(event.datetime))
+      errorMsg =
+        "Invalid date. It's been dropped, as otherwise timemap won't work as expected.";
+
+    if (errorMsg) {
       discardedDomain.events.push({
         ...event,
-        error: makeError(
-          "events",
-          event.id,
-          "Invalid date. It's been dropped, as otherwise timemap won't work as expected."
-        ),
+        error: makeError("events", event.id, errorMsg),
       });
       return false;
     }
@@ -177,6 +210,5 @@ export function validateDomain(domain, features) {
       });
     }
   });
-
   return sanitizedDomain;
 }

@@ -8,6 +8,7 @@ import {
   UPDATE_COLORING_SET,
   CLEAR_FILTER,
   TOGGLE_ASSOCIATIONS,
+  TOGGLE_SHAPES,
   UPDATE_TIMERANGE,
   UPDATE_DIMENSIONS,
   UPDATE_NARRATIVE,
@@ -26,6 +27,7 @@ import {
   SET_LOADING,
   SET_NOT_LOADING,
   SET_INITIAL_CATEGORIES,
+  SET_INITIAL_SHAPES,
   UPDATE_SEARCH_QUERY,
 } from "../actions";
 
@@ -153,6 +155,21 @@ function toggleAssociations(appState, action) {
   };
 }
 
+function toggleShapes(appState, action) {
+  let newShapes = [...appState.shapes];
+  if (newShapes.includes(action.shape)) {
+    const idx = newShapes.indexOf(action.shape);
+    newShapes.splice(idx, 1);
+  } else {
+    newShapes.push(action.shape);
+  }
+
+  return {
+    ...appState,
+    shapes: newShapes,
+  };
+}
+
 function clearFilter(appState, action) {
   return {
     ...appState,
@@ -256,6 +273,14 @@ function setInitialCategories(appState, action) {
   };
 }
 
+function setInitialShapes(appState, action) {
+  const shapeIds = action.values.map((sh) => sh.id);
+  return {
+    ...appState,
+    shapes: shapeIds,
+  };
+}
+
 function updateSearchQuery(appState, action) {
   return {
     ...appState,
@@ -275,6 +300,8 @@ function app(appState = initial.app, action) {
       return clearFilter(appState, action);
     case TOGGLE_ASSOCIATIONS:
       return toggleAssociations(appState, action);
+    case TOGGLE_SHAPES:
+      return toggleShapes(appState, action);
     case UPDATE_TIMERANGE:
       return updateTimeRange(appState, action);
     case UPDATE_DIMENSIONS:
@@ -313,6 +340,8 @@ function app(appState = initial.app, action) {
       return setNotLoading(appState);
     case SET_INITIAL_CATEGORIES:
       return setInitialCategories(appState, action);
+    case SET_INITIAL_SHAPES:
+      return setInitialShapes(appState, action);
     case UPDATE_SEARCH_QUERY:
       return updateSearchQuery(appState, action);
     default:
