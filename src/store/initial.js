@@ -112,10 +112,13 @@ const initial = {
     toolbar: {
       panels: {
         categories: {
-          icon: DEFAULT_TAB_ICONS.CATEGORY,
-          label: copy[language].toolbar.categories_label,
-          title: copy[language].toolbar.explore_by_category__title,
-          description: copy[language].toolbar.explore_by_category__description,
+          default: {
+            icon: DEFAULT_TAB_ICONS.CATEGORY,
+            label: copy[language].toolbar.categories_label,
+            title: copy[language].toolbar.explore_by_category__title,
+            description:
+              copy[language].toolbar.explore_by_category__description,
+          },
         },
         filters: {
           icon: DEFAULT_TAB_ICONS.FILTER,

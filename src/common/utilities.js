@@ -222,9 +222,7 @@ export function getEventCategories(event, activeCategories) {
  * Takes a filter's path and concatenates it like so: Parent 1/Parent 2/Child
  */
 export function createFilterPathString(filter) {
-  return filter.mode === ASSOCIATION_MODES.FILTER
-    ? filter.filter_paths.join("/")
-    : "";
+  return filter.filter_paths.join("/");
 }
 
 /**
@@ -511,6 +509,11 @@ export function setD3Locale(d3) {
   }
 }
 
+/**
+ * Gets the set of associated styles for a given shape type from the entire set of shapes
+ * @param list shapes - The aggregated set of shapes
+ * @param list activeShapes - The set of active shapes in the app
+ */
 export function mapStyleByShape(shapes, activeShapes) {
   const styledShapes = shapes.map((s) => {
     const { colour, shape, id } = s;
@@ -529,4 +532,44 @@ export function mapStyleByShape(shapes, activeShapes) {
     return s;
   });
   return styledShapes;
+}
+
+export function mapCategoriesToPaths(categories, panelCategories) {
+  const mappedCats = categories.reduce((acc, cat) => {
+    const type = cat.filter_paths[0];
+    if (!(type in acc)) {
+      acc[type] = [];
+    }
+    acc[type].push(cat);
+    return acc;
+  }, {});
+
+  const categoryMap =
+    panelCategories.length > 1 ? mappedCats : { default: categories };
+  return categoryMap;
+}
+
+export function getCategoryIdxs(panelCategories, startingIdx) {
+  let idxCounter = startingIdx;
+  // If there are specified categories from the config, filter out the default value; else, leave the default value
+  const catTypes =
+    panelCategories.length > 1
+      ? panelCategories.filter((val) => val !== "default")
+      : panelCategories;
+  return catTypes.reduce((set, val) => {
+    set[val] = idxCounter;
+    idxCounter += 1;
+    return set;
+  }, {});
+}
+
+export function getFilterIdx(
+  narrativesExist,
+  categoriesExist,
+  numCategoryPanels
+) {
+  if (narrativesExist && !categoriesExist) return 1;
+  else if (!narrativesExist && categoriesExist) return numCategoryPanels;
+  else if (narrativesExist && categoriesExist) return numCategoryPanels + 1;
+  else return 0;
 }
