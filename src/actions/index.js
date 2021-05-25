@@ -120,7 +120,7 @@ export function fetchDomain() {
           );
         }
         dispatch(toggleFetchingDomain());
-        // dispatch(setInitialCategories(result.associations));
+        dispatch(setInitialCategories(result.associations));
         dispatch(setInitialShapes(result.shapes));
         return result;
       })

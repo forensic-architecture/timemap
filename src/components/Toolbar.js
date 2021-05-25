@@ -114,8 +114,11 @@ class Toolbar extends React.Component {
 
   renderToolbarCategoriesPanel() {
     const { categories: panelCategories } = this.props.toolbarCopy.panels;
-    const catMap = mapCategoriesToPaths(this.props.categories);
-    console.info(catMap);
+    const catMap = mapCategoriesToPaths(
+      this.props.categories,
+      Object.keys(panelCategories)
+    );
+
     return (
       <div>
         {Object.keys(catMap).map((type) => {
@@ -127,16 +130,8 @@ class Toolbar extends React.Component {
                 activeCategories={this.props.activeCategories}
                 onCategoryFilter={this.props.methods.onCategoryFilter}
                 language={this.props.language}
-                title={
-                  panelCategories[type]
-                    ? panelCategories[type].label
-                    : panelCategories.default.label
-                }
-                description={
-                  panelCategories[type]
-                    ? panelCategories[type].description
-                    : panelCategories.default.description
-                }
+                title={panelCategories[type].label}
+                description={panelCategories[type].description}
               />
             </TabPanel>
           );

@@ -534,8 +534,8 @@ export function mapStyleByShape(shapes, activeShapes) {
   return styledShapes;
 }
 
-export function mapCategoriesToPaths(categories) {
-  const categoryMap = categories.reduce((acc, cat) => {
+export function mapCategoriesToPaths(categories, panelCategories) {
+  const mappedCats = categories.reduce((acc, cat) => {
     const type = cat.filter_paths[0];
     if (!(type in acc)) {
       acc[type] = [];
@@ -543,6 +543,9 @@ export function mapCategoriesToPaths(categories) {
     acc[type].push(cat);
     return acc;
   }, {});
+
+  const categoryMap =
+    panelCategories.length > 1 ? mappedCats : { default: categories };
   return categoryMap;
 }
 
@@ -550,7 +553,7 @@ export function getCategoryIdxs(panelCategories, startingIdx) {
   let idxCounter = startingIdx;
   // If there are specified categories from the config, filter out the default value; else, leave the default value
   const catTypes =
-    panelCategories.length > 1 && panelCategories.includes("default")
+    panelCategories.length > 1
       ? panelCategories.filter((val) => val !== "default")
       : panelCategories;
   return catTypes.reduce((set, val) => {
@@ -568,5 +571,5 @@ export function getFilterIdx(
   if (narrativesExist && !categoriesExist) return 1;
   else if (!narrativesExist && categoriesExist) return numCategoryPanels;
   else if (narrativesExist && categoriesExist) return numCategoryPanels + 1;
-  else return;
+  else return 0;
 }
