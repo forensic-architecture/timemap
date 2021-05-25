@@ -8,11 +8,8 @@ const Checkbox = ({ label, isActive, onClickCheckbox, color, styleProps }) => {
       background: isActive ? checkboxColor : "none",
       border: `1px solid ${checkboxColor}`,
     },
-    containerStyles: {},
   };
-  const containerStyles = styleProps
-    ? styleProps.containerStyles
-    : baseStyles.containerStyles;
+  const containerStyles = styleProps ? styleProps.containerStyles : {};
   const checkboxStyles = styleProps
     ? styleProps.checkboxStyles
     : baseStyles.checkboxStyles;
