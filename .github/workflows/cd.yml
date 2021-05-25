@@ -1,7 +1,7 @@
 name: CD
 on:
   push:
-    branches: [ feature/allow-for-multiple-categories ]
+    branches: [ develop ]
 #  pull_request:
 #    branches: [ develop ]
 
