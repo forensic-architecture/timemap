@@ -190,7 +190,6 @@ const initial = {
   },
 
   features: {
-    USE_MULTIPLE_CATEGORIES: false,
     USE_COVER: false,
     USE_ASSOCIATIONS: false,
     USE_SITES: false,
