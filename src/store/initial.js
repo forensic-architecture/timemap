@@ -191,6 +191,7 @@ const initial = {
 
   features: {
     USE_COVER: false,
+    STATIC_MARKER_COLORING: false,
     USE_ASSOCIATIONS: false,
     USE_SITES: false,
     USE_SOURCES: false,
