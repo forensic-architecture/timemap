@@ -73,6 +73,17 @@ const initial = {
       minZoom: 2,
       maxZoom: 16,
     },
+    spotlightToolbar: {
+      dimensions: {
+        height: isSmallLaptop ? 170 : 250,
+        width: 0,
+        marginLeft: 70,
+        marginTop: isSmallLaptop ? 5 : 10, // the padding used for the day/month labels inside the timeline
+        marginBottom: 60,
+        contentHeight: isSmallLaptop ? 160 : 200,
+        width_controls: 100,
+      },
+    },
     timeline: {
       dimensions: {
         height: isSmallLaptop ? 170 : 250,
