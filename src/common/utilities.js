@@ -1,7 +1,11 @@
 import moment from "moment";
 import hash from "object-hash";
 
-import { ASSOCIATION_MODES, POLYGON_CLIP_PATH } from "./constants";
+import {
+  ASSOCIATION_MODES,
+  POLYGON_CLIP_PATH,
+  ASSOCIATION_TYPES,
+} from "./constants";
 
 let { DATE_FMT, TIME_FMT } = process.env;
 if (!DATE_FMT) DATE_FMT = "MM/DD/YYYY";
@@ -223,6 +227,16 @@ export function getEventCategories(event, activeCategories) {
  */
 export function createFilterPathString(filter) {
   return filter.filter_paths.join("/");
+}
+
+export function filterIsSingleSelect(allFilters, selectedFilters) {
+  return selectedFilters.some((filter) => {
+    const foundFilter = allFilters.find(
+      (f) => createFilterPathString(f) === filter
+    );
+    if (foundFilter && foundFilter.type === ASSOCIATION_TYPES.SINGLE_SELECT)
+      return true;
+  });
 }
 
 /**

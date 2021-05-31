@@ -20,6 +20,7 @@ import {
   mapCategoriesToPaths,
   getCategoryIdxs,
   getFilterIdx,
+  filterIsSingleSelect,
 } from "../common/utilities.js";
 
 class Toolbar extends React.Component {
@@ -39,9 +40,12 @@ class Toolbar extends React.Component {
 
     const parent = getImmediateFilterParent(key);
     const isTurningOff = activeFilters.includes(key);
+    const isSingleSelect = filterIsSingleSelect(filters, matchingKeys);
 
     if (!isTurningOff) {
       const updatedColoringSet = addToColoringSet(coloringSet, matchingKeys);
+      // Filter is single select, so toggle off all other active filters
+      if (isSingleSelect) this.props.methods.onSelectFilter(activeFilters);
       if (updatedColoringSet.length <= maxNumOfColors) {
         this.props.actions.updateColoringSet(updatedColoringSet);
       }
@@ -352,6 +356,7 @@ function mapStateToProps(state) {
     coloringSet: state.app.associations.coloringSet,
     maxNumOfColors: state.ui.coloring.maxNumOfColors,
     filterColors: state.ui.coloring.colors,
+    coloringAlgMode: state.ui.coloring.mode,
     eventRadius: state.ui.eventRadius,
     features: selectors.getFeatures(state),
   };

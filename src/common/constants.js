@@ -32,3 +32,12 @@ export const POLYGON_CLIP_PATH = {
 };
 
 export const DEFAULT_CHECKBOX_COLOR = "#ffffff";
+
+export const COLORING_ALGORITHM_MODE = {
+  STATIC: "STATIC",
+  DYNAMIC: "DYNAMIC",
+};
+
+export const ASSOCIATION_TYPES = {
+  SINGLE_SELECT: "SINGLE_SELECT",
+};
