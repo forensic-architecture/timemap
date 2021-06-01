@@ -229,16 +229,29 @@ export function createFilterPathString(filter) {
   return filter.filter_paths.join("/");
 }
 
+export function findFilterObjFromKey(allFilters, filter) {
+  return allFilters.find((f) => createFilterPathString(f) === filter);
+}
+
 export function findSingleSelectFilter(allFilters, selectedFilters) {
-  let foundSingleSelectFilter;
+  let foundSingleSelectFilter = false;
   selectedFilters.forEach((filter) => {
-    const foundFilter = allFilters.find(
-      (f) => createFilterPathString(f) === filter
-    );
+    const foundFilter = findFilterObjFromKey(allFilters, filter);
     if (foundFilter && foundFilter.type === ASSOCIATION_TYPES.SINGLE_SELECT)
-      foundSingleSelectFilter = foundFilter;
+      foundSingleSelectFilter = true;
   });
   return foundSingleSelectFilter;
+}
+
+export function findStaticFilterColor(allFilters, selectedFilters) {
+  let filterColour;
+  selectedFilters.forEach((filter) => {
+    const foundFilter = findFilterObjFromKey(allFilters, filter);
+    if (foundFilter && foundFilter.colour) {
+      filterColour = foundFilter.colour;
+    }
+  });
+  return filterColour;
 }
 
 /**
