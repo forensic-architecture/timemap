@@ -229,14 +229,16 @@ export function createFilterPathString(filter) {
   return filter.filter_paths.join("/");
 }
 
-export function filterIsSingleSelect(allFilters, selectedFilters) {
-  return selectedFilters.some((filter) => {
+export function findSingleSelectFilter(allFilters, selectedFilters) {
+  let foundSingleSelectFilter;
+  selectedFilters.forEach((filter) => {
     const foundFilter = allFilters.find(
       (f) => createFilterPathString(f) === filter
     );
     if (foundFilter && foundFilter.type === ASSOCIATION_TYPES.SINGLE_SELECT)
-      return true;
+      foundSingleSelectFilter = foundFilter;
   });
+  return foundSingleSelectFilter;
 }
 
 /**

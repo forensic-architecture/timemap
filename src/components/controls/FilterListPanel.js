@@ -1,6 +1,7 @@
 import React from "react";
 import Checkbox from "../atoms/Checkbox";
 import marked from "marked";
+import { COLORING_ALGORITHM_MODE } from "../../common/constants";
 import {
   aggregateFilterPaths,
   getFilterIdxFromColorSet,
@@ -31,6 +32,7 @@ function FilterListPanel({
   filterColors,
   title,
   description,
+  coloringMode,
 }) {
   function createNodeComponent(filter, depth) {
     const [key, children] = filter;
