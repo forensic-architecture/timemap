@@ -41,3 +41,5 @@ export const COLORING_ALGORITHM_MODE = {
 export const ASSOCIATION_TYPES = {
   SINGLE_SELECT: "SINGLE_SELECT",
 };
+
+export const DATASHEET_FALSE = "FALSE";

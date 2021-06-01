@@ -452,7 +452,7 @@ export function calculateColorPercentages(set, coloringSet) {
       });
     });
   });
-
+  console.info(associationCounts);
   if (totalAssociations === 0) return [1];
 
   return associationCounts.map((count) => count / totalAssociations);

@@ -7,6 +7,7 @@ const associationsSchema = Joi.object().keys({
   mode: Joi.string().allow("").required(),
   colour: Joi.string().allow(""),
   type: Joi.string().allow(""),
+  display: Joi.string().allow(""),
   filter_paths: Joi.array(),
 });
 

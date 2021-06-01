@@ -48,16 +48,24 @@ class Toolbar extends React.Component {
     const isTurningOff = activeFilters.includes(key);
 
     if (!isTurningOff) {
-      const updatedColoringSet = addToColoringSet(coloringSet, matchingKeys);
+      let updatedColoringSet;
       // Filter is single select, so toggle off all other active filters
       if (coloringAlgMode === COLORING_ALGORITHM_MODE.STATIC) {
         const toggleOffFilters = findSingleSelectFilter(filters, matchingKeys)
           ? activeFilters
           : activeFilters.filter((f) => findSingleSelectFilter(filters, [f]));
         this.props.methods.onSelectFilter(toggleOffFilters);
-      }
-      if (updatedColoringSet.length <= maxNumOfColors) {
+        const editedColoringSet = removeFromColoringSet(
+          coloringSet,
+          toggleOffFilters
+        );
+        updatedColoringSet = addToColoringSet(editedColoringSet, matchingKeys);
         this.props.actions.updateColoringSet(updatedColoringSet);
+      } else {
+        updatedColoringSet = addToColoringSet(coloringSet, matchingKeys);
+        if (updatedColoringSet.length <= maxNumOfColors) {
+          this.props.actions.updateColoringSet(updatedColoringSet);
+        }
       }
     } else {
       if (parent && activeFilters.includes(parent)) {
