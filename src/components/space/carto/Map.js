@@ -399,7 +399,8 @@ class Map extends React.Component {
         getCategoryColor={this.props.methods.getCategoryColor}
         eventRadius={this.props.ui.eventRadius}
         coloringSet={this.props.app.coloringSet}
-        filterColors={this.props.ui.filterColors}
+        filters={this.props.domain.filters}
+        coloringConfig={this.props.ui.coloringConfig}
         features={this.props.features}
       />
     );
@@ -419,7 +420,8 @@ class Map extends React.Component {
         onSelect={this.onClusterSelect}
         coloringSet={this.props.app.coloringSet}
         getClusterChildren={this.getClusterChildren}
-        filterColors={this.props.ui.filterColors}
+        coloringConfig={this.props.ui.coloringConfig}
+        filters={this.props.domain.filters}
       />
     );
   }
@@ -509,6 +511,7 @@ function mapStateToProps(state) {
       locations: selectors.selectLocations(state),
       narratives: selectors.selectNarratives(state),
       categories: selectors.getCategories(state),
+      filters: selectors.getFilters(state),
       sites: selectors.selectSites(state),
       regions: selectors.selectRegions(state),
     },
@@ -535,7 +538,7 @@ function mapStateToProps(state) {
       regions: state.ui.style.regions,
       eventRadius: state.ui.eventRadius,
       radial: state.ui.style.clusters.radial,
-      filterColors: state.ui.coloring.colors,
+      coloringConfig: state.ui.coloring,
     },
     features: selectors.getFeatures(state),
   };

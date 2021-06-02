@@ -182,6 +182,7 @@ const initial = {
     },
     coloring: {
       mode: COLORING_ALGORITHM_MODE.DYNAMIC,
+      defaultColor: "#ffffff",
       maxNumOfColors: 4,
       colors: Object.values(colors),
     },

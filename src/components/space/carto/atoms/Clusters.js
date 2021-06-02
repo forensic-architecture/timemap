@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Portal } from "react-portal";
 import colors from "../../../../common/global";
+import { COLORING_ALGORITHM_MODE } from "../../../../common/constants";
 import ColoredMarkers from "../../../atoms/ColoredMarkers";
 import {
   calcClusterOpacity,
@@ -10,6 +11,8 @@ import {
   calculateColorPercentages,
   zipColorsToPercentages,
   calculateTotalClusterPoints,
+  appendFiltersToColoringSet,
+  getStaticFilterColorSet,
 } from "../../../../common/utilities";
 
 const DefsClusters = () => (
@@ -31,7 +34,8 @@ function Cluster({
   onClick,
   getClusterChildren,
   coloringSet,
-  filterColors,
+  filters,
+  coloringConfig,
 }) {
   /**
   {
@@ -47,12 +51,23 @@ function Cluster({
     type: "Feature"
   }
   */
+  const { mode, colors, defaultColor } = coloringConfig;
   const { cluster_id: clusterId } = cluster.properties;
 
   const individualChildren = getClusterChildren(clusterId);
+
+  const updatedColoringSet =
+    mode === COLORING_ALGORITHM_MODE.STATIC
+      ? appendFiltersToColoringSet(filters, coloringSet)
+      : coloringSet;
+  const updatedFilterColors =
+    mode === COLORING_ALGORITHM_MODE.STATIC
+      ? getStaticFilterColorSet(filters, updatedColoringSet, defaultColor)
+      : colors;
+
   const colorPercentages = calculateColorPercentages(
     individualChildren,
-    coloringSet
+    updatedColoringSet
   );
 
   const { coordinates } = cluster.geometry;
@@ -73,7 +88,7 @@ function Cluster({
         <ColoredMarkers
           radius={size}
           colorPercentMap={zipColorsToPercentages(
-            filterColors,
+            updatedFilterColors,
             colorPercentages
           )}
           styles={{
@@ -95,8 +110,9 @@ function ClusterEvents({
   isRadial,
   svg,
   clusters,
-  filterColors,
   selected,
+  filters,
+  coloringConfig,
 }) {
   const totalPoints = calculateTotalClusterPoints(clusters);
 
@@ -142,10 +158,11 @@ function ClusterEvents({
                 getClusterChildren={getClusterChildren}
                 coloringSet={coloringSet}
                 cluster={c}
-                filterColors={filterColors}
                 size={clusterSize}
                 projectPoint={projectPoint}
                 totalPoints={totalPoints}
+                filters={filters}
+                coloringConfig={coloringConfig}
                 styles={{
                   ...styles,
                   fillOpacity: calcClusterOpacity(pointCount, totalPoints),

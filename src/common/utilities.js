@@ -38,6 +38,7 @@ export function getCoordinatesForPercent(radius, percent) {
  * Return value:
  * ex. {'#fff': 0.5, '#000': 0.5, ...} */
 export function zipColorsToPercentages(colors, percentages) {
+  // console.info('ZIP COLORS: ', colors, percentages)
   if (colors.length < percentages.length) {
     throw new Error("You must declare an appropriate number of filter colors");
   }
@@ -424,6 +425,7 @@ export function mapClustersToLocations(clusters, locations) {
  * and calculates the proportionate percentage of every given association in relation to the coloring set
  */
 export function calculateColorPercentages(set, coloringSet) {
+  // console.info('CALCULATE COLORING SET: ', set, coloringSet)
   if (coloringSet.length === 0) return [1];
   const associationMap = {};
 
@@ -432,7 +434,6 @@ export function calculateColorPercentages(set, coloringSet) {
       associationMap[filter] = idx;
     }
   }
-
   const associationCounts = new Array(coloringSet.length);
   associationCounts.fill(0);
 
@@ -452,10 +453,33 @@ export function calculateColorPercentages(set, coloringSet) {
       });
     });
   });
-  console.info(associationCounts);
+
   if (totalAssociations === 0) return [1];
 
   return associationCounts.map((count) => count / totalAssociations);
+}
+
+export function appendFiltersToColoringSet(filters, coloringSet) {
+  const filterSet = filters.map((f) => createFilterPathString(f));
+  const flattenedColoringSet = coloringSet.flatMap((f) => f);
+  return [
+    ...coloringSet,
+    filterSet.filter((f) => !flattenedColoringSet.includes(f)),
+  ];
+}
+
+export function getStaticFilterColorSet(filters, coloringSet, defaultColor) {
+  if (coloringSet.length === 0) return [defaultColor];
+
+  return coloringSet.reduce((acc, set, idx) => {
+    // In STATIC mode, the last element of the coloring set is always the full set of inactive filters which should show up as default color
+    const colorToAdd =
+      idx === coloringSet.length - 1
+        ? defaultColor
+        : findStaticFilterColor(filters, set);
+    acc.push(colorToAdd);
+    return acc;
+  }, []);
 }
 
 /**
