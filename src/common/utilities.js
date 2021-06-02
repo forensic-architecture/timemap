@@ -38,15 +38,16 @@ export function getCoordinatesForPercent(radius, percent) {
  * Return value:
  * ex. {'#fff': 0.5, '#000': 0.5, ...} */
 export function zipColorsToPercentages(colors, percentages) {
-  // console.info('ZIP COLORS: ', colors, percentages)
   if (colors.length < percentages.length) {
     throw new Error("You must declare an appropriate number of filter colors");
   }
 
-  return percentages.reduce((map, percent, idx) => {
-    map[colors[idx]] = percent;
-    return map;
-  }, {});
+  const colorMap = [];
+  percentages.forEach((percent, idx) => {
+    const relatedColor = colors[idx];
+    colorMap.push({ [relatedColor]: percent });
+  });
+  return colorMap;
 }
 
 /**

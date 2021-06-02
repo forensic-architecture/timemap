@@ -3,12 +3,10 @@ import { getCoordinatesForPercent } from "../../common/utilities";
 
 function ColoredMarkers({ radius, colorPercentMap, styles, className }) {
   let cumulativeAngleSweep = 0;
-  const colors = Object.keys(colorPercentMap);
-
   return (
     <>
-      {colors.map((color, idx) => {
-        const colorPercent = colorPercentMap[color];
+      {colorPercentMap.map((colorSet, idx) => {
+        const [color, colorPercent] = Object.entries(colorSet)[0];
 
         const [startX, startY] = getCoordinatesForPercent(
           radius,
@@ -22,7 +20,8 @@ function ColoredMarkers({ radius, colorPercentMap, styles, className }) {
           cumulativeAngleSweep
         );
         // if the slices are less than 2, take the long arc
-        const largeArcFlag = colors.length === 1 || colorPercent > 0.5 ? 1 : 0;
+        const largeArcFlag =
+          colorPercentMap.length === 1 || colorPercent > 0.5 ? 1 : 0;
 
         // create an array and join it just for code readability
         const arc = [
