@@ -70,8 +70,6 @@ function Cluster({
     updatedColoringSet
   );
 
-  // console.info('IN CLUSTERS: ', updatedColoringSet, updatedFilterColors, colorPercentages, zipColorsToPercentages(updatedFilterColors, colorPercentages))
-
   const { coordinates } = cluster.geometry;
   const [longitude, latitude] = coordinates;
   const { x, y } = projectPoint([latitude, longitude]);

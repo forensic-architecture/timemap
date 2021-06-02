@@ -426,7 +426,6 @@ export function mapClustersToLocations(clusters, locations) {
  * and calculates the proportionate percentage of every given association in relation to the coloring set
  */
 export function calculateColorPercentages(set, coloringSet) {
-  // console.info('CALCULATE COLORING SET: ', set, coloringSet)
   if (coloringSet.length === 0) return [1];
   const associationMap = {};
 

@@ -38,7 +38,7 @@ function renderDot(event, styles, props) {
     [event],
     updatedColoringSet
   );
-  // console.info('IN EVENTS: ', updatedColoringSet, updatedFilterColors, zipColorsToPercentages(updatedFilterColors, colorPercentages))
+
   return (
     <g
       className="timeline-event"
