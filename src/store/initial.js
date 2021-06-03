@@ -3,7 +3,10 @@ import { mergeDeepLeft } from "ramda";
 import global, { colors } from "../common/global";
 import copy from "../common/data/copy.json";
 import { language } from "../common/utilities";
-import { DEFAULT_TAB_ICONS } from "../common/constants";
+import {
+  DEFAULT_TAB_ICONS,
+  COLORING_ALGORITHM_MODE,
+} from "../common/constants";
 
 const isSmallLaptop = window.innerHeight < 800;
 const mapIniital = {
@@ -189,6 +192,8 @@ const initial = {
       },
     },
     coloring: {
+      mode: COLORING_ALGORITHM_MODE.DYNAMIC,
+      defaultColor: "#ffffff",
       maxNumOfColors: 4,
       colors: Object.values(colors),
     },

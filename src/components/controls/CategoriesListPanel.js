@@ -1,7 +1,7 @@
 import React from "react";
 import marked from "marked";
 import PanelTree from "./atoms/PanelTree";
-import { ASSOCIATION_MODES } from "../../common/constants";
+import { ASSOCIATION_MODES, DATASHEET_FALSE } from "../../common/constants";
 
 const CategoriesListPanel = ({
   categories,
@@ -11,6 +11,9 @@ const CategoriesListPanel = ({
   title,
   description,
 }) => {
+  const filteredCategories = categories.filter(
+    (f) => f.display !== DATASHEET_FALSE
+  );
   return (
     <div className="react-innertabpanel">
       <h2>{title}</h2>
@@ -20,7 +23,7 @@ const CategoriesListPanel = ({
         }}
       />
       <PanelTree
-        data={categories}
+        data={filteredCategories}
         activeValues={activeCategories}
         onSelect={onCategoryFilter}
         type={ASSOCIATION_MODES.CATEGORY}

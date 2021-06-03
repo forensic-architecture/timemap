@@ -1,7 +1,11 @@
 import moment from "moment";
 import hash from "object-hash";
 
-import { ASSOCIATION_MODES, POLYGON_CLIP_PATH } from "./constants";
+import {
+  ASSOCIATION_MODES,
+  POLYGON_CLIP_PATH,
+  ASSOCIATION_TYPES,
+} from "./constants";
 
 let { DATE_FMT, TIME_FMT } = process.env;
 if (!DATE_FMT) DATE_FMT = "MM/DD/YYYY";
@@ -38,10 +42,12 @@ export function zipColorsToPercentages(colors, percentages) {
     throw new Error("You must declare an appropriate number of filter colors");
   }
 
-  return percentages.reduce((map, percent, idx) => {
-    map[colors[idx]] = percent;
-    return map;
-  }, {});
+  const colorMap = [];
+  percentages.forEach((percent, idx) => {
+    const relatedColor = colors[idx];
+    colorMap.push({ [relatedColor]: percent });
+  });
+  return colorMap;
 }
 
 /**
@@ -225,6 +231,31 @@ export function createFilterPathString(filter) {
   return filter.filter_paths.join("/");
 }
 
+export function findFilterObjFromKey(allFilters, filter) {
+  return allFilters.find((f) => createFilterPathString(f) === filter);
+}
+
+export function findSingleSelectFilter(allFilters, selectedFilters) {
+  let foundSingleSelectFilter = false;
+  selectedFilters.forEach((filter) => {
+    const foundFilter = findFilterObjFromKey(allFilters, filter);
+    if (foundFilter && foundFilter.type === ASSOCIATION_TYPES.SINGLE_SELECT)
+      foundSingleSelectFilter = true;
+  });
+  return foundSingleSelectFilter;
+}
+
+export function findStaticFilterColor(allFilters, selectedFilters) {
+  let filterColour;
+  selectedFilters.forEach((filter) => {
+    const foundFilter = findFilterObjFromKey(allFilters, filter);
+    if (foundFilter && foundFilter.colour) {
+      filterColour = foundFilter.colour;
+    }
+  });
+  return filterColour;
+}
+
 /**
  * Inset the full source represenation from 'allSources' into an event. The
  * function is 'curried' to allow easy use with maps. To use for a single
@@ -403,7 +434,6 @@ export function calculateColorPercentages(set, coloringSet) {
       associationMap[filter] = idx;
     }
   }
-
   const associationCounts = new Array(coloringSet.length);
   associationCounts.fill(0);
 
@@ -427,6 +457,29 @@ export function calculateColorPercentages(set, coloringSet) {
   if (totalAssociations === 0) return [1];
 
   return associationCounts.map((count) => count / totalAssociations);
+}
+
+export function appendFiltersToColoringSet(filters, coloringSet) {
+  const filterSet = filters.map((f) => createFilterPathString(f));
+  const flattenedColoringSet = coloringSet.flatMap((f) => f);
+  return [
+    ...coloringSet,
+    filterSet.filter((f) => !flattenedColoringSet.includes(f)),
+  ];
+}
+
+export function getStaticFilterColorSet(filters, coloringSet, defaultColor) {
+  if (coloringSet.length === 0) return [defaultColor];
+
+  return coloringSet.reduce((acc, set, idx) => {
+    // In STATIC mode, the last element of the coloring set is always the full set of inactive filters which should show up as default color
+    const colorToAdd =
+      idx === coloringSet.length - 1
+        ? defaultColor
+        : findStaticFilterColor(filters, set);
+    acc.push(colorToAdd);
+    return acc;
+  }, []);
 }
 
 /**

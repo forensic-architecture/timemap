@@ -13,14 +13,32 @@ import {
   calculateColorPercentages,
   isLatitude,
   isLongitude,
+  appendFiltersToColoringSet,
+  getStaticFilterColorSet,
 } from "../../../common/utilities";
-import { AVAILABLE_SHAPES } from "../../../common/constants";
+import {
+  AVAILABLE_SHAPES,
+  COLORING_ALGORITHM_MODE,
+} from "../../../common/constants";
 
 function renderDot(event, styles, props) {
+  const { filters, coloringSet, coloringConfig } = props;
+  const { mode, colors, defaultColor } = coloringConfig;
+
+  const updatedColoringSet =
+    mode === COLORING_ALGORITHM_MODE.STATIC
+      ? appendFiltersToColoringSet(filters, coloringSet)
+      : coloringSet;
+  const updatedFilterColors =
+    mode === COLORING_ALGORITHM_MODE.STATIC
+      ? getStaticFilterColorSet(filters, updatedColoringSet, defaultColor)
+      : colors;
+
   const colorPercentages = calculateColorPercentages(
     [event],
-    props.coloringSet
+    updatedColoringSet
   );
+
   return (
     <g
       className="timeline-event"
@@ -30,7 +48,7 @@ function renderDot(event, styles, props) {
       <ColoredMarkers
         radius={props.eventRadius}
         colorPercentMap={zipColorsToPercentages(
-          props.filterColors,
+          updatedFilterColors,
           colorPercentages
         )}
         styles={{
@@ -142,7 +160,8 @@ const TimelineEvents = ({
   setLoading,
   setNotLoading,
   eventRadius,
-  filterColors,
+  coloringConfig,
+  filters,
   coloringSet,
 }) => {
   const narIds = narrative ? narrative.steps.map((s) => s.id) : [];
@@ -210,7 +229,8 @@ const TimelineEvents = ({
             )
           : [],
         features,
-        filterColors,
+        filters,
+        coloringConfig,
         coloringSet,
       });
     }

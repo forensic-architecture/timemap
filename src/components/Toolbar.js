@@ -10,6 +10,7 @@ import CategoriesListPanel from "./controls/CategoriesListPanel";
 import ShapesListPanel from "./controls/ShapesListPanel";
 import BottomActions from "./controls/BottomActions";
 import copy from "../common/data/copy.json";
+import { COLORING_ALGORITHM_MODE } from "../common/constants";
 import {
   trimAndEllipse,
   getImmediateFilterParent,
@@ -20,6 +21,7 @@ import {
   mapCategoriesToPaths,
   getCategoryIdxs,
   getFilterIdx,
+  findSingleSelectFilter,
 } from "../common/utilities.js";
 
 class Toolbar extends React.Component {
@@ -35,15 +37,35 @@ class Toolbar extends React.Component {
   }
 
   onSelectFilter(key, matchingKeys) {
-    const { filters, activeFilters, coloringSet, maxNumOfColors } = this.props;
-
+    const {
+      filters,
+      activeFilters,
+      coloringSet,
+      maxNumOfColors,
+      coloringAlgMode,
+    } = this.props;
     const parent = getImmediateFilterParent(key);
     const isTurningOff = activeFilters.includes(key);
 
     if (!isTurningOff) {
-      const updatedColoringSet = addToColoringSet(coloringSet, matchingKeys);
-      if (updatedColoringSet.length <= maxNumOfColors) {
+      let updatedColoringSet;
+      // Filter is single select, so toggle off all other active filters
+      if (coloringAlgMode === COLORING_ALGORITHM_MODE.STATIC) {
+        const toggleOffFilters = findSingleSelectFilter(filters, matchingKeys)
+          ? activeFilters
+          : activeFilters.filter((f) => findSingleSelectFilter(filters, [f]));
+        this.props.methods.onSelectFilter(toggleOffFilters);
+        const editedColoringSet = removeFromColoringSet(
+          coloringSet,
+          toggleOffFilters
+        );
+        updatedColoringSet = addToColoringSet(editedColoringSet, matchingKeys);
         this.props.actions.updateColoringSet(updatedColoringSet);
+      } else {
+        updatedColoringSet = addToColoringSet(coloringSet, matchingKeys);
+        if (updatedColoringSet.length <= maxNumOfColors) {
+          this.props.actions.updateColoringSet(updatedColoringSet);
+        }
       }
     } else {
       if (parent && activeFilters.includes(parent)) {
@@ -153,6 +175,7 @@ class Toolbar extends React.Component {
           filterColors={this.props.filterColors}
           title={panels.filters.label}
           description={panels.filters.description}
+          coloringMode={this.props.coloringAlgMode}
         />
       </TabPanel>
     );
@@ -352,6 +375,7 @@ function mapStateToProps(state) {
     coloringSet: state.app.associations.coloringSet,
     maxNumOfColors: state.ui.coloring.maxNumOfColors,
     filterColors: state.ui.coloring.colors,
+    coloringAlgMode: state.ui.coloring.mode,
     eventRadius: state.ui.eventRadius,
     features: selectors.getFeatures(state),
   };

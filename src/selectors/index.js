@@ -8,7 +8,11 @@ import {
   createFilterPathString,
 } from "../common/utilities";
 import { isTimeRangedIn } from "./helpers";
-import { ASSOCIATION_MODES, SHAPE } from "../common/constants";
+import {
+  ASSOCIATION_MODES,
+  SHAPE,
+  COLORING_ALGORITHM_MODE,
+} from "../common/constants";
 
 // Input selectors
 export const getEvents = (state) => state.domain.events;
@@ -38,6 +42,7 @@ export const getTimeRange = (state) => state.app.timeline.range;
 export const getTimelineDimensions = (state) => state.app.timeline.dimensions;
 export const selectNarrative = (state) => state.app.associations.narrative;
 export const getFeatures = (state) => state.features;
+export const getColoringAlgMode = (state) => state.ui.coloring.mode;
 export const getEventRadius = (state) => state.ui.eventRadius;
 
 export const selectSites = createSelector(
@@ -80,6 +85,7 @@ export const selectEvents = createSelector(
     getActiveShapes,
     getTimeRange,
     getFeatures,
+    getColoringAlgMode,
   ],
   (
     events,
@@ -87,7 +93,8 @@ export const selectEvents = createSelector(
     activeCategories,
     activeShapes,
     timeRange,
-    features
+    features,
+    coloringAlgMode
   ) => {
     return events.reduce((acc, event) => {
       const isMatchingFilter =
@@ -118,8 +125,14 @@ export const selectEvents = createSelector(
           acc[event.id] = { ...event };
         }
       } else {
-        if (isActiveFilter && isActiveCategory && isActiveTime) {
-          acc[event.id] = { ...event };
+        if (coloringAlgMode === COLORING_ALGORITHM_MODE.STATIC) {
+          if (isActiveCategory && isActiveTime) {
+            acc[event.id] = { ...event };
+          }
+        } else {
+          if (isActiveFilter && isActiveCategory && isActiveTime) {
+            acc[event.id] = { ...event };
+          }
         }
       }
       return acc;

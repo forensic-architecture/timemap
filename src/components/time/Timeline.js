@@ -446,7 +446,8 @@ class Timeline extends React.Component {
                 setLoading={this.props.actions.setLoading}
                 setNotLoading={this.props.actions.setNotLoading}
                 eventRadius={this.props.ui.eventRadius}
-                filterColors={this.props.ui.filterColors}
+                coloringConfig={this.props.ui.coloringConfig}
+                filters={this.props.domain.filters}
                 coloringSet={this.props.app.coloringSet}
               />
             </svg>
@@ -465,6 +466,7 @@ function mapStateToProps(state) {
     domain: {
       events: selectors.selectStackedEvents(state),
       projects: selectors.selectProjects(state),
+      filters: selectors.getFilters(state),
       narratives: state.domain.narratives,
     },
     app: {
@@ -478,7 +480,7 @@ function mapStateToProps(state) {
       dom: state.ui.dom,
       styles: state.ui.style.selectedEvents,
       eventRadius: state.ui.eventRadius,
-      filterColors: state.ui.coloring.colors,
+      coloringConfig: state.ui.coloring,
     },
     features: selectors.getFeatures(state),
   };
