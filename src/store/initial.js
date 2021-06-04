@@ -61,6 +61,7 @@ const initial = {
       coloringSet: [],
       filters: [],
       narrative: null,
+      spotlight: null,
       categories: [],
       views: {
         events: true,
@@ -81,9 +82,10 @@ const initial = {
         height: isSmallLaptop ? 170 : 250,
         width: 0,
         marginLeft: 70,
-        marginTop: isSmallLaptop ? 5 : 10, // the padding used for the day/month labels inside the timeline
+        marginTop: isSmallLaptop ? 5 : 10,
         marginBottom: 60,
-        contentHeight: isSmallLaptop ? 160 : 200,
+        svgHeight: 120,
+        contentHeight: isSmallLaptop ? 50 : 80,
         width_controls: 100,
       },
     },
@@ -198,6 +200,7 @@ const initial = {
       colors: Object.values(colors),
     },
     dom: {
+      spotlightToolbar: "spotlight",
       timeline: "timeline",
       timeslider: "timeslider",
       map: "map",

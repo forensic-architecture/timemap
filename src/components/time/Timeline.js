@@ -11,7 +11,7 @@ import copy from "../../common/data/copy.json";
 import Header from "./atoms/Header";
 import Axis from "./Axis";
 import Clip from "./atoms/Clip";
-import Handles from "./atoms/Handles.js";
+import Handles from "../atoms/Handles.js";
 import ZoomControls from "./atoms/ZoomControls.js";
 import Markers from "./atoms/Markers.js";
 import Events from "./atoms/Events.js";
@@ -330,7 +330,6 @@ class Timeline extends React.Component {
    * Determines additional styles on the <circle> for each location.
    * A location consists of an array of events (see selectors). The function
    * also has full access to the domain and redux state to derive values if
-   * necessary. The function should return an array, where the value at the
    * first index is a styles object for the SVG at the location, and the value
    * at the second index is an optional additional component that renders in
    * the <g/> div.
@@ -402,8 +401,9 @@ class Timeline extends React.Component {
                 }
               />
               <Handles
+                classes="time-controls-inline"
                 dims={dims}
-                onMoveTime={(dir) => {
+                onMove={(dir) => {
                   this.onMoveTime(dir);
                 }}
               />

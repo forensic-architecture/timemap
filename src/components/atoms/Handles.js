@@ -1,15 +1,15 @@
 import React from "react";
 
-const TimelineHandles = ({ dims, onMoveTime }) => {
+const Handles = ({ classes, dims, onMove }) => {
   const transform = "scale(1.5,1.5)";
   const size = 45;
   return (
-    <g className="time-controls-inline">
+    <g className={classes}>
       <g
         transform={`translate(${dims.marginLeft - 20}, ${
           dims.contentHeight - 10
         })`}
-        onClick={() => onMoveTime("backwards")}
+        onClick={() => onMove("backwards")}
       >
         <circle r={size} />
         <path
@@ -21,7 +21,7 @@ const TimelineHandles = ({ dims, onMoveTime }) => {
         transform={`translate(${dims.width - dims.width_controls + 20}, ${
           dims.contentHeight - 10
         })`}
-        onClick={() => onMoveTime("forward")}
+        onClick={() => onMove("forward")}
       >
         <circle r={size} />
         <path
@@ -33,4 +33,4 @@ const TimelineHandles = ({ dims, onMoveTime }) => {
   );
 };
 
-export default TimelineHandles;
+export default Handles;

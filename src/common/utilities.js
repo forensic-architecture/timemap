@@ -626,3 +626,14 @@ export function getFilterIdx(
   else if (narrativesExist && categoriesExist) return numCategoryPanels + 1;
   else return 0;
 }
+
+export function getUniqueSpotlights(spotlights) {
+  const hash = new Set();
+  return spotlights.reduce((acc, sp) => {
+    if (!hash.has(sp.title)) {
+      hash.add(sp.title);
+      acc.push(sp);
+    }
+    return acc;
+  }, []);
+}

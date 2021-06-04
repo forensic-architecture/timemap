@@ -24,6 +24,10 @@ export const getNarratives = (state) =>
   state.domain.associations.filter(
     (item) => item.mode === ASSOCIATION_MODES.NARRATIVE
   );
+export const getSpotlights = (state) =>
+  state.domain.associations.filter(
+    (item) => item.mode === ASSOCIATION_MODES.SPOTLIGHT
+  );
 export const getActiveNarrative = (state) => state.app.associations.narrative;
 export const getSelected = (state) => state.app.selected;
 export const getSites = (state) => state.domain.sites;
@@ -38,6 +42,7 @@ export const getNotifications = (state) => state.domain.notifications;
 export const getActiveFilters = (state) => state.app.associations.filters;
 export const getActiveCategories = (state) => state.app.associations.categories;
 export const getActiveShapes = (state) => state.app.shapes;
+export const getActiveSpotlight = (state) => state.app.associations.spotlight;
 export const getTimeRange = (state) => state.app.timeline.range;
 export const getTimelineDimensions = (state) => state.app.timeline.dimensions;
 export const selectNarrative = (state) => state.app.associations.narrative;

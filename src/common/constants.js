@@ -2,6 +2,7 @@ export const ASSOCIATION_MODES = {
   CATEGORY: "CATEGORY",
   NARRATIVE: "NARRATIVE",
   FILTER: "FILTER",
+  SPOTLIGHT: "SPOTLIGHT",
 };
 
 export const SHAPE = "SHAPE";
@@ -40,6 +41,8 @@ export const COLORING_ALGORITHM_MODE = {
 
 export const ASSOCIATION_TYPES = {
   SINGLE_SELECT: "SINGLE_SELECT",
+  DASH: "DASH",
+  SOLID: "SOLID",
 };
 
 export const DATASHEET_FALSE = "FALSE";
