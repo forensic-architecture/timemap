@@ -2,6 +2,7 @@ import React from "react";
 import * as selectors from "../selectors/index";
 import { connect } from "react-redux";
 import Handles from "./atoms/Handles";
+import { colors } from "../common/global";
 import { getUniqueSpotlights } from "../common/utilities";
 
 class SpotlightToolbar extends React.Component {
@@ -13,6 +14,7 @@ class SpotlightToolbar extends React.Component {
       startIdx: 0,
       endIdx: 0,
       spotlightsInView: props.spotlights,
+      spotlights: props.spotlights,
       dimensions: props.dimensions,
     };
   }
@@ -28,6 +30,7 @@ class SpotlightToolbar extends React.Component {
       const uniqueSpotlights = getUniqueSpotlights(this.props.spotlights);
       this.setState({
         spotlightsInView: uniqueSpotlights.slice(0, this.state.maxInView),
+        spotlights: uniqueSpotlights,
       });
     }
   }
@@ -35,7 +38,7 @@ class SpotlightToolbar extends React.Component {
   onMoveSpotlight(direction) {
     let { startIdx: start, endIdx: end, maxInView } = this.state;
     if (end === 0) end = maxInView - 1;
-    const totalSpotlightLength = this.props.spotlights.length;
+    const totalSpotlightLength = this.state.spotlights.length;
 
     if (direction === "forward") {
       if (
@@ -56,7 +59,7 @@ class SpotlightToolbar extends React.Component {
     this.setState({
       startIdx: start,
       endIdx: end,
-      spotlightsInView: this.props.spotlights.slice(start, end + 1),
+      spotlightsInView: this.state.spotlights.slice(start, end + 1),
     });
   }
 
@@ -106,14 +109,19 @@ class SpotlightToolbar extends React.Component {
                 y="0"
                 width={buttonWidth}
                 height={contentDims.contentHeight}
-                fill="white"
+                fill="black"
+                fillOpacity="50%"
               />
               <text
                 x={xPos + buttonWidth / 2}
                 y={contentDims.contentHeight / 2}
-                style={{ fontWeight: "bold", fill: "blue", zIndex: 10000 }}
+                fontWeight="bold"
+                fill="white"
+                textAnchor="middle"
+                fontSize="14px"
+                zIndex={10000}
               >
-                {sp.label}
+                {sp.title}
               </text>
             </g>
           );
