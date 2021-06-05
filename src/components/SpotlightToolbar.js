@@ -25,8 +25,9 @@ class SpotlightToolbar extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.spotlights !== this.props.spotlights) {
+      const uniqueSpotlights = getUniqueSpotlights(this.props.spotlights);
       this.setState({
-        spotlightsInView: getUniqueSpotlights(this.props.spotlights),
+        spotlightsInView: uniqueSpotlights.slice(0, this.state.maxInView),
       });
     }
   }
@@ -55,7 +56,7 @@ class SpotlightToolbar extends React.Component {
     this.setState({
       startIdx: start,
       endIdx: end,
-      spotlights: this.props.spotlights.slice(start, end + 1),
+      spotlightsInView: this.props.spotlights.slice(start, end + 1),
     });
   }
 
@@ -76,17 +77,63 @@ class SpotlightToolbar extends React.Component {
     }
   }
 
+  computeContentDims() {
+    const { dimensions: dims } = this.state;
+    return {
+      contentHeight: dims.height - dims.marginLeft - 30,
+      contentWidth: dims.width - dims.marginLeft - dims.width_controls,
+    };
+  }
+
+  computeButtonWidth() {
+    const contentDims = this.computeContentDims();
+    return contentDims.contentWidth / this.state.maxInView;
+  }
+
+  renderSpotlightButtons() {
+    const buttonWidth = this.computeButtonWidth();
+    const contentDims = this.computeContentDims();
+    const { dimensions: dims } = this.state;
+
+    return (
+      <g>
+        {this.state.spotlightsInView.map((sp, idx) => {
+          const xPos = dims.marginLeft + idx * buttonWidth;
+          return (
+            <g clipPath="url(#spotlight-clip)">
+              <rect
+                x={xPos}
+                y="0"
+                width={buttonWidth}
+                height={contentDims.contentHeight}
+                fill="white"
+              />
+              <text
+                x={xPos + buttonWidth / 2}
+                y={contentDims.contentHeight / 2}
+                style={{ fontWeight: "bold", fill: "blue", zIndex: 10000 }}
+              >
+                {sp.label}
+              </text>
+            </g>
+          );
+        })}
+      </g>
+    );
+  }
+
   render() {
     const { dimensions } = this.state;
     const heightStyle = { height: dimensions.height };
-    const contentHeight = dimensions.height - dimensions.marginLeft - 30;
+
+    const contentDims = this.computeContentDims();
+    const { contentHeight, contentWidth } = contentDims;
+
     const contentStyles = {
       width: dimensions.width,
       height: contentHeight,
       margin: dimensions.marginLeft,
     };
-    const contentWidth =
-      dimensions.width - dimensions.marginLeft - dimensions.width_controls;
 
     return (
       <div className="spotlight-wrapper" style={heightStyle}>
@@ -104,6 +151,7 @@ class SpotlightToolbar extends React.Component {
                 height={contentHeight}
               />
             </clipPath>
+            {this.renderSpotlightButtons()}
             <Handles
               classes="time-controls-inline"
               dims={{
