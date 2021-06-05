@@ -98,11 +98,11 @@ class SpotlightToolbar extends React.Component {
     const { dimensions: dims } = this.state;
 
     return (
-      <g>
+      <g className="spotlight-group">
         {this.state.spotlightsInView.map((sp, idx) => {
           const xPos = dims.marginLeft + idx * buttonWidth;
           return (
-            <g clipPath="url(#spotlight-clip)">
+            <g clipPath="url(#spotlight-clip)" className="spotlight-button">
               <rect
                 x={xPos}
                 y="0"

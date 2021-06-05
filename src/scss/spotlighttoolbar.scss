@@ -17,6 +17,18 @@
       float: left;
     }
 
+    .spotlight-group {
+      .spotlight-button {
+        &:hover {
+          cursor: pointer;
+          rect {
+            transition: 0.2 ease;
+            fill: $offwhite;
+          }
+        }
+      }
+    }
+
     .time-controls-inline path {
       cursor: pointer;
       fill: $offwhite;
