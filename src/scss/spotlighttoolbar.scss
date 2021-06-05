@@ -19,6 +19,10 @@
 
     .spotlight-group {
       .spotlight-button {
+        text,
+        rect {
+          transition: 1s ease;
+        }
         &:hover {
           cursor: pointer;
           rect {

@@ -12,7 +12,7 @@ class SpotlightToolbar extends React.Component {
       maxInView: 4,
       startIdx: 0,
       endIdx: 0,
-      spotlightsInView: props.spotlights,
+      xPositions: [],
       spotlights: props.spotlights,
       dimensions: props.dimensions,
     };
@@ -28,17 +28,22 @@ class SpotlightToolbar extends React.Component {
     if (prevProps.spotlights !== this.props.spotlights) {
       const uniqueSpotlights = getUniqueSpotlights(this.props.spotlights);
       this.setState({
-        spotlightsInView: uniqueSpotlights.slice(0, this.state.maxInView),
         spotlights: uniqueSpotlights,
+        xPositions: this.computeInitialXPositions(uniqueSpotlights),
       });
     }
   }
 
   onMoveSpotlight(direction) {
-    let { startIdx: start, endIdx: end, maxInView } = this.state;
-    if (end === 0) end = maxInView - 1;
-    const totalSpotlightLength = this.state.spotlights.length;
-
+    let {
+      xPositions: xPositionsToUpdate,
+      startIdx: start,
+      endIdx: end,
+      maxInView,
+      spotlights,
+    } = this.state;
+    const totalSpotlightLength = spotlights.length;
+    const buttonWidth = this.computeButtonWidth();
     if (direction === "forward") {
       if (
         end < totalSpotlightLength - 1 &&
@@ -46,20 +51,32 @@ class SpotlightToolbar extends React.Component {
       ) {
         end += 1;
         start += 1;
+        xPositionsToUpdate = xPositionsToUpdate.map((pos) => pos - buttonWidth);
       }
     }
+
     if (direction === "backwards") {
-      if (start >= 0 && end > maxInView - 1) {
+      if (start > 0) {
         start -= 1;
         end -= 1;
+        xPositionsToUpdate = xPositionsToUpdate.map((pos) => pos + buttonWidth);
       }
     }
 
     this.setState({
       startIdx: start,
       endIdx: end,
-      spotlightsInView: this.state.spotlights.slice(start, end + 1),
+      xPositions: xPositionsToUpdate,
     });
+  }
+
+  computeInitialXPositions(spotlights) {
+    const { dimensions: dims } = this.state;
+    const buttonWidth = this.computeButtonWidth();
+    return spotlights.reduce((acc, _, idx) => {
+      acc.push(dims.marginLeft + idx * buttonWidth);
+      return acc;
+    }, []);
   }
 
   computeDims() {
@@ -95,28 +112,27 @@ class SpotlightToolbar extends React.Component {
   renderSpotlightButtons() {
     const buttonWidth = this.computeButtonWidth();
     const contentDims = this.computeContentDims();
-    const { dimensions: dims } = this.state;
-
+    const { xPositions } = this.state;
     return (
       <g className="spotlight-group">
-        {this.state.spotlightsInView.map((sp, idx) => {
-          const xPos = dims.marginLeft + idx * buttonWidth;
+        {this.state.spotlights.map((sp, idx) => {
+          const xPos = xPositions[idx];
           return (
             <g clipPath="url(#spotlight-clip)" className="spotlight-button">
               <rect
-                x={xPos}
-                y="0"
+                transform={`translate(${xPos}, 0)`}
                 width={buttonWidth}
                 height={contentDims.contentHeight}
                 fill="black"
                 fillOpacity="50%"
                 stroke="rgb(44, 44, 44)"
-                strokeWidth="2%"
+                strokeWidth="1%"
                 strokeOpacity="50%"
               />
               <text
-                x={xPos + buttonWidth / 2}
-                y={contentDims.contentHeight / 2}
+                transform={`translate(${xPos + buttonWidth / 2}, ${
+                  contentDims.contentHeight / 2
+                })`}
                 fontWeight="bold"
                 fill="white"
                 textAnchor="middle"
