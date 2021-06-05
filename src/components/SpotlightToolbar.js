@@ -2,7 +2,6 @@ import React from "react";
 import * as selectors from "../selectors/index";
 import { connect } from "react-redux";
 import Handles from "./atoms/Handles";
-import { colors } from "../common/global";
 import { getUniqueSpotlights } from "../common/utilities";
 
 class SpotlightToolbar extends React.Component {
@@ -111,6 +110,9 @@ class SpotlightToolbar extends React.Component {
                 height={contentDims.contentHeight}
                 fill="black"
                 fillOpacity="50%"
+                stroke="rgb(44, 44, 44)"
+                strokeWidth="2%"
+                strokeOpacity="50%"
               />
               <text
                 x={xPos + buttonWidth / 2}
