@@ -79,13 +79,9 @@ const initial = {
     },
     spotlightToolbar: {
       dimensions: {
-        height: isSmallLaptop ? 170 : 250,
+        height: isSmallLaptop ? 130 : 160,
         width: 0,
-        marginLeft: 70,
-        marginTop: isSmallLaptop ? 5 : 10,
-        marginBottom: 60,
-        svgHeight: 120,
-        contentHeight: isSmallLaptop ? 50 : 80,
+        marginLeft: 30,
         width_controls: 100,
       },
     },
@@ -98,6 +94,7 @@ const initial = {
         marginBottom: 60,
         contentHeight: isSmallLaptop ? 160 : 200,
         width_controls: 100,
+        heightDiffControls: 10,
       },
       range: [new Date(2001, 2, 23, 12), new Date(2021, 2, 23, 12)],
       rangeLimits: [new Date(1, 1, 1, 1), new Date()],

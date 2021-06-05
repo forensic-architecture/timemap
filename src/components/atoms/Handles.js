@@ -3,11 +3,12 @@ import React from "react";
 const Handles = ({ classes, dims, onMove }) => {
   const transform = "scale(1.5,1.5)";
   const size = 45;
+
   return (
     <g className={classes}>
       <g
         transform={`translate(${dims.marginLeft - 20}, ${
-          dims.contentHeight - 10
+          dims.contentHeight - dims.heightDiffControls
         })`}
         onClick={() => onMove("backwards")}
       >
@@ -19,7 +20,7 @@ const Handles = ({ classes, dims, onMove }) => {
       </g>
       <g
         transform={`translate(${dims.width - dims.width_controls + 20}, ${
-          dims.contentHeight - 10
+          dims.contentHeight - dims.heightDiffControls
         })`}
         onClick={() => onMove("forward")}
       >
