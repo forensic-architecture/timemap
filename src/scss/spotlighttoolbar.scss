@@ -23,6 +23,11 @@
         rect {
           transition: 1s ease;
         }
+        &.active {
+          rect {
+            fill: $offwhite;
+          }
+        }
         &:hover {
           cursor: pointer;
           rect {

@@ -254,6 +254,14 @@ export function setInitialShapes(values) {
   };
 }
 
+export const SET_ACTIVE_SPOTLIGHT = "SET_ACTIVE_SPOTLIGHT";
+export function setActiveSpotlight(value) {
+  return {
+    type: SET_ACTIVE_SPOTLIGHT,
+    value,
+  };
+}
+
 export const UPDATE_TIMERANGE = "UPDATE_TIMERANGE";
 export function updateTimeRange(timerange) {
   return {

@@ -1,8 +1,13 @@
 import React from "react";
-import * as selectors from "../selectors/index";
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import Handles from "./atoms/Handles";
+import hash from "object-hash";
+
+import { setActiveSpotlight } from "../actions";
+import * as selectors from "../selectors/index";
 import { getUniqueSpotlights } from "../common/utilities";
+
+import Handles from "./atoms/Handles";
 
 class SpotlightToolbar extends React.Component {
   constructor(props) {
@@ -25,7 +30,7 @@ class SpotlightToolbar extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.spotlights !== this.props.spotlights) {
+    if (hash(prevProps.spotlights) !== hash(this.props.spotlights)) {
       const uniqueSpotlights = getUniqueSpotlights(this.props.spotlights);
       this.setState({
         spotlights: uniqueSpotlights,
@@ -109,16 +114,31 @@ class SpotlightToolbar extends React.Component {
     return contentDims.contentWidth / this.state.maxInView;
   }
 
+  onSpotlightSelect(title) {
+    const { activeSpotlight, actions } = this.props;
+    const toggle = activeSpotlight !== title ? title : "";
+    actions.setActiveSpotlight(toggle);
+  }
+
   renderSpotlightButtons() {
     const buttonWidth = this.computeButtonWidth();
     const contentDims = this.computeContentDims();
     const { xPositions } = this.state;
+
     return (
       <g className="spotlight-group">
         {this.state.spotlights.map((sp, idx) => {
+          const { title } = sp;
           const xPos = xPositions[idx];
+          const classes = `spotlight-button ${
+            this.props.activeSpotlight === title ? " active" : ""
+          }`;
           return (
-            <g clipPath="url(#spotlight-clip)" className="spotlight-button">
+            <g
+              clipPath="url(#spotlight-clip)"
+              className={classes}
+              onClick={() => this.onSpotlightSelect(title)}
+            >
               <rect
                 transform={`translate(${xPos}, 0)`}
                 width={buttonWidth}
@@ -139,7 +159,7 @@ class SpotlightToolbar extends React.Component {
                 fontSize="14px"
                 zIndex={10000}
               >
-                {sp.title}
+                {title}
               </text>
             </g>
           );
@@ -206,4 +226,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(SpotlightToolbar);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({ setActiveSpotlight }, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SpotlightToolbar);

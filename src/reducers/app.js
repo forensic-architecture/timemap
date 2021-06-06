@@ -28,6 +28,7 @@ import {
   SET_NOT_LOADING,
   SET_INITIAL_CATEGORIES,
   SET_INITIAL_SHAPES,
+  SET_ACTIVE_SPOTLIGHT,
   UPDATE_SEARCH_QUERY,
 } from "../actions";
 
@@ -281,6 +282,16 @@ function setInitialShapes(appState, action) {
   };
 }
 
+function setActiveSpotlight(appState, action) {
+  return {
+    ...appState,
+    associations: {
+      ...appState.associations,
+      spotlight: action.value,
+    },
+  };
+}
+
 function updateSearchQuery(appState, action) {
   return {
     ...appState,
@@ -342,6 +353,8 @@ function app(appState = initial.app, action) {
       return setInitialCategories(appState, action);
     case SET_INITIAL_SHAPES:
       return setInitialShapes(appState, action);
+    case SET_ACTIVE_SPOTLIGHT:
+      return setActiveSpotlight(appState, action);
     case UPDATE_SEARCH_QUERY:
       return updateSearchQuery(appState, action);
     default:
