@@ -637,3 +637,36 @@ export function getUniqueSpotlights(spotlights) {
     return acc;
   }, []);
 }
+
+export function findLocationsWithActiveSpotlight(locations, activeSpotlight) {
+  return locations.reduce((acc, loc) => {
+    loc.events.forEach((evt) => {
+      const foundSpotlight = evt.associations.find(
+        (a) =>
+          a.mode === ASSOCIATION_MODES.SPOTLIGHT && a.title === activeSpotlight
+      );
+      if (foundSpotlight) {
+        acc.push({ ...loc, spotlightType: foundSpotlight.type });
+      }
+    });
+    return acc;
+  }, []);
+}
+
+export function accumulateSelectedClusters(
+  clusters,
+  totalClusterPoints,
+  aggregate
+) {
+  return clusters.reduce((acc, cl) => {
+    if (cl.properties.cluster) {
+      const { coordinates } = cl.geometry;
+      acc.push({
+        latitude: String(coordinates[1]),
+        longitude: String(coordinates[0]),
+        radius: calcClusterSize(cl.properties.point_count, totalClusterPoints),
+      });
+    }
+    return acc;
+  }, aggregate);
+}

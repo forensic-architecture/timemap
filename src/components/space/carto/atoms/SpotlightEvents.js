@@ -1,6 +1,5 @@
 import React from "react";
 import { Portal } from "react-portal";
-import colors from "../../../../common/global";
 
 class SpotlightMapEvents extends React.Component {
   renderMarker(marker) {
@@ -8,7 +7,6 @@ class SpotlightMapEvents extends React.Component {
       marker.latitude,
       marker.longitude,
     ]);
-    // const styles = this.props.styles;
     const styles = marker.styles;
     const r = marker.radius ? marker.radius + 5 : 24;
     return (
