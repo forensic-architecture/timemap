@@ -25,7 +25,10 @@ import {
   calculateTotalClusterPoints,
   calcClusterSize,
 } from "../../../common/utilities";
-import { ASSOCIATION_MODES } from "../../../common/constants";
+import {
+  ASSOCIATION_MODES,
+  ASSOCIATION_TYPES,
+} from "../../../common/constants";
 
 // NB: important constants for map, TODO: make statics
 // Note: Base map is OpenStreetMaps by default; can choose another base map
@@ -515,7 +518,18 @@ class Map extends React.Component {
 
     const selectedLocations = locationsWithSpotlight.reduce((acc, loc) => {
       const { latitude, longitude } = loc;
-      acc.push({ latitude, longitude, radius: this.props.ui.eventRadius });
+      const styles = {
+        strokeDasharray:
+          loc.spotlightType === ASSOCIATION_TYPES.DASH ? "2,2" : "",
+        strokeWidth: 2,
+        stroke: "#ffffff",
+      };
+      acc.push({
+        latitude,
+        longitude,
+        radius: this.props.ui.eventRadius,
+        styles: styles,
+      });
       return acc;
     }, []);
 
@@ -530,8 +544,8 @@ class Map extends React.Component {
             totalClusterPoints
           ),
         });
-        return acc;
       }
+      return acc;
     }, selectedLocations);
 
     return (
@@ -539,7 +553,7 @@ class Map extends React.Component {
         svg={this.svgRef.current}
         selected={totalSelected}
         projectPoint={this.projectPoint}
-        styles={this.props.ui.mapSelectedEvents}
+        // styles={this.props.ui.mapSelectedEvents}
       />
     );
   }

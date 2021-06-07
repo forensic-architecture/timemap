@@ -8,18 +8,19 @@ class SpotlightMapEvents extends React.Component {
       marker.latitude,
       marker.longitude,
     ]);
-    const styles = this.props.styles;
+    // const styles = this.props.styles;
+    const styles = marker.styles;
     const r = marker.radius ? marker.radius + 5 : 24;
     return (
       <g className="spotlight-marker" transform={`translate(${x - r}, ${y})`}>
         <path
           className="spotlight-interactive"
-          stroke={styles ? styles.stroke : colors.secondaryHighlight}
+          stroke={styles ? styles.stroke : ""}
           stroke-opacity="1"
-          stroke-width={styles ? styles["stroke-width"] : 2}
+          stroke-width={styles ? styles.strokeWidth : 0}
           stroke-linecap=""
           stroke-linejoin="round"
-          stroke-dasharray={styles ? styles["stroke-dasharray"] : "2,2"}
+          stroke-dasharray={styles ? styles.strokeDasharray : "2,2"}
           fill="none"
           d={`M0,0a${r},${r} 0 1,0 ${r * 2},0 a${r},${r} 0 1,0 -${r * 2},0 `}
         />
