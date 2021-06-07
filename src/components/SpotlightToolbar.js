@@ -49,6 +49,7 @@ class SpotlightToolbar extends React.Component {
     } = this.state;
     const totalSpotlightLength = spotlights.length;
     const buttonWidth = this.computeButtonWidth();
+
     if (direction === "forward") {
       if (
         end < totalSpotlightLength - 1 &&
@@ -143,21 +144,11 @@ class SpotlightToolbar extends React.Component {
                 transform={`translate(${xPos}, 0)`}
                 width={buttonWidth}
                 height={contentDims.contentHeight}
-                fill="black"
-                fillOpacity="50%"
-                stroke="rgb(44, 44, 44)"
-                strokeWidth="1%"
-                strokeOpacity="50%"
               />
               <text
                 transform={`translate(${xPos + buttonWidth / 2}, ${
                   contentDims.contentHeight / 2
                 })`}
-                fontWeight="bold"
-                fill="white"
-                textAnchor="middle"
-                fontSize="14px"
-                zIndex={10000}
               >
                 {title}
               </text>

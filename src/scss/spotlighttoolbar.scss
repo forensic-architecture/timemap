@@ -16,9 +16,21 @@
 
     .spotlight-group {
       .spotlight-button {
-        text,
+        text {
+          transition: 0.5s ease;
+          font-weight: bold;
+          fill: white;
+          text-anchor: middle;
+          font-size: 14px;
+          z-index: 10000;
+        }
         rect {
-          transition: 1s ease;
+          transition: 0.5s ease;
+          fill: $black;
+          fill-opacity: 50%;
+          stroke: $midgrey;
+          stroke-width: 1%;
+          stroke-opacity: 50%;
         }
         &.active {
           rect {

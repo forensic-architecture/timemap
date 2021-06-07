@@ -530,7 +530,7 @@ class Map extends React.Component {
         {this.renderEvents()}
         {this.renderClusters()}
         {this.renderSelected()}
-        {this.renderSpotlightEvents()}
+        {this.props.features.USE_SPOTLIGHTS && this.renderSpotlightEvents()}
       </>
     ) : null;
 

@@ -343,7 +343,7 @@ class Dashboard extends React.Component {
               : (ev) => this.handleSelect(ev, 1),
           }}
         />
-        <SpotlightToolbar />
+        {features.USE_SPOTLIGHTS && <SpotlightToolbar />}
         <Timeline
           onKeyDown={this.onKeyDown}
           methods={{
