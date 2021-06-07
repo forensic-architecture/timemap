@@ -74,6 +74,7 @@ const TimelineMarkers = ({
     const { shape: eventShapeObj } = event;
 
     function renderMarkerForEvent(y) {
+      // Currently, we render a circle marker for all shapes; potential TO-DO: make shape markers
       switch (eventShapeObj.shape) {
         case AVAILABLE_SHAPES.DIAMOND:
         case AVAILABLE_SHAPES.STAR:
