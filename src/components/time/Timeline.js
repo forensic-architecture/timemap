@@ -413,7 +413,7 @@ class Timeline extends React.Component {
                 dims={dims}
                 onApplyZoom={this.onApplyZoom}
               />
-              <Markers
+              {/* <Markers
                 dims={dims}
                 selected={this.props.app.selected}
                 getEventX={(ev) => this.getDatetimeX(ev.datetime)}
@@ -423,7 +423,7 @@ class Timeline extends React.Component {
                 styles={this.props.ui.styles}
                 features={this.props.features}
                 eventRadius={this.props.ui.eventRadius}
-              />
+              /> */}
               <Events
                 events={this.props.domain.events}
                 projects={this.props.domain.projects}

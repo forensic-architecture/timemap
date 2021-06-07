@@ -72,3 +72,20 @@
     }
   }
 }
+
+.spotlight-marker {
+  .spotlight-interactive {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      filter: drop-shadow(0 0 10px #fff) drop-shadow(0 0 20px #fff)
+        drop-shadow(0 0 30px #ff1177) drop-shadow(0 0 40px #ff1177);
+    }
+    to {
+      filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 10px #fff)
+        drop-shadow(0 0 15px #ff1177) drop-shadow(0 0 20px #ff1177);
+    }
+  }
+}

@@ -12,6 +12,7 @@ import Regions from "./atoms/Regions";
 import Events from "./atoms/Events";
 import Clusters from "./atoms/Clusters";
 import SelectedEvents from "./atoms/SelectedEvents";
+import SpotlightMapEvents from "./atoms/SpotlightEvents";
 import Narratives from "./atoms/Narratives";
 import DefsMarkers from "./atoms/DefsMarkers";
 import LoadingOverlay from "../../atoms/Loading";
@@ -24,6 +25,7 @@ import {
   calculateTotalClusterPoints,
   calcClusterSize,
 } from "../../../common/utilities";
+import { ASSOCIATION_MODES } from "../../../common/constants";
 
 // NB: important constants for map, TODO: make statics
 // Note: Base map is OpenStreetMaps by default; can choose another base map
@@ -465,6 +467,83 @@ class Map extends React.Component {
     );
   }
 
+  getClustersWithSpotlights(selected) {
+    const selectedIds = selected.map((sl) => sl.id);
+
+    if (this.state.clusters && this.state.clusters.length > 0) {
+      return this.state.clusters.reduce((acc, cl) => {
+        if (cl.properties.cluster) {
+          const children = this.getClusterChildren(cl.properties.cluster_id);
+          if (children && children.length > 0) {
+            children.forEach((child) => {
+              const clusterPresent =
+                acc.findIndex((item) => item.id === cl.id) >= 0;
+              if (selectedIds.includes(child.id) && !clusterPresent) {
+                acc.push(cl);
+              }
+            });
+          }
+        }
+        return acc;
+      }, []);
+    }
+    return [];
+  }
+
+  renderSpotlightEvents() {
+    const { activeSpotlight } = this.props.app;
+    const totalClusterPoints = calculateTotalClusterPoints(this.state.clusters);
+    const locationsWithSpotlight = this.props.domain.locations.reduce(
+      (acc, loc) => {
+        loc.events.forEach((evt) => {
+          const foundSpotlight = evt.associations.find(
+            (a) =>
+              a.mode === ASSOCIATION_MODES.SPOTLIGHT &&
+              a.title === activeSpotlight
+          );
+          if (foundSpotlight) {
+            acc.push({ ...loc, spotlightType: foundSpotlight.type });
+          }
+        });
+        return acc;
+      },
+      []
+    );
+    const clustersWithSpotlights = this.getClustersWithSpotlights(
+      locationsWithSpotlight
+    );
+
+    const selectedLocations = locationsWithSpotlight.reduce((acc, loc) => {
+      const { latitude, longitude } = loc;
+      acc.push({ latitude, longitude, radius: this.props.ui.eventRadius });
+      return acc;
+    }, []);
+
+    const totalSelected = clustersWithSpotlights.reduce((acc, cl) => {
+      if (cl.properties.cluster) {
+        const { coordinates } = cl.geometry;
+        acc.push({
+          latitude: String(coordinates[1]),
+          longitude: String(coordinates[0]),
+          radius: calcClusterSize(
+            cl.properties.point_count,
+            totalClusterPoints
+          ),
+        });
+        return acc;
+      }
+    }, selectedLocations);
+
+    return (
+      <SpotlightMapEvents
+        svg={this.svgRef.current}
+        selected={totalSelected}
+        projectPoint={this.projectPoint}
+        styles={this.props.ui.mapSelectedEvents}
+      />
+    );
+  }
+
   renderMarkers() {
     return (
       <Portal node={this.svgRef.current}>
@@ -488,6 +567,7 @@ class Map extends React.Component {
         {this.renderEvents()}
         {this.renderClusters()}
         {this.renderSelected()}
+        {this.renderSpotlightEvents()}
       </>
     ) : null;
 
@@ -524,6 +604,7 @@ function mapStateToProps(state) {
       language: state.app.language,
       loading: state.app.loading,
       narrative: state.app.associations.narrative,
+      activeSpotlight: state.app.associations.spotlight,
       coloringSet: state.app.associations.coloringSet,
       flags: {
         isShowingSites: state.app.flags.isShowingSites,

@@ -95,7 +95,7 @@ class SpotlightToolbar extends React.Component {
         dimensions: {
           ...this.props.dimensions,
           width: boundingClient.width,
-          // height: boundingClient.height
+          height: boundingClient.height,
         },
       });
     }

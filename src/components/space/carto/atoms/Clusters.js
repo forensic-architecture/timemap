@@ -96,7 +96,7 @@ function Cluster({
           }}
           className="cluster-event-marker"
         />
-        {hovered ? renderHover(cluster) : null}
+        {hovered ? renderHover() : null}
       </g>
     </svg>
   );
