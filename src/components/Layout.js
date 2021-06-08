@@ -318,6 +318,8 @@ class Dashboard extends React.Component {
       );
     }
 
+    console.info(process.env.AUTH_PASSWORD);
+
     return (
       <div>
         <Toolbar

@@ -27,7 +27,6 @@ import {
   accumulateSelectedClusters,
 } from "../../../common/utilities";
 import { ASSOCIATION_TYPES } from "../../../common/constants";
-import { colors } from "../../../common/global";
 
 // NB: important constants for map, TODO: make statics
 // Note: Base map is OpenStreetMaps by default; can choose another base map
@@ -474,14 +473,14 @@ class Map extends React.Component {
       locationsWithSpotlight
     );
 
-    const baseLocationStyles = { strokeWidth: 2, stroke: colors.white };
+    const baseLocationStyles = { strokeWidth: 2 };
 
     const selectedLocations = locationsWithSpotlight.reduce((acc, loc) => {
       const { latitude, longitude } = loc;
       const styles = {
         ...baseLocationStyles,
         strokeDasharray:
-          loc.spotlightType === ASSOCIATION_TYPES.DASH ? "2,2" : "",
+          loc.spotlightType === ASSOCIATION_TYPES.DASH ? "2" : "",
       };
       acc.push({
         latitude,
