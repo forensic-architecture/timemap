@@ -1,13 +1,21 @@
 import React from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
 import {
   Card,
   generateCardLayout,
 } from "@forensic-architecture/design-system/dist/react";
 
 import * as selectors from "../../selectors";
-import { getFilterIdxFromColorSet } from "../../common/utilities";
+import { fetchMediaForEvent } from "../../actions";
+import {
+  getFilterIdxFromColorSet,
+  getStaticFilterColorSet,
+  appendFiltersToColoringSet,
+} from "../../common/utilities";
 import copy from "../../common/data/copy.json";
+import { COLORING_ALGORITHM_MODE } from "../../common/constants";
 
 class CardStack extends React.Component {
   constructor() {
@@ -57,11 +65,23 @@ class CardStack extends React.Component {
   }
 
   renderCards(events, selections) {
+    const { mode, colors, defaultColor } = this.props.coloringConfig;
+    const { filters, coloringSet } = this.props;
     // if no selections provided, select all
     if (!selections) {
       selections = events.map((e) => true);
     }
     this.refs = [];
+
+    const updatedColoringSet =
+      mode === COLORING_ALGORITHM_MODE.STATIC
+        ? appendFiltersToColoringSet(filters, coloringSet)
+        : coloringSet;
+
+    const updatedFilterColors =
+      mode === COLORING_ALGORITHM_MODE.STATIC
+        ? getStaticFilterColorSet(filters, updatedColoringSet, defaultColor)
+        : colors;
 
     const generateTemplate =
       generateCardLayout[this.props.cardUI.layout.template];
@@ -69,14 +89,21 @@ class CardStack extends React.Component {
     return events.map((event, idx) => {
       const thisRef = React.createRef();
       this.refs[idx] = thisRef;
+      const evtToUpdate = { ...event };
+
+      if (this.props.features.FETCH_EXTERNAL_MEDIA) {
+        this.props.actions
+          .fetchMediaForEvent("CV_A12")
+          .then((data) => (evtToUpdate.media = data));
+      }
 
       return (
         <Card
           ref={thisRef}
           content={generateTemplate({
             event,
-            colors: this.props.colors,
-            coloringSet: this.props.coloringSet,
+            colors: updatedFilterColors,
+            coloringSet: updatedColoringSet,
             getFilterIdxFromColorSet,
           })}
           language={this.props.language}
@@ -188,10 +215,17 @@ function mapStateToProps(state) {
     isCardstack: state.app.flags.isCardstack,
     isLoading: state.app.flags.isFetchingSources,
     cardUI: state.ui.card,
-    colors: state.ui.coloring.colors,
+    coloringConfig: state.ui.coloring,
     coloringSet: state.app.associations.coloringSet,
+    filters: selectors.getFilters(state),
     features: state.features,
   };
 }
 
-export default connect(mapStateToProps)(CardStack);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({ fetchMediaForEvent }, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardStack);

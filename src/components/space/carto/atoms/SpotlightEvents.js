@@ -7,8 +7,8 @@ class SpotlightMapEvents extends React.Component {
     return (
       <defs>
         <linearGradient id="spotlight-gradient">
-          <stop offset="50%" stop-color="white" />
-          <stop offset="50%" stop-color={`${colors.yellow}`} />
+          <stop offset="20%" stop-color="white" />
+          <stop offset="80%" stop-color={`${colors.yellow}`} />
         </linearGradient>
       </defs>
     );

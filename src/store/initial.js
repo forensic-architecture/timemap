@@ -53,6 +53,7 @@ const initial = {
     debug: true,
     errors: {
       source: false,
+      media: false,
     },
     highlighted: null,
     selected: [],

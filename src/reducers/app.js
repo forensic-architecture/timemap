@@ -24,6 +24,7 @@ import {
   TOGGLE_COVER,
   FETCH_ERROR,
   FETCH_SOURCE_ERROR,
+  FETCH_MEDIA_ERROR,
   SET_LOADING,
   SET_NOT_LOADING,
   SET_INITIAL_CATEGORIES,
@@ -245,6 +246,16 @@ function fetchSourceError(appState, action) {
   };
 }
 
+function fetchMediaError(appState, action) {
+  return {
+    ...appState,
+    errors: {
+      ...appState.errors,
+      media: action.msg,
+    },
+  };
+}
+
 function setLoading(appState) {
   return {
     ...appState,
@@ -345,6 +356,8 @@ function app(appState = initial.app, action) {
       return fetchError(appState, action);
     case FETCH_SOURCE_ERROR:
       return fetchSourceError(appState, action);
+    case FETCH_MEDIA_ERROR:
+      return fetchMediaError(appState, action);
     case SET_LOADING:
       return setLoading(appState);
     case SET_NOT_LOADING:
