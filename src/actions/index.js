@@ -151,8 +151,8 @@ export function fetchMediaForEvent(mediaId) {
         })
         .then((data) => data)
         .catch((err) => {
-          console.info(err);
           dispatch(fetchMediaError(err.message));
+          return;
         });
       return data;
     }

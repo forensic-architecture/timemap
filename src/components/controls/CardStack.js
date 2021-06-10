@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import hash from "object-hash";
 import { bindActionCreators } from "redux";
 
 import {
@@ -18,18 +19,31 @@ import copy from "../../common/data/copy.json";
 import { COLORING_ALGORITHM_MODE } from "../../common/constants";
 
 class CardStack extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.refs = {};
     this.refCardStack = React.createRef();
     this.refCardStackContent = React.createRef();
+    this.state = {
+      selected: props.selected,
+    };
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const isNarrative = !!this.props.narrative;
 
     if (isNarrative) {
       this.scrollToCard();
+    }
+
+    if (hash(prevProps.selected) !== hash(this.props.selected)) {
+      if (this.props.features.FETCH_EXTERNAL_MEDIA) {
+        this.getMediaDataForEvents(this.props.selected).then((data) =>
+          this.setState({ selected: data })
+        );
+      } else {
+        this.setState({ selected: this.props.selected });
+      }
     }
   }
 
@@ -64,6 +78,20 @@ class CardStack extends React.Component {
     animateScroll();
   }
 
+  async getMediaDataForEvents(events) {
+    const updatedEvts = [];
+    for (const evt of events) {
+      // TO-DO: Make the attr for the media code more generalized; declare field in config
+      const { incident_code } = evt;
+      const mediaData = incident_code
+        ? await this.props.actions.fetchMediaForEvent(incident_code)
+        : [];
+      evt.media = mediaData ? mediaData : [];
+      updatedEvts.push(evt);
+    }
+    return updatedEvts;
+  }
+
   renderCards(events, selections) {
     const { mode, colors, defaultColor } = this.props.coloringConfig;
     const { filters, coloringSet } = this.props;
@@ -89,13 +117,6 @@ class CardStack extends React.Component {
     return events.map((event, idx) => {
       const thisRef = React.createRef();
       this.refs[idx] = thisRef;
-      const evtToUpdate = { ...event };
-
-      if (this.props.features.FETCH_EXTERNAL_MEDIA) {
-        this.props.actions
-          .fetchMediaForEvent("CV_A12")
-          .then((data) => (evtToUpdate.media = data));
-      }
 
       return (
         <Card
@@ -115,7 +136,7 @@ class CardStack extends React.Component {
   }
 
   renderSelectedCards() {
-    const { selected } = this.props;
+    const { selected } = this.state;
 
     if (selected.length > 0) {
       return this.renderCards(selected);
@@ -145,7 +166,7 @@ class CardStack extends React.Component {
           <span />
         </button>
         <p className="header-copy top">
-          {`${this.props.selected.length} ${headerLang}`}
+          {`${this.state.selected.length} ${headerLang}`}
         </p>
       </div>
     );
@@ -172,10 +193,10 @@ class CardStack extends React.Component {
   }
 
   render() {
-    const { isCardstack, selected, narrative, timelineDims } = this.props;
+    const { isCardstack, narrative, timelineDims } = this.props;
     // TODO: make '237px', which is the narrative header, less hard-coded
     const height = `calc(100% - 237px - ${timelineDims.height}px)`;
-    if (selected.length > 0) {
+    if (this.state.selected.length > 0) {
       if (!narrative) {
         return (
           <div
