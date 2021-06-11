@@ -14,7 +14,6 @@ import {
   getFilterIdxFromColorSet,
   getStaticFilterColorSet,
   appendFiltersToColoringSet,
-  processMediaData,
 } from "../../common/utilities";
 import copy from "../../common/data/copy.json";
 import { COLORING_ALGORITHM_MODE } from "../../common/constants";

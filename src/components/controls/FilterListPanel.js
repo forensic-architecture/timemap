@@ -37,7 +37,6 @@ function FilterListPanel({
 }) {
   function createNodeComponent(filter, depth) {
     const [key, children] = filter;
-    console.info(key);
     const pathLeaf = getPathLeaf(key);
     const matchingKeys = getFiltersToToggle(filter, activeFilters);
     const idxFromColorSet = getFilterIdxFromColorSet(key, coloringSet);
