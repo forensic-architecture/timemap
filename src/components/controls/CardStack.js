@@ -9,7 +9,7 @@ import {
 } from "@forensic-architecture/design-system/dist/react";
 
 import * as selectors from "../../selectors";
-import { fetchMediaForEvent } from "../../actions";
+import { fetchMediaForEvent, updateMediaCache } from "../../actions";
 import {
   getFilterIdxFromColorSet,
   getStaticFilterColorSet,
@@ -80,13 +80,21 @@ class CardStack extends React.Component {
 
   async getMediaDataForEvents(events) {
     const updatedEvts = [];
+    const { mediaCache, features } = this.props;
     for (const evt of events) {
-      // TO-DO: Make the attr for the media code more generalized; declare field in config
-      const { incident_code } = evt;
-      const mediaData = incident_code
-        ? await this.props.actions.fetchMediaForEvent(incident_code)
-        : [];
-      evt.media = mediaData ? mediaData : [];
+      // Caching here only relevant if data doesn't update frequently
+      // TO-DO: make robust caching mechanism to speed up bottleneck of media fetch
+      if (features.USE_MEDIA_CACHE && evt.id in mediaCache) {
+        evt.media = mediaCache[evt.id];
+      } else {
+        // TO-DO: Make the attr for the media code more generalized; declare field in config
+        const { incident_code } = evt;
+        const mediaData = incident_code
+          ? await this.props.actions.fetchMediaForEvent(incident_code)
+          : [];
+        evt.media = mediaData ? mediaData : [];
+        if (features.USE_MEDIA_CACHE) this.props.actions.updateMediaCache(evt);
+      }
       updatedEvts.push(evt);
     }
     return updatedEvts;
@@ -240,12 +248,16 @@ function mapStateToProps(state) {
     coloringSet: state.app.associations.coloringSet,
     filters: selectors.getFilters(state),
     features: state.features,
+    mediaCache: state.app.mediaCache,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({ fetchMediaForEvent }, dispatch),
+    actions: bindActionCreators(
+      { fetchMediaForEvent, updateMediaCache },
+      dispatch
+    ),
   };
 }
 

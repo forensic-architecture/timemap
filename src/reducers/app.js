@@ -31,6 +31,7 @@ import {
   SET_INITIAL_SHAPES,
   SET_ACTIVE_SPOTLIGHT,
   UPDATE_SEARCH_QUERY,
+  UPDATE_MEDIA_CACHE,
 } from "../actions";
 
 function updateHighlighted(appState, action) {
@@ -310,6 +311,14 @@ function updateSearchQuery(appState, action) {
   };
 }
 
+function updateMediaCache(appState, action) {
+  const { evt } = action;
+  return {
+    ...appState,
+    mediaCache: { ...appState.mediaCache, [evt.id]: evt.media },
+  };
+}
+
 function app(appState = initial.app, action) {
   switch (action.type) {
     case UPDATE_HIGHLIGHTED:
@@ -370,6 +379,8 @@ function app(appState = initial.app, action) {
       return setActiveSpotlight(appState, action);
     case UPDATE_SEARCH_QUERY:
       return updateSearchQuery(appState, action);
+    case UPDATE_MEDIA_CACHE:
+      return updateMediaCache(appState, action);
     default:
       return appState;
   }

@@ -86,6 +86,7 @@ const initial = {
         width_controls: 100,
       },
     },
+    mediaCache: {},
     timeline: {
       dimensions: {
         height: isSmallLaptop ? 170 : 250,

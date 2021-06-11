@@ -417,6 +417,14 @@ export function updateSearchQuery(searchQuery) {
   };
 }
 
+export const UPDATE_MEDIA_CACHE = "UPDATE_MEDIA_CACHE";
+export function updateMediaCache(evt) {
+  return {
+    type: UPDATE_MEDIA_CACHE,
+    evt,
+  };
+}
+
 // ERRORS
 
 export const FETCH_SOURCE_ERROR = "FETCH_SOURCE_ERROR";
