@@ -14,6 +14,7 @@ import {
   getFilterIdxFromColorSet,
   getStaticFilterColorSet,
   appendFiltersToColoringSet,
+  processMediaData,
 } from "../../common/utilities";
 import copy from "../../common/data/copy.json";
 import { COLORING_ALGORITHM_MODE } from "../../common/constants";
@@ -89,10 +90,12 @@ class CardStack extends React.Component {
       } else {
         // TO-DO: Make the attr for the media code more generalized; declare field in config
         const { incident_code } = evt;
-        const mediaData = incident_code
-          ? await this.props.actions.fetchMediaForEvent(incident_code)
-          : [];
-        evt.media = mediaData ? mediaData : [];
+        let mediaData = {};
+        if (incident_code)
+          mediaData = await this.props.actions.fetchMediaForEvent(
+            incident_code
+          );
+        evt.media = mediaData || {};
         if (features.USE_MEDIA_CACHE) this.props.actions.updateMediaCache(evt);
       }
       updatedEvts.push(evt);

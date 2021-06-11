@@ -46,3 +46,7 @@ export const ASSOCIATION_TYPES = {
 };
 
 export const DATASHEET_FALSE = "FALSE";
+
+export const LANGUAGE_OPTIONS = {
+  EN_US: "en-us",
+};
