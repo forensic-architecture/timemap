@@ -484,6 +484,13 @@ class Map extends React.Component {
       spotlights: loc.spotlights,
     }));
 
+    // const selectedLocations = locationsWithSpotlight.map((loc) => ({
+    //   latitude: loc.latitude,
+    //   longitude: loc.longitude,
+    //   radius: this.props.ui.eventRadius,
+    //   spotlights: loc.spotlights,
+    // }));
+
     const clustersWithSpotlights = this.getSelectedClusters(
       locationsWithSpotlight
     );
