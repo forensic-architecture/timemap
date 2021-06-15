@@ -643,7 +643,11 @@ export function findLocationsWithActiveSpotlight(locations, activeSpotlight) {
   return locations.reduce((acc, loc) => {
     const foundSpotlights = loc.events.reduce((total, evt) => {
       const activeEvtSp = findActiveEventSpotlight(evt, activeSpotlight);
-      if (activeEvtSp) total.push(activeEvtSp);
+      if (
+        activeEvtSp &&
+        total.findIndex((item) => item.id === activeEvtSp.id) < 0
+      )
+        total.push(activeEvtSp);
       return total;
     }, []);
     if (foundSpotlights.length > 0)
