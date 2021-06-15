@@ -6,7 +6,7 @@
   height: 150px;
   color: white;
   z-index: $timeline;
-  top: 570px;
+  bottom: 225px;
 
   .spotlight-toolbar {
     svg {
@@ -21,7 +21,7 @@
           font-weight: bold;
           fill: white;
           text-anchor: middle;
-          font-size: 14px;
+          font-size: 0.65rem;
           z-index: 10000;
         }
         rect {
@@ -82,19 +82,19 @@
   }
 }
 
-.spotlight-marker {
-  .spotlight-interactive {
-    // transform-origin: center;
-    // transform-box: fill-box;
-    // animation: rotate 8s linear infinite;
-  }
+// .spotlight-marker {
+//   .spotlight-interactive {
+//     transform-origin: center;
+//     transform-box: fill-box;
+//     animation: rotate 8s linear infinite;
+//   }
 
-  // @keyframes rotate {
-  //   from {
-  //     transform: rotate(0deg);
-  //   }
-  //   to {
-  //     transform: rotate(360deg);
-  //   }
-  // }
-}
+//   @keyframes rotate {
+//     from {
+//       transform: rotate(0deg);
+//     }
+//     to {
+//       transform: rotate(360deg);
+//     }
+//   }
+// }

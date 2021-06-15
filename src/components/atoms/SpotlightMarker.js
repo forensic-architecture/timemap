@@ -6,11 +6,11 @@ const SpotlightMarker = ({ x, y, radius, styles }) => {
     <g className="spotlight-marker" transform={`translate(${x}, ${y})`}>
       <circle
         className="spotlight-interactive"
-        stroke-opacity="1"
+        strokeOpacity="0.75"
         stroke={styles ? styles.stroke : colors.yellow}
-        stroke-width={styles ? styles.strokeWidth : 2}
-        stroke-dasharray={styles ? styles.strokeDasharray : ""}
-        stroke-linejoin="round"
+        strokeWidth={styles ? styles.strokeWidth : 2}
+        strokeDasharray={styles ? styles.strokeDasharray : ""}
+        strokeLineJoin="round"
         fill="none"
         r={radius}
       />
