@@ -7,6 +7,7 @@ import hash from "object-hash";
 import { setLoading, setNotLoading } from "../../actions";
 import * as selectors from "../../selectors";
 import copy from "../../common/data/copy.json";
+import { findActiveEventSpotlight } from "../../common/utilities";
 
 import Header from "./atoms/Header";
 import Axis from "./Axis";
@@ -16,6 +17,7 @@ import ZoomControls from "./atoms/ZoomControls.js";
 import Markers from "./atoms/Markers.js";
 import Events from "./atoms/Events.js";
 import Categories from "./Categories";
+import TimelineSpotlightEvents from "./atoms/SpotlightEvents";
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -326,6 +328,18 @@ class Timeline extends React.Component {
     return this.state.scaleY(category);
   }
 
+  getActiveSpotlightEvents() {
+    const { events } = this.props.domain;
+    return events.reduce((acc, evt) => {
+      const foundSpotlight = findActiveEventSpotlight(
+        evt,
+        this.props.app.activeSpotlight
+      );
+      if (foundSpotlight) acc.push({ ...evt, spotlight: foundSpotlight });
+      return acc;
+    }, []);
+  }
+
   /**
    * Determines additional styles on the <circle> for each location.
    * A location consists of an array of events (see selectors). The function
@@ -348,6 +362,7 @@ class Timeline extends React.Component {
     const extraStyle = { ...heightStyle, ...foldedStyle };
     const contentHeight = { height: dims.contentHeight };
     const { activeCategories: categories } = this.props;
+    const selectedSpotlightEvents = this.getActiveSpotlightEvents();
 
     return (
       <div
@@ -413,6 +428,13 @@ class Timeline extends React.Component {
                 dims={dims}
                 onApplyZoom={this.onApplyZoom}
               />
+              <TimelineSpotlightEvents
+                getEventX={(ev) => this.getDatetimeX(ev.datetime)}
+                getEventY={this.getY}
+                eventRadius={this.props.ui.eventRadius}
+                categories={categories}
+                selectedEvents={selectedSpotlightEvents}
+              />
               <Markers
                 dims={dims}
                 selected={this.props.app.selected}
@@ -475,6 +497,7 @@ function mapStateToProps(state) {
       timeline: state.app.timeline,
       narrative: state.app.associations.narrative,
       coloringSet: state.app.associations.coloringSet,
+      activeSpotlight: state.app.associations.spotlight,
     },
     ui: {
       dom: state.ui.dom,
