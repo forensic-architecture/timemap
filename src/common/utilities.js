@@ -6,6 +6,7 @@ import {
   POLYGON_CLIP_PATH,
   ASSOCIATION_TYPES,
 } from "./constants";
+import { colors } from "./global";
 
 let { DATE_FMT, TIME_FMT } = process.env;
 if (!DATE_FMT) DATE_FMT = "MM/DD/YYYY";
@@ -640,24 +641,39 @@ export function getUniqueSpotlights(spotlights) {
 
 export function findLocationsWithActiveSpotlight(locations, activeSpotlight) {
   return locations.reduce((acc, loc) => {
-    loc.events.forEach((evt) => {
-      const foundSpotlight = evt.associations.find(
-        (a) =>
-          a.mode === ASSOCIATION_MODES.SPOTLIGHT && a.title === activeSpotlight
-      );
-      if (foundSpotlight) {
-        acc.push({ ...loc, spotlightType: foundSpotlight.type });
+    const foundSpotlights = loc.events.reduce((total, evt) => {
+      const activeEvtSp = findActiveEventSpotlight(evt, activeSpotlight);
+      if (activeEvtSp) total.push(activeEvtSp);
+      return total;
+    }, []);
+    if (foundSpotlights.length > 0)
+      acc.push({ ...loc, spotlights: foundSpotlights });
+    return acc;
+  }, []);
+}
+
+export function findActiveEventSpotlight(event, activeSpotlight) {
+  return event.associations.find(
+    (a) => a.mode === ASSOCIATION_MODES.SPOTLIGHT && a.title === activeSpotlight
+  );
+}
+
+export function getTotalClusterSpotlights(cl, activeSpotlight) {
+  const locations = findLocationsWithActiveSpotlight(
+    cl.selected,
+    activeSpotlight
+  );
+  return locations.reduce((acc, loc) => {
+    loc.spotlights.forEach((sp) => {
+      if (acc.findIndex((item) => item.id === sp.id) < 0) {
+        acc.push(sp);
       }
     });
     return acc;
   }, []);
 }
 
-export function accumulateSelectedClusters(
-  clusters,
-  totalClusterPoints,
-  aggregate
-) {
+export function accumulateSelectedClusters(clusters, totalClusterPoints) {
   return clusters.reduce((acc, cl) => {
     if (cl.properties.cluster) {
       const { coordinates } = cl.geometry;
@@ -665,8 +681,17 @@ export function accumulateSelectedClusters(
         latitude: String(coordinates[1]),
         longitude: String(coordinates[0]),
         radius: calcClusterSize(cl.properties.point_count, totalClusterPoints),
+        selected: cl.selected,
       });
     }
     return acc;
-  }, aggregate);
+  }, []);
+}
+
+export function styleSpotlight(sp) {
+  const baseLocationStyles = { strokeWidth: 2, stroke: colors.yellow };
+  return {
+    ...baseLocationStyles,
+    strokeDasharray: sp.type === ASSOCIATION_TYPES.DASH ? "2" : "",
+  };
 }

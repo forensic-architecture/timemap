@@ -1,5 +1,6 @@
 import React from "react";
 import { colors } from "../../../common/global";
+import SpotlightGradient from "../../atoms/SpotlightGradient";
 import { getEventCategories } from "../../../common/utilities";
 import { ASSOCIATION_TYPES } from "../../../common/constants";
 
@@ -10,31 +11,30 @@ const TimelineSpotlightEvents = ({
   eventRadius,
   categories,
   transitionDuration,
-  selected,
+  events,
 }) => {
   function renderSpotlightEvent(acc, event) {
-    function renderMarker(y, spotlightType) {
-      const dashSpotlight = spotlightType === ASSOCIATION_TYPES.DASH;
+    function renderMarker(y) {
+      const { styles } = event;
       return (
-        <circle
+        <g
           className="spotlight-marker"
-          cx={0}
-          cy={0}
-          stroke={styles ? styles.stroke : colors.white}
-          stroke-opacity="1"
-          stroke-width={styles ? styles.strokeWidth : 2}
-          stroke-linejoin="round"
-          stroke-dasharray={dashSpotlight ? "2,2" : ""}
-          style={{
-            transform: `translate(${getEventX(event)}px, ${y}px)`,
-            "-webkit-transition": `transform ${
-              transitionDuration / 1000
-            }s ease`,
-            "-moz-transition": "none",
-            opacity: 1,
-          }}
-          r={eventRadius * 2}
-        />
+          transform={`translate(${getEventX(event)}, ${y})`}
+        >
+          <path
+            className="spotlight-interactive"
+            stroke="url(#spotlight-gradient)"
+            stroke-opacity="1"
+            stroke-width={styles ? styles.strokeWidth : 2}
+            stroke-linecap=""
+            stroke-linejoin="round"
+            stroke-dasharray={styles ? styles.strokeDasharray : "2"}
+            fill="none"
+            d={`M0,0a${eventRadius},${eventRadius} 0 1,0 ${
+              eventRadius * 2
+            },0 a${eventRadius},${eventRadius} 0 1,0 -${eventRadius * 2},0 `}
+          />
+        </g>
       );
     }
 
@@ -42,18 +42,19 @@ const TimelineSpotlightEvents = ({
       getEventY({ ...event, category: cat })
     );
 
-    const { spotlightType } = event;
-
     if (evShadows.length > 0) {
-      evShadows.forEach((y) => acc.push(renderMarker(y, spotlightType)));
+      evShadows.forEach((y) => acc.push(renderMarker(y)));
     } else {
-      acc.push(renderMarker(getEventY(event), spotlightType));
+      acc.push(renderMarker(getEventY(event)));
     }
     return acc;
   }
 
   return (
-    <g clipPath="url(#clip)">{selected.reduce(renderSpotlightEvent, [])}</g>
+    <g clipPath="url(#clip)">
+      <SpotlightGradient />
+      {events.reduce(renderSpotlightEvent, [])}
+    </g>
   );
 };
 

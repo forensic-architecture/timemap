@@ -25,8 +25,8 @@ import {
   calculateTotalClusterPoints,
   findLocationsWithActiveSpotlight,
   accumulateSelectedClusters,
+  getTotalClusterSpotlights,
 } from "../../../common/utilities";
-import { ASSOCIATION_TYPES } from "../../../common/constants";
 
 // NB: important constants for map, TODO: make statics
 // Note: Base map is OpenStreetMaps by default; can choose another base map
@@ -225,20 +225,23 @@ class Map extends React.Component {
   }
 
   getSelectedClusters(selected) {
-    const selectedIds = selected.map((sl) => sl.id);
-
     if (this.state.clusters && this.state.clusters.length > 0) {
       return this.state.clusters.reduce((acc, cl) => {
         if (cl.properties.cluster) {
           const children = this.getClusterChildren(cl.properties.cluster_id);
           if (children && children.length > 0) {
-            children.forEach((child) => {
-              const clusterPresent =
-                acc.findIndex((item) => item.id === cl.id) >= 0;
-              if (selectedIds.includes(child.id) && !clusterPresent) {
-                acc.push(cl);
-              }
-            });
+            const selectedChildren = children.reduce((total, child) => {
+              const isSelected = selected.find((sl) => sl.id === child.id);
+              if (isSelected) total.push(isSelected);
+              return total;
+            }, []);
+            // Check to see that we haven't added the cluster to the set & it has selected locations in the cluster
+            if (
+              acc.findIndex((item) => item.id === cl.id) < 0 &&
+              selectedChildren.length > 0
+            ) {
+              acc.push({ ...cl, selected: selectedChildren });
+            }
           }
         }
         return acc;
@@ -431,28 +434,23 @@ class Map extends React.Component {
   renderSelected() {
     const { selected } = this.props.app;
     const selectedClusters = this.getSelectedClusters(selected);
-    const totalMarkers = [];
 
-    selected.forEach((s) => {
-      const { latitude, longitude } = s;
-      totalMarkers.push({
-        latitude,
-        longitude,
-        radius: this.props.ui.eventRadius,
-      });
-    });
+    const totalSelectedLocations = selected.map((s) => ({
+      latitude: s.latitude,
+      longitude: s.longitude,
+      radius: this.props.ui.eventRadius,
+    }));
 
     const totalClusterPoints = calculateTotalClusterPoints(this.state.clusters);
-    const totalSelected = accumulateSelectedClusters(
+    const totalSelectedClusters = accumulateSelectedClusters(
       selectedClusters,
-      totalClusterPoints,
-      totalMarkers
+      totalClusterPoints
     );
 
     return (
       <SelectedEvents
         svg={this.svgRef.current}
-        selected={totalSelected}
+        selected={[...totalSelectedLocations, ...totalSelectedClusters]}
         projectPoint={this.projectPoint}
         styles={this.props.ui.mapSelectedEvents}
       />
@@ -469,38 +467,41 @@ class Map extends React.Component {
       locations,
       activeSpotlight
     );
+
+    const individualClusters = this.state.clusters.filter(
+      (cl) => !cl.properties.cluster
+    );
+
+    const filteredLocations = mapClustersToLocations(
+      individualClusters,
+      locationsWithSpotlight
+    );
+
+    const selectedLocations = filteredLocations.map((loc) => ({
+      latitude: loc.latitude,
+      longitude: loc.longitude,
+      radius: this.props.ui.eventRadius,
+      spotlights: loc.spotlights,
+    }));
+
     const clustersWithSpotlights = this.getSelectedClusters(
       locationsWithSpotlight
     );
 
-    const baseLocationStyles = { strokeWidth: 2 };
-
-    const selectedLocations = locationsWithSpotlight.reduce((acc, loc) => {
-      const { latitude, longitude } = loc;
-      const styles = {
-        ...baseLocationStyles,
-        strokeDasharray:
-          loc.spotlightType === ASSOCIATION_TYPES.DASH ? "2" : "",
-      };
-      acc.push({
-        latitude,
-        longitude,
-        radius: this.props.ui.eventRadius,
-        styles: styles,
-      });
-      return acc;
-    }, []);
-
-    const totalSelected = accumulateSelectedClusters(
+    const selectedClusters = accumulateSelectedClusters(
       clustersWithSpotlights,
-      totalClusterPoints,
-      selectedLocations
+      totalClusterPoints
     );
+
+    const selectedClustersWithSpotlights = selectedClusters.map((cl) => ({
+      ...cl,
+      spotlights: getTotalClusterSpotlights(cl, activeSpotlight),
+    }));
 
     return (
       <SpotlightMapEvents
         svg={this.svgRef.current}
-        selected={totalSelected}
+        selected={[...selectedLocations, ...selectedClustersWithSpotlights]}
         projectPoint={this.projectPoint}
       />
     );

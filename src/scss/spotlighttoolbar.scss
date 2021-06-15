@@ -84,17 +84,17 @@
 
 .spotlight-marker {
   .spotlight-interactive {
-    transform-origin: center;
-    transform-box: fill-box;
-    animation: rotate 8s linear infinite;
+    // transform-origin: center;
+    // transform-box: fill-box;
+    // animation: rotate 8s linear infinite;
   }
 
-  @keyframes rotate {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
+  // @keyframes rotate {
+  //   from {
+  //     transform: rotate(0deg);
+  //   }
+  //   to {
+  //     transform: rotate(360deg);
+  //   }
+  // }
 }
