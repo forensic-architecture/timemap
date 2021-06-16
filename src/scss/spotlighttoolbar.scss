@@ -6,12 +6,13 @@
   height: 150px;
   color: white;
   z-index: $timeline;
-  bottom: 225px;
+  top: calc(100vh - 340px);
 
   .spotlight-toolbar {
     svg {
       display: inline-block;
       float: left;
+      box-sizing: border-box;
     }
 
     .spotlight-group {
