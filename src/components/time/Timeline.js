@@ -421,6 +421,7 @@ class Timeline extends React.Component {
                 onMove={(dir) => {
                   this.onMoveTime(dir);
                 }}
+                size={45}
               />
               <ZoomControls
                 extent={this.getTimeScaleExtent()}

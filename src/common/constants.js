@@ -46,3 +46,5 @@ export const ASSOCIATION_TYPES = {
 };
 
 export const DATASHEET_FALSE = "FALSE";
+
+export const SPOTLIGHT_TITLE_LENGTH = 22;

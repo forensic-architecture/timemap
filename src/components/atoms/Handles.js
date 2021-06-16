@@ -1,8 +1,7 @@
 import React from "react";
 
-const Handles = ({ classes, dims, onMove }) => {
+const Handles = ({ classes, dims, onMove, size }) => {
   const transform = "scale(1.5,1.5)";
-  const size = 45;
 
   return (
     <g className={classes}>

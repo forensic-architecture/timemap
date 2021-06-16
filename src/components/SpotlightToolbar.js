@@ -6,6 +6,7 @@ import hash from "object-hash";
 import { setActiveSpotlight } from "../actions";
 import * as selectors from "../selectors/index";
 import { getUniqueSpotlights } from "../common/utilities";
+import { SPOTLIGHT_TITLE_LENGTH } from "../common/constants";
 
 import Handles from "./atoms/Handles";
 
@@ -149,6 +150,11 @@ class SpotlightToolbar extends React.Component {
       <g className="spotlight-group">
         {this.state.spotlights.map((sp, idx) => {
           const { title } = sp;
+          const formattedTitle =
+            title.length > SPOTLIGHT_TITLE_LENGTH
+              ? `${title.slice(0, SPOTLIGHT_TITLE_LENGTH)}...`
+              : title;
+
           const xPos = xPositions[idx];
           const classes = `spotlight-button ${
             this.props.activeSpotlight === title ? " active" : ""
@@ -171,7 +177,7 @@ class SpotlightToolbar extends React.Component {
                 width={buttonWidth}
                 height={contentHeight}
               >
-                {title}
+                {formattedTitle}
               </text>
             </g>
           );
@@ -218,6 +224,7 @@ class SpotlightToolbar extends React.Component {
               onMove={(dir) => {
                 this.onMoveSpotlight(dir);
               }}
+              size={20}
             />
           </svg>
         </div>
