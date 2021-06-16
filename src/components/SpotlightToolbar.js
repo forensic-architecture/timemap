@@ -190,6 +190,9 @@ class SpotlightToolbar extends React.Component {
 
     return (
       <div className="spotlight-wrapper" style={heightStyle}>
+        <div className="spotlight-header">
+          <p>{this.props.header}</p>
+        </div>
         <div
           id={this.props.dom.spotlightToolbar}
           className="spotlight-toolbar"

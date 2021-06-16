@@ -6,9 +6,20 @@
   height: 150px;
   color: white;
   z-index: $timeline;
-  top: calc(100vh - 340px);
+  top: calc(100vh - 325px);
+  display: flex;
+  flex-direction: row;
+  background: $black-transparent;
+
+  .spotlight-header {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
 
   .spotlight-toolbar {
+    width: 75%;
     svg {
       display: inline-block;
       float: left;
