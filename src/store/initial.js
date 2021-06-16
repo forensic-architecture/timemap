@@ -83,7 +83,7 @@ const initial = {
         height: isSmallLaptop ? 70 : 100,
         width: 0,
         marginLeft: 30,
-        // contentHeight: isSmallLaptop ? 60 : 100,
+        contentHeight: isSmallLaptop ? 60 : 100,
         width_controls: 60,
       },
     },

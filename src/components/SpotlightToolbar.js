@@ -18,9 +18,8 @@ class SpotlightToolbar extends React.Component {
       startIdx: 0,
       endIdx: 0,
       xPositions: [],
-      buttonWidth: 0,
       spotlights: props.spotlights,
-      dimensions: props.dimensions,
+      dims: props.dimensions,
     };
   }
 
@@ -29,7 +28,7 @@ class SpotlightToolbar extends React.Component {
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        this.computeDims();
+        this.updateDims();
       }, 75);
     });
   }
@@ -37,16 +36,12 @@ class SpotlightToolbar extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (hash(prevProps.spotlights) !== hash(this.props.spotlights)) {
       const uniqueSpotlights = getUniqueSpotlights(this.props.spotlights);
-      const buttonWidth = this.computeButtonWidth(this.state.dimensions);
+      const newDims = this.computeDims();
 
       this.setState({
         spotlights: uniqueSpotlights,
-        xPositions: this.computeXPositions(
-          uniqueSpotlights,
-          this.state.dimensions,
-          buttonWidth
-        ),
-        buttonWidth: buttonWidth,
+        xPositions: this.computeXPositions(uniqueSpotlights, newDims),
+        dims: newDims,
       });
     }
   }
@@ -58,9 +53,10 @@ class SpotlightToolbar extends React.Component {
       endIdx: end,
       maxInView,
       spotlights,
-      buttonWidth,
+      dims,
     } = this.state;
 
+    const { buttonWidth } = dims;
     const totalSpotlightLength = spotlights.length;
 
     if (direction === "forward") {
@@ -89,9 +85,17 @@ class SpotlightToolbar extends React.Component {
     });
   }
 
-  computeXPositions(spotlights, dims, buttonWidth) {
+  computeXPositions(spotlights, dims) {
     return spotlights.map((_, idx) => {
-      return dims.marginLeft + idx * buttonWidth;
+      return dims.marginLeft + idx * dims.buttonWidth;
+    });
+  }
+
+  updateDims() {
+    const updatedDims = this.computeDims();
+    this.setState({
+      dims: updatedDims,
+      xPositions: this.computeXPositions(this.state.spotlights, updatedDims),
     });
   }
 
@@ -102,40 +106,33 @@ class SpotlightToolbar extends React.Component {
         .querySelector(`#${dom}`)
         .getBoundingClientRect();
 
-      const newDimensions = {
+      const updatedDims = {
+        ...this.state.dims,
         width: boundingClient.width,
         height: boundingClient.height,
-        ...this.state.dimensions,
       };
-      const buttonWidth = this.computeButtonWidth(newDimensions);
-      console.info("COMPUTE DIMS BW: ", buttonWidth);
-      this.setState({
-        dimensions: {
-          ...this.props.dimensions,
-          width: boundingClient.width,
-          height: boundingClient.height,
-        },
-        xPositions: this.computeXPositions(
-          this.state.spotlights,
-          newDimensions,
-          buttonWidth
-        ),
-        buttonWidth: buttonWidth,
-      });
+
+      const { contentHeight, contentWidth } = this.computeContentDims(
+        updatedDims
+      );
+
+      const newDims = {
+        ...updatedDims,
+        contentHeight,
+        contentWidth,
+        buttonWidth: contentWidth / this.state.maxInView,
+      };
+
+      return newDims;
     }
   }
 
-  computeContentDims(width, height) {
-    const { dimensions: dims } = this.state;
+  computeContentDims(dims) {
+    const { height, width, marginLeft, width_controls } = dims;
     return {
-      contentHeight: height - dims.marginLeft,
-      contentWidth: width - dims.marginLeft - dims.width_controls,
+      contentHeight: height - marginLeft,
+      contentWidth: width - marginLeft - width_controls,
     };
-  }
-
-  computeButtonWidth(dims) {
-    const contentDims = this.computeContentDims(dims.width, dims.height);
-    return contentDims.contentWidth / this.state.maxInView;
   }
 
   onSpotlightSelect(title) {
@@ -145,19 +142,9 @@ class SpotlightToolbar extends React.Component {
   }
 
   renderSpotlightButtons() {
-    const { dimensions: dims, xPositions, buttonWidth } = this.state;
-    // const buttonWidth = this.computeButtonWidth(dims);
-    const contentDims = this.computeContentDims(dims.width, dims.height);
-    // console.info('RENDER BW: ', buttonWidth)
-    console.info(
-      "BUTTON WIDTH: ",
-      buttonWidth,
-      "CONTENT WIDTH: ",
-      contentDims.contentWidth,
-      "X POS IN RENDER: ",
-      xPositions
-    );
-    // const xPositions = this.computeXPositions(this.state.spotlights, dims)
+    const { dims, xPositions } = this.state;
+    const { contentHeight, buttonWidth } = dims;
+
     return (
       <g className="spotlight-group">
         {this.state.spotlights.map((sp, idx) => {
@@ -175,14 +162,14 @@ class SpotlightToolbar extends React.Component {
               <rect
                 transform={`translate(${xPos}, 0)`}
                 width={buttonWidth}
-                height={contentDims.contentHeight}
+                height={contentHeight}
               />
               <text
                 transform={`translate(${xPos + buttonWidth / 2}, ${
-                  contentDims.contentHeight / 2
+                  contentHeight / 2
                 })`}
                 width={buttonWidth}
-                height={contentDims.contentHeight}
+                height={contentHeight}
               >
                 {title}
               </text>
@@ -194,15 +181,12 @@ class SpotlightToolbar extends React.Component {
   }
 
   render() {
-    const { dimensions } = this.state;
-    const { width, height } = dimensions;
+    const { dims } = this.state;
+    const { width, height, contentHeight, contentWidth } = dims;
     const heightStyle = { height: height };
     const widthStyle = { width: width };
 
     const containerStyles = { ...heightStyle, ...widthStyle };
-
-    const contentDims = this.computeContentDims(width, height);
-    const { contentHeight, contentWidth } = contentDims;
 
     return (
       <div className="spotlight-wrapper" style={heightStyle}>
@@ -214,7 +198,7 @@ class SpotlightToolbar extends React.Component {
           <svg ref={this.svgRef} style={containerStyles}>
             <clipPath id="spotlight-clip">
               <rect
-                x={dimensions.marginLeft}
+                x={dims.marginLeft}
                 y="0"
                 width={contentWidth}
                 height={contentHeight}
@@ -224,7 +208,7 @@ class SpotlightToolbar extends React.Component {
             <Handles
               classes="time-controls-inline"
               dims={{
-                ...dimensions,
+                ...dims,
                 contentHeight: contentHeight,
                 heightDiffControls: contentHeight / 2,
               }}
