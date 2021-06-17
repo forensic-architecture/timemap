@@ -145,6 +145,7 @@ class SpotlightToolbar extends React.Component {
   renderSpotlightButtons() {
     const { dims, xPositions } = this.state;
     const { contentHeight, buttonWidth } = dims;
+    const fontSize = window.innerWidth > 1000 ? 0.65 : 0.45;
 
     return (
       <g className="spotlight-group">
@@ -176,6 +177,7 @@ class SpotlightToolbar extends React.Component {
                 })`}
                 width={buttonWidth}
                 height={contentHeight}
+                fontSize={`${fontSize}rem`}
               >
                 {formattedTitle}
               </text>

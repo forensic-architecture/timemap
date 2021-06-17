@@ -79,6 +79,7 @@ const initial = {
     },
     spotlightToolbar: {
       header: null,
+      title: null,
       dimensions: {
         height: isSmallLaptop ? 50 : 65,
         width: 0,

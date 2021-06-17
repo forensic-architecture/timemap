@@ -267,6 +267,33 @@ class Dashboard extends React.Component {
     );
   }
 
+  renderSpotlightCard(isMobile) {
+    const { app, domain, actions } = this.props;
+    const { spotlight } = app.associations;
+    console.info(this.props);
+    const associatedSpotlight = spotlight
+      ? domain.associations.find((a) => a.title === spotlight)
+      : "";
+
+    const styles = {
+      width: "100px",
+      bottom: "500px",
+      zIndex: 3,
+    };
+
+    return (
+      <Popup
+        title={associatedSpotlight ? associatedSpotlight.title : ""}
+        theme="dark"
+        isOpen={!!associatedSpotlight}
+        onClose={() => actions.setActiveSpotlight("")}
+        content={associatedSpotlight ? [associatedSpotlight.desc] : []}
+        styles={styles}
+        isMobile={isMobile}
+      ></Popup>
+    );
+  }
+
   render() {
     const { actions, app, domain, features } = this.props;
     const dateHeight = 80;
@@ -344,6 +371,7 @@ class Dashboard extends React.Component {
           }}
         />
         {features.USE_SPOTLIGHTS && <SpotlightToolbar />}
+        {features.USE_SPOTLIGHTS && this.renderSpotlightCard(false)}
         <Timeline
           onKeyDown={this.onKeyDown}
           methods={{
