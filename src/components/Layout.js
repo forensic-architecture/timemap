@@ -270,15 +270,17 @@ class Dashboard extends React.Component {
   renderSpotlightCard(isMobile) {
     const { app, domain, actions } = this.props;
     const { spotlight } = app.associations;
-    console.info(this.props);
+
     const associatedSpotlight = spotlight
       ? domain.associations.find((a) => a.title === spotlight)
       : "";
 
     const styles = {
-      width: "100px",
-      bottom: "500px",
+      width: "25vw",
+      bottom: "335px",
       zIndex: 3,
+      fontSize: "12px",
+      borderWidth: "0.5px",
     };
 
     return (
@@ -371,7 +373,9 @@ class Dashboard extends React.Component {
           }}
         />
         {features.USE_SPOTLIGHTS && <SpotlightToolbar />}
-        {features.USE_SPOTLIGHTS && this.renderSpotlightCard(false)}
+        {features.USE_SPOTLIGHTS &&
+          this.props.app.associations.spotlight &&
+          this.renderSpotlightCard(false)}
         <Timeline
           onKeyDown={this.onKeyDown}
           methods={{

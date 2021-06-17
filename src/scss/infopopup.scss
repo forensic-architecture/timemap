@@ -35,6 +35,10 @@
     }
   }
 
+  p {
+    word-wrap: break-word;
+  }
+
   &.dark {
     // background: $black-transparent;
     background: rgba(0, 0, 0, 0.8);
