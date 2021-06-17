@@ -1,10 +1,12 @@
 import React from "react";
 import Checkbox from "../atoms/Checkbox";
 import marked from "marked";
+import { COLORING_ALGORITHM_MODE } from "../../common/constants";
 import {
   aggregateFilterPaths,
   getFilterIdxFromColorSet,
   getPathLeaf,
+  findStaticFilterColor,
 } from "../../common/utilities";
 
 /** recursively get an array of node keys to toggle */
@@ -31,16 +33,23 @@ function FilterListPanel({
   filterColors,
   title,
   description,
+  coloringMode,
 }) {
   function createNodeComponent(filter, depth) {
     const [key, children] = filter;
     const pathLeaf = getPathLeaf(key);
     const matchingKeys = getFiltersToToggle(filter, activeFilters);
     const idxFromColorSet = getFilterIdxFromColorSet(key, coloringSet);
-    const assignedColor =
+    const dynamicAlgColor =
       idxFromColorSet !== -1 && activeFilters.includes(key)
         ? filterColors[idxFromColorSet]
         : "";
+
+    const foundStaticColour = findStaticFilterColor(filters, matchingKeys);
+    const assignedColor =
+      coloringMode === COLORING_ALGORITHM_MODE.STATIC && foundStaticColour
+        ? foundStaticColour
+        : dynamicAlgColor;
 
     const styles = {
       color: assignedColor,

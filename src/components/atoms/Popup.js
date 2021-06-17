@@ -18,7 +18,7 @@ const Popup = ({
       className={`infopopup ${isOpen ? "" : "hidden"} ${
         theme === "dark" ? "dark" : "light"
       } ${isMobile ? "mobile" : ""}`}
-      style={{ ...styles, fontSize }}
+      style={{ fontSize, ...styles }}
     >
       <div className="legend-header">
         <button

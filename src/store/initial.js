@@ -3,7 +3,10 @@ import { mergeDeepLeft } from "ramda";
 import global, { colors } from "../common/global";
 import copy from "../common/data/copy.json";
 import { language } from "../common/utilities";
-import { DEFAULT_TAB_ICONS } from "../common/constants";
+import {
+  DEFAULT_TAB_ICONS,
+  COLORING_ALGORITHM_MODE,
+} from "../common/constants";
 
 const isSmallLaptop = window.innerHeight < 800;
 const mapIniital = {
@@ -58,6 +61,7 @@ const initial = {
       coloringSet: [],
       filters: [],
       narrative: null,
+      spotlight: null,
       categories: [],
       views: {
         events: true,
@@ -73,6 +77,17 @@ const initial = {
       minZoom: 2,
       maxZoom: 16,
     },
+    spotlightToolbar: {
+      header: null,
+      title: null,
+      dimensions: {
+        height: isSmallLaptop ? 50 : 65,
+        width: 0,
+        marginLeft: 30,
+        contentHeight: isSmallLaptop ? 40 : 55,
+        width_controls: 60,
+      },
+    },
     timeline: {
       dimensions: {
         height: isSmallLaptop ? 170 : 250,
@@ -82,6 +97,7 @@ const initial = {
         marginBottom: 60,
         contentHeight: isSmallLaptop ? 160 : 200,
         width_controls: 100,
+        heightDiffControls: 10,
       },
       range: [new Date(2001, 2, 23, 12), new Date(2021, 2, 23, 12)],
       rangeLimits: [new Date(1, 1, 1, 1), new Date()],
@@ -178,10 +194,13 @@ const initial = {
       },
     },
     coloring: {
+      mode: COLORING_ALGORITHM_MODE.DYNAMIC,
+      defaultColor: "#ffffff",
       maxNumOfColors: 4,
       colors: Object.values(colors),
     },
     dom: {
+      spotlightToolbar: "spotlight",
       timeline: "timeline",
       timeslider: "timeslider",
       map: "map",
@@ -191,6 +210,7 @@ const initial = {
 
   features: {
     USE_COVER: false,
+    STATIC_MARKER_COLORING: false,
     USE_ASSOCIATIONS: false,
     USE_SITES: false,
     USE_SOURCES: false,

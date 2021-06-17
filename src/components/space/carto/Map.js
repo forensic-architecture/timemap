@@ -12,6 +12,7 @@ import Regions from "./atoms/Regions";
 import Events from "./atoms/Events";
 import Clusters from "./atoms/Clusters";
 import SelectedEvents from "./atoms/SelectedEvents";
+import SpotlightMapEvents from "./atoms/SpotlightEvents";
 import Narratives from "./atoms/Narratives";
 import DefsMarkers from "./atoms/DefsMarkers";
 import LoadingOverlay from "../../atoms/Loading";
@@ -22,7 +23,9 @@ import {
   isLatitude,
   isLongitude,
   calculateTotalClusterPoints,
-  calcClusterSize,
+  findLocationsWithActiveSpotlight,
+  accumulateSelectedClusters,
+  getTotalClusterSpotlights,
 } from "../../../common/utilities";
 
 // NB: important constants for map, TODO: make statics
@@ -221,22 +224,24 @@ class Map extends React.Component {
     return [];
   }
 
-  getSelectedClusters() {
-    const { selected } = this.props.app;
-    const selectedIds = selected.map((sl) => sl.id);
-
+  getSelectedClusters(selected) {
     if (this.state.clusters && this.state.clusters.length > 0) {
       return this.state.clusters.reduce((acc, cl) => {
         if (cl.properties.cluster) {
           const children = this.getClusterChildren(cl.properties.cluster_id);
           if (children && children.length > 0) {
-            children.forEach((child) => {
-              const clusterPresent =
-                acc.findIndex((item) => item.id === cl.id) >= 0;
-              if (selectedIds.includes(child.id) && !clusterPresent) {
-                acc.push(cl);
-              }
-            });
+            const selectedChildren = children.reduce((total, child) => {
+              const isSelected = selected.find((sl) => sl.id === child.id);
+              if (isSelected) total.push(isSelected);
+              return total;
+            }, []);
+            // Check to see that we haven't added the cluster to the set & it has selected locations in the cluster
+            if (
+              acc.findIndex((item) => item.id === cl.id) < 0 &&
+              selectedChildren.length > 0
+            ) {
+              acc.push({ ...cl, selected: selectedChildren });
+            }
           }
         }
         return acc;
@@ -399,7 +404,8 @@ class Map extends React.Component {
         getCategoryColor={this.props.methods.getCategoryColor}
         eventRadius={this.props.ui.eventRadius}
         coloringSet={this.props.app.coloringSet}
-        filterColors={this.props.ui.filterColors}
+        filters={this.props.domain.filters}
+        coloringConfig={this.props.ui.coloringConfig}
         features={this.props.features}
       />
     );
@@ -419,46 +425,91 @@ class Map extends React.Component {
         onSelect={this.onClusterSelect}
         coloringSet={this.props.app.coloringSet}
         getClusterChildren={this.getClusterChildren}
-        filterColors={this.props.ui.filterColors}
+        coloringConfig={this.props.ui.coloringConfig}
+        filters={this.props.domain.filters}
       />
     );
   }
 
   renderSelected() {
-    const selectedClusters = this.getSelectedClusters();
-    const totalMarkers = [];
+    const { selected } = this.props.app;
+    const selectedClusters = this.getSelectedClusters(selected);
 
-    this.props.app.selected.forEach((s) => {
-      const { latitude, longitude } = s;
-      totalMarkers.push({
-        latitude,
-        longitude,
-        radius: this.props.ui.eventRadius,
-      });
-    });
+    const totalSelectedLocations = selected.map((s) => ({
+      latitude: s.latitude,
+      longitude: s.longitude,
+      radius: this.props.ui.eventRadius,
+    }));
 
     const totalClusterPoints = calculateTotalClusterPoints(this.state.clusters);
-
-    selectedClusters.forEach((cl) => {
-      if (cl.properties.cluster) {
-        const { coordinates } = cl.geometry;
-        totalMarkers.push({
-          latitude: String(coordinates[1]),
-          longitude: String(coordinates[0]),
-          radius: calcClusterSize(
-            cl.properties.point_count,
-            totalClusterPoints
-          ),
-        });
-      }
-    });
+    const totalSelectedClusters = accumulateSelectedClusters(
+      selectedClusters,
+      totalClusterPoints
+    );
 
     return (
       <SelectedEvents
         svg={this.svgRef.current}
-        selected={totalMarkers}
+        selected={[...totalSelectedLocations, ...totalSelectedClusters]}
         projectPoint={this.projectPoint}
         styles={this.props.ui.mapSelectedEvents}
+      />
+    );
+  }
+
+  renderSpotlightEvents() {
+    const { activeSpotlight } = this.props.app;
+    const { locations } = this.props.domain;
+
+    const totalClusterPoints = calculateTotalClusterPoints(this.state.clusters);
+
+    const locationsWithSpotlight = findLocationsWithActiveSpotlight(
+      locations,
+      activeSpotlight
+    );
+
+    const individualClusters = this.state.clusters.filter(
+      (cl) => !cl.properties.cluster
+    );
+
+    const filteredLocations = mapClustersToLocations(
+      individualClusters,
+      locationsWithSpotlight
+    );
+
+    const selectedLocations = filteredLocations.map((loc) => ({
+      latitude: loc.latitude,
+      longitude: loc.longitude,
+      radius: this.props.ui.eventRadius,
+      spotlights: loc.spotlights,
+    }));
+
+    // const selectedLocations = locationsWithSpotlight.map((loc) => ({
+    //   latitude: loc.latitude,
+    //   longitude: loc.longitude,
+    //   radius: this.props.ui.eventRadius,
+    //   spotlights: loc.spotlights,
+    // }));
+
+    const clustersWithSpotlights = this.getSelectedClusters(
+      locationsWithSpotlight
+    );
+
+    const selectedClusters = accumulateSelectedClusters(
+      clustersWithSpotlights,
+      totalClusterPoints
+    );
+
+    const selectedClustersWithSpotlights = selectedClusters.map((cl) => ({
+      ...cl,
+      spotlights: getTotalClusterSpotlights(cl, activeSpotlight),
+    }));
+
+    return (
+      <SpotlightMapEvents
+        svg={this.svgRef.current}
+        selected={[...selectedLocations, ...selectedClustersWithSpotlights]}
+        projectPoint={this.projectPoint}
       />
     );
   }
@@ -486,6 +537,7 @@ class Map extends React.Component {
         {this.renderEvents()}
         {this.renderClusters()}
         {this.renderSelected()}
+        {this.props.features.USE_SPOTLIGHTS && this.renderSpotlightEvents()}
       </>
     ) : null;
 
@@ -509,6 +561,7 @@ function mapStateToProps(state) {
       locations: selectors.selectLocations(state),
       narratives: selectors.selectNarratives(state),
       categories: selectors.getCategories(state),
+      filters: selectors.getFilters(state),
       sites: selectors.selectSites(state),
       regions: selectors.selectRegions(state),
     },
@@ -521,6 +574,7 @@ function mapStateToProps(state) {
       language: state.app.language,
       loading: state.app.loading,
       narrative: state.app.associations.narrative,
+      activeSpotlight: state.app.associations.spotlight,
       coloringSet: state.app.associations.coloringSet,
       flags: {
         isShowingSites: state.app.flags.isShowingSites,
@@ -535,7 +589,7 @@ function mapStateToProps(state) {
       regions: state.ui.style.regions,
       eventRadius: state.ui.eventRadius,
       radial: state.ui.style.clusters.radial,
-      filterColors: state.ui.coloring.colors,
+      coloringConfig: state.ui.coloring,
     },
     features: selectors.getFeatures(state),
   };

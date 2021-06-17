@@ -1,12 +1,15 @@
 import React from "react";
 import { Portal } from "react-portal";
 import colors from "../../../../common/global";
+import { COLORING_ALGORITHM_MODE } from "../../../../common/constants";
 import ColoredMarkers from "../../../atoms/ColoredMarkers";
 import {
   calcOpacity,
   getCoordinatesForPercent,
   calculateColorPercentages,
   zipColorsToPercentages,
+  appendFiltersToColoringSet,
+  getStaticFilterColorSet,
 } from "../../../../common/utilities";
 
 function MapEvents({
@@ -21,7 +24,8 @@ function MapEvents({
   locations,
   eventRadius,
   coloringSet,
-  filterColors,
+  filters,
+  coloringConfig,
   features,
 }) {
   function handleEventSelect(e, location) {
@@ -47,7 +51,21 @@ function MapEvents({
   }
 
   function renderLocationSlicesByAssociation(location) {
-    const colorPercentages = calculateColorPercentages([location], coloringSet);
+    const { mode, colors, defaultColor } = coloringConfig;
+
+    const updatedColoringSet =
+      mode === COLORING_ALGORITHM_MODE.STATIC
+        ? appendFiltersToColoringSet(filters, coloringSet)
+        : coloringSet;
+    const updatedFilterColors =
+      mode === COLORING_ALGORITHM_MODE.STATIC
+        ? getStaticFilterColorSet(filters, updatedColoringSet, defaultColor)
+        : colors;
+
+    const colorPercentages = calculateColorPercentages(
+      [location],
+      updatedColoringSet
+    );
 
     const styles = {
       stroke: colors.darkBackground,
@@ -58,7 +76,10 @@ function MapEvents({
     return (
       <ColoredMarkers
         radius={eventRadius}
-        colorPercentMap={zipColorsToPercentages(filterColors, colorPercentages)}
+        colorPercentMap={zipColorsToPercentages(
+          updatedFilterColors,
+          colorPercentages
+        )}
         styles={{
           ...styles,
         }}
