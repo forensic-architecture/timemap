@@ -163,6 +163,7 @@ const TimelineEvents = ({
   coloringConfig,
   filters,
   coloringSet,
+  defaultCategory,
 }) => {
   const narIds = narrative ? narrative.steps.map((s) => s.id) : [];
 
@@ -203,13 +204,15 @@ const TimelineEvents = ({
     const evShadows = getEventCategories(event, categories).map((cat) => {
       const y = getY({ ...event, category: cat });
 
-      const colour = event.colour ? event.colour : getCategoryColor(cat.title);
+      const colour = event.colour ? event.colour : getCategoryColor(cat);
 
       const styles = {
         fill: colour,
         fillOpacity: y > 0 ? calcOpacity(1) : 0,
         transition: `transform ${transitionDuration / 1000}s ease`,
       };
+
+      // const radius = cat === defaultCategory ? eventRadius + 2 : eventRadius;
 
       return { y, styles };
     });

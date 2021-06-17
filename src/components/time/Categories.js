@@ -25,8 +25,17 @@ class TimelineCategories extends React.Component {
   }
 
   renderCategory(cat, idx) {
-    const { features, dims } = this.props;
-    const strokeWidth = 1; // dims.trackHeight / (this.props.categories.length + 1)
+    const { features, dims, defaultCategory } = this.props;
+    const isDefaultCategory = cat === defaultCategory;
+
+    const styles = {
+      strokeWidth: isDefaultCategory ? 2 : 1,
+      opacity: isDefaultCategory ? "0.65" : "0.5",
+    };
+
+    const fontSize = isDefaultCategory ? "14px" : "";
+
+    // const strokeWidth = isDefaultCategory ? 2 : 1; // dims.trackHeight / (this.props.categories.length + 1)
     if (
       features.GRAPH_NONLOCATED &&
       features.GRAPH_NONLOCATED.categories &&
@@ -39,8 +48,7 @@ class TimelineCategories extends React.Component {
       <>
         <g
           className="tick"
-          style={{ strokeWidth }}
-          opacity="0.5"
+          style={styles}
           transform={`translate(0,${this.props.getCategoryY(cat)})`}
         >
           <line x1={dims.marginLeft} x2={dims.width - dims.width_controls} />
@@ -50,7 +58,7 @@ class TimelineCategories extends React.Component {
           opacity="1"
           transform={`translate(0,${this.props.getCategoryY(cat)})`}
         >
-          <text x={dims.marginLeft - 5} dy="0.32em">
+          <text x={dims.marginLeft - 5} dy="0.32em" style={{ fontSize }}>
             {cat}
           </text>
         </g>

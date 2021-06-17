@@ -422,6 +422,7 @@ class Timeline extends React.Component {
                   copy[this.props.app.language].timeline
                     .default_categories_label
                 }
+                defaultCategory={this.props.app.defaultCategory}
               />
               <Handles
                 classes="time-controls-inline"
@@ -480,6 +481,7 @@ class Timeline extends React.Component {
                 coloringConfig={this.props.ui.coloringConfig}
                 filters={this.props.domain.filters}
                 coloringSet={this.props.app.coloringSet}
+                defaultCategory={this.props.app.defaultCategory}
               />
             </svg>
           </div>
