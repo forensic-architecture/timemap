@@ -42,6 +42,7 @@ const TimelineMarkers = ({
         />
       );
     }
+
     function renderBar() {
       return (
         <rect
@@ -70,11 +71,16 @@ const TimelineMarkers = ({
       getEventY({ ...event, category: cat })
     );
 
+    const { shape: eventShapeObj } = event;
+
     function renderMarkerForEvent(y) {
-      switch (event.shape) {
-        case "circle":
+      // Currently, we render a circle marker for all shapes; potential TO-DO: make shape markers
+      switch (eventShapeObj.shape) {
         case AVAILABLE_SHAPES.DIAMOND:
         case AVAILABLE_SHAPES.STAR:
+        case AVAILABLE_SHAPES.PENTAGON:
+        case AVAILABLE_SHAPES.SQUARE:
+        case AVAILABLE_SHAPES.TRIANGLE:
           acc.push(renderCircle(y));
           break;
         case AVAILABLE_SHAPES.BAR:

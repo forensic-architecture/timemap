@@ -2,6 +2,7 @@ export const ASSOCIATION_MODES = {
   CATEGORY: "CATEGORY",
   NARRATIVE: "NARRATIVE",
   FILTER: "FILTER",
+  SPOTLIGHT: "SPOTLIGHT",
 };
 
 export const SHAPE = "SHAPE";
@@ -32,3 +33,18 @@ export const POLYGON_CLIP_PATH = {
 };
 
 export const DEFAULT_CHECKBOX_COLOR = "#ffffff";
+
+export const COLORING_ALGORITHM_MODE = {
+  STATIC: "STATIC",
+  DYNAMIC: "DYNAMIC",
+};
+
+export const ASSOCIATION_TYPES = {
+  SINGLE_SELECT: "SINGLE_SELECT",
+  DASH: "DASH",
+  SOLID: "SOLID",
+};
+
+export const DATASHEET_FALSE = "FALSE";
+
+export const SPOTLIGHT_TITLE_LENGTH = 22;

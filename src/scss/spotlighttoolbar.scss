@@ -1,0 +1,113 @@
+.spotlight-wrapper {
+  position: fixed;
+  box-sizing: border-box;
+  left: $toolbar-width;
+  right: 0px;
+  height: 150px;
+  color: white;
+  z-index: $timeline;
+  top: calc(100vh - 325px);
+  display: flex;
+  flex-direction: row;
+  background: $black-transparent;
+
+  .spotlight-header {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    font-size: 12px;
+    justify-content: center;
+  }
+
+  .spotlight-toolbar {
+    width: 75%;
+
+    svg {
+      display: inline-block;
+      float: left;
+      box-sizing: border-box;
+    }
+
+    .spotlight-group {
+      .spotlight-button {
+        text {
+          transition: 0.5s ease;
+          font-weight: bold;
+          fill: white;
+          text-anchor: middle;
+          z-index: 10000;
+        }
+        rect {
+          transition: 0.5s ease;
+          fill: $black;
+          fill-opacity: 50%;
+          stroke: $midgrey;
+          stroke-width: 1%;
+          stroke-opacity: 50%;
+        }
+        &.active {
+          rect {
+            fill: $offwhite;
+          }
+        }
+        &:hover {
+          cursor: pointer;
+          rect {
+            transition: 0.2 ease;
+            fill: $offwhite;
+          }
+        }
+      }
+    }
+
+    .time-controls-inline path {
+      cursor: pointer;
+      fill: $offwhite;
+    }
+
+    .time-controls-inline circle {
+      fill: $midwhite;
+      fill-opacity: 0.01;
+      cursor: pointer;
+      stroke: $midwhite;
+      stroke-width: 1;
+    }
+
+    .time-controls-inline circle {
+      stroke: none;
+    }
+
+    .time-controls-inline {
+      &:hover {
+        cursor: pointer;
+        circle {
+          transition: 0.2s ease;
+          fill-opacity: 0.2;
+          fill: $offwhite;
+        }
+        path,
+        rect {
+          transition: 0.2s ease;
+          fill: $offwhite;
+        }
+      }
+    }
+  }
+}
+
+// .spotlight-marker {
+//   .spotlight-interactive {
+//     transform-origin: center;
+//     transform-box: fill-box;
+//     animation: rotate 8s linear infinite;
+//   }
+
+//   @keyframes rotate {
+//     from {
+//       transform: rotate(0deg);
+//     }
+//     to {
+//       transform: rotate(360deg);
+//     }
+//   }
+// }

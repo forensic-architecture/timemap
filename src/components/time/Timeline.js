@@ -7,15 +7,17 @@ import hash from "object-hash";
 import { setLoading, setNotLoading } from "../../actions";
 import * as selectors from "../../selectors";
 import copy from "../../common/data/copy.json";
+import { findActiveEventSpotlight } from "../../common/utilities";
 
 import Header from "./atoms/Header";
 import Axis from "./Axis";
 import Clip from "./atoms/Clip";
-import Handles from "./atoms/Handles.js";
+import Handles from "../atoms/Handles.js";
 import ZoomControls from "./atoms/ZoomControls.js";
 import Markers from "./atoms/Markers.js";
 import Events from "./atoms/Events.js";
 import Categories from "./Categories";
+import TimelineSpotlightEvents from "./atoms/SpotlightEvents";
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -326,11 +328,22 @@ class Timeline extends React.Component {
     return this.state.scaleY(category);
   }
 
+  getActiveSpotlightEvents() {
+    const { events } = this.props.domain;
+    return events.reduce((acc, evt) => {
+      const foundSpotlight = findActiveEventSpotlight(
+        evt,
+        this.props.app.activeSpotlight
+      );
+      if (foundSpotlight) acc.push({ ...evt, spotlight: foundSpotlight });
+      return acc;
+    }, []);
+  }
+
   /**
    * Determines additional styles on the <circle> for each location.
    * A location consists of an array of events (see selectors). The function
    * also has full access to the domain and redux state to derive values if
-   * necessary. The function should return an array, where the value at the
    * first index is a styles object for the SVG at the location, and the value
    * at the second index is an optional additional component that renders in
    * the <g/> div.
@@ -349,6 +362,7 @@ class Timeline extends React.Component {
     const extraStyle = { ...heightStyle, ...foldedStyle };
     const contentHeight = { height: dims.contentHeight };
     const { activeCategories: categories } = this.props;
+    const selectedSpotlightEvents = this.getActiveSpotlightEvents();
 
     return (
       <div
@@ -402,16 +416,25 @@ class Timeline extends React.Component {
                 }
               />
               <Handles
+                classes="time-controls-inline"
                 dims={dims}
-                onMoveTime={(dir) => {
+                onMove={(dir) => {
                   this.onMoveTime(dir);
                 }}
+                size={45}
               />
               <ZoomControls
                 extent={this.getTimeScaleExtent()}
                 zoomLevels={this.props.app.timeline.zoomLevels}
                 dims={dims}
                 onApplyZoom={this.onApplyZoom}
+              />
+              <TimelineSpotlightEvents
+                getEventX={(ev) => this.getDatetimeX(ev.datetime)}
+                getEventY={this.getY}
+                eventRadius={this.props.ui.eventRadius}
+                categories={categories}
+                selectedEvents={selectedSpotlightEvents}
               />
               <Markers
                 dims={dims}
@@ -446,7 +469,8 @@ class Timeline extends React.Component {
                 setLoading={this.props.actions.setLoading}
                 setNotLoading={this.props.actions.setNotLoading}
                 eventRadius={this.props.ui.eventRadius}
-                filterColors={this.props.ui.filterColors}
+                coloringConfig={this.props.ui.coloringConfig}
+                filters={this.props.domain.filters}
                 coloringSet={this.props.app.coloringSet}
               />
             </svg>
@@ -465,6 +489,7 @@ function mapStateToProps(state) {
     domain: {
       events: selectors.selectStackedEvents(state),
       projects: selectors.selectProjects(state),
+      filters: selectors.getFilters(state),
       narratives: state.domain.narratives,
     },
     app: {
@@ -473,12 +498,13 @@ function mapStateToProps(state) {
       timeline: state.app.timeline,
       narrative: state.app.associations.narrative,
       coloringSet: state.app.associations.coloringSet,
+      activeSpotlight: state.app.associations.spotlight,
     },
     ui: {
       dom: state.ui.dom,
       styles: state.ui.style.selectedEvents,
       eventRadius: state.ui.eventRadius,
-      filterColors: state.ui.coloring.colors,
+      coloringConfig: state.ui.coloring,
     },
     features: selectors.getFeatures(state),
   };
