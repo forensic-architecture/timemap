@@ -5,6 +5,7 @@ import {
   ASSOCIATION_MODES,
   POLYGON_CLIP_PATH,
   ASSOCIATION_TYPES,
+  LANGUAGE_OPTIONS,
 } from "./constants";
 import { colors } from "./global";
 
@@ -698,4 +699,25 @@ export function styleSpotlight(sp) {
     ...baseLocationStyles,
     strokeDasharray: sp.type === ASSOCIATION_TYPES.DASH ? "2" : "",
   };
+}
+
+export function processMediaData(mediaData, language) {
+  const mediaLinks = [];
+  if (mediaData && mediaData.data) {
+    const { data } = mediaData;
+    if (data.observations) {
+      data.observations.reduce((acc, obs) => {
+        acc.push({
+          kind: obs.online_link ? "video" : "twitter",
+          title:
+            language === LANGUAGE_OPTIONS.EN_US
+              ? obs.online_title_en
+              : obs.online_title_ar,
+          src: obs.online_link || "",
+        });
+        return acc;
+      }, mediaLinks);
+    }
+  }
+  return mediaLinks;
 }

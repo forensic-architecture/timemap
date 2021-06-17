@@ -53,6 +53,7 @@ const initial = {
     debug: true,
     errors: {
       source: false,
+      media: false,
     },
     highlighted: null,
     selected: [],
@@ -88,6 +89,7 @@ const initial = {
         width_controls: 60,
       },
     },
+    mediaCache: {},
     timeline: {
       dimensions: {
         height: isSmallLaptop ? 170 : 250,

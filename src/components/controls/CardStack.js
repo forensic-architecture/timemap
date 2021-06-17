@@ -1,27 +1,49 @@
 import React from "react";
 import { connect } from "react-redux";
+import hash from "object-hash";
+import { bindActionCreators } from "redux";
+
 import {
   Card,
   generateCardLayout,
 } from "@forensic-architecture/design-system/dist/react";
 
 import * as selectors from "../../selectors";
-import { getFilterIdxFromColorSet } from "../../common/utilities";
+import { fetchMediaForEvent, updateMediaCache } from "../../actions";
+import {
+  getFilterIdxFromColorSet,
+  getStaticFilterColorSet,
+  appendFiltersToColoringSet,
+} from "../../common/utilities";
 import copy from "../../common/data/copy.json";
+import { COLORING_ALGORITHM_MODE } from "../../common/constants";
 
 class CardStack extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.refs = {};
     this.refCardStack = React.createRef();
     this.refCardStackContent = React.createRef();
+    this.state = {
+      selected: props.selected,
+    };
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const isNarrative = !!this.props.narrative;
 
     if (isNarrative) {
       this.scrollToCard();
+    }
+
+    if (hash(prevProps.selected) !== hash(this.props.selected)) {
+      if (this.props.features.FETCH_EXTERNAL_MEDIA) {
+        this.getMediaDataForEvents(this.props.selected).then((data) =>
+          this.setState({ selected: data })
+        );
+      } else {
+        this.setState({ selected: this.props.selected });
+      }
     }
   }
 
@@ -56,12 +78,48 @@ class CardStack extends React.Component {
     animateScroll();
   }
 
+  async getMediaDataForEvents(events) {
+    const updatedEvts = [];
+    const { mediaCache, features } = this.props;
+    for (const evt of events) {
+      // Caching here only relevant if data doesn't update frequently
+      // TO-DO: make robust caching mechanism to speed up bottleneck of media fetch
+      if (features.USE_MEDIA_CACHE && evt.id in mediaCache) {
+        evt.media = mediaCache[evt.id];
+      } else {
+        // TO-DO: Make the attr for the media code more generalized; declare field in config
+        const { incident_code } = evt;
+        let mediaData = {};
+        if (incident_code)
+          mediaData = await this.props.actions.fetchMediaForEvent(
+            incident_code
+          );
+        evt.media = mediaData || {};
+        if (features.USE_MEDIA_CACHE) this.props.actions.updateMediaCache(evt);
+      }
+      updatedEvts.push(evt);
+    }
+    return updatedEvts;
+  }
+
   renderCards(events, selections) {
+    const { mode, colors, defaultColor } = this.props.coloringConfig;
+    const { filters, coloringSet } = this.props;
     // if no selections provided, select all
     if (!selections) {
       selections = events.map((e) => true);
     }
     this.refs = [];
+
+    const updatedColoringSet =
+      mode === COLORING_ALGORITHM_MODE.STATIC
+        ? appendFiltersToColoringSet(filters, coloringSet)
+        : coloringSet;
+
+    const updatedFilterColors =
+      mode === COLORING_ALGORITHM_MODE.STATIC
+        ? getStaticFilterColorSet(filters, updatedColoringSet, defaultColor)
+        : colors;
 
     const generateTemplate =
       generateCardLayout[this.props.cardUI.layout.template];
@@ -75,8 +133,8 @@ class CardStack extends React.Component {
           ref={thisRef}
           content={generateTemplate({
             event,
-            colors: this.props.colors,
-            coloringSet: this.props.coloringSet,
+            colors: updatedFilterColors,
+            coloringSet: updatedColoringSet,
             getFilterIdxFromColorSet,
           })}
           language={this.props.language}
@@ -88,7 +146,7 @@ class CardStack extends React.Component {
   }
 
   renderSelectedCards() {
-    const { selected } = this.props;
+    const { selected } = this.state;
 
     if (selected.length > 0) {
       return this.renderCards(selected);
@@ -118,7 +176,7 @@ class CardStack extends React.Component {
           <span />
         </button>
         <p className="header-copy top">
-          {`${this.props.selected.length} ${headerLang}`}
+          {`${this.state.selected.length} ${headerLang}`}
         </p>
       </div>
     );
@@ -145,10 +203,10 @@ class CardStack extends React.Component {
   }
 
   render() {
-    const { isCardstack, selected, narrative, timelineDims } = this.props;
+    const { isCardstack, narrative, timelineDims } = this.props;
     // TODO: make '237px', which is the narrative header, less hard-coded
     const height = `calc(100% - 237px - ${timelineDims.height}px)`;
-    if (selected.length > 0) {
+    if (this.state.selected.length > 0) {
       if (!narrative) {
         return (
           <div
@@ -188,10 +246,21 @@ function mapStateToProps(state) {
     isCardstack: state.app.flags.isCardstack,
     isLoading: state.app.flags.isFetchingSources,
     cardUI: state.ui.card,
-    colors: state.ui.coloring.colors,
+    coloringConfig: state.ui.coloring,
     coloringSet: state.app.associations.coloringSet,
+    filters: selectors.getFilters(state),
     features: state.features,
+    mediaCache: state.app.mediaCache,
   };
 }
 
-export default connect(mapStateToProps)(CardStack);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(
+      { fetchMediaForEvent, updateMediaCache },
+      dispatch
+    ),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardStack);

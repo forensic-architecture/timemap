@@ -48,3 +48,7 @@ export const ASSOCIATION_TYPES = {
 export const DATASHEET_FALSE = "FALSE";
 
 export const SPOTLIGHT_TITLE_LENGTH = 22;
+
+export const LANGUAGE_OPTIONS = {
+  EN_US: "en-us",
+};

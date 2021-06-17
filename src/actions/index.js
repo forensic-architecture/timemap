@@ -8,6 +8,7 @@ const SOURCES_URL = urlFromEnv("SOURCES_EXT");
 const SITES_URL = urlFromEnv("SITES_EXT");
 const REGIONS_URL = urlFromEnv("REGIONS_EXT");
 const SHAPES_URL = urlFromEnv("SHAPES_EXT");
+const MEDIA_URL = urlFromEnv("MEDIA_EXT");
 
 const domainMsg = (domainType) =>
   `Something went wrong fetching ${domainType}. Check the URL or try disabling them in the config file.`;
@@ -130,6 +131,31 @@ export function fetchDomain() {
         // TODO: handle this appropriately in React hierarchy
         alert(err.message);
       });
+  };
+}
+
+export function fetchMediaForEvent(mediaId) {
+  return async (dispatch) => {
+    if (!MEDIA_URL) {
+      dispatch(fetchMediaError("No media extension specified."));
+    } else {
+      const data = await fetch(`${MEDIA_URL}/${mediaId}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              "No media is available for this event with the mediaId specified"
+            );
+          } else {
+            return response.json();
+          }
+        })
+        .then((data) => data)
+        .catch((err) => {
+          dispatch(fetchMediaError(err.message));
+          return;
+        });
+      return data;
+    }
   };
 }
 
@@ -391,12 +417,28 @@ export function updateSearchQuery(searchQuery) {
   };
 }
 
+export const UPDATE_MEDIA_CACHE = "UPDATE_MEDIA_CACHE";
+export function updateMediaCache(evt) {
+  return {
+    type: UPDATE_MEDIA_CACHE,
+    evt,
+  };
+}
+
 // ERRORS
 
 export const FETCH_SOURCE_ERROR = "FETCH_SOURCE_ERROR";
 export function fetchSourceError(msg) {
   return {
     type: FETCH_SOURCE_ERROR,
+    msg,
+  };
+}
+
+export const FETCH_MEDIA_ERROR = "FETCH_MEDIA_ERROR";
+export function fetchMediaError(msg) {
+  return {
+    type: FETCH_MEDIA_ERROR,
     msg,
   };
 }

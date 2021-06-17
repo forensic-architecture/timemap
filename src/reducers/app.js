@@ -24,12 +24,14 @@ import {
   TOGGLE_COVER,
   FETCH_ERROR,
   FETCH_SOURCE_ERROR,
+  FETCH_MEDIA_ERROR,
   SET_LOADING,
   SET_NOT_LOADING,
   SET_INITIAL_CATEGORIES,
   SET_INITIAL_SHAPES,
   SET_ACTIVE_SPOTLIGHT,
   UPDATE_SEARCH_QUERY,
+  UPDATE_MEDIA_CACHE,
 } from "../actions";
 
 function updateHighlighted(appState, action) {
@@ -245,6 +247,16 @@ function fetchSourceError(appState, action) {
   };
 }
 
+function fetchMediaError(appState, action) {
+  return {
+    ...appState,
+    errors: {
+      ...appState.errors,
+      media: action.msg,
+    },
+  };
+}
+
 function setLoading(appState) {
   return {
     ...appState,
@@ -299,6 +311,14 @@ function updateSearchQuery(appState, action) {
   };
 }
 
+function updateMediaCache(appState, action) {
+  const { evt } = action;
+  return {
+    ...appState,
+    mediaCache: { ...appState.mediaCache, [evt.id]: evt.media },
+  };
+}
+
 function app(appState = initial.app, action) {
   switch (action.type) {
     case UPDATE_HIGHLIGHTED:
@@ -345,6 +365,8 @@ function app(appState = initial.app, action) {
       return fetchError(appState, action);
     case FETCH_SOURCE_ERROR:
       return fetchSourceError(appState, action);
+    case FETCH_MEDIA_ERROR:
+      return fetchMediaError(appState, action);
     case SET_LOADING:
       return setLoading(appState);
     case SET_NOT_LOADING:
@@ -357,6 +379,8 @@ function app(appState = initial.app, action) {
       return setActiveSpotlight(appState, action);
     case UPDATE_SEARCH_QUERY:
       return updateSearchQuery(appState, action);
+    case UPDATE_MEDIA_CACHE:
+      return updateMediaCache(appState, action);
     default:
       return appState;
   }
