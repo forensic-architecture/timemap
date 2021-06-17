@@ -63,6 +63,7 @@ const initial = {
       filters: [],
       narrative: null,
       spotlight: null,
+      defaultCategory: null,
       categories: [],
       views: {
         events: true,

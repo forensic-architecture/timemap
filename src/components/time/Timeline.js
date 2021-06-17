@@ -7,7 +7,10 @@ import hash from "object-hash";
 import { setLoading, setNotLoading } from "../../actions";
 import * as selectors from "../../selectors";
 import copy from "../../common/data/copy.json";
-import { findActiveEventSpotlight } from "../../common/utilities";
+import {
+  findActiveEventSpotlight,
+  setDefaultCategory,
+} from "../../common/utilities";
 
 import Header from "./atoms/Header";
 import Axis from "./Axis";
@@ -94,24 +97,29 @@ class Timeline extends React.Component {
   }
 
   makeScaleY(categories, trackHeight, marginTop) {
-    const { features } = this.props;
+    const { features, app } = this.props;
+
+    let updatedCats = app.defaultCategory
+      ? setDefaultCategory(categories, app.defaultCategory)
+      : categories;
+
     if (features.GRAPH_NONLOCATED && features.GRAPH_NONLOCATED.categories) {
-      categories = categories.filter(
+      updatedCats = updatedCats.filter(
         (cat) => !features.GRAPH_NONLOCATED.categories.includes(cat.title)
       );
     }
 
     const extraPadding = 0;
     const catHeight =
-      categories.length > 2
-        ? trackHeight / categories.length
-        : trackHeight / (categories.length + 1);
-    const catsYpos = categories.map((g, i) => {
+      updatedCats.length > 2
+        ? trackHeight / updatedCats.length
+        : trackHeight / (updatedCats.length + 1);
+    const catsYpos = updatedCats.map((g, i) => {
       return (i + 1) * catHeight + marginTop + extraPadding / 2;
     });
 
     return (cat) => {
-      const idx = categories.indexOf(cat);
+      const idx = updatedCats.indexOf(cat);
       return catsYpos[idx];
     };
   }
@@ -499,6 +507,7 @@ function mapStateToProps(state) {
       narrative: state.app.associations.narrative,
       coloringSet: state.app.associations.coloringSet,
       activeSpotlight: state.app.associations.spotlight,
+      defaultCategory: state.app.associations.defaultCategory,
     },
     ui: {
       dom: state.ui.dom,

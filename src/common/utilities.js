@@ -721,3 +721,13 @@ export function processMediaData(mediaData, language) {
   }
   return mediaLinks;
 }
+
+export function setDefaultCategory(categories, defaultCategory) {
+  const catCopy = [...categories];
+  const defaultIdx = catCopy.indexOf(defaultCategory);
+  if (defaultIdx > -1) {
+    catCopy.splice(defaultIdx, 1);
+    catCopy.unshift(defaultCategory);
+  }
+  return catCopy;
+}

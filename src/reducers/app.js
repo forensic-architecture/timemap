@@ -1,6 +1,6 @@
 import initial from "../store/initial.js";
 import { ASSOCIATION_MODES } from "../common/constants";
-import { toggleFlagAC } from "../common/utilities";
+import { toggleFlagAC, setDefaultCategory } from "../common/utilities";
 
 import {
   UPDATE_HIGHLIGHTED,
@@ -277,11 +277,16 @@ function setInitialCategories(appState, action) {
     return acc;
   }, []);
 
+  const updatedCategories = setDefaultCategory(
+    categories,
+    appState.associations.defaultCategory
+  );
+
   return {
     ...appState,
     associations: {
       ...appState.associations,
-      categories: categories,
+      categories: updatedCategories,
     },
   };
 }
