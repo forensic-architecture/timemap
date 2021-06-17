@@ -80,10 +80,10 @@ const initial = {
     spotlightToolbar: {
       header: null,
       dimensions: {
-        height: isSmallLaptop ? 60 : 75,
+        height: isSmallLaptop ? 50 : 65,
         width: 0,
         marginLeft: 30,
-        contentHeight: isSmallLaptop ? 50 : 65,
+        contentHeight: isSmallLaptop ? 40 : 55,
         width_controls: 60,
       },
     },

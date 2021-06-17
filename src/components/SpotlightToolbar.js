@@ -131,7 +131,7 @@ class SpotlightToolbar extends React.Component {
   computeContentDims(dims) {
     const { height, width, marginLeft, width_controls } = dims;
     return {
-      contentHeight: height - marginLeft,
+      contentHeight: height,
       contentWidth: width - marginLeft - width_controls,
     };
   }
