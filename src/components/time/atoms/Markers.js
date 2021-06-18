@@ -8,6 +8,7 @@ import {
 import {
   AVAILABLE_SHAPES,
   EVENT_MARKER_OFFSETS,
+  DASH_HEIGHT,
 } from "../../../common/constants";
 
 const TimelineMarkers = ({
@@ -46,17 +47,21 @@ const TimelineMarkers = ({
       );
     }
 
-    function renderBar() {
+    function renderBar(
+      y = dims.marginTop,
+      width = eventRadius / 1.5,
+      height = dims.contentHeight - 55
+    ) {
       return (
         <rect
           className="timeline-marker"
           x={0}
-          y={dims.marginTop}
-          width={eventRadius / 1.5}
-          height={dims.contentHeight - 55}
+          y={y}
+          width={width}
+          height={height}
           stroke={styles ? styles.stroke : colors.primaryHighlight}
           stroke-opacity="1"
-          stroke-width={styles ? styles["stroke-width"] : 1}
+          stroke-width={styles ? styles["stroke-width"] : 3}
           stroke-dasharray={styles ? styles["stroke-dasharray"] : "2,2"}
           style={{
             transform: `translate(${getEventX(event)}px)`,
@@ -92,10 +97,15 @@ const TimelineMarkers = ({
           acc.push(renderCircle(y, EVENT_MARKER_OFFSETS.SQUARE));
           break;
         case AVAILABLE_SHAPES.BAR:
-          acc.push(renderBar(y));
+          acc.push(renderBar());
+          break;
+        case AVAILABLE_SHAPES.DASH:
+          acc.push(
+            renderBar(y - DASH_HEIGHT / 2, eventRadius / 2, DASH_HEIGHT)
+          );
           break;
         default:
-          return isDot ? acc.push(renderCircle(y)) : acc.push(renderBar(y));
+          return isDot ? acc.push(renderCircle(y)) : acc.push(renderBar());
       }
     }
 

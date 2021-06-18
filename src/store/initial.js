@@ -82,7 +82,6 @@ const initial = {
     spotlightToolbar: {
       header: null,
       title: null,
-      // eventRadius: 8,
       dimensions: {
         height: isSmallLaptop ? 50 : 65,
         width: 0,
@@ -209,7 +208,12 @@ const initial = {
       timeslider: "timeslider",
       map: "map",
     },
-    eventRadius: 8,
+    carto: {
+      eventRadius: 8,
+    },
+    time: {
+      eventRadius: 8,
+    },
   },
 
   features: {

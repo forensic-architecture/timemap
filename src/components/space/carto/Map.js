@@ -484,13 +484,6 @@ class Map extends React.Component {
       spotlights: loc.spotlights,
     }));
 
-    // const selectedLocations = locationsWithSpotlight.map((loc) => ({
-    //   latitude: loc.latitude,
-    //   longitude: loc.longitude,
-    //   radius: this.props.ui.eventRadius,
-    //   spotlights: loc.spotlights,
-    // }));
-
     const clustersWithSpotlights = this.getSelectedClusters(
       locationsWithSpotlight
     );
@@ -587,7 +580,7 @@ function mapStateToProps(state) {
       narratives: state.ui.style.narratives,
       mapSelectedEvents: state.ui.style.selectedEvents,
       regions: state.ui.style.regions,
-      eventRadius: state.ui.eventRadius,
+      eventRadius: state.ui.carto.eventRadius,
       radial: state.ui.style.clusters.radial,
       coloringConfig: state.ui.coloring,
     },

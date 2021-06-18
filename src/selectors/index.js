@@ -48,7 +48,7 @@ export const getTimelineDimensions = (state) => state.app.timeline.dimensions;
 export const selectNarrative = (state) => state.app.associations.narrative;
 export const getFeatures = (state) => state.features;
 export const getColoringAlgMode = (state) => state.ui.coloring.mode;
-export const getEventRadius = (state) => state.ui.eventRadius;
+export const getEventRadius = (state) => state.ui.carto.eventRadius;
 
 export const selectSites = createSelector(
   [getSites, getFeatures],

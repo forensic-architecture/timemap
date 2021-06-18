@@ -376,7 +376,6 @@ function mapStateToProps(state) {
     maxNumOfColors: state.ui.coloring.maxNumOfColors,
     filterColors: state.ui.coloring.colors,
     coloringAlgMode: state.ui.coloring.mode,
-    eventRadius: state.ui.eventRadius,
     features: selectors.getFeatures(state),
   };
 }

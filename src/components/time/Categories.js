@@ -33,8 +33,6 @@ class TimelineCategories extends React.Component {
       opacity: isDefaultCategory ? "0.65" : "0.5",
     };
 
-    // const fontSize = isDefaultCategory ? "14px" : "";
-
     // const strokeWidth = isDefaultCategory ? 2 : 1; // dims.trackHeight / (this.props.categories.length + 1)
     if (
       features.GRAPH_NONLOCATED &&
