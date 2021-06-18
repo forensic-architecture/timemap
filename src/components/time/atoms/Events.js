@@ -4,6 +4,7 @@ import DatetimeSquare from "./DatetimeSquare";
 import DatetimeStar from "./DatetimeStar";
 import DatetimeTriangle from "./DatetimeTriangle";
 import DatetimePentagon from "./DatetimePentagon";
+import DatetimeHexagon from "./DatetimeHexagon";
 import Project from "./Project";
 import ColoredMarkers from "../../atoms/ColoredMarkers";
 import {
@@ -82,6 +83,8 @@ function renderBar(event, styles, props) {
   );
 }
 
+//TO-DO: Make generic polygon function to render different shapes
+
 function renderDiamond(event, styles, props) {
   return (
     <DatetimeSquare
@@ -144,6 +147,18 @@ function renderStar(event, styles, props) {
   );
 }
 
+function renderHexagon(event, styles, props) {
+  return (
+    <DatetimeHexagon
+      onSelect={props.onSelect}
+      x={props.x}
+      y={props.y}
+      r={1.5 * props.eventRadius}
+      styleProps={styles}
+    />
+  );
+}
+
 const TimelineEvents = ({
   events,
   projects,
@@ -193,6 +208,8 @@ const TimelineEvents = ({
         renderShape = renderPentagon;
       } else if (eventShape.shape === AVAILABLE_SHAPES.SQUARE) {
         renderShape = renderSquare;
+      } else if (eventShape.shape === AVAILABLE_SHAPES.HEXAGON) {
+        renderShape = renderHexagon;
       } else {
         renderShape = renderDot;
       }

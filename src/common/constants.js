@@ -22,6 +22,8 @@ export const AVAILABLE_SHAPES = {
   DOT: "DOT",
   BAR: "BAR",
   TRIANGLE: "TRIANGLE",
+  HEXAGON: "HEXAGON",
+  SEMI_CIRCLE: "SEMI_CIRCLE",
 };
 
 export const POLYGON_CLIP_PATH = {
@@ -30,6 +32,7 @@ export const POLYGON_CLIP_PATH = {
   DIAMOND: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
   PENTAGON: "polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)",
   TRIANGLE: "polygon(50% 0%, 0% 100%, 100% 100%)",
+  HEXAGON: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
 };
 
 export const DEFAULT_CHECKBOX_COLOR = "#ffffff";

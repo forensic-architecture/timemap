@@ -19,7 +19,7 @@ const TimelineMarkers = ({
   features,
 }) => {
   function renderMarker(acc, event) {
-    function renderCircle(y) {
+    function renderCircle(y, offset = 0) {
       return (
         <circle
           className="timeline-marker"
@@ -31,7 +31,7 @@ const TimelineMarkers = ({
           stroke-linejoin="round"
           stroke-dasharray={styles ? styles["stroke-dasharray"] : "2,2"}
           style={{
-            transform: `translate(${getEventX(event)}px, ${y}px)`,
+            transform: `translate(${getEventX(event) + offset}px, ${y}px)`,
             "-webkit-transition": `transform ${
               transitionDuration / 1000
             }s ease`,
@@ -76,12 +76,17 @@ const TimelineMarkers = ({
     function renderMarkerForEvent(y) {
       // Currently, we render a circle marker for all shapes; potential TO-DO: make shape markers
       switch (eventShapeObj.shape) {
-        case AVAILABLE_SHAPES.DIAMOND:
         case AVAILABLE_SHAPES.STAR:
         case AVAILABLE_SHAPES.PENTAGON:
-        case AVAILABLE_SHAPES.SQUARE:
         case AVAILABLE_SHAPES.TRIANGLE:
+        case AVAILABLE_SHAPES.HEXAGON:
           acc.push(renderCircle(y));
+          break;
+        case AVAILABLE_SHAPES.DIAMOND:
+          acc.push(renderCircle(y, 10));
+          break;
+        case AVAILABLE_SHAPES.SQUARE:
+          acc.push(renderCircle(y, 7));
           break;
         case AVAILABLE_SHAPES.BAR:
           acc.push(renderBar(y));

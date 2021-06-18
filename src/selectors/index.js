@@ -239,7 +239,9 @@ export const selectLocations = createSelector([selectEvents], (events) => {
   const activeLocations = {};
   events.forEach((event) => {
     const { latitude, longitude } = event;
-    if (!isLatitude(latitude) || !isLongitude(longitude)) return;
+    if (!isLatitude(latitude) || !isLongitude(longitude)) {
+      return;
+    }
 
     const location = `${event.location}$_${event.latitude}_${event.longitude}`;
 
