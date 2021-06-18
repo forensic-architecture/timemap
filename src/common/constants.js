@@ -55,3 +55,8 @@ export const SPOTLIGHT_TITLE_LENGTH = 22;
 export const LANGUAGE_OPTIONS = {
   EN_US: "en-us",
 };
+
+export const EVENT_MARKER_OFFSETS = {
+  SQUARE: 7,
+  DIAMOND: 10,
+};

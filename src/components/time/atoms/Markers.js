@@ -5,7 +5,10 @@ import {
   isLatitude,
   isLongitude,
 } from "../../../common/utilities";
-import { AVAILABLE_SHAPES } from "../../../common/constants";
+import {
+  AVAILABLE_SHAPES,
+  EVENT_MARKER_OFFSETS,
+} from "../../../common/constants";
 
 const TimelineMarkers = ({
   styles,
@@ -83,10 +86,10 @@ const TimelineMarkers = ({
           acc.push(renderCircle(y));
           break;
         case AVAILABLE_SHAPES.DIAMOND:
-          acc.push(renderCircle(y, 10));
+          acc.push(renderCircle(y, EVENT_MARKER_OFFSETS.DIAMOND));
           break;
         case AVAILABLE_SHAPES.SQUARE:
-          acc.push(renderCircle(y, 7));
+          acc.push(renderCircle(y, EVENT_MARKER_OFFSETS.SQUARE));
           break;
         case AVAILABLE_SHAPES.BAR:
           acc.push(renderBar(y));

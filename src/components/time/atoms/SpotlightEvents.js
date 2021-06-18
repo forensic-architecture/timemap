@@ -1,5 +1,9 @@
 import React from "react";
 import { getEventCategories, styleSpotlight } from "../../../common/utilities";
+import {
+  AVAILABLE_SHAPES,
+  EVENT_MARKER_OFFSETS,
+} from "../../../common/constants";
 import SpotlightMarker from "../../atoms/SpotlightMarker";
 
 const TimelineSpotlightEvents = ({
@@ -13,9 +17,25 @@ const TimelineSpotlightEvents = ({
     function renderMarker(y, styles) {
       const radius = event.shape ? eventRadius + 5 : eventRadius;
 
+      let offset = 0;
+      if (event.shape) {
+        const { shape } = event.shape;
+        switch (shape) {
+          case AVAILABLE_SHAPES.DIAMOND:
+            offset = EVENT_MARKER_OFFSETS.DIAMOND;
+            break;
+          case AVAILABLE_SHAPES.SQUARE:
+            offset = EVENT_MARKER_OFFSETS.SQUARE;
+            break;
+          default:
+            offset = 0;
+            break;
+        }
+      }
+
       return (
         <SpotlightMarker
-          x={getEventX(event)}
+          x={getEventX(event) + offset}
           y={y}
           radius={radius}
           styles={styles}
