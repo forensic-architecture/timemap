@@ -25,12 +25,15 @@ class SpotlightToolbar extends React.Component {
   }
 
   componentDidMount() {
-    var resizeTimer;
+    // var resizeTimer;
+    // window.addEventListener("resize", () => {
+    //   clearTimeout(resizeTimer);
+    //   resizeTimer = setTimeout(() => {
+    //     this.updateDims();
+    //   }, 20);
+    // });
     window.addEventListener("resize", () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        this.updateDims();
-      }, 75);
+      this.updateDims();
     });
   }
 
