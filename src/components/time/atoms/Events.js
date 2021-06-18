@@ -20,6 +20,7 @@ import {
 import {
   AVAILABLE_SHAPES,
   COLORING_ALGORITHM_MODE,
+  DASH_HEIGHT,
 } from "../../../common/constants";
 
 function renderDot(event, styles, props) {
@@ -159,6 +160,21 @@ function renderHexagon(event, styles, props) {
   );
 }
 
+function renderDash(event, styles, props) {
+  return (
+    <DatetimeBar
+      onSelect={props.onSelect}
+      events={[event]}
+      x={props.x}
+      y={props.y - DASH_HEIGHT / 2}
+      width={props.eventRadius / 2}
+      height={DASH_HEIGHT}
+      styleProps={styles}
+      highlights={props.highlights}
+    />
+  );
+}
+
 const TimelineEvents = ({
   events,
   projects,
@@ -210,6 +226,8 @@ const TimelineEvents = ({
         renderShape = renderSquare;
       } else if (eventShape.shape === AVAILABLE_SHAPES.HEXAGON) {
         renderShape = renderHexagon;
+      } else if (eventShape.shape === AVAILABLE_SHAPES.DASH) {
+        renderShape = renderDash;
       } else {
         renderShape = renderDot;
       }

@@ -33,7 +33,7 @@ class TimelineCategories extends React.Component {
       opacity: isDefaultCategory ? "0.65" : "0.5",
     };
 
-    const fontSize = isDefaultCategory ? "14px" : "";
+    // const fontSize = isDefaultCategory ? "14px" : "";
 
     // const strokeWidth = isDefaultCategory ? 2 : 1; // dims.trackHeight / (this.props.categories.length + 1)
     if (
@@ -58,7 +58,7 @@ class TimelineCategories extends React.Component {
           opacity="1"
           transform={`translate(0,${this.props.getCategoryY(cat)})`}
         >
-          <text x={dims.marginLeft - 5} dy="0.32em" style={{ fontSize }}>
+          <text x={dims.marginLeft - 5} dy="0.32em">
             {cat}
           </text>
         </g>

@@ -20,7 +20,6 @@ import Space from "./space/Space";
 import Search from "./controls/Search";
 import CardStack from "./controls/CardStack";
 import NarrativeControls from "./controls/NarrativeControls.js";
-import SpotlightToolbar from "./SpotlightToolbar";
 
 import colors from "../common/global";
 import { binarySearch, insetSourceFrom } from "../common/utilities";
@@ -372,7 +371,7 @@ class Dashboard extends React.Component {
               : (ev) => this.handleSelect(ev, 1),
           }}
         />
-        {features.USE_SPOTLIGHTS && <SpotlightToolbar />}
+        {/* {features.USE_SPOTLIGHTS && <SpotlightToolbar />} */}
         {features.USE_SPOTLIGHTS &&
           this.props.app.associations.spotlight &&
           this.renderSpotlightCard(false)}

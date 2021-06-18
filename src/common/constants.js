@@ -23,7 +23,7 @@ export const AVAILABLE_SHAPES = {
   BAR: "BAR",
   TRIANGLE: "TRIANGLE",
   HEXAGON: "HEXAGON",
-  SEMI_CIRCLE: "SEMI_CIRCLE",
+  DASH: "DASH",
 };
 
 export const POLYGON_CLIP_PATH = {
@@ -60,3 +60,5 @@ export const EVENT_MARKER_OFFSETS = {
   SQUARE: 7,
   DIAMOND: 10,
 };
+
+export const DASH_HEIGHT = 20;
