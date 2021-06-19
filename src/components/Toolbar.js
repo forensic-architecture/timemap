@@ -8,6 +8,7 @@ import { Tabs, TabPanel } from "react-tabs";
 import FilterListPanel from "./controls/FilterListPanel";
 import CategoriesListPanel from "./controls/CategoriesListPanel";
 import ShapesListPanel from "./controls/ShapesListPanel";
+import SpotlightListPanel from "./controls/SpotlightListPanel";
 import BottomActions from "./controls/BottomActions";
 import copy from "../common/data/copy.json";
 import { COLORING_ALGORITHM_MODE } from "../common/constants";
@@ -20,8 +21,8 @@ import {
   removeFromColoringSet,
   mapCategoriesToPaths,
   getCategoryIdxs,
-  getFilterIdx,
   findSingleSelectFilter,
+  getToolbarStartIdx,
 } from "../common/utilities.js";
 
 class Toolbar extends React.Component {
@@ -200,6 +201,28 @@ class Toolbar extends React.Component {
     }
   }
 
+  renderToolbarSpotlightPanel() {
+    const { panels } = this.props.toolbarCopy;
+
+    if (this.props.features.USE_SPOTLIGHTS) {
+      return (
+        <TabPanel>
+          <SpotlightListPanel
+            spotlights={this.props.spotlights}
+            activeSpotlight={this.props.activeSpotlight}
+            onSpotlightSelect={(val) => {
+              const toggle = val === this.props.activeSpotlight ? "" : val;
+              this.props.actions.setActiveSpotlight(toggle);
+            }}
+            language={this.props.language}
+            title={panels.spotlights.label}
+            description={panels.spotlights.description}
+          />
+        </TabPanel>
+      );
+    }
+  }
+
   renderToolbarTab(_selected, label, iconKey) {
     const isActive = this.state._selected === _selected;
     const classes = isActive ? "toolbar-tab active" : "toolbar-tab";
@@ -243,6 +266,7 @@ class Toolbar extends React.Component {
           {narratives && narratives.length !== 0
             ? this.renderToolbarNarrativePanel()
             : null}
+          {features.USE_SPOTLIGHTS ? this.renderToolbarSpotlightPanel() : null}
           {features.USE_CATEGORIES ? this.renderToolbarCategoriesPanel() : null}
           {features.USE_ASSOCIATIONS ? this.renderToolbarFilterPanel() : null}
           {features.USE_SHAPES ? this.renderToolbarShapePanel() : null}
@@ -279,18 +303,20 @@ class Toolbar extends React.Component {
     let title = copy[this.props.language].toolbar.title;
     if (process.env.display_title) title = process.env.display_title;
     const { panels } = toolbarCopy;
+    const spotlightsExist = features.USE_SPOTLIGHTS;
 
     const narrativesIdx = 0;
+    const spotlightIdx = narrativesExist ? 1 : 0;
+    const startingIdx = getToolbarStartIdx(narrativesExist, spotlightsExist);
+
     const categoryIdxs = getCategoryIdxs(
       Object.keys(panels.categories),
-      narrativesExist ? 1 : 0
+      startingIdx
     );
-    const numCategoryPanels = Object.keys(categoryIdxs).length;
-    const filtersIdx = getFilterIdx(
-      narrativesExist,
-      features.USE_CATEGORIES,
-      numCategoryPanels || 0
-    );
+    const numCategoryPanels = Object.entries(categoryIdxs).length;
+
+    const filtersIdx = numCategoryPanels > 0 ? numCategoryPanels : startingIdx;
+
     const shapesIdx = filtersIdx + 1;
 
     return (
@@ -304,6 +330,13 @@ class Toolbar extends React.Component {
                 narrativesIdx,
                 panels.narratives.label,
                 panels.narratives.icon
+              )
+            : null}
+          {features.USE_SPOTLIGHTS
+            ? this.renderToolbarTab(
+                spotlightIdx,
+                panels.spotlights.label,
+                panels.spotlights.icon
               )
             : null}
           {features.USE_CATEGORIES
@@ -363,11 +396,13 @@ function mapStateToProps(state) {
     categories: selectors.getCategories(state),
     narratives: selectors.selectNarratives(state),
     shapes: selectors.getShapes(state),
+    spotlights: selectors.getSpotlights(state),
     language: state.app.language,
     toolbarCopy: state.app.toolbar,
     activeFilters: selectors.getActiveFilters(state),
     activeCategories: selectors.getActiveCategories(state),
     activeShapes: selectors.getActiveShapes(state),
+    activeSpotlight: selectors.getActiveSpotlight(state),
     viewFilters: state.app.associations.views,
     narrative: state.app.associations.narrative,
     sitesShowing: state.app.flags.isShowingSites,

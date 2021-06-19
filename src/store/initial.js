@@ -130,6 +130,12 @@ const initial = {
     },
     toolbar: {
       panels: {
+        spotlights: {
+          icon: DEFAULT_TAB_ICONS.SPOTLIGHT,
+          label: copy[language].toolbar.spotlights_label,
+          title: copy[language].toolbar.explore_by_spotlight__title,
+          description: copy[language].toolbar.explore_by_spotlight__description,
+        },
         categories: {
           default: {
             icon: DEFAULT_TAB_ICONS.CATEGORY,

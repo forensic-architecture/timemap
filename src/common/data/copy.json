@@ -149,7 +149,11 @@
       "shapes": "Shapes",
       "shapes_label": "Shapes",
       "explore_by_shapes__title": "Explore events by shape breakdown",
-      "explore_by_shape__description": "Shapes map to a given type of event that appears on the timeline.<br><br>Select the shape marker to toggle this type of event on / off"
+      "explore_by_shape__description": "Shapes map to a given type of event that appears on the timeline.<br><br>Select the shape marker to toggle this type of event on / off",
+      "spotlights": "Spotlights",
+      "spotlights_label": "Spotlights",
+      "explore_by_spotlight__title": "Explore events by showing important spotlights",
+      "explore_by_spotlight__description": "Spotlights highlight events on a map according to a predefined outline.<br><br>Select one spotlight at a time to show these highlights."
     },
     "timeline": {
       "labels_title": "Testimonies",

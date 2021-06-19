@@ -1,10 +1,10 @@
 import React from "react";
 import Checkbox from "../../atoms/Checkbox";
-import { ASSOCIATION_MODES } from "../../../common/constants";
+import { SHAPE } from "../../../common/constants";
 
 const PanelTree = ({ data, activeValues, onSelect, type }) => {
-  // If the parent panel is of type 'CATEGORY': filter on title. If panel is 'SHAPE': filter on id
-  const onSelectionType = type === ASSOCIATION_MODES.CATEGORY ? "title" : "id";
+  // If the parent panel is of type 'CATEGORY' || 'SPOTLIGHT': filter on title. If panel is 'SHAPE': filter on id
+  const onSelectionType = type === SHAPE ? "id" : "title";
   return (
     <div>
       {data.map((val) => {

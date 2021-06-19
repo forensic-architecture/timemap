@@ -618,15 +618,13 @@ export function getCategoryIdxs(panelCategories, startingIdx) {
   }, {});
 }
 
-export function getFilterIdx(
-  narrativesExist,
-  categoriesExist,
-  numCategoryPanels
-) {
-  if (narrativesExist && !categoriesExist) return 1;
-  else if (!narrativesExist && categoriesExist) return numCategoryPanels;
-  else if (narrativesExist && categoriesExist) return numCategoryPanels + 1;
-  else return 0;
+export function getToolbarStartIdx(narrativesExist, spotlightsExist) {
+  if (
+    (narrativesExist && !spotlightsExist) ||
+    (!narrativesExist && spotlightsExist)
+  )
+    return 1;
+  return 0;
 }
 
 export function getUniqueSpotlights(spotlights) {
