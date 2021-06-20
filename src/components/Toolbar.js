@@ -315,7 +315,8 @@ class Toolbar extends React.Component {
     );
     const numCategoryPanels = Object.entries(categoryIdxs).length;
 
-    const filtersIdx = numCategoryPanels > 0 ? numCategoryPanels : startingIdx;
+    const filtersIdx =
+      numCategoryPanels > 0 ? numCategoryPanels + 1 : startingIdx;
 
     const shapesIdx = filtersIdx + 1;
 

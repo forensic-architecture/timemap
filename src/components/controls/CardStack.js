@@ -14,9 +14,10 @@ import {
   getFilterIdxFromColorSet,
   getStaticFilterColorSet,
   appendFiltersToColoringSet,
+  processMediaData,
 } from "../../common/utilities";
 import copy from "../../common/data/copy.json";
-import { COLORING_ALGORITHM_MODE } from "../../common/constants";
+import { COLORING_ALGORITHM_MODE, MEDIA_TYPES } from "../../common/constants";
 
 class CardStack extends React.Component {
   constructor(props) {
@@ -85,7 +86,9 @@ class CardStack extends React.Component {
       // Caching here only relevant if data doesn't update frequently
       // TO-DO: make robust caching mechanism to speed up bottleneck of media fetch
       if (features.USE_MEDIA_CACHE && evt.id in mediaCache) {
-        evt.media = mediaCache[evt.id];
+        const { media, links } = mediaCache[evt.id];
+        evt.media = media;
+        evt.links = links;
       } else {
         // TO-DO: Make the attr for the media code more generalized; declare field in config
         const { incident_code } = evt;
@@ -94,7 +97,13 @@ class CardStack extends React.Component {
           mediaData = await this.props.actions.fetchMediaForEvent(
             incident_code
           );
-        evt.media = mediaData || {};
+
+        const processedData = processMediaData(mediaData);
+        evt.media = processedData.filter((d) => d.kind === MEDIA_TYPES.VIDEO);
+        const twitterMedia = processedData
+          .filter((d) => d.kind === MEDIA_TYPES.TWITTER)
+          .map((s) => s.src);
+        evt.links = evt.links ? [...evt.links, ...twitterMedia] : twitterMedia;
         if (features.USE_MEDIA_CACHE) this.props.actions.updateMediaCache(evt);
       }
       updatedEvts.push(evt);

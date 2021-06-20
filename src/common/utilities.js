@@ -6,6 +6,7 @@ import {
   POLYGON_CLIP_PATH,
   ASSOCIATION_TYPES,
   LANGUAGE_OPTIONS,
+  MEDIA_TYPES,
 } from "./constants";
 import { colors } from "./global";
 
@@ -325,16 +326,16 @@ export function selectTypeFromPath(path) {
   let type;
   switch (true) {
     case /\.(png|jpg)$/.test(path):
-      type = "Image";
+      type = MEDIA_TYPES.IMAGE;
       break;
     case /\.(mp4)$/.test(path):
-      type = "Video";
+      type = MEDIA_TYPES.VIDEO;
       break;
     case /\.(md)$/.test(path):
-      type = "Text";
+      type = MEDIA_TYPES.TEXT;
       break;
     default:
-      type = "Unknown";
+      type = MEDIA_TYPES.UNKNOWN;
       break;
   }
   return { type, path };
@@ -345,19 +346,24 @@ export function typeForPath(path) {
   path = path.trim();
   switch (true) {
     case /\.((png)|(jpg)|(jpeg))$/.test(path):
-      type = "Image";
+      type = MEDIA_TYPES.IMAGE;
       break;
     case /\.(mp4)$/.test(path):
-      type = "Video";
+      type = MEDIA_TYPES.VIDEO;
       break;
     case /\.(md)$/.test(path):
-      type = "Text";
+      type = MEDIA_TYPES.TEXT;
       break;
     case /\.(pdf)$/.test(path):
-      type = "Document";
+      type = MEDIA_TYPES.DOCUMENT;
+      break;
+    case new RegExp("http(?:s)?://(?:www.)?twitter.com/([a-zA-Z0-9_]+)").test(
+      path
+    ):
+      type = MEDIA_TYPES.TWITTER;
       break;
     default:
-      type = "Unknown";
+      type = MEDIA_TYPES.UNKNOWN;
       break;
   }
   return type;
@@ -705,14 +711,17 @@ export function processMediaData(mediaData, language) {
     const { data } = mediaData;
     if (data.observations) {
       data.observations.reduce((acc, obs) => {
-        acc.push({
-          kind: obs.online_link ? "video" : "twitter",
-          title:
-            language === LANGUAGE_OPTIONS.EN_US
-              ? obs.online_title_en
-              : obs.online_title_ar,
-          src: obs.online_link || "",
-        });
+        const { online_title_ar, online_title_en, online_link } = obs;
+        if (online_link) {
+          acc.push({
+            kind: typeForPath(online_link),
+            title:
+              language === LANGUAGE_OPTIONS.EN_US
+                ? online_title_en
+                : online_title_ar,
+            src: online_link,
+          });
+        }
         return acc;
       }, mediaLinks);
     }

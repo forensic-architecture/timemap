@@ -63,5 +63,14 @@ export const EVENT_MARKER_OFFSETS = {
   DASH: 2,
 };
 
+export const MEDIA_TYPES = {
+  VIDEO: "Video",
+  IMAGE: "Image",
+  TEXT: "Text",
+  DOCUMENT: "Document",
+  TWITTER: "Twitter",
+  UNKNOWN: "Unknown",
+};
+
 export const DASH_HEIGHT = 20;
 export const DASH_SPOTLIGHT_RADIUS = 6;

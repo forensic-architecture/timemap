@@ -320,7 +320,10 @@ function updateMediaCache(appState, action) {
   const { evt } = action;
   return {
     ...appState,
-    mediaCache: { ...appState.mediaCache, [evt.id]: evt.media },
+    mediaCache: {
+      ...appState.mediaCache,
+      [evt.id]: { media: evt.media, links: evt.links },
+    },
   };
 }
 
