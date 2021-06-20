@@ -515,6 +515,7 @@ function mapStateToProps(state) {
       dom: state.ui.dom,
       styles: state.ui.style.selectedEvents,
       eventRadius: state.ui.timeline.eventRadius,
+      spotlightRadius: state.ui.time.spotlightRadius,
       coloringConfig: state.ui.coloring,
     },
     features: selectors.getFeatures(state),

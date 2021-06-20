@@ -82,6 +82,7 @@ const initial = {
     spotlightToolbar: {
       header: null,
       title: null,
+      eventRadius: 6,
       dimensions: {
         height: isSmallLaptop ? 50 : 65,
         width: 0,
@@ -219,6 +220,7 @@ const initial = {
     },
     time: {
       eventRadius: 8,
+      spotlightRadius: 6,
     },
   },
 

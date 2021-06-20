@@ -60,6 +60,8 @@ export const LANGUAGE_OPTIONS = {
 export const EVENT_MARKER_OFFSETS = {
   SQUARE: 7,
   DIAMOND: 10,
+  DASH: 2,
 };
 
 export const DASH_HEIGHT = 20;
+export const DASH_SPOTLIGHT_RADIUS = 6;
