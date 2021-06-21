@@ -545,13 +545,8 @@ export function makeNiceDate(datetime) {
     month: "long",
     day: "2-digit",
   });
-  const [
-    { value: month },
-    ,
-    { value: day },
-    ,
-    { value: year },
-  ] = dateTimeFormat.formatToParts(datetime);
+  const [{ value: month }, , { value: day }, , { value: year }] =
+    dateTimeFormat.formatToParts(datetime);
 
   return `${day} ${month}, ${year}`;
 }
@@ -737,4 +732,10 @@ export function setDefaultCategory(categories, defaultCategory) {
     catCopy.unshift(defaultCategory);
   }
   return catCopy;
+}
+
+export function uppercaseAndUnderscore(val) {
+  const clean = val.replaceAll(".", "");
+  const upperCase = clean.toUpperCase();
+  return upperCase.replaceAll(" ", "_");
 }

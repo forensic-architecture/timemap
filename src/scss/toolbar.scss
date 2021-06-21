@@ -394,12 +394,67 @@
     }
   }
 
+  .image-checkbox {
+    width: 100%;
+    height: 90px;
+    background: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    img {
+      max-width: 100%;
+      height: 100%;
+    }
+
+    button {
+      border: 1px transparent;
+      background: none;
+      cursor: pointer;
+      color: $offwhite;
+      outline: none;
+      transition: 0.2s ease;
+      padding: 0 10px;
+      text-align: left;
+      float: left;
+
+      .border {
+        width: 16px;
+        height: 16px;
+        background: none;
+        box-sizing: border-box;
+        position: relative;
+
+        .checkbox {
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          border: 1px solid $offwhite;
+          box-sizing: border-box;
+          background: none;
+          float: left;
+          position: absolute;
+          top: 2px;
+          left: 2px;
+          background: none;
+        }
+      }
+    }
+
+    &.active {
+      .checkbox {
+        background: $offwhite;
+      }
+    }
+  }
+
   .item {
     width: 100%;
     height: 36px;
     line-height: 36px;
     background: none;
     font-size: $large;
+    display: flex;
 
     button {
       height: 36px;

@@ -413,6 +413,7 @@ function mapStateToProps(state) {
     filterColors: state.ui.coloring.colors,
     coloringAlgMode: state.ui.coloring.mode,
     features: selectors.getFeatures(state),
+    assetDir: state.app.customAssetDir,
   };
 }
 
