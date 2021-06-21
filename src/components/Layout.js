@@ -22,7 +22,11 @@ import CardStack from "./controls/CardStack";
 import NarrativeControls from "./controls/NarrativeControls.js";
 
 import colors from "../common/global";
-import { binarySearch, insetSourceFrom } from "../common/utilities";
+import {
+  binarySearch,
+  insetSourceFrom,
+  uppercaseAndUnderscore,
+} from "../common/utilities";
 import { isMobileOnly } from "react-device-detect";
 
 class Dashboard extends React.Component {
@@ -269,6 +273,7 @@ class Dashboard extends React.Component {
   renderSpotlightCard(isMobile) {
     const { app, domain, actions } = this.props;
     const { spotlight } = app.associations;
+    const { copy } = app.spotlights;
 
     const associatedSpotlight = spotlight
       ? domain.associations.find((a) => a.title === spotlight)
@@ -288,7 +293,7 @@ class Dashboard extends React.Component {
         theme="dark"
         isOpen={!!associatedSpotlight}
         onClose={() => actions.setActiveSpotlight("")}
-        content={associatedSpotlight ? [associatedSpotlight.desc] : []}
+        content={copy[uppercaseAndUnderscore(associatedSpotlight.title)] || []}
         styles={styles}
         isMobile={isMobile}
       ></Popup>
@@ -416,7 +421,7 @@ class Dashboard extends React.Component {
           isOpen={app.flags.isInfopopup}
           onClose={actions.toggleInfoPopup}
         />
-        {this.renderIntroPopup(false, popupStyles)}
+        {features.USE_INTRO && this.renderIntroPopup(false, popupStyles)}
         {app.debug ? (
           <Notification
             isNotification={app.flags.isNotification}
