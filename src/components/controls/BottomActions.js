@@ -16,20 +16,17 @@ function BottomActions(props) {
             />
           ) : null}
         </div>
-        ,
         <div className="botttom-action-block">
           <InfoIcon
             isActive={props.info.enabled}
             onClickHandler={props.info.toggle}
           />
         </div>
-        ,
         <div className="botttom-action-block">
           {props.features.USE_COVER ? (
             <CoverIcon onClickHandler={props.cover.toggle} />
           ) : null}
         </div>
-        ,
       </>
     );
   }

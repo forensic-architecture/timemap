@@ -5,6 +5,10 @@ import marked from "marked";
 import MediaOverlay from "./atoms/Media";
 import falogo from "../assets/fa-logo.png";
 import bcatlogo from "../assets/bellingcat-logo.png";
+import yalogo from "../assets/ya-logo.png";
+import glanlogo from "../assets/glan-logo.png";
+import ecchrlogo from "../assets/ecchr-logo.png";
+
 const MEDIA_HIDDEN = -2;
 
 /**
@@ -154,6 +158,22 @@ class TemplateCover extends React.Component {
     return (
       <div className="default-cover-container">
         <div className={showing ? "cover-header" : "cover-header minimized"}>
+          <a className="cover-logo-container" href="https://yemeniarchive.org/">
+            <img
+              className="cover-logo"
+              src={yalogo}
+              alt="Yemeni Archive logo"
+            />
+          </a>
+          <a className="cover-logo-container" href="https://www.glanlaw.org/">
+            <img className="cover-logo" src={glanlogo} alt="GLAN logo" />
+          </a>
+          <a className="cover-logo-container" href="https://www.ecchr.eu/en/#">
+            <img className="cover-logo" src={ecchrlogo} alt="ECCHR logo" />
+          </a>
+          <a className="cover-logo-container" href="https://bellingcat.com">
+            <img className="cover-logo" src={bcatlogo} alt="Bellingcat logo" />
+          </a>
           <a
             className="cover-logo-container"
             href="https://forensic-architecture.org"
@@ -163,9 +183,6 @@ class TemplateCover extends React.Component {
               src={falogo}
               alt="Forensic Architecture logo"
             />
-          </a>
-          <a className="cover-logo-container" href="https://bellingcat.com">
-            <img className="cover-logo" src={bcatlogo} alt="Bellingcat logo" />
           </a>
         </div>
         <div className="cover-content">
