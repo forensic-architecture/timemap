@@ -19,6 +19,8 @@ import RAYTHEON_US from "../../assets/companies/RAYTHEON_US.png";
 import RHEINMETALL_AG from "../../assets/companies/RHEINMETALL_AG.png";
 import RWM_ITALIA_SPA from "../../assets/companies/RWM_ITALIA_SPA.png";
 import THALES_GROUP from "../../assets/companies/THALES_GROUP.png";
+import dash_selection from "../../assets/dash-selection.png";
+import solid_selection from "../../assets/solid-selection.png";
 
 const assetMap = {
   AIRBUS_DEFENCE_AND_SPACE_GMBH: AIRBUS_DEFENCE_AND_SPACE_GMBH,
@@ -45,12 +47,14 @@ const SpotlightListPanel = ({
   description,
 }) => {
   const uniqueSpotlights = getUniqueSpotlights(spotlights);
+  const legend = `<br><br> <img src=${dash_selection} alt='Dash Selection' style='height:55px; width:55px;'/> <p  style='font-size: 12px;'/>potential relation [according to the products and services provided] </p> <br><br> <img src=${solid_selection} alt='Dash Selection' style='height:40px; width:40px;'/> <p  style='font-size: 12px;'/>confirmed relation [according to remnants found on the ground] </p>`;
+
   return (
     <div className="react-innertabpanel">
       <h2>{title}</h2>
       <p
         dangerouslySetInnerHTML={{
-          __html: marked(description),
+          __html: marked(description + legend),
         }}
       />
       <div>
