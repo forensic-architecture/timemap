@@ -160,7 +160,7 @@ const TimelineEvents = ({
     const { shape: eventShape } = event;
 
     let renderShape = isDot ? renderDot : renderBar;
-    if (eventShape.shape) {
+    if (eventShape && eventShape.shape) {
       if (eventShape.shape === AVAILABLE_SHAPES.BAR) {
         renderShape = renderBar;
       } else if (eventShape.shape === AVAILABLE_SHAPES.DIAMOND) {
