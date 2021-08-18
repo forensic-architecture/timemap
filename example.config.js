@@ -17,9 +17,10 @@ module.exports = {
       }
     },
     features: {
-      USE_CATEGORIES: false,
+      COLOR_BY_ASSOCIATION: true,
+      USE_CATEGORIES: true,
       USE_ASSOCIATIONS: true,
-      USE_SOURCES: false,
+      USE_SOURCES: true,
       USE_COVER: false,
       GRAPH_NONLOCATED: false,
       HIGHLIGHT_GROUPS: false
