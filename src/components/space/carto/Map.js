@@ -276,7 +276,7 @@ class Map extends React.Component {
       this.superclusterIndex.options.minZoom
     );
     const zoomLevelsToSkip = 2;
-    const zoomToFly = Math.min(
+    const zoomToFly = Math.max(
       expansionZoom + zoomLevelsToSkip,
       this.props.app.cluster.maxZoom
     );
