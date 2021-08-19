@@ -25,11 +25,11 @@ export const AVAILABLE_SHAPES = {
   TRIANGLE: "TRIANGLE",
   HEXAGON: "HEXAGON",
   DASH: "DASH",
+  CIRCLE: "CIRCLE",
 };
 
 export const POLYGON_CLIP_PATH = {
-  STAR:
-    "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
+  STAR: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
   DIAMOND: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
   PENTAGON: "polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)",
   TRIANGLE: "polygon(50% 0%, 0% 100%, 100% 100%)",
@@ -60,7 +60,7 @@ export const LANGUAGE_OPTIONS = {
 export const EVENT_MARKER_OFFSETS = {
   SQUARE: 7,
   DIAMOND: 10,
-  DASH: 2,
+  DASH: -1,
 };
 
 export const MEDIA_TYPES = {

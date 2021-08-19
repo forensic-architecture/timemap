@@ -3,7 +3,7 @@ import { getEventCategories, styleSpotlight } from "../../../common/utilities";
 import {
   AVAILABLE_SHAPES,
   EVENT_MARKER_OFFSETS,
-  DASH_SPOTLIGHT_RADIUS,
+  DASH_HEIGHT,
 } from "../../../common/constants";
 import SpotlightMarker from "../../atoms/SpotlightMarker";
 
@@ -17,6 +17,7 @@ const TimelineSpotlightEvents = ({
   function renderSpotlightEvent(acc, event) {
     function renderMarker(y, styles) {
       let offset = 0;
+      let markerShape = AVAILABLE_SHAPES.CIRCLE;
       let radius = eventRadius;
       if (event.shape) {
         const { shape } = event.shape;
@@ -31,7 +32,7 @@ const TimelineSpotlightEvents = ({
             break;
           case AVAILABLE_SHAPES.DASH:
             offset = EVENT_MARKER_OFFSETS.DASH;
-            radius = DASH_SPOTLIGHT_RADIUS;
+            markerShape = AVAILABLE_SHAPES.DASH;
             break;
           default:
             offset = 0;
@@ -43,9 +44,12 @@ const TimelineSpotlightEvents = ({
       return (
         <SpotlightMarker
           x={getEventX(event) + offset}
-          y={y}
+          y={
+            markerShape === AVAILABLE_SHAPES.DASH ? y - DASH_HEIGHT / 2 + 1 : y
+          }
           radius={radius}
           styles={styles}
+          shape={markerShape}
         />
       );
     }
