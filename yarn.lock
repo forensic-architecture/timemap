@@ -951,10 +951,10 @@
   dependencies:
     arrify "^1.0.1"
 
-"@forensic-architecture/design-system@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@forensic-architecture/design-system/-/design-system-0.5.0.tgz#2a49ef9a7faa89126f979bbdd81c39916660fae9"
-  integrity sha512-ox2sDQ0ia+j6L5ugIrtbFcF8Bh3jLjAOfaMRUMjM4aA4ZzaF03EHx8wrBvlx1xLtLLWpHj0TJ7Ee1JiZZZtlTg==
+"@forensic-architecture/design-system@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@forensic-architecture/design-system/-/design-system-0.6.1.tgz#60a07f029714c5148c0a4399e6b1a8a1b6ca488a"
+  integrity sha512-dfNYRHKO12kWKTFewtk6mHDI8BKPAghp6n5zVyXW3S/nNOP7rrm9Ho+mk0YagV+81m3zAsctL6iAQIdohoM6rA==
   dependencies:
     marked "^1.1.1"
 
@@ -8219,9 +8219,9 @@ url-parse-lax@^1.0.0:
     prepend-http "^1.0.1"
 
 url-parse@^1.4.3:
-  version "1.4.7"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.4.7.tgz#a8a83535e8c00a316e403a5db4ac1b9b853ae278"
-  integrity sha512-d3uaVyzDB9tQoSXFvuSUNFibTd9zxd2bkVrDRvF5TmvWWQwqE4lgYJ5m+x1DbecWkw+LK4RNl2CU1hHuOKPVlg==
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.3.tgz#71c1303d38fb6639ade183c2992c8cc0686df862"
+  integrity sha512-IIORyIQD9rvj0A4CLWsHkBBJuNqWpFQe224b6j9t/ABmquIS0qDU2pY6kl6AuOrL5OkCXHMCFNe1jBcuAggjvQ==
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
