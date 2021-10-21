@@ -100,6 +100,7 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "devDependencies": {
+    "@babel/highlight": "^7.14.5",
     "ava": "1.0.0-beta.8",
     "mocha": "^5.2.0",
     "node-sass": "4.13.1",

@@ -43,10 +43,16 @@ git clone https://github.com/forensic-architecture/timemap
 npm install
 ```
 
-3. Run the development server, which will be available at http://localhost:8080.
+3. Copy the example config
 
 ```shell
-npm run dev
+cp example.config.js config.js
+```
+
+4. Run the development server, which will be available at http://localhost:8080.
+
+```shell
+CONFIG=config.js npm run dev
 ```
 
 To run with a file that is not 'config.js' in the root directory, set the `CONFIG` environment variable:
@@ -55,7 +61,7 @@ To run with a file that is not 'config.js' in the root directory, set the `CONFI
 CONFIG="myotherconfig.js" npm run dev
 ```
 
-In order for TimeMap to be able to display interesting information, you'll have to make sure to have the capacity to serve data, as well as adjusting some configuration parameters. Follow the in-depth tutorial linked above!
+At this stage, you'll probably only see a basic map with several error modals. In order for TimeMap to be able to display interesting information, you'll have to make sure to have the capacity to serve data, as well as adjusting some configuration parameters. See the [in-depth tutorial](https://forensic-architecture.org/investigation/timemap-for-cartographic-platforms) or [datasheet-server](https://github.com/forensic-architecture/datasheet-server).
 
 #### Running without datasheet-server
 

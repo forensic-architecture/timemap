@@ -184,6 +184,7 @@ class Toolbar extends React.Component {
     return (
       <div
         className={classes}
+        key={iconKey}
         onClick={() => {
           this.selectTab(_selected);
         }}
