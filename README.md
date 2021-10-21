@@ -43,10 +43,16 @@ git clone https://github.com/forensic-architecture/timemap
 npm install
 ```
 
-3. Run the development server, which will be available at http://localhost:8080.
+3. Copy the example config
 
 ```shell
-npm run dev
+cp example.config.js config.js
+```
+
+4. Run the development server, which will be available at http://localhost:8080.
+
+```shell
+CONFIG=config.js npm run dev
 ```
 
 To run with a file that is not 'config.js' in the root directory, set the `CONFIG` environment variable:
