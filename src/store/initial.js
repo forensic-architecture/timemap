@@ -145,7 +145,7 @@ const initial = {
 
   /*
    * The 'ui' subtree of this state refers the state of the cosmetic
-   *   elements of the application, such as color palettes of categories
+   *   elements of the application, such as color palettes of clusters
    *   as well as dom elements to attach SVG
    */
   ui: {
