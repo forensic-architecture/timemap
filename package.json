@@ -70,6 +70,7 @@
     "postcss-safe-parser": "5.0.2",
     "prettier": "^2.2.1",
     "prompts": "2.4.0",
+    "prop-types": "^15.7.2",
     "ramda": "^0.26.1",
     "react": "^16.13.1",
     "react-app-polyfill": "^2.0.0",
