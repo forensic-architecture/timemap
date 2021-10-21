@@ -87,12 +87,15 @@ export function validateDomain(domain, features) {
 
   function validateArray(items, domainKey, schema) {
     items.forEach((item) => {
+      if (domainKey === "events" && item.date === "" && item.time === "")
+        return;
       validateArrayItem(item, domainKey, schema);
     });
   }
 
   function validateObject(obj, domainKey, itemSchema) {
     Object.keys(obj).forEach((key) => {
+      if (key === "") return;
       const vl = obj[key];
       const result = Joi.validate(vl, itemSchema);
       if (result.error !== null) {

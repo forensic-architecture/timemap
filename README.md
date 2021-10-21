@@ -61,7 +61,7 @@ To run with a file that is not 'config.js' in the root directory, set the `CONFI
 CONFIG="myotherconfig.js" npm run dev
 ```
 
-In order for TimeMap to be able to display interesting information, you'll have to make sure to have the capacity to serve data, as well as adjusting some configuration parameters. Follow the in-depth tutorial linked above!
+At this stage, you'll probably only see a basic map with several error modals. In order for TimeMap to be able to display interesting information, you'll have to make sure to have the capacity to serve data, as well as adjusting some configuration parameters. See the [in-depth tutorial](https://forensic-architecture.org/investigation/timemap-for-cartographic-platforms) or [datasheet-server](https://github.com/forensic-architecture/datasheet-server).
 
 #### Running without datasheet-server
 
