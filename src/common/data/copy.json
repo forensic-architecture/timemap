@@ -145,7 +145,7 @@
       "categories": "Categories",
       "categories_label": "Categories",
       "explore_by_category__title": "Explore events by category",
-      "explore_by_category__description": "‘Categories’ refer to the victims of a given incident.<br><br>If no categories are selected, all datapoints are displayed.",
+      "explore_by_category__description": "",
       "shapes": "Shapes",
       "shapes_label": "Shapes",
       "explore_by_shapes__title": "Explore events by shape breakdown",

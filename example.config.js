@@ -3,7 +3,6 @@ module.exports = {
   display_title: 'example',
   SERVER_ROOT: 'http://localhost:4040',
   EVENTS_EXT: '/api/timemap_data/export_events/deeprows',
-  CATEGORIES_EXT: '/api/timemap_data/export_categories/rows',
   ASSOCIATIONS_EXT: '/api/timemap_data/export_associations/deeprows',
   SOURCES_EXT: '/api/timemap_data/export_sources/deepids',
   SITES_EXT: '',
@@ -18,7 +17,6 @@ module.exports = {
     },
     features: {
       COLOR_BY_ASSOCIATION: true,
-      USE_CATEGORIES: true,
       USE_ASSOCIATIONS: true,
       USE_SOURCES: true,
       USE_COVER: false,
