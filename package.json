@@ -70,7 +70,6 @@
     "postcss-safe-parser": "5.0.2",
     "prettier": "^2.2.1",
     "prompts": "2.4.0",
-    "prop-types": "^15.7.2",
     "ramda": "^0.26.1",
     "react": "^16.13.1",
     "react-app-polyfill": "^2.0.0",
@@ -101,7 +100,6 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "devDependencies": {
-    "@babel/highlight": "^7.14.5",
     "ava": "1.0.0-beta.8",
     "mocha": "^5.2.0",
     "node-sass": "4.13.1",

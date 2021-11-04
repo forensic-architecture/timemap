@@ -576,6 +576,19 @@
   }
 }
 
+.deselect-button {
+  display: inline-block;
+  height: 36px;
+  line-height: 36px;
+  color: $offwhite;
+  font-size: $normal;
+
+  &:hover {
+    color: red;
+    cursor: pointer;
+  }
+}
+
 .path-list {
   margin-bottom: 10px;
 

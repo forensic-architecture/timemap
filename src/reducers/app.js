@@ -135,19 +135,29 @@ function updateNarrativeStepIdx(appState, action) {
 }
 
 function toggleAssociations(appState, action) {
-  if (!(action.value instanceof Array)) {
-    action.value = [action.value];
-  }
+  const values = !(action.value instanceof Array)
+    ? [action.value]
+    : action.value;
+
   const { association: associationType } = action;
 
   let newAssociations = appState.associations[associationType].slice(0);
-  action.value.forEach((vl) => {
+  values.forEach((vl) => {
     if (newAssociations.includes(vl)) {
       newAssociations = newAssociations.filter((s) => s !== vl);
     } else {
       newAssociations.push(vl);
     }
   });
+
+  const { defaultCategory } = appState.associations;
+
+  newAssociations =
+    action.value === ""
+      ? defaultCategory
+        ? [defaultCategory]
+        : []
+      : newAssociations;
 
   return {
     ...appState,
