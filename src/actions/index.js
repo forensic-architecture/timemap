@@ -243,10 +243,18 @@ export function toggleAssociations(association, value, shouldColor) {
 }
 
 export const TOGGLE_SHAPES = "TOGGLE_SHAPES";
-export function toggleShapes(shape) {
+export function toggleShapes(shapes) {
   return {
     type: TOGGLE_SHAPES,
-    shape,
+    shapes,
+  };
+}
+
+export const TOGGLE_ALL_SHAPES = "TOGGLE_ALL_SHAPES";
+export function toggleAllShapes(shapes) {
+  return {
+    type: TOGGLE_ALL_SHAPES,
+    shapes,
   };
 }
 

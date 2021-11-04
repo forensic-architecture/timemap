@@ -192,6 +192,7 @@ class Toolbar extends React.Component {
             shapes={this.props.shapes}
             activeShapes={this.props.activeShapes}
             onShapeFilter={this.props.methods.onShapeFilter}
+            toggleAll={this.props.actions.toggleAllShapes}
             language={this.props.language}
             title={panels.shapes.label}
             description={panels.shapes.description}
@@ -230,6 +231,7 @@ class Toolbar extends React.Component {
     return (
       <div
         className={classes}
+        key={iconKey}
         onClick={() => {
           this.selectTab(_selected);
         }}

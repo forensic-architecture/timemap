@@ -13,6 +13,7 @@ import {
   CLEAR_FILTER,
   TOGGLE_ASSOCIATIONS,
   TOGGLE_SHAPES,
+  TOGGLE_ALL_SHAPES,
   UPDATE_TIMERANGE,
   UPDATE_DIMENSIONS,
   UPDATE_NARRATIVE,
@@ -168,12 +169,20 @@ function toggleAssociations(appState, action) {
 }
 
 function toggleShapes(appState, action) {
-  let newShapes = toggleValuesInList([...appState.shapes], [action.shape]);
-  newShapes = !action.shape ? [] : newShapes;
+  const newShapes = toggleValuesInList(appState.shapes, [...action.shapes]);
 
   return {
     ...appState,
     shapes: newShapes,
+  };
+}
+
+function toggleAllShapes(appState, action) {
+  const selectionSet = !action.shapes ? [] : action.shapes;
+
+  return {
+    ...appState,
+    shapes: selectionSet,
   };
 }
 
@@ -345,6 +354,8 @@ function app(appState = initial.app, action) {
       return toggleAssociations(appState, action);
     case TOGGLE_SHAPES:
       return toggleShapes(appState, action);
+    case TOGGLE_ALL_SHAPES:
+      return toggleAllShapes(appState, action);
     case UPDATE_TIMERANGE:
       return updateTimeRange(appState, action);
     case UPDATE_DIMENSIONS:

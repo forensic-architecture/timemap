@@ -8,11 +8,13 @@ const ShapesListPanel = ({
   shapes,
   activeShapes,
   onShapeFilter,
+  toggleAll,
   language,
   title,
   description,
 }) => {
   const styledShapes = mapStyleByShape(shapes, activeShapes);
+
   return (
     <div className="react-innertabpanel">
       <h2>{title}</h2>
@@ -25,6 +27,7 @@ const ShapesListPanel = ({
         data={styledShapes}
         activeValues={activeShapes}
         onSelect={onShapeFilter}
+        toggleAll={toggleAll}
         type={SHAPE}
       />
     </div>

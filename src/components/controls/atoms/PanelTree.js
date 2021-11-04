@@ -3,14 +3,16 @@ import Checkbox from "../../atoms/Checkbox";
 import { SHAPE } from "../../../common/constants";
 import BatchSelectButtons from "./BatchSelectButton";
 
-const PanelTree = ({ data, activeValues, onSelect, type }) => {
+const PanelTree = ({ data, activeValues, onSelect, toggleAll, type }) => {
   // If the parent panel is of type 'CATEGORY' || 'SPOTLIGHT': filter on title. If panel is 'SHAPE': filter on id
   const onSelectionType = type === SHAPE ? "id" : "title";
+  const selectAll = data.map((d) => d[onSelectionType]);
+
   return (
     <div>
       <BatchSelectButtons
-        onSelect={() => console.info("Selected...")}
-        onDeselect={() => onSelect("")}
+        onSelect={() => toggleAll(selectAll)}
+        onDeselect={() => toggleAll("")}
       />
       {data.map((val) => {
         return (

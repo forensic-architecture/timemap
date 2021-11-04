@@ -747,6 +747,7 @@ export function uppercaseAndUnderscore(val) {
  */
 export function toggleValuesInList(list, values) {
   let result = [...list];
+
   values.forEach((vl) => {
     if (result.includes(vl)) {
       result = result.filter((s) => s !== vl);
