@@ -1,12 +1,17 @@
 import React from "react";
 import Checkbox from "../../atoms/Checkbox";
 import { SHAPE } from "../../../common/constants";
+import BatchSelectButtons from "./BatchSelectButton";
 
 const PanelTree = ({ data, activeValues, onSelect, type }) => {
   // If the parent panel is of type 'CATEGORY' || 'SPOTLIGHT': filter on title. If panel is 'SHAPE': filter on id
   const onSelectionType = type === SHAPE ? "id" : "title";
   return (
     <div>
+      <BatchSelectButtons
+        onSelect={() => console.info("Selected...")}
+        onDeselect={() => onSelect("")}
+      />
       {data.map((val) => {
         return (
           <li

@@ -739,3 +739,20 @@ export function uppercaseAndUnderscore(val) {
   const upperCase = clean.toUpperCase();
   return upperCase.replaceAll(" ", "_");
 }
+
+/**
+ * Toggles the set of values in the current list, adding to the list if the value is not present, and removing it if it already is.
+ * @param list list - The current set of active values
+ * @param list values - The set of values to toggle
+ */
+export function toggleValuesInList(list, values) {
+  let result = [...list];
+  values.forEach((vl) => {
+    if (result.includes(vl)) {
+      result = result.filter((s) => s !== vl);
+    } else {
+      result.push(vl);
+    }
+  });
+  return result;
+}

@@ -1,6 +1,10 @@
 import initial from "../store/initial.js";
 import { ASSOCIATION_MODES } from "../common/constants";
-import { toggleFlagAC, setDefaultCategory } from "../common/utilities";
+import {
+  toggleFlagAC,
+  setDefaultCategory,
+  toggleValuesInList,
+} from "../common/utilities";
 
 import {
   UPDATE_HIGHLIGHTED,
@@ -141,23 +145,18 @@ function toggleAssociations(appState, action) {
 
   const { association: associationType } = action;
 
-  let newAssociations = appState.associations[associationType].slice(0);
-  values.forEach((vl) => {
-    if (newAssociations.includes(vl)) {
-      newAssociations = newAssociations.filter((s) => s !== vl);
-    } else {
-      newAssociations.push(vl);
-    }
-  });
+  let newAssociations = toggleValuesInList(
+    appState.associations[associationType],
+    values
+  );
 
   const { defaultCategory } = appState.associations;
 
-  newAssociations =
-    action.value === ""
-      ? defaultCategory
-        ? [defaultCategory]
-        : []
-      : newAssociations;
+  newAssociations = !action.value
+    ? defaultCategory
+      ? [defaultCategory]
+      : []
+    : newAssociations;
 
   return {
     ...appState,
@@ -169,13 +168,8 @@ function toggleAssociations(appState, action) {
 }
 
 function toggleShapes(appState, action) {
-  let newShapes = [...appState.shapes];
-  if (newShapes.includes(action.shape)) {
-    const idx = newShapes.indexOf(action.shape);
-    newShapes.splice(idx, 1);
-  } else {
-    newShapes.push(action.shape);
-  }
+  let newShapes = toggleValuesInList([...appState.shapes], [action.shape]);
+  newShapes = !action.shape ? [] : newShapes;
 
   return {
     ...appState,

@@ -576,16 +576,21 @@
   }
 }
 
-.deselect-button {
-  display: inline-block;
-  height: 36px;
-  line-height: 36px;
-  color: $offwhite;
-  font-size: $normal;
+.select-buttons {
+  display: flex;
+  flex-direction: column;
 
-  &:hover {
-    color: red;
-    cursor: pointer;
+  .batch-select-button {
+    display: inline-block;
+    height: 36px;
+    line-height: 36px;
+    color: $offwhite;
+    font-size: $normal;
+
+    &:hover {
+      color: red;
+      cursor: pointer;
+    }
   }
 }
 
