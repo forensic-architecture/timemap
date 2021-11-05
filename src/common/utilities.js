@@ -468,7 +468,9 @@ export function calculateColorPercentages(set, coloringSet) {
 }
 
 export function appendFiltersToColoringSet(filters, coloringSet) {
-  const filterSet = filters.map((f) => createFilterPathString(f));
+  const filterSet = filters
+    .filter((f) => f.type !== ASSOCIATION_TYPES.SINGLE_SELECT)
+    .map((f) => createFilterPathString(f));
   const flattenedColoringSet = coloringSet.flatMap((f) => f);
   return [
     ...coloringSet,
@@ -497,10 +499,9 @@ export function getStaticFilterColorSet(filters, coloringSet, defaultColor) {
  */
 export function getFilterIdxFromColorSet(filter, coloringSet) {
   let filterIdx = -1;
-  coloringSet.map((set, idx) => {
+  coloringSet.forEach((set, idx) => {
     const foundIdx = set.indexOf(filter);
     if (foundIdx !== -1) filterIdx = idx;
-    return null;
   });
   return filterIdx;
 }
