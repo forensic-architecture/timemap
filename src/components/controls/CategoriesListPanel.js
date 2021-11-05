@@ -7,6 +7,7 @@ const CategoriesListPanel = ({
   categories,
   activeCategories,
   onCategoryFilter,
+  toggleAll,
   language,
   title,
   description,
@@ -14,6 +15,7 @@ const CategoriesListPanel = ({
   const filteredCategories = categories.filter(
     (f) => f.display !== DATASHEET_FALSE
   );
+
   return (
     <div className="react-innertabpanel">
       <h2>{title}</h2>
@@ -26,6 +28,7 @@ const CategoriesListPanel = ({
         data={filteredCategories}
         activeValues={activeCategories}
         onSelect={onCategoryFilter}
+        toggleAll={toggleAll}
         type={ASSOCIATION_MODES.CATEGORY}
       />
     </div>

@@ -5,6 +5,11 @@ export const ASSOCIATION_MODES = {
   SPOTLIGHT: "SPOTLIGHT",
 };
 
+export const APP_STATE_ASSOCIATIONS = {
+  CATEGORY: "categories",
+  FILTER: "filters",
+};
+
 export const SHAPE = "SHAPE";
 
 export const DEFAULT_TAB_ICONS = {

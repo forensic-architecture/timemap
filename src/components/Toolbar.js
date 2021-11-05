@@ -11,7 +11,10 @@ import ShapesListPanel from "./controls/ShapesListPanel";
 import SpotlightListPanel from "./controls/SpotlightListPanel";
 import BottomActions from "./controls/BottomActions";
 import copy from "../common/data/copy.json";
-import { COLORING_ALGORITHM_MODE } from "../common/constants";
+import {
+  APP_STATE_ASSOCIATIONS,
+  COLORING_ALGORITHM_MODE,
+} from "../common/constants";
 import {
   trimAndEllipse,
   getImmediateFilterParent,
@@ -152,6 +155,12 @@ class Toolbar extends React.Component {
                 categories={children}
                 activeCategories={this.props.activeCategories}
                 onCategoryFilter={this.props.methods.onCategoryFilter}
+                toggleAll={(values) =>
+                  this.props.actions.toggleAllAssociations(
+                    APP_STATE_ASSOCIATIONS.CATEGORY,
+                    values
+                  )
+                }
                 language={this.props.language}
                 title={panelCategories[type].label}
                 description={panelCategories[type].description}

@@ -1,5 +1,5 @@
 import initial from "../store/initial.js";
-import { ASSOCIATION_MODES } from "../common/constants";
+import { ASSOCIATION_MODES, APP_STATE_ASSOCIATIONS } from "../common/constants";
 import {
   toggleFlagAC,
   setDefaultCategory,
@@ -12,6 +12,7 @@ import {
   UPDATE_COLORING_SET,
   CLEAR_FILTER,
   TOGGLE_ASSOCIATIONS,
+  TOGGLE_ALL_ASSOCIATIONS,
   TOGGLE_SHAPES,
   TOGGLE_ALL_SHAPES,
   UPDATE_TIMERANGE,
@@ -151,13 +152,33 @@ function toggleAssociations(appState, action) {
     values
   );
 
-  const { defaultCategory } = appState.associations;
+  return {
+    ...appState,
+    associations: {
+      ...appState.associations,
+      [associationType]: newAssociations,
+    },
+  };
+}
 
-  newAssociations = !action.value
-    ? defaultCategory
-      ? [defaultCategory]
-      : []
-    : newAssociations;
+function toggleAllAssociations(appState, action) {
+  let newAssociations;
+
+  const { association: associationType } = action;
+
+  switch (associationType) {
+    case APP_STATE_ASSOCIATIONS.CATEGORY:
+      const { defaultCategory } = appState.associations;
+      newAssociations = !action.values
+        ? [defaultCategory]
+        : [defaultCategory, ...action.values];
+      break;
+    case APP_STATE_ASSOCIATIONS.FILTER:
+      newAssociations = !action.values ? [] : action.values;
+      break;
+    default:
+      newAssociations = [];
+  }
 
   return {
     ...appState,
@@ -352,6 +373,8 @@ function app(appState = initial.app, action) {
       return clearFilter(appState, action);
     case TOGGLE_ASSOCIATIONS:
       return toggleAssociations(appState, action);
+    case TOGGLE_ALL_ASSOCIATIONS:
+      return toggleAllAssociations(appState, action);
     case TOGGLE_SHAPES:
       return toggleShapes(appState, action);
     case TOGGLE_ALL_SHAPES:

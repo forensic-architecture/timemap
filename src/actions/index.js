@@ -242,6 +242,15 @@ export function toggleAssociations(association, value, shouldColor) {
   };
 }
 
+export const TOGGLE_ALL_ASSOCIATIONS = "TOGGLE_ALL_ASSOCIATIONS";
+export function toggleAllAssociations(association, values) {
+  return {
+    type: TOGGLE_ALL_ASSOCIATIONS,
+    association,
+    values,
+  };
+}
+
 export const TOGGLE_SHAPES = "TOGGLE_SHAPES";
 export function toggleShapes(shapes) {
   return {
