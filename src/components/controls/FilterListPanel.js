@@ -1,7 +1,10 @@
 import React from "react";
 import Checkbox from "../atoms/Checkbox";
 import marked from "marked";
-import { COLORING_ALGORITHM_MODE } from "../../common/constants";
+import {
+  COLORING_ALGORITHM_MODE,
+  ASSOCIATION_TYPES,
+} from "../../common/constants";
 import {
   aggregateFilterPaths,
   getFilterIdxFromColorSet,
@@ -89,6 +92,10 @@ function FilterListPanel({
     );
   }
 
+  const singleSelectFilters = filters.filter(
+    (f) => f.type === ASSOCIATION_TYPES.SINGLE_SELECT
+  );
+
   return (
     <div className="react-innertabpanel">
       <h2>{title}</h2>
@@ -97,7 +104,16 @@ function FilterListPanel({
           __html: marked(description),
         }}
       />
-      {renderTree(filters)}
+      <span>{"Multi-select Filters"}</span>
+      {renderTree(
+        filters.filter((f) => f.type !== ASSOCIATION_TYPES.SINGLE_SELECT)
+      )}
+      {singleSelectFilters.length > 0 && (
+        <div>
+          <span>{"Single-select Filters"}</span>
+          {renderTree(singleSelectFilters)}
+        </div>
+      )}
     </div>
   );
 }
