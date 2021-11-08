@@ -16,6 +16,9 @@ import {
   isLongitude,
   appendFiltersToColoringSet,
   getStaticFilterColorSet,
+  findSingleSelectFilter,
+  findStaticFilterColor,
+  calculateSingleSelectColorPercentages,
 } from "../../../common/utilities";
 import {
   AVAILABLE_SHAPES,
@@ -27,19 +30,26 @@ function renderDot(event, styles, props) {
   const { filters, coloringSet, coloringConfig } = props;
   const { mode, colors, defaultColor } = coloringConfig;
 
+  const singleSelectOn = findSingleSelectFilter(
+    filters,
+    coloringSet.flatMap((f) => f)
+  );
+
   const updatedColoringSet =
-    mode === COLORING_ALGORITHM_MODE.STATIC
+    mode === COLORING_ALGORITHM_MODE.STATIC && !singleSelectOn
       ? appendFiltersToColoringSet(filters, coloringSet)
       : coloringSet;
+
   const updatedFilterColors =
     mode === COLORING_ALGORITHM_MODE.STATIC
-      ? getStaticFilterColorSet(filters, updatedColoringSet, defaultColor)
+      ? singleSelectOn
+        ? [findStaticFilterColor(filters, updatedColoringSet[0]), defaultColor]
+        : getStaticFilterColorSet(filters, updatedColoringSet, defaultColor)
       : colors;
 
-  const colorPercentages = calculateColorPercentages(
-    [event],
-    updatedColoringSet
-  );
+  const colorPercentages = singleSelectOn
+    ? calculateSingleSelectColorPercentages([event], updatedColoringSet)
+    : calculateColorPercentages([event], updatedColoringSet);
 
   return (
     <g
