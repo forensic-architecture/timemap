@@ -10,11 +10,13 @@ import {
   zipColorsToPercentages,
   appendFiltersToColoringSet,
   getStaticFilterColorSet,
+  findSingleSelectFilter,
+  calculateSingleSelectColorPercentages,
+  findStaticFilterColor,
 } from "../../../../common/utilities";
 
 function MapEvents({
   getCategoryColor,
-  categories,
   projectPoint,
   styleLocation,
   selected,
@@ -53,19 +55,29 @@ function MapEvents({
   function renderLocationSlicesByAssociation(location) {
     const { mode, colors, defaultColor } = coloringConfig;
 
+    const singleSelectOn = findSingleSelectFilter(
+      filters,
+      coloringSet.flatMap((f) => f)
+    );
+
     const updatedColoringSet =
-      mode === COLORING_ALGORITHM_MODE.STATIC
+      mode === COLORING_ALGORITHM_MODE.STATIC && !singleSelectOn
         ? appendFiltersToColoringSet(filters, coloringSet)
         : coloringSet;
+
     const updatedFilterColors =
       mode === COLORING_ALGORITHM_MODE.STATIC
-        ? getStaticFilterColorSet(filters, updatedColoringSet, defaultColor)
+        ? singleSelectOn
+          ? [
+              findStaticFilterColor(filters, updatedColoringSet[0]),
+              defaultColor,
+            ]
+          : getStaticFilterColorSet(filters, updatedColoringSet, defaultColor)
         : colors;
 
-    const colorPercentages = calculateColorPercentages(
-      [location],
-      updatedColoringSet
-    );
+    const colorPercentages = singleSelectOn
+      ? calculateSingleSelectColorPercentages([location], updatedColoringSet)
+      : calculateColorPercentages([location], updatedColoringSet);
 
     const styles = {
       stroke: colors.darkBackground,

@@ -467,6 +467,31 @@ export function calculateColorPercentages(set, coloringSet) {
   return associationCounts.map((count) => count / totalAssociations);
 }
 
+export function calculateSingleSelectColorPercentages(set, coloringSet) {
+  const singleSelectFilter = coloringSet[0][0];
+
+  let eventsWithFilter = 0;
+  let totalCount = 0;
+
+  set.forEach((item) => {
+    const setIsCluster = "events" in item;
+    let innerSet = setIsCluster ? item.events : item;
+
+    if (!Array.isArray(innerSet)) innerSet = [innerSet];
+
+    innerSet.forEach((e) => {
+      if (e.associations.map((f) => f.title).includes(singleSelectFilter))
+        eventsWithFilter += 1;
+      totalCount += 1;
+    });
+  });
+
+  return [
+    eventsWithFilter / totalCount,
+    (totalCount - eventsWithFilter) / totalCount,
+  ];
+}
+
 export function appendFiltersToColoringSet(filters, coloringSet) {
   const filterSet = filters
     .filter((f) => f.type !== ASSOCIATION_TYPES.SINGLE_SELECT)

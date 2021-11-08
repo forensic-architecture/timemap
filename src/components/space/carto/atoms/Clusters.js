@@ -9,10 +9,13 @@ import {
   isLatitude,
   isLongitude,
   calculateColorPercentages,
+  calculateSingleSelectColorPercentages,
   zipColorsToPercentages,
   calculateTotalClusterPoints,
   appendFiltersToColoringSet,
   getStaticFilterColorSet,
+  findSingleSelectFilter,
+  findStaticFilterColor,
 } from "../../../../common/utilities";
 
 const DefsClusters = () => (
@@ -28,7 +31,6 @@ function Cluster({
   cluster,
   size,
   projectPoint,
-  totalPoints,
   styles,
   renderHover,
   onClick,
@@ -55,20 +57,29 @@ function Cluster({
   const { cluster_id: clusterId } = cluster.properties;
 
   const individualChildren = getClusterChildren(clusterId);
+  const singleSelectOn = findSingleSelectFilter(
+    filters,
+    coloringSet.flatMap((f) => f)
+  );
 
   const updatedColoringSet =
-    mode === COLORING_ALGORITHM_MODE.STATIC
+    mode === COLORING_ALGORITHM_MODE.STATIC && !singleSelectOn
       ? appendFiltersToColoringSet(filters, coloringSet)
       : coloringSet;
+
   const updatedFilterColors =
     mode === COLORING_ALGORITHM_MODE.STATIC
-      ? getStaticFilterColorSet(filters, updatedColoringSet, defaultColor)
+      ? singleSelectOn
+        ? [findStaticFilterColor(filters, updatedColoringSet[0]), defaultColor]
+        : getStaticFilterColorSet(filters, updatedColoringSet, defaultColor)
       : colors;
 
-  const colorPercentages = calculateColorPercentages(
-    individualChildren,
-    updatedColoringSet
-  );
+  const colorPercentages = singleSelectOn
+    ? calculateSingleSelectColorPercentages(
+        individualChildren,
+        updatedColoringSet
+      )
+    : calculateColorPercentages(individualChildren, updatedColoringSet);
 
   const { coordinates } = cluster.geometry;
   const [longitude, latitude] = coordinates;
