@@ -223,6 +223,7 @@ class Toolbar extends React.Component {
             onSpotlightSelect={(val) => {
               const toggle = val === this.props.activeSpotlight ? "" : val;
               this.props.actions.setActiveSpotlight(toggle);
+              this.selectTab(-1);
             }}
             language={this.props.language}
             title={panels.spotlights.label}
