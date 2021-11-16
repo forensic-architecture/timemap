@@ -8,11 +8,26 @@
           "Cada evento estará coloreado según la persona que dio el testimonio del evento."
         ],
         "colors": [
-          { "class": "category_group00", "label": "Categoría Grupo 00" },
-          { "class": "category_group01", "label": "Categoría Grupo 01" },
-          { "class": "category_group02", "label": "Categoría Grupo 02" },
-          { "class": "category_group03", "label": "Categoría Grupo 03" },
-          { "class": "other", "label": "Otras categorías" }
+          {
+            "class": "category_group00",
+            "label": "Categoría Grupo 00"
+          },
+          {
+            "class": "category_group01",
+            "label": "Categoría Grupo 01"
+          },
+          {
+            "class": "category_group02",
+            "label": "Categoría Grupo 02"
+          },
+          {
+            "class": "category_group03",
+            "label": "Categoría Grupo 03"
+          },
+          {
+            "class": "other",
+            "label": "Otras categorías"
+          }
         ]
       },
       "default": {
@@ -50,12 +65,30 @@
     },
     "timeline": {
       "zoomLevels": [
-        { "label": "20 años", "duration": 10512000 },
-        { "label": "2 años", "duration": 1051200 },
-        { "label": "3 meses", "duration": 129600 },
-        { "label": "3 días", "duration": 4320 },
-        { "label": "12 horas", "duration": 720 },
-        { "label": "1 hora", "duration": 60 }
+        {
+          "label": "20 años",
+          "duration": 10512000
+        },
+        {
+          "label": "2 años",
+          "duration": 1051200
+        },
+        {
+          "label": "3 meses",
+          "duration": 129600
+        },
+        {
+          "label": "3 días",
+          "duration": 4320
+        },
+        {
+          "label": "12 horas",
+          "duration": 720
+        },
+        {
+          "label": "1 hora",
+          "duration": 60
+        }
       ],
       "labels_title": "Testimonios",
       "labels": [
@@ -98,11 +131,26 @@
           "Each event is colored according the person that gave category of the event."
         ],
         "colors": [
-          { "class": "category_group00", "label": "Category Group 00" },
-          { "class": "category_group01", "label": "Category Group 01" },
-          { "class": "category_group02", "label": "Category Group 02" },
-          { "class": "category_group03", "label": "Category Group 03" },
-          { "class": "other", "label": "Other categories" }
+          {
+            "class": "category_group00",
+            "label": "Category Group 00"
+          },
+          {
+            "class": "category_group01",
+            "label": "Category Group 01"
+          },
+          {
+            "class": "category_group02",
+            "label": "Category Group 02"
+          },
+          {
+            "class": "category_group03",
+            "label": "Category Group 03"
+          },
+          {
+            "class": "other",
+            "label": "Other categories"
+          }
         ]
       },
       "default": {
@@ -111,6 +159,7 @@
           "Each small **dot** represents a **datapoint**, or incident. Click on a dot to see details. Hover over a larger ‘**cluster**’ dot to see how many events it represents.",
           "Zoom in either with a mouse-scroll or by clicking a ‘cluster’ dot.",
           "Use **filters** and **categories** to segment the data. Selecting certain filters and categories will show only the datapoints that relate to them. If no filters or categories are selected, all the datapoints are displayed.",
+          "Selecting in airstrikes and companies adjusts the datapoints displayed on the map. Selecting filters in evidence of complicity and countries reflect in the displayed events on the timeline at the bottom.",
           "Selecting more than one filter will introduce colour-coded datapoints, which allow you to compare types of incident across time and space. This feature works up to a maximum of six filters.",
           "Use the left and right arrows to move back and forward through time. You can also click and drag anywhere on the timeline. Use the handles on the right to select a date range."
         ],
