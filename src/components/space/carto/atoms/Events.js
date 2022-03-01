@@ -108,9 +108,7 @@ function MapEvents({
           transform={`translate(${x}, ${y})`}
           onClick={(e) => handleEventSelect(e, location)}
         >
-          {features.COLOR_BY_ASSOCIATION
-            ? renderLocationSlicesByAssociation(location)
-            : null}
+          {renderLocationSlicesByAssociation(location)}
           {extraRender ? extraRender() : null}
           {isSelected ? null : renderBorder()}
         </g>
