@@ -133,11 +133,12 @@ function ClusterEvents({
       <svg>
         <g className="cluster-locations">
           {isRadial ? <DefsClusters /> : null}
-          {clusters.map((c) => {
+          {clusters.map((c, idx) => {
             const pointCount = c.properties.point_count;
             const clusterSize = calcClusterSize(pointCount, totalPoints);
             return (
               <Cluster
+                key={idx}
                 onClick={onSelect}
                 getClusterChildren={getClusterChildren}
                 coloringSet={coloringSet}

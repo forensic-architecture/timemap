@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import {
-  Card,
   generateCardLayout,
+  Card,
 } from "@forensic-architecture/design-system/dist/react";
 
 import * as selectors from "../../selectors";
@@ -28,8 +28,8 @@ class CardStack extends React.Component {
   scrollToCard() {
     const duration = 500;
     const element = this.refCardStack.current;
-    const cardScroll = this.refs[this.props.narrative.current].current
-      .offsetTop;
+    const cardScroll =
+      this.refs[this.props.narrative.current].current.offsetTop;
 
     const start = element.scrollTop;
     const change = cardScroll - start;
@@ -70,15 +70,18 @@ class CardStack extends React.Component {
       const thisRef = React.createRef();
       this.refs[idx] = thisRef;
 
+      const content = generateTemplate({
+        event,
+        colors: this.props.colors,
+        coloringSet: this.props.coloringSet,
+        getFilterIdxFromColorSet,
+      });
+
       return (
         <Card
           ref={thisRef}
-          content={generateTemplate({
-            event,
-            colors: this.props.colors,
-            coloringSet: this.props.coloringSet,
-            getFilterIdxFromColorSet,
-          })}
+          key={idx}
+          content={content}
           language={this.props.language}
           isLoading={this.props.isLoading}
           isSelected={selections[idx]}
