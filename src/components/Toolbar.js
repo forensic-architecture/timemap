@@ -217,7 +217,7 @@ class Toolbar extends React.Component {
     return (
       <div className={classes}>
         {this.renderClosePanel()}
-        <Tabs selectedIndex={this.state._selected}>
+        <Tabs onSelect={() => null} selectedIndex={this.state._selected}>
           {narratives && narratives.length !== 0
             ? this.renderToolbarNarrativePanel()
             : null}
