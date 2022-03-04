@@ -1,9 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import {
-  generateCardLayout,
-  Card,
-} from "@forensic-architecture/design-system/dist/react";
+import { generateCardLayout, Card } from "./Card";
 
 import * as selectors from "../../selectors";
 import { getFilterIdxFromColorSet } from "../../common/utilities";
@@ -70,6 +67,7 @@ class CardStack extends React.Component {
     return events.map((event, idx) => {
       const thisRef = React.createRef();
       this.refs[idx] = thisRef;
+      console.log(event);
 
       const content = generateTemplate({
         event,

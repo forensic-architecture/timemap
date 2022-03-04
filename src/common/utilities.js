@@ -484,13 +484,8 @@ export function makeNiceDate(datetime) {
     month: "long",
     day: "2-digit",
   });
-  const [
-    { value: month },
-    ,
-    { value: day },
-    ,
-    { value: year },
-  ] = dateTimeFormat.formatToParts(datetime);
+  const [{ value: month }, , { value: day }, , { value: year }] =
+    dateTimeFormat.formatToParts(datetime);
 
   return `${day} ${month}, ${year}`;
 }
@@ -573,3 +568,5 @@ export function getFilterIdx(
   else if (narrativesExist && categoriesExist) return numCategoryPanels + 1;
   else return 0;
 }
+
+export const isEmptyString = (s) => s.length === 0;
