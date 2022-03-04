@@ -161,7 +161,7 @@
         "Other"
       ],
       "info": "Seeing events that occurred between",
-      "default_categories_label": "Events"
+      "default_categories_label": "Last 12 Days"
     },
     "cardstack": {
       "header": "selected events",

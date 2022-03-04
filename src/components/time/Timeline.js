@@ -130,7 +130,7 @@ class Timeline extends React.Component {
   }
 
   onClickArrow() {
-    this.setState((prevState, props) => {
+    this.setState((prevState) => {
       return { isFolded: !prevState.isFolded };
     });
   }

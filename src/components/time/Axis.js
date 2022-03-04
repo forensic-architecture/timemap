@@ -34,14 +34,14 @@ class TimelineAxis extends React.Component {
     if (this.props.scaleX) {
       this.x0 = d3
         .axisBottom(this.props.scaleX)
-        .ticks(5)
+        .ticks(15)
         .tickPadding(0)
         .tickSize(contentHeight - TEXT_HEIGHT - marginTop)
         .tickFormat(d3.timeFormat(fstFmt));
 
       this.x1 = d3
         .axisBottom(this.props.scaleX)
-        .ticks(5)
+        .ticks(15)
         .tickPadding(marginTop)
         .tickSize(0)
         .tickFormat(d3.timeFormat(sndFmt));
