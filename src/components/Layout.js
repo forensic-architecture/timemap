@@ -107,6 +107,7 @@ class Dashboard extends React.Component {
       delete std.sources;
       Object.values(std).forEach((ev) => matchedEvents.push(ev));
     }
+
     this.props.actions.updateSelected(matchedEvents);
   }
 

@@ -24,6 +24,7 @@ class Timeline extends React.Component {
     this.getDatetimeX = this.getDatetimeX.bind(this);
     this.getY = this.getY.bind(this);
     this.onApplyZoom = this.onApplyZoom.bind(this);
+    this.onSelect = this.onSelect.bind(this);
     this.svgRef = React.createRef();
     this.state = {
       isFolded: false,
@@ -339,6 +340,18 @@ class Timeline extends React.Component {
     return [null, null];
   }
 
+  onSelect(event) {
+    if (this.props.features.ZOOM_TO_TIMEFRAME_ON_TIMELINE_CLICK) {
+      const timeframe = Math.floor(
+        this.props.features.ZOOM_TO_TIMEFRAME_ON_TIMELINE_CLICK / 2
+      );
+      const start = d3.timeMinute.offset(event.datetime, -timeframe);
+      const end = d3.timeMinute.offset(event.datetime, timeframe);
+      this.props.methods.onUpdateTimerange([start, end]);
+    }
+    this.props.methods.onSelect(event);
+  }
+
   render() {
     const { isNarrative, app } = this.props;
     let classes = `timeline-wrapper ${this.state.isFolded ? " folded" : ""}`;
@@ -440,7 +453,7 @@ class Timeline extends React.Component {
                 }}
                 getCategoryColor={this.props.methods.getCategoryColor}
                 transitionDuration={this.state.transitionDuration}
-                onSelect={this.props.methods.onSelect}
+                onSelect={this.onSelect}
                 dims={dims}
                 features={this.props.features}
                 setLoading={this.props.actions.setLoading}
