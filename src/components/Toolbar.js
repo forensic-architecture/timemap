@@ -71,6 +71,7 @@ class Toolbar extends React.Component {
       this.props.actions.updateColoringSet(updatedColoringSet);
     }
     this.props.methods.onSelectFilter(matchingKeys);
+    this.props.actions.updateSelected([]);
   }
 
   renderClosePanel() {
