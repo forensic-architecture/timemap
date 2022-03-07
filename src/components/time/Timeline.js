@@ -70,7 +70,6 @@ class Timeline extends React.Component {
     }
 
     // nextProps.domain.events.forEach(e => {
-    //   console.log(e.datetime)
     // });
     // this.props.methods.onSelect()
   }
@@ -314,7 +313,7 @@ class Timeline extends React.Component {
       USE_CATEGORIES && activeCategories && activeCategories.length > 0;
 
     if (!categoriesExist) {
-      return this.state.dims.trackHeight / 2;
+      return this.state.dims.trackHeight / 1.5;
     }
 
     const { category } = event;
@@ -363,7 +362,10 @@ class Timeline extends React.Component {
     let classes = `timeline-wrapper ${this.state.isFolded ? " folded" : ""}`;
     classes += app.narrative !== null ? " narrative-mode" : "";
     const { dims } = this.state;
-    const foldedStyle = { bottom: this.state.isFolded ? -dims.height : 0 };
+    const foldedStyle = {
+      bottom: this.state.isFolded ? -dims.height : 0,
+      left: 110,
+    };
     const heightStyle = { height: dims.height };
     const extraStyle = { ...heightStyle, ...foldedStyle };
     const contentHeight = { height: dims.contentHeight };

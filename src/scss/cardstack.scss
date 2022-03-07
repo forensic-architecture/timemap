@@ -1,11 +1,12 @@
 // @import 'burger';
 @import "card";
 
+$card-stack-header-height: 38px;
 .card-stack {
   position: absolute;
-  top: $card-right;
+  top: calc(#{$card-right} + #{$card-stack-header-height});
   right: $card-right;
-  max-height: calc(100% - 260px);
+  max-height: calc(100% - 10px);
   height: auto;
   width: $card-width;
   overflow-y: scroll;
@@ -27,8 +28,10 @@
   }
 
   .card-stack-header {
-    min-height: 38px;
-    line-height: 38px;
+    position: fixed;
+    top: $card-right;
+    min-height: $card-stack-header-height;
+    line-height: $card-stack-header-height;
     width: $card-width;
     box-sizing: border-box;
     padding: 0 5px;

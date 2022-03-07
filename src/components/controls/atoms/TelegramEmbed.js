@@ -11,9 +11,7 @@ const styles = {
   overflow: "hidden",
 };
 
-const containerStyles = {
-  marginLeft: -60,
-};
+const containerStyles = {};
 
 /**
  * Simple Component for Telegram embedding

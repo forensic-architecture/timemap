@@ -39,8 +39,6 @@ function updateHighlighted(appState, action) {
 }
 
 function updateTicks(appState, action) {
-  console.log(action);
-  console.log(appState);
   return {
     ...appState,
     timeline: {
