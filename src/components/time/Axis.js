@@ -27,21 +27,22 @@ class TimelineAxis extends React.Component {
       fstFmt = "";
     } else {
       sndFmt = "%d %b";
-      fstFmt = "%H:%M";
+      // fstFmt = "%H:%M";
+      fstFmt = "";
     }
 
     const { marginTop, contentHeight } = this.props.dims;
     if (this.props.scaleX) {
       this.x0 = d3
         .axisBottom(this.props.scaleX)
-        .ticks(15)
+        .ticks(this.props.ticks)
         .tickPadding(0)
         .tickSize(contentHeight - TEXT_HEIGHT - marginTop)
         .tickFormat(d3.timeFormat(fstFmt));
 
       this.x1 = d3
         .axisBottom(this.props.scaleX)
-        .ticks(15)
+        .ticks(this.props.ticks)
         .tickPadding(marginTop)
         .tickSize(0)
         .tickFormat(d3.timeFormat(sndFmt));

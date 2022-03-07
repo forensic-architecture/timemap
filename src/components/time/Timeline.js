@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import * as d3 from "d3";
 import hash from "object-hash";
 
-import { setLoading, setNotLoading } from "../../actions";
+import { setLoading, setNotLoading, updateTicks } from "../../actions";
 import * as selectors from "../../selectors";
 import copy from "../../common/data/copy.json";
 
@@ -239,6 +239,7 @@ class Timeline extends React.Component {
         timerange: [newDomain0, newDomainF],
       },
       () => {
+        this.props.actions.updateTicks(15);
         this.props.methods.onUpdateTimerange(this.state.timerange);
       }
     );
@@ -347,6 +348,7 @@ class Timeline extends React.Component {
       );
       const start = d3.timeMinute.offset(event.datetime, -timeframe);
       const end = d3.timeMinute.offset(event.datetime, timeframe);
+      this.props.actions.updateTicks(1);
       this.props.methods.onUpdateTimerange([start, end]);
     }
     this.props.methods.onSelect(event);
@@ -388,6 +390,7 @@ class Timeline extends React.Component {
             <svg ref={this.svgRef} width={dims.width} style={contentHeight}>
               <Clip dims={dims} />
               <Axis
+                ticks={app.timeline.dimensions.ticks}
                 dims={dims}
                 extent={this.getTimeScaleExtent()}
                 transitionDuration={this.state.transitionDuration}
@@ -499,7 +502,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({ setLoading, setNotLoading }, dispatch),
+    actions: bindActionCreators(
+      { setLoading, setNotLoading, updateTicks },
+      dispatch
+    ),
   };
 }
 

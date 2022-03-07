@@ -6,6 +6,7 @@ import {
   UPDATE_HIGHLIGHTED,
   UPDATE_SELECTED,
   UPDATE_COLORING_SET,
+  UPDATE_TICKS,
   CLEAR_FILTER,
   TOGGLE_ASSOCIATIONS,
   TOGGLE_SHAPES,
@@ -35,6 +36,21 @@ function updateHighlighted(appState, action) {
   return Object.assign({}, appState, {
     highlighted: action.highlighted,
   });
+}
+
+function updateTicks(appState, action) {
+  console.log(action);
+  console.log(appState);
+  return {
+    ...appState,
+    timeline: {
+      ...appState.timeline,
+      dimensions: {
+        ...appState.timeline.dimensions,
+        ticks: action.ticks,
+      },
+    },
+  };
 }
 
 function updateSelected(appState, action) {
@@ -296,6 +312,8 @@ function app(appState = initial.app, action) {
       return updateSelected(appState, action);
     case UPDATE_COLORING_SET:
       return updateColoringSet(appState, action);
+    case UPDATE_TICKS:
+      return updateTicks(appState, action);
     case CLEAR_FILTER:
       return clearFilter(appState, action);
     case TOGGLE_ASSOCIATIONS:

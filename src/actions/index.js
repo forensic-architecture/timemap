@@ -302,6 +302,14 @@ export function updateColoringSet(coloringSet) {
   };
 }
 
+export const UPDATE_TICKS = "UPDATE_TICKS";
+export function updateTicks(ticks) {
+  return {
+    type: UPDATE_TICKS,
+    ticks,
+  };
+}
+
 // UI
 
 export const TOGGLE_SITES = "TOGGLE_SITES";

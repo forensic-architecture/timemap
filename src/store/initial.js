@@ -75,6 +75,7 @@ const initial = {
     },
     timeline: {
       dimensions: {
+        ticks: 15,
         height: isSmallLaptop ? 170 : 250,
         width: 0,
         marginLeft: 70,
