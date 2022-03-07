@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
 import { useCallback } from "react";
 import { typeForPath } from "../../../common/utilities";
+import { TwitterTweetEmbed } from "react-twitter-embed";
+import TelegramPostEmbed from "./TelegramEmbed";
 
 const TITLE_LENGTH = 50;
 // TODO should videos
@@ -51,6 +53,25 @@ const Media = ({ src, title }) => {
               alt="an inline photograph for the event card component"
             />
           </div>
+        </div>
+      );
+
+    case "Telegram":
+      return (
+        <div className="card-cell media embedded">
+          <TelegramPostEmbed src={src} />
+        </div>
+      );
+
+    case "Tweet":
+      const tweetIdRegex =
+        /https?:\/\/twitter.com\/[0-9a-zA-Z_]{1,20}\/status\/([0-9]*)/;
+      const match = tweetIdRegex.exec(src);
+      const tweetId = match[1];
+
+      return (
+        <div className="card-cell media embedded">
+          <TwitterTweetEmbed tweetId={tweetId} />
         </div>
       );
     default:

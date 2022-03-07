@@ -323,6 +323,13 @@ export function typeForPath(path) {
     case /\.(pdf)$/.test(path):
       type = "Document";
       break;
+    case /.+(twitter\.com).+/.test(path):
+      type = "Tweet";
+      break;
+    case /.+(t\.me).+/.test(path):
+      type = "Telegram";
+      break;
+
     default:
       type = "Unknown";
       break;

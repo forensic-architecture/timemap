@@ -15,7 +15,7 @@
   text-align: left;
   overflow-y: scroll;
   height: 100%;
-  max-width: 400px;
+  max-width: $card-width;
 
   &:hover {
     background: $lightwhite;
@@ -53,6 +53,7 @@
   .card-col {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
 
     .card-cell {
       flex: 1;
@@ -182,7 +183,7 @@
 
   .media {
     display: flex;
-    max-height: 350px;
+    // max-height: 350px;
     // justify-content: center;
     flex-direction: column;
     cursor: pointer;
@@ -267,5 +268,9 @@
 
   .card-row {
     border-color: darkgray;
+  }
+
+  .embedded {
+    width: calc(#{$card-width} - 2px) !important;
   }
 }

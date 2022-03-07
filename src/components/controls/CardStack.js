@@ -67,7 +67,6 @@ class CardStack extends React.Component {
     return events.map((event, idx) => {
       const thisRef = React.createRef();
       this.refs[idx] = thisRef;
-      console.log(event);
 
       const content = generateTemplate({
         event,
@@ -78,7 +77,6 @@ class CardStack extends React.Component {
 
       return (
         <Card
-          ref={thisRef}
           key={hash(content)}
           content={content}
           language={this.props.language}
