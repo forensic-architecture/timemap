@@ -68,6 +68,11 @@ class Timeline extends React.Component {
     ) {
       this.computeDims();
     }
+
+    // nextProps.domain.events.forEach(e => {
+    //   console.log(e.datetime)
+    // });
+    // this.props.methods.onSelect()
   }
 
   addEventListeners() {
@@ -165,7 +170,7 @@ class Timeline extends React.Component {
     const extent = this.getTimeScaleExtent();
     const newCentralTime = d3.timeMinute.offset(
       this.state.scaleX.domain()[0],
-      extent / 2
+      extent
     );
 
     // if forward
@@ -174,13 +179,12 @@ class Timeline extends React.Component {
 
     // if backwards
     if (direction === "backwards") {
-      domain0 = d3.timeMinute.offset(newCentralTime, -extent);
-      domainF = newCentralTime;
+      domain0 = d3.timeMinute.offset(newCentralTime, -(2 * extent));
+      domainF = d3.timeMinute.offset(newCentralTime, -extent);
     }
 
-    this.setState({ timerange: [domain0, domainF] }, () => {
-      this.props.methods.onUpdateTimerange(this.state.timerange);
-    });
+    this.props.methods.onUpdateTimerange([domain0, domainF]);
+    this.props.methods.onSelect([]);
   }
 
   onCenterTime(newCentralTime) {
@@ -417,12 +421,14 @@ class Timeline extends React.Component {
                     .default_categories_label
                 }
               />
-              <Handles
-                dims={dims}
-                onMoveTime={(dir) => {
-                  this.onMoveTime(dir);
-                }}
-              />
+              {app.timeline.dimensions.ticks == 1 && (
+                <Handles
+                  dims={dims}
+                  onMoveTime={(dir) => {
+                    this.onMoveTime(dir);
+                  }}
+                />
+              )}
               <ZoomControls
                 extent={this.getTimeScaleExtent()}
                 zoomLevels={this.props.app.timeline.zoomLevels}
