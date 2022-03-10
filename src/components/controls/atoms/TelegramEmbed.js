@@ -87,6 +87,7 @@ class TelegramEmbed extends Component {
     return (
       <div data-sharing-id={container} style={containerStyles}>
         <iframe
+          title={src}
           ref={(node) => (this.iFrame = node)}
           src={src + "?embed=1"}
           height={height}

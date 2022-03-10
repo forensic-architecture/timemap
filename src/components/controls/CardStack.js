@@ -145,7 +145,7 @@ class CardStack extends React.Component {
   }
 
   render() {
-    const { isCardstack, selected, narrative, timelineDims } = this.props;
+    const { isCardstack, selected, narrative } = this.props;
     if (selected.length > 0) {
       if (!narrative) {
         return (

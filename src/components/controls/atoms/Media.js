@@ -75,7 +75,19 @@ const Media = ({ src, title }) => {
         </div>
       );
     default:
-      return null;
+      if (src === "HIDDEN") {
+        return (
+          <div className="card-cell media source-hidden">
+            <h4>
+              Source hidden
+              <br />
+              Privacy concerns
+            </h4>
+          </div>
+        );
+      } else {
+        return null;
+      }
   }
 };
 

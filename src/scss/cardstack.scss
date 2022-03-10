@@ -6,7 +6,7 @@ $card-stack-header-height: 38px;
   position: absolute;
   top: calc(#{$card-right} + #{$card-stack-header-height});
   right: $card-right;
-  max-height: calc(100% - 10px);
+  max-height: calc(100% - #{$timeline-height} + 60px);
   height: auto;
   width: $card-width;
   overflow-y: scroll;

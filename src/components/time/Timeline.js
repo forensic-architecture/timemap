@@ -423,7 +423,7 @@ class Timeline extends React.Component {
                     .default_categories_label
                 }
               />
-              {app.timeline.dimensions.ticks == 1 && (
+              {app.timeline.dimensions.ticks === 1 && (
                 <Handles
                   dims={dims}
                   onMoveTime={(dir) => {

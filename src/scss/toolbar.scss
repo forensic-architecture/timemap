@@ -17,7 +17,7 @@
     position: relative;
     width: $toolbar-width;
     height: 100%;
-    padding: 20px 0px;
+    padding: 20px 0px 0px 0px;
     margin: 0;
     box-sizing: border-box;
     color: $offwhite;
@@ -275,6 +275,7 @@
   position: fixed;
   transition: 0.2s ease;
   left: $toolbar-width;
+  max-height: calc(100vh - #{$timeline-height});
   box-shadow: 10px -10px 38px rgba(0, 0, 0, 0.3),
     10px 15px 12px rgba(0, 0, 0, 0.22);
 
