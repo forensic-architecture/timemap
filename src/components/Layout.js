@@ -77,6 +77,11 @@ class Dashboard extends React.Component {
       // find in events
       const { events } = this.props.domain;
       const idx = this.findEventIdx(selected);
+      // binary search can return event with different id
+      if (events[idx].id !== selected.id) {
+        matchedEvents.push(events[idx]);
+      }
+      
       // check events before
       let ptr = idx - 1;
 
