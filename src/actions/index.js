@@ -392,3 +392,17 @@ export function fetchSourceError(msg) {
     msg,
   };
 }
+
+export const USE_SATELLITE_TILES_OVERLAY = "USE_SATELLITE_TILES_OVERLAY";
+export function useSatelliteTilesOverlay() {
+  return {
+    type: USE_SATELLITE_TILES_OVERLAY,
+  };
+}
+
+export const RESET_TILES_OVERLAY = "RESET_TILES_OVERLAY";
+export function resetTilesOverlay() {
+  return {
+    type: RESET_TILES_OVERLAY,
+  };
+}
