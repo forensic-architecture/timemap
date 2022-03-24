@@ -67,7 +67,7 @@
         "Testimonio Grupo 03",
         "Otras categorias"
       ],
-      "info": "Eventos ocurridos entre",
+      "info": "%n eventos ocurridos entre",
       "default_categories_label": "Eventos"
     },
     "cardstack": {
@@ -164,7 +164,7 @@
         "Testimony Group 03",
         "Other"
       ],
-      "info": "Seeing events that occurred between",
+      "info": "Seeing %n events that occurred between",
       "default_categories_label": "Events"
     },
     "cardstack": {
