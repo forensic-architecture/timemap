@@ -46,7 +46,9 @@
           "title": "Directorio de etiquetas",
           "placeholder": "Búsqueda"
         }
-      }
+      },
+      "fullscreen_enter": "Pantalla completa",
+      "fullscreen_exit": "Salir de pantalla completa"
     },
     "timeline": {
       "zoomLevels": [
@@ -149,7 +151,9 @@
       "shapes": "Shapes",
       "shapes_label": "Shapes",
       "explore_by_shapes__title": "Explore events by shape breakdown",
-      "explore_by_shape__description": "Shapes map to a given type of event that appears on the timeline.<br><br>Select the shape marker to toggle this type of event on / off"
+      "explore_by_shape__description": "Shapes map to a given type of event that appears on the timeline.<br><br>Select the shape marker to toggle this type of event on / off",
+      "fullscreen_enter": "Fullscreen",
+      "fullscreen_exit": "Exit Fullscreen"
     },
     "timeline": {
       "labels_title": "Testimonies",
