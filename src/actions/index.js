@@ -393,16 +393,9 @@ export function fetchSourceError(msg) {
   };
 }
 
-export const USE_SATELLITE_TILES_OVERLAY = "USE_SATELLITE_TILES_OVERLAY";
-export function useSatelliteTilesOverlay() {
+export const TOGGLE_SATELLITE_VIEW = "TOGGLE_SATELLITE_VIEW";
+export function toggleSatelliteView() {
   return {
-    type: USE_SATELLITE_TILES_OVERLAY,
-  };
-}
-
-export const RESET_TILES_OVERLAY = "RESET_TILES_OVERLAY";
-export function resetTilesOverlay() {
-  return {
-    type: RESET_TILES_OVERLAY,
+    type: TOGGLE_SATELLITE_VIEW,
   };
 }

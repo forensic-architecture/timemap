@@ -525,8 +525,7 @@ class Map extends React.Component {
         {this.props.features.USE_SATELLITE_OVERLAY_TOGGLE && (
           <SatelliteOverlayToggle
             isUsingSatellite={this.props.ui.tiles === "satellite"}
-            switchToSatellite={this.props.actions.useSatelliteTilesOverlay}
-            reset={this.props.actions.resetTilesOverlay}
+            toggleView={this.props.actions.toggleSatelliteView}
           />
         )}
         {innerMap}
