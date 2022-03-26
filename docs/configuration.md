@@ -20,6 +20,7 @@ The URLs for these endpoints, as well as other configurable settings in your tim
 | MAPBOX_TOKEN | Access token for Mapbox satellite imagery | String | No |
 | features.USE_ASSOCIATIONS | Enable / Disable filters | boolean | No |
 | features.USE_SITES | Enable / Disable sites | boolean | No |
+| features.USE_SATELLITE_OVERLAY_TOGGLE | Enable/ Disable satellite overlay toggle. Requires mapbox token.| boolean | No |
 
 In this configuration file you'll need to add your Mapbox token (see [here for more info](https://www.mapbox.com/help/define-access-token/)). Additionally, you'll need to replace the required endpoints by functioning ones. Finally, you'll want to initialize your application set in `MAP_ANCHOR`, as a (lat, long) pair, which determines the specific location at which the application will center itself on start.
 
