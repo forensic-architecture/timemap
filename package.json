@@ -1,5 +1,5 @@
 {
-  "name": "guerrero",
+  "name": "timemap",
   "version": "0.1.0",
   "description": "",
   "homepage": ".",
@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@babel/core": "7.12.3",
-    "@forensic-architecture/design-system": "0.6.2",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
     "@svgr/webpack": "5.4.0",
     "@testing-library/jest-dom": "^5.11.6",
@@ -81,6 +80,7 @@
     "react-redux": "^5.0.4",
     "react-refresh": "^0.8.3",
     "react-tabs": "3.0.0",
+    "react-twitter-embed": "^4.0.4",
     "redux": "^4.0.0",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",

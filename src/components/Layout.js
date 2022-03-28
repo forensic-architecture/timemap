@@ -70,6 +70,11 @@ class Dashboard extends React.Component {
   }
 
   handleSelect(selected, axis) {
+    if (selected.length <= 0) {
+      this.props.actions.updateSelected([]);
+      return;
+    }
+
     const matchedEvents = [];
     const TIMELINE_AXIS = 0;
     if (axis === TIMELINE_AXIS) {
@@ -112,6 +117,7 @@ class Dashboard extends React.Component {
       delete std.sources;
       Object.values(std).forEach((ev) => matchedEvents.push(ev));
     }
+
     this.props.actions.updateSelected(matchedEvents);
   }
 

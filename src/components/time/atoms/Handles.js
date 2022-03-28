@@ -3,12 +3,11 @@ import React from "react";
 const TimelineHandles = ({ dims, onMoveTime }) => {
   const transform = "scale(1.5,1.5)";
   const size = 45;
+  const handleOffset = dims.contentHeight / 2;
   return (
     <g className="time-controls-inline">
       <g
-        transform={`translate(${dims.marginLeft - 20}, ${
-          dims.contentHeight - 10
-        })`}
+        transform={`translate(${dims.marginLeft - 20}, ${handleOffset})`}
         onClick={() => onMoveTime("backwards")}
       >
         <circle r={size} />
@@ -18,9 +17,9 @@ const TimelineHandles = ({ dims, onMoveTime }) => {
         />
       </g>
       <g
-        transform={`translate(${dims.width - dims.width_controls + 20}, ${
-          dims.contentHeight - 10
-        })`}
+        transform={`translate(${
+          dims.width - dims.width_controls + 20
+        }, ${handleOffset})`}
         onClick={() => onMoveTime("forward")}
       >
         <circle r={size} />

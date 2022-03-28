@@ -1,6 +1,7 @@
 import React from "react";
 import { Portal } from "react-portal";
 import colors from "../../../../common/global";
+import hash from "object-hash";
 
 class MapSelectedEvents extends React.Component {
   renderMarker(marker) {
@@ -11,15 +12,19 @@ class MapSelectedEvents extends React.Component {
     const styles = this.props.styles;
     const r = marker.radius ? marker.radius + 5 : 24;
     return (
-      <g className="location-marker" transform={`translate(${x - r}, ${y})`}>
+      <g
+        key={hash(marker)}
+        className="location-marker"
+        transform={`translate(${x - r}, ${y})`}
+      >
         <path
           className="leaflet-interactive"
           stroke={styles ? styles.stroke : colors.primaryHighlight}
-          stroke-opacity="1"
-          stroke-width={styles ? styles["stroke-width"] : 2}
-          stroke-linecap=""
-          stroke-linejoin="round"
-          stroke-dasharray={styles ? styles["stroke-dasharray"] : "2,2"}
+          strokeOpacity="1"
+          strokeWidth={styles ? styles["stroke-width"] : 2}
+          strokeLinecap=""
+          strokeLinejoin="round"
+          strokeDasharray={styles ? styles["stroke-dasharray"] : "2,2"}
           fill="none"
           d={`M0,0a${r},${r} 0 1,0 ${r * 2},0 a${r},${r} 0 1,0 -${r * 2},0 `}
         />

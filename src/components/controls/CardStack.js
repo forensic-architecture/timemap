@@ -1,13 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import {
-  Card,
-  generateCardLayout,
-} from "@forensic-architecture/design-system/dist/react";
+import { generateCardLayout, Card } from "./Card";
 
 import * as selectors from "../../selectors";
 import { getFilterIdxFromColorSet } from "../../common/utilities";
 import copy from "../../common/data/copy.json";
+import hash from "object-hash";
 
 class CardStack extends React.Component {
   constructor() {
@@ -28,8 +26,8 @@ class CardStack extends React.Component {
   scrollToCard() {
     const duration = 500;
     const element = this.refCardStack.current;
-    const cardScroll = this.refs[this.props.narrative.current].current
-      .offsetTop;
+    const cardScroll =
+      this.refs[this.props.narrative.current].current.offsetTop;
 
     const start = element.scrollTop;
     const change = cardScroll - start;
@@ -70,15 +68,17 @@ class CardStack extends React.Component {
       const thisRef = React.createRef();
       this.refs[idx] = thisRef;
 
+      const content = generateTemplate({
+        event,
+        colors: this.props.colors,
+        coloringSet: this.props.coloringSet,
+        getFilterIdxFromColorSet,
+      });
+
       return (
         <Card
-          ref={thisRef}
-          content={generateTemplate({
-            event,
-            colors: this.props.colors,
-            coloringSet: this.props.coloringSet,
-            getFilterIdxFromColorSet,
-          })}
+          key={hash(content)}
+          content={content}
           language={this.props.language}
           isLoading={this.props.isLoading}
           isSelected={selections[idx]}
@@ -145,16 +145,13 @@ class CardStack extends React.Component {
   }
 
   render() {
-    const { isCardstack, selected, narrative, timelineDims } = this.props;
-    // TODO: make '237px', which is the narrative header, less hard-coded
-    const height = `calc(100% - 237px - ${timelineDims.height}px)`;
+    const { isCardstack, selected, narrative } = this.props;
     if (selected.length > 0) {
       if (!narrative) {
         return (
           <div
             id="card-stack"
-            className={`card-stack
-            ${isCardstack ? "" : " folded"}`}
+            className={`card-stack ${isCardstack ? "" : " folded"}`}
           >
             {this.renderCardStackHeader()}
             {this.renderCardStackContent()}
@@ -167,7 +164,6 @@ class CardStack extends React.Component {
             ref={this.refCardStack}
             className={`card-stack narrative-mode
             ${isCardstack ? "" : " folded"}`}
-            style={{ height }}
           >
             {this.renderNarrativeContent()}
           </div>

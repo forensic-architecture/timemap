@@ -1,5 +1,6 @@
 import React from "react";
 import colors from "../../../common/global";
+import hash from "object-hash";
 import {
   getEventCategories,
   isLatitude,
@@ -22,20 +23,19 @@ const TimelineMarkers = ({
     function renderCircle(y) {
       return (
         <circle
+          key={hash(event)}
           className="timeline-marker"
           cx={0}
           cy={0}
           stroke={styles ? styles.stroke : colors.primaryHighlight}
-          stroke-opacity="1"
-          stroke-width={styles ? styles["stroke-width"] : 1}
-          stroke-linejoin="round"
-          stroke-dasharray={styles ? styles["stroke-dasharray"] : "2,2"}
+          strokeOpacity="1"
+          strokeWidth={styles ? styles["stroke-width"] : 1}
+          strokeLinejoin="round"
+          strokeDasharray={styles ? styles["stroke-dasharray"] : "2,2"}
           style={{
             transform: `translate(${getEventX(event)}px, ${y}px)`,
-            "-webkit-transition": `transform ${
-              transitionDuration / 1000
-            }s ease`,
-            "-moz-transition": "none",
+            WebkitTransition: `transform ${transitionDuration / 1000}s ease`,
+            MozTransition: "none",
             opacity: 1,
           }}
           r={eventRadius * 2}
@@ -51,9 +51,9 @@ const TimelineMarkers = ({
           width={eventRadius / 1.5}
           height={dims.contentHeight - 55}
           stroke={styles ? styles.stroke : colors.primaryHighlight}
-          stroke-opacity="1"
-          stroke-width={styles ? styles["stroke-width"] : 1}
-          stroke-dasharray={styles ? styles["stroke-dasharray"] : "2,2"}
+          strokeOpacity="1"
+          strokeWidth={styles ? styles["stroke-width"] : 1}
+          strokeDasharray={styles ? styles["stroke-dasharray"] : "2,2"}
           style={{
             transform: `translate(${getEventX(event)}px)`,
             opacity: 0.7,
