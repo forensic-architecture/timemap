@@ -1,4 +1,5 @@
 /* global L */
+import { bindActionCreators } from "redux";
 import "leaflet";
 import React from "react";
 import { Portal } from "react-portal";
@@ -6,6 +7,7 @@ import Supercluster from "supercluster";
 
 import { connect } from "react-redux";
 import * as selectors from "../../../selectors";
+import * as actions from "../../../actions";
 
 import Sites from "./atoms/Sites";
 import Regions from "./atoms/Regions";
@@ -14,6 +16,7 @@ import Clusters from "./atoms/Clusters";
 import SelectedEvents from "./atoms/SelectedEvents";
 import Narratives from "./atoms/Narratives";
 import DefsMarkers from "./atoms/DefsMarkers";
+import SatelliteOverlayToggle from "./atoms/SatelliteOverlayToggle";
 import LoadingOverlay from "../../atoms/Loading";
 
 import {
@@ -40,6 +43,7 @@ class Map extends React.Component {
     this.svgRef = React.createRef();
     this.map = null;
     this.superclusterIndex = null;
+    this.tileLayer = null;
     this.state = {
       mapTransformX: 0,
       mapTransformY: 0,
@@ -52,14 +56,22 @@ class Map extends React.Component {
   componentDidMount() {
     if (this.map === null) {
       this.initializeMap();
+      this.initializeTileLayer();
     }
     window.dispatchEvent(new Event("resize"));
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.ui.tiles !== this.props.ui.tiles && this.map) {
+      this.initializeTileLayer();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     if (!isIdentical(nextProps.domain.locations, this.props.domain.locations)) {
       this.loadClusterData(nextProps.domain.locations);
     }
+
     // Set appropriate zoom for narrative
     const { bounds } = nextProps.app.map;
     if (!isIdentical(bounds, this.props.app.map.bounds) && bounds !== null) {
@@ -91,9 +103,45 @@ class Map extends React.Component {
     }
   }
 
+  getTileUrl(tiles) {
+    if (
+      tiles === "openstreetmap" ||
+      !process.env.MAPBOX_TOKEN ||
+      process.env.MAPBOX_TOKEN === defaultToken
+    ) {
+      return "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+    }
+
+    if (supportedMapboxMap.indexOf(this.props.ui.tiles) !== -1) {
+      return `http://a.tiles.mapbox.com/v4/mapbox.${tiles}/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`;
+    }
+
+    return `http://a.tiles.mapbox.com/styles/v1/${this.props.ui.tiles}/tiles/{z}/{x}/{y}?access_token=${process.env.MAPBOX_TOKEN}`;
+  }
+
+  /**
+   * Initialize the base tile layer based on the ui state
+   */
+  initializeTileLayer() {
+    if (!this.map) {
+      return;
+    }
+
+    const url = this.getTileUrl(this.props.ui.tiles);
+    /**
+     * If a tile layer already exists, we update its url. Otherwise, we create it and add it to the map.
+     */
+    if (this.tileLayer) {
+      this.tileLayer.setUrl(url);
+    } else {
+      this.tileLayer = L.tileLayer(url);
+      this.tileLayer.addTo(this.map);
+    }
+  }
+
   initializeMap() {
     /**
-     * Creates a Leaflet map and a tilelayer for the map background
+     * Creates a Leaflet map
      */
     const { map: mapConfig, cluster: clusterConfig } = this.props.app;
 
@@ -105,30 +153,6 @@ class Map extends React.Component {
 
     // Initialize supercluster index
     this.superclusterIndex = new Supercluster(clusterConfig);
-
-    let firstLayer;
-
-    if (
-      supportedMapboxMap.indexOf(this.props.ui.tiles) !== -1 &&
-      process.env.MAPBOX_TOKEN &&
-      process.env.MAPBOX_TOKEN !== defaultToken
-    ) {
-      firstLayer = L.tileLayer(
-        `http://a.tiles.mapbox.com/v4/mapbox.${this.props.ui.tiles}/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`
-      );
-    } else if (
-      process.env.MAPBOX_TOKEN &&
-      process.env.MAPBOX_TOKEN !== defaultToken
-    ) {
-      firstLayer = L.tileLayer(
-        `http://a.tiles.mapbox.com/styles/v1/${this.props.ui.tiles}/tiles/{z}/{x}/{y}?access_token=${process.env.MAPBOX_TOKEN}`
-      );
-    } else {
-      firstLayer = L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      );
-    }
-    firstLayer.addTo(map);
 
     map.keyboard.disable();
     map.zoomControl.remove();
@@ -498,6 +522,12 @@ class Map extends React.Component {
           ui={isFetchingDomain}
           language={this.props.app.language}
         />
+        {this.props.features.USE_SATELLITE_OVERLAY_TOGGLE && (
+          <SatelliteOverlayToggle
+            isUsingSatellite={this.props.ui.tiles === "satellite"}
+            toggleView={this.props.actions.toggleSatelliteView}
+          />
+        )}
         {innerMap}
       </div>
     );
@@ -529,7 +559,7 @@ function mapStateToProps(state) {
       },
     },
     ui: {
-      tiles: state.ui.tiles,
+      tiles: selectors.getTiles(state),
       dom: state.ui.dom,
       narratives: state.ui.style.narratives,
       mapSelectedEvents: state.ui.style.selectedEvents,
@@ -542,4 +572,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Map);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map);

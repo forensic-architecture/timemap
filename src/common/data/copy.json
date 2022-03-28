@@ -1,5 +1,9 @@
 {
   "es-MX": {
+    "tiles": {
+      "default": "Mapa",
+      "satellite": "Sat"
+    },
     "loading": "Cargando...",
     "legend": {
       "view2d": {
@@ -92,6 +96,10 @@
     }
   },
   "en-US": {
+    "tiles": {
+      "default": "Map",
+      "satellite": "Sat"
+    },
     "loading": "Loading...",
     "legend": {
       "view2d": {

@@ -400,3 +400,10 @@ export function fetchSourceError(msg) {
     msg,
   };
 }
+
+export const TOGGLE_SATELLITE_VIEW = "TOGGLE_SATELLITE_VIEW";
+export function toggleSatelliteView() {
+  return {
+    type: TOGGLE_SATELLITE_VIEW,
+  };
+}

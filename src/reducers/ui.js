@@ -1,9 +1,23 @@
 import initial from "../store/initial.js";
 
-import {} from "../actions";
+import { TOGGLE_SATELLITE_VIEW } from "../actions";
 
 function ui(uiState = initial.ui, action) {
-  return uiState;
+  switch (action.type) {
+    case TOGGLE_SATELLITE_VIEW:
+      return {
+        ...uiState,
+        tiles: {
+          ...uiState.tiles,
+          current:
+            uiState.tiles.current === "satellite"
+              ? uiState.tiles.default
+              : "satellite",
+        },
+      };
+    default:
+      return uiState;
+  }
 }
 
 export default ui;
