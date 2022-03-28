@@ -149,7 +149,10 @@ const initial = {
    *   as well as dom elements to attach SVG
    */
   ui: {
-    tiles: "openstreetmap", // ['openstreetmap', 'streets', 'satellite']
+    tiles: {
+      current: "openstreetmap", // ['openstreetmap', 'streets', 'satellite'] (2nd two require a mapbox access token)
+      default: "openstreetmap", // ['openstreetmap', 'streets', 'satellite']
+    },
     style: {
       categories: {
         default: global.fallbackEventColor,
