@@ -59,11 +59,13 @@ function FilterListPanel({
           onClickCheckbox={() => onSelectFilter(key, matchingKeys)}
           color={assignedColor}
         />
-        {Object.keys(children).length > 0
-          ? Object.entries(children).map((filter) =>
+        {Object.keys(children).length > 0 ? (
+          <ul>
+            {Object.entries(children).map((filter) =>
               createNodeComponent(filter, depth + 1)
-            )
-          : null}
+            )}
+          </ul>
+        ) : null}
       </li>
     );
   }
