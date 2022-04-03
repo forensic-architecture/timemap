@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 
-import { Tabs, TabPanel } from "react-tabs";
+import { Tabs, TabList, TabPanel } from "react-tabs";
 import FilterListPanel from "./controls/FilterListPanel";
 import CategoriesListPanel from "./controls/CategoriesListPanel";
 import ShapesListPanel from "./controls/ShapesListPanel";
@@ -127,7 +127,7 @@ class Toolbar extends React.Component {
         {Object.keys(catMap).map((type) => {
           const children = catMap[type];
           return (
-            <TabPanel>
+            <TabPanel key={type}>
               <CategoriesListPanel
                 categories={children}
                 activeCategories={this.props.activeCategories}
@@ -180,9 +180,10 @@ class Toolbar extends React.Component {
     }
   }
 
-  renderToolbarTab(_selected, label, iconKey) {
+  renderToolbarTab(_selected, label, iconKey, key) {
     return (
       <ToolbarButton
+        key={key}
         label={label}
         iconKey={iconKey}
         isActive={this.state._selected === _selected}
@@ -201,7 +202,8 @@ class Toolbar extends React.Component {
           return this.renderToolbarTab(
             idxs[key],
             panelCategories[key].label,
-            panelCategories[key].icon
+            panelCategories[key].icon,
+            key
           );
         })}
       </div>
@@ -215,14 +217,12 @@ class Toolbar extends React.Component {
     return (
       <div className={classes}>
         {this.renderClosePanel()}
-        <Tabs onSelect={() => null} selectedIndex={this.state._selected}>
-          {narratives && narratives.length !== 0
-            ? this.renderToolbarNarrativePanel()
-            : null}
-          {features.USE_CATEGORIES ? this.renderToolbarCategoriesPanel() : null}
-          {features.USE_ASSOCIATIONS ? this.renderToolbarFilterPanel() : null}
-          {features.USE_SHAPES ? this.renderToolbarShapePanel() : null}
-        </Tabs>
+        {narratives && narratives.length !== 0
+          ? this.renderToolbarNarrativePanel()
+          : null}
+        {features.USE_CATEGORIES ? this.renderToolbarCategoriesPanel() : null}
+        {features.USE_ASSOCIATIONS ? this.renderToolbarFilterPanel() : null}
+        {features.USE_SHAPES ? this.renderToolbarShapePanel() : null}
       </div>
     );
   }
@@ -275,33 +275,35 @@ class Toolbar extends React.Component {
           <p>{title}</p>
         </div>
         <div className="toolbar-tabs">
-          {narrativesExist
-            ? this.renderToolbarTab(
-                narrativesIdx,
-                panels.narratives.label,
-                panels.narratives.icon
-              )
-            : null}
-          {features.USE_CATEGORIES
-            ? this.renderToolbarCategoryTabs(categoryIdxs)
-            : null}
-          {features.USE_ASSOCIATIONS
-            ? this.renderToolbarTab(
-                filtersIdx,
-                panels.filters.label,
-                panels.filters.icon
-              )
-            : null}
-          {features.USE_SHAPES
-            ? this.renderToolbarTab(
-                shapesIdx,
-                panels.shapes.label,
-                panels.shapes.icon
-              )
-            : null}
-          {features.USE_FULLSCREEN && (
-            <FullscreenToggle language={this.props.language} />
-          )}
+          <TabList>
+            {narrativesExist
+              ? this.renderToolbarTab(
+                  narrativesIdx,
+                  panels.narratives.label,
+                  panels.narratives.icon
+                )
+              : null}
+            {features.USE_CATEGORIES
+              ? this.renderToolbarCategoryTabs(categoryIdxs)
+              : null}
+            {features.USE_ASSOCIATIONS
+              ? this.renderToolbarTab(
+                  filtersIdx,
+                  panels.filters.label,
+                  panels.filters.icon
+                )
+              : null}
+            {features.USE_SHAPES
+              ? this.renderToolbarTab(
+                  shapesIdx,
+                  panels.shapes.label,
+                  panels.shapes.icon
+                )
+              : null}
+            {features.USE_FULLSCREEN && (
+              <FullscreenToggle language={this.props.language} />
+            )}
+          </TabList>
         </div>
         <BottomActions
           info={{
@@ -329,8 +331,10 @@ class Toolbar extends React.Component {
         id="toolbar-wrapper"
         className={`toolbar-wrapper ${isNarrative ? "narrative-mode" : ""}`}
       >
-        {this.renderToolbarTabs()}
-        {this.renderToolbarPanels()}
+        <Tabs onSelect={() => null} selectedIndex={this.state._selected}>
+          {this.renderToolbarTabs()}
+          {this.renderToolbarPanels()}
+        </Tabs>
       </div>
     );
   }
