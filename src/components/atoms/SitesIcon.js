@@ -8,7 +8,7 @@ const SitesIcon = ({ isActive, isDisabled, onClickHandler }) => {
 
   return (
     <button className={classes} onClick={onClickHandler}>
-      <i class="material-icons">location_on</i>
+      <i className="material-icons">location_on</i>
     </button>
   );
 };
