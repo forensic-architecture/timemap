@@ -24,7 +24,7 @@ function renderDot(event, styles, props) {
   );
   return (
     <g
-      key={hash(event)}
+      key={event.id}
       className="timeline-event"
       onClick={props.onSelect}
       transform={`translate(${props.x}, ${props.y})`}
