@@ -6,7 +6,6 @@ import DatetimeTriangle from "./DatetimeTriangle";
 import DatetimePentagon from "./DatetimePentagon";
 import Project from "./Project";
 import ColoredMarkers from "../../atoms/ColoredMarkers";
-import hash from "object-hash";
 import {
   calcOpacity,
   getEventCategories,
