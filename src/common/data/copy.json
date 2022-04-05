@@ -36,7 +36,7 @@
       "title": "Título",
       "filters": "Filtros",
       "explore_by_filter__title": "Explorar por filtros",
-      "explore_by_filter__description": "Al seleccionar filtros, puede ver los eventos que tienen esa categoria. Para ver todos los eventos puede quitar todas las selecciones (o seleccionarlos todos).",
+      "explore_by_filter__description": "Al seleccionar filtros, puede ver los eventos que tienen esa categoría. Para ver todos los eventos puede quitar todas las selecciones (o seleccionarlos todos).",
       "panels": {
         "mentions": {
           "title": "Personas",
@@ -69,7 +69,7 @@
         "Testimonio Grupo 01",
         "Testimonio Grupo 02",
         "Testimonio Grupo 03",
-        "Otras categorias"
+        "Otras categorías"
       ],
       "info": "%n eventos ocurridos entre",
       "default_categories_label": "Eventos"
