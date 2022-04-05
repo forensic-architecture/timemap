@@ -1,7 +1,7 @@
 import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import * as d3 from "d3";
+import { scaleTime, timeMinute, timeSecond } from "d3";
 import hash from "object-hash";
 
 import { setLoading, setNotLoading, updateTicks } from "../../actions";
@@ -25,6 +25,9 @@ class Timeline extends React.Component {
     this.getY = this.getY.bind(this);
     this.onApplyZoom = this.onApplyZoom.bind(this);
     this.onSelect = this.onSelect.bind(this);
+    this.onDragStart = this.onDragStart.bind(this);
+    this.onDrag = this.onDrag.bind(this);
+    this.onDragEnd = this.onDragEnd.bind(this);
     this.svgRef = React.createRef();
     this.state = {
       isFolded: false,
@@ -87,8 +90,7 @@ class Timeline extends React.Component {
   }
 
   makeScaleX() {
-    return d3
-      .scaleTime()
+    return scaleTime()
       .domain(this.state.timerange)
       .range([
         this.state.dims.marginLeft,
@@ -167,19 +169,19 @@ class Timeline extends React.Component {
    */
   onMoveTime(direction) {
     const extent = this.getTimeScaleExtent();
-    const newCentralTime = d3.timeMinute.offset(
+    const newCentralTime = timeMinute.offset(
       this.state.scaleX.domain()[0],
       extent
     );
 
     // if forward
     let domain0 = newCentralTime;
-    let domainF = d3.timeMinute.offset(newCentralTime, extent);
+    let domainF = timeMinute.offset(newCentralTime, extent);
 
     // if backwards
     if (direction === "backwards") {
-      domain0 = d3.timeMinute.offset(newCentralTime, -(2 * extent));
-      domainF = d3.timeMinute.offset(newCentralTime, -extent);
+      domain0 = timeMinute.offset(newCentralTime, -(2 * extent));
+      domainF = timeMinute.offset(newCentralTime, -extent);
     }
 
     this.props.methods.onUpdateTimerange([domain0, domainF]);
@@ -189,8 +191,8 @@ class Timeline extends React.Component {
   onCenterTime(newCentralTime) {
     const extent = this.getTimeScaleExtent();
 
-    const domain0 = d3.timeMinute.offset(newCentralTime, -extent / 2);
-    const domainF = d3.timeMinute.offset(newCentralTime, +extent / 2);
+    const domain0 = timeMinute.offset(newCentralTime, -extent / 2);
+    const domainF = timeMinute.offset(newCentralTime, +extent / 2);
 
     this.setState({ timerange: [domain0, domainF] }, () => {
       this.props.methods.onUpdateTimerange(this.state.timerange);
@@ -212,14 +214,14 @@ class Timeline extends React.Component {
    */
   onApplyZoom(zoom) {
     const extent = this.getTimeScaleExtent();
-    const newCentralTime = d3.timeMinute.offset(
+    const newCentralTime = timeMinute.offset(
       this.state.scaleX.domain()[0],
       extent / 2
     );
     const { rangeLimits } = this.props.app.timeline;
 
-    let newDomain0 = d3.timeMinute.offset(newCentralTime, -zoom.duration / 2);
-    let newDomainF = d3.timeMinute.offset(newCentralTime, zoom.duration / 2);
+    let newDomain0 = timeMinute.offset(newCentralTime, -zoom.duration / 2);
+    let newDomainF = timeMinute.offset(newCentralTime, zoom.duration / 2);
 
     if (rangeLimits) {
       // If the store contains absolute time limits,
@@ -229,11 +231,11 @@ class Timeline extends React.Component {
 
       if (newDomain0 < minDate) {
         newDomain0 = minDate;
-        newDomainF = d3.timeMinute.offset(newDomain0, zoom.duration);
+        newDomainF = timeMinute.offset(newDomain0, zoom.duration);
       }
       if (newDomainF > maxDate) {
         newDomainF = maxDate;
-        newDomain0 = d3.timeMinute.offset(newDomainF, -zoom.duration);
+        newDomain0 = timeMinute.offset(newDomainF, -zoom.duration);
       }
     }
 
@@ -255,11 +257,11 @@ class Timeline extends React.Component {
   /*
    * Setup drag behavior
    */
-  onDragStart() {
-    d3.event.sourceEvent.stopPropagation();
+  onDragStart(event) {
+    event.sourceEvent.stopPropagation();
     this.setState(
       {
-        dragPos0: d3.event.x,
+        dragPos0: event.x,
       },
       () => {
         this.toggleTransition(false);
@@ -270,14 +272,14 @@ class Timeline extends React.Component {
   /*
    * Drag and update
    */
-  onDrag() {
+  onDrag(event) {
     const drag0 = this.state.scaleX.invert(this.state.dragPos0).getTime();
-    const dragNow = this.state.scaleX.invert(d3.event.x).getTime();
+    const dragNow = this.state.scaleX.invert(event.x).getTime();
     const timeShift = (drag0 - dragNow) / 1000;
 
     const { range, rangeLimits } = this.props.app.timeline;
-    let newDomain0 = d3.timeSecond.offset(range[0], timeShift);
-    let newDomainF = d3.timeSecond.offset(range[1], timeShift);
+    let newDomain0 = timeSecond.offset(range[0], timeShift);
+    let newDomainF = timeSecond.offset(range[1], timeShift);
 
     if (rangeLimits) {
       // If the store contains absolute time limits,
@@ -349,8 +351,8 @@ class Timeline extends React.Component {
       const timeframe = Math.floor(
         this.props.features.ZOOM_TO_TIMEFRAME_ON_TIMELINE_CLICK / 2
       );
-      const start = d3.timeMinute.offset(event.datetime, -timeframe);
-      const end = d3.timeMinute.offset(event.datetime, timeframe);
+      const start = timeMinute.offset(event.datetime, -timeframe);
+      const end = timeMinute.offset(event.datetime, timeframe);
       this.props.actions.updateTicks(1);
       this.props.methods.onUpdateTimerange([start, end]);
     }
@@ -413,15 +415,9 @@ class Timeline extends React.Component {
                 getCategoryY={(category) =>
                   this.getY({ category, project: null })
                 }
-                onDragStart={() => {
-                  this.onDragStart();
-                }}
-                onDrag={() => {
-                  this.onDrag();
-                }}
-                onDragEnd={() => {
-                  this.onDragEnd();
-                }}
+                onDragStart={this.onDragStart}
+                onDrag={this.onDrag}
+                onDragEnd={this.onDragEnd}
                 categories={categories}
                 features={this.props.features}
                 fallbackLabel={
