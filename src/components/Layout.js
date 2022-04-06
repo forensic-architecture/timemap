@@ -86,7 +86,7 @@ class Dashboard extends React.Component {
       if (events[idx].id !== selected.id) {
         matchedEvents.push(events[idx]);
       }
-      
+
       // check events before
       let ptr = idx - 1;
 

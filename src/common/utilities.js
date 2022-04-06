@@ -1,7 +1,11 @@
-import moment from "moment";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import dayjs from "dayjs";
 import hash from "object-hash";
+import { timeFormatDefaultLocale } from "d3";
 
 import { ASSOCIATION_MODES, POLYGON_CLIP_PATH } from "./constants";
+
+dayjs.extend(customParseFormat);
 
 let { DATE_FMT, TIME_FMT } = process.env;
 if (!DATE_FMT) DATE_FMT = "MM/DD/YYYY";
@@ -16,7 +20,7 @@ export function getPathLeaf(path) {
 
 export function calcDatetime(date, time) {
   if (!time) time = "00:00";
-  const dt = moment(`${date} ${time}`, `${DATE_FMT} ${TIME_FMT}`);
+  const dt = dayjs(`${date} ${time}`, `${DATE_FMT} ${TIME_FMT}`);
   return dt.toDate();
 }
 
@@ -499,15 +503,14 @@ export function makeNiceDate(datetime) {
 
 /**
  * Sets the default locale for d3 to format dates in each available language.
- * @param {Object} d3 - An instance of D3
  */
-export function setD3Locale(d3) {
+export function setD3Locale() {
   const languages = {
     "es-MX": require("./data/es-MX.json"),
   };
 
   if (language !== "es-US" && languages[language]) {
-    d3.timeFormatDefaultLocale(languages[language]);
+    timeFormatDefaultLocale(languages[language]);
   }
 }
 

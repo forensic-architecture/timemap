@@ -1,5 +1,5 @@
 import React from "react";
-import * as d3 from "d3";
+import { drag as d3Drag, select } from "d3";
 
 class TimelineCategories extends React.Component {
   constructor(props) {
@@ -12,13 +12,12 @@ class TimelineCategories extends React.Component {
 
   componentDidUpdate() {
     if (!this.state.isInitialized) {
-      const drag = d3
-        .drag()
+      const drag = d3Drag()
         .on("start", this.props.onDragStart)
         .on("drag", this.props.onDrag)
         .on("end", this.props.onDragEnd);
 
-      d3.select(this.grabRef.current).call(drag);
+      select(this.grabRef.current).call(drag);
 
       this.setState({ isInitialized: true });
     }
