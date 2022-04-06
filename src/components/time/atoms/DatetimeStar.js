@@ -1,15 +1,21 @@
 import React from "react";
 
-const DatetimeStar = ({
-  x,
-  y,
-  r,
-  transform,
-  onSelect,
-  styleProps,
-  extraRender,
-}) => {
-  const s = (r * 2) / 3;
+function createStar(numPoints, r, x, y) {
+  const innerRadius = r;
+  const outerRadius = (r * 2) / numPoints;
+  const angle = Math.PI / numPoints;
+  const points = [];
+
+  for (let i = 0; i < numPoints * 2; i++) {
+    const radius = i & 1 ? innerRadius : outerRadius;
+    points.push(radius * Math.sin(i * angle) + x);
+    points.push(radius * Math.cos(i * angle) + y);
+  }
+
+  return points;
+}
+
+const DatetimeStar = ({ x, y, r, onSelect, styleProps, extraRender }) => {
   return (
     <polygon
       onClick={onSelect}
@@ -17,10 +23,7 @@ const DatetimeStar = ({
       x={x}
       y={y}
       style={styleProps}
-      points={`${x + s},${y - s} ${x - r},${y} ${x + r},${y} ${x - s},${
-        y - s
-      } ${x},${y + s}`}
-      transform={transform}
+      points={createStar(5, r, x, y)}
     />
   );
 };
