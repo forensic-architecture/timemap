@@ -2,6 +2,7 @@
 import { bindActionCreators } from "redux";
 import "leaflet";
 import React from "react";
+import { flushSync } from "react-dom";
 import { Portal } from "react-portal";
 import Supercluster from "supercluster";
 
@@ -67,7 +68,7 @@ class Map extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!isIdentical(nextProps.domain.locations, this.props.domain.locations)) {
       this.loadClusterData(nextProps.domain.locations);
     }
@@ -162,7 +163,15 @@ class Map extends React.Component {
       this.alignLayers();
     });
 
-    map.on("move zoomend viewreset", () => this.alignLayers());
+    map.on("zoomend viewreset", () => {
+      this.map.dragging.enable();
+      this.map.doubleClickZoom.enable();
+      this.map.scrollWheelZoom.enable();
+      flushSync(() => {
+        this.alignLayers();
+        this.updateClusters();
+      });
+    });
     map.on("zoomstart", () => {
       if (this.svgRef.current !== null)
         this.svgRef.current.classList.add("hide");

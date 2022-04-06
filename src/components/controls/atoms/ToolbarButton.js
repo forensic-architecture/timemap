@@ -10,3 +10,6 @@ export function ToolbarButton({ isActive, iconKey, onClick, label }) {
     </div>
   );
 }
+
+// https://github.com/reactjs/react-tabs#set-tabsrole
+ToolbarButton.tabsRole = "Tab";

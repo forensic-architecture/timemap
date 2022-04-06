@@ -6,7 +6,6 @@ import DatetimeTriangle from "./DatetimeTriangle";
 import DatetimePentagon from "./DatetimePentagon";
 import Project from "./Project";
 import ColoredMarkers from "../../atoms/ColoredMarkers";
-import hash from "object-hash";
 import {
   calcOpacity,
   getEventCategories,
@@ -24,7 +23,7 @@ function renderDot(event, styles, props) {
   );
   return (
     <g
-      key={hash(event)}
+      key={event.id}
       className="timeline-event"
       onClick={props.onSelect}
       transform={`translate(${props.x}, ${props.y})`}

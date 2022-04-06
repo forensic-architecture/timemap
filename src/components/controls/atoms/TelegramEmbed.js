@@ -68,7 +68,7 @@ class TelegramEmbed extends Component {
     );
   }
 
-  componentWillReceiveProps({ src }) {
+  UNSAFE_componentWillReceiveProps({ src }) {
     if (this.state.src !== src) {
       this.urlObj.href = src;
       const id = `telegram-post${this.urlObj.pathname.replace(

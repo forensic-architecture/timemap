@@ -64,6 +64,7 @@ class TemplateCover extends React.Component {
               if (featureLang !== langIdx) {
                 return (
                   <div
+                    key={trans.code}
                     onClick={() => this.setState({ featureLang: langIdx })}
                     className="trans-button"
                   >
@@ -73,6 +74,7 @@ class TemplateCover extends React.Component {
               } else {
                 return (
                   <div
+                    key="ENG"
                     onClick={() => this.setState({ featureLang: 0 })}
                     className="trans-button"
                   >
@@ -99,6 +101,7 @@ class TemplateCover extends React.Component {
       <div className="row">
         {headerVideos.slice(0, 2).map((media, index) => (
           <div
+            key={index}
             className="cell plain"
             onClick={() => this.setState({ video: index })}
           >
@@ -209,8 +212,9 @@ class TemplateCover extends React.Component {
           </div>
 
           {Array.isArray(this.props.cover.description) ? (
-            this.props.cover.description.map((e) => (
+            this.props.cover.description.map((e, index) => (
               <div
+                key={index}
                 className="md-container"
                 dangerouslySetInnerHTML={{ __html: marked(e) }}
               />
@@ -231,6 +235,7 @@ class TemplateCover extends React.Component {
                 {videos &&
                   videos.slice(0, 2).map((media, index) => (
                     <div
+                      key={index}
                       className="cell small"
                       onClick={this.onVideoClickHandler(index)}
                     >
@@ -244,6 +249,7 @@ class TemplateCover extends React.Component {
                 {videos.length > 2 &&
                   this.props.cover.videos.slice(2, 4).map((media, index) => (
                     <div
+                      key={index}
                       className="cell small"
                       onClick={this.onVideoClickHandler(index + 2)}
                     >

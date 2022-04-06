@@ -73,7 +73,10 @@ class TimelineCategories extends React.Component {
           className="drag-grabber"
           x={dims.marginLeft}
           y={dims.marginTop}
-          width={dims.width - dims.marginLeft - dims.width_controls}
+          width={Math.max(
+            0,
+            dims.width - dims.marginLeft - dims.width_controls
+          )}
           height={dims.contentHeight}
         />
       </g>
