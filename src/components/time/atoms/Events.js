@@ -52,7 +52,6 @@ function renderBar(event, styles, props) {
 
   return (
     <DatetimeBar
-      key={event.id}
       onSelect={props.onSelect}
       category={event.category}
       events={[event]}
@@ -69,7 +68,6 @@ function renderBar(event, styles, props) {
 function renderDiamond(event, styles, props) {
   return (
     <DatetimeSquare
-      key={event.id}
       onSelect={props.onSelect}
       x={props.x}
       y={props.y - props.eventRadius}
@@ -83,7 +81,6 @@ function renderDiamond(event, styles, props) {
 function renderSquare(event, styles, props) {
   return (
     <DatetimeSquare
-      key={event.id}
       onSelect={props.onSelect}
       x={props.x}
       y={props.y - (1.8 * props.eventRadius) / 2}
@@ -96,7 +93,6 @@ function renderSquare(event, styles, props) {
 function renderTriangle(event, styles, props) {
   return (
     <DatetimeTriangle
-      key={event.id}
       onSelect={props.onSelect}
       x={props.x}
       y={props.y}
@@ -109,7 +105,6 @@ function renderTriangle(event, styles, props) {
 function renderPentagon(event, styles, props) {
   return (
     <DatetimePentagon
-      key={event.id}
       onSelect={props.onSelect}
       x={props.x}
       y={props.y}
@@ -122,7 +117,6 @@ function renderPentagon(event, styles, props) {
 function renderStar(event, styles, props) {
   return (
     <DatetimeStar
-      key={event.id}
       onSelect={props.onSelect}
       x={props.x}
       y={props.y}
