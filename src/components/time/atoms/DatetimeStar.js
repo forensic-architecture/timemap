@@ -1,4 +1,5 @@
 import React from "react";
+import { isOdd } from "../../../common/utilities";
 
 function createStar(numPoints, r, x, y) {
   const innerRadius = r;
@@ -7,7 +8,7 @@ function createStar(numPoints, r, x, y) {
   const points = [];
 
   for (let i = 0; i < numPoints * 2; i++) {
-    const radius = i & 1 ? innerRadius : outerRadius;
+    const radius = isOdd(i) ? innerRadius : outerRadius;
     points.push(radius * Math.sin(i * angle) + x);
     points.push(radius * Math.cos(i * angle) + y);
   }

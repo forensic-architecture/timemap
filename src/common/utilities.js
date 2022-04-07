@@ -580,3 +580,5 @@ export function getFilterIdx(
 }
 
 export const isEmptyString = (s) => s.length === 0;
+
+export const isOdd = (num) => num % 2 !== 0;
