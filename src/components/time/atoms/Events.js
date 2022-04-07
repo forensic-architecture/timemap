@@ -70,7 +70,7 @@ function renderDiamond(event, styles, props) {
     <DatetimeSquare
       onSelect={props.onSelect}
       x={props.x}
-      y={props.y - 1.8 * props.eventRadius}
+      y={props.y - props.eventRadius}
       r={1.8 * props.eventRadius}
       styleProps={styles}
       transform={`rotate(45, ${props.x}, ${props.y})`}
@@ -120,9 +120,8 @@ function renderStar(event, styles, props) {
       onSelect={props.onSelect}
       x={props.x}
       y={props.y}
-      r={1.8 * props.eventRadius}
+      r={1.5 * props.eventRadius}
       styleProps={{ ...styles, fillRule: "nonzero" }}
-      transform={`rotate(180, ${props.x}, ${props.y})`}
     />
   );
 }
