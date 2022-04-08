@@ -29,7 +29,8 @@ A fully-functioning live version can be found as a result of the Forensic Archit
 These easiest way to get up and running with timemap and datasheet-server is to
 [follow the in-depth tutorial here](https://forensic-architecture.org/investigation/timemap-for-cartographic-platforms).
 
-We recommend using **node v14.x.x** for its current compatibility.
+We recommend using **Node v16.x.x** for its current compatibility.
+TimeMap may not work with other versions of Node.
 
 ### Quickstart
 
