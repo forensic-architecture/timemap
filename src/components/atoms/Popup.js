@@ -1,5 +1,5 @@
 import React from "react";
-import marked from "marked";
+import { marked } from "marked";
 
 const fontSize = window.innerWidth > 1000 ? 14 : 18;
 
