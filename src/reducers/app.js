@@ -30,6 +30,7 @@ import {
   SET_INITIAL_CATEGORIES,
   SET_INITIAL_SHAPES,
   UPDATE_SEARCH_QUERY,
+  REHYDRATE_APP_STATE,
 } from "../actions";
 
 function updateHighlighted(appState, action) {
@@ -302,6 +303,18 @@ function updateSearchQuery(appState, action) {
   };
 }
 
+function rehydrate(appState, action) {
+  const { domain, state } = action;
+
+  const hasEvents = state.id?.length;
+  if (!hasEvents) return appState;
+
+  return {
+    ...appState,
+    selected: state.id.map((id) => domain.events[id]),
+  };
+}
+
 function app(appState = initial.app, action) {
   switch (action.type) {
     case UPDATE_HIGHLIGHTED:
@@ -360,6 +373,8 @@ function app(appState = initial.app, action) {
       return setInitialShapes(appState, action);
     case UPDATE_SEARCH_QUERY:
       return updateSearchQuery(appState, action);
+    case REHYDRATE_APP_STATE:
+      return rehydrate(appState, action);
     default:
       return appState;
   }
