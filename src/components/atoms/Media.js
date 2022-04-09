@@ -1,5 +1,5 @@
 import React from "react";
-import marked from "marked";
+import { marked } from "marked";
 import Content from "./Content";
 import Controls from "./Controls";
 import { selectTypeFromPathWithPoster } from "../../common/utilities";

@@ -1,5 +1,5 @@
 import React from "react";
-import marked from "marked";
+import { marked } from "marked";
 import PanelTree from "./atoms/PanelTree";
 import { mapStyleByShape } from "../../common/utilities";
 import { SHAPE } from "../../common/constants";

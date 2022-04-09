@@ -1,5 +1,5 @@
 import React from "react";
-import marked from "marked";
+import { marked } from "marked";
 
 // TODO could this be a security vulnerability?
 const CardCustomField = ({ title, value }) => (

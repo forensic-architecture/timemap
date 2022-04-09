@@ -1,5 +1,5 @@
 import React from "react";
-import marked from "marked";
+import { marked } from "marked";
 import PanelTree from "./atoms/PanelTree";
 import { ASSOCIATION_MODES } from "../../common/constants";
 
