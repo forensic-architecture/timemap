@@ -77,7 +77,7 @@
     "react-dom": "^18.0.0",
     "react-image": "^1.5.1",
     "react-portal": "^4.2.0",
-    "react-redux": "^5.0.4",
+    "react-redux": "^7.2.8",
     "react-refresh": "^0.8.3",
     "react-tabs": "3.0.0",
     "react-twitter-embed": "^4.0.4",
