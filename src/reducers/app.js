@@ -303,16 +303,21 @@ function updateSearchQuery(appState, action) {
   };
 }
 
-function rehydrate(appState, action) {
-  const { domain, state } = action;
+function rehydrate(appState, { domain, state }) {
+  if (!Object.keys(state).length) return appState;
 
-  const hasEvents = state.id?.length;
-  if (!hasEvents) return appState;
+  const nextState = { ...appState };
 
-  return {
-    ...appState,
-    selected: state.id.map((id) => domain.events[id]),
-  };
+  if (state.id?.length) {
+    nextState.selected = state.id.map((id) => domain.events[id]);
+  }
+
+  // TODO: fit to selected events if no timerange is set.
+  if (state.fromDate && state.toDate) {
+    nextState.timeline.range = [state.fromDate, state.toDate];
+  }
+
+  return nextState;
 }
 
 function app(appState = initial.app, action) {

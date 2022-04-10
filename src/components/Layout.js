@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { isMobileOnly } from "react-device-detect";
 import * as actions from "../actions";
 import * as selectors from "../selectors";
-import { UrlState } from "../store/plugins/urlState";
+import { URLState } from "../store/plugins/urlState";
 
 import Toolbar from "./Toolbar";
 import InfoPopup from "./InfoPopup";
@@ -49,7 +49,7 @@ class Dashboard extends React.Component {
 
         actions.rehydrateAppState({
           domain,
-          state: new UrlState().deserialize(),
+          state: new URLState().deserialize(),
         });
       });
     }
