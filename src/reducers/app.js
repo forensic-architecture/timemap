@@ -32,6 +32,7 @@ import {
   UPDATE_SEARCH_QUERY,
   REHYDRATE_APP_STATE,
 } from "../actions";
+import { applyUrlState } from "../store/plugins/urlState";
 
 function updateHighlighted(appState, action) {
   return Object.assign({}, appState, {
@@ -303,25 +304,8 @@ function updateSearchQuery(appState, action) {
   };
 }
 
-function rehydrate(appState, { domain, state }) {
-  if (!Object.keys(state).length) return appState;
-
-  const nextState = { ...appState };
-
-  if (state.id?.length) {
-    nextState.selected = state.id.map((id) => domain.events[id]);
-  }
-
-  // TODO: fit to selected events if no timerange is set.
-  if (state.start_date && state.end_date) {
-    nextState.timeline.range = [state.start_date, state.end_date];
-  }
-
-  if (state.filter?.length) {
-    nextState.associations.filters = state.filter;
-  }
-
-  return nextState;
+function rehydrate(appState, payload) {
+  return applyUrlState(appState, payload);
 }
 
 function app(appState = initial.app, action) {

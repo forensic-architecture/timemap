@@ -11,6 +11,10 @@ const SCHEMA = Object.freeze({
     type: "string",
     isArray: true,
   },
+  color: {
+    type: "string",
+    isArray: true,
+  },
   // Timeline
   start_date: {
     type: "date",
@@ -22,7 +26,7 @@ const SCHEMA = Object.freeze({
   },
 });
 
-class URLState {
+export class URLState {
   constructor() {
     this.url = new URL(window.location);
     this.schema = SCHEMA;

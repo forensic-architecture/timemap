@@ -1,23 +1,18 @@
 import {
   TOGGLE_ASSOCIATIONS,
+  UPDATE_COLORING_SET,
   UPDATE_SELECTED,
   UPDATE_TIMERANGE,
 } from "../../../actions";
-import {
-  getActiveCategories,
-  getActiveFilters,
-  getActiveNarrative,
-  getSelected,
-  getTimeRange,
-} from "../../../selectors";
+import { getSelected, getTimeRange } from "../../../selectors";
+import { selectActiveColorSets, selectActiveFilterIds } from "./helpers";
 import URLState from "./urlState";
 
 function onEventsSelect(state) {
-  const selected = getSelected(state);
   const urlstate = new URLState();
   urlstate.set(
     "id",
-    selected.map(({ id }) => id)
+    getSelected(state).map(({ id }) => id)
   );
   urlstate.serialize();
 }
@@ -32,14 +27,17 @@ function onTimerangeUpdate(state) {
 
 function onAssociationUpdate(state) {
   const urlstate = new URLState();
-
-  const filters = getActiveFilters(state);
-  urlstate.set("filter", filters);
-
+  urlstate.set("filter", selectActiveFilterIds(state));
   urlstate.serialize();
 }
 
-function urlStateMiddleware(store) {
+function onColoringSetUpdate(state) {
+  const urlstate = new URLState();
+  urlstate.set("color", selectActiveColorSets(state));
+  urlstate.serialize();
+}
+
+export function urlStateMiddleware(store) {
   return (next) => (action) => {
     const result = next(action);
     const state = store.getState();
@@ -62,8 +60,12 @@ function urlStateMiddleware(store) {
           break;
         }
 
+        case UPDATE_COLORING_SET: {
+          onColoringSetUpdate(state);
+          break;
+        }
+
         default: {
-          console.log(action);
           break;
         }
       }
@@ -74,5 +76,3 @@ function urlStateMiddleware(store) {
     return result;
   };
 }
-
-export default urlStateMiddleware;

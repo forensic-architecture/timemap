@@ -49,7 +49,7 @@ class Dashboard extends React.Component {
 
         actions.rehydrateAppState({
           domain,
-          state: new URLState().deserialize(),
+          urlState: new URLState().deserialize(),
         });
       });
     }

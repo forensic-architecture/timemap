@@ -1,4 +1,3 @@
-import URLState from "./urlState";
-import urlStateMiddleware from "./middleware";
-
-export { URLState, urlStateMiddleware };
+export { URLState } from "./urlState";
+export { urlStateMiddleware } from "./middleware";
+export { applyUrlState } from "./applyUrlState";
