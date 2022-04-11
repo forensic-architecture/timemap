@@ -1,15 +1,22 @@
 import dayjs from "dayjs";
 
 const SCHEMA = Object.freeze({
+  // Events
   id: {
     type: "number",
     isArray: true,
   },
-  fromDate: {
+  // Associations
+  filter: {
+    type: "string",
+    isArray: true,
+  },
+  // Timeline
+  start_date: {
     type: "date",
     isArray: false,
   },
-  toDate: {
+  end_date: {
     type: "date",
     isArray: false,
   },
@@ -38,10 +45,12 @@ class URLState {
 
     if (schema.isArray) {
       value.forEach((val) => {
-        this.url.searchParams.append(key, this._encode(schema, val));
+        const encoded = this._encode(schema, val);
+        if (encoded) this.url.searchParams.append(key, encoded);
       });
     } else {
-      this.url.searchParams.set(key, this._encode(schema, value));
+      const encoded = this._encode(schema, value);
+      if (encoded) this.url.searchParams.set(key, encoded);
     }
   }
 
@@ -76,6 +85,7 @@ class URLState {
   _decode(schema, value) {
     if (schema.type === "number") return +value;
     if (schema.type === "date") return new Date(value);
+    if (value === "null" || value === "undefined") return undefined;
     return value;
   }
 

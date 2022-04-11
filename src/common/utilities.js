@@ -49,25 +49,6 @@ export function zipColorsToPercentages(colors, percentages) {
 }
 
 /**
- * Get URI params to start with predefined set of
- * https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
- * @param {string} name: name of paramater to search
- * @param {string} url: url passed as variable, defaults to window.location.href
- */
-export function getParameterByName(name, url) {
-  if (!url) url = window.location.href;
-  name = name.replace(/[[\]]/g, "\\$&");
-
-  const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
-  const results = regex.exec(url);
-
-  if (!results) return null;
-  if (!results[2]) return "";
-
-  return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
-/**
  * Compare two arrays of scalars
  * @param {array} arr1: array of numbers
  * @param {array} arr2: array of numbers

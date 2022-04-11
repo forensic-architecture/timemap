@@ -1,36 +1,69 @@
-import { UPDATE_SELECTED, UPDATE_TIMERANGE } from "../../../actions";
+import {
+  TOGGLE_ASSOCIATIONS,
+  UPDATE_SELECTED,
+  UPDATE_TIMERANGE,
+} from "../../../actions";
+import {
+  getActiveCategories,
+  getActiveFilters,
+  getActiveNarrative,
+  getSelected,
+  getTimeRange,
+} from "../../../selectors";
 import URLState from "./urlState";
 
-function onEventsSelected(action) {
-  const state = new URLState();
-  const ids = action.selected.map(({ id }) => id);
-  state.set("id", ids);
-  state.serialize();
+function onEventsSelect(state) {
+  const selected = getSelected(state);
+  const urlstate = new URLState();
+  urlstate.set(
+    "id",
+    selected.map(({ id }) => id)
+  );
+  urlstate.serialize();
 }
 
-function onTimerangeUpdated(action) {
-  const state = new URLState();
-  state.set("fromDate", action.timerange[0]);
-  state.set("toDate", action.timerange[1]);
-  state.serialize();
+function onTimerangeUpdate(state) {
+  const timerange = getTimeRange(state);
+  const urlstate = new URLState();
+  urlstate.set("start_date", timerange[0]);
+  urlstate.set("end_date", timerange[1]);
+  urlstate.serialize();
+}
+
+function onAssociationUpdate(state) {
+  const urlstate = new URLState();
+
+  const filters = getActiveFilters(state);
+  urlstate.set("filter", filters);
+
+  urlstate.serialize();
 }
 
 function urlStateMiddleware(store) {
   return (next) => (action) => {
+    const result = next(action);
+    const state = store.getState();
+
     // handle errors to ensure `next()` is called.
     try {
       switch (action.type) {
         case UPDATE_SELECTED: {
-          onEventsSelected(action);
+          onEventsSelect(state);
           break;
         }
 
         case UPDATE_TIMERANGE: {
-          onTimerangeUpdated(action);
+          onTimerangeUpdate(state);
+          break;
+        }
+
+        case TOGGLE_ASSOCIATIONS: {
+          onAssociationUpdate(state);
           break;
         }
 
         default: {
+          console.log(action);
           break;
         }
       }
@@ -38,7 +71,7 @@ function urlStateMiddleware(store) {
       console.error("error serializing url state", err);
     }
 
-    return next(action);
+    return result;
   };
 }
 

@@ -313,8 +313,12 @@ function rehydrate(appState, { domain, state }) {
   }
 
   // TODO: fit to selected events if no timerange is set.
-  if (state.fromDate && state.toDate) {
-    nextState.timeline.range = [state.fromDate, state.toDate];
+  if (state.start_date && state.end_date) {
+    nextState.timeline.range = [state.start_date, state.end_date];
+  }
+
+  if (state.filter?.length) {
+    nextState.associations.filters = state.filter;
   }
 
   return nextState;
