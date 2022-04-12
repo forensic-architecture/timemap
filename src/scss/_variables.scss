@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @font-face {
   font-family: "GT-Zirkon";
   src: url(../assets/fonts/timemapfont.woff); // a Lato woff by default
@@ -73,7 +75,7 @@ $toolbar-width: 110px;
 $panel-width: 1000px;
 $panel-height: 1000px;
 $vimeo-width: $panel-width - 100;
-$vimeo-height: $panel-height / 2;
+$vimeo-height: math.div($panel-height, 2);
 $banner-height: 100px;
 $padding: 20px;
 $header-inset: 10px;
