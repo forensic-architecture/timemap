@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { isMobileOnly } from "react-device-detect";
 import * as actions from "../actions";
 import * as selectors from "../selectors";
-import { URLState } from "../store/plugins/urlState";
 
 import Toolbar from "./Toolbar";
 import InfoPopup from "./InfoPopup";
@@ -46,11 +45,7 @@ class Dashboard extends React.Component {
       this.props.actions.fetchDomain().then((domain) => {
         const { actions, features } = this.props;
         actions.updateDomain({ domain, features });
-
-        actions.rehydrateAppState({
-          domain,
-          urlState: new URLState().deserialize(),
-        });
+        actions.rehydrateState();
       });
     }
     // NOTE: hack to get the timeline to always show. Not entirely sure why

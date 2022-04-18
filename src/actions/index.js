@@ -408,10 +408,9 @@ export function toggleSatelliteView() {
   };
 }
 
-export const REHYDRATE_APP_STATE = "REHYDRATE_APP_STATE";
-export function rehydrateAppState(payload) {
+export const REHYDRATE_STATE = "REHYDRATE_STATE";
+export function rehydrateState() {
   return {
-    type: REHYDRATE_APP_STATE,
-    ...payload,
+    type: REHYDRATE_STATE,
   };
 }

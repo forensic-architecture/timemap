@@ -1,3 +1,2 @@
-export { URLState } from "./urlState";
-export { urlStateMiddleware } from "./middleware";
 export { applyUrlState } from "./applyUrlState";
+export { urlStateMiddleware } from "./middleware";

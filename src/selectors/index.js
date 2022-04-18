@@ -7,7 +7,7 @@ import {
   isLongitude,
   createFilterPathString,
 } from "../common/utilities";
-import { isTimeRangedIn } from "./helpers";
+import { isTimeRangedIn, mapFilterPathsToIds, toIds } from "./helpers";
 import { ASSOCIATION_MODES, SHAPE } from "../common/constants";
 
 // Input selectors
@@ -366,5 +366,24 @@ export const selectDimensions = createSelector(
       ...dimensions,
       trackHeight: dimensions.contentHeight - 50, // height of time labels
     };
+  }
+);
+
+export const selectFilterPathToIdMapping = createSelector(
+  [getFilters],
+  (filters) => mapFilterPathsToIds(filters)
+);
+
+export const selectActiveColorSets = createSelector(
+  [getColoringSet, selectFilterPathToIdMapping],
+  (set, mapping) => {
+    return set.map((set) => toIds(set, mapping).join(","));
+  }
+);
+
+export const selectActiveFilterIds = createSelector(
+  [getActiveFilters, selectFilterPathToIdMapping],
+  (filters, mapping) => {
+    return toIds(filters, mapping);
   }
 );

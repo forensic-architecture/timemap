@@ -30,9 +30,7 @@ import {
   SET_INITIAL_CATEGORIES,
   SET_INITIAL_SHAPES,
   UPDATE_SEARCH_QUERY,
-  REHYDRATE_APP_STATE,
 } from "../actions";
-import { applyUrlState } from "../store/plugins/urlState";
 
 function updateHighlighted(appState, action) {
   return Object.assign({}, appState, {
@@ -304,10 +302,6 @@ function updateSearchQuery(appState, action) {
   };
 }
 
-function rehydrate(appState, payload) {
-  return applyUrlState(appState, payload);
-}
-
 function app(appState = initial.app, action) {
   switch (action.type) {
     case UPDATE_HIGHLIGHTED:
@@ -366,8 +360,6 @@ function app(appState = initial.app, action) {
       return setInitialShapes(appState, action);
     case UPDATE_SEARCH_QUERY:
       return updateSearchQuery(appState, action);
-    case REHYDRATE_APP_STATE:
-      return rehydrate(appState, action);
     default:
       return appState;
   }

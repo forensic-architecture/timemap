@@ -1,30 +1,5 @@
 import dayjs from "dayjs";
-
-const SCHEMA = Object.freeze({
-  // Events
-  id: {
-    type: "number",
-    isArray: true,
-  },
-  // Associations
-  filter: {
-    type: "string",
-    isArray: true,
-  },
-  color: {
-    type: "string",
-    isArray: true,
-  },
-  // Timeline
-  start_date: {
-    type: "date",
-    isArray: false,
-  },
-  end_date: {
-    type: "date",
-    isArray: false,
-  },
-});
+import { isSchemaArray, SCHEMA, SCHEMA_TYPES } from "./schema";
 
 export class URLState {
   constructor() {
@@ -47,7 +22,7 @@ export class URLState {
 
     this.delete(key);
 
-    if (schema.isArray) {
+    if (isSchemaArray(schema)) {
       value.forEach((val) => {
         const encoded = this._encode(schema, val);
         if (encoded) this.url.searchParams.append(key, encoded);
@@ -56,6 +31,10 @@ export class URLState {
       const encoded = this._encode(schema, value);
       if (encoded) this.url.searchParams.set(key, encoded);
     }
+  }
+
+  serialize() {
+    window.history.replaceState(null, "", this.url);
   }
 
   /**
@@ -72,7 +51,7 @@ export class URLState {
       // ignore unknown query parameters
       if (!schema) return;
 
-      state[key] = schema.isArray
+      state[key] = isSchemaArray(schema)
         ? this.url.searchParams
             .getAll(key)
             .map((val) => this._decode(schema, val))
@@ -82,21 +61,41 @@ export class URLState {
     return state;
   }
 
-  serialize() {
-    window.history.replaceState(null, "", this.url);
-  }
-
   _decode(schema, value) {
-    if (schema.type === "number") return +value;
-    if (schema.type === "date") return new Date(value);
-    if (value === "null" || value === "undefined") return undefined;
-    return value;
+    switch (schema.type) {
+      case SCHEMA_TYPES.NUMBER_ARRAY:
+      case SCHEMA_TYPES.NUMBER: {
+        return +value;
+      }
+
+      case SCHEMA_TYPES.DATE:
+      case SCHEMA_TYPES.DATE_ARRAY: {
+        return new Date(value);
+      }
+
+      default: {
+        if (value === "null" || value === "undefined") return undefined;
+        return value;
+      }
+    }
   }
 
   _encode(schema, value) {
-    if (schema.type === "number") return value.toString();
-    if (schema.type === "date") return dayjs(value).format("YYYY-MM-DD");
-    return value;
+    switch (schema.type) {
+      case SCHEMA_TYPES.NUMBER_ARRAY:
+      case SCHEMA_TYPES.NUMBER: {
+        return value.toString();
+      }
+
+      case SCHEMA_TYPES.DATE:
+      case SCHEMA_TYPES.DATE_ARRAY: {
+        return dayjs(value).format("YYYY-MM-DD");
+      }
+
+      default: {
+        return value;
+      }
+    }
   }
 }
 
