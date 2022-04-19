@@ -563,3 +563,7 @@ export function getFilterIdx(
 export const isEmptyString = (s) => s.length === 0;
 
 export const isOdd = (num) => num % 2 !== 0;
+
+export function isEmptyObject(o) {
+  return o == null || (typeof o === "object" && !Object.keys(o).length);
+}

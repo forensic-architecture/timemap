@@ -1,9 +1,10 @@
+import { isEmptyObject } from "../../../common/utilities";
 import { SCHEMA } from "./schema";
 import URLState from "./urlState";
 
 export function applyUrlState(state) {
   const urlState = new URLState().deserialize();
-  if (isEmpty(urlState)) return state;
+  if (isEmptyObject(urlState)) return state;
 
   const nextState = { ...state };
 
@@ -16,8 +17,4 @@ export function applyUrlState(state) {
   });
 
   return nextState;
-}
-
-function isEmpty(o) {
-  return !Object.keys(o).length;
 }

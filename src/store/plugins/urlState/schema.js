@@ -5,13 +5,13 @@ import {
   UPDATE_TIMERANGE,
 } from "../../../actions";
 import { ASSOCIATION_MODES } from "../../../common/constants";
+import { createFilterPathString } from "../../../common/utilities";
 import {
   getSelected,
   getTimeRange,
   selectActiveColorSets,
   selectActiveFilterIds,
 } from "../../../selectors";
-import { mapFilterIdsToPaths } from "../../../selectors/helpers";
 
 export const SCHEMA_TYPES = {
   NUMBER: "NUMBER",
@@ -112,3 +112,10 @@ export const SCHEMA = Object.freeze({
     },
   },
 });
+
+function mapFilterIdsToPaths(filters) {
+  return filters.reduce((acc, curr) => {
+    acc[curr.id] = createFilterPathString(curr);
+    return acc;
+  }, {});
+}
