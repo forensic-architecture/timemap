@@ -31,21 +31,6 @@ function MapEvents({
     onSelect(events);
   }
 
-  function renderBorder() {
-    return (
-      <>
-        <circle
-          className="event-hover"
-          cx="0"
-          cy="0"
-          r="10"
-          stroke={colors.primaryHighlight}
-          fillOpacity="0.0"
-        />
-      </>
-    );
-  }
-
   function renderLocationSlicesByAssociation(location) {
     const colorPercentages = calculateColorPercentages([location], coloringSet);
 
@@ -111,7 +96,15 @@ function MapEvents({
         >
           {renderLocationSlicesByAssociation(location)}
           {extraRender ? extraRender() : null}
-          {isSelected ? null : renderBorder()}
+          <circle
+            className="event-hover"
+            display={isSelected ? "auto" : "none"}
+            cx="0"
+            cy="0"
+            r="10"
+            stroke={colors.primaryHighlight}
+            fillOpacity="0.0"
+          />
         </g>
       </svg>
     );
