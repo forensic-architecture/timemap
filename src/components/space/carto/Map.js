@@ -463,8 +463,9 @@ class Map extends React.Component {
     const totalMarkers = [];
 
     this.props.app.selected.forEach((s) => {
-      const { latitude, longitude } = s;
+      const { latitude, longitude, id } = s;
       totalMarkers.push({
+        id,
         latitude,
         longitude,
         radius: this.props.ui.eventRadius,
@@ -476,7 +477,9 @@ class Map extends React.Component {
     selectedClusters.forEach((cl) => {
       if (cl.properties.cluster) {
         const { coordinates } = cl.geometry;
+
         totalMarkers.push({
+          id: cl.id,
           latitude: String(coordinates[1]),
           longitude: String(coordinates[0]),
           radius: calcClusterSize(
