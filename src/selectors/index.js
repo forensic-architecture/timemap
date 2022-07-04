@@ -34,6 +34,7 @@ export const getNotifications = (state) => state.domain.notifications;
 export const getActiveFilters = (state) => state.app.associations.filters;
 export const getActiveCategories = (state) => state.app.associations.categories;
 export const getActiveShapes = (state) => state.app.shapes;
+export const getColoringSet = (state) => state.app.associations.coloringSet;
 export const getTimeRange = (state) => state.app.timeline.range;
 export const getTimelineDimensions = (state) => state.app.timeline.dimensions;
 export const selectNarrative = (state) => state.app.associations.narrative;
@@ -367,3 +368,35 @@ export const selectDimensions = createSelector(
     };
   }
 );
+
+export const selectFilterPathToIdMapping = createSelector(
+  [getFilters],
+  (filters) => {
+    return filters.reduce((acc, curr) => {
+      acc[createFilterPathString(curr)] = curr.id;
+      return acc;
+    }, {});
+  }
+);
+
+export const selectActiveColorSets = createSelector(
+  [getColoringSet, selectFilterPathToIdMapping],
+  (set, mapping) => {
+    return set.map((set) => mapFiltersToIds(set, mapping).join(","));
+  }
+);
+
+export const selectActiveFilterIds = createSelector(
+  [getActiveFilters, selectFilterPathToIdMapping],
+  (filters, mapping) => {
+    return mapFiltersToIds(filters, mapping);
+  }
+);
+
+function mapFiltersToIds(arr, filterMapping) {
+  return arr.reduce((acc, path) => {
+    const id = filterMapping[path];
+    if (id) acc.push(id);
+    return acc;
+  }, []);
+}

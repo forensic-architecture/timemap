@@ -2,6 +2,7 @@ import React from "react";
 
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import { isMobileOnly } from "react-device-detect";
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 
@@ -23,7 +24,6 @@ import NarrativeControls from "./controls/NarrativeControls.js";
 
 import colors from "../common/global";
 import { binarySearch, insetSourceFrom } from "../common/utilities";
-import { isMobileOnly } from "react-device-detect";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -42,12 +42,11 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     if (!this.props.app.isMobile) {
-      this.props.actions.fetchDomain().then((domain) =>
-        this.props.actions.updateDomain({
-          domain,
-          features: this.props.features,
-        })
-      );
+      this.props.actions.fetchDomain().then((domain) => {
+        const { actions, features } = this.props;
+        actions.updateDomain({ domain, features });
+        actions.rehydrateState();
+      });
     }
     // NOTE: hack to get the timeline to always show. Not entirely sure why
     // this is necessary.

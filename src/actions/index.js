@@ -407,3 +407,10 @@ export function toggleSatelliteView() {
     type: TOGGLE_SATELLITE_VIEW,
   };
 }
+
+export const REHYDRATE_STATE = "REHYDRATE_STATE";
+export function rehydrateState() {
+  return {
+    type: REHYDRATE_STATE,
+  };
+}
