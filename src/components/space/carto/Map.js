@@ -114,10 +114,10 @@ class Map extends React.Component {
     }
 
     if (supportedMapboxMap.indexOf(this.props.ui.tiles) !== -1) {
-      return `https://api.mapbox.com/styles/v1/${this.props.ui.tiles}/tiles/{z}/{x}/{y}?access_token=${process.env.accessToken}`;
+      return `https://api.mapbox.com/styles/v1/mapbox/${this.props.ui.tiles}/tiles/{z}/{x}/{y}?access_token=${process.env.MAPBOX_TOKEN}`;
     }
 
-    return `https://api.mapbox.com/styles/v1/${supportedMapboxMap[0]}/tiles/{z}/{x}/{y}?access_token=${process.env.accessToken}`;
+    return `https://api.mapbox.com/styles/v1/${supportedMapboxMap[0]}/tiles/{z}/{x}/{y}?access_token=${process.env.MAPBOX_TOKEN}`;
   }
 
   /**
