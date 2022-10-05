@@ -31,7 +31,7 @@ import {
 
 // NB: important constants for map, TODO: make statics
 // Note: Base map is OpenStreetMaps by default; can choose another base map
-const supportedMapboxMap = ["streets", "satellite"];
+const supportedMapboxMap = ["streets-v11", "satellite"];
 const defaultToken = "your_token";
 
 class Map extends React.Component {
@@ -114,10 +114,10 @@ class Map extends React.Component {
     }
 
     if (supportedMapboxMap.indexOf(this.props.ui.tiles) !== -1) {
-      return `http://a.tiles.mapbox.com/v4/mapbox.${tiles}/{z}/{x}/{y}@2x.png?access_token=${process.env.MAPBOX_TOKEN}`;
+      return `https://api.mapbox.com/styles/v1/${this.props.ui.tiles}/tiles/{z}/{x}/{y}?access_token=${process.env.accessToken}`;
     }
 
-    return `http://a.tiles.mapbox.com/styles/v1/${this.props.ui.tiles}/tiles/{z}/{x}/{y}?access_token=${process.env.MAPBOX_TOKEN}`;
+    return `https://api.mapbox.com/styles/v1/${supportedMapboxMap[0]}/tiles/{z}/{x}/{y}?access_token=${process.env.accessToken}`;
   }
 
   /**
