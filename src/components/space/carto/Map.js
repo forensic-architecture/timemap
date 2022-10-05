@@ -117,7 +117,7 @@ class Map extends React.Component {
       return `https://api.mapbox.com/styles/v1/mapbox/${this.props.ui.tiles}/tiles/{z}/{x}/{y}?access_token=${process.env.MAPBOX_TOKEN}`;
     }
 
-    return `https://api.mapbox.com/styles/v1/${supportedMapboxMap[0]}/tiles/{z}/{x}/{y}?access_token=${process.env.MAPBOX_TOKEN}`;
+    return `https://api.mapbox.com/styles/v1/mapbox/${supportedMapboxMap[0]}/tiles/{z}/{x}/{y}?access_token=${process.env.MAPBOX_TOKEN}`;
   }
 
   /**
